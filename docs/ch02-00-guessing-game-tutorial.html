@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html" class="active"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -67,221 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h1>介绍</h1>
-<blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch01-00-introduction.md">ch01-00-introduction.md</a>
-<br>
-commit c6920d4a2ee0f282addaf8f6945cefe3ef7bdf09</p>
-</blockquote>
-<p>欢迎阅读“Rust 程序设计语言”。一本关于 Rust 的介绍性书籍。Rust 是一个关注安全、速度和并发的编程语言。它的设计可以使程序获得性能和对底层语言的控制，并享受高级语言强大的抽象能力。这些特性使得 Rust 适合那些有类似 C 语言经验并正在寻找一个更安全的替代者的程序员，同时也适合那些来自类似 Python 语言背景，正在探索在不牺牲表现力的情况下编写更好性能代码的人们。</p>
-<p>Rust 在编译时进行其绝大多数的安全检查和内存管理决策，因此程序的运行时性能没有受到影响。这让其在许多其他语言不擅长的应用场景中得以大显身手：有可预测空间和时间要求的程序，嵌入到其他语言中，以及编写底层代码，如设备驱动和操作系统。Rust 也很擅长 web 程序：它驱动着 Rust 包注册网站（package
-registry site），crates.io！我们期待看到<em>你</em>使用 Rust 进行创作。</p>
-<p>本书的编排面向已经了解如何使用至少一门编程语言编程的读者。读完本书之后，你应该能自如的编写 Rust 程序。我们将通过小的，专注的并相互依赖的例子来学习 Rust，并向你展示如何使用 Rust 多样的功能，同时了解它们在后台是如何执行的。</p>
-<h2>为本书做出贡献</h2>
-<p>本书是开源的。如果你发现任何错误，请不要犹豫，<a href="https://github.com/rust-lang/book">在 GitHub 上</a>发起 issue 或提交 pull request。</p>
-<h2>安装</h2>
-<blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch01-01-installation.md">ch01-01-installation.md</a>
-<br>
-commit f828919e62aa542aaaae03c1fb565da42374213e</p>
-</blockquote>
-<p>使用 Rust 的第一步是安装。你需要联网来执行本章的命令，因为我们要从网上下载 Rust。</p>
-<p>我们将会展示很多使用终端的命令，并且这些代码都以<code>$</code>开头。并不需要真正输入<code>$</code>，它们在这里代表每行指令的开头。在网上会看到很多使用这个惯例的教程和例子：<code>$</code>代表以常规用户运行命令，<code>#</code>代表需要用管理员运行的命令。没有以<code>$</code>（或<code>#</code>）的行通常是之前命令的输出。</p>
-<h3>在 Linux 或 Mac 上安装</h3>
-<p>如果你使用 Linux 或 Mac，所有需要做的就是打开一个终端并输入：</p>
-<pre><code class="language-sh">$ curl https://sh.rustup.rs -sSf | sh
-</code></pre>
-<p>这会下载一个脚本并开始安装。你可能被提示要输入密码。如果一切顺利，将会出现如下内容：</p>
-<pre><code class="language-sh">Rust is installed now. Great!
-</code></pre>
-<p>当然，如果你不赞成<code>curl | sh</code>这种模式，可以随意下载、检查和运行这个脚本。</p>
-<h3>在 Windows 上安装</h3>
-<p>在 Windows 上，前往<a href="https://rustup.rs/">https://rustup.rs</a><!-- ignore -->并按照说明下载<code>rustup-init.exe</code>。运行并遵循它提供的其余指示。</p>
-<p>本书其余 Windows 相关的命令假设你使用<code>cmd</code>作为你的 shell。如果你使用不同的 shell，可能能够执行 Linux 和 Mac 用户相同的命令。如果都不行，查看所使用的 shell 的文档。</p>
-<h3>自定义安装</h3>
-<p>如果有理由倾向于不使用 rustup.rs，请查看<a href="https://www.rust-lang.org/install.html">Rust 安装页面</a>获取其他选择。</p>
-<h3>卸载</h3>
-<p>卸载 Rust 同安装一样简单。在 shell 中运行卸载脚本</p>
-<pre><code class="language-sh">$ rustup self uninstall
-</code></pre>
-<h3>故障排除</h3>
-<p>安装完 Rust 后，打开 shell，输入：</p>
-<pre><code class="language-sh">$ rustc --version
-</code></pre>
-<p>应该能看到类似这样的版本号、提交 hash 和提交日期，对应你安装时的最新稳定版本：</p>
-<pre><code class="language-sh">rustc x.y.z (abcabcabc yyyy-mm-dd)
-</code></pre>
-<p>如果出现这些内容，Rust 就安装成功了！</p>
-<p>恭喜入坑！（此处应该有掌声！）</p>
-<p>如果有问题并且你在使用 Windows，检查 Rust（rustc，cargo 等）是否位于<code>%PATH%</code>系统变量中。</p>
-<p>如果还是不能运行，有许多可以获取帮助的地方。最简单的是 irc.mozilla.org 上的 IRC 频道 <a href="irc://irc.mozilla.org/#rust-beginners">#rust-beginners</a> 和供一般讨论之用的 <a href="irc://irc.mozilla.org/#rust">#rust</a>，我们可以使用 <a href="http://chat.mibbit.com/?server=irc.mozilla.org&amp;channel=%23rust-beginners,%23rust">Mibbit</a> 访问。然后我们就可以和其他能提供帮助的 Rustacean（我们这些人自嘲的绰号）聊天了。其它给力的资源包括<a href="https://users.rust-lang.org/">用户论坛</a>和<a href="http://stackoverflow.com/questions/tagged/rust">Stack Overflow</a>。</p>
-<h3>本地文档</h3>
-<p>安装程序也包含一份本地文档的拷贝，你可以离线阅读它们。输入<code>rustup doc</code>将在浏览器中打开本地文档。</p>
-<p>任何你太确认标准库提供的类型或函数是干什么的时候，使用文档 API 查找！</p>
-<h2>Hello, World!</h2>
-<blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch01-02-hello-world.md">ch01-02-hello-world.md</a>
-<br>
-commit aa1801d99cd3b19c96533f00c852b1c4bd5350a6</p>
-</blockquote>
-<p>现在你已经安装好了 Rust，让我们来编写你的第一个 Rust 程序。当学习一门新语言的时候，编写一个在屏幕上打印 “Hello, world!” 文本的小程序是一个传统，而在这一部分，我们将遵循这个传统。</p>
-<blockquote>
-<p>注意：本书假设你熟悉基本的命令行操作。Rust 本身并不对你的编辑器，工具和你的代码存放在何处有什么特定的要求，所以如果你比起命令行更喜欢 IDE，请随意选择你喜欢的 IDE。</p>
-</blockquote>
-<h3>创建项目文件</h3>
-<p>首先，创建一个文件来编写 Rust 代码。Rust 并不关心你的代码存放在哪里，不过在本书中，我们建议在你的 home 目录创建一个<em>项目</em>目录，并把你的所有项目放在这。打开一个终端并输入如下命令来为这个项目创建一个文件夹：</p>
-<p>Linux 和 Mac:</p>
-<pre><code class="language-sh">$ mkdir ~/projects
-$ cd ~/projects
-$ mkdir hello_world
-$ cd hello_world
-</code></pre>
-<p>Windows:</p>
-<pre><code class="language-cmd">&gt; mkdir %USERPROFILE%\projects
-&gt; cd %USERPROFILE%\projects
-&gt; mkdir hello_world
-&gt; cd hello_world
-</code></pre>
-<h3>编写并运行 Rust 程序</h3>
-<p>接下来，创建一个新的叫做 <em>main.rs</em> 的源文件。Rust 文件总是以 <em>.rs</em> 后缀结尾。如果文件名多于一个单词，使用下划线分隔它们。例如，使用 <em>my_program.rs</em> 而不是   <em>myprogram.rs</em>。</p>
-<p>现在打开刚创建的 <em>main.rs</em> 文件，并输入如下代码：</p>
-<p><span class="filename">Filename: main.rs</span></p>
-<pre><code class="language-rust">fn main() {
-    println!(&quot;Hello, world!&quot;);
-}
-</code></pre>
-<p>保存文件，并回到终端窗口。在 Linux 或 OSX 上，输入如下命令：</p>
-<pre><code class="language-sh">$ rustc main.rs
-$ ./main
-Hello, world!
-</code></pre>
-<p>在 Windows 上，运行<code>.\main.exe</code>而不是<code>./main</code>。不管使用何种系统，你应该在终端看到<code>Hello, world!</code>字符串。如果你做到了，那么恭喜你！你已经正式编写了一个 Rust 程序。你是一名 Rust 程序员了！欢迎入坑。</p>
-<h3>分析 Rust 程序</h3>
-<p>现在，让我们回过头来仔细看看你的“Hello, world!”程序到底发生了什么。这是谜题的第一片：</p>
-<pre><code class="language-rust">fn main() {
-
-}
-</code></pre>
-<p>这几行定义了一个 Rust <strong>函数</strong>。<code>main</code> 函数是特殊的：这是每一个可执行的 Rust 程序首先运行的函数（译者注：入口点）。第一行表示“定义一个叫 <code>main</code> 的函数，没有参数也没有返回值。”如果有参数的话，它们应该出现在括号中，<code>(</code>和<code>)</code>。</p>
-<p>同时注意函数体被包裹在大括号中，<code>{</code>和<code>}</code>。Rust 要求所有函数体都位于大括号中（译者注：对比有些语言特定情况可以省略大括号）。将前一个大括号与函数声明置于一行，并留有一个空格被认为是一个好的代码风格。</p>
-<p>在<code>main()</code>函数中：</p>
-<pre><code class="language-rust">    println!(&quot;Hello, world!&quot;);
-</code></pre>
-<p>这行代码做了这个小程序的所有工作：它在屏幕上打印文本。有很多需要注意的细节。第一个是 Rust 代码风格使用 4 个空格缩进，而不是 1 个制表符（tab）。</p>
-<p>第二个重要的部分是<code>println!()</code>。这叫做 Rust <em>宏</em>，是如何进行 Rust 元编程（metaprogramming）的关键所在。相反如果调用一个函数的话，它应该看起来像这样：<code>println</code>（没有<code>!</code>）。我们将在 24 章更加详细的讨论 Rust 宏，不过现在你只需记住当看到符号 <code>!</code> 的时候，就代表在调用一个宏而不是一个普通的函数。</p>
-<p>接下来，<code>&quot;Hello, world!&quot;</code> 是一个 <em>字符串</em>。我们把这个字符串作为一个参数传递给<code>println!</code>，它负责在屏幕上打印这个字符串。轻松加愉快！(⊙o⊙)</p>
-<p>这一行以一个分号结尾（<code>;</code>）。<code>;</code>代表这个表达式的结束和下一个表达式的开始。大部分 Rust 代码行以<code>;</code>结尾。</p>
-<h3>编译和运行是两个步骤</h3>
-<p>在“编写并运行 Rust 程序”部分，展示了如何运行一个新创建的程序。现在我们将拆分并检查每一步操作。</p>
-<p>在运行一个 Rust 程序之前，必须编译它。可以输入<code>rustc</code>命令来使用 Rust 编译器并像这样传递你源文件的名字：</p>
-<pre><code class="language-sh">$ rustc main.rs
-</code></pre>
-<p>如果你来自 C 或 C++ 背景，你会发现这与<code>gcc</code>和<code>clang</code>类似。编译成功后，Rust 应该会输出一个二进制可执行文件，在 Linux 或 OSX 上在 shell 中你可以通过<code>ls</code>命令看到如下：</p>
-<pre><code class="language-sh">$ ls
-main  main.rs
-</code></pre>
-<p>在 Windows 上，输入：</p>
-<pre><code class="language-cmd">&gt; dir /B %= the /B option says to only show the file names =%
-main.exe
-main.rs
-</code></pre>
-<p>这表示我们有两个文件：<em>.rs</em> 后缀的源文件，和可执行文件（在 Windows下是 <em>main.exe</em>，其它平台是 <em>main</em>）。这里剩下的操作就只有运行 <em>main</em> 或 <em>main.exe</em> 文件了，像这样：</p>
-<pre><code class="language-sh">$ ./main  # or .\main.exe on Windows
-</code></pre>
-<p>如果 <em>main.rs</em> 是我们的“Hello, world!”程序，它将会在终端上打印<code>Hello, world!</code>。</p>
-<p>来自 Ruby、Python 或 JavaScript 这样的动态类型语言背景的同学，可能不太习惯在分开的步骤编译和执行程序。Rust 是一种 <em>静态提前编译语言</em>（<em>ahead-of-time compiled language</em>），这意味着可以编译好程序后，把它给任何人，他们都不需要安装 Rust 就可运行。如果你给他们一个 <code>.rb</code> ， <code>.py</code> 或 <code>.js</code> 文件，他们需要先分别安装 Ruby，Python，JavaScript 实现（运行时环境，VM），不过你只需要一句命令就可以编译和执行程序。这一切都是语言设计的权衡取舍。</p>
-<p>仅仅使用<code>rustc</code>编译简单程序是没问题的，不过随着项目的增长，你将想要能够控制你项目拥有的所有选项，并使其易于分享你的代码给别人或别的项目。接下来，我们将介绍一个叫做 Cargo 的工具，它将帮助你编写现实生活中的 Rust 程序。</p>
-<h2>Hello, Cargo!</h2>
-<p>Cargo 是 Rust 的构建系统和包管理工具，同时 Rustacean 们使用 Cargo 来管理它们的 Rust 项目，因为它使得很多任务变得更轻松。例如，Cargo负责构建代码、下载代码依赖的库并编译这些库。我们把代码需要的库叫做 <em>依赖</em>（<em>dependencies</em>）。</p>
-<p>最简单的 Rust 程序，例如我们刚刚编写的，并没有任何依赖，所以目前我们只使用了 Cargo 负责构建代码的部分。随着你编写更加复杂的 Rust 程序，你会想要添加依赖，那么如果你使用 Cargo 开始的话，这将会变得简单许多。</p>
-<p>因为绝大部分 Rust 项目使用 Cargo，本书接下来的部分将假设你使用它。如果使用安装章节介绍的官方安装包的话，Rust 自带 Cargo。如果通过其他方式安装 Rust 的话，可以在终端输入如下命令检查是否安装了 Cargo：</p>
-<pre><code class="language-sh">$ cargo --version
-</code></pre>
-<p>如果看到了版本号，一切 OK！如果出现一个类似“<code>command not found</code>”的错误，那么你应该查看安装方式的文档来确定如何单独安装 Cargo。</p>
-<h3>使用 Cargo 创建项目</h3>
-<p>让我们使用 Cargo 来创建一个新项目并看看与<code>hello_world</code>项目有什么不同。回到项目目录（或者任何你决定放置代码的目录）：</p>
-<p>Linux 和 Mac:</p>
-<pre><code class="language-sh">$ cd ~/projects
-</code></pre>
-<p>Windows:</p>
-<pre><code class="language-cmd">&gt; cd %USERPROFILE%\projects
-</code></pre>
-<p>并在任何操作系统运行：</p>
-<pre><code class="language-sh">$ cargo new hello_cargo --bin
-$ cd hello_cargo
-</code></pre>
-<p>我们向<code>cargo new</code>传递了<code>--bin</code>因为我们的目标是生成一个可执行程序，而不是一个库。可执行文件是二进制可执行文件，通常就叫做 <em>二进制文件</em>（<em>binaries</em>）。项目的名称被定为<code>hello_cargo</code>，同时 Cargo 在一个同名（子）目录中创建它的文件，接着我们可以进入查看。</p>
-<p>如果列出 <em>hello_cargo</em> 目录中的文件，我们将会看到 Cargo 生成了两个文件和一个目录：一个 <em>Cargo.toml</em> 文件和一个 <em>src</em> 目录，<em>main.rs</em> 文件位于目录中。它也在 <em>hello_cargo</em> 目录初始化了一个 git 仓库，以及一个 <em>.gitignore</em> 文件；你可以改为使用不同的版本控制系统，或者不使用，通过<code>--vcs</code>参数。</p>
-<p>使用你选择的文本编辑器（IDE）打开 <em>Cargo.toml</em> 文件。它应该看起来像这样：</p>
-<p><span class="filename">Filename: Cargo.toml</span></p>
-<pre><code class="language-toml">[package]
-name = &quot;hello_cargo&quot;
-version = &quot;0.1.0&quot;
-authors = [&quot;Your Name &lt;you@example.com&gt;&quot;]
-
-[dependencies]
-</code></pre>
-<p>这个文件使用<a href="https://github.com/toml-lang/toml"><em>TOML</em></a><!-- ignore --> (Tom's Obvious, Minimal Language) 格式。TOML 类似于 INI，不过有一些额外的改进之处，并且被用作 Cargo 的配置文件的格式。</p>
-<p>第一行，<code>[package]</code>，是一个部分标题表明下面的语句用来配置一个包。随着我们在这个文件增加更多的信息，我们还会增加其他部分。</p>
-<p>最后一行，<code>[dependencies]</code>，是列出项目依赖的 <em>crates</em>（我们这么称呼 Rust 代码的包）的部分的开始，这样 Cargo 也就知道去下载和编译它们。这个项目并不需要任何其他的 crate，不过在猜猜看教程章节会需要。</p>
-<p>现在看看 <em>src/main.rs</em>：</p>
-<pre><code class="language-rust">fn main() {
-    println!(&quot;Hello, world!&quot;);
-}
-</code></pre>
-<p>Cargo 为你生成了一个“Hello World!”，正如我们之前编写的那个！目前为止我们所见过的之前项目与 Cargo 生成的项目区别有：</p>
-<ul>
-<li>代码位于 <em>src</em> 目录</li>
-<li>项目根目录包含一个 <em>Cargo.toml</em> 配置文件</li>
-</ul>
-<p>Cargo 期望源文件位于 src 目录，这样将项目根目录留给 README、license 信息、配置文件和其他跟代码无关的文件。这样，Cargo 帮助你保持项目干净整洁。一切井井有条。</p>
-<p>如果没有使用 Cargo 开始项目，正如我们在 <em>hello_world</em> 目录中的项目，可以把它转化为一个 Cargo 使用的项目，通过将代码放入 <em>src</em> 目录并创建一个合适的 <em>Cargo.toml</em>。</p>
-<h3>构建并运行 Cargo 项目</h3>
-<p>现在让我们看看通过 Cargo 构建和运行 Hello World 程序有什么不同。为此，我们输入如下命令：</p>
-<pre><code>$ cargo build
-   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
-</code></pre>
-<p>这应该创建 <em>target/debug/hello_cargo</em>（或者在 Windows 上是 <em>target\debug\hello_cargo.exe</em>）可执行文件，可以通过这个命令运行：</p>
-<pre><code class="language-sh">$ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
-Hello, world!
-</code></pre>
-<p>好的！如果一切顺利，<code>Hello, world!</code>应该再次打印在终端上。</p>
-<p>第一次运行的时候也会使 Cargo 在项目根目录创建一个叫做 <em>Cargo.lock</em> 的新文件，它看起来像这样：</p>
-<p><span class="filename">Filename: Cargo.lock</span></p>
-<pre><code class="language-toml">[root]
-name = &quot;hello_cargo&quot;
-version = &quot;0.1.0&quot;
-</code></pre>
-<p>Cargo 使用 <em>Cargo.lock</em> 来记录程序的依赖。这个项目并没有依赖，所以内容有一点稀少。事实上，你自己永远也不需要碰这个文件；仅仅让 Cargo 处理它就行了。</p>
-<p>我们刚刚使用<code>cargo build</code>构建了项目并使用<code>./target/debug/hello_cargo</code>运行了它，不过也可以使用<code>cargo run</code>编译并运行：</p>
-<pre><code class="language-sh">$ cargo run
-     Running `target/debug/hello_cargo`
-Hello, world!
-</code></pre>
-<p>注意这一次，并没有出现告诉我们 Cargo 正在编译 <code>hello_cargo</code> 的输出。Cargo 发现文件并没有被改变，所以只是运行了二进制文件。如果修改了源文件的话，将会出现像这样的输出：</p>
-<pre><code class="language-sh">$ cargo run
-   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
-     Running `target/debug/hello_cargo`
-Hello, world!
-</code></pre>
-<p>所以又出现一些更多的不同：</p>
-<ul>
-<li>使用<code>cargo build</code>构建项目（或使用<code>cargo run</code>一步构建并运行），而不是使用<code>rustc</code></li>
-<li>不同于将构建结果放在源码相同目录，Cargo 会将它放到 <em>target/debug</em> 目录中的文件，我们将会看到</li>
-</ul>
-<p>Cargo 的另一个有点是不管你使用什么操作系统它的命令都是一样的，所以之后我们将不再为 Linux 和 Mac 以及 Windows 提供特定的命令。</p>
-<h3>发布构建</h3>
-<p>当项目最终准备好发布了，可以使用<code>cargo build --release</code>来优化编译项目。这会在 <em>target/release</em> 下生成可执行文件，而不是 <em>target/debug</em>。这些优化可以让 Rust 代码运行的更快，不过启用他们会让程序花更长的时间编译。这也是为何这是两种不同的配置：一个为了开发，这时你经常想要快速重新构建；另一个构建提供给用户的最终程序，这时并不会重新构建并希望能运行得越快越好。如果你在测试代码的运行时间，请确保运行<code>cargo build --release</code>并使用 <em>target/release</em> 下的可执行文件进行测试。</p>
-<h3>把 Cargo 当作习惯</h3>
-<p>对于简单项目， Cargo 并不能比<code>rustc</code>提供更多的价值，不过随着开发的进行终将体现它的价值。对于拥有多个 crate 的复杂项目，可以仅仅运行<code>cargo build</code>，然后一切将有序运行。即便这个项目很简单，现在它使用了很多接下来你 Rust 程序生涯将会用到的实用工具。事实上，无形中你可以使用下面的命令开始所有你想要从事的项目：</p>
-<pre><code class="language-sh">$ git clone someurl.com/someproject
-$ cd someproject
-$ carg
-</code></pre>
-<blockquote>
-<p>注意：如果你想要查看 Cargo 的更多细节，请阅读官方的 <a href="http://doc.crates.io/guide.html">Cargo guide</a>，它覆盖了其所有的功能。</p>
-</blockquote>
-<h1>猜猜看</h1>
+                    <h1>猜猜看</h1>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch02-00-guessing-game-tutorial.md">ch02-00-guessing-game-tutorial.md</a>
 <br>
@@ -835,168 +621,34 @@ fn main() {
 <h2>总结一下，</h2>
 <p>此时此刻，你顺利完成了猜猜看游戏！恭喜！</p>
 <p>这是一个通过动手实践的方式想你介绍许多 Rust 新知识的项目：<code>let</code>、<code>match</code>、方法、关联函数，使用外部 crate，等等。接下来的几章，我们将会详细学习这些概念。第三章涉及到大部分编程语言都有的概念，比如变量、数据类型和函数，以及如何在 Rust 中使用他们。第四章探索所有权（ownership），这是一个 Rust 同其他语言都不相同的功能。第五章讨论结构体和方法语法，而第六章侧重解释枚举。</p>
-<h1>通用编程概念</h1>
-<blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch03-00-common-programming-concepts.md">ch03-00-common-programming-concepts.md</a>
-<br>
-commit 2067b6e2bff990bceb39ae8f35780bd3bed08644</p>
-</blockquote>
-<p>这一章涉及到几乎出现在所有编程语言中的概念，以及他们在 Rust 中如何工作。很多编程语言在核心概念上都是共通的。本章中展示的所有概念没有一个是 Rust 所特有的，不过我们会在 Rust 环境中讨论他们并解释他们的使用习惯。</p>
-<p>具体的，我们将会学习变量，基本类型，函数，注释和控制流。这些基础知识将会出现在每一个 Rust 程序中，提早学习这些概念会使你在起步时拥有一个核心的基础。</p>
-<!-- PROD: START BOX -->
-<blockquote>
-<h3>关键字</h3>
-<p>Rust 语言有一系列被保留为只能被语言使用的<em>关键字</em>（<em>keywords</em>），如大部分语言一样。注意你不能使用这些关键字作为变量或函数的名称。大部分关键字有特殊的意义，并将会被用来进行 Rust 程序中的多种任务；一些关键字目前没有相关的功能不过为了将来可能添加进 Rust 的功能而被保留。可以在附录 A 中找到一份关键字的列表</p>
-</blockquote>
-<!-- PROD: END BOX --><h2>变量和可变性</h2>
-<blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch03-01-variables-and-mutability.md">ch03-01-variables-and-mutability.md</a>
-<br>
-commit b0fab378c9c6a817d4f0080d7001d085017cdef8</p>
-</blockquote>
-<p>第二章中提到过，变量默认是<em>不可变</em>（<em>immutable</em>）的。这是 Rust 中许多鼓励以利用 Rust 提供的安全和简单并发优势编写代码的助力之一。不过，仍然有使变量可变的选项。让我们探索一下为什么以及如何鼓励你拥抱不可变性，还有为什么你可能想要弃之不用。</p>
-<p>当变量使不可变时，这意味着一旦一个值被绑定上了一个名称，你就不能改变这个值。作为说明，通过<code>cargo new --bin variables</code>在 <em>projects</em> 目录生成一个叫做 <em>variables</em> 的新项目。</p>
-<p>接着，在新建的 <em>variables</em> 目录，打开 <em>src/main.rs</em> 并替换其代码为如下：</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">fn main() {
-    let x = 5;
-    println!(&quot;The value of x is: {}&quot;, x);
-    x = 6;
-    println!(&quot;The value of x is: {}&quot;, x);
-}
-</code></pre>
-<p>保存并使用<code>cargo run</code>运行程序。应该会看到一个错误信息，如下输出所示：</p>
-<pre><code class="language-sh">$ cargo run
-   Compiling variables v0.0.1 (file:///projects/variables)
-error[E0384]: re-assignment of immutable variable `x`
- --&gt; src/main.rs:4:5
-  |
-2 |     let x = 5;
-  |         - first assignment to `x`
-3 |     println!(&quot;The value of x is: {}&quot;, x);
-4 |     x = 6;
-  |     ^^^^^ re-assignment of immutable variable
-</code></pre>
-<p>这个例子显示了编译器如何帮助你寻找程序中的错误。即便编译器错误可能是令人沮丧的，他们也仅仅意味着程序不能安全的完成你想让它完成的工作；他们<em>不能</em>说明你不是一个好的程序员！有经验的 Rustacean 们也会遇到编译器错误。这些错误表明错误的原因是<code>对不可变变量重新赋值</code>（<code>re-assignment of immutable variable</code>），因为我们尝试对不可变变量<code>x</code>赋第二个值。</p>
-<p>当尝试去改变之前设计为不可变的值出现编译时错误是很重要的，因为这种情况可能导致 bug。如果代码的一部分假设一个值永远也不会改变而另一部分代码改变了它，这样第一部分代码就有可能不能像它设计的那样运行。你必须承认这种 bug 难以跟踪，尤其是当第二部分代码只是<em>有时</em>当变量使不可变时，这意味着一旦一个值被绑定上了一个名称，你就不能改变这个值。</p>
-<p>Rust 编译器保证如果声明一个值不会改变，它就真的不会改变。这意味着当阅读和编写代码时，并不需要记录如何以及在哪可能会被改变，这使得代码易于推导。</p>
-<p>不过可变性也是非常有用的。变量只是默认不可变；可以通过在变量名之前增加<code>mut</code>来使其可变。它向之后的读者表明了其他部分的代码将会改变这个变量值的意图。</p>
-<p>例如，改变 <em>src/main.rs</em> 并替换其代码为如下：</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
-    let mut x = 5;
-    println!(&quot;The value of x is: {}&quot;, x);
-    x = 6;
-    println!(&quot;The value of x is: {}&quot;, x);
-}
-</code></pre>
-<p>当运行这个程序，出现如下：</p>
-<pre><code class="language-sh">$ cargo run
-   Compiling variables v0.1.0 (file:///projects/variables)
-     Running `target/debug/variables`
-The value of x is: 5
-The value of x is: 6
-</code></pre>
-<p>通过<code>mut</code>，允许把绑定到<code>x</code>的值从<code>5</code>改成<code>6</code>。在一些情况下，你会想要使一个变量可变，因为这比只使用不可变变量实现的代码更易于编写。</p>
-<p>除了避免 bug 外，这里还有数个需要权衡取舍的地方。例如，有时使用大型数据结构时，适当地使变量可变可能比复制和返回新分配的实例要更快。对于较小的数据结构，总是创建新实例并采用一种更函数式的编程风格可能会使代码更易理解。所以为了可读性而造成的性能惩罚也许使值得的。</p>
-<h3>变量和常量的区别</h3>
-<p>不能改变一个变量的值可能会使你想起另一个大部分编程语言都有的概念：<em>常量</em>（<em>constants</em>）。常量也是绑定到一个名称的不允许改变的值，不过常量与变量还是有一些区别。首先，不允许对常量使用<code>mut</code>：常量不光是默认不能改变，它总是不能改变。常量使用<code>const</code>关键字而不是<code>let</code>关键字声明，而且<em>必须</em>注明值的类型。现在我们准备在下一部分，“数据类型”，涉及到类型和类型注解，所以现在无需担心这些细节。常量可以在任何作用域声明，包括全局作用域，这在一个值需要被很多部分的代码用到时很有用。最后一个区别是常量只能用于常量表达式，而不能作为函数调用的结果或任何其他只在运行时使用到的值。</p>
-<p>这是一个常量声明的例子，它的名称是<code>MAX_POINTS</code>而它的值是 100,000。Rust 常量的命名规范是使用大写字母和单词间使用下划线：</p>
-<pre><code class="language-rust">const MAX_POINTS: u32 = 100_000;
-</code></pre>
-<p>常量在整个程序生命周期中都有效，位于它声明的作用域之中。这使得常量可以用作多个部分的代码可能需要知道的程序范围的值，例如一个游戏中任何玩家可以获得的最高分或者一年的秒数。</p>
-<p>将用于整个程序的硬编码的值命名为常量（并编写文档）对为将来代码维护者表明值的意义是很有用的。它也能帮助你将硬编码的值至于一处以便将来可能需要修改他们。</p>
-<h3>覆盖</h3>
-<p>如第二章猜猜看游戏所讲到的，我们可以定义一个与之前变量名称相同的新变量，而新变量会<em>覆盖</em>之前的变量。Rustacean 们称其为第一个变量被第二个<em>给覆盖</em>了，这意味着第二个变量的值是使用这个变量时会看到的值。可以用相同变量名称来覆盖它自己以及重复使用<code>let</code>关键字来多次覆盖，如下所示：</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
-    let x = 5;
-
-    let x = x + 1;
-
-    let x = x * 2;
-
-    println!(&quot;The value of x is: {}&quot;, x);
-}
-</code></pre>
-<p>这个程序首先将<code>x</code>绑定到值<code>5</code>上。接着通过<code>let x =</code>覆盖<code>x</code>，获取原始值并加<code>1</code>这样<code>x</code>的值就变成<code>6</code>了。第三个<code>let</code>语句也覆盖了<code>x</code>，获取之前的值并乘以<code>2</code>，<code>x</code>的最终值是<code>12</code>。当运行这个程序，它会有如下输出：</p>
-<pre><code class="language-sh">$ cargo run
-   Compiling variables v0.1.0 (file:///projects/variables)
-     Running `target/debug/variables`
-The value of x is: 12
-</code></pre>
-<p>这与将变量声明为<code>mut</code>是有区别的。因为除非再次使用<code>let</code>关键字，不小心尝试对变量重新赋值会导致编译时错误。我们可以用这个值进行一些计算，不过计算完之后变量仍然是不变的。</p>
-<p>另一个<code>mut</code>与覆盖的区别是当再次使用<code>let</code>关键字时，事实上创建了一个新变量，我们可以改变值的类型。例如，假设程序请求用户输入空格来提供在一些文本之间需要多少空间来分隔，不过我们真正需要的是将输入存储成数字（多少个空格）：</p>
-<pre><code class="language-rust">let spaces = &quot;   &quot;;
-let spaces = spaces.len();
-</code></pre>
-<p>这里允许第一个<code>spaces</code>变量是字符串类型，而第二个<code>spaces</code>变量，它是一个恰巧与第一个变量名字相同的崭新的变量，它是数字类型。因此覆盖使我们不必使用不同的名字，比如<code>spaces_str</code>和<code>spaces_num</code>；相反，我们可以复用<code>spaces</code>这个更简单的名称。然而，如果尝试使用<code>mut</code>，如下所示：</p>
-<pre><code class="language-rust,ignore">let mut spaces = &quot;   &quot;;
-spaces = spaces.len();
-</code></pre>
-<p>会导致一个编译时错误，因为不允许改变一个变量的类型：</p>
-<pre><code class="language-sh">error[E0308]: mismatched types
- --&gt; src/main.rs:3:14
-  |
-3 |     spaces = spaces.len();
-  |              ^^^^^^^^^^^^ expected &amp;str, found usize
-  |
-  = note: expected type `&amp;str`
-  = note:    found type `usize`
-</code></pre>
-<p>现在我们探索了变量如何工作，让我们看看他们能有多少数据类型。</p>
-<h2>数据类型</h2>
-<blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch03-02-data-types.md">ch03-02-data-types.md</a>
-<br>
-commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
-</blockquote>
-<p>Rust 中的任何值都有一个具体的<em>类型</em>（<em>type</em>），这告诉了 Rust 它被指定为何种数据这样 Rust 就知道如何处理这些数据了。这一部分将讲到一些语言内建的类型。我们将这些类型分为两个子集：标量（scalar）和复合（compound）。</p>
-<p>贯穿整个部分，请记住 Rust 是一个<em>静态类型</em>（<em>statically typed</em>）语言，也就是说必须在编译时就知道所有变量的类型。编译器通常可以通过值以及如何使用他们来推断出我们想要用的类型。当多个类型都是可能的时候，比如第二章中<code>parse</code>将<code>String</code>转换为数字类型，必须增加类型注解，像这样：</p>
-<pre><code class="language-rust">let guess: u32 = &quot;42&quot;.parse().unwrap();
-</code></pre>
-<p>如果这里不添加类型注解，Rust 会显示如下错误，它意味着编译器需要我们提供更多我们想要使用哪个可能的类型的信息：</p>
-<pre><code class="language-sh">error[E0282]: unable to infer enough type information about `_`
- --&gt; src/main.rs:2:5
-  |
-2 | let guess = &quot;42&quot;.parse().unwrap();
-  |     ^^^^^ cannot infer type for `_`
-  |
-  = note: type annotations or generic parameter binding required
-</code></pre>
-<p>在我们讨论各种数据类型时会看到不同的类型注解。</p>
-<h3>标量类型</h3>
-<p><em>标量</em>类型代表一个单独的值。Rust 有四种基本的标量类型：整型、浮点型、布尔类型和字符类型。你可能在其他语言中见过他们，不过让我们深入了解他们在 Rust 中时如何工作的。</p>
-<h4>整型</h4>
-<p><em>整数</em>是一个没有小数部分的数字。我们在这一章的前面使用过一个整型，<code>i32</code>类型。这个类型声明表明在 32 位系统上它关联的值应该是一个有符号整数（因为这个<code>i</code>，与<code>u</code>代表的无符号相对）。表格 3-1 展示了 Rust 内建的整数类型。每一个变体的有符号和无符号列（例如，<em>i32</em>）可以用来声明对应的整数值。</p>
-<figure>
-<figcaption>
-<p>Table 3-1: Integer Types in Rust</p>
-</figcaption>
-<table><thead><tr><td> Length </td><td> Signed </td><td> Unsigned </td></tr></thead>
-<tr><td> 8-bit  </td><td> i8     </td><td> u8       </td></tr>
-<tr><td> 16-bit </td><td> i16    </td><td> u16      </td></tr>
-<tr><td> 32-bit </td><td> i32    </td><td> u32      </td></tr>
-<tr><td> 64-bit </td><td> i64    </td><td> u64      </td></tr>
-<tr><td> arch   </td><td> isize  </td><td> usize    </td></tr>
-</table>
-</figure>
-<p>每一种变体都可以是有符号或无符号的并有一个显式的大小。有符号和无符号代表数字是否能够是正数或负数；换句话说，数字是否需要有一个符号（有符号数）或者永远只需要是正的这样就可以不用符号（无符号数）。</p>
-<h1>How Functions Work</h1>
-<h1>Comments</h1>
-<h1>Control Flow</h1>
 
                 </div>
 
                 <!-- Mobile navigation buttons -->
                 
+                    <a href="ch01-02-hello-world.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
 
+                
+                    <a href="ch03-00-common-programming-concepts.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
                 
 
             </div>
 
             
+                <a href="ch01-02-hello-world.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
 
+            
+                <a href="ch03-00-common-programming-concepts.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
             
 
         </div>

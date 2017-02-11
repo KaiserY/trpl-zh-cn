@@ -7,6 +7,7 @@
         <meta name="description" content="Rust 程序设计语言 中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <base href="">
 
         <link rel="stylesheet" href="book.css">
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
@@ -46,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html" class="active"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html" class="active"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -66,26 +67,31 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h1>介绍</h1>
+                    <h1>通用编程概念</h1>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch01-00-introduction.md">ch01-00-introduction.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch03-00-common-programming-concepts.md">ch03-00-common-programming-concepts.md</a>
 <br>
-commit c6920d4a2ee0f282addaf8f6945cefe3ef7bdf09</p>
+commit 2067b6e2bff990bceb39ae8f35780bd3bed08644</p>
 </blockquote>
-<p>欢迎阅读“Rust 程序设计语言”。一本关于 Rust 的介绍性书籍。Rust 是一个关注安全、速度和并发的编程语言。它的设计可以使程序获得性能和对底层语言的控制，并享受高级语言强大的抽象能力。这些特性使得 Rust 适合那些有类似 C 语言经验并正在寻找一个更安全的替代者的程序员，同时也适合那些来自类似 Python 语言背景，正在探索在不牺牲表现力的情况下编写更好性能代码的人们。</p>
-<p>Rust 在编译时进行其绝大多数的安全检查和内存管理决策，因此程序的运行时性能没有受到影响。这让其在许多其他语言不擅长的应用场景中得以大显身手：有可预测空间和时间要求的程序，嵌入到其他语言中，以及编写底层代码，如设备驱动和操作系统。Rust 也很擅长 web 程序：它驱动着 Rust 包注册网站（package
-registry site），crates.io！我们期待看到<em>你</em>使用 Rust 进行创作。</p>
-<p>本书的编排面向已经了解如何使用至少一门编程语言编程的读者。读完本书之后，你应该能自如的编写 Rust 程序。我们将通过小的，专注的并相互依赖的例子来学习 Rust，并向你展示如何使用 Rust 多样的功能，同时了解它们在后台是如何执行的。</p>
-<h2>为本书做出贡献</h2>
-<p>本书是开源的。如果你发现任何错误，请不要犹豫，<a href="https://github.com/rust-lang/book">在 GitHub 上</a>发起 issue 或提交 pull request。</p>
-
+<p>这一章涉及到几乎出现在所有编程语言中的概念，以及他们在 Rust 中如何工作。很多编程语言在核心概念上都是共通的。本章中展示的所有概念没有一个是 Rust 所特有的，不过我们会在 Rust 环境中讨论他们并解释他们的使用习惯。</p>
+<p>具体的，我们将会学习变量，基本类型，函数，注释和控制流。这些基础知识将会出现在每一个 Rust 程序中，提早学习这些概念会使你在起步时拥有一个核心的基础。</p>
+<!-- PROD: START BOX -->
+<blockquote>
+<h3>关键字</h3>
+<p>Rust 语言有一系列被保留为只能被语言使用的<em>关键字</em>（<em>keywords</em>），如大部分语言一样。注意你不能使用这些关键字作为变量或函数的名称。大部分关键字有特殊的意义，并将会被用来进行 Rust 程序中的多种任务；一些关键字目前没有相关的功能不过为了将来可能添加进 Rust 的功能而被保留。可以在附录 A 中找到一份关键字的列表</p>
+</blockquote>
+<!-- PROD: END BOX -->
                 </div>
 
                 <!-- Mobile navigation buttons -->
                 
+                    <a href="ch02-00-guessing-game-tutorial.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
 
                 
-                    <a href="ch01-01-installation.html" class="mobile-nav-chapters next">
+                    <a href="ch03-01-variables-and-mutability.html" class="mobile-nav-chapters next">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -93,9 +99,13 @@ registry site），crates.io！我们期待看到<em>你</em>使用 Rust 进行�
             </div>
 
             
+                <a href="ch02-00-guessing-game-tutorial.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
 
             
-                <a href="ch01-01-installation.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                <a href="ch03-01-variables-and-mutability.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-right"></i>
                 </a>
             
