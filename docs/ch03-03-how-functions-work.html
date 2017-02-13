@@ -67,7 +67,188 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h1>How Functions Work</h1>
+                    <h2>函数如何工作</h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch03-03-how-functions-work.md">ch03-03-how-functions-work.md</a>
+<br>
+commit 52b7fcbfdd35915cb21e6d492fb6c86764f53b47</p>
+</blockquote>
+<p>函数在 Rust 代码中应用广泛。你已经见过一个语言中最重要的函数：<code>main</code>函数，它时很多程序的入口点。你也见过了<code>fn</code>关键字，它用来声明新函数。</p>
+<p>Rust 代码使用 <em>snake case</em> 作为函数和变量名称的规范风格。在 snake case 中，所有字母都是小写并使用下划线分隔单词。这里是一个函数定义程序的例子：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">fn main() {
+    println!(&quot;Hello, world!&quot;);
+
+    another_function();
+}
+
+fn another_function() {
+    println!(&quot;Another function.&quot;);
+}
+</code></pre>
+<p>Rust 中的函数定义以<code>fn</code>开始并在函数名后跟一对括号。大括号告诉编译器哪里是函数体的开始和结尾。</p>
+<p>可以使用定义过的函数名后跟括号来调用任意函数。因为<code>another_function</code>在程序中已经定义过了，它可以在<code>main</code>函数中被调用。注意，源码中<code>another_function</code>在<code>main</code>函数<em>之后</em>被定义；也可以在之前定义。Rust 不关心函数定义于何处，只要他们被定义了。</p>
+<p>让我们开始一个叫做<em>functions</em>的新二进制项目来进一步探索函数。将上面的<code>another_function</code>例子写入 <em>src/main.rs</em> 中并运行。你应该会看到如下输出：</p>
+<pre><code class="language-sh">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+     Running `target/debug/functions`
+Hello, world!
+Another function.
+</code></pre>
+<p>代码在<code>main</code>函数中按照他们出现的顺序被执行。首先，打印“Hello, world!”信息，接着<code>another_function</code>被调用并打印它的信息。</p>
+<h3>函数参数</h3>
+<p>函数也可以被定义为拥有<em>参数</em>（<em>parameters</em>），他们是作为函数签名一部分的特殊变量。当函数拥有参数，可以为这些参数提供具体的值。技术上讲，这些具体值被称为参数（ <em>arguments</em>），不过通常的习惯是倾向于在函数定义中的变量和调用函数时传递的具体值都可以用 &quot;parameter&quot; 和 &quot;argument&quot; 而不加区别。</p>
+<p>如下被重写的<code>another_function</code>版本展示了 Rust 中参数是什么样的：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">fn main() {
+    another_function(5);
+}
+
+fn another_function(x: i32) {
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+</code></pre>
+<p>尝试运行程序，将会得到如下输出：</p>
+<pre><code class="language-sh">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+     Running `target/debug/functions`
+The value of x is: 5
+</code></pre>
+<p><code>another_function</code>的声明有一个叫做<code>x</code>的参数。<code>x</code>的类型被指定为<code>i32</code>。当<code>5</code>被传递给<code>another_function</code>时，<code>println!</code>宏将<code>5</code>放入格式化字符串中大括号的位置。</p>
+<p>在函数签名中，<em>必须</em>声明每个参数的类型。这是 Rust 设计中一个经过慎重考虑的决定：要求在函数定义中提供类型注解意味着编译器再也不需要在别的地方要求你注明类型就能知道你的意图。</p>
+<p>当一个函数有多个参数时，使用逗号隔开他们，像这样：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">fn main() {
+    another_function(5, 6);
+}
+
+fn another_function(x: i32, y: i32) {
+    println!(&quot;The value of x is: {}&quot;, x);
+    println!(&quot;The value of y is: {}&quot;, y);
+}
+</code></pre>
+<p>这个例子创建了一个有两个参数的函数，都是<code>i32</code>类型的。函数打印出了这两个参数的值。注意函数参数并一定都是相同的————这个例子中他们只是碰巧相同。</p>
+<p>尝试运行代码。使用上面的例子替换当前 <em>function</em> 项目的 <em>src/main.rs</em> 文件，并<code>cargo run</code>运行它：</p>
+<pre><code class="language-sh">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+     Running `target/debug/functions`
+The value of x is: 5
+The value of y is: 6
+</code></pre>
+<p>因为我们使用<code>5</code>作为<code>x</code>的值和<code>6</code>作为<code>y</code>的值来调用函数，这两个字符串使用这些值并被打印出来。</p>
+<h3>函数体</h3>
+<p>函数体由一系列的语句和一个可选的表达式构成。目前为止，我们只涉及到了没有结尾表达式的函数，不过我们见过表达式作为了语句的一部分。因为 Rust 是一个基于表达式（expression-based）的语言，这是一个需要理解的（不同于其他语言）重要区别。其他语言并没有这样的区别，所以让我们看看语句与表达式有什么区别以及他们是如何影响函数体的。</p>
+<h3>语句与表达式</h3>
+<p>我们已经用过语句与表达式了。<em>语句</em>（<em>Statements</em>）是执行一些操作但不返回值的指令。表达式（<em>Expressions</em>）计算并产生一个值。让我们看看一些例子：</p>
+<p>使用<code>let</code>关键字创建变量并绑定一个值是一个语句。在列表 3-3 中，<code>let y = 6;</code>是一个语句：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">fn main() {
+    let y = 6;
+}
+</code></pre>
+<figcaption>
+<p>Listing 3-3: A <code>main</code> function declaration containing one statement.</p>
+</figcaption>
+</figure>
+<p>函数定义也是语句；上面整个例子本身就是一个语句。</p>
+<p>语句并不返回值。因此，不能把<code>let</code>语句赋值给另一个变量，比如下面的例子尝试做的：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">fn main() {
+    let x = (let y = 6);
+}
+</code></pre>
+<p>当运行这个程序，会得到如下错误：</p>
+<pre><code class="language-sh">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+error: expected expression, found statement (`let`)
+ --&gt; src/main.rs:2:14
+  |
+2 |     let x = (let y = 6);
+  |              ^^^
+  |
+  = note: variable declaration using `let` is a statement
+</code></pre>
+<p><code>let y = 6</code>语句并不返回值，所以并没有<code>x</code>可以绑定的值。这与其他语言不同，例如 C 和 Ruby，他们的赋值语句返回所赋的值。在这些语言中，可以这么写<code>x = y = 6</code>这样<code>x</code>和<code>y</code>的值都是<code>6</code>；这在 Rust 中可不行。</p>
+<p>表达式进行计算而且他们组成了其余大部分 Rust 代码。考虑一个简单的数学运算，比如<code>5 + 6</code>，这是一个表达式并计算出值<code>11</code>。表达式可以是语句的一部分：在列表 3-3 中有这个语句<code>let y = 6;</code>，<code>6</code>是一个表达式它计算出的值是<code>6</code>。函数调用是一个表达式。宏调用是一个表达式。我们用来创新建作用域的大括号（代码块），<code>{}</code>，也是一个表达式，例如：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">fn main() {
+    let x = 5;
+
+    let y = {
+        let x = 3;
+        x + 1
+    };
+
+    println!(&quot;The value of y is: {}&quot;, y);
+}
+</code></pre>
+<p>这个表达式：</p>
+<pre><code class="language-rust,ignore">{
+    let x = 3;
+    x + 1
+}
+</code></pre>
+<p>这个代码块的值是<code>4</code>。这个值作为<code>let</code>语句的一部分被绑定到<code>y</code>上。注意结尾没有分号的那一行，与大部分我们见过的代码行不同。表达式并不包含结尾的分号。如果在表达式的结尾加上分号，他就变成了语句，这也就使其不返回一个值。在接下来的探索中记住函数和表达式都返回值就行了。</p>
+<h3>函数的返回值</h3>
+<p>可以向调用它的代码返回值。并不对返回值命名，不过会在一个箭头（<code>-&gt;</code>）后声明它的类型。在 Rust 中，函数的返回值等同于函数体最后一个表达式的值。这是一个有返回值的函数的例子：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">fn five() -&gt; i32 {
+    5
+}
+
+fn main() {
+    let x = five();
+
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+</code></pre>
+<p>在函数<code>five</code>中并没有函数调用、宏、甚至也没有<code>let</code>语句————只有数字<code>5</code>它子集。这在 Rust 中是一个完全有效的函数。注意函数的返回值类型也被指定了，就是<code>-&gt; i32</code>。尝试运行代码；输出应该看起来像这样：</p>
+<pre><code class="language-sh">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+     Running `target/debug/functions`
+The value of x is: 5
+</code></pre>
+<p>函数<code>five</code>的返回值是<code>5</code>，也就是为什么返回值类型是<code>i32</code>。让我们仔细检查一下这段代码。这有两个重要的部分：首先，<code>let x = five();</code>这一行表明我们使用函数的返回值来初始化了一个变量。因为函数<code>five</code>返回<code>5</code>，这一行与如下这行相同：</p>
+<pre><code class="language-rust">let x = 5;
+</code></pre>
+<p>再次，函数<code>five</code>没有参数并定义了返回值类型，不过函数体只有单单一个<code>5</code>也没有分号，因为这是我们想要返回值的表达式。让我们看看另一个例子：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">fn main() {
+    let x = plus_one(5);
+
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+
+fn plus_one(x: i32) -&gt; i32 {
+    x + 1
+}
+</code></pre>
+<p>运行代码会打印出<code>The value of x is: 6</code>。如果在包含<code>x + 1</code>的那一行的结尾加上一个分号，把它从表达式变成语句后会怎样呢？</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let x = plus_one(5);
+
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+
+fn plus_one(x: i32) -&gt; i32 {
+    x + 1;
+}
+</code></pre>
+<p>运行代码会产生一个错误，如下：</p>
+<pre><code class="language-sh">error[E0269]: not all control paths return a value
+ --&gt; src/main.rs:7:1
+  |
+7 | fn plus_one(x: i32) -&gt; i32 {
+  | ^
+  |
+help: consider removing this semicolon:
+ --&gt; src/main.rs:8:10
+  |
+8 |     x + 1;
+  |          ^
+</code></pre>
+<p>主要的错误信息，“并非所有控制路径都返回一个值”（“not all control paths return a value,”），揭示了代码的核心问题。函数<code>plus_one</code>的定义说明它要返回一个<code>i32</code>，不过语句并不返回一个值。因此，这个函数没有返回任何值，这与函数定义相矛盾并导致一个错误。在输出中，Rust 提供了一个可能会对修正问题有帮助的信息：它建议去掉分号，这会修复这个错误。</p>
 
                 </div>
 
