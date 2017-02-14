@@ -1,0 +1,293 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Rust 程序设计语言 中文版</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html" class="active"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>什么是所有权</h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch04-01-what-is-ownership.md">ch04-01-what-is-ownership.md</a>
+<br>
+commit cc053d91f41793e54d5321abe027b0c163d735b8</p>
+</blockquote>
+<p>Rust 的核心功能（之一）是<strong>所有权</strong>（<em>ownership</em>）。虽然这个功能理解起来很直观，不过它对语言的其余部分有着更深层的含义。</p>
+<p>所有程序都必须管理他们运行时使用计算机内存的方式。一些语言中使用垃圾回收在程序运行过程中来时刻寻找不再被使用的内存；在另一些语言中，程序员必须亲自分配和释放内存。Rust 则选择了第三种方式：内存被一个所有权系统管理，它拥有一系列的规则使编译器在编译时进行检查。任何所有权系统的功能都不会导致运行时开销。</p>
+<p>因为所有权对很多程序员都是一个新概念，需要一些时间来适应。好消息是随着你对 Rust 和所有权系统的规则越来越有经验，你就越能自然地编写出安全和高效的代码。持之以恒！</p>
+<p>当你理解了所有权系统，你就会对这个使 Rust 如此独特的功能有一个坚实的基础。在本章中，你将会通过一些例子来学习所有权，他们关注一个非常常见的数据结构：字符串。</p>
+<!-- PROD: START BOX -->
+<blockquote>
+<h3>栈（Stack）与堆（Heap）</h3>
+<p>在很多语言中并不经常需要考虑到栈与堆。不过在像 Rust 这样的系统变成语言中，值是位于栈上还是堆上在更大程度上影响了语言的行为以及为何必须做出特定的选择。我们会在本章的稍后部分描述所有权与堆与栈相关的部分，所以这里只是一个用来预热的简要解释。</p>
+<p>栈和堆都是代码在运行时可供使用的内存部分，不过他们以不同的结构组成。栈以放入值的顺序存储并以相反顺序取出值。这也被称作<strong>后进先出</strong>（<em>last in, first out</em>）。想象一下一叠盘子：当增加更多盘子时，把他们放在盘子堆的顶部，当需要盘子时，也从顶部拿走。不能从中间也不能从底部增加或拿走盘子！增加数据叫做<strong>进栈</strong>（<em>pushing onto the stack</em>），而移出数据叫做<strong>出栈</strong>（<em>popping off the stack</em>）。</p>
+<p>操作栈是非常快的，因为它访问数据的方式：永远也不需要寻找一个位置放入新数据或者取出数据因为这个位置总是在栈顶。另一个使得栈快速的性质是栈中的所有数据都必须是一个已知的固定的大小。</p>
+<p>相反对于在编译时未知大小或大小可能变化的数据，可以把他们储存在堆上。堆是缺乏组织的：当向堆放入数据时，我们请求一定大小的空间。操作系统在堆的某处找到一块足够大的空位，把它标记为已使用，并返回给我们一个它位置的指针。这个过程称作<strong>在堆上分配内存</strong>（<em>allocating on the heap</em>），并且有时这个过程就简称为“分配”（allocating）。向栈中放入数据并不被认为是分配。因为指针是已知的固定大小的，我们可以将指针储存在栈上，不过当需要实际数据时，必须访问指针。</p>
+<p>想象一下去餐馆就坐吃饭。当进入时，你说明有几个人，餐馆员工会找到一个够大的空桌子并领你们过去。如果有人来迟了，他们也可以通过询问来找到你们坐在哪。</p>
+<p>访问堆上的数据要比访问栈上的数据要慢因为必须通过指针来访问。现代的处理器在内存中跳转越少就越快。继续类比，假设有一台服务器来处理来自多个桌子的订单。它在处理完一个桌子的所有订单后再移动到下一个桌子是最有效率的。从桌子 A 获取一个订单，接着再从桌子 B 获取一个订单，然后再从桌子 A，然后再从桌子 B 这样的流程会更加缓慢。出于同样原因，处理器在处理的数据之间彼此较近的时候（比如在栈上）比较远的时候（比如可能在堆上）能更好的工作。在堆上分配大量的空间也可能消耗时间。</p>
+<p>当调用一个函数，传递给函数的值（包括可能指向堆上数据的指针）和函数的局部变量被压入栈中。当函数结束时，这些值被移出栈。</p>
+<p>记录何处的代码在使用堆上的什么数据，最小化堆上的冗余数据的数量以及清理堆上不再使用的数据以致不至于用完空间，这些所有的问题正是所有权系统要处理的。一旦理解了所有权，你就不需要经常考虑栈和堆了，不过理解如何管理堆内存可以帮助我们理解所有权为什么存在以及为什么以它的方式工作。</p>
+</blockquote>
+<!-- PROD: END BOX -->
+<h3>所有权规则</h3>
+<p>首先，让我们看一下所有权的规则。记住这些规则正如我们将完成一些说明这些规则的例子：</p>
+<blockquote>
+<ol>
+<li>Rust 中的每一个值都有一个叫做它的<strong>所有者</strong>（<em>owner</em>）的变量。</li>
+<li>同时一次只能有一个所有者</li>
+<li>当所有者变量离开作用域，这个值将被丢弃。</li>
+</ol>
+</blockquote>
+<h3>变量作用域</h3>
+<p>我们在第二章已经完成过一个 Rust 程序的例子了。现在我们已经掌握了基本语法，所以不会在所有的例子中包含<code>fn main() {</code>代码了，所以如果你是一路跟过来的，必须手动将之后例子的代码放入一个<code>main</code>函数中。为此，例子将显得更加具体，使我们可以关注具体细节而不是样板代码。</p>
+<p>作为所有权的第一个例子，我们看看一些变量的<strong>作用域</strong>（<em>scope</em>）。作用域是一个 item 在程序中有效的范围。假如有一个这样的变量：</p>
+<pre><code class="language-rust">let s = &quot;hello&quot;;
+</code></pre>
+<p>变量<code>s</code>绑定到了一个字符串字面值，这个字符串值是硬编码进我们程序代码中的。这个变量从声明的点开始直到当前<em>作用域</em>结束时都是有效的。列表 4-1 的注释标明了变量<code>s</code>在哪里是有效的：</p>
+<figure>
+<pre><code class="language-rust">{                      // s is not valid here, it’s not yet declared
+    let s = &quot;hello&quot;;   // s is valid from this point forward
+
+    // do stuff with s
+}                      // this scope is now over, and s is no longer valid
+</code></pre>
+<figcaption>
+<p>Listing 4-1: A variable and the scope in which it is valid</p>
+</figcaption>
+</figure>
+<p>换句话说，这里有两个重要的点：</p>
+<ol>
+<li>当<code>s</code><strong>进入作用域</strong>，它就是有效的。</li>
+<li>这一直持续到它<strong>离开作用域</strong>为止。</li>
+</ol>
+<p>目前为止，变量是否有效与作用域的关系跟其他变成语言是类似的。现在我们要在此基础上介绍<code>String</code>类型。</p>
+<h3><code>String</code>类型</h3>
+<p>为了演示所有权的规则，我们需要一个比第三章讲到的任何一个都要复杂的数据类型。之前出现的数据类型都是储存在栈上的并且当离开作用域时被移出栈，不过我们需要寻找一个储存在堆上的数据来探索 Rust 如何知道该在何时清理数据。</p>
+<p>这里使用<code>String</code>作为例子并专注于<code>String</code>与所有权相关的部分。这些方面也同样适用于其他标准库提供的或你创建的复杂数据类型。在第八章会更深入地讲解<code>String</code>。</p>
+<p>我们已经见过字符串字面值了，它被硬编码进程序里。字符串字面值是很方便，不过他们并不总是适合所有需要使用文本的场景。原因之一就是他们是不可变的。另一个原因是不是所有字符串的值都能在编写代码时就知道：例如，如果想要获取用户输入并储存该怎么办呢？为此，Rust 有第二个字符串类型，<code>String</code>。这个类型储存在堆上所以储存在编译时未知大小的文本。可以用<code>from</code>从字符串字面值来创建<code>String</code>，如下：</p>
+<pre><code class="language-rust">let s = String::from(&quot;hello&quot;);
+</code></pre>
+<p>这两个冒号（<code>::</code>）运算符允许将特定的<code>from</code>函数置于<code>String</code>类型的命名空间（namespace）下而不需要使用类似<code>string_from</code>这样的名字。在第五章的“方法语法”（“Method Syntax”）部分会着重讲解这个语法而且在第七章会讲到模块的命名空间。</p>
+<p>这类字符串<em>可以</em>被修改：</p>
+<pre><code class="language-rust">let mut s = String::from(&quot;hello&quot;);
+
+s.push_str(&quot;, world!&quot;); // push_str() appends a literal to a String
+
+println!(&quot;{}&quot;, s); // This will print `hello, world!`
+</code></pre>
+<p>那么这里有什么区别呢？为什么<code>String</code>可变而字面值却不行呢？区别在于两个类型对内存的处理上。</p>
+<h3>内存与分配</h3>
+<p>字符串字面值的情况，我们在编译时就知道内容所以它直接被硬编码进最终的可执行文件中，这使得字符串字面值快速和高效。不过这些属性都只来源于它的不可变形。不幸的是，我们不能为了每一个在编译时未知大小的文本而将一块内存放入二进制文件中而它的大小还可能随着程序运行而改变。</p>
+<p>对于<code>String</code>类型，为了支持一个可变，可增长的文本片段，需要在堆上分配一块在编译时未知大小的内存来存放内容。这意味着：</p>
+<ol>
+<li>内存必须在运行时向操作系统请求</li>
+<li>需要一个当我们处理完<code>String</code>时将内存返回给操作系统的方法</li>
+</ol>
+<p>第一部分由我们完成：当调用<code>String::from</code>时，它的实现请求它需要的内存。这在编程语言中是非常通用的。</p>
+<p>然而，第二部分实现起来就各有区别了。在有**垃圾回收（GC）**的语言中， GC 记录并清除不再使用的内存，而我们作为程序员，并不需要关心他们。没有 GC 的话，识别出不再使用的内存并调用代码显式释放就是我们程序员的责任了，正如请求内存的时候一样。从历史的角度上说正确处理内存回收曾经是一个困难的编程问题。如果忘记回收了会浪费内存。如果过早回收了，将会出现无效变量。如果重复回收，这也是个 bug。我们需要<code>allocate</code>和<code>free</code>一一对应。</p>
+<p>Rust 采取了一个不同的策略：内存在拥有它的变量离开作用域后就被自动释放。下面是列表 4-1 作用域例子的一个使用<code>String</code>而不是字符串字面值的版本：</p>
+<pre><code class="language-rust">{
+    let s = String::from(&quot;hello&quot;); // s is valid from this point forward
+
+    // do stuff with s
+}                                  // this scope is now over, and s is no
+                                   // longer valid
+</code></pre>
+<p>这里是一个将<code>String</code>需要的内存返回给操作系统的很自然的位置：当<code>s</code>离开作用域的时候。当变量离开作用域，Rust 为其调用一个特殊的函数。这个函数叫做 <code>drop</code>，在这里<code>String</code>的作者可以放置释放内存的代码。Rust 在结尾的<code>}</code>处自动调用<code>drop</code>。</p>
+<blockquote>
+<p>注意：在 C++ 中，这种 item 在生命周期结束时释放资源的方法有时被称作<strong>资源获取即初始化</strong>（<em>Resource Acquisition Is Initialization (RAII)</em>）。如果你使用过 RAII 模式的话应该对 Rust 的<code>drop</code>函数不陌生。</p>
+</blockquote>
+<p>这个模式对编写 Rust 代码的方式有着深远的影响。它现在看起来很简单，不过在更复杂的场景下代码的行为可能是不可预测的，比如当有多个变量使用在堆上分配的内存时。现在让我们探索一些这样的场景。</p>
+<h4>变量与数据交互：移动</h4>
+<p>Rust 中的多个变量以一种独特的方式与同一数据交互。让我们看看列表 4-2 中一个使用整型的例子：</p>
+<figure>
+<pre><code class="language-rust">let x = 5;
+let y = x;
+</code></pre>
+<figcaption>
+<p>Listing 4-2: Assigning the integer value of variable <code>x</code> to <code>y</code></p>
+</figcaption>
+</figure>
+<p>根据其他语言的经验大致可以猜到这在干什么：“将<code>5</code>绑定到<code>x</code>；接着生成一个值<code>x</code>的拷贝并绑定到<code>y</code>”。现在有了两个变量，<code>x</code>和<code>y</code>，都等于<code>5</code>。这也正是事实上发生了的，因为正数是有已知固定大小的简单值，所以这两个<code>5</code>被放入了栈中。</p>
+<p>现在看看这个<code>String</code>版本：</p>
+<pre><code class="language-rust">let s1 = String::from(&quot;hello&quot;);
+let s2 = s1;
+</code></pre>
+<p>这看起来与上面的代码非常类似，所以我们可能会假设他们的运行方式也是类似的：也就是说，第二行可能会生成一个<code>s1</code>的拷贝并绑定到<code>s2</code>上。不过，事实上并不完全是这样。</p>
+<p>为了更全面的解释这个问题，让我们看看图 4-3 中<code>String</code>真正是什么样。<code>String</code>由三部分组成，如图左侧所示：一个指向存放字符串内容内存的指针，一个长度，和一个容量。这一组数据储存在栈上。右侧则是堆上存放内容的内存部分。</p>
+<figure>
+<img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
+<figcaption>
+<p>Figure 4-3: Representation in memory of a <code>String</code> holding the value <code>&quot;hello&quot;</code>
+bound to <code>s1</code></p>
+</figcaption>
+</figure>
+<p>长度代表当前<code>String</code>的内容使用了多少字节的内存。容量是<code>String</code>从操作系统总共获取了多少字节的内存。长度与容量的区别是很重要的，不过目前为止的场景中并不重要，所以可以暂时忽略容量。</p>
+<p>当我们把<code>s1</code>赋值给<code>s2</code>，<code>String</code>的数据被复制了，这意味着我们从栈上拷贝了它的指针、长度和容量。我们并没有复制堆上指针所指向的数据。换句话说，内存中数据的表现如图 4-4 所示。</p>
+<figure>
+<img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
+<figcaption>
+<p>Figure 4-4: Representation in memory of the variable <code>s2</code> that has a copy of
+the pointer, length, and capacity of <code>s1</code></p>
+</figcaption>
+</figure>
+<p>这个表现形式看起来<strong>并不像</strong>图 4-5 中的那样，它是如果 Rust 也拷贝了堆上的数据后内存看起来是怎么样的。如果 Rust 这么做了，那么操作<code>s2 = s1</code>在堆上数据比较大的时候可能会对运行时性能造成非常大的影响。</p>
+<figure>
+<img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
+<figcaption>
+<p>Figure 4-5: Another possibility of what <code>s2 = s1</code> might do if Rust copied the
+heap data as well</p>
+</figcaption>
+</figure>
+<p>之前，我们提到过当变量离开作用域后 Rust 自动调用<code>drop</code>函数并清理变量的堆内存。不过图 4-4 展示了两个数据指针指向了同一位置。这就有了一个问题：当<code>s2</code>和<code>s1</code>离开作用域，他们都会尝试释放相同的内存。这是一个叫做 <em>double free</em> 的错误，也是之前提到过的内存安全性 bug 之一。两次释放（相同）内存会导致内存污染，它可能会导致安全漏洞。</p>
+<p>为了确保内存安全，这种场景下 Rust 的处理有另一个细节值得注意。与其尝试拷贝被分配的内存，Rust 则认为<code>s1</code>不再有效，因此 Rust 不需要在<code>s1</code>离开作用域后清理任何东西。看看在<code>s2</code>被创建之后尝试使用<code>s1</code>会发生生么：</p>
+<pre><code class="language-rust,ignore">let s1 = String::from(&quot;hello&quot;);
+let s2 = s1;
+
+println!(&quot;{}&quot;, s1);
+</code></pre>
+<p>你会得到一个类似如下的错误，因为 Rust 禁止你使用无效的引用。</p>
+<pre><code class="language-sh">error[E0382]: use of moved value: `s1`
+ --&gt; src/main.rs:4:27
+  |
+3 |     let s2 = s1;
+  |         -- value moved here
+4 |     println!(&quot;{}, world!&quot;,s1);
+  |                           ^^ value used here after move
+  |
+  = note: move occurs because `s1` has type `std::string::String`,
+which does not implement the `Copy` trait
+</code></pre>
+<p>如果你在其他语言中听说过术语“浅拷贝”（“shallow copy”）和“深拷贝”（“deep copy”），那么拷贝指针、长度和容量而不拷贝数据可能听起来像浅拷贝。不过因为 Rust 同时使第一个变量无效化了，这个操作被成为<strong>移动</strong>（<em>move</em>），而不是浅拷贝。上面的例子可以解读为<code>s1</code>被<strong>移动</strong>到了<code>s2</code>中。那么具体发生了什么如图 4-6 所示。</p>
+<figure>
+<img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
+<figcaption>
+<p>Figure 4-6: Representation in memory after <code>s1</code> has been invalidated</p>
+</figcaption>
+</figure>
+<p>这样就解决了我们的麻烦！因为只有<code>s2</code>是有效的，当其离开作用域，它就释放自己的内存，完毕。</p>
+<p>另外，这里还隐含了一个设计选择：Rust 永远也不会自动创建数据的“深拷贝”。因此，任何<strong>自动</strong>的复制可以被认为对运行时性能影响较小。</p>
+<h4>变量与数据交互：克隆</h4>
+<p>如果我们<strong>确实</strong>需要深度复制<code>String</code>中堆上的数据，而不仅仅是栈上的数据，可以使用一个叫做<code>clone</code></p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch04-00-understanding-ownership.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch04-02-references-and-borrowing.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch04-00-understanding-ownership.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch04-02-references-and-borrowing.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3001");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload(true); // force reload from server (not from cache)
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+    
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

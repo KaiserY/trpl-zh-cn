@@ -10,7 +10,7 @@
 
 ## 准备一个新项目
 
-要创建一个新项目，进入你在第一章创建的*项目*目录，并使用 Cargo 创建它，像这样：
+要创建一个新项目，进入你在第一章创建的**项目**目录，并使用 Cargo 创建它，像这样：
 
 ```sh
 $ cargo new guessing_game --bin
@@ -125,7 +125,7 @@ println!("Please input your guess.");
 let mut guess = String::new();
 ```
 
-现在程序开始变得有意思了！这一小行代码发生了很多事。注意这是一个`let`语句，用来创建 *变量*。这里是另外一个例子：
+现在程序开始变得有意思了！这一小行代码发生了很多事。注意这是一个`let`语句，用来创建**变量**。这里是另外一个例子：
 
 ```rust,ignore
 let foo = bar;
@@ -144,7 +144,7 @@ let mut bar = 5; // mutable
 
 [string]: ../std/string/struct.String.html
 
-`::new`那一行的`::`语法表明`new`是`String`类型的一个 *关联函数*（*associated function*）。关联函数是针对类型实现的，在这个例子中是`String`，而不是`String`的某个特定实例。一些语言中把它称为 *静态方法*（*static method*）。
+`::new`那一行的`::`语法表明`new`是`String`类型的一个**关联函数**（*associated function*）。关联函数是针对类型实现的，在这个例子中是`String`，而不是`String`的某个特定实例。一些语言中把它称为**静态方法**（*static method*）。
 
 `new`函数创建了一个新的空的`String`，你会在很多类型上发现`new`函数，因为这是创建某个类型新值的常用函数名。
 
@@ -167,7 +167,7 @@ io::stdin().read_line(&mut guess)
 
 `read_line`的工作是把获取任何用户键入到标准输入的字符并放入一个字符串中，所以它获取字符串作为一个参数。这个字符串需要是可变的，这样这个方法就可以通过增加用户的输入来改变字符串的内容。
 
-`&`表明这个参数是一个 *引用*（*reference*），它提供了一个允许多个不同部分的代码访问同一份数据而不需要在内存中多次拷贝的方法。引用是一个复杂的功能，而 Rust 的一大优势就是它是安全而优雅操纵引用。完成这个程序并不需要知道这么多细节：第四章会更全面的解释引用。现在，我们只需知道它像变量一样，默认是不可变的。因此，需要写成`&mut guess`而不是`&guess`来使其可变。
+`&`表明这个参数是一个**引用**（*reference*），它提供了一个允许多个不同部分的代码访问同一份数据而不需要在内存中多次拷贝的方法。引用是一个复杂的功能，而 Rust 的一大优势就是它是安全而优雅操纵引用。完成这个程序并不需要知道这么多细节：第四章会更全面的解释引用。现在，我们只需知道它像变量一样，默认是不可变的。因此，需要写成`&mut guess`而不是`&guess`来使其可变。
 
 这行代码还没有分析完。虽然这是单独一行代码，但它只是一个逻辑上代码行（虽然换行了但仍是一个语句）的第一部分。第二部分是这个方法：
 
@@ -190,7 +190,7 @@ io::stdin().read_line(&mut guess).expect("Failed to read line");
 [ioresult]: ../std/io/type.Result.html
 [result]: ../std/result/enum.Result.html
 
-`Result`类型是 [*枚举*（*enumerations*）][enums]<!-- ignore -->，通常也写作 *enums*。枚举拥有固定值集合的类型，而这些值被称为枚举的 *成员*（*variants*）。第六章会更详细的介绍枚举。
+`Result`类型是 [*枚举*（*enumerations*）][enums]<!-- ignore -->，通常也写作 *enums*。枚举拥有固定值集合的类型，而这些值被称为枚举的**成员**（*variants*）。第六章会更详细的介绍枚举。
 
 [enums]: ch06-00-enums.html
 
@@ -256,7 +256,7 @@ You guessed: 6
 
 ## 使用 crate 来增加更多功能
 
-记住 *crate* 是一个 Rust 代码的包。我们正在构建的项目是一个 *二进制 crate*，它生成一个可执行文件。 `rand` crate 是一个 *库 crate*，它包含意在被其他程序使用的代码。
+记住 *crate* 是一个 Rust 代码的包。我们正在构建的项目是一个**二进制 crate**，它生成一个可执行文件。 `rand` crate 是一个 *库 crate*，它包含意在被其他程序使用的代码。
 
 Cargo 对外部 crate 的运用是其真正闪光的地方。在我们可以使用`rand`编写代码之前，需要编辑 *Cargo.toml* 来包含`rand`作为一个依赖。现在打开这个文件并在`[dependencies]`部分标题（Cargo 为你创建了它）的下面添加如下代码：
 
@@ -319,7 +319,7 @@ Cargo 有一个机制来确保每次任何人重新构建代码都会生成相�
 
 #### 更新 crate 到一个新版本
 
-当你*确实*需要升级 crate 时，Cargo 提供了另一个命令，`update`，他会：
+当你**确实**需要升级 crate 时，Cargo 提供了另一个命令，`update`，他会：
 
 1. 忽略 *Cargo.lock* 文件并计算出所有符合 *Cargo.toml* 中规格的最新版本。
 2. 如果成功了，Cargo 会把这些版本写入 *Cargo.lock* 文件。
@@ -351,7 +351,7 @@ rand = "0.4.0"
 
 ### 生成一个随机数
 
-让我们开始*使用*`rand`。下一步是更新 *src/main.rs*，如列表 2-3：
+让我们开始**使用**`rand`。下一步是更新 *src/main.rs*，如列表 2-3：
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -480,9 +480,9 @@ match guess.cmp(&secret_number) {
 
 [match]: ch06-02-match.html
 
-一个`match`表达式由 *分支（arms）* 构成。一个分支包含一个 *模式*（*pattern*）和代码，这些代码在`match`表达式开头给出的值符合分支的模式时将被执行。Rust 获取提供给`match`的值并挨个检查每个分支的模式。`match`结构和模式是 Rust 中非常强大的功能，它帮助你体现代码可能遇到的多种情形并帮助你处理全部的可能。这些功能将分别在第六章和第十九章详细介绍。
+一个`match`表达式由 **分支（arms）** 构成。一个分支包含一个 **模式**（*pattern*）和代码，这些代码在`match`表达式开头给出的值符合分支的模式时将被执行。Rust 获取提供给`match`的值并挨个检查每个分支的模式。`match`结构和模式是 Rust 中非常强大的功能，它帮助你体现代码可能遇到的多种情形并帮助你处理全部的可能。这些功能将分别在第六章和第十九章详细介绍。
 
-让我们看看一个使用这里的`match`表达式会发生什么的例子。假设用户猜了 50，这时随机生成的秘密数字是 38。当代码比较 50 与 38 时，`cmp`方法会返回`Ordering::Greater`，因为 50 比 38 要大。`Ordering::Greater`是`match`表达式得到的值。它检查第一个分支的模式，`Ordering::Less`，不过值`Ordering::Greater`并不匹配`Ordering::Less`。所以它忽略了这个分支的代码并移动到下一个分支。下一个分支的模式，`Ordering::Greater`，*正确*匹配了`Ordering::Greater`！这个分支关联的代码会被执行并在屏幕打印出`Too big!`。`match`表达式就此终止，因为在这个特定场景下没有检查最后一个分支的必要。
+让我们看看一个使用这里的`match`表达式会发生什么的例子。假设用户猜了 50，这时随机生成的秘密数字是 38。当代码比较 50 与 38 时，`cmp`方法会返回`Ordering::Greater`，因为 50 比 38 要大。`Ordering::Greater`是`match`表达式得到的值。它检查第一个分支的模式，`Ordering::Less`，不过值`Ordering::Greater`并不匹配`Ordering::Less`。所以它忽略了这个分支的代码并移动到下一个分支。下一个分支的模式，`Ordering::Greater`，**正确**匹配了`Ordering::Greater`！这个分支关联的代码会被执行并在屏幕打印出`Too big!`。`match`表达式就此终止，因为在这个特定场景下没有检查最后一个分支的必要。
 
 然而，列表 2-4 的代码并不能编译，尝试一下：
 
@@ -502,7 +502,7 @@ error: aborting due to previous error
 Could not compile `guessing_game`.
 ```
 
-错误的核心表明这里有*不匹配的类型*（*mismatched types*）。Rust 拥有一个静态强类型系统。不过，它也有类型推断。当我们写出`let guess = String::new()`时，Rust 能够推断出`guess`应该是一个`String`，并不需要我们写出类型。另一方面，`secret_number`，是一个数字类型。一些数字类型拥有 1 到 100 之间的值：`i32`，一个 32 位的数字；`u32`，一个 32 位无符号数字；`i64`，一个 64 位数字；等等。Rust 默认使用`i32`，所以`secret_number`的类型就是它，除非增加类型信息或任何能让 Rust 推断出不同数值类型的信息。这里错误的原因是 Rust 不会比较字符串类型和数字类型。
+错误的核心表明这里有**不匹配的类型**（*mismatched types*）。Rust 拥有一个静态强类型系统。不过，它也有类型推断。当我们写出`let guess = String::new()`时，Rust 能够推断出`guess`应该是一个`String`，并不需要我们写出类型。另一方面，`secret_number`，是一个数字类型。一些数字类型拥有 1 到 100 之间的值：`i32`，一个 32 位的数字；`u32`，一个 32 位无符号数字；`i64`，一个 64 位数字；等等。Rust 默认使用`i32`，所以`secret_number`的类型就是它，除非增加类型信息或任何能让 Rust 推断出不同数值类型的信息。这里错误的原因是 Rust 不会比较字符串类型和数字类型。
 
 最终我们想要把程序从输入中读取到的`String`转换为一个真正的数字类型，这样好与秘密数字向比较。可以通过在`main`函数体中增加如下两行代码来实现：
 
@@ -549,7 +549,7 @@ let guess: u32 = guess.trim().parse()
     .expect("Please type a number!");
 ```
 
-这里创建了一个叫做`guess`的变量。不过等等，难道这个程序不是已经有了一个叫做`guess`的变量了吗？确实如此，不过 Rust 允许我们通过 *覆盖*（*shadow*） 用一个新值来覆盖`guess`之前的值。这个功能经常用在类似需要把一个值从一种类型转换到另一种类型的场景。shadowing 允许我们复用`guess`变量的名字而不是强迫我们创建两个不同变量，比如`guess_str`和`guess`。（第三章会介绍 shadowing 的更多细节。）
+这里创建了一个叫做`guess`的变量。不过等等，难道这个程序不是已经有了一个叫做`guess`的变量了吗？确实如此，不过 Rust 允许我们通过**覆盖**（*shadow*） 用一个新值来覆盖`guess`之前的值。这个功能经常用在类似需要把一个值从一种类型转换到另一种类型的场景。shadowing 允许我们复用`guess`变量的名字而不是强迫我们创建两个不同变量，比如`guess_str`和`guess`。（第三章会介绍 shadowing 的更多细节。）
 
 `guess`被绑定到`guess.trim().parse()`表达式。表达式中的`guess`对应包含输入的`String`类型的原始`guess`。`String`实例的`trim`方法会消除字符串开头和结尾的空白。`u32`只能包含数字字符。不过用户必须输入回车键才能让`read_line`返回。当用户按下回车键时，会在字符串中增加一个换行（newline）字符。例如，如果用户输入 5 并回车，`guess`看起来像这样：`5\n`。`\n`代表“换行”，回车键。`trim`方法消除`\n`，只留下`5`。
 

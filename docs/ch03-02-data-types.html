@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html" class="active"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html" class="active"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -73,8 +73,8 @@
 <br>
 commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 </blockquote>
-<p>Rust 中的任何值都有一个具体的<em>类型</em>（<em>type</em>），这告诉了 Rust 它被指定为何种数据这样 Rust 就知道如何处理这些数据了。这一部分将讲到一些语言内建的类型。我们将这些类型分为两个子集：标量（scalar）和复合（compound）。</p>
-<p>贯穿整个部分，请记住 Rust 是一个<em>静态类型</em>（<em>statically typed</em>）语言，也就是说必须在编译时就知道所有变量的类型。编译器通常可以通过值以及如何使用他们来推断出我们想要用的类型。当多个类型都是可能的时候，比如第二章中<code>parse</code>将<code>String</code>转换为数字类型，必须增加类型注解，像这样：</p>
+<p>Rust 中的任何值都有一个具体的<strong>类型</strong>（<em>type</em>），这告诉了 Rust 它被指定为何种数据这样 Rust 就知道如何处理这些数据了。这一部分将讲到一些语言内建的类型。我们将这些类型分为两个子集：标量（scalar）和复合（compound）。</p>
+<p>贯穿整个部分，请记住 Rust 是一个<strong>静态类型</strong>（<em>statically typed</em>）语言，也就是说必须在编译时就知道所有变量的类型。编译器通常可以通过值以及如何使用他们来推断出我们想要用的类型。当多个类型都是可能的时候，比如第二章中<code>parse</code>将<code>String</code>转换为数字类型，必须增加类型注解，像这样：</p>
 <pre><code class="language-rust">let guess: u32 = &quot;42&quot;.parse().unwrap();
 </code></pre>
 <p>如果这里不添加类型注解，Rust 会显示如下错误，它意味着编译器需要我们提供更多我们想要使用哪个可能的类型的信息：</p>
@@ -88,9 +88,9 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 </code></pre>
 <p>在我们讨论各种数据类型时会看到不同的类型注解。</p>
 <h3>标量类型</h3>
-<p><em>标量</em>类型代表一个单独的值。Rust 有四种基本的标量类型：整型、浮点型、布尔类型和字符类型。你可能在其他语言中见过他们，不过让我们深入了解他们在 Rust 中时如何工作的。</p>
+<p><strong>标量</strong>类型代表一个单独的值。Rust 有四种基本的标量类型：整型、浮点型、布尔类型和字符类型。你可能在其他语言中见过他们，不过让我们深入了解他们在 Rust 中时如何工作的。</p>
 <h4>整型</h4>
-<p><em>整数</em>是一个没有小数部分的数字。我们在这一章的前面使用过一个整型，<code>i32</code>类型。这个类型声明表明在 32 位系统上它关联的值应该是一个有符号整数（因为这个<code>i</code>，与<code>u</code>代表的无符号相对）。表格 3-1 展示了 Rust 内建的整数类型。每一个变体的有符号和无符号列（例如，<em>i32</em>）可以用来声明对应的整数值。</p>
+<p><strong>整数</strong>是一个没有小数部分的数字。我们在这一章的前面使用过一个整型，<code>i32</code>类型。这个类型声明表明在 32 位系统上它关联的值应该是一个有符号整数（因为这个<code>i</code>，与<code>u</code>代表的无符号相对）。表格 3-1 展示了 Rust 内建的整数类型。每一个变体的有符号和无符号列（例如，<em>i32</em>）可以用来声明对应的整数值。</p>
 <figure>
 <figcaption>
 <p>Table 3-1: Integer Types in Rust</p>
@@ -121,7 +121,7 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 </figure>
 <p>那么如何知晓该使用哪种类型的数字呢？如果对此拿不定主意，Rust 的默认类型通常就是一个很好的选择，这个默认数字类型是<code>i32</code>：它通常是最快的，甚至是在 64 位系统上。使用<code>isize</code>或<code>usize</code>的主要场景是索引一些集合。</p>
 <h4>浮点型</h4>
-<p>Rust 也有两个主要的<em>浮点数</em>（<em>floating-point numbers</em>）类型，他们是有小数点的数字。Rust 的浮点数类型是<code>f32</code>和<code>f64</code>，分别是 32 位 和 64 位大小。默认类型是<code>f64</code>，因为它基本上与<code>f32</code>一样快不过精度更高。在 32 位系统上使用<code>f64</code>是可能的，不过会比<code>f32</code>要慢。大部分情况，牺牲潜在可能的更低性能来换取更高的精度是一个合理的首要选择，同时如果怀疑浮点数的大小有问题的时候应该对代码进行性能测试。</p>
+<p>Rust 也有两个主要的<strong>浮点数</strong>（<em>floating-point numbers</em>）类型，他们是有小数点的数字。Rust 的浮点数类型是<code>f32</code>和<code>f64</code>，分别是 32 位 和 64 位大小。默认类型是<code>f64</code>，因为它基本上与<code>f32</code>一样快不过精度更高。在 32 位系统上使用<code>f64</code>是可能的，不过会比<code>f32</code>要慢。大部分情况，牺牲潜在可能的更低性能来换取更高的精度是一个合理的首要选择，同时如果怀疑浮点数的大小有问题的时候应该对代码进行性能测试。</p>
 <p>这是一个展示浮点数的实例：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -173,7 +173,7 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 </code></pre>
 <p>Rust 的<code>char</code>类型代表了一个 Unicode 变量值（Unicode Scalar Value），这意味着它可以比 ASCII 表示更多内容。拼音字母（Accented letters），中文/日文/汉语等象形文字，emoji（絵文字）以及零长度的空白字符对于 Rust <code>char</code>类型都是有效的。Unicode 标量值包含从 <code>U+0000</code> 到 <code>U+D7FF</code> 和 <code>U+E000</code> 到 <code>U+10FFFF</code> 之间的值。不过，“字符”并不是一个 Unicode 中的概念，所以人直觉上的“字符”可能与 Rust 中的<code>char</code>并不符合。第八章的“字符串”部分将详细讨论这个主题。</p>
 <h3>复合类型</h3>
-<p><em>复合类型</em>可以将多个其他类型的值组合成一个类型。Rust 有两个原生的复合类型：元组（tuple）和数组（array）。</p>
+<p><strong>复合类型</strong>可以将多个其他类型的值组合成一个类型。Rust 有两个原生的复合类型：元组（tuple）和数组（array）。</p>
 <h4>将值组合进元组</h4>
 <p>元组是一个将多个其他类型的值组合进一个复合类型的组要方式。</p>
 <p>我们使用一个括号中的逗号分隔的值列表来创建一个元组。元组中的每一个位置都有一个类型，而且这写不同值的类型也不必是相同的。这个例子中使用了额外的可选类型注解：</p>
@@ -207,14 +207,14 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 </code></pre>
 <p>这个程序创建了一个元组，<code>x</code>，并接着使用索引为每个元素创建新变量。跟大多数编程语言一样，元组的第一个索引值是 0。</p>
 <h4>数组</h4>
-<p>另一个获取一个多个值集合的方式是<em>数组</em>（<em>array</em>）。与元组不同，数组中的每个元素的类型必须相同。Rust 中的数组与一些其他语言中的数组不同，因为 Rust 中的数组是固定长度的：一旦声明，他们的长度不能增长或缩小。</p>
+<p>另一个获取一个多个值集合的方式是<strong>数组</strong>（<em>array</em>）。与元组不同，数组中的每个元素的类型必须相同。Rust 中的数组与一些其他语言中的数组不同，因为 Rust 中的数组是固定长度的：一旦声明，他们的长度不能增长或缩小。</p>
 <p>Rust 中数组的值位于中括号中的逗号分隔的列表中：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
 }
 </code></pre>
-<p>数组在想要在栈（stack）而不是在堆（heap）上为数据分配空间时十分有用（第四章将讨论栈与堆的更多内容），或者是想要确保总是有固定数量的元素时。虽然它并不如 vector 类型那么灵活。vector 类型是标准库提供的一个<em>允许</em>增长和缩小长度的类似数组的集合类型。当不确定是应该使用数组还是 vector 的时候，你可能应该使用 vector：第八章会详细讨论 vector。</p>
+<p>数组在想要在栈（stack）而不是在堆（heap）上为数据分配空间时十分有用（第四章将讨论栈与堆的更多内容），或者是想要确保总是有固定数量的元素时。虽然它并不如 vector 类型那么灵活。vector 类型是标准库提供的一个<strong>允许</strong>增长和缩小长度的类似数组的集合类型。当不确定是应该使用数组还是 vector 的时候，你可能应该使用 vector：第八章会详细讨论 vector。</p>
 <p>一个你可能想要使用数组而不是 vector 的例子是当程序需要知道一年中月份的名字时。程序不大可能回去增加或减少月份，这时你可以使用数组因为我们知道它总是含有 12 个元素：</p>
 <pre><code class="language-rust">let months = [&quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quot;April&quot;, &quot;May&quot;, &quot;June&quot;, &quot;July&quot;,
               &quot;August&quot;, &quot;September&quot;, &quot;October&quot;, &quot;November&quot;, &quot;December&quot;];
@@ -250,7 +250,7 @@ thread '&lt;main&gt;' panicked at 'index out of bounds: the len is 5 but the ind
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/arrays` (exit code: 101)
 </code></pre>
-<p>编译并没有产生任何错误，不过程序会导致一个<em>运行时</em>（<em>runtime</em>）错误并且不会成功退出。当尝试用索引访问一个元素时，Rust 会检查指定的索引是否小于数组的长度。如果索引超出了数组长度，Rust 会<em>panic</em>，这是 Rust 中的术语，它用于程序因为错误而退出的情况。</p>
+<p>编译并没有产生任何错误，不过程序会导致一个<strong>运行时</strong>（<em>runtime</em>）错误并且不会成功退出。当尝试用索引访问一个元素时，Rust 会检查指定的索引是否小于数组的长度。如果索引超出了数组长度，Rust 会<em>panic</em>，这是 Rust 中的术语，它用于程序因为错误而退出的情况。</p>
 <p>这是第一个在实战中遇到的 Rust 安全原则的例子。在很多底层语言中，并没有进行这类检查，这样当提供了一个不正确的索引时，就会访问无效的内存。Rust 通过立即退出而不是允许内存访问并继续执行来使你免受这类错误困扰。第九章会讨论更多 Rust 的错误处理。</p>
 
                 </div>

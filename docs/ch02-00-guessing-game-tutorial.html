@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html" class="active"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html" class="active"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -76,7 +76,7 @@ commit 77370c073661548dd56bbcb43cc64713585acbba</p>
 <p>让我们通过自己动手的方式一起完成一个项目来快速上手 Rust！本章通过展示如何在真实的项目中运用的方式向你介绍一些常用的 Rust 概念。你将会学到<code>let</code>、<code>match</code>、方法、关联函数、使用外部 crate 等更多的知识！接下来的章节会探索这些概念的细节。在这一章，我们练习基础。</p>
 <p>我们会实现一个经典新手编程问题：猜猜看游戏。它是这么工作的：程序将会随机生成一个 1 到 100 之间的随机整数。接着它会提示玩家输入一个猜测。当输入了一个猜测后，它会告诉提示猜测是太大了还是太小了。猜对了，它会打印出祝贺并退出。</p>
 <h2>准备一个新项目</h2>
-<p>要创建一个新项目，进入你在第一章创建的<em>项目</em>目录，并使用 Cargo 创建它，像这样：</p>
+<p>要创建一个新项目，进入你在第一章创建的<strong>项目</strong>目录，并使用 Cargo 创建它，像这样：</p>
 <pre><code class="language-sh">$ cargo new guessing_game --bin
 $ cd guessing_game
 </code></pre>
@@ -146,7 +146,7 @@ println!(&quot;Please input your guess.&quot;);
 <p>接下来，创建一个地方储存用户输入，像这样：</p>
 <pre><code class="language-rust,ignore">let mut guess = String::new();
 </code></pre>
-<p>现在程序开始变得有意思了！这一小行代码发生了很多事。注意这是一个<code>let</code>语句，用来创建 <em>变量</em>。这里是另外一个例子：</p>
+<p>现在程序开始变得有意思了！这一小行代码发生了很多事。注意这是一个<code>let</code>语句，用来创建<strong>变量</strong>。这里是另外一个例子：</p>
 <pre><code class="language-rust,ignore">let foo = bar;
 </code></pre>
 <p>这行代码会创建一个叫做<code>foo</code>的新变量并把它绑定到值<code>bar</code>上。在 Rust 中，变量默认是不可变的。下面的例子展示了如何在变量名前使用<code>mut</code>来使一个变量可变：</p>
@@ -157,7 +157,7 @@ let mut bar = 5; // mutable
 <p>注意：<code>//</code> 开始一个注释，它持续到本行的结尾。Rust 忽略注释中的所有内容。</p>
 </blockquote>
 <p>现在我们知道了<code>let mut guess</code>会引入一个叫做<code>guess</code>的可变变量。等号（<code>=</code>）的另一边是<code>guess</code>所绑定的值，它是<code>String::new</code>的结果，这个函数会返回一个<code>String</code>的新实例。<a href="../std/string/struct.String.html"><code>String</code></a><!-- ignore -->是一个标准库提供的字符串类型，它是可增长的、UTF-8 编码的文本块。</p>
-<p><code>::new</code>那一行的<code>::</code>语法表明<code>new</code>是<code>String</code>类型的一个 <em>关联函数</em>（<em>associated function</em>）。关联函数是针对类型实现的，在这个例子中是<code>String</code>，而不是<code>String</code>的某个特定实例。一些语言中把它称为 <em>静态方法</em>（<em>static method</em>）。</p>
+<p><code>::new</code>那一行的<code>::</code>语法表明<code>new</code>是<code>String</code>类型的一个<strong>关联函数</strong>（<em>associated function</em>）。关联函数是针对类型实现的，在这个例子中是<code>String</code>，而不是<code>String</code>的某个特定实例。一些语言中把它称为<strong>静态方法</strong>（<em>static method</em>）。</p>
 <p><code>new</code>函数创建了一个新的空的<code>String</code>，你会在很多类型上发现<code>new</code>函数，因为这是创建某个类型新值的常用函数名。</p>
 <p>总结一下，<code>let mut guess = String::new();</code>这一行创建了一个可变变量，目前它绑定到一个<code>String</code>新的、空的实例上。哟！</p>
 <p>回忆一下我们在程序的第一行使用<code>use std::io;</code>从标准库中引用输入/输出功能。现在在<code>io</code>上调用一个关联函数，<code>stdin</code>：</p>
@@ -167,7 +167,7 @@ let mut bar = 5; // mutable
 <p>如果我们在程序的开头没有<code>use std::io</code>这一行，我们可以把函数调用写成<code>std::io::stdin</code>这样。<code>stdin</code>函数返回一个 <a href="../std/io/struct.Stdin.html"><code>std::io::Stdin</code></a><!-- ignore -->的实例，这是一个代表终端标准输入句柄的类型。</p>
 <p>代码的下一部分，<code>.read_line(&amp;mut guess)</code>，调用 <a href="../std/io/struct.Stdin.html#method.read_line"><code>read_line</code></a><!-- ignore --> 方法从标准输入句柄获取用户输入。我们还向<code>read_line()</code>传递了一个参数：<code>&amp;mut guess</code>。</p>
 <p><code>read_line</code>的工作是把获取任何用户键入到标准输入的字符并放入一个字符串中，所以它获取字符串作为一个参数。这个字符串需要是可变的，这样这个方法就可以通过增加用户的输入来改变字符串的内容。</p>
-<p><code>&amp;</code>表明这个参数是一个 <em>引用</em>（<em>reference</em>），它提供了一个允许多个不同部分的代码访问同一份数据而不需要在内存中多次拷贝的方法。引用是一个复杂的功能，而 Rust 的一大优势就是它是安全而优雅操纵引用。完成这个程序并不需要知道这么多细节：第四章会更全面的解释引用。现在，我们只需知道它像变量一样，默认是不可变的。因此，需要写成<code>&amp;mut guess</code>而不是<code>&amp;guess</code>来使其可变。</p>
+<p><code>&amp;</code>表明这个参数是一个<strong>引用</strong>（<em>reference</em>），它提供了一个允许多个不同部分的代码访问同一份数据而不需要在内存中多次拷贝的方法。引用是一个复杂的功能，而 Rust 的一大优势就是它是安全而优雅操纵引用。完成这个程序并不需要知道这么多细节：第四章会更全面的解释引用。现在，我们只需知道它像变量一样，默认是不可变的。因此，需要写成<code>&amp;mut guess</code>而不是<code>&amp;guess</code>来使其可变。</p>
 <p>这行代码还没有分析完。虽然这是单独一行代码，但它只是一个逻辑上代码行（虽然换行了但仍是一个语句）的第一部分。第二部分是这个方法：</p>
 <pre><code class="language-rust,ignore">.expect(&quot;Failed to read line&quot;);
 </code></pre>
@@ -177,7 +177,7 @@ let mut bar = 5; // mutable
 <p>不过，过长的代码行难以阅读，所以最好拆开来写，两行代码两个方法调用。现在来看看这行代码干了什么。</p>
 <h3>使用<code>Result</code>类型来处理潜在的错误</h3>
 <p>之前提到过，<code>read_line</code>将用户输入放入到传递给它字符串中，不过它也返回一个值————一个<a href="../std/io/type.Result.html"><code>io::Result</code></a><!-- ignore -->。Rust 标准库中有很多叫做<code>Result</code>的类型。一个<a href="../std/result/enum.Result.html"><code>Result</code></a><!-- ignore -->泛型以及对应子模块的特定版本，比如<code>io::Result</code>。</p>
-<p><code>Result</code>类型是 <a href="ch06-00-enums.html"><em>枚举</em>（<em>enumerations</em>）</a><!-- ignore -->，通常也写作 <em>enums</em>。枚举拥有固定值集合的类型，而这些值被称为枚举的 <em>成员</em>（<em>variants</em>）。第六章会更详细的介绍枚举。</p>
+<p><code>Result</code>类型是 <a href="ch06-00-enums.html"><em>枚举</em>（<em>enumerations</em>）</a><!-- ignore -->，通常也写作 <em>enums</em>。枚举拥有固定值集合的类型，而这些值被称为枚举的<strong>成员</strong>（<em>variants</em>）。第六章会更详细的介绍枚举。</p>
 <p>对于<code>Result</code>，它的成员是<code>Ok</code>或<code>Err</code>，<code>Ok</code>表明操作成功了，同时<code>Ok</code>成员之中包含成功生成的值。<code>Err</code>意味着操作失败，<code>Err</code>之中包含操作是为什么或如何失败的信息。</p>
 <p><code>Result</code>类型的作用是编码错误处理信息。<code>Result</code>类型的值，正如其他任何类型，拥有定义于其上的方法。<code>io::Result</code>的实例拥有<a href="../std/result/enum.Result.html#method.expect"><code>expect</code>方法</a><!-- ignore -->可供调用。如果<code>io::Result</code>实例的值是<code>Err</code>，<code>expect</code>会导致程序崩溃并显示显示你作为参数传递给<code>expect</code>的信息。如果<code>io::Result</code>实例的值是<code>Ok</code>，<code>expect</code>会获取<code>Ok</code>中的值并原原本本的返回给你，这样就可以使用它了。在本例中，返回值是用户输入到标准输入的一些字符。</p>
 <p>如果不使用<code>expect</code>，程序也能编译，不过会出现一个警告：</p>
@@ -214,7 +214,7 @@ You guessed: 6
 <h2>生成一个秘密数字</h2>
 <p>接下来，需要生成一个秘密数字，用户会尝试猜测它。秘密数字应该每次都不同，这样多玩几次才会有意思。生成一个 1 到 100 之间的随机数这样游戏也不会太难。Rust 标准库中还未包含随机数功能。然而，Rust 团队确实提供了一个<a href="https://crates.io/crates/rand"><code>rand</code> crate</a>。</p>
 <h2>使用 crate 来增加更多功能</h2>
-<p>记住 <em>crate</em> 是一个 Rust 代码的包。我们正在构建的项目是一个 <em>二进制 crate</em>，它生成一个可执行文件。 <code>rand</code> crate 是一个 <em>库 crate</em>，它包含意在被其他程序使用的代码。</p>
+<p>记住 <em>crate</em> 是一个 Rust 代码的包。我们正在构建的项目是一个<strong>二进制 crate</strong>，它生成一个可执行文件。 <code>rand</code> crate 是一个 <em>库 crate</em>，它包含意在被其他程序使用的代码。</p>
 <p>Cargo 对外部 crate 的运用是其真正闪光的地方。在我们可以使用<code>rand</code>编写代码之前，需要编辑 <em>Cargo.toml</em> 来包含<code>rand</code>作为一个依赖。现在打开这个文件并在<code>[dependencies]</code>部分标题（Cargo 为你创建了它）的下面添加如下代码：</p>
 <p><span class="filename">Filename: Cargo.toml</span></p>
 <pre><code class="language-toml">[dependencies]
@@ -249,7 +249,7 @@ as a dependency</p>
 <p>Cargo 有一个机制来确保每次任何人重新构建代码都会生成相同的成品：Cargo 只会使用你指定的依赖的版本，除非你又手动指定了别的。例如，如果下周<code>rand</code> crate 的<code>v0.3.15</code>版本出来了，而它包含一个重要的 bug 修改并也含有一个会破坏代码运行的缺陷的时候会发生什么呢？</p>
 <p>这个问题的答案是 <em>Cargo.lock</em> 文件，它在第一次运行<code>cargo build</code>时被创建并位于 <em>guessing_game</em> 目录。当第一次构建项目时，Cargo 计算出所有符合要求的依赖版本并接着写入 <em>Cargo.lock</em> 文件中。当将来构建项目时，Cargo 发现 <em>Cargo.lock</em> 存在就会使用这里指定的版本，而不是重新进行所有版本的计算。这使得你拥有了一个自动的可重现的构建。换句话说，项目会继续使用<code>0.3.14</code>直到你显式升级，多亏了 <em>Cargo.lock</em> 文件。我们将会在这个文件编写全部的代码。</p>
 <h4>更新 crate 到一个新版本</h4>
-<p>当你<em>确实</em>需要升级 crate 时，Cargo 提供了另一个命令，<code>update</code>，他会：</p>
+<p>当你<strong>确实</strong>需要升级 crate 时，Cargo 提供了另一个命令，<code>update</code>，他会：</p>
 <ol>
 <li>忽略 <em>Cargo.lock</em> 文件并计算出所有符合 <em>Cargo.toml</em> 中规格的最新版本。</li>
 <li>如果成功了，Cargo 会把这些版本写入 <em>Cargo.lock</em> 文件。</li>
@@ -268,7 +268,7 @@ rand = &quot;0.4.0&quot;
 <p>下一次运行<code>cargo build</code>时，Cargo 会更新 registry 中可用的 crate 并根据你指定新版本重新计算<code>rand</code>的要求。</p>
 <p>第十四章会讲到<a href="http://doc.crates.io">Cargo</a><!-- ignore --> 和<a href="http://doc.crates.io/crates-io.html">它的生态系统</a><!-- ignore -->的更多内容，不过目前你只需要了解这么多。Cargo 使得复用库文件变得非常容易，所以 Rustacean 们能够通过组合很多包来编写出更轻巧的项目。</p>
 <h3>生成一个随机数</h3>
-<p>让我们开始<em>使用</em><code>rand</code>。下一步是更新 <em>src/main.rs</em>，如列表 2-3：</p>
+<p>让我们开始<strong>使用</strong><code>rand</code>。下一步是更新 <em>src/main.rs</em>，如列表 2-3：</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust,ignore">extern crate rand;
@@ -366,8 +366,8 @@ fn main() {
 }
 </code></pre>
 <p><code>cmp</code>方法比较两个值并可以在任何可比较的值上调用。它获取一个任何你想要比较的值的引用：这里是把<code>guess</code>与<code>secret_number</code>做比较。<code>cmp</code>返回一个使用<code>use</code>语句引用的<code>Ordering</code>枚举的成员。我们使用一个<a href="ch06-02-match.html"><code>match</code></a><!-- ignore -->表达式根据对<code>guess</code>和<code>secret_number</code>中的值调用<code>cmp</code>后返回的哪个<code>Ordering</code>枚举成员来决定接下来干什么。</p>
-<p>一个<code>match</code>表达式由 <em>分支（arms）</em> 构成。一个分支包含一个 <em>模式</em>（<em>pattern</em>）和代码，这些代码在<code>match</code>表达式开头给出的值符合分支的模式时将被执行。Rust 获取提供给<code>match</code>的值并挨个检查每个分支的模式。<code>match</code>结构和模式是 Rust 中非常强大的功能，它帮助你体现代码可能遇到的多种情形并帮助你处理全部的可能。这些功能将分别在第六章和第十九章详细介绍。</p>
-<p>让我们看看一个使用这里的<code>match</code>表达式会发生什么的例子。假设用户猜了 50，这时随机生成的秘密数字是 38。当代码比较 50 与 38 时，<code>cmp</code>方法会返回<code>Ordering::Greater</code>，因为 50 比 38 要大。<code>Ordering::Greater</code>是<code>match</code>表达式得到的值。它检查第一个分支的模式，<code>Ordering::Less</code>，不过值<code>Ordering::Greater</code>并不匹配<code>Ordering::Less</code>。所以它忽略了这个分支的代码并移动到下一个分支。下一个分支的模式，<code>Ordering::Greater</code>，<em>正确</em>匹配了<code>Ordering::Greater</code>！这个分支关联的代码会被执行并在屏幕打印出<code>Too big!</code>。<code>match</code>表达式就此终止，因为在这个特定场景下没有检查最后一个分支的必要。</p>
+<p>一个<code>match</code>表达式由 <strong>分支（arms）</strong> 构成。一个分支包含一个 <strong>模式</strong>（<em>pattern</em>）和代码，这些代码在<code>match</code>表达式开头给出的值符合分支的模式时将被执行。Rust 获取提供给<code>match</code>的值并挨个检查每个分支的模式。<code>match</code>结构和模式是 Rust 中非常强大的功能，它帮助你体现代码可能遇到的多种情形并帮助你处理全部的可能。这些功能将分别在第六章和第十九章详细介绍。</p>
+<p>让我们看看一个使用这里的<code>match</code>表达式会发生什么的例子。假设用户猜了 50，这时随机生成的秘密数字是 38。当代码比较 50 与 38 时，<code>cmp</code>方法会返回<code>Ordering::Greater</code>，因为 50 比 38 要大。<code>Ordering::Greater</code>是<code>match</code>表达式得到的值。它检查第一个分支的模式，<code>Ordering::Less</code>，不过值<code>Ordering::Greater</code>并不匹配<code>Ordering::Less</code>。所以它忽略了这个分支的代码并移动到下一个分支。下一个分支的模式，<code>Ordering::Greater</code>，<strong>正确</strong>匹配了<code>Ordering::Greater</code>！这个分支关联的代码会被执行并在屏幕打印出<code>Too big!</code>。<code>match</code>表达式就此终止，因为在这个特定场景下没有检查最后一个分支的必要。</p>
 <p>然而，列表 2-4 的代码并不能编译，尝试一下：</p>
 <pre><code class="language-sh">$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
@@ -383,7 +383,7 @@ error[E0308]: mismatched types
 error: aborting due to previous error
 Could not compile `guessing_game`.
 </code></pre>
-<p>错误的核心表明这里有<em>不匹配的类型</em>（<em>mismatched types</em>）。Rust 拥有一个静态强类型系统。不过，它也有类型推断。当我们写出<code>let guess = String::new()</code>时，Rust 能够推断出<code>guess</code>应该是一个<code>String</code>，并不需要我们写出类型。另一方面，<code>secret_number</code>，是一个数字类型。一些数字类型拥有 1 到 100 之间的值：<code>i32</code>，一个 32 位的数字；<code>u32</code>，一个 32 位无符号数字；<code>i64</code>，一个 64 位数字；等等。Rust 默认使用<code>i32</code>，所以<code>secret_number</code>的类型就是它，除非增加类型信息或任何能让 Rust 推断出不同数值类型的信息。这里错误的原因是 Rust 不会比较字符串类型和数字类型。</p>
+<p>错误的核心表明这里有<strong>不匹配的类型</strong>（<em>mismatched types</em>）。Rust 拥有一个静态强类型系统。不过，它也有类型推断。当我们写出<code>let guess = String::new()</code>时，Rust 能够推断出<code>guess</code>应该是一个<code>String</code>，并不需要我们写出类型。另一方面，<code>secret_number</code>，是一个数字类型。一些数字类型拥有 1 到 100 之间的值：<code>i32</code>，一个 32 位的数字；<code>u32</code>，一个 32 位无符号数字；<code>i64</code>，一个 64 位数字；等等。Rust 默认使用<code>i32</code>，所以<code>secret_number</code>的类型就是它，除非增加类型信息或任何能让 Rust 推断出不同数值类型的信息。这里错误的原因是 Rust 不会比较字符串类型和数字类型。</p>
 <p>最终我们想要把程序从输入中读取到的<code>String</code>转换为一个真正的数字类型，这样好与秘密数字向比较。可以通过在<code>main</code>函数体中增加如下两行代码来实现：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate rand;
@@ -422,7 +422,7 @@ fn main() {
 <pre><code class="language-rust,ignore">let guess: u32 = guess.trim().parse()
     .expect(&quot;Please type a number!&quot;);
 </code></pre>
-<p>这里创建了一个叫做<code>guess</code>的变量。不过等等，难道这个程序不是已经有了一个叫做<code>guess</code>的变量了吗？确实如此，不过 Rust 允许我们通过 <em>覆盖</em>（<em>shadow</em>） 用一个新值来覆盖<code>guess</code>之前的值。这个功能经常用在类似需要把一个值从一种类型转换到另一种类型的场景。shadowing 允许我们复用<code>guess</code>变量的名字而不是强迫我们创建两个不同变量，比如<code>guess_str</code>和<code>guess</code>。（第三章会介绍 shadowing 的更多细节。）</p>
+<p>这里创建了一个叫做<code>guess</code>的变量。不过等等，难道这个程序不是已经有了一个叫做<code>guess</code>的变量了吗？确实如此，不过 Rust 允许我们通过<strong>覆盖</strong>（<em>shadow</em>） 用一个新值来覆盖<code>guess</code>之前的值。这个功能经常用在类似需要把一个值从一种类型转换到另一种类型的场景。shadowing 允许我们复用<code>guess</code>变量的名字而不是强迫我们创建两个不同变量，比如<code>guess_str</code>和<code>guess</code>。（第三章会介绍 shadowing 的更多细节。）</p>
 <p><code>guess</code>被绑定到<code>guess.trim().parse()</code>表达式。表达式中的<code>guess</code>对应包含输入的<code>String</code>类型的原始<code>guess</code>。<code>String</code>实例的<code>trim</code>方法会消除字符串开头和结尾的空白。<code>u32</code>只能包含数字字符。不过用户必须输入回车键才能让<code>read_line</code>返回。当用户按下回车键时，会在字符串中增加一个换行（newline）字符。例如，如果用户输入 5 并回车，<code>guess</code>看起来像这样：<code>5\n</code>。<code>\n</code>代表“换行”，回车键。<code>trim</code>方法消除<code>\n</code>，只留下<code>5</code>。</p>
 <p><a href="../std/primitive.str.html#method.parse">字符串的<code>parse</code>方法</a><!-- ignore -->解析一个字符串成某个数字。因为这个方法可以解析多种数字类型，需要告诉 Rust 我们需要的具体的数字类型，这里通过<code>let guess: u32</code>指定。<code>guess</code>后面的冒号（<code>:</code>）告诉 Rust 我们指明了变量的类型。Rust 有一些内建的数字类型；这里的<code>u32</code>是一个无符号的 32 位整型。它是一个好的较小正整数的默认类型。第三章会讲到其他数字类型。另外，例子程序中的<code>u32</code>注解和与<code>secret_number</code>的比较意味着 Rust 会推断<code>secret_number</code>应该是也是<code>u32</code>类型。现在可以使用相同类型比较两个值了！</p>
 <p><code>parse</code>调用容易产生错误。例如，如果字符串包含<code>A👍%</code>，就无法将其转换为一个数字。因为它可能失败，<code>parse</code>方法返回一个<code>Result</code>类型，非常像之前在 XX 页“使用<code>Result</code>类型来处理潜在的错误”部分讨论的<code>read_line</code>方法。这里再次类似的使用<code>expect</code>方法处理这个<code>Result</code>类型。如果<code>parse</code>因为不能从字符串生成一个数字而返回一个<code>Err</code>的<code>Result</code>成员时，<code>expect</code>会使游戏崩溃并打印提供给它的信息。如果<code>parse</code>能成功地将字符串转换为一个数字，它会返回<code>Result</code>的<code>Ok</code>成员，同时<code>expect</code>会返回<code>Ok</code>中我们需要的数字。</p>

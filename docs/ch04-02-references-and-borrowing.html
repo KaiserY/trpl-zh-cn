@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html" class="active"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html" class="active"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -67,47 +67,19 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>注释</h2>
-<blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch03-04-comments.md">ch03-04-comments.md</a>
-<br>
-commit 74d6fc999b986b74bf94edd6dcbb5a08a16c12de</p>
-</blockquote>
-<p>所有编程语言都力求使他们的代码易于理解，不过有时额外的解释需要得到保障。在这种情况下，程序员在源码中留下记录，或者<strong>注释</strong>（<em>comments</em>），编译器会忽略他们不过其他阅读代码的人可能会用得上。</p>
-<p>这是一个注释的例子：</p>
-<pre><code class="language-rust">// Hello, world.
-</code></pre>
-<p>在 Rust 中，注释必须以两道斜杠开始并持续到本行的结尾。对于超过一行的注释，需要在每一行都加上<code>//</code>，像这样：</p>
-<pre><code class="language-rust">// So we’re doing something complicated here, long enough that we need
-// multiple lines of comments to do it! Whew! Hopefully, this comment will
-// explain what’s going on.
-</code></pre>
-<p>注释也可以在放在包含代码的行的结尾：</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
-    let lucky_number = 7; // I’m feeling lucky today.
-}
-</code></pre>
-<p>不过你会经常看到他们被以这种格式使用，也就是位于它解释的代码行的上面一行：</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
-    // I’m feeling lucky today.
-    let lucky_number = 7;
-}
-</code></pre>
-<p>这就是注释的全部。并没有什么特别复杂的。</p>
+                    <h1>References &amp; Borrowing</h1>
 
                 </div>
 
                 <!-- Mobile navigation buttons -->
                 
-                    <a href="ch03-03-how-functions-work.html" class="mobile-nav-chapters previous">
+                    <a href="ch04-01-what-is-ownership.html" class="mobile-nav-chapters previous">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="ch03-05-control-flow.html" class="mobile-nav-chapters next">
+                    <a href="ch04-03-slices.html" class="mobile-nav-chapters next">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -115,13 +87,13 @@ commit 74d6fc999b986b74bf94edd6dcbb5a08a16c12de</p>
             </div>
 
             
-                <a href="ch03-03-how-functions-work.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                <a href="ch04-01-what-is-ownership.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-left"></i>
                 </a>
             
 
             
-                <a href="ch03-05-control-flow.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                <a href="ch04-03-slices.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-right"></i>
                 </a>
             

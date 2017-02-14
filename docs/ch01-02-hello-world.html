@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html" class="active"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html" class="active"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -78,7 +78,7 @@ commit aa1801d99cd3b19c96533f00c852b1c4bd5350a6</p>
 <p>注意：本书假设你熟悉基本的命令行操作。Rust 本身并不对你的编辑器，工具和你的代码存放在何处有什么特定的要求，所以如果你比起命令行更喜欢 IDE，请随意选择你喜欢的 IDE。</p>
 </blockquote>
 <h3>创建项目文件</h3>
-<p>首先，创建一个文件来编写 Rust 代码。Rust 并不关心你的代码存放在哪里，不过在本书中，我们建议在你的 home 目录创建一个<em>项目</em>目录，并把你的所有项目放在这。打开一个终端并输入如下命令来为这个项目创建一个文件夹：</p>
+<p>首先，创建一个文件来编写 Rust 代码。Rust 并不关心你的代码存放在哪里，不过在本书中，我们建议在你的 home 目录创建一个<strong>项目</strong>目录，并把你的所有项目放在这。打开一个终端并输入如下命令来为这个项目创建一个文件夹：</p>
 <p>Linux 和 Mac:</p>
 <pre><code class="language-sh">$ mkdir ~/projects
 $ cd ~/projects
@@ -117,8 +117,8 @@ Hello, world!
 <pre><code class="language-rust">    println!(&quot;Hello, world!&quot;);
 </code></pre>
 <p>这行代码做了这个小程序的所有工作：它在屏幕上打印文本。有很多需要注意的细节。第一个是 Rust 代码风格使用 4 个空格缩进，而不是 1 个制表符（tab）。</p>
-<p>第二个重要的部分是<code>println!()</code>。这叫做 Rust <em>宏</em>，是如何进行 Rust 元编程（metaprogramming）的关键所在。相反如果调用一个函数的话，它应该看起来像这样：<code>println</code>（没有<code>!</code>）。我们将在 24 章更加详细的讨论 Rust 宏，不过现在你只需记住当看到符号 <code>!</code> 的时候，就代表在调用一个宏而不是一个普通的函数。</p>
-<p>接下来，<code>&quot;Hello, world!&quot;</code> 是一个 <em>字符串</em>。我们把这个字符串作为一个参数传递给<code>println!</code>，它负责在屏幕上打印这个字符串。轻松加愉快！(⊙o⊙)</p>
+<p>第二个重要的部分是<code>println!()</code>。这叫做 Rust <strong>宏</strong>，是如何进行 Rust 元编程（metaprogramming）的关键所在。相反如果调用一个函数的话，它应该看起来像这样：<code>println</code>（没有<code>!</code>）。我们将在 24 章更加详细的讨论 Rust 宏，不过现在你只需记住当看到符号 <code>!</code> 的时候，就代表在调用一个宏而不是一个普通的函数。</p>
+<p>接下来，<code>&quot;Hello, world!&quot;</code> 是一个 <strong>字符串</strong>。我们把这个字符串作为一个参数传递给<code>println!</code>，它负责在屏幕上打印这个字符串。轻松加愉快！(⊙o⊙)</p>
 <p>这一行以一个分号结尾（<code>;</code>）。<code>;</code>代表这个表达式的结束和下一个表达式的开始。大部分 Rust 代码行以<code>;</code>结尾。</p>
 <h3>编译和运行是两个步骤</h3>
 <p>在“编写并运行 Rust 程序”部分，展示了如何运行一个新创建的程序。现在我们将拆分并检查每一步操作。</p>
@@ -138,10 +138,10 @@ main.rs
 <pre><code class="language-sh">$ ./main  # or .\main.exe on Windows
 </code></pre>
 <p>如果 <em>main.rs</em> 是我们的“Hello, world!”程序，它将会在终端上打印<code>Hello, world!</code>。</p>
-<p>来自 Ruby、Python 或 JavaScript 这样的动态类型语言背景的同学，可能不太习惯在分开的步骤编译和执行程序。Rust 是一种 <em>静态提前编译语言</em>（<em>ahead-of-time compiled language</em>），这意味着可以编译好程序后，把它给任何人，他们都不需要安装 Rust 就可运行。如果你给他们一个 <code>.rb</code> ， <code>.py</code> 或 <code>.js</code> 文件，他们需要先分别安装 Ruby，Python，JavaScript 实现（运行时环境，VM），不过你只需要一句命令就可以编译和执行程序。这一切都是语言设计的权衡取舍。</p>
+<p>来自 Ruby、Python 或 JavaScript 这样的动态类型语言背景的同学，可能不太习惯在分开的步骤编译和执行程序。Rust 是一种 <strong>静态提前编译语言</strong>（<em>ahead-of-time compiled language</em>），这意味着可以编译好程序后，把它给任何人，他们都不需要安装 Rust 就可运行。如果你给他们一个 <code>.rb</code> ， <code>.py</code> 或 <code>.js</code> 文件，他们需要先分别安装 Ruby，Python，JavaScript 实现（运行时环境，VM），不过你只需要一句命令就可以编译和执行程序。这一切都是语言设计的权衡取舍。</p>
 <p>仅仅使用<code>rustc</code>编译简单程序是没问题的，不过随着项目的增长，你将想要能够控制你项目拥有的所有选项，并使其易于分享你的代码给别人或别的项目。接下来，我们将介绍一个叫做 Cargo 的工具，它将帮助你编写现实生活中的 Rust 程序。</p>
 <h2>Hello, Cargo!</h2>
-<p>Cargo 是 Rust 的构建系统和包管理工具，同时 Rustacean 们使用 Cargo 来管理它们的 Rust 项目，因为它使得很多任务变得更轻松。例如，Cargo负责构建代码、下载代码依赖的库并编译这些库。我们把代码需要的库叫做 <em>依赖</em>（<em>dependencies</em>）。</p>
+<p>Cargo 是 Rust 的构建系统和包管理工具，同时 Rustacean 们使用 Cargo 来管理它们的 Rust 项目，因为它使得很多任务变得更轻松。例如，Cargo负责构建代码、下载代码依赖的库并编译这些库。我们把代码需要的库叫做 <strong>依赖</strong>（<em>dependencies</em>）。</p>
 <p>最简单的 Rust 程序，例如我们刚刚编写的，并没有任何依赖，所以目前我们只使用了 Cargo 负责构建代码的部分。随着你编写更加复杂的 Rust 程序，你会想要添加依赖，那么如果你使用 Cargo 开始的话，这将会变得简单许多。</p>
 <p>因为绝大部分 Rust 项目使用 Cargo，本书接下来的部分将假设你使用它。如果使用安装章节介绍的官方安装包的话，Rust 自带 Cargo。如果通过其他方式安装 Rust 的话，可以在终端输入如下命令检查是否安装了 Cargo：</p>
 <pre><code class="language-sh">$ cargo --version
@@ -159,7 +159,7 @@ main.rs
 <pre><code class="language-sh">$ cargo new hello_cargo --bin
 $ cd hello_cargo
 </code></pre>
-<p>我们向<code>cargo new</code>传递了<code>--bin</code>因为我们的目标是生成一个可执行程序，而不是一个库。可执行文件是二进制可执行文件，通常就叫做 <em>二进制文件</em>（<em>binaries</em>）。项目的名称被定为<code>hello_cargo</code>，同时 Cargo 在一个同名（子）目录中创建它的文件，接着我们可以进入查看。</p>
+<p>我们向<code>cargo new</code>传递了<code>--bin</code>因为我们的目标是生成一个可执行程序，而不是一个库。可执行文件是二进制可执行文件，通常就叫做 <strong>二进制文件</strong>（<em>binaries</em>）。项目的名称被定为<code>hello_cargo</code>，同时 Cargo 在一个同名（子）目录中创建它的文件，接着我们可以进入查看。</p>
 <p>如果列出 <em>hello_cargo</em> 目录中的文件，我们将会看到 Cargo 生成了两个文件和一个目录：一个 <em>Cargo.toml</em> 文件和一个 <em>src</em> 目录，<em>main.rs</em> 文件位于目录中。它也在 <em>hello_cargo</em> 目录初始化了一个 git 仓库，以及一个 <em>.gitignore</em> 文件；你可以改为使用不同的版本控制系统，或者不使用，通过<code>--vcs</code>参数。</p>
 <p>使用你选择的文本编辑器（IDE）打开 <em>Cargo.toml</em> 文件。它应该看起来像这样：</p>
 <p><span class="filename">Filename: Cargo.toml</span></p>

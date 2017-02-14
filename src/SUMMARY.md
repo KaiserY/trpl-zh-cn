@@ -14,3 +14,8 @@
     - [函数如何工作](ch03-03-how-functions-work.md)
     - [注释](ch03-04-comments.md)
     - [控制流](ch03-05-control-flow.md)
+
+- [认识所有权](ch04-00-understanding-ownership.md)
+    - [什么是所有权](ch04-01-what-is-ownership.md)
+    - [引用 & 借用](ch04-02-references-and-borrowing.md)
+    - [Slices](ch04-03-slices.md)

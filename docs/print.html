@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -71,12 +71,12 @@
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch01-00-introduction.md">ch01-00-introduction.md</a>
 <br>
-commit c6920d4a2ee0f282addaf8f6945cefe3ef7bdf09</p>
+commit c51c14215d2ee2cb481bc8a942a3769c6d9a2e1a</p>
 </blockquote>
-<p>欢迎阅读“Rust 程序设计语言”。一本关于 Rust 的介绍性书籍。Rust 是一个关注安全、速度和并发的编程语言。它的设计可以使程序获得性能和对底层语言的控制，并享受高级语言强大的抽象能力。这些特性使得 Rust 适合那些有类似 C 语言经验并正在寻找一个更安全的替代者的程序员，同时也适合那些来自类似 Python 语言背景，正在探索在不牺牲表现力的情况下编写更好性能代码的人们。</p>
+<p>欢迎阅读“Rust 程序设计语言”，一本关于 Rust 的介绍性书籍。Rust 是一个着用于安全、速度和并发的编程语言。它的设计不仅可以使程序获得性能和对底层语言的控制，并且能够享受高级语言强大的抽象能力。这些特性使得 Rust 适合那些有类似 C 语言经验并正在寻找一个更安全的替代者的程序员，同时也适合那些来自类似 Python 语言背景，正在探索在不牺牲表现力的情况下编写更好性能代码的人们。</p>
 <p>Rust 在编译时进行其绝大多数的安全检查和内存管理决策，因此程序的运行时性能没有受到影响。这让其在许多其他语言不擅长的应用场景中得以大显身手：有可预测空间和时间要求的程序，嵌入到其他语言中，以及编写底层代码，如设备驱动和操作系统。Rust 也很擅长 web 程序：它驱动着 Rust 包注册网站（package
-registry site），crates.io！我们期待看到<em>你</em>使用 Rust 进行创作。</p>
-<p>本书的编排面向已经了解如何使用至少一门编程语言编程的读者。读完本书之后，你应该能自如的编写 Rust 程序。我们将通过小的，专注的并相互依赖的例子来学习 Rust，并向你展示如何使用 Rust 多样的功能，同时了解它们在后台是如何执行的。</p>
+registry site），<a href="https://crates.io/">crates.io</a>！我们期待看到<strong>你</strong>使用 Rust 进行创作。</p>
+<p>本书是为已经至少了解一门编程语言的读者而写的。读完本书之后，你应该能自如的编写 Rust 程序。我们将通过小而集中并相互依赖的例子来学习 Rust，并向你展示如何使用 Rust 多样的功能，同时了解它们在后台是如何执行的。</p>
 <h2>为本书做出贡献</h2>
 <p>本书是开源的。如果你发现任何错误，请不要犹豫，<a href="https://github.com/rust-lang/book">在 GitHub 上</a>发起 issue 或提交 pull request。</p>
 <h2>安装</h2>
@@ -129,7 +129,7 @@ commit aa1801d99cd3b19c96533f00c852b1c4bd5350a6</p>
 <p>注意：本书假设你熟悉基本的命令行操作。Rust 本身并不对你的编辑器，工具和你的代码存放在何处有什么特定的要求，所以如果你比起命令行更喜欢 IDE，请随意选择你喜欢的 IDE。</p>
 </blockquote>
 <h3>创建项目文件</h3>
-<p>首先，创建一个文件来编写 Rust 代码。Rust 并不关心你的代码存放在哪里，不过在本书中，我们建议在你的 home 目录创建一个<em>项目</em>目录，并把你的所有项目放在这。打开一个终端并输入如下命令来为这个项目创建一个文件夹：</p>
+<p>首先，创建一个文件来编写 Rust 代码。Rust 并不关心你的代码存放在哪里，不过在本书中，我们建议在你的 home 目录创建一个<strong>项目</strong>目录，并把你的所有项目放在这。打开一个终端并输入如下命令来为这个项目创建一个文件夹：</p>
 <p>Linux 和 Mac:</p>
 <pre><code class="language-sh">$ mkdir ~/projects
 $ cd ~/projects
@@ -168,8 +168,8 @@ Hello, world!
 <pre><code class="language-rust">    println!(&quot;Hello, world!&quot;);
 </code></pre>
 <p>这行代码做了这个小程序的所有工作：它在屏幕上打印文本。有很多需要注意的细节。第一个是 Rust 代码风格使用 4 个空格缩进，而不是 1 个制表符（tab）。</p>
-<p>第二个重要的部分是<code>println!()</code>。这叫做 Rust <em>宏</em>，是如何进行 Rust 元编程（metaprogramming）的关键所在。相反如果调用一个函数的话，它应该看起来像这样：<code>println</code>（没有<code>!</code>）。我们将在 24 章更加详细的讨论 Rust 宏，不过现在你只需记住当看到符号 <code>!</code> 的时候，就代表在调用一个宏而不是一个普通的函数。</p>
-<p>接下来，<code>&quot;Hello, world!&quot;</code> 是一个 <em>字符串</em>。我们把这个字符串作为一个参数传递给<code>println!</code>，它负责在屏幕上打印这个字符串。轻松加愉快！(⊙o⊙)</p>
+<p>第二个重要的部分是<code>println!()</code>。这叫做 Rust <strong>宏</strong>，是如何进行 Rust 元编程（metaprogramming）的关键所在。相反如果调用一个函数的话，它应该看起来像这样：<code>println</code>（没有<code>!</code>）。我们将在 24 章更加详细的讨论 Rust 宏，不过现在你只需记住当看到符号 <code>!</code> 的时候，就代表在调用一个宏而不是一个普通的函数。</p>
+<p>接下来，<code>&quot;Hello, world!&quot;</code> 是一个 <strong>字符串</strong>。我们把这个字符串作为一个参数传递给<code>println!</code>，它负责在屏幕上打印这个字符串。轻松加愉快！(⊙o⊙)</p>
 <p>这一行以一个分号结尾（<code>;</code>）。<code>;</code>代表这个表达式的结束和下一个表达式的开始。大部分 Rust 代码行以<code>;</code>结尾。</p>
 <h3>编译和运行是两个步骤</h3>
 <p>在“编写并运行 Rust 程序”部分，展示了如何运行一个新创建的程序。现在我们将拆分并检查每一步操作。</p>
@@ -189,10 +189,10 @@ main.rs
 <pre><code class="language-sh">$ ./main  # or .\main.exe on Windows
 </code></pre>
 <p>如果 <em>main.rs</em> 是我们的“Hello, world!”程序，它将会在终端上打印<code>Hello, world!</code>。</p>
-<p>来自 Ruby、Python 或 JavaScript 这样的动态类型语言背景的同学，可能不太习惯在分开的步骤编译和执行程序。Rust 是一种 <em>静态提前编译语言</em>（<em>ahead-of-time compiled language</em>），这意味着可以编译好程序后，把它给任何人，他们都不需要安装 Rust 就可运行。如果你给他们一个 <code>.rb</code> ， <code>.py</code> 或 <code>.js</code> 文件，他们需要先分别安装 Ruby，Python，JavaScript 实现（运行时环境，VM），不过你只需要一句命令就可以编译和执行程序。这一切都是语言设计的权衡取舍。</p>
+<p>来自 Ruby、Python 或 JavaScript 这样的动态类型语言背景的同学，可能不太习惯在分开的步骤编译和执行程序。Rust 是一种 <strong>静态提前编译语言</strong>（<em>ahead-of-time compiled language</em>），这意味着可以编译好程序后，把它给任何人，他们都不需要安装 Rust 就可运行。如果你给他们一个 <code>.rb</code> ， <code>.py</code> 或 <code>.js</code> 文件，他们需要先分别安装 Ruby，Python，JavaScript 实现（运行时环境，VM），不过你只需要一句命令就可以编译和执行程序。这一切都是语言设计的权衡取舍。</p>
 <p>仅仅使用<code>rustc</code>编译简单程序是没问题的，不过随着项目的增长，你将想要能够控制你项目拥有的所有选项，并使其易于分享你的代码给别人或别的项目。接下来，我们将介绍一个叫做 Cargo 的工具，它将帮助你编写现实生活中的 Rust 程序。</p>
 <h2>Hello, Cargo!</h2>
-<p>Cargo 是 Rust 的构建系统和包管理工具，同时 Rustacean 们使用 Cargo 来管理它们的 Rust 项目，因为它使得很多任务变得更轻松。例如，Cargo负责构建代码、下载代码依赖的库并编译这些库。我们把代码需要的库叫做 <em>依赖</em>（<em>dependencies</em>）。</p>
+<p>Cargo 是 Rust 的构建系统和包管理工具，同时 Rustacean 们使用 Cargo 来管理它们的 Rust 项目，因为它使得很多任务变得更轻松。例如，Cargo负责构建代码、下载代码依赖的库并编译这些库。我们把代码需要的库叫做 <strong>依赖</strong>（<em>dependencies</em>）。</p>
 <p>最简单的 Rust 程序，例如我们刚刚编写的，并没有任何依赖，所以目前我们只使用了 Cargo 负责构建代码的部分。随着你编写更加复杂的 Rust 程序，你会想要添加依赖，那么如果你使用 Cargo 开始的话，这将会变得简单许多。</p>
 <p>因为绝大部分 Rust 项目使用 Cargo，本书接下来的部分将假设你使用它。如果使用安装章节介绍的官方安装包的话，Rust 自带 Cargo。如果通过其他方式安装 Rust 的话，可以在终端输入如下命令检查是否安装了 Cargo：</p>
 <pre><code class="language-sh">$ cargo --version
@@ -210,7 +210,7 @@ main.rs
 <pre><code class="language-sh">$ cargo new hello_cargo --bin
 $ cd hello_cargo
 </code></pre>
-<p>我们向<code>cargo new</code>传递了<code>--bin</code>因为我们的目标是生成一个可执行程序，而不是一个库。可执行文件是二进制可执行文件，通常就叫做 <em>二进制文件</em>（<em>binaries</em>）。项目的名称被定为<code>hello_cargo</code>，同时 Cargo 在一个同名（子）目录中创建它的文件，接着我们可以进入查看。</p>
+<p>我们向<code>cargo new</code>传递了<code>--bin</code>因为我们的目标是生成一个可执行程序，而不是一个库。可执行文件是二进制可执行文件，通常就叫做 <strong>二进制文件</strong>（<em>binaries</em>）。项目的名称被定为<code>hello_cargo</code>，同时 Cargo 在一个同名（子）目录中创建它的文件，接着我们可以进入查看。</p>
 <p>如果列出 <em>hello_cargo</em> 目录中的文件，我们将会看到 Cargo 生成了两个文件和一个目录：一个 <em>Cargo.toml</em> 文件和一个 <em>src</em> 目录，<em>main.rs</em> 文件位于目录中。它也在 <em>hello_cargo</em> 目录初始化了一个 git 仓库，以及一个 <em>.gitignore</em> 文件；你可以改为使用不同的版本控制系统，或者不使用，通过<code>--vcs</code>参数。</p>
 <p>使用你选择的文本编辑器（IDE）打开 <em>Cargo.toml</em> 文件。它应该看起来像这样：</p>
 <p><span class="filename">Filename: Cargo.toml</span></p>
@@ -290,7 +290,7 @@ commit 77370c073661548dd56bbcb43cc64713585acbba</p>
 <p>让我们通过自己动手的方式一起完成一个项目来快速上手 Rust！本章通过展示如何在真实的项目中运用的方式向你介绍一些常用的 Rust 概念。你将会学到<code>let</code>、<code>match</code>、方法、关联函数、使用外部 crate 等更多的知识！接下来的章节会探索这些概念的细节。在这一章，我们练习基础。</p>
 <p>我们会实现一个经典新手编程问题：猜猜看游戏。它是这么工作的：程序将会随机生成一个 1 到 100 之间的随机整数。接着它会提示玩家输入一个猜测。当输入了一个猜测后，它会告诉提示猜测是太大了还是太小了。猜对了，它会打印出祝贺并退出。</p>
 <h2>准备一个新项目</h2>
-<p>要创建一个新项目，进入你在第一章创建的<em>项目</em>目录，并使用 Cargo 创建它，像这样：</p>
+<p>要创建一个新项目，进入你在第一章创建的<strong>项目</strong>目录，并使用 Cargo 创建它，像这样：</p>
 <pre><code class="language-sh">$ cargo new guessing_game --bin
 $ cd guessing_game
 </code></pre>
@@ -360,7 +360,7 @@ println!(&quot;Please input your guess.&quot;);
 <p>接下来，创建一个地方储存用户输入，像这样：</p>
 <pre><code class="language-rust,ignore">let mut guess = String::new();
 </code></pre>
-<p>现在程序开始变得有意思了！这一小行代码发生了很多事。注意这是一个<code>let</code>语句，用来创建 <em>变量</em>。这里是另外一个例子：</p>
+<p>现在程序开始变得有意思了！这一小行代码发生了很多事。注意这是一个<code>let</code>语句，用来创建<strong>变量</strong>。这里是另外一个例子：</p>
 <pre><code class="language-rust,ignore">let foo = bar;
 </code></pre>
 <p>这行代码会创建一个叫做<code>foo</code>的新变量并把它绑定到值<code>bar</code>上。在 Rust 中，变量默认是不可变的。下面的例子展示了如何在变量名前使用<code>mut</code>来使一个变量可变：</p>
@@ -371,7 +371,7 @@ let mut bar = 5; // mutable
 <p>注意：<code>//</code> 开始一个注释，它持续到本行的结尾。Rust 忽略注释中的所有内容。</p>
 </blockquote>
 <p>现在我们知道了<code>let mut guess</code>会引入一个叫做<code>guess</code>的可变变量。等号（<code>=</code>）的另一边是<code>guess</code>所绑定的值，它是<code>String::new</code>的结果，这个函数会返回一个<code>String</code>的新实例。<a href="../std/string/struct.String.html"><code>String</code></a><!-- ignore -->是一个标准库提供的字符串类型，它是可增长的、UTF-8 编码的文本块。</p>
-<p><code>::new</code>那一行的<code>::</code>语法表明<code>new</code>是<code>String</code>类型的一个 <em>关联函数</em>（<em>associated function</em>）。关联函数是针对类型实现的，在这个例子中是<code>String</code>，而不是<code>String</code>的某个特定实例。一些语言中把它称为 <em>静态方法</em>（<em>static method</em>）。</p>
+<p><code>::new</code>那一行的<code>::</code>语法表明<code>new</code>是<code>String</code>类型的一个<strong>关联函数</strong>（<em>associated function</em>）。关联函数是针对类型实现的，在这个例子中是<code>String</code>，而不是<code>String</code>的某个特定实例。一些语言中把它称为<strong>静态方法</strong>（<em>static method</em>）。</p>
 <p><code>new</code>函数创建了一个新的空的<code>String</code>，你会在很多类型上发现<code>new</code>函数，因为这是创建某个类型新值的常用函数名。</p>
 <p>总结一下，<code>let mut guess = String::new();</code>这一行创建了一个可变变量，目前它绑定到一个<code>String</code>新的、空的实例上。哟！</p>
 <p>回忆一下我们在程序的第一行使用<code>use std::io;</code>从标准库中引用输入/输出功能。现在在<code>io</code>上调用一个关联函数，<code>stdin</code>：</p>
@@ -381,7 +381,7 @@ let mut bar = 5; // mutable
 <p>如果我们在程序的开头没有<code>use std::io</code>这一行，我们可以把函数调用写成<code>std::io::stdin</code>这样。<code>stdin</code>函数返回一个 <a href="../std/io/struct.Stdin.html"><code>std::io::Stdin</code></a><!-- ignore -->的实例，这是一个代表终端标准输入句柄的类型。</p>
 <p>代码的下一部分，<code>.read_line(&amp;mut guess)</code>，调用 <a href="../std/io/struct.Stdin.html#method.read_line"><code>read_line</code></a><!-- ignore --> 方法从标准输入句柄获取用户输入。我们还向<code>read_line()</code>传递了一个参数：<code>&amp;mut guess</code>。</p>
 <p><code>read_line</code>的工作是把获取任何用户键入到标准输入的字符并放入一个字符串中，所以它获取字符串作为一个参数。这个字符串需要是可变的，这样这个方法就可以通过增加用户的输入来改变字符串的内容。</p>
-<p><code>&amp;</code>表明这个参数是一个 <em>引用</em>（<em>reference</em>），它提供了一个允许多个不同部分的代码访问同一份数据而不需要在内存中多次拷贝的方法。引用是一个复杂的功能，而 Rust 的一大优势就是它是安全而优雅操纵引用。完成这个程序并不需要知道这么多细节：第四章会更全面的解释引用。现在，我们只需知道它像变量一样，默认是不可变的。因此，需要写成<code>&amp;mut guess</code>而不是<code>&amp;guess</code>来使其可变。</p>
+<p><code>&amp;</code>表明这个参数是一个<strong>引用</strong>（<em>reference</em>），它提供了一个允许多个不同部分的代码访问同一份数据而不需要在内存中多次拷贝的方法。引用是一个复杂的功能，而 Rust 的一大优势就是它是安全而优雅操纵引用。完成这个程序并不需要知道这么多细节：第四章会更全面的解释引用。现在，我们只需知道它像变量一样，默认是不可变的。因此，需要写成<code>&amp;mut guess</code>而不是<code>&amp;guess</code>来使其可变。</p>
 <p>这行代码还没有分析完。虽然这是单独一行代码，但它只是一个逻辑上代码行（虽然换行了但仍是一个语句）的第一部分。第二部分是这个方法：</p>
 <pre><code class="language-rust,ignore">.expect(&quot;Failed to read line&quot;);
 </code></pre>
@@ -391,7 +391,7 @@ let mut bar = 5; // mutable
 <p>不过，过长的代码行难以阅读，所以最好拆开来写，两行代码两个方法调用。现在来看看这行代码干了什么。</p>
 <h3>使用<code>Result</code>类型来处理潜在的错误</h3>
 <p>之前提到过，<code>read_line</code>将用户输入放入到传递给它字符串中，不过它也返回一个值————一个<a href="../std/io/type.Result.html"><code>io::Result</code></a><!-- ignore -->。Rust 标准库中有很多叫做<code>Result</code>的类型。一个<a href="../std/result/enum.Result.html"><code>Result</code></a><!-- ignore -->泛型以及对应子模块的特定版本，比如<code>io::Result</code>。</p>
-<p><code>Result</code>类型是 <a href="ch06-00-enums.html"><em>枚举</em>（<em>enumerations</em>）</a><!-- ignore -->，通常也写作 <em>enums</em>。枚举拥有固定值集合的类型，而这些值被称为枚举的 <em>成员</em>（<em>variants</em>）。第六章会更详细的介绍枚举。</p>
+<p><code>Result</code>类型是 <a href="ch06-00-enums.html"><em>枚举</em>（<em>enumerations</em>）</a><!-- ignore -->，通常也写作 <em>enums</em>。枚举拥有固定值集合的类型，而这些值被称为枚举的<strong>成员</strong>（<em>variants</em>）。第六章会更详细的介绍枚举。</p>
 <p>对于<code>Result</code>，它的成员是<code>Ok</code>或<code>Err</code>，<code>Ok</code>表明操作成功了，同时<code>Ok</code>成员之中包含成功生成的值。<code>Err</code>意味着操作失败，<code>Err</code>之中包含操作是为什么或如何失败的信息。</p>
 <p><code>Result</code>类型的作用是编码错误处理信息。<code>Result</code>类型的值，正如其他任何类型，拥有定义于其上的方法。<code>io::Result</code>的实例拥有<a href="../std/result/enum.Result.html#method.expect"><code>expect</code>方法</a><!-- ignore -->可供调用。如果<code>io::Result</code>实例的值是<code>Err</code>，<code>expect</code>会导致程序崩溃并显示显示你作为参数传递给<code>expect</code>的信息。如果<code>io::Result</code>实例的值是<code>Ok</code>，<code>expect</code>会获取<code>Ok</code>中的值并原原本本的返回给你，这样就可以使用它了。在本例中，返回值是用户输入到标准输入的一些字符。</p>
 <p>如果不使用<code>expect</code>，程序也能编译，不过会出现一个警告：</p>
@@ -428,7 +428,7 @@ You guessed: 6
 <h2>生成一个秘密数字</h2>
 <p>接下来，需要生成一个秘密数字，用户会尝试猜测它。秘密数字应该每次都不同，这样多玩几次才会有意思。生成一个 1 到 100 之间的随机数这样游戏也不会太难。Rust 标准库中还未包含随机数功能。然而，Rust 团队确实提供了一个<a href="https://crates.io/crates/rand"><code>rand</code> crate</a>。</p>
 <h2>使用 crate 来增加更多功能</h2>
-<p>记住 <em>crate</em> 是一个 Rust 代码的包。我们正在构建的项目是一个 <em>二进制 crate</em>，它生成一个可执行文件。 <code>rand</code> crate 是一个 <em>库 crate</em>，它包含意在被其他程序使用的代码。</p>
+<p>记住 <em>crate</em> 是一个 Rust 代码的包。我们正在构建的项目是一个<strong>二进制 crate</strong>，它生成一个可执行文件。 <code>rand</code> crate 是一个 <em>库 crate</em>，它包含意在被其他程序使用的代码。</p>
 <p>Cargo 对外部 crate 的运用是其真正闪光的地方。在我们可以使用<code>rand</code>编写代码之前，需要编辑 <em>Cargo.toml</em> 来包含<code>rand</code>作为一个依赖。现在打开这个文件并在<code>[dependencies]</code>部分标题（Cargo 为你创建了它）的下面添加如下代码：</p>
 <p><span class="filename">Filename: Cargo.toml</span></p>
 <pre><code class="language-toml">[dependencies]
@@ -463,7 +463,7 @@ as a dependency</p>
 <p>Cargo 有一个机制来确保每次任何人重新构建代码都会生成相同的成品：Cargo 只会使用你指定的依赖的版本，除非你又手动指定了别的。例如，如果下周<code>rand</code> crate 的<code>v0.3.15</code>版本出来了，而它包含一个重要的 bug 修改并也含有一个会破坏代码运行的缺陷的时候会发生什么呢？</p>
 <p>这个问题的答案是 <em>Cargo.lock</em> 文件，它在第一次运行<code>cargo build</code>时被创建并位于 <em>guessing_game</em> 目录。当第一次构建项目时，Cargo 计算出所有符合要求的依赖版本并接着写入 <em>Cargo.lock</em> 文件中。当将来构建项目时，Cargo 发现 <em>Cargo.lock</em> 存在就会使用这里指定的版本，而不是重新进行所有版本的计算。这使得你拥有了一个自动的可重现的构建。换句话说，项目会继续使用<code>0.3.14</code>直到你显式升级，多亏了 <em>Cargo.lock</em> 文件。我们将会在这个文件编写全部的代码。</p>
 <h4>更新 crate 到一个新版本</h4>
-<p>当你<em>确实</em>需要升级 crate 时，Cargo 提供了另一个命令，<code>update</code>，他会：</p>
+<p>当你<strong>确实</strong>需要升级 crate 时，Cargo 提供了另一个命令，<code>update</code>，他会：</p>
 <ol>
 <li>忽略 <em>Cargo.lock</em> 文件并计算出所有符合 <em>Cargo.toml</em> 中规格的最新版本。</li>
 <li>如果成功了，Cargo 会把这些版本写入 <em>Cargo.lock</em> 文件。</li>
@@ -482,7 +482,7 @@ rand = &quot;0.4.0&quot;
 <p>下一次运行<code>cargo build</code>时，Cargo 会更新 registry 中可用的 crate 并根据你指定新版本重新计算<code>rand</code>的要求。</p>
 <p>第十四章会讲到<a href="http://doc.crates.io">Cargo</a><!-- ignore --> 和<a href="http://doc.crates.io/crates-io.html">它的生态系统</a><!-- ignore -->的更多内容，不过目前你只需要了解这么多。Cargo 使得复用库文件变得非常容易，所以 Rustacean 们能够通过组合很多包来编写出更轻巧的项目。</p>
 <h3>生成一个随机数</h3>
-<p>让我们开始<em>使用</em><code>rand</code>。下一步是更新 <em>src/main.rs</em>，如列表 2-3：</p>
+<p>让我们开始<strong>使用</strong><code>rand</code>。下一步是更新 <em>src/main.rs</em>，如列表 2-3：</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust,ignore">extern crate rand;
@@ -580,8 +580,8 @@ fn main() {
 }
 </code></pre>
 <p><code>cmp</code>方法比较两个值并可以在任何可比较的值上调用。它获取一个任何你想要比较的值的引用：这里是把<code>guess</code>与<code>secret_number</code>做比较。<code>cmp</code>返回一个使用<code>use</code>语句引用的<code>Ordering</code>枚举的成员。我们使用一个<a href="ch06-02-match.html"><code>match</code></a><!-- ignore -->表达式根据对<code>guess</code>和<code>secret_number</code>中的值调用<code>cmp</code>后返回的哪个<code>Ordering</code>枚举成员来决定接下来干什么。</p>
-<p>一个<code>match</code>表达式由 <em>分支（arms）</em> 构成。一个分支包含一个 <em>模式</em>（<em>pattern</em>）和代码，这些代码在<code>match</code>表达式开头给出的值符合分支的模式时将被执行。Rust 获取提供给<code>match</code>的值并挨个检查每个分支的模式。<code>match</code>结构和模式是 Rust 中非常强大的功能，它帮助你体现代码可能遇到的多种情形并帮助你处理全部的可能。这些功能将分别在第六章和第十九章详细介绍。</p>
-<p>让我们看看一个使用这里的<code>match</code>表达式会发生什么的例子。假设用户猜了 50，这时随机生成的秘密数字是 38。当代码比较 50 与 38 时，<code>cmp</code>方法会返回<code>Ordering::Greater</code>，因为 50 比 38 要大。<code>Ordering::Greater</code>是<code>match</code>表达式得到的值。它检查第一个分支的模式，<code>Ordering::Less</code>，不过值<code>Ordering::Greater</code>并不匹配<code>Ordering::Less</code>。所以它忽略了这个分支的代码并移动到下一个分支。下一个分支的模式，<code>Ordering::Greater</code>，<em>正确</em>匹配了<code>Ordering::Greater</code>！这个分支关联的代码会被执行并在屏幕打印出<code>Too big!</code>。<code>match</code>表达式就此终止，因为在这个特定场景下没有检查最后一个分支的必要。</p>
+<p>一个<code>match</code>表达式由 <strong>分支（arms）</strong> 构成。一个分支包含一个 <strong>模式</strong>（<em>pattern</em>）和代码，这些代码在<code>match</code>表达式开头给出的值符合分支的模式时将被执行。Rust 获取提供给<code>match</code>的值并挨个检查每个分支的模式。<code>match</code>结构和模式是 Rust 中非常强大的功能，它帮助你体现代码可能遇到的多种情形并帮助你处理全部的可能。这些功能将分别在第六章和第十九章详细介绍。</p>
+<p>让我们看看一个使用这里的<code>match</code>表达式会发生什么的例子。假设用户猜了 50，这时随机生成的秘密数字是 38。当代码比较 50 与 38 时，<code>cmp</code>方法会返回<code>Ordering::Greater</code>，因为 50 比 38 要大。<code>Ordering::Greater</code>是<code>match</code>表达式得到的值。它检查第一个分支的模式，<code>Ordering::Less</code>，不过值<code>Ordering::Greater</code>并不匹配<code>Ordering::Less</code>。所以它忽略了这个分支的代码并移动到下一个分支。下一个分支的模式，<code>Ordering::Greater</code>，<strong>正确</strong>匹配了<code>Ordering::Greater</code>！这个分支关联的代码会被执行并在屏幕打印出<code>Too big!</code>。<code>match</code>表达式就此终止，因为在这个特定场景下没有检查最后一个分支的必要。</p>
 <p>然而，列表 2-4 的代码并不能编译，尝试一下：</p>
 <pre><code class="language-sh">$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
@@ -597,7 +597,7 @@ error[E0308]: mismatched types
 error: aborting due to previous error
 Could not compile `guessing_game`.
 </code></pre>
-<p>错误的核心表明这里有<em>不匹配的类型</em>（<em>mismatched types</em>）。Rust 拥有一个静态强类型系统。不过，它也有类型推断。当我们写出<code>let guess = String::new()</code>时，Rust 能够推断出<code>guess</code>应该是一个<code>String</code>，并不需要我们写出类型。另一方面，<code>secret_number</code>，是一个数字类型。一些数字类型拥有 1 到 100 之间的值：<code>i32</code>，一个 32 位的数字；<code>u32</code>，一个 32 位无符号数字；<code>i64</code>，一个 64 位数字；等等。Rust 默认使用<code>i32</code>，所以<code>secret_number</code>的类型就是它，除非增加类型信息或任何能让 Rust 推断出不同数值类型的信息。这里错误的原因是 Rust 不会比较字符串类型和数字类型。</p>
+<p>错误的核心表明这里有<strong>不匹配的类型</strong>（<em>mismatched types</em>）。Rust 拥有一个静态强类型系统。不过，它也有类型推断。当我们写出<code>let guess = String::new()</code>时，Rust 能够推断出<code>guess</code>应该是一个<code>String</code>，并不需要我们写出类型。另一方面，<code>secret_number</code>，是一个数字类型。一些数字类型拥有 1 到 100 之间的值：<code>i32</code>，一个 32 位的数字；<code>u32</code>，一个 32 位无符号数字；<code>i64</code>，一个 64 位数字；等等。Rust 默认使用<code>i32</code>，所以<code>secret_number</code>的类型就是它，除非增加类型信息或任何能让 Rust 推断出不同数值类型的信息。这里错误的原因是 Rust 不会比较字符串类型和数字类型。</p>
 <p>最终我们想要把程序从输入中读取到的<code>String</code>转换为一个真正的数字类型，这样好与秘密数字向比较。可以通过在<code>main</code>函数体中增加如下两行代码来实现：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate rand;
@@ -636,7 +636,7 @@ fn main() {
 <pre><code class="language-rust,ignore">let guess: u32 = guess.trim().parse()
     .expect(&quot;Please type a number!&quot;);
 </code></pre>
-<p>这里创建了一个叫做<code>guess</code>的变量。不过等等，难道这个程序不是已经有了一个叫做<code>guess</code>的变量了吗？确实如此，不过 Rust 允许我们通过 <em>覆盖</em>（<em>shadow</em>） 用一个新值来覆盖<code>guess</code>之前的值。这个功能经常用在类似需要把一个值从一种类型转换到另一种类型的场景。shadowing 允许我们复用<code>guess</code>变量的名字而不是强迫我们创建两个不同变量，比如<code>guess_str</code>和<code>guess</code>。（第三章会介绍 shadowing 的更多细节。）</p>
+<p>这里创建了一个叫做<code>guess</code>的变量。不过等等，难道这个程序不是已经有了一个叫做<code>guess</code>的变量了吗？确实如此，不过 Rust 允许我们通过<strong>覆盖</strong>（<em>shadow</em>） 用一个新值来覆盖<code>guess</code>之前的值。这个功能经常用在类似需要把一个值从一种类型转换到另一种类型的场景。shadowing 允许我们复用<code>guess</code>变量的名字而不是强迫我们创建两个不同变量，比如<code>guess_str</code>和<code>guess</code>。（第三章会介绍 shadowing 的更多细节。）</p>
 <p><code>guess</code>被绑定到<code>guess.trim().parse()</code>表达式。表达式中的<code>guess</code>对应包含输入的<code>String</code>类型的原始<code>guess</code>。<code>String</code>实例的<code>trim</code>方法会消除字符串开头和结尾的空白。<code>u32</code>只能包含数字字符。不过用户必须输入回车键才能让<code>read_line</code>返回。当用户按下回车键时，会在字符串中增加一个换行（newline）字符。例如，如果用户输入 5 并回车，<code>guess</code>看起来像这样：<code>5\n</code>。<code>\n</code>代表“换行”，回车键。<code>trim</code>方法消除<code>\n</code>，只留下<code>5</code>。</p>
 <p><a href="../std/primitive.str.html#method.parse">字符串的<code>parse</code>方法</a><!-- ignore -->解析一个字符串成某个数字。因为这个方法可以解析多种数字类型，需要告诉 Rust 我们需要的具体的数字类型，这里通过<code>let guess: u32</code>指定。<code>guess</code>后面的冒号（<code>:</code>）告诉 Rust 我们指明了变量的类型。Rust 有一些内建的数字类型；这里的<code>u32</code>是一个无符号的 32 位整型。它是一个好的较小正整数的默认类型。第三章会讲到其他数字类型。另外，例子程序中的<code>u32</code>注解和与<code>secret_number</code>的比较意味着 Rust 会推断<code>secret_number</code>应该是也是<code>u32</code>类型。现在可以使用相同类型比较两个值了！</p>
 <p><code>parse</code>调用容易产生错误。例如，如果字符串包含<code>A👍%</code>，就无法将其转换为一个数字。因为它可能失败，<code>parse</code>方法返回一个<code>Result</code>类型，非常像之前在 XX 页“使用<code>Result</code>类型来处理潜在的错误”部分讨论的<code>read_line</code>方法。这里再次类似的使用<code>expect</code>方法处理这个<code>Result</code>类型。如果<code>parse</code>因为不能从字符串生成一个数字而返回一个<code>Err</code>的<code>Result</code>成员时，<code>expect</code>会使游戏崩溃并打印提供给它的信息。如果<code>parse</code>能成功地将字符串转换为一个数字，它会返回<code>Result</code>的<code>Ok</code>成员，同时<code>expect</code>会返回<code>Ok</code>中我们需要的数字。</p>
@@ -846,7 +846,7 @@ commit 2067b6e2bff990bceb39ae8f35780bd3bed08644</p>
 <!-- PROD: START BOX -->
 <blockquote>
 <h3>关键字</h3>
-<p>Rust 语言有一系列被保留为只能被语言使用的<em>关键字</em>（<em>keywords</em>），如大部分语言一样。注意你不能使用这些关键字作为变量或函数的名称。大部分关键字有特殊的意义，并将会被用来进行 Rust 程序中的多种任务；一些关键字目前没有相关的功能不过为了将来可能添加进 Rust 的功能而被保留。可以在附录 A 中找到一份关键字的列表</p>
+<p>Rust 语言有一系列被保留为只能被语言使用的<strong>关键字</strong>（<em>keywords</em>），如大部分语言一样。注意你不能使用这些关键字作为变量或函数的名称。大部分关键字有特殊的意义，并将会被用来进行 Rust 程序中的多种任务；一些关键字目前没有相关的功能不过为了将来可能添加进 Rust 的功能而被保留。可以在附录 A 中找到一份关键字的列表</p>
 </blockquote>
 <!-- PROD: END BOX --><h2>变量和可变性</h2>
 <blockquote>
@@ -854,7 +854,7 @@ commit 2067b6e2bff990bceb39ae8f35780bd3bed08644</p>
 <br>
 commit b0fab378c9c6a817d4f0080d7001d085017cdef8</p>
 </blockquote>
-<p>第二章中提到过，变量默认是<em>不可变</em>（<em>immutable</em>）的。这是 Rust 中许多鼓励以利用 Rust 提供的安全和简单并发优势编写代码的助力之一。不过，仍然有使变量可变的选项。让我们探索一下为什么以及如何鼓励你拥抱不可变性，还有为什么你可能想要弃之不用。</p>
+<p>第二章中提到过，变量默认是<strong>不可变</strong>（<em>immutable</em>）的。这是 Rust 中许多鼓励以利用 Rust 提供的安全和简单并发优势编写代码的助力之一。不过，仍然有使变量可变的选项。让我们探索一下为什么以及如何鼓励你拥抱不可变性，还有为什么你可能想要弃之不用。</p>
 <p>当变量使不可变时，这意味着一旦一个值被绑定上了一个名称，你就不能改变这个值。作为说明，通过<code>cargo new --bin variables</code>在 <em>projects</em> 目录生成一个叫做 <em>variables</em> 的新项目。</p>
 <p>接着，在新建的 <em>variables</em> 目录，打开 <em>src/main.rs</em> 并替换其代码为如下：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -877,8 +877,8 @@ error[E0384]: re-assignment of immutable variable `x`
 4 |     x = 6;
   |     ^^^^^ re-assignment of immutable variable
 </code></pre>
-<p>这个例子显示了编译器如何帮助你寻找程序中的错误。即便编译器错误可能是令人沮丧的，他们也仅仅意味着程序不能安全的完成你想让它完成的工作；他们<em>不能</em>说明你不是一个好的程序员！有经验的 Rustacean 们也会遇到编译器错误。这些错误表明错误的原因是<code>对不可变变量重新赋值</code>（<code>re-assignment of immutable variable</code>），因为我们尝试对不可变变量<code>x</code>赋第二个值。</p>
-<p>当尝试去改变之前设计为不可变的值出现编译时错误是很重要的，因为这种情况可能导致 bug。如果代码的一部分假设一个值永远也不会改变而另一部分代码改变了它，这样第一部分代码就有可能不能像它设计的那样运行。你必须承认这种 bug 难以跟踪，尤其是当第二部分代码只是<em>有时</em>当变量使不可变时，这意味着一旦一个值被绑定上了一个名称，你就不能改变这个值。</p>
+<p>这个例子显示了编译器如何帮助你寻找程序中的错误。即便编译器错误可能是令人沮丧的，他们也仅仅意味着程序不能安全的完成你想让它完成的工作；他们<strong>不能</strong>说明你不是一个好的程序员！有经验的 Rustacean 们也会遇到编译器错误。这些错误表明错误的原因是<code>对不可变变量重新赋值</code>（<code>re-assignment of immutable variable</code>），因为我们尝试对不可变变量<code>x</code>赋第二个值。</p>
+<p>当尝试去改变之前设计为不可变的值出现编译时错误是很重要的，因为这种情况可能导致 bug。如果代码的一部分假设一个值永远也不会改变而另一部分代码改变了它，这样第一部分代码就有可能不能像它设计的那样运行。你必须承认这种 bug 难以跟踪，尤其是当第二部分代码只是<strong>有时</strong>当变量使不可变时，这意味着一旦一个值被绑定上了一个名称，你就不能改变这个值。</p>
 <p>Rust 编译器保证如果声明一个值不会改变，它就真的不会改变。这意味着当阅读和编写代码时，并不需要记录如何以及在哪可能会被改变，这使得代码易于推导。</p>
 <p>不过可变性也是非常有用的。变量只是默认不可变；可以通过在变量名之前增加<code>mut</code>来使其可变。它向之后的读者表明了其他部分的代码将会改变这个变量值的意图。</p>
 <p>例如，改变 <em>src/main.rs</em> 并替换其代码为如下：</p>
@@ -900,14 +900,14 @@ The value of x is: 6
 <p>通过<code>mut</code>，允许把绑定到<code>x</code>的值从<code>5</code>改成<code>6</code>。在一些情况下，你会想要使一个变量可变，因为这比只使用不可变变量实现的代码更易于编写。</p>
 <p>除了避免 bug 外，这里还有数个需要权衡取舍的地方。例如，有时使用大型数据结构时，适当地使变量可变可能比复制和返回新分配的实例要更快。对于较小的数据结构，总是创建新实例并采用一种更函数式的编程风格可能会使代码更易理解。所以为了可读性而造成的性能惩罚也许使值得的。</p>
 <h3>变量和常量的区别</h3>
-<p>不能改变一个变量的值可能会使你想起另一个大部分编程语言都有的概念：<em>常量</em>（<em>constants</em>）。常量也是绑定到一个名称的不允许改变的值，不过常量与变量还是有一些区别。首先，不允许对常量使用<code>mut</code>：常量不光是默认不能改变，它总是不能改变。常量使用<code>const</code>关键字而不是<code>let</code>关键字声明，而且<em>必须</em>注明值的类型。现在我们准备在下一部分，“数据类型”，涉及到类型和类型注解，所以现在无需担心这些细节。常量可以在任何作用域声明，包括全局作用域，这在一个值需要被很多部分的代码用到时很有用。最后一个区别是常量只能用于常量表达式，而不能作为函数调用的结果或任何其他只在运行时使用到的值。</p>
+<p>不能改变一个变量的值可能会使你想起另一个大部分编程语言都有的概念：<strong>常量</strong>（<em>constants</em>）。常量也是绑定到一个名称的不允许改变的值，不过常量与变量还是有一些区别。首先，不允许对常量使用<code>mut</code>：常量不光是默认不能改变，它总是不能改变。常量使用<code>const</code>关键字而不是<code>let</code>关键字声明，而且<em>必须</em>注明值的类型。现在我们准备在下一部分，“数据类型”，涉及到类型和类型注解，所以现在无需担心这些细节。常量可以在任何作用域声明，包括全局作用域，这在一个值需要被很多部分的代码用到时很有用。最后一个区别是常量只能用于常量表达式，而不能作为函数调用的结果或任何其他只在运行时使用到的值。</p>
 <p>这是一个常量声明的例子，它的名称是<code>MAX_POINTS</code>而它的值是 100,000。Rust 常量的命名规范是使用大写字母和单词间使用下划线：</p>
 <pre><code class="language-rust">const MAX_POINTS: u32 = 100_000;
 </code></pre>
 <p>常量在整个程序生命周期中都有效，位于它声明的作用域之中。这使得常量可以用作多个部分的代码可能需要知道的程序范围的值，例如一个游戏中任何玩家可以获得的最高分或者一年的秒数。</p>
 <p>将用于整个程序的硬编码的值命名为常量（并编写文档）对为将来代码维护者表明值的意义是很有用的。它也能帮助你将硬编码的值至于一处以便将来可能需要修改他们。</p>
 <h3>覆盖</h3>
-<p>如第二章猜猜看游戏所讲到的，我们可以定义一个与之前变量名称相同的新变量，而新变量会<em>覆盖</em>之前的变量。Rustacean 们称其为第一个变量被第二个<em>给覆盖</em>了，这意味着第二个变量的值是使用这个变量时会看到的值。可以用相同变量名称来覆盖它自己以及重复使用<code>let</code>关键字来多次覆盖，如下所示：</p>
+<p>如第二章猜猜看游戏所讲到的，我们可以定义一个与之前变量名称相同的新变量，而新变量会<strong>覆盖</strong>之前的变量。Rustacean 们称其为第一个变量被第二个<strong>给覆盖</strong>了，这意味着第二个变量的值是使用这个变量时会看到的值。可以用相同变量名称来覆盖它自己以及重复使用<code>let</code>关键字来多次覆盖，如下所示：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
@@ -951,8 +951,8 @@ spaces = spaces.len();
 <br>
 commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 </blockquote>
-<p>Rust 中的任何值都有一个具体的<em>类型</em>（<em>type</em>），这告诉了 Rust 它被指定为何种数据这样 Rust 就知道如何处理这些数据了。这一部分将讲到一些语言内建的类型。我们将这些类型分为两个子集：标量（scalar）和复合（compound）。</p>
-<p>贯穿整个部分，请记住 Rust 是一个<em>静态类型</em>（<em>statically typed</em>）语言，也就是说必须在编译时就知道所有变量的类型。编译器通常可以通过值以及如何使用他们来推断出我们想要用的类型。当多个类型都是可能的时候，比如第二章中<code>parse</code>将<code>String</code>转换为数字类型，必须增加类型注解，像这样：</p>
+<p>Rust 中的任何值都有一个具体的<strong>类型</strong>（<em>type</em>），这告诉了 Rust 它被指定为何种数据这样 Rust 就知道如何处理这些数据了。这一部分将讲到一些语言内建的类型。我们将这些类型分为两个子集：标量（scalar）和复合（compound）。</p>
+<p>贯穿整个部分，请记住 Rust 是一个<strong>静态类型</strong>（<em>statically typed</em>）语言，也就是说必须在编译时就知道所有变量的类型。编译器通常可以通过值以及如何使用他们来推断出我们想要用的类型。当多个类型都是可能的时候，比如第二章中<code>parse</code>将<code>String</code>转换为数字类型，必须增加类型注解，像这样：</p>
 <pre><code class="language-rust">let guess: u32 = &quot;42&quot;.parse().unwrap();
 </code></pre>
 <p>如果这里不添加类型注解，Rust 会显示如下错误，它意味着编译器需要我们提供更多我们想要使用哪个可能的类型的信息：</p>
@@ -966,9 +966,9 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 </code></pre>
 <p>在我们讨论各种数据类型时会看到不同的类型注解。</p>
 <h3>标量类型</h3>
-<p><em>标量</em>类型代表一个单独的值。Rust 有四种基本的标量类型：整型、浮点型、布尔类型和字符类型。你可能在其他语言中见过他们，不过让我们深入了解他们在 Rust 中时如何工作的。</p>
+<p><strong>标量</strong>类型代表一个单独的值。Rust 有四种基本的标量类型：整型、浮点型、布尔类型和字符类型。你可能在其他语言中见过他们，不过让我们深入了解他们在 Rust 中时如何工作的。</p>
 <h4>整型</h4>
-<p><em>整数</em>是一个没有小数部分的数字。我们在这一章的前面使用过一个整型，<code>i32</code>类型。这个类型声明表明在 32 位系统上它关联的值应该是一个有符号整数（因为这个<code>i</code>，与<code>u</code>代表的无符号相对）。表格 3-1 展示了 Rust 内建的整数类型。每一个变体的有符号和无符号列（例如，<em>i32</em>）可以用来声明对应的整数值。</p>
+<p><strong>整数</strong>是一个没有小数部分的数字。我们在这一章的前面使用过一个整型，<code>i32</code>类型。这个类型声明表明在 32 位系统上它关联的值应该是一个有符号整数（因为这个<code>i</code>，与<code>u</code>代表的无符号相对）。表格 3-1 展示了 Rust 内建的整数类型。每一个变体的有符号和无符号列（例如，<em>i32</em>）可以用来声明对应的整数值。</p>
 <figure>
 <figcaption>
 <p>Table 3-1: Integer Types in Rust</p>
@@ -999,7 +999,7 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 </figure>
 <p>那么如何知晓该使用哪种类型的数字呢？如果对此拿不定主意，Rust 的默认类型通常就是一个很好的选择，这个默认数字类型是<code>i32</code>：它通常是最快的，甚至是在 64 位系统上。使用<code>isize</code>或<code>usize</code>的主要场景是索引一些集合。</p>
 <h4>浮点型</h4>
-<p>Rust 也有两个主要的<em>浮点数</em>（<em>floating-point numbers</em>）类型，他们是有小数点的数字。Rust 的浮点数类型是<code>f32</code>和<code>f64</code>，分别是 32 位 和 64 位大小。默认类型是<code>f64</code>，因为它基本上与<code>f32</code>一样快不过精度更高。在 32 位系统上使用<code>f64</code>是可能的，不过会比<code>f32</code>要慢。大部分情况，牺牲潜在可能的更低性能来换取更高的精度是一个合理的首要选择，同时如果怀疑浮点数的大小有问题的时候应该对代码进行性能测试。</p>
+<p>Rust 也有两个主要的<strong>浮点数</strong>（<em>floating-point numbers</em>）类型，他们是有小数点的数字。Rust 的浮点数类型是<code>f32</code>和<code>f64</code>，分别是 32 位 和 64 位大小。默认类型是<code>f64</code>，因为它基本上与<code>f32</code>一样快不过精度更高。在 32 位系统上使用<code>f64</code>是可能的，不过会比<code>f32</code>要慢。大部分情况，牺牲潜在可能的更低性能来换取更高的精度是一个合理的首要选择，同时如果怀疑浮点数的大小有问题的时候应该对代码进行性能测试。</p>
 <p>这是一个展示浮点数的实例：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -1051,7 +1051,7 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 </code></pre>
 <p>Rust 的<code>char</code>类型代表了一个 Unicode 变量值（Unicode Scalar Value），这意味着它可以比 ASCII 表示更多内容。拼音字母（Accented letters），中文/日文/汉语等象形文字，emoji（絵文字）以及零长度的空白字符对于 Rust <code>char</code>类型都是有效的。Unicode 标量值包含从 <code>U+0000</code> 到 <code>U+D7FF</code> 和 <code>U+E000</code> 到 <code>U+10FFFF</code> 之间的值。不过，“字符”并不是一个 Unicode 中的概念，所以人直觉上的“字符”可能与 Rust 中的<code>char</code>并不符合。第八章的“字符串”部分将详细讨论这个主题。</p>
 <h3>复合类型</h3>
-<p><em>复合类型</em>可以将多个其他类型的值组合成一个类型。Rust 有两个原生的复合类型：元组（tuple）和数组（array）。</p>
+<p><strong>复合类型</strong>可以将多个其他类型的值组合成一个类型。Rust 有两个原生的复合类型：元组（tuple）和数组（array）。</p>
 <h4>将值组合进元组</h4>
 <p>元组是一个将多个其他类型的值组合进一个复合类型的组要方式。</p>
 <p>我们使用一个括号中的逗号分隔的值列表来创建一个元组。元组中的每一个位置都有一个类型，而且这写不同值的类型也不必是相同的。这个例子中使用了额外的可选类型注解：</p>
@@ -1085,14 +1085,14 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 </code></pre>
 <p>这个程序创建了一个元组，<code>x</code>，并接着使用索引为每个元素创建新变量。跟大多数编程语言一样，元组的第一个索引值是 0。</p>
 <h4>数组</h4>
-<p>另一个获取一个多个值集合的方式是<em>数组</em>（<em>array</em>）。与元组不同，数组中的每个元素的类型必须相同。Rust 中的数组与一些其他语言中的数组不同，因为 Rust 中的数组是固定长度的：一旦声明，他们的长度不能增长或缩小。</p>
+<p>另一个获取一个多个值集合的方式是<strong>数组</strong>（<em>array</em>）。与元组不同，数组中的每个元素的类型必须相同。Rust 中的数组与一些其他语言中的数组不同，因为 Rust 中的数组是固定长度的：一旦声明，他们的长度不能增长或缩小。</p>
 <p>Rust 中数组的值位于中括号中的逗号分隔的列表中：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
 }
 </code></pre>
-<p>数组在想要在栈（stack）而不是在堆（heap）上为数据分配空间时十分有用（第四章将讨论栈与堆的更多内容），或者是想要确保总是有固定数量的元素时。虽然它并不如 vector 类型那么灵活。vector 类型是标准库提供的一个<em>允许</em>增长和缩小长度的类似数组的集合类型。当不确定是应该使用数组还是 vector 的时候，你可能应该使用 vector：第八章会详细讨论 vector。</p>
+<p>数组在想要在栈（stack）而不是在堆（heap）上为数据分配空间时十分有用（第四章将讨论栈与堆的更多内容），或者是想要确保总是有固定数量的元素时。虽然它并不如 vector 类型那么灵活。vector 类型是标准库提供的一个<strong>允许</strong>增长和缩小长度的类似数组的集合类型。当不确定是应该使用数组还是 vector 的时候，你可能应该使用 vector：第八章会详细讨论 vector。</p>
 <p>一个你可能想要使用数组而不是 vector 的例子是当程序需要知道一年中月份的名字时。程序不大可能回去增加或减少月份，这时你可以使用数组因为我们知道它总是含有 12 个元素：</p>
 <pre><code class="language-rust">let months = [&quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quot;April&quot;, &quot;May&quot;, &quot;June&quot;, &quot;July&quot;,
               &quot;August&quot;, &quot;September&quot;, &quot;October&quot;, &quot;November&quot;, &quot;December&quot;];
@@ -1128,7 +1128,7 @@ thread '&lt;main&gt;' panicked at 'index out of bounds: the len is 5 but the ind
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/arrays` (exit code: 101)
 </code></pre>
-<p>编译并没有产生任何错误，不过程序会导致一个<em>运行时</em>（<em>runtime</em>）错误并且不会成功退出。当尝试用索引访问一个元素时，Rust 会检查指定的索引是否小于数组的长度。如果索引超出了数组长度，Rust 会<em>panic</em>，这是 Rust 中的术语，它用于程序因为错误而退出的情况。</p>
+<p>编译并没有产生任何错误，不过程序会导致一个<strong>运行时</strong>（<em>runtime</em>）错误并且不会成功退出。当尝试用索引访问一个元素时，Rust 会检查指定的索引是否小于数组的长度。如果索引超出了数组长度，Rust 会<em>panic</em>，这是 Rust 中的术语，它用于程序因为错误而退出的情况。</p>
 <p>这是第一个在实战中遇到的 Rust 安全原则的例子。在很多底层语言中，并没有进行这类检查，这样当提供了一个不正确的索引时，就会访问无效的内存。Rust 通过立即退出而不是允许内存访问并继续执行来使你免受这类错误困扰。第九章会讨论更多 Rust 的错误处理。</p>
 <h2>函数如何工作</h2>
 <blockquote>
@@ -1160,7 +1160,7 @@ Another function.
 </code></pre>
 <p>代码在<code>main</code>函数中按照他们出现的顺序被执行。首先，打印“Hello, world!”信息，接着<code>another_function</code>被调用并打印它的信息。</p>
 <h3>函数参数</h3>
-<p>函数也可以被定义为拥有<em>参数</em>（<em>parameters</em>），他们是作为函数签名一部分的特殊变量。当函数拥有参数，可以为这些参数提供具体的值。技术上讲，这些具体值被称为参数（ <em>arguments</em>），不过通常的习惯是倾向于在函数定义中的变量和调用函数时传递的具体值都可以用 &quot;parameter&quot; 和 &quot;argument&quot; 而不加区别。</p>
+<p>函数也可以被定义为拥有<strong>参数</strong>（<em>parameters</em>），他们是作为函数签名一部分的特殊变量。当函数拥有参数，可以为这些参数提供具体的值。技术上讲，这些具体值被称为参数（ <em>arguments</em>），不过通常的习惯是倾向于在函数定义中的变量和调用函数时传递的具体值都可以用 &quot;parameter&quot; 和 &quot;argument&quot; 而不加区别。</p>
 <p>如下被重写的<code>another_function</code>版本展示了 Rust 中参数是什么样的：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -1178,7 +1178,7 @@ fn another_function(x: i32) {
 The value of x is: 5
 </code></pre>
 <p><code>another_function</code>的声明有一个叫做<code>x</code>的参数。<code>x</code>的类型被指定为<code>i32</code>。当<code>5</code>被传递给<code>another_function</code>时，<code>println!</code>宏将<code>5</code>放入格式化字符串中大括号的位置。</p>
-<p>在函数签名中，<em>必须</em>声明每个参数的类型。这是 Rust 设计中一个经过慎重考虑的决定：要求在函数定义中提供类型注解意味着编译器再也不需要在别的地方要求你注明类型就能知道你的意图。</p>
+<p>在函数签名中，<strong>必须</strong>声明每个参数的类型。这是 Rust 设计中一个经过慎重考虑的决定：要求在函数定义中提供类型注解意味着编译器再也不需要在别的地方要求你注明类型就能知道你的意图。</p>
 <p>当一个函数有多个参数时，使用逗号隔开他们，像这样：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -1202,7 +1202,7 @@ The value of y is: 6
 <h3>函数体</h3>
 <p>函数体由一系列的语句和一个可选的表达式构成。目前为止，我们只涉及到了没有结尾表达式的函数，不过我们见过表达式作为了语句的一部分。因为 Rust 是一个基于表达式（expression-based）的语言，这是一个需要理解的（不同于其他语言）重要区别。其他语言并没有这样的区别，所以让我们看看语句与表达式有什么区别以及他们是如何影响函数体的。</p>
 <h3>语句与表达式</h3>
-<p>我们已经用过语句与表达式了。<em>语句</em>（<em>Statements</em>）是执行一些操作但不返回值的指令。表达式（<em>Expressions</em>）计算并产生一个值。让我们看看一些例子：</p>
+<p>我们已经用过语句与表达式了。<strong>语句</strong>（<em>Statements</em>）是执行一些操作但不返回值的指令。表达式（<em>Expressions</em>）计算并产生一个值。让我们看看一些例子：</p>
 <p>使用<code>let</code>关键字创建变量并绑定一个值是一个语句。在列表 3-3 中，<code>let y = 6;</code>是一个语句：</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -1318,7 +1318,7 @@ help: consider removing this semicolon:
 <br>
 commit 74d6fc999b986b74bf94edd6dcbb5a08a16c12de</p>
 </blockquote>
-<p>所有编程语言都力求使他们的代码易于理解，不过有时额外的解释需要得到保障。在这种情况下，程序员在源码中留下记录，或者<em>注释</em>（<em>comments</em>），编译器会忽略他们不过其他阅读代码的人可能会用得上。</p>
+<p>所有编程语言都力求使他们的代码易于理解，不过有时额外的解释需要得到保障。在这种情况下，程序员在源码中留下记录，或者<strong>注释</strong>（<em>comments</em>），编译器会忽略他们不过其他阅读代码的人可能会用得上。</p>
 <p>这是一个注释的例子：</p>
 <pre><code class="language-rust">// Hello, world.
 </code></pre>
@@ -1339,8 +1339,8 @@ commit 74d6fc999b986b74bf94edd6dcbb5a08a16c12de</p>
     // I’m feeling lucky today.
     let lucky_number = 7;
 }
-
-这就是注释的全部。并没有什么特别复杂的。</code></pre>
+</code></pre>
+<p>这就是注释的全部。并没有什么特别复杂的。</p>
 <h2>控制流</h2>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch03-05-control-flow.md">ch03-05-control-flow.md</a>
@@ -1378,7 +1378,7 @@ condition was true
      Running `target/debug/branches`
 condition was false
 </code></pre>
-<p>另外值得注意的是代码中的条件<em>必须</em>是<code>bool</code>。如果像看看条件不是<code>bool</code>值时会发生什么，尝试运行如下代码：</p>
+<p>另外值得注意的是代码中的条件<strong>必须</strong>是<code>bool</code>。如果像看看条件不是<code>bool</code>值时会发生什么，尝试运行如下代码：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
     let number = 3;
@@ -1490,7 +1490,7 @@ error[E0308]: if and else have incompatible types
 </code></pre>
 <p><code>if</code>代码块的表达式返回一个整型，而<code>else</code>代码块返回一个字符串。这并不可行因为变量必须只有一个类型。Rust 需要在编译时就确切的知道<code>number</code>变量的类型，这样它就可以在编译时证明其他使用<code>number</code>变量的地方它的类型是有效的。Rust 并不能够在<code>number</code>的类型只能在运行时确定的情况下完成这些功能；这样会使编译器变得更复杂而且只能为代码提供更少的保障，因为它不得不记录所有变量的多种可能的类型。</p>
 <h3>使用循环重复执行</h3>
-<p>多次执行一段代码是很常用的。为了这个功能，Rust 提供了多种<em>循环</em>（<em>loops</em>）。一个循环执行循环体中的代码直到结尾并紧接着从回到开头继续执行。为了实验一下循环，让我们创建一个叫做 <em>loops</em> 的新项目。</p>
+<p>多次执行一段代码是很常用的。为了这个功能，Rust 提供了多种<strong>循环</strong>（<em>loops</em>）。一个循环执行循环体中的代码直到结尾并紧接着从回到开头继续执行。为了实验一下循环，让我们创建一个叫做 <em>loops</em> 的新项目。</p>
 <p>Rust 有三种循环类型：<code>loop</code>、<code>while</code>和<code>for</code>。让我们每一个都试试。</p>
 <h4>使用<code>loop</code>重复执行代码</h4>
 <p><code>loop</code>关键字告诉 Rust 一遍又一遍的执行一段代码直到你明确要求停止。</p>
@@ -1598,6 +1598,178 @@ the value is: 50
 <li>打印圣诞颂歌“The Twelve Days of Christmas”的歌词，并利用歌曲中的重复部分（编写循环）</li>
 </ul>
 <p>当你准备好继续的时候，让我们讨论一个其他语言中<em>并不</em>常见的概念：所有权（ownership）。</p>
+<h1>认识所有权</h1>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch04-00-understanding-ownership.md">ch04-00-understanding-ownership.md</a>
+<br>
+commit 759067b651a48a4a66485fe0876d318d398fb4fe</p>
+</blockquote>
+<p>所有权（系统）是 Rust 最独特的功能，它令 Rust 可以无需垃圾回收（garbage collector）就能保障内存安全。因此，理解 Rust 中所有权如何工作是十分重要的。本章我们将讲到所有权以及相关功能：借用、slices 以及 Rust 如何在内存中安排数据。</p>
+<h2>什么是所有权</h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch04-01-what-is-ownership.md">ch04-01-what-is-ownership.md</a>
+<br>
+commit cc053d91f41793e54d5321abe027b0c163d735b8</p>
+</blockquote>
+<p>Rust 的核心功能（之一）是<strong>所有权</strong>（<em>ownership</em>）。虽然这个功能理解起来很直观，不过它对语言的其余部分有着更深层的含义。</p>
+<p>所有程序都必须管理他们运行时使用计算机内存的方式。一些语言中使用垃圾回收在程序运行过程中来时刻寻找不再被使用的内存；在另一些语言中，程序员必须亲自分配和释放内存。Rust 则选择了第三种方式：内存被一个所有权系统管理，它拥有一系列的规则使编译器在编译时进行检查。任何所有权系统的功能都不会导致运行时开销。</p>
+<p>因为所有权对很多程序员都是一个新概念，需要一些时间来适应。好消息是随着你对 Rust 和所有权系统的规则越来越有经验，你就越能自然地编写出安全和高效的代码。持之以恒！</p>
+<p>当你理解了所有权系统，你就会对这个使 Rust 如此独特的功能有一个坚实的基础。在本章中，你将会通过一些例子来学习所有权，他们关注一个非常常见的数据结构：字符串。</p>
+<!-- PROD: START BOX -->
+<blockquote>
+<h3>栈（Stack）与堆（Heap）</h3>
+<p>在很多语言中并不经常需要考虑到栈与堆。不过在像 Rust 这样的系统变成语言中，值是位于栈上还是堆上在更大程度上影响了语言的行为以及为何必须做出特定的选择。我们会在本章的稍后部分描述所有权与堆与栈相关的部分，所以这里只是一个用来预热的简要解释。</p>
+<p>栈和堆都是代码在运行时可供使用的内存部分，不过他们以不同的结构组成。栈以放入值的顺序存储并以相反顺序取出值。这也被称作<strong>后进先出</strong>（<em>last in, first out</em>）。想象一下一叠盘子：当增加更多盘子时，把他们放在盘子堆的顶部，当需要盘子时，也从顶部拿走。不能从中间也不能从底部增加或拿走盘子！增加数据叫做<strong>进栈</strong>（<em>pushing onto the stack</em>），而移出数据叫做<strong>出栈</strong>（<em>popping off the stack</em>）。</p>
+<p>操作栈是非常快的，因为它访问数据的方式：永远也不需要寻找一个位置放入新数据或者取出数据因为这个位置总是在栈顶。另一个使得栈快速的性质是栈中的所有数据都必须是一个已知的固定的大小。</p>
+<p>相反对于在编译时未知大小或大小可能变化的数据，可以把他们储存在堆上。堆是缺乏组织的：当向堆放入数据时，我们请求一定大小的空间。操作系统在堆的某处找到一块足够大的空位，把它标记为已使用，并返回给我们一个它位置的指针。这个过程称作<strong>在堆上分配内存</strong>（<em>allocating on the heap</em>），并且有时这个过程就简称为“分配”（allocating）。向栈中放入数据并不被认为是分配。因为指针是已知的固定大小的，我们可以将指针储存在栈上，不过当需要实际数据时，必须访问指针。</p>
+<p>想象一下去餐馆就坐吃饭。当进入时，你说明有几个人，餐馆员工会找到一个够大的空桌子并领你们过去。如果有人来迟了，他们也可以通过询问来找到你们坐在哪。</p>
+<p>访问堆上的数据要比访问栈上的数据要慢因为必须通过指针来访问。现代的处理器在内存中跳转越少就越快。继续类比，假设有一台服务器来处理来自多个桌子的订单。它在处理完一个桌子的所有订单后再移动到下一个桌子是最有效率的。从桌子 A 获取一个订单，接着再从桌子 B 获取一个订单，然后再从桌子 A，然后再从桌子 B 这样的流程会更加缓慢。出于同样原因，处理器在处理的数据之间彼此较近的时候（比如在栈上）比较远的时候（比如可能在堆上）能更好的工作。在堆上分配大量的空间也可能消耗时间。</p>
+<p>当调用一个函数，传递给函数的值（包括可能指向堆上数据的指针）和函数的局部变量被压入栈中。当函数结束时，这些值被移出栈。</p>
+<p>记录何处的代码在使用堆上的什么数据，最小化堆上的冗余数据的数量以及清理堆上不再使用的数据以致不至于用完空间，这些所有的问题正是所有权系统要处理的。一旦理解了所有权，你就不需要经常考虑栈和堆了，不过理解如何管理堆内存可以帮助我们理解所有权为什么存在以及为什么以它的方式工作。</p>
+</blockquote>
+<!-- PROD: END BOX -->
+<h3>所有权规则</h3>
+<p>首先，让我们看一下所有权的规则。记住这些规则正如我们将完成一些说明这些规则的例子：</p>
+<blockquote>
+<ol>
+<li>Rust 中的每一个值都有一个叫做它的<strong>所有者</strong>（<em>owner</em>）的变量。</li>
+<li>同时一次只能有一个所有者</li>
+<li>当所有者变量离开作用域，这个值将被丢弃。</li>
+</ol>
+</blockquote>
+<h3>变量作用域</h3>
+<p>我们在第二章已经完成过一个 Rust 程序的例子了。现在我们已经掌握了基本语法，所以不会在所有的例子中包含<code>fn main() {</code>代码了，所以如果你是一路跟过来的，必须手动将之后例子的代码放入一个<code>main</code>函数中。为此，例子将显得更加具体，使我们可以关注具体细节而不是样板代码。</p>
+<p>作为所有权的第一个例子，我们看看一些变量的<strong>作用域</strong>（<em>scope</em>）。作用域是一个 item 在程序中有效的范围。假如有一个这样的变量：</p>
+<pre><code class="language-rust">let s = &quot;hello&quot;;
+</code></pre>
+<p>变量<code>s</code>绑定到了一个字符串字面值，这个字符串值是硬编码进我们程序代码中的。这个变量从声明的点开始直到当前<em>作用域</em>结束时都是有效的。列表 4-1 的注释标明了变量<code>s</code>在哪里是有效的：</p>
+<figure>
+<pre><code class="language-rust">{                      // s is not valid here, it’s not yet declared
+    let s = &quot;hello&quot;;   // s is valid from this point forward
+
+    // do stuff with s
+}                      // this scope is now over, and s is no longer valid
+</code></pre>
+<figcaption>
+<p>Listing 4-1: A variable and the scope in which it is valid</p>
+</figcaption>
+</figure>
+<p>换句话说，这里有两个重要的点：</p>
+<ol>
+<li>当<code>s</code><strong>进入作用域</strong>，它就是有效的。</li>
+<li>这一直持续到它<strong>离开作用域</strong>为止。</li>
+</ol>
+<p>目前为止，变量是否有效与作用域的关系跟其他变成语言是类似的。现在我们要在此基础上介绍<code>String</code>类型。</p>
+<h3><code>String</code>类型</h3>
+<p>为了演示所有权的规则，我们需要一个比第三章讲到的任何一个都要复杂的数据类型。之前出现的数据类型都是储存在栈上的并且当离开作用域时被移出栈，不过我们需要寻找一个储存在堆上的数据来探索 Rust 如何知道该在何时清理数据。</p>
+<p>这里使用<code>String</code>作为例子并专注于<code>String</code>与所有权相关的部分。这些方面也同样适用于其他标准库提供的或你创建的复杂数据类型。在第八章会更深入地讲解<code>String</code>。</p>
+<p>我们已经见过字符串字面值了，它被硬编码进程序里。字符串字面值是很方便，不过他们并不总是适合所有需要使用文本的场景。原因之一就是他们是不可变的。另一个原因是不是所有字符串的值都能在编写代码时就知道：例如，如果想要获取用户输入并储存该怎么办呢？为此，Rust 有第二个字符串类型，<code>String</code>。这个类型储存在堆上所以储存在编译时未知大小的文本。可以用<code>from</code>从字符串字面值来创建<code>String</code>，如下：</p>
+<pre><code class="language-rust">let s = String::from(&quot;hello&quot;);
+</code></pre>
+<p>这两个冒号（<code>::</code>）运算符允许将特定的<code>from</code>函数置于<code>String</code>类型的命名空间（namespace）下而不需要使用类似<code>string_from</code>这样的名字。在第五章的“方法语法”（“Method Syntax”）部分会着重讲解这个语法而且在第七章会讲到模块的命名空间。</p>
+<p>这类字符串<em>可以</em>被修改：</p>
+<pre><code class="language-rust">let mut s = String::from(&quot;hello&quot;);
+
+s.push_str(&quot;, world!&quot;); // push_str() appends a literal to a String
+
+println!(&quot;{}&quot;, s); // This will print `hello, world!`
+</code></pre>
+<p>那么这里有什么区别呢？为什么<code>String</code>可变而字面值却不行呢？区别在于两个类型对内存的处理上。</p>
+<h3>内存与分配</h3>
+<p>字符串字面值的情况，我们在编译时就知道内容所以它直接被硬编码进最终的可执行文件中，这使得字符串字面值快速和高效。不过这些属性都只来源于它的不可变形。不幸的是，我们不能为了每一个在编译时未知大小的文本而将一块内存放入二进制文件中而它的大小还可能随着程序运行而改变。</p>
+<p>对于<code>String</code>类型，为了支持一个可变，可增长的文本片段，需要在堆上分配一块在编译时未知大小的内存来存放内容。这意味着：</p>
+<ol>
+<li>内存必须在运行时向操作系统请求</li>
+<li>需要一个当我们处理完<code>String</code>时将内存返回给操作系统的方法</li>
+</ol>
+<p>第一部分由我们完成：当调用<code>String::from</code>时，它的实现请求它需要的内存。这在编程语言中是非常通用的。</p>
+<p>然而，第二部分实现起来就各有区别了。在有**垃圾回收（GC）**的语言中， GC 记录并清除不再使用的内存，而我们作为程序员，并不需要关心他们。没有 GC 的话，识别出不再使用的内存并调用代码显式释放就是我们程序员的责任了，正如请求内存的时候一样。从历史的角度上说正确处理内存回收曾经是一个困难的编程问题。如果忘记回收了会浪费内存。如果过早回收了，将会出现无效变量。如果重复回收，这也是个 bug。我们需要<code>allocate</code>和<code>free</code>一一对应。</p>
+<p>Rust 采取了一个不同的策略：内存在拥有它的变量离开作用域后就被自动释放。下面是列表 4-1 作用域例子的一个使用<code>String</code>而不是字符串字面值的版本：</p>
+<pre><code class="language-rust">{
+    let s = String::from(&quot;hello&quot;); // s is valid from this point forward
+
+    // do stuff with s
+}                                  // this scope is now over, and s is no
+                                   // longer valid
+</code></pre>
+<p>这里是一个将<code>String</code>需要的内存返回给操作系统的很自然的位置：当<code>s</code>离开作用域的时候。当变量离开作用域，Rust 为其调用一个特殊的函数。这个函数叫做 <code>drop</code>，在这里<code>String</code>的作者可以放置释放内存的代码。Rust 在结尾的<code>}</code>处自动调用<code>drop</code>。</p>
+<blockquote>
+<p>注意：在 C++ 中，这种 item 在生命周期结束时释放资源的方法有时被称作<strong>资源获取即初始化</strong>（<em>Resource Acquisition Is Initialization (RAII)</em>）。如果你使用过 RAII 模式的话应该对 Rust 的<code>drop</code>函数不陌生。</p>
+</blockquote>
+<p>这个模式对编写 Rust 代码的方式有着深远的影响。它现在看起来很简单，不过在更复杂的场景下代码的行为可能是不可预测的，比如当有多个变量使用在堆上分配的内存时。现在让我们探索一些这样的场景。</p>
+<h4>变量与数据交互：移动</h4>
+<p>Rust 中的多个变量以一种独特的方式与同一数据交互。让我们看看列表 4-2 中一个使用整型的例子：</p>
+<figure>
+<pre><code class="language-rust">let x = 5;
+let y = x;
+</code></pre>
+<figcaption>
+<p>Listing 4-2: Assigning the integer value of variable <code>x</code> to <code>y</code></p>
+</figcaption>
+</figure>
+<p>根据其他语言的经验大致可以猜到这在干什么：“将<code>5</code>绑定到<code>x</code>；接着生成一个值<code>x</code>的拷贝并绑定到<code>y</code>”。现在有了两个变量，<code>x</code>和<code>y</code>，都等于<code>5</code>。这也正是事实上发生了的，因为正数是有已知固定大小的简单值，所以这两个<code>5</code>被放入了栈中。</p>
+<p>现在看看这个<code>String</code>版本：</p>
+<pre><code class="language-rust">let s1 = String::from(&quot;hello&quot;);
+let s2 = s1;
+</code></pre>
+<p>这看起来与上面的代码非常类似，所以我们可能会假设他们的运行方式也是类似的：也就是说，第二行可能会生成一个<code>s1</code>的拷贝并绑定到<code>s2</code>上。不过，事实上并不完全是这样。</p>
+<p>为了更全面的解释这个问题，让我们看看图 4-3 中<code>String</code>真正是什么样。<code>String</code>由三部分组成，如图左侧所示：一个指向存放字符串内容内存的指针，一个长度，和一个容量。这一组数据储存在栈上。右侧则是堆上存放内容的内存部分。</p>
+<figure>
+<img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
+<figcaption>
+<p>Figure 4-3: Representation in memory of a <code>String</code> holding the value <code>&quot;hello&quot;</code>
+bound to <code>s1</code></p>
+</figcaption>
+</figure>
+<p>长度代表当前<code>String</code>的内容使用了多少字节的内存。容量是<code>String</code>从操作系统总共获取了多少字节的内存。长度与容量的区别是很重要的，不过目前为止的场景中并不重要，所以可以暂时忽略容量。</p>
+<p>当我们把<code>s1</code>赋值给<code>s2</code>，<code>String</code>的数据被复制了，这意味着我们从栈上拷贝了它的指针、长度和容量。我们并没有复制堆上指针所指向的数据。换句话说，内存中数据的表现如图 4-4 所示。</p>
+<figure>
+<img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
+<figcaption>
+<p>Figure 4-4: Representation in memory of the variable <code>s2</code> that has a copy of
+the pointer, length, and capacity of <code>s1</code></p>
+</figcaption>
+</figure>
+<p>这个表现形式看起来<strong>并不像</strong>图 4-5 中的那样，它是如果 Rust 也拷贝了堆上的数据后内存看起来是怎么样的。如果 Rust 这么做了，那么操作<code>s2 = s1</code>在堆上数据比较大的时候可能会对运行时性能造成非常大的影响。</p>
+<figure>
+<img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
+<figcaption>
+<p>Figure 4-5: Another possibility of what <code>s2 = s1</code> might do if Rust copied the
+heap data as well</p>
+</figcaption>
+</figure>
+<p>之前，我们提到过当变量离开作用域后 Rust 自动调用<code>drop</code>函数并清理变量的堆内存。不过图 4-4 展示了两个数据指针指向了同一位置。这就有了一个问题：当<code>s2</code>和<code>s1</code>离开作用域，他们都会尝试释放相同的内存。这是一个叫做 <em>double free</em> 的错误，也是之前提到过的内存安全性 bug 之一。两次释放（相同）内存会导致内存污染，它可能会导致安全漏洞。</p>
+<p>为了确保内存安全，这种场景下 Rust 的处理有另一个细节值得注意。与其尝试拷贝被分配的内存，Rust 则认为<code>s1</code>不再有效，因此 Rust 不需要在<code>s1</code>离开作用域后清理任何东西。看看在<code>s2</code>被创建之后尝试使用<code>s1</code>会发生生么：</p>
+<pre><code class="language-rust,ignore">let s1 = String::from(&quot;hello&quot;);
+let s2 = s1;
+
+println!(&quot;{}&quot;, s1);
+</code></pre>
+<p>你会得到一个类似如下的错误，因为 Rust 禁止你使用无效的引用。</p>
+<pre><code class="language-sh">error[E0382]: use of moved value: `s1`
+ --&gt; src/main.rs:4:27
+  |
+3 |     let s2 = s1;
+  |         -- value moved here
+4 |     println!(&quot;{}, world!&quot;,s1);
+  |                           ^^ value used here after move
+  |
+  = note: move occurs because `s1` has type `std::string::String`,
+which does not implement the `Copy` trait
+</code></pre>
+<p>如果你在其他语言中听说过术语“浅拷贝”（“shallow copy”）和“深拷贝”（“deep copy”），那么拷贝指针、长度和容量而不拷贝数据可能听起来像浅拷贝。不过因为 Rust 同时使第一个变量无效化了，这个操作被成为<strong>移动</strong>（<em>move</em>），而不是浅拷贝。上面的例子可以解读为<code>s1</code>被<strong>移动</strong>到了<code>s2</code>中。那么具体发生了什么如图 4-6 所示。</p>
+<figure>
+<img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
+<figcaption>
+<p>Figure 4-6: Representation in memory after <code>s1</code> has been invalidated</p>
+</figcaption>
+</figure>
+<p>这样就解决了我们的麻烦！因为只有<code>s2</code>是有效的，当其离开作用域，它就释放自己的内存，完毕。</p>
+<p>另外，这里还隐含了一个设计选择：Rust 永远也不会自动创建数据的“深拷贝”。因此，任何<strong>自动</strong>的复制可以被认为对运行时性能影响较小。</p>
+<h4>变量与数据交互：克隆</h4>
+<p>如果我们<strong>确实</strong>需要深度复制<code>String</code>中堆上的数据，而不仅仅是栈上的数据，可以使用一个叫做<code>clone</code></p>
+<h1>References &amp; Borrowing</h1>
+<h1>Slices</h1>
 
                 </div>
 
