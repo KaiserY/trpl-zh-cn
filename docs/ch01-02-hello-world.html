@@ -71,14 +71,14 @@
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch01-02-hello-world.md">ch01-02-hello-world.md</a>
 <br>
-commit aa1801d99cd3b19c96533f00c852b1c4bd5350a6</p>
+commit ccbeea7b9fe115cd545881618fe14229d18b307f</p>
 </blockquote>
 <p>现在你已经安装好了 Rust，让我们来编写你的第一个 Rust 程序。当学习一门新语言的时候，编写一个在屏幕上打印 “Hello, world!” 文本的小程序是一个传统，而在这一部分，我们将遵循这个传统。</p>
 <blockquote>
 <p>注意：本书假设你熟悉基本的命令行操作。Rust 本身并不对你的编辑器，工具和你的代码存放在何处有什么特定的要求，所以如果你比起命令行更喜欢 IDE，请随意选择你喜欢的 IDE。</p>
 </blockquote>
-<h3>创建项目文件</h3>
-<p>首先，创建一个文件来编写 Rust 代码。Rust 并不关心你的代码存放在哪里，不过在本书中，我们建议在你的 home 目录创建一个<strong>项目</strong>目录，并把你的所有项目放在这。打开一个终端并输入如下命令来为这个项目创建一个文件夹：</p>
+<h3>创建项目文件夹</h3>
+<p>首先，创建一个文件夹来编写 Rust 代码。Rust 并不关心你的代码存放在哪里，不过在本书中，我们建议在你的 home 目录创建一个<strong>项目</strong>目录，并把你的所有项目放在这。打开一个终端并输入如下命令来为这个项目创建一个文件夹：</p>
 <p>Linux 和 Mac:</p>
 <pre><code class="language-sh">$ mkdir ~/projects
 $ cd ~/projects
@@ -143,7 +143,7 @@ main.rs
 <h2>Hello, Cargo!</h2>
 <p>Cargo 是 Rust 的构建系统和包管理工具，同时 Rustacean 们使用 Cargo 来管理它们的 Rust 项目，因为它使得很多任务变得更轻松。例如，Cargo负责构建代码、下载代码依赖的库并编译这些库。我们把代码需要的库叫做 <strong>依赖</strong>（<em>dependencies</em>）。</p>
 <p>最简单的 Rust 程序，例如我们刚刚编写的，并没有任何依赖，所以目前我们只使用了 Cargo 负责构建代码的部分。随着你编写更加复杂的 Rust 程序，你会想要添加依赖，那么如果你使用 Cargo 开始的话，这将会变得简单许多。</p>
-<p>因为绝大部分 Rust 项目使用 Cargo，本书接下来的部分将假设你使用它。如果使用安装章节介绍的官方安装包的话，Rust 自带 Cargo。如果通过其他方式安装 Rust 的话，可以在终端输入如下命令检查是否安装了 Cargo：</p>
+<p>由于绝大部分 Rust 项目使用 Cargo，本书接下来的部分将假设你使用它。如果使用安装章节介绍的官方安装包的话，Rust 自带 Cargo。如果通过其他方式安装 Rust 的话，可以在终端输入如下命令检查是否安装了 Cargo：</p>
 <pre><code class="language-sh">$ cargo --version
 </code></pre>
 <p>如果看到了版本号，一切 OK！如果出现一个类似“<code>command not found</code>”的错误，那么你应该查看安装方式的文档来确定如何单独安装 Cargo。</p>

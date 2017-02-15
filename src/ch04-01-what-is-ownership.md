@@ -248,4 +248,146 @@ Figure 4-6: Representation in memory after `s1` has been invalidated
 
 #### 变量与数据交互：克隆
 
-如果我们**确实**需要深度复制`String`中堆上的数据，而不仅仅是栈上的数据，可以使用一个叫做`clone`
+如果我们**确实**需要深度复制`String`中堆上的数据，而不仅仅是栈上的数据，可以使用一个叫做`clone`的通用函数。第五章会讨论方法语法，不过因为方法在很多语言中是一个常见功能，所以之前你可能已经见过了。
+
+这是一个实际使用`clone`方法的例子：
+
+```rust
+let s1 = String::from("hello");
+let s2 = s1.clone();
+
+println!("s1 = {}, s2 = {}", s1, s2);
+```
+
+这段代码能正常运行，也是如何显式产生图 4-5 中行为的方式，这里堆上的数据**被复制了**。
+
+当出现`clone`调用时，你知道一些特有的代码被执行而且这些代码可能相当消耗资源。所以它作为一个可视化的标识代表了不同的行为。
+
+#### 只在栈上的数据：拷贝
+
+这里还有一个没有提到的小窍门。这些代码使用了整型并且是有效的，他们是之前列表 4-2 中的一部分：
+
+```rust
+let x = 5;
+let y = x;
+
+println!("x = {}, y = {}", x, y);
+```
+
+他们似乎与我们刚刚学到的内容向抵触：没有调用`clone`，不过`x`依然有效且没有被移动到`y`中。
+
+原因是像整型这样的在编译时已知大小的类型被整个储存在栈上，所以拷贝其实际的值是快速的。这意味着没有理由在创建变量`y`后使`x`无效。换句话说，这里没有深浅拷贝的区别，所以调用`clone`并不会与通常的浅拷贝有什么不同，我们可以不用管它。
+
+Rust 有一个叫做`Copy` trait 的特殊注解，可以用在类似整型这样的储存在栈上的类型（第十章详细讲解 trait）。如果一个类型拥有`Copy` trait，一个旧的变量在（重新）赋值后仍然可用。Rust 不允许自身或其任何部分实现了`Drop` trait 的类型使用`Copy` trait。如果我们对其值离开作用域时需要特殊处理的类型使用`Copy`注解，将会出现一个编译时错误。
+
+那么什么类型是`Copy`的呢？可以查看给定类型的文档来确认，不过作为一个通用的规则，任何简单标量值的组合可以是`Copy`的，任何不需要分配内存或类似形式资源的类型是`Copy`的，如下是一些`Copy`的类型：
+
+* 所有整数类型，比如`u32`。
+* 布尔类型，`bool`，它的值是`true`和`false`。
+* 所有浮点数类型，比如`f64`。
+* 元组，当且仅当其包含的类型也都是`Copy`的时候。`(i32, i32)`是`Copy`的，不过`(i32, String)`就不是。
+
+### 所有权与函数
+
+将值传递给函数在语言上与给变量赋值相似。向函数传递值可能会移动或者复制，就像赋值语句一样。列表 4-7 是一个带有变量何时进入和离开作用域标注的例子：
+
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+fn main() {
+    let s = String::from("hello");  // s comes into scope.
+
+    takes_ownership(s);             // s's value moves into the function...
+                                    // ... and so is no longer valid here.
+    let x = 5;                      // x comes into scope.
+
+    makes_copy(x);                  // x would move into the function,
+                                    // but i32 is Copy, so it’s okay to still
+                                    // use x afterward.
+
+} // Here, x goes out of scope, then s. But since s's value was moved, nothing
+  // special happens.
+
+fn takes_ownership(some_string: String) { // some_string comes into scope.
+    println!("{}", some_string);
+} // Here, some_string goes out of scope and `drop` is called. The backing
+  // memory is freed.
+
+fn makes_copy(some_integer: i32) { // some_integer comes into scope.
+    println!("{}", some_integer);
+} // Here, some_integer goes out of scope. Nothing special happens.
+```
+
+<figcaption>
+
+Listing 4-7: Functions with ownership and scope annotated
+
+</figcaption>
+</figure>
+
+当尝试在调用`takes_ownership`后使用`s`时，Rust 会抛出一个编译时错误。这些静态检查使我们免于犯错。试试在`main`函数中添加使用`s`和`x`的代码来看看哪里能使用他们，和哪里所有权规则会阻止我们这么做。
+
+### 返回值与作用域
+
+返回值也可以转移作用域。这里是一个有与列表 4-7 中类似标注的例子：
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+fn main() {
+    let s1 = gives_ownership();         // gives_ownership moves its return
+                                        // value into s1.
+
+    let s2 = String::from("hello");     // s2 comes into scope.
+
+    let s3 = takes_and_gives_back(s2);  // s2 is moved into
+                                        // takes_and_gives_back, which also
+                                        // moves its return value into s3.
+} // Here, s3 goes out of scope and is dropped. s2 goes out of scope but was
+  // moved, so nothing happens. s1 goes out of scope and is dropped.
+
+fn gives_ownership() -> String {             // gives_ownership will move its
+                                             // return value into the function
+                                             // that calls it.
+
+    let some_string = String::from("hello"); // some_string comes into scope.
+
+    some_string                              // some_string is returned and
+                                             // moves out to the calling
+                                             // function.
+}
+
+// takes_and_gives_back will take a String and return one.
+fn takes_and_gives_back(a_string: String) -> String { // a_string comes into
+                                                      // scope.
+
+    a_string  // a_string is returned and moves out to the calling function.
+}
+```
+
+变量的所有权总是遵循相同的模式：将值赋值给另一个变量时移动它，并且当变量值的堆书卷离开作用域时，如果数据的所有权没有被移动到另外一个变量时，其值将通过`drop`被清理掉。
+
+在每一个函数中都获取并接着返回所有权是冗余乏味的。如果我们想要函数使用一个值但不获取所有权改怎么办呢？如果我们还要接着使用它的话，每次都传递出去再传回来就有点烦人了，另外我们也可能想要返回函数体产生的任何（不止一个）数据。
+
+使用元组来返回多个值是可能的，像这样：
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+fn main() {
+    let s1 = String::from("hello");
+
+    let (s2, len) = calculate_length(s1);
+
+    println!("The length of '{}' is {}.", s2, len);
+}
+
+fn calculate_length(s: String) -> (String, usize) {
+    let length = s.len(); // len() returns the length of a String.
+
+    (s, length)
+}
+```
+
+但是这不免有些形式主义，同时这离一个通用的观点还有很长距离。幸运的是，Rust 对此提供了一个功能，叫做**引用**（*references*）。
