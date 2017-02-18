@@ -1,0 +1,260 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Rust 程序设计语言 中文版</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> 结构体</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html" class="active"><strong>5.1.</strong> 方法语法</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> 枚举和模式匹配</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> 定义枚举</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> <code>match</code>控制流运算符</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> 使用<code>if let</code>的具体控制流</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>方法语法</h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch05-01-method-syntax.md">ch05-01-method-syntax.md</a>
+<br>
+commit c9fd8eb1da7a79deee97020e8ad49af8ded78f9c</p>
+</blockquote>
+<p><strong>方法</strong>与函数类似：他们使用<code>fn</code>关键和名字声明，他们可以拥有参数和返回值，同时包含一些代码会在某处被调用时执行。不过方法与方法是不同的，因为他们在结构体（或者枚举或者 trait 对象，将分别在第六章和第十三章讲解）的上下文中被定义，并且他们第一个参数总是<code>self</code>，它代表方法被调用的结构体的实例。</p>
+<h3>定义方法</h3>
+<p>让我们将获取一个<code>Rectangle</code>实例作为参数的<code>area</code>函数改写成一个定义于<code>Rectangle</code>结构体上的<code>area</code>方法，如列表 5-7 所示：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">#[derive(Debug)]
+struct Rectangle {
+    length: u32,
+    width: u32,
+}
+
+impl Rectangle {
+    fn area(&amp;self) -&gt; u32 {
+        self.length * self.width
+    }
+}
+
+fn main() {
+    let rect1 = Rectangle { length: 50, width: 30 };
+
+    println!(
+        &quot;The area of the rectangle is {} square pixels.&quot;,
+        rect1.area()
+    );
+}
+</code></pre>
+<figcaption>
+<p>Listing 5-7: Defining an <code>area</code> method on the <code>Rectangle</code> struct</p>
+</figcaption>
+</figure>
+<!-- Will add ghosting and wingdings here in libreoffice /Carol -->
+<p>为了使函数定义于<code>Rectangle</code>的上下文中，我们开始了一个<code>impl</code>块（<code>impl</code>是 <em>implementation</em> 的缩写）。接着将函数移动到<code>impl</code>大括号中，并将签名中的第一个（在这里也是唯一一个）参数和函数体中其他地方的对应参数改成<code>self</code>。然后在<code>main</code>中将我们调用<code>area</code>方法并传递<code>rect1</code>作为参数的地方，改成使用<strong>方法语法</strong>在<code>Rectangle</code>实例上调用<code>area</code>方法。方法语法获取一个实例并加上一个点号后跟方法名、括号以及任何参数。</p>
+<p>在<code>area</code>的签名中，开始使用<code>&amp;self</code>来替代<code>rectangle: &amp;Rectangle</code>，因为该方法位于<code>impl Rectangle</code> 上下文中所以 Rust 知道<code>self</code>的类型是<code>Rectangle</code>。注意仍然需要在<code>self</code>前面加上<code>&amp;</code>，就像<code>&amp;Rectangle</code>一样。方法可以选择获取<code>self</code>的所有权，像我们这里一样不可变的借用<code>self</code>，或者可变的借用<code>self</code>，就跟其他别的参数一样。</p>
+<p>这里选择<code>&amp;self</code>跟在函数版本中使用<code>&amp;Rectangle</code>出于同样的理由：我们并不想获取所有权，只希望能够读取结构体中的数据，而不是写入。如果想要能够在方法中改变调用方法的实例的话，需要将抵押给参数改为<code>&amp;mut self</code>。通过仅仅使用<code>self</code>作为第一个参数来使方法获取实例的所有权，不过这是很少见的；这通常用在当方法将<code>self</code>转换成别的实例的时候，同时我们想要防止调用者在转换之后使用原始的实例。</p>
+<p>使用方法而不是函数，除了使用了方法语法和不需要在每个函数签名中重复<code>self</code>类型外，其主要好处在于组织性。我将某个类型实例能做的所有事情都一起放入<code>impl</code>块中，而不是让将来的用户在我们的代码中到处寻找`Rectangle的功能。</p>
+<!-- PROD: START BOX -->
+<blockquote>
+<h3><code>-&gt;</code>运算符到哪去了？</h3>
+<p>像在 C++ 这样的语言中，又两个不同的运算符来调用方法：<code>.</code>直接在对象上调用方法，而<code>-&gt;</code>在一个对象的指针上调用方法，这时需要先解引用（dereference）指针。换句话说，如果<code>object</code>是一个指针，那么<code>object-&gt;something()</code>就像<code>(*object).something()</code>一样。</p>
+<p>Rust 并没有一个与<code>-&gt;</code>等效的运算符；相反，Rust 有一个叫<strong>自动引用和解引用</strong>（<em>automatic referencing and dereferencing</em>）的功能。方法调用是 Rust 中少数几个拥有这种行为的地方。</p>
+<p>这是它如何工作的：当使用<code>object.something()</code>调用方法时，Rust 会自动增加<code>&amp;</code>、<code>&amp;mut</code>或<code>*</code>以便使<code>object</code>符合方法的签名。也就是说，这些代码是等同的：</p>
+<pre><code class="language-rust"># #[derive(Debug,Copy,Clone)]
+# struct Point {
+#     x: f64,
+#     y: f64,
+# }
+#
+# impl Point {
+#    fn distance(&amp;self, other: &amp;Point) -&gt; f64 {
+#        let x_squared = f64::powi(other.x - self.x, 2);
+#        let y_squared = f64::powi(other.y - self.y, 2);
+#
+#        f64::sqrt(x_squared + y_squared)
+#    }
+# }
+# let p1 = Point { x: 0.0, y: 0.0 };
+# let p2 = Point { x: 5.0, y: 6.5 };
+p1.distance(&amp;p2);
+(&amp;p1).distance(&amp;p2);
+</code></pre>
+<p>第一行看起来简洁的多。这种自动引用的行为之所以能行得通是因为方法有一个明确的接收者————<code>self</code>的类型。在给出接收者和方法名的前提下，Rust 可以明确的计算出方法是仅仅读取（所以需要<code>&amp;self</code>），做出修改（所以是<code>&amp;mut self</code>）或者是获取所有权（所以是<code>self</code>）。Rust 这种使得借用对方法接收者来说是隐式的做法是其所有权系统人体工程学实践的一大部分。</p>
+</blockquote>
+<!-- PROD: END BOX -->
+<h3>带有更多参数的方法</h3>
+<p>让我们更多的实践一下方法，通过为<code>Rectangle</code>结构体实现第二个方法。这回，我们让一个<code>Rectangle</code>的实例获取另一个<code>Rectangle</code>实例并返回<code>self</code>能否完全包含第二个长方形，如果能返回<code>true</code>若不能则返回<code>false</code>。当我们定义了<code>can_hold</code>方法，就可以运行列表 5-8 中的代码了：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust,ignore">fn main() {
+    let rect1 = Rectangle { length: 50, width: 30 };
+    let rect2 = Rectangle { length: 40, width: 10 };
+    let rect3 = Rectangle { length: 45, width: 60 };
+
+    println!(&quot;Can rect1 hold rect2? {}&quot;, rect1.can_hold(&amp;rect2));
+    println!(&quot;Can rect1 hold rect3? {}&quot;, rect1.can_hold(&amp;rect3));
+}
+</code></pre>
+<figcaption>
+<p>Listing 5-8: Demonstration of using the as-yet-unwritten <code>can_hold</code> method</p>
+</figcaption>
+</figure>
+<p>我们希望看到如下输出，因为<code>rect2</code>的长宽都小于<code>rect1</code>，而<code>rect3</code>比<code>rect1</code>要宽：</p>
+<pre><code>Can rect1 hold rect2? true
+Can rect1 hold rect3? false
+</code></pre>
+<p>因为我们想定义一个方法，所以它应该位于<code>impl Rectangle</code>块中。方法名是<code>can_hold</code>，并且它会获取另一个<code>Rectangle</code>的不可变借用作为参数。通过观察调用点可以看出参数是什么类型的：<code>rect1.can_hold(&amp;rect2)</code>传入了<code>&amp;rect2</code>，它是一个<code>Rectangle</code>的实例<code>rect2</code>的不可变借用。这是可以理解的，因为我们只需要读取<code>rect2</code>（而不是写入，这意味着我们需要一个可变借用）而且希望<code>main</code>保持<code>rect2</code>的所有权这样就可以在调用这个方法后继续使用它。<code>can_hold</code>的返回值是一个布尔值，其实现会分别检查<code>self</code>的长宽是够都大于另一个<code>Rectangle</code>。让我们在列表 5-7 的<code>impl</code>块中增加这个新方法：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust"># #[derive(Debug)]
+# struct Rectangle {
+#     length: u32,
+#     width: u32,
+# }
+#
+impl Rectangle {
+    fn area(&amp;self) -&gt; u32 {
+        self.length * self.width
+    }
+
+    fn can_hold(&amp;self, other: &amp;Rectangle) -&gt; bool {
+        self.length &gt; other.length &amp;&amp; self.width &gt; other.width
+    }
+}
+</code></pre>
+<!-- Will add ghosting here in libreoffice /Carol -->
+<p>如果结合列表 5-8 的<code>main</code>函数来运行，就会看到想要得到的输出！方法可以在<code>self</code>后增加多个参数，而且这些参数就像函数中的参数一样工作。</p>
+<h3>关联函数</h3>
+<p><code>impl</code>块的另一个好用的功能是：允许在<code>impl</code>块中定义<strong>不</strong>以<code>self</code>作为参数的函数。这被称为<strong>关联函数</strong>（<em>associated functions</em>），因为他们与结构体相关联。即便如此他们也是函数而不是方法，因为他们并不作用于一个结构体的实例。你已经使用过一个关联函数了：<code>String::from</code>。</p>
+<p>关联函数经常被用作返回一个结构体新实例的构造函数。例如我们可以一个关联函数，它获取一个维度参数并且用来作为长宽，这样可以更轻松的创建一个正方形<code>Rectangle</code>而不必指定两次同样的值：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust"># #[derive(Debug)]
+# struct Rectangle {
+#     length: u32,
+#     width: u32,
+# }
+#
+impl Rectangle {
+    fn square(size: u32) -&gt; Rectangle {
+        Rectangle { length: size, width: size }
+    }
+}
+</code></pre>
+<p>使用结构体名和<code>::</code>语法来调用这个关联函数：比如<code>let sq = Rectangle::square(3);</code>。这个方法位于结构体的命名空间中：<code>::</code>语法用于关联函数和模块创建的命名空间，第七章会讲到后者。</p>
+<h2>总结</h2>
+<p>结构体让我们可以在自己的范围内创建有意义的自定义类型。通过结构体，我们可以将相关联的数据片段联系起来并命名他们来使得代码更清晰。方法允许为结构体实例指定行为，而关联函数将特定功能置于结构体的命名空间中并且无需一个实例。</p>
+<p>结构体并不是创建自定义类型的唯一方法；让我们转向 Rust 的<code>enum</code>功能并为自己的工具箱再填一个工具。</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch05-00-structs.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch06-00-enums.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch05-00-structs.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch06-00-enums.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3001");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload(true); // force reload from server (not from cache)
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+    
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

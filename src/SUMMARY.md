@@ -19,3 +19,11 @@
     - [什么是所有权](ch04-01-what-is-ownership.md)
     - [引用 & 借用](ch04-02-references-and-borrowing.md)
     - [Slices](ch04-03-slices.md)
+
+- [结构体](ch05-00-structs.md)
+    - [方法语法](ch05-01-method-syntax.md)
+
+- [枚举和模式匹配](ch06-00-enums.md)
+    - [定义枚举](ch06-01-defining-an-enum.md)
+    - [`match`控制流运算符](ch06-02-match.md)
+    - [使用`if let`的具体控制流](ch06-03-if-let.md)

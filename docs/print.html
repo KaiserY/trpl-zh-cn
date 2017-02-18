@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> 结构体</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> 方法语法</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> 枚举和模式匹配</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> 定义枚举</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> <code>match</code>控制流运算符</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> 使用<code>if let</code>的具体控制流</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -2294,6 +2294,456 @@ let slice = &amp;a[1..3];
 <h2>总结</h2>
 <p>所有权、借用和 slice 这些概念是 Rust 何以在编译时保障内存安全的关键所在。Rust 像其他系统编程语言那样给予你对内存使用的控制，但拥有数据所有者在离开作用域后自动清除其数据的功能意味着你无须额外编写和调试相关的控制代码。</p>
 <p>所有权系统影响了 Rust 中其他很多部分如何工作，所以我们会继续讲到这些概念，贯穿本书的余下内容。让我们开始下一个章节，来看看如何将多份数据组合进一个<code>struct</code>中。</p>
+<h1>结构体</h1>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch05-00-structs.md">ch05-00-structs.md</a>
+<br>
+commit 255b44b409585e472e14c396ebc75d28f540a1ac</p>
+</blockquote>
+<p><code>struct</code>，是 <em>structure</em> 的缩写，是一个允许我们命名并将多个相关值包装进一个有意义的组合的自定义类型。如果你来自一个面向对象编程语言背景，<code>struct</code>就像对象中的数据属性（字段）。在这一章的下一部分会讲到如何在结构体上定义方法；方法是如何为结构体数据指定<strong>行为</strong>的函数。<code>struct</code>和<code>enum</code>（将在第六章讲到）是为了充分利用 Rust 的编译时类型检查，来在程序范围创建新类型的基本组件。</p>
+<p>对结构体的一种看法是他们与元组类似，这个我们在第三章讲过了。就像元组，结构体的每一部分可以是不同类型。可以命令各部分数据所以能更清楚的知道其值是什么意思。由于有了这些名字使得结构体更灵活：不需要依赖顺序来指定或访问实例中的值。</p>
+<p>为了定义结构体，通过<code>struct</code>关键字并为整个结构体提供一个名字。结构体的名字需要描述它所组合的数据的意义。接着，在大括号中，定义每一部分数据的名字，他们被称作<strong>字段</strong>（<em>fields</em>），并定义字段类型。例如，列表 5-1 展示了一个储存用户账号信息的结构体：</p>
+<figure>
+<pre><code class="language-rust">struct User {
+    username: String,
+    email: String,
+    sign_in_count: u64,
+    active: bool,
+}
+</code></pre>
+<figcaption>
+<p>Listing 5-1: A <code>User</code> struct definition</p>
+</figcaption>
+</figure>
+<p>一旦定义后为了使用它，通过为每个字段指定具体值来创建这个结构体的<strong>实例</strong>。创建一个实例需要以结构体的名字开头，接着在大括号中使用<code>key: value</code>对的形式提供字段，其中 key 是字段的名字而 value 是需要储存在字段中的数据值。这时字段的顺序并不必要与在结构体中声明他们的顺序一致。换句话说，结构体的定义就像一个这个类型的通用模板。例如，我们可以像这样来声明一个特定的用户：</p>
+<pre><code class="language-rust"># struct User {
+#     username: String,
+#     email: String,
+#     sign_in_count: u64,
+#     active: bool,
+# }
+#
+let user1 = User {
+    email: String::from(&quot;someone@example.com&quot;),
+    username: String::from(&quot;someusername123&quot;),
+    active: true,
+    sign_in_count: 1,
+};
+</code></pre>
+<p>为了从结构体中获取某个值，可以使用点号。如果我们只想要用户的邮箱地址，可以用<code>user1.email</code>。</p>
+<h2>结构体数据的所有权</h2>
+<p>在列表 5-1 中的<code>User</code>结构体的定义中，我们使用了自身拥有所有权的<code>String</code>类型而不是<code>&amp;str</code>字符串 slice 类型。这是一个有意而为之的选择，因为我们想要这个结构体拥有它所有的数据，为此只要整个结构体是有效的话其数据也应该是有效的。</p>
+<p>可以使结构体储存被其他对象拥有的数据的引用，不过这么做的话需要用上<strong>生命周期</strong>（<em>lifetimes</em>），这是第十章会讨论的一个 Rust 的功能。生命周期确保结构体引用的数据有效性跟结构体本身保持一致。如果你尝试在结构体中储存一个引用而不指定生命周期，比如这样：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">struct User {
+    username: &amp;str,
+    email: &amp;str,
+    sign_in_count: u64,
+    active: bool,
+}
+
+fn main() {
+    let user1 = User {
+        email: &quot;someone@example.com&quot;,
+        username: &quot;someusername123&quot;,
+        active: true,
+        sign_in_count: 1,
+    };
+}
+</code></pre>
+<p>编译器会抱怨它需要生命周期说明符：</p>
+<pre><code>error[E0106]: missing lifetime specifier
+ --&gt;
+  |
+2 |     username: &amp;str,
+  |               ^ expected lifetime parameter
+
+error[E0106]: missing lifetime specifier
+ --&gt;
+  |
+3 |     email: &amp;str,
+  |            ^ expected lifetime parameter
+</code></pre>
+<p>第十章会讲到如何修复这个问题以便在结构体中储存引用，不过现在，通过通过从像<code>&amp;str</code>这样的引用切换到像<code>String</code>这类拥有所有权的类型来修改修改这个错误。</p>
+<h2>一个示例程序</h2>
+<p>为了理解何时会需要使用结构体，让我们编写一个计算长方形面积的程序。我们会从单独的变量开始，接着重构程序直到使用结构体替代他们为止。</p>
+<p>使用 Cargo 来创建一个叫做 <em>rectangles</em> 的新二进制程序，它会获取一个长方形以像素为单位的长度和宽度并计算它的面积。列表 5-2 中是项目的 <em>src/main.rs</em> 文件中为此实现的一个小程序：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">fn main() {
+    let length1 = 50;
+    let width1 = 30;
+
+    println!(
+        &quot;The area of the rectangle is {} square pixels.&quot;,
+        area(length1, width1)
+    );
+}
+
+fn area(length: u32, width: u32) -&gt; u32 {
+    length * width
+}
+</code></pre>
+<figcaption>
+<p>Listing 5-2: Calculating the area of a rectangle specified by its length and
+width in separate variables</p>
+</figcaption>
+</figure>
+<p>尝试使用<code>cargo run</code>运行程序：</p>
+<pre><code>The area of the rectangle is 1500 square pixels.
+</code></pre>
+<h3>使用元组重构</h3>
+<p>我们的小程序能正常运行；它调用<code>area</code>函数用长方形的每个维度来计算出面积。不过我们可以做的更好。长度和宽度是相关联的，因为他们一起才能定义一个长方形。</p>
+<p>这个做法的问题突显在<code>area</code>的签名上：</p>
+<pre><code class="language-rust,ignore">fn area(length: u32, width: u32) -&gt; u32 {
+</code></pre>
+<p>函数<code>area</code>本应该计算一个长方形的面积，不过函数却有两个参数。这两个参数是相关联的，不过程序自身却哪里也没有表现出这一点。将长度和宽度组合在一起将更易懂也更易处理。</p>
+<p>第三章已经讨论过了一种可行的方法：元组。列表 5-3 是一个使用元组的版本：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">fn main() {
+    let rect1 = (50, 30);
+
+    println!(
+        &quot;The area of the rectangle is {} square pixels.&quot;,
+        area(rect1)
+    );
+}
+
+fn area(dimensions: (u32, u32)) -&gt; u32 {
+    dimensions.0 * dimensions.1
+}
+</code></pre>
+<figcaption>
+<p>Listing 5-3: Specifying the length and width of the rectangle with a tuple</p>
+</figcaption>
+</figure>
+<!-- I will add ghosting & wingdings once we're in libreoffice /Carol -->
+<p>在某种程度上说这样好一点了。元组帮助我们增加了一些结构，现在在调用<code>area</code>的时候只用传递一个参数。不过另一方面这个方法却更不明确了：元组并没有给出它元素的名称，所以计算变得更费解了，因为不得不使用索引来获取元组的每一部分：</p>
+<!-- I will change this to use wingdings instead of repeating this code once
+we're in libreoffice /Carol -->
+<pre><code class="language-rust,ignore">dimensions.0 * dimensions.1
+</code></pre>
+<p>在面积计算时混淆长宽并没有什么问题，不过当在屏幕上绘制长方形时就有问题了！我们将不得不记住元组索引<code>0</code>是<code>length</code>而<code>1</code>是<code>width</code>。如果其他人要使用这些代码，他们也不得不搞清楚后再记住。容易忘记或者混淆这些值而造成错误，因为我们没有表达我们代码中数据的意义。</p>
+<h3>使用结构体重构：增加更多意义</h3>
+<p>现在引入结构体。我们可以将元组转换为一个有整体名称而且每个部分也有对应名字的数据类型，如列表 5-4 所示：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">struct Rectangle {
+    length: u32,
+    width: u32,
+}
+
+fn main() {
+    let rect1 = Rectangle { length: 50, width: 30 };
+
+    println!(
+        &quot;The area of the rectangle is {} square pixels.&quot;,
+        area(&amp;rect1)
+    );
+}
+
+fn area(rectangle: &amp;Rectangle) -&gt; u32 {
+    rectangle.length * rectangle.width
+}
+</code></pre>
+<figcaption>
+<p>Listing 5-4: Defining a <code>Rectangle</code> struct</p>
+</figcaption>
+</figure>
+<!-- Will add ghosting & wingdings once we're in libreoffice /Carol -->
+<p>这里我们定义了一个结构体并称其为<code>Rectangle</code>。在<code>{}</code>中定义了字段<code>length</code>和<code>width</code>，都是<code>u32</code>类型的。接着在<code>main</code>中，我们创建了一个长度为 50 和宽度为 30 的<code>Rectangle</code>的具体实例。</p>
+<p>函数<code>area</code>现在被定义为接收一个名叫<code>rectangle</code>的参数，它的类型是一个结构体<code>Rectangle</code>实例的不可变借用。第四章讲到过，我们希望借用结构体而不是获取它的所有权这样<code>main</code>函数就可以保持<code>rect1</code>的所有权并继续使用它，所以这就是为什么在函数签名和调用的地方会有<code>&amp;</code>。</p>
+<p><code>area</code>函数访问<code>Rectangle</code>的<code>length</code>和<code>width</code>字段。<code>area</code>的签名现在明确的表明了我们的意图：计算一个<code>Rectangle</code>的面积，通过其<code>length</code>和<code>width</code>字段。这表明了长度和宽度是相互联系的，并为这些值提供了描述性的名称而不是使用元组的索引值<code>0</code>和<code>1</code>。这是明确性的胜利。</p>
+<h3>通过衍生 trait 增加实用功能</h3>
+<p>如果能够在调试程序时打印出<code>Rectangle</code>实例来查看其所有字段的值就更好了。列表 5-5 尝试像往常一样使用<code>println!</code>宏：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust,ignore">struct Rectangle {
+    length: u32,
+    width: u32,
+}
+
+fn main() {
+    let rect1 = Rectangle { length: 50, width: 30 };
+
+    println!(&quot;rect1 is {}&quot;, rect1);
+}
+</code></pre>
+<figcaption>
+<p>Listing 5-5: Attempting to print a <code>Rectangle</code> instance</p>
+</figcaption>
+</figure>
+<p>如果运行代码，会出现带有如下核心信息的错误：</p>
+<pre><code>error[E0277]: the trait bound `Rectangle: std::fmt::Display` is not satisfied
+</code></pre>
+<p><code>println!</code>宏能处理很多类型的格式，不过，<code>{}</code>，默认告诉<code>println!</code>使用称为<code>Display</code>的格式：直接提供给终端用户查看的输出。目前为止见过的基本类型都默认实现了<code>Display</code>，所以它就是向用户展示<code>1</code>或其他任何基本类型的唯一方式。不过对于结构体，<code>println!</code>应该用来输出的格式是不明确的，因为这有更多显示的可能性：是否需要逗号？需要打印出结构体的<code>{}</code>吗？所有字段都应该显示吗？因为这种不确定性，Rust 不尝试猜测我们的意图所以结构体并没有提供一个<code>Display</code>的实现。</p>
+<p>但是如果我们继续阅读错误，将会发现这个有帮助的信息：</p>
+<pre><code>note: `Rectangle` cannot be formatted with the default formatter; try using
+`:?` instead if you are using a format string
+</code></pre>
+<p>让我们来试试！现在<code>println!</code>看起来像<code>println!(&quot;rect1 is {:?}&quot;, rect1);</code>这样。在<code>{}</code>中加入<code>:?</code>指示符告诉<code>println!</code>我们想要使用叫做<code>Debug</code>的输出格式。<code>Debug</code>是一个 trait，它允许我们在调试代码时以一种对开发者有帮助的方式打印出结构体。</p>
+<p>让我们试试运行这个变化...见鬼了。仍然能看到一个错误：</p>
+<pre><code>error: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
+</code></pre>
+<p>虽然编译器又一次给出了一个有帮助的信息！</p>
+<pre><code>note: `Rectangle` cannot be formatted using `:?`; if it is defined in your
+crate, add `#[derive(Debug)]` or manually implement it
+</code></pre>
+<p>Rust <strong>确实</strong>包含了打印出调试信息的功能，不过我们必须为结构体显式选择这个功能。为此，在结构体定义之前加上<code>#[derive(Debug)]</code>注解，如列表 5-6 所示：</p>
+<figure>
+<pre><code class="language-rust">#[derive(Debug)]
+struct Rectangle {
+    length: u32,
+    width: u32,
+}
+
+fn main() {
+    let rect1 = Rectangle { length: 50, width: 30 };
+
+    println!(&quot;rect1 is {:?}&quot;, rect1);
+}
+</code></pre>
+<figcaption>
+<p>Listing 5-6: Adding the annotation to derive the <code>Debug</code> trait and printing the
+<code>Rectangle</code> instance using debug formatting</p>
+</figcaption>
+</figure>
+<p>此时此刻运行程序，运行这个程序，不会有任何错误并会出现如下输出：</p>
+<pre><code>rect1 is Rectangle { length: 50, width: 30 }
+</code></pre>
+<p>好极了！这不是最漂亮的输出，不过它显示这个实例的所有字段，毫无疑问这对调试有帮助。如果想要输出再好看和易读一点，这对更大的结构体会有帮助，可以将<code>println!</code>的字符串中的<code>{:?}</code>替换为<code>{:#?}</code>。如果在这个例子中使用了美化的调试风格的话，输出会看起来像这样：</p>
+<pre><code>rect1 is Rectangle {
+    length: 50,
+    width: 30
+}
+</code></pre>
+<p>Rust 为我们提供了很多可以通过<code>derive</code>注解来使用的 trait，他们可以为我们的自定义类型增加有益的行为。这些 trait 和行为在附录 C 中列出。第十章会涉及到如何通过自定义行为来实现这些 trait，同时还有如何创建你自己的 trait。</p>
+<p>我们的<code>area</code>函数是非常明确的————它只是计算了长方形的面积。如果这个行为与<code>Rectangle</code>结构体再结合得更紧密一些就更好了，因为这明显就是<code>Rectangle</code>类型的行为。现在让我们看看如何继续重构这些代码，来将<code>area</code>函数协调进<code>Rectangle</code>类型定义的<code>area</code><strong>方法</strong>中。</p>
+<h2>方法语法</h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch05-01-method-syntax.md">ch05-01-method-syntax.md</a>
+<br>
+commit c9fd8eb1da7a79deee97020e8ad49af8ded78f9c</p>
+</blockquote>
+<p><strong>方法</strong>与函数类似：他们使用<code>fn</code>关键和名字声明，他们可以拥有参数和返回值，同时包含一些代码会在某处被调用时执行。不过方法与方法是不同的，因为他们在结构体（或者枚举或者 trait 对象，将分别在第六章和第十三章讲解）的上下文中被定义，并且他们第一个参数总是<code>self</code>，它代表方法被调用的结构体的实例。</p>
+<h3>定义方法</h3>
+<p>让我们将获取一个<code>Rectangle</code>实例作为参数的<code>area</code>函数改写成一个定义于<code>Rectangle</code>结构体上的<code>area</code>方法，如列表 5-7 所示：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">#[derive(Debug)]
+struct Rectangle {
+    length: u32,
+    width: u32,
+}
+
+impl Rectangle {
+    fn area(&amp;self) -&gt; u32 {
+        self.length * self.width
+    }
+}
+
+fn main() {
+    let rect1 = Rectangle { length: 50, width: 30 };
+
+    println!(
+        &quot;The area of the rectangle is {} square pixels.&quot;,
+        rect1.area()
+    );
+}
+</code></pre>
+<figcaption>
+<p>Listing 5-7: Defining an <code>area</code> method on the <code>Rectangle</code> struct</p>
+</figcaption>
+</figure>
+<!-- Will add ghosting and wingdings here in libreoffice /Carol -->
+<p>为了使函数定义于<code>Rectangle</code>的上下文中，我们开始了一个<code>impl</code>块（<code>impl</code>是 <em>implementation</em> 的缩写）。接着将函数移动到<code>impl</code>大括号中，并将签名中的第一个（在这里也是唯一一个）参数和函数体中其他地方的对应参数改成<code>self</code>。然后在<code>main</code>中将我们调用<code>area</code>方法并传递<code>rect1</code>作为参数的地方，改成使用<strong>方法语法</strong>在<code>Rectangle</code>实例上调用<code>area</code>方法。方法语法获取一个实例并加上一个点号后跟方法名、括号以及任何参数。</p>
+<p>在<code>area</code>的签名中，开始使用<code>&amp;self</code>来替代<code>rectangle: &amp;Rectangle</code>，因为该方法位于<code>impl Rectangle</code> 上下文中所以 Rust 知道<code>self</code>的类型是<code>Rectangle</code>。注意仍然需要在<code>self</code>前面加上<code>&amp;</code>，就像<code>&amp;Rectangle</code>一样。方法可以选择获取<code>self</code>的所有权，像我们这里一样不可变的借用<code>self</code>，或者可变的借用<code>self</code>，就跟其他别的参数一样。</p>
+<p>这里选择<code>&amp;self</code>跟在函数版本中使用<code>&amp;Rectangle</code>出于同样的理由：我们并不想获取所有权，只希望能够读取结构体中的数据，而不是写入。如果想要能够在方法中改变调用方法的实例的话，需要将抵押给参数改为<code>&amp;mut self</code>。通过仅仅使用<code>self</code>作为第一个参数来使方法获取实例的所有权，不过这是很少见的；这通常用在当方法将<code>self</code>转换成别的实例的时候，同时我们想要防止调用者在转换之后使用原始的实例。</p>
+<p>使用方法而不是函数，除了使用了方法语法和不需要在每个函数签名中重复<code>self</code>类型外，其主要好处在于组织性。我将某个类型实例能做的所有事情都一起放入<code>impl</code>块中，而不是让将来的用户在我们的代码中到处寻找`Rectangle的功能。</p>
+<!-- PROD: START BOX -->
+<blockquote>
+<h3><code>-&gt;</code>运算符到哪去了？</h3>
+<p>像在 C++ 这样的语言中，又两个不同的运算符来调用方法：<code>.</code>直接在对象上调用方法，而<code>-&gt;</code>在一个对象的指针上调用方法，这时需要先解引用（dereference）指针。换句话说，如果<code>object</code>是一个指针，那么<code>object-&gt;something()</code>就像<code>(*object).something()</code>一样。</p>
+<p>Rust 并没有一个与<code>-&gt;</code>等效的运算符；相反，Rust 有一个叫<strong>自动引用和解引用</strong>（<em>automatic referencing and dereferencing</em>）的功能。方法调用是 Rust 中少数几个拥有这种行为的地方。</p>
+<p>这是它如何工作的：当使用<code>object.something()</code>调用方法时，Rust 会自动增加<code>&amp;</code>、<code>&amp;mut</code>或<code>*</code>以便使<code>object</code>符合方法的签名。也就是说，这些代码是等同的：</p>
+<pre><code class="language-rust"># #[derive(Debug,Copy,Clone)]
+# struct Point {
+#     x: f64,
+#     y: f64,
+# }
+#
+# impl Point {
+#    fn distance(&amp;self, other: &amp;Point) -&gt; f64 {
+#        let x_squared = f64::powi(other.x - self.x, 2);
+#        let y_squared = f64::powi(other.y - self.y, 2);
+#
+#        f64::sqrt(x_squared + y_squared)
+#    }
+# }
+# let p1 = Point { x: 0.0, y: 0.0 };
+# let p2 = Point { x: 5.0, y: 6.5 };
+p1.distance(&amp;p2);
+(&amp;p1).distance(&amp;p2);
+</code></pre>
+<p>第一行看起来简洁的多。这种自动引用的行为之所以能行得通是因为方法有一个明确的接收者————<code>self</code>的类型。在给出接收者和方法名的前提下，Rust 可以明确的计算出方法是仅仅读取（所以需要<code>&amp;self</code>），做出修改（所以是<code>&amp;mut self</code>）或者是获取所有权（所以是<code>self</code>）。Rust 这种使得借用对方法接收者来说是隐式的做法是其所有权系统人体工程学实践的一大部分。</p>
+</blockquote>
+<!-- PROD: END BOX -->
+<h3>带有更多参数的方法</h3>
+<p>让我们更多的实践一下方法，通过为<code>Rectangle</code>结构体实现第二个方法。这回，我们让一个<code>Rectangle</code>的实例获取另一个<code>Rectangle</code>实例并返回<code>self</code>能否完全包含第二个长方形，如果能返回<code>true</code>若不能则返回<code>false</code>。当我们定义了<code>can_hold</code>方法，就可以运行列表 5-8 中的代码了：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust,ignore">fn main() {
+    let rect1 = Rectangle { length: 50, width: 30 };
+    let rect2 = Rectangle { length: 40, width: 10 };
+    let rect3 = Rectangle { length: 45, width: 60 };
+
+    println!(&quot;Can rect1 hold rect2? {}&quot;, rect1.can_hold(&amp;rect2));
+    println!(&quot;Can rect1 hold rect3? {}&quot;, rect1.can_hold(&amp;rect3));
+}
+</code></pre>
+<figcaption>
+<p>Listing 5-8: Demonstration of using the as-yet-unwritten <code>can_hold</code> method</p>
+</figcaption>
+</figure>
+<p>我们希望看到如下输出，因为<code>rect2</code>的长宽都小于<code>rect1</code>，而<code>rect3</code>比<code>rect1</code>要宽：</p>
+<pre><code>Can rect1 hold rect2? true
+Can rect1 hold rect3? false
+</code></pre>
+<p>因为我们想定义一个方法，所以它应该位于<code>impl Rectangle</code>块中。方法名是<code>can_hold</code>，并且它会获取另一个<code>Rectangle</code>的不可变借用作为参数。通过观察调用点可以看出参数是什么类型的：<code>rect1.can_hold(&amp;rect2)</code>传入了<code>&amp;rect2</code>，它是一个<code>Rectangle</code>的实例<code>rect2</code>的不可变借用。这是可以理解的，因为我们只需要读取<code>rect2</code>（而不是写入，这意味着我们需要一个可变借用）而且希望<code>main</code>保持<code>rect2</code>的所有权这样就可以在调用这个方法后继续使用它。<code>can_hold</code>的返回值是一个布尔值，其实现会分别检查<code>self</code>的长宽是够都大于另一个<code>Rectangle</code>。让我们在列表 5-7 的<code>impl</code>块中增加这个新方法：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust"># #[derive(Debug)]
+# struct Rectangle {
+#     length: u32,
+#     width: u32,
+# }
+#
+impl Rectangle {
+    fn area(&amp;self) -&gt; u32 {
+        self.length * self.width
+    }
+
+    fn can_hold(&amp;self, other: &amp;Rectangle) -&gt; bool {
+        self.length &gt; other.length &amp;&amp; self.width &gt; other.width
+    }
+}
+</code></pre>
+<!-- Will add ghosting here in libreoffice /Carol -->
+<p>如果结合列表 5-8 的<code>main</code>函数来运行，就会看到想要得到的输出！方法可以在<code>self</code>后增加多个参数，而且这些参数就像函数中的参数一样工作。</p>
+<h3>关联函数</h3>
+<p><code>impl</code>块的另一个好用的功能是：允许在<code>impl</code>块中定义<strong>不</strong>以<code>self</code>作为参数的函数。这被称为<strong>关联函数</strong>（<em>associated functions</em>），因为他们与结构体相关联。即便如此他们也是函数而不是方法，因为他们并不作用于一个结构体的实例。你已经使用过一个关联函数了：<code>String::from</code>。</p>
+<p>关联函数经常被用作返回一个结构体新实例的构造函数。例如我们可以一个关联函数，它获取一个维度参数并且用来作为长宽，这样可以更轻松的创建一个正方形<code>Rectangle</code>而不必指定两次同样的值：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust"># #[derive(Debug)]
+# struct Rectangle {
+#     length: u32,
+#     width: u32,
+# }
+#
+impl Rectangle {
+    fn square(size: u32) -&gt; Rectangle {
+        Rectangle { length: size, width: size }
+    }
+}
+</code></pre>
+<p>使用结构体名和<code>::</code>语法来调用这个关联函数：比如<code>let sq = Rectangle::square(3);</code>。这个方法位于结构体的命名空间中：<code>::</code>语法用于关联函数和模块创建的命名空间，第七章会讲到后者。</p>
+<h2>总结</h2>
+<p>结构体让我们可以在自己的范围内创建有意义的自定义类型。通过结构体，我们可以将相关联的数据片段联系起来并命名他们来使得代码更清晰。方法允许为结构体实例指定行为，而关联函数将特定功能置于结构体的命名空间中并且无需一个实例。</p>
+<p>结构体并不是创建自定义类型的唯一方法；让我们转向 Rust 的<code>enum</code>功能并为自己的工具箱再填一个工具。</p>
+<h1>枚举和模式匹配</h1>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch06-00-enums.md">ch06-00-enums.md</a>
+<br>
+commit 396e2db4f7de2e5e7869b1f8bc905c45c631ad7d</p>
+</blockquote>
+<p>本章介绍<strong>枚举</strong>，也被称作 <em>enums</em>。枚举允许你通过列举可能的值来定义一个类型。首先，我们会定义并使用一个枚举来展示它是如何连同数据一起编码信息的。接下来，我们会探索一个特别有用的枚举，叫做<code>Option</code>，它代表一个值要么是一些值要么什么都不是。然后会讲到<code>match</code>表达式中的模式匹配如何使对枚举不同的值运行不同的代码变得容易。最后会涉及到<code>if let</code>，另一个简洁方便处理代码中枚举的结构。</p>
+<p>枚举是一个很多语言都有的功能，不过不同语言中的功能各不相同。Rust 的枚举与像F#、OCaml 和 Haskell这样的函数式编程语言中的<strong>代数数据类型</strong>（<em>algebraic data types</em>）最为相似。</p>
+<h1>定义枚举</h1>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch06-01-defining-an-enum.md">ch06-01-defining-an-enum.md</a>
+<br>
+commit 396e2db4f7de2e5e7869b1f8bc905c45c631ad7d</p>
+</blockquote>
+<p>让我们通过一用代码来表现的场景，来看看为什么这里枚举是有用的而且比结构体更合适。比如我们要处理 IP 地。目前被广泛使用的两个主要 IP 标准：IPv4（version four）和 IPv6（version six）。这是我们的程序只可能会遇到两种 IP 地址：我们可以<strong>枚举</strong>出所有可能的值，这也正是它名字的由来。</p>
+<p>任何一个 IP 地址要么是 IPv4 的要么是 IPv6 的而不能两者都是。IP 地址的这个特性使得枚举数据结构非常适合这个场景，因为枚举值尽可能是其一个成员。IPv4 和 IPv6 从根本上讲都是 IP 地址，所以当代码在处理申请任何类型的 IP 地址的场景时应该把他们当作相同的类型。</p>
+<p>可以通过在代码中定义一个<code>IpAddrKind</code>枚举来表现这个概念并列出可能的 IP 地址类型，<code>V4</code>和<code>V6</code>。这被称为枚举的<strong>成员</strong>（<em>variants</em>）：</p>
+<pre><code class="language-rust">enum IpAddrKind {
+    V4,
+    V6,
+}
+</code></pre>
+<p>现在<code>IpAddrKind</code>就是一个可以在代码中使用的自定义类型了。</p>
+<h3>枚举值</h3>
+<p>可以像这样创建<code>IpAddrKind</code>两个不同成员的实例：</p>
+<pre><code class="language-rust"># enum IpAddrKind {
+#     V4,
+#     V6,
+# }
+#
+let four = IpAddrKind::V4;
+let six = IpAddrKind::V6;
+</code></pre>
+<p>注意枚举的成员位于其标识符的命名空间中，并使用两个冒号分开。这么设计的益处是现在<code>IpAddrKind::V4</code>和<code>IpAddrKind::V6</code>是相同类型的：<code>IpAddrKind</code>。例如，接着我们可以顶一个函数来获取<code>IpAddrKind</code>：</p>
+<pre><code class="language-rust"># enum IpAddrKind {
+#     V4,
+#     V6,
+# }
+#
+fn route(ip_type: IpAddrKind) { }
+</code></pre>
+<p>现在可以使用任意成员来调用这个函数：</p>
+<pre><code class="language-rust"># enum IpAddrKind {
+#     V4,
+#     V6,
+# }
+#
+# fn route(ip_type: IpAddrKind) { }
+#
+route(IpAddrKind::V4);
+route(IpAddrKind::V6);
+</code></pre>
+<p>使用枚举甚至还有更多优势。进一步考虑一下我们的 IP 地址类型，目前没有一个储存实际 IP 地址<strong>数据</strong>的方法；只知道它是什么<strong>类型</strong>的。考虑到已经在第五章学习过结构体了，你可以想如列表 6-1 那样修改这个问题：</p>
+<figure>
+<pre><code class="language-rust">enum IpAddrKind {
+    V4,
+    V6,
+}
+
+struct IpAddr {
+    kind: IpAddrKind,
+    address: String,
+}
+
+let home = IpAddr {
+    kind: IpAddrKind::V4,
+    address: String::from(&quot;127.0.0.1&quot;),
+};
+
+let loopback = IpAddr {
+    kind: IpAddrKind::V6,
+    address: String::from(&quot;::1&quot;),
+};
+</code></pre>
+<figcaption>
+<p>Listing 6-1: Storing the data and <code>IpAddrKind</code> variant of an IP address using a
+<code>struct</code></p>
+</figcaption>
+</figure>
+<p>这里我们定义了一个有两个字段的结构体<code>IpAddr</code>：<code>kind</code>字段是<code>IpAddrKind</code>（之前定义的枚举）类型的而<code>address</code>字段是<code>String</code>类型的。这里有两个结构体的实例。第一个，<code>home</code>，它的<code>kind</code>的值是<code>IpAddrKind::V4</code>与之相关联的地址数据是<code>127.0.0.1</code>。第二个实例，<code>loopback</code>，<code>kind</code>的值是<code>IpAddrKind</code>的另一个成员，<code>V6</code>，关联的地址是<code>::1</code>。我们使用了要给结构体来将<code>kind</code>和<code>address</code>打包在一起，现在枚举成员就与值相关联了。</p>
+<p>我们可以使用一种更简洁的方式来表达相同的概念，仅仅使用枚举并将数据直接放进每一个枚举成员而不是将枚举作为结构体的一部分。<code>IpAddr</code>枚举的新定义表明了<code>V4</code>和<code>V6</code>成员都关联了<code>String</code>值：</p>
+<pre><code class="language-rust">enum IpAddr {
+    V4(String),
+    V6(String),
+}
+
+let home = IpAddr::V4(String::from(&quot;127.0.0.1&quot;));
+
+let loopback = IpAddr::V6(String::from(&quot;::1&quot;));
+</code></pre>
+<p>我们直接将数据附加到枚举的每个成员上，这样就不需要一个额外的结构体了。</p>
+<p>使用枚举而不是结构体还有另外一个优势：每个成员可以处理不同类型和数量的数据。</p>
+<h1>The <code>match</code> Control Flow Operator</h1>
+<h1>Concise Control Flow with <code>if let</code></h1>
 
                 </div>
 
