@@ -26,4 +26,4 @@
 - [枚举和模式匹配](ch06-00-enums.md)
     - [定义枚举](ch06-01-defining-an-enum.md)
     - [`match`控制流运算符](ch06-02-match.md)
-    - [使用`if let`的具体控制流](ch06-03-if-let.md)
+    - [`if let`简单控制流](ch06-03-if-let.md)
