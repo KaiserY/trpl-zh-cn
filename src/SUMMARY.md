@@ -33,4 +33,9 @@
 - [模块](ch07-00-modules.md)
     - [`mod`和文件系统](ch07-01-mod-and-the-filesystem.md)
     - [使用`pub`控制可见性](ch07-02-controlling-visibility-with-pub.md)
-    - [使用`use`导入命名空间](ch07-03-importing-names-with-use.md)
+    - [使用`use`导入命名](ch07-03-importing-names-with-use.md)
+
+- [通用集合类型](ch08-00-common-collections.md)
+    - [vector](ch08-01-vectors.md)
+    - [字符串](ch08-02-strings.md)
+    - [哈希 map](ch08-03-hash-maps.md)
