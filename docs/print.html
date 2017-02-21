@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> 结构体</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> 方法语法</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> 枚举和模式匹配</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> 定义枚举</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> <code>match</code>控制流运算符</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code>简单控制流</a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> 模块</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code>和文件系统</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> 使用<code>pub</code>空值可见性</a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> 使用<code>use</code>导入命名空间</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> 结构体</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> 方法语法</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> 枚举和模式匹配</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> 定义枚举</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> <code>match</code>控制流运算符</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code>简单控制流</a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> 模块</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code>和文件系统</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> 使用<code>pub</code>控制可见性</a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> 使用<code>use</code>导入命名空间</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -3104,6 +3104,436 @@ if let Coin::Quarter(state) = coin {
 <p>现在我们涉及到了如何使用枚举来创建有一系列可列举值的自定义类型。我们也展示了标准库的<code>Option&lt;T&gt;</code>类型是如何帮助你利用类型系统来避免出错。当枚举值包含数据时，你可以根据需要处理多少情况来选择使用<code>match</code>或<code>if let</code>来获取并使用这些值。</p>
 <p>你的 Rust 程序现在能够使用结构体和枚举在自己的作用域内表现其内容了。在你的 API 中使用自定义类型保证了类型安全：编译器会确保你的函数只会得到它期望的类型的值。</p>
 <p>为了向你的用户提供一个组织良好的 API，它使用直观且只向用户暴露他们确实需要的部分，那么让我们转向 Rust 的模块系统吧。</p>
+<h1>模块</h1>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch07-00-modules.md">ch07-00-modules.md</a>
+<br>
+commit e2a129961ae346f726f8b342455ec2255cdfed68</p>
+</blockquote>
+<p>在你刚开始编写 Rust 程序时，代码可能仅仅位于<code>main</code>函数里。随着代码数量的增长，最终你会将功能移动到其他函数中，为了复用也为了更好的组织。通过将代码分隔成更小的块，每一个块代码自身就更易于理解。不过当你发现自己有太多的函数了该怎么办呢？Rust 有一个模块系统来处理编写可复用代码同时保持代码组织度的问题。</p>
+<p>就跟你将代码行提取到一个函数中一样，也可以将函数（和其他类似结构体和枚举的代码）提取到不同模块中。<strong>模块</strong>（<em>module</em>）是一个包含函数或类型定义的命名空间，你可以选择这些定义是能（公有）还是不能（私有）在其模块外可见。这是一个模块如何工作的概括：</p>
+<ul>
+<li>使用<code>mod</code>关键字声明模块</li>
+<li>默认所有内容都是私有的（包括模块自身）。可以使用<code>pub</code>关键字将其变成公有并在其命名空间外可见。</li>
+<li><code>use</code>关键字允许引入模块、或模块中的定义到作用域中以便于引用他们。</li>
+</ul>
+<p>我们会逐一了解这每一部分并学习如何将他们结合在一起。</p>
+<h2><code>mod</code>和文件系统</h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch07-01-mod-and-the-filesystem.md">ch07-01-mod-and-the-filesystem.md</a>
+<br>
+commit e2a129961ae346f726f8b342455ec2255cdfed68</p>
+</blockquote>
+<p>我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过我们不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章我们见过的<code>rand</code>就是这样的 crate。</p>
+<p>我们将创建一个提供一些通用网络功能的项目的骨架结构；我们将专注于模块和函数的组织，而不担心函数体中的具体代码。这个项目叫做<code>communicator</code>。Cargo 默认会创建一个库 crate 除非指定其他项目类型，所以如果不像一直以来那样加入<code>--bin</code>参数则项目将会是一个库：</p>
+<pre><code>$ cargo new communicator
+$ cd communicator
+</code></pre>
+<p>注意 Cargo 生成了 <em>src/lib.rs</em> 而不是 <em>src/main.rs</em>。在 <em>src/lib.rs</em> 中我们会找到这些：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+    }
+}
+</code></pre>
+<p>Cargo 创建了一个空的测试来帮助我们开始库项目，不像使用<code>--bin</code>参数那样创建一个“Hello, world!”二进制项目。稍后一点会介绍<code>#[]</code>和<code>mod tests</code>语法，目前只需确保他们位于 <em>src/lib.rs</em> 中。</p>
+<p>因为没有 <em>src/main.rs</em> 文件，所以没有可供 Cargo 的<code>cargo run</code>执行的东西。因此，我们将使用<code>cargo build</code>命令只是编译库 crate 的代码。</p>
+<p>我们将学习根据编写代码的意图来选择不同的织库项目代码组织来适应多种场景。</p>
+<h3>模块定义</h3>
+<p>对于<code>communicator</code>网络库，首先我们要定义一个叫做<code>network</code>的模块，它包含一个叫做<code>connect</code>的函数定义。Rust 中所有模块的定义以关键字<code>mod</code>开始。在 <em>src/lib.rs</em> 文件的开头在测试代码的上面增加这些代码：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">mod network {
+    fn connect() {
+    }
+}
+</code></pre>
+<p><code>mod</code>关键字的后面是模块的名字，<code>network</code>，接着是位于大括号中的代码块。代码块中的一切都位于<code>network</code>命名空间中。在这个例子中，只有一个函数，<code>connect</code>。如果想要在<code>network</code>模块外面的代码中调用这个函数，需要指定模块名并使用命名空间语法<code>::</code>，像这样：<code>network::connect()</code>，而不是只是<code>connect()</code>。</p>
+<p>也可以在 <em>src/lib.rs</em> 文件中同时存在多个模块。例如，再拥有一个<code>client</code>模块，它也有一个叫做<code>connect</code>的函数，如列表 7-1 中所示那样增加这个模块：</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
+<pre><code class="language-rust">mod network {
+    fn connect() {
+    }
+}
+
+mod client {
+    fn connect() {
+    }
+}
+</code></pre>
+<figcaption>
+<p>Listing 7-1: The <code>network</code> module and the <code>client</code> module defined side-by-side
+in <em>src/lib.rs</em></p>
+</figcaption>
+</figure>
+<p>现在我们有了<code>network::connect</code>函数和<code>client::connect</code>函数。他们可能有着完全不同的功能，同时他们也不会彼此冲突因为他们位于不同的模块。</p>
+<p>虽然在这个例子中，我们构建了一个库，但是 <em>src/lib.rs</em> 并没有什么特殊意义。也可以在 <em>src/main.rs</em> 中使用子模块。事实上，也可以将模块放入其他模块中。这有助于随着模块的增长，将相关的功能组织在一起并又保持各自独立。如何选择组织代码依赖于如何考虑代码不同部分之间的关系。例如，对于库的用户来说，<code>client</code>模块和它的函数<code>connect</code>可能放在<code>network</code>命名空间里显得更有道理，如列表 7-2 所示：</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
+<pre><code class="language-rust">mod network {
+    fn connect() {
+    }
+
+    mod client {
+        fn connect() {
+        }
+    }
+}
+</code></pre>
+<figcaption>
+<p>Listing 7-2: Moving the <code>client</code> module inside of the <code>network</code> module</p>
+</figcaption>
+</figure>
+<p>在 <em>src/lib.rs</em> 文件中，将现有的<code>mod network</code>和<code>mod client</code>的定义替换为<code>client</code>模块作为<code>network</code>的一个内部模块。现在我们有了<code>network::connect</code>和<code>network::client::connect</code>函数：又一次，这两个<code>connect</code>函数也不相冲突，因为他们在不同的命名空间中。</p>
+<p>这样，模块之间形成了一个层次结构。<em>src/lib.rs</em> 的内容位于最顶层，而其子模块位于较低的层次。这是列表 7-1 中的例子以这种方式考虑的组织结构：</p>
+<pre><code>communicator
+ ├── network
+ └── client
+</code></pre>
+<p>而这是列表 7-2 中例子的的结构：</p>
+<pre><code>communicator
+ └── network
+     └── client
+</code></pre>
+<p>可以看到列表 7-2 中，<code>client</code>是<code>network</code>的子模块，而不是它的同级模块。更为负责的项目可以有很多的模块，所以他们需要符合逻辑地组合在一起以便记录他们。在项目中“符合逻辑”的意义全凭你得理解和库的用户对你项目领域的认识。利用我们这里讲到的技术来创建同级模块和嵌套的模块将是你会喜欢的结构。</p>
+<h3>将模块移动到其他文件</h3>
+<p>位于层级结构中的模块，非常类似计算机领域的另一个我们非常熟悉的结构：文件系统！我们可以利用 Rust 的模块系统连同多个文件一起分解 Rust 项目，这样就不是所有的内容都落到 <em>src/lib.rs</em> 中了。作为例子，我们将从列表 7-3 中的代码开始：</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
+<pre><code class="language-rust">mod client {
+    fn connect() {
+    }
+}
+
+mod network {
+    fn connect() {
+    }
+
+    mod server {
+        fn connect() {
+        }
+    }
+}
+</code></pre>
+<figcaption>
+<p>Listing 7-3: Three modules, <code>client</code>, <code>network</code>, and <code>network::server</code>, all
+defined in <em>src/lib.rs</em></p>
+</figcaption>
+</figure>
+<p>这是模块层次结构：</p>
+<pre><code>communicator
+ ├── client
+ └── network
+     └── server
+</code></pre>
+<p>这里我们仍然<strong>定义</strong>了<code>client</code>模块，不过去掉了大括号和<code>client</code>模块中的定义并替换为一个分号，这使得 Rust 知道去其他地方寻找模块中定义的代码。</p>
+<p>那么现在需要创建对应模块名的外部文件。在 <em>src/</em> 目录创建一个 <em>client.rs</em> 文件，接着打开它并输入如下内容，它是上一步<code>client</code>模块中被去掉的<code>connect</code>函数：</p>
+<p><span class="filename">Filename: src/client.rs</span></p>
+<pre><code class="language-rust">fn connect() {
+}
+</code></pre>
+<p>注意这个文件中并不需要一个<code>mod</code>声明；因为已经在 <em>src/lib.rs</em> 中已经使用<code>mod</code>声明了<code>client</code>模块。这个文件仅仅提供<code>client</code>模块的内容。如果在这里加上一个<code>mod client</code>，那么就等于给<code>client</code>模块增加了一个叫做<code>client</code>的子模块！</p>
+<p>Rust 默认只知道 <em>src/lib.rs</em> 中的内容。如果想要对项目加入更多文件，我们需要在 <em>src/lib.rs</em> 中告诉 Rust 去寻找其他文件；这就是为什么<code>mod client</code>需要被定义在 <em>src/lib.rs</em> 而不是在 <em>src/client.rs</em>。</p>
+<p>现在，一切应该能成功编译，虽然会有一些警告。记住使用<code>cargo build</code>而不是<code>cargo run</code>因为这是一个库 crate 而不是二进制 crate：</p>
+<pre><code>$ cargo build
+   Compiling communicator v0.1.0 (file:///projects/communicator)
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/client.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/lib.rs:4:5
+  |
+4 |     fn connect() {
+  |     ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/lib.rs:8:9
+  |
+8 |         fn connect() {
+  |         ^
+</code></pre>
+<p>这些警告提醒我们有从未被使用的函数。目前不用担心这些警告；在本章的后面会解决他们。好消息是，他们仅仅是警告；我们的项目能够被成功编译。</p>
+<p>下面使用相同的模式将<code>network</code>模块提取到它自己的文件中。删除 <em>src/lib.rs</em> 中<code>network</code>模块的内容并在声明后加上一个分号，像这样：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust,ignore">mod client;
+
+mod network;
+</code></pre>
+<p>接着新建 <em>src/network.rs</em> 文件并输入如下内容：</p>
+<p><span class="filename">Filename: src/network.rs</span></p>
+<pre><code class="language-rust">fn connect() {
+}
+
+mod server {
+    fn connect() {
+    }
+}
+</code></pre>
+<p>注意这个模块文件中我们也使用了一个<code>mod</code>声明；这是因为我们希望<code>server</code>成为<code>network</code>的一个子模块。</p>
+<p>现在再次运行<code>cargo build</code>。成功！不过我们还需要再提取出另一个模块：<code>server</code>。因为这是一个子模块————也就是模块中的模块————目前的将模块提取到对应名字的文件中的策略就不管用了。如果我们仍这么尝试则会出现错误。对 <em>src/network.rs</em> 的第一个修改是用<code>mod server;</code>替换<code>server</code>模块的内容：</p>
+<p><span class="filename">Filename: src/network.rs</span></p>
+<pre><code class="language-rust,ignore">fn connect() {
+}
+
+mod server;
+</code></pre>
+<p>接着创建 <em>src/server.rs</em> 文件并输入需要提取的<code>server</code>模块的内容：</p>
+<p><span class="filename">Filename: src/server.rs</span></p>
+<pre><code class="language-rust">fn connect() {
+}
+</code></pre>
+<p>当尝试运行<code>cargo build</code>时，会出现如列表 7-4 中所示的错误：</p>
+<figure>
+<pre><code class="language-text">$ cargo build
+   Compiling communicator v0.1.0 (file:///projects/communicator)
+error: cannot declare a new module at this location
+ --&gt; src/network.rs:4:5
+  |
+4 | mod server;
+  |     ^^^^^^
+  |
+note: maybe move this module `network` to its own directory via `network/mod.rs`
+ --&gt; src/network.rs:4:5
+  |
+4 | mod server;
+  |     ^^^^^^
+note: ... or maybe `use` the module `server` instead of possibly redeclaring it
+ --&gt; src/network.rs:4:5
+  |
+4 | mod server;
+  |     ^^^^^^
+</code></pre>
+<figcaption>
+<p>Listing 7-4: Error when trying to extract the <code>server</code> submodule into
+<em>src/server.rs</em></p>
+</figcaption>
+</figure>
+<p>这个错误说明“不能在这个位置新声明一个模块”并指出 <em>src/network.rs</em> 中的<code>mod server;</code>这一行。看来 <em>src/network.rs</em> 与 <em>src/lib.rs</em> 在某些方面是不同的；让我们继续阅读以理解这是为什么。</p>
+<p>列表 7-4 中间的记录事实上是非常有帮助的，因为它指出了一些我们还未讲到的操作：</p>
+<pre><code class="language-text">note: maybe move this module `network` to its own directory via `network/mod.rs`
+</code></pre>
+<p>我们可以按照记录所建议的去操作，而不是继续使用之前的与模块同名的文件的模式：</p>
+<ol>
+<li>新建一个叫做 <em>network</em> 的<strong>目录</strong>，这是父模块的名字</li>
+<li>将 <em>src/network.rs</em> 移动到新建的 <em>network</em> 目录中并重命名，现在它是 <em>src/network/mod.rs</em></li>
+<li>将子模块文件 <em>src/server.rs</em> 移动到 <em>network</em> 目录中</li>
+</ol>
+<p>如下是执行这些步骤的命令：</p>
+<pre><code class="language-sh">$ mkdir src/network
+$ mv src/network.rs src/network/mod.rs
+$ mv src/server.rs src/network
+</code></pre>
+<p>现在如果运行<code>cargo build</code>的话将顺利编译（虽然仍有警告）。现在模块的布局看起来仍然与列表 7-3 中所有代码都在 <em>src/lib.rs</em> 中时完全一样：</p>
+<pre><code>communicator
+ ├── client
+ └── network
+     └── server
+</code></pre>
+<p>对应的文件布局现在看起来像这样：</p>
+<pre><code>├── src
+│   ├── client.rs
+│   ├── lib.rs
+│   └── network
+│       ├── mod.rs
+│       └── server.rs
+</code></pre>
+<p>那么，当我们想要提取<code>network::server</code>模块时，为什么也必须将 <em>src/network.rs</em> 文件改名成 <em>src/network/mod.rs</em> 文件呢，还有为什么要将<code>network::server</code>的代码放入 <em>network</em> 目录的 <em>src/network/server.rs</em> 文件中，而不能将<code>network::server</code>模块提取到 <em>src/server.rs</em> 中呢？原因是如果 <em>server.rs</em> 文件在 <em>src</em> 目录中那么 Rust 就不能知道<code>server</code>应当是<code>network</code>的子模块。为了更清除的说明为什么 Rust 不知道，让我们考虑一下有着如下层级的另一个例子，它的所有定义都位于 <em>src/lib.rs</em> 中：</p>
+<pre><code>communicator
+ ├── client
+ └── network
+     └── client
+</code></pre>
+<p>在这个例子中，仍然有这三个模块，<code>client</code>、<code>network</code>和<code>network::client</code>。如果按照与上面最开始将模块提取到文件中相同的步骤来操作，对于<code>client</code>模块会创建 <em>src/client.rs</em>。对于<code>network</code>模块，会创建 <em>src/network.rs</em>。但是接下来不能将<code>network::client</code>模块提取到 <em>src/client.rs</em> 文件中，因为它已经存在了，对应顶层的<code>client</code>模块！如果将<code>client</code>和<code>network::client</code>的代码都放入 <em>src/client.rs</em> 文件，Rust 将无从可知这些代码是属于<code>client</code>还是<code>network::client</code>的。</p>
+<p>因此，一旦想要将<code>network</code>模块的子模块<code>network::client</code>提取到一个文件中，需要为<code>network</code>模块新建一个目录替代 <em>src/network.rs</em> 文件。接着<code>network</code>模块的代码将进入 <em>src/network/mod.rs</em> 文件，而子模块<code>network::client</code>将拥有其自己的文件 <em>src/network/client.rs</em>。现在顶层的 <em>src/client.rs</em> 中的代码毫无疑问的都属于<code>client</code>模块。</p>
+<h3>模块文件系统的规则</h3>
+<p>与文件系统相关的模块规则总结如下：</p>
+<ul>
+<li>如果一个叫做<code>foo</code>的模块没有子模块，应该将<code>foo</code>的声明放入叫做 <em>foo.rs</em> 的文件中。</li>
+<li>如果一个叫做<code>foo</code>的模块有子模块，应该将<code>foo</code>的声明放入叫做 <em>foo/mod.rs</em> 的文件中。</li>
+</ul>
+<p>这些规则适用于递归（嵌套），所以如果<code>foo</code>模块有一个子模块<code>bar</code>而<code>bar</code>没有子模块，则 <em>src</em> 目录中应该有如下文件：</p>
+<pre><code>├── foo
+│   ├── bar.rs (contains the declarations in `foo::bar`)
+│   └── mod.rs (contains the declarations in `foo`, including `mod bar`)
+</code></pre>
+<p>模块自身则应该使用<code>mod</code>关键字定义于父模块的文件中。</p>
+<p>接下来，我们讨论一下<code>pub</code>关键字，并除掉那些警告！</p>
+<h2>使用<code>pub</code>控制可见性</h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch07-02-controlling-visibility-with-pub.md">ch07-02-controlling-visibility-with-pub.md</a>
+<br>
+commit e2a129961ae346f726f8b342455ec2255cdfed68</p>
+</blockquote>
+<p>我们通过将<code>network</code>和<code>network::server</code>的代码分别移动到 <em>src/network/mod.rs</em> 和 <em>src/network/server.rs</em> 文件中解决了列表 7-4 中出现的错误信息。现在，<code>cargo build</code>能够构建我们的项目，不过仍然有一些警告信息，表示<code>client::connect</code>、<code>network::connect</code>和<code>network::server::connect</code>函数没有被使用：</p>
+<pre><code>warning: function is never used: `connect`, #[warn(dead_code)] on by default
+src/client.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/mod.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+</code></pre>
+<p>那么为什么会出现这些错误信息呢？我们构建的是一个库，它的函数的目的是被<strong>用户</strong>使用，而不一定要被项目自身使用，所以不应该担心这些函数是未被使用的。创建他们的意义就在于被另一个项目而不是被自己使用。</p>
+<p>为了理解为什么这个程序出现了这些警告，尝试作为另一个项目来使用这个<code>connect</code>库，从外部调用他们。为此，通过创建一个包含这些代码的 <em>src/main.rs</em> 文件，在与库 crate 相同的目录创建一个二进制 crate：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">extern crate communicator;
+
+fn main() {
+    communicator::client::connect();
+}
+</code></pre>
+<p>使用<code>extern crate</code>指令将<code>communicator</code>库 crate 引入到作用域，因为事实上我们的包包含<strong>两个</strong> crate。Cargo 认为 <em>src/main.rs</em> 是一个二进制 crate 的根文件，与现存的以 <em>src/lib.rs</em> 为根文件的库 crate 相区分。这个模式在可执行项目中非常常见：大部分功能位于库 crate 中，而二进制 crate 使用这个库 crate。通过这种方式，其他程序也可以使用这个库 crate，这是一个很好的关注分离（separation of concerns）。</p>
+<p>从一个外部 crate 的视角观察<code>communicator</code>库的内部，我们创建的所有模块都位于一个与 crate 同名的模块内部，<code>communicator</code>。这个顶层的模块被称为 crate 的<strong>根模块</strong>（<em>root module</em>）。</p>
+<p>另外注意到即便在项目的子模块中使用外部 crate，<code>extern crate</code>也应该位于根模块（也就是 <em>src/main.rs</em> 或 <em>src/lib.rs</em>）。接着，在子模块中，我们就可以像顶层模块那样引用外部 crate 中的项了。</p>
+<p>我们的二进制 crate 如今正好调用了库中<code>client</code>模块的<code>connect</code>函数。然而，执行<code>cargo build</code>会在之前的警告之后出现一个错误：</p>
+<pre><code>error: module `client` is private
+ --&gt; src/main.rs:4:5
+  |
+4 |     communicator::client::connect();
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</code></pre>
+<p>啊哈！这告诉了我们<code>client</code>模块是私有的，这也正是那些警告的症结所在。这也是我们第一次在 Rust 上下文中涉及到<strong>公有</strong>和<strong>私有</strong>的概念。Rust 所有代码的默认状态是私有的：除了自己之外别人不允许使用这些代码。如果不在自己的项目中使用一个私有函数，因为程序自身是唯一允许使用这个函数的代码，Rust 会警告说函数未被使用。</p>
+<p>一旦我们指定一个像<code>client::connect</code>的函数为公有，不光二进制 crate 中的函数调用会被允许，函数未被使用的警告也会消失。将其标记为公有让 Rust 知道了我们意在使函数在我们程序的外部被使用。现在这个可能的理论上的外部可用性使 Rust 认为这个函数“已经被使用”。因此。当某项被标记为公有，Rust 不再要求它在程序自身被使用并停止警告某项未被使用。</p>
+<h3>标记函数为公有</h3>
+<p>为了告诉 Rust 某项为公有，在想要标记为公有的项的声明开头加上<code>pub</code>关键字。现在我们将致力于修复<code>client::connect</code>未被使用的警告，以及二进制 crate 中“模块<code>client</code>是私有的”的错误。像这样修改 <em>src/lib.rs</em> 使<code>client</code>模块公有：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust,ignore">pub mod client;
+
+mod network;
+</code></pre>
+<p><code>pub</code>写在<code>mod</code>之前。再次尝试构建：</p>
+<pre><code>&lt;warnings&gt;
+error: function `connect` is private
+ --&gt; src/main.rs:4:5
+  |
+4 |     communicator::client::connect();
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</code></pre>
+<p>非常好！另一个不同的错误！好的，不同的错误信息是值得庆祝的（可能是程序员被黑的最惨的一次）。新错误表明“函数<code>connect</code>是私有的”，那么让我们修改 <em>src/client.rs</em> 将<code>client::connect</code>也设为公有：</p>
+<p><span class="filename">Filename: src/client.rs</span></p>
+<pre><code class="language-rust">pub fn connect() {
+}
+</code></pre>
+<p>再再一次运行<code>cargo build</code>：</p>
+<pre><code>warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/mod.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+</code></pre>
+<p>编译通过了，关于<code>client::connect</code>未被使用的警告消失了！</p>
+<p>未被使用的代码并不总是意味着他们需要被设为公有的：如果你<strong>不</strong>希望这些函数成为公有 API 的一部分，未被使用的代码警告可能是在警告你这些代码不再需要并可以安全的删除他们。这也可能是警告你出 bug，如果你刚刚不小心删除了库中所有这个函数的调用。</p>
+<p>当然我们的情况是，<strong>确实</strong>希望另外两个函数也作为 crate 公有 API 的一部分，所以让我们也将其标记为<code>pub</code>并去掉剩余的警告。修改 <em>src/network/mod.rs</em> 为：</p>
+<p><span class="filename">Filename: src/network/mod.rs</span></p>
+<pre><code class="language-rust,ignore">pub fn connect() {
+}
+
+mod server;
+</code></pre>
+<p>并编译：</p>
+<pre><code>warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/mod.rs:1:1
+  |
+1 | pub fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+</code></pre>
+<p>恩，虽然将<code>network::connect</code>设为<code>pub</code>了我们仍然得到了一个未被使用函数的警告。这是因为模块中的函数是公有的，不过函数所在的<code>network</code>模块却不是公有的。这回我们是自内向外修改库文件的，而<code>client::connect</code>的时候是自外向内修改的。我们需要修改 <em>src/lib.rs</em> 让 <code>network</code> 也是公有的：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust,ignore">pub mod client;
+
+pub mod network;
+</code></pre>
+<p>现在再编译的话，那个警告就消失了：</p>
+<pre><code>warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+</code></pre>
+<p>只剩一个警告了！尝试自食其力修改它吧！</p>
+<h3>私有性规则</h3>
+<p>总的来说，有如下项的可见性规则：</p>
+<ol>
+<li>如果一个项是公有的，它能被任何父模块访问</li>
+<li>如果一个项是私有的，它只能被当前模块或其子模块访问</li>
+</ol>
+<h3>私有性示例</h3>
+<p>让我们看看更多例子作为练习。创建一个新的库项目并在新项目的 <em>src/lib.rs</em> 输入列表 7-5 中的代码：</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
+<pre><code class="language-rust,ignore">mod outermost {
+    pub fn middle_function() {}
+
+    fn middle_secret_function() {}
+
+    mod inside {
+        pub fn inner_function() {}
+
+        fn secret_function() {}
+    }
+}
+
+fn try_me() {
+    outermost::middle_function();
+    outermost::middle_secret_function();
+    outermost::inside::inner_function();
+    outermost::inside::secret_function();
+}
+</code></pre>
+<figcaption>
+<p>Listing 7-5: Examples of private and public functions, some of which are
+incorrect</p>
+</figcaption>
+</figure>
+<p>在尝试编译这些代码之前，猜测一下<code>try_me</code>函数的哪一行会出错。接着编译项目来看看是否猜对了，然后继续阅读后面关于错误的讨论！</p>
+<h4>检查错误</h4>
+<p><code>try_me</code>函数位于项目的根模块。叫做<code>outermost</code>的模块是私有的，不过第二条私有性规则说明<code>try_me</code>函数允许访问<code>outermost</code>模块，因为<code>outermost</code>位于当前（根）模块，<code>try_me</code>也是。</p>
+<p><code>outermost::middle_function</code>的调用是正确的。因为<code>middle_function</code>是公有的，而<code>try_me</code>通过其父模块访问<code>middle_function</code>，<code>outermost</code>。根据上一段的规则我们可以确定这个模块是可访问的。</p>
+<p><code>outermost::middle_secret_function</code>的调用会造成一个编译错误。<code>middle_secret_function</code>是私有的，所以第二条（私有性）规则生效了。根模块既不是<code>middle_secret_function</code>的当前模块（<code>outermost</code>是），也不是<code>middle_secret_function</code>当前模块的子模块。</p>
+<p>叫做<code>inside</code>的模块是私有的且没有子模块，所以它只能被当前模块访问，<code>outermost</code>。这意味着<code>try_me</code>函数不允许调用<code>outermost::inside::inner_function</code>或<code>outermost::inside::secret_function</code>任何一个。</p>
+<h4>修改错误</h4>
+<p>这里有一些尝试修复错误的代码修改意见。在你尝试他们之前，猜测一下他们哪个能修复错误，接着编译查看你是否猜对了，并结合私有性规则理解为什么。</p>
+<ul>
+<li>如果<code>inside</code>模块是公有的？</li>
+<li>如果<code>outermost</code>是公有的而<code>inside</code>是私有的？</li>
+<li>如果在<code>inner_function</code>函数体中调用<code>::outermost::middle_secret_function()</code>？（开头的两个冒号意味着从根模块开始引用模块。）</li>
+</ul>
+<p>请随意设计更多的实验并尝试理解他们！</p>
+<p>接下来，让我们讨论一下使用<code>use</code>关键字来将项引入作用域。</p>
+<h2>使用<code>use</code>导入命名空间</h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch07-03-importing-names-with-use.md">ch07-03-importing-names-with-use.md</a>
+<br>
+commit e2a129961ae346f726f8b342455ec2255cdfed68</p>
+</blockquote>
 
                 </div>
 

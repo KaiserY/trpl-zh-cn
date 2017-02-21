@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> 结构体</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> 方法语法</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> 枚举和模式匹配</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> 定义枚举</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> <code>match</code>控制流运算符</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code>简单控制流</a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> 模块</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code>和文件系统</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html" class="active"><strong>7.2.</strong> 使用<code>pub</code>空值可见性</a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> 使用<code>use</code>导入命名空间</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> 结构体</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> 方法语法</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> 枚举和模式匹配</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> 定义枚举</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> <code>match</code>控制流运算符</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code>简单控制流</a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> 模块</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code>和文件系统</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html" class="active"><strong>7.2.</strong> 使用<code>pub</code>控制可见性</a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> 使用<code>use</code>导入命名空间</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -67,7 +67,171 @@
                 </div>
 
                 <div id="content" class="content">
-                    
+                    <h2>使用<code>pub</code>控制可见性</h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch07-02-controlling-visibility-with-pub.md">ch07-02-controlling-visibility-with-pub.md</a>
+<br>
+commit e2a129961ae346f726f8b342455ec2255cdfed68</p>
+</blockquote>
+<p>我们通过将<code>network</code>和<code>network::server</code>的代码分别移动到 <em>src/network/mod.rs</em> 和 <em>src/network/server.rs</em> 文件中解决了列表 7-4 中出现的错误信息。现在，<code>cargo build</code>能够构建我们的项目，不过仍然有一些警告信息，表示<code>client::connect</code>、<code>network::connect</code>和<code>network::server::connect</code>函数没有被使用：</p>
+<pre><code>warning: function is never used: `connect`, #[warn(dead_code)] on by default
+src/client.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/mod.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+</code></pre>
+<p>那么为什么会出现这些错误信息呢？我们构建的是一个库，它的函数的目的是被<strong>用户</strong>使用，而不一定要被项目自身使用，所以不应该担心这些函数是未被使用的。创建他们的意义就在于被另一个项目而不是被自己使用。</p>
+<p>为了理解为什么这个程序出现了这些警告，尝试作为另一个项目来使用这个<code>connect</code>库，从外部调用他们。为此，通过创建一个包含这些代码的 <em>src/main.rs</em> 文件，在与库 crate 相同的目录创建一个二进制 crate：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">extern crate communicator;
+
+fn main() {
+    communicator::client::connect();
+}
+</code></pre>
+<p>使用<code>extern crate</code>指令将<code>communicator</code>库 crate 引入到作用域，因为事实上我们的包包含<strong>两个</strong> crate。Cargo 认为 <em>src/main.rs</em> 是一个二进制 crate 的根文件，与现存的以 <em>src/lib.rs</em> 为根文件的库 crate 相区分。这个模式在可执行项目中非常常见：大部分功能位于库 crate 中，而二进制 crate 使用这个库 crate。通过这种方式，其他程序也可以使用这个库 crate，这是一个很好的关注分离（separation of concerns）。</p>
+<p>从一个外部 crate 的视角观察<code>communicator</code>库的内部，我们创建的所有模块都位于一个与 crate 同名的模块内部，<code>communicator</code>。这个顶层的模块被称为 crate 的<strong>根模块</strong>（<em>root module</em>）。</p>
+<p>另外注意到即便在项目的子模块中使用外部 crate，<code>extern crate</code>也应该位于根模块（也就是 <em>src/main.rs</em> 或 <em>src/lib.rs</em>）。接着，在子模块中，我们就可以像顶层模块那样引用外部 crate 中的项了。</p>
+<p>我们的二进制 crate 如今正好调用了库中<code>client</code>模块的<code>connect</code>函数。然而，执行<code>cargo build</code>会在之前的警告之后出现一个错误：</p>
+<pre><code>error: module `client` is private
+ --&gt; src/main.rs:4:5
+  |
+4 |     communicator::client::connect();
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</code></pre>
+<p>啊哈！这告诉了我们<code>client</code>模块是私有的，这也正是那些警告的症结所在。这也是我们第一次在 Rust 上下文中涉及到<strong>公有</strong>和<strong>私有</strong>的概念。Rust 所有代码的默认状态是私有的：除了自己之外别人不允许使用这些代码。如果不在自己的项目中使用一个私有函数，因为程序自身是唯一允许使用这个函数的代码，Rust 会警告说函数未被使用。</p>
+<p>一旦我们指定一个像<code>client::connect</code>的函数为公有，不光二进制 crate 中的函数调用会被允许，函数未被使用的警告也会消失。将其标记为公有让 Rust 知道了我们意在使函数在我们程序的外部被使用。现在这个可能的理论上的外部可用性使 Rust 认为这个函数“已经被使用”。因此。当某项被标记为公有，Rust 不再要求它在程序自身被使用并停止警告某项未被使用。</p>
+<h3>标记函数为公有</h3>
+<p>为了告诉 Rust 某项为公有，在想要标记为公有的项的声明开头加上<code>pub</code>关键字。现在我们将致力于修复<code>client::connect</code>未被使用的警告，以及二进制 crate 中“模块<code>client</code>是私有的”的错误。像这样修改 <em>src/lib.rs</em> 使<code>client</code>模块公有：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust,ignore">pub mod client;
+
+mod network;
+</code></pre>
+<p><code>pub</code>写在<code>mod</code>之前。再次尝试构建：</p>
+<pre><code>&lt;warnings&gt;
+error: function `connect` is private
+ --&gt; src/main.rs:4:5
+  |
+4 |     communicator::client::connect();
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</code></pre>
+<p>非常好！另一个不同的错误！好的，不同的错误信息是值得庆祝的（可能是程序员被黑的最惨的一次）。新错误表明“函数<code>connect</code>是私有的”，那么让我们修改 <em>src/client.rs</em> 将<code>client::connect</code>也设为公有：</p>
+<p><span class="filename">Filename: src/client.rs</span></p>
+<pre><code class="language-rust">pub fn connect() {
+}
+</code></pre>
+<p>再再一次运行<code>cargo build</code>：</p>
+<pre><code>warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/mod.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+</code></pre>
+<p>编译通过了，关于<code>client::connect</code>未被使用的警告消失了！</p>
+<p>未被使用的代码并不总是意味着他们需要被设为公有的：如果你<strong>不</strong>希望这些函数成为公有 API 的一部分，未被使用的代码警告可能是在警告你这些代码不再需要并可以安全的删除他们。这也可能是警告你出 bug，如果你刚刚不小心删除了库中所有这个函数的调用。</p>
+<p>当然我们的情况是，<strong>确实</strong>希望另外两个函数也作为 crate 公有 API 的一部分，所以让我们也将其标记为<code>pub</code>并去掉剩余的警告。修改 <em>src/network/mod.rs</em> 为：</p>
+<p><span class="filename">Filename: src/network/mod.rs</span></p>
+<pre><code class="language-rust,ignore">pub fn connect() {
+}
+
+mod server;
+</code></pre>
+<p>并编译：</p>
+<pre><code>warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/mod.rs:1:1
+  |
+1 | pub fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+</code></pre>
+<p>恩，虽然将<code>network::connect</code>设为<code>pub</code>了我们仍然得到了一个未被使用函数的警告。这是因为模块中的函数是公有的，不过函数所在的<code>network</code>模块却不是公有的。这回我们是自内向外修改库文件的，而<code>client::connect</code>的时候是自外向内修改的。我们需要修改 <em>src/lib.rs</em> 让 <code>network</code> 也是公有的：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust,ignore">pub mod client;
+
+pub mod network;
+</code></pre>
+<p>现在再编译的话，那个警告就消失了：</p>
+<pre><code>warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+</code></pre>
+<p>只剩一个警告了！尝试自食其力修改它吧！</p>
+<h3>私有性规则</h3>
+<p>总的来说，有如下项的可见性规则：</p>
+<ol>
+<li>如果一个项是公有的，它能被任何父模块访问</li>
+<li>如果一个项是私有的，它只能被当前模块或其子模块访问</li>
+</ol>
+<h3>私有性示例</h3>
+<p>让我们看看更多例子作为练习。创建一个新的库项目并在新项目的 <em>src/lib.rs</em> 输入列表 7-5 中的代码：</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
+<pre><code class="language-rust,ignore">mod outermost {
+    pub fn middle_function() {}
+
+    fn middle_secret_function() {}
+
+    mod inside {
+        pub fn inner_function() {}
+
+        fn secret_function() {}
+    }
+}
+
+fn try_me() {
+    outermost::middle_function();
+    outermost::middle_secret_function();
+    outermost::inside::inner_function();
+    outermost::inside::secret_function();
+}
+</code></pre>
+<figcaption>
+<p>Listing 7-5: Examples of private and public functions, some of which are
+incorrect</p>
+</figcaption>
+</figure>
+<p>在尝试编译这些代码之前，猜测一下<code>try_me</code>函数的哪一行会出错。接着编译项目来看看是否猜对了，然后继续阅读后面关于错误的讨论！</p>
+<h4>检查错误</h4>
+<p><code>try_me</code>函数位于项目的根模块。叫做<code>outermost</code>的模块是私有的，不过第二条私有性规则说明<code>try_me</code>函数允许访问<code>outermost</code>模块，因为<code>outermost</code>位于当前（根）模块，<code>try_me</code>也是。</p>
+<p><code>outermost::middle_function</code>的调用是正确的。因为<code>middle_function</code>是公有的，而<code>try_me</code>通过其父模块访问<code>middle_function</code>，<code>outermost</code>。根据上一段的规则我们可以确定这个模块是可访问的。</p>
+<p><code>outermost::middle_secret_function</code>的调用会造成一个编译错误。<code>middle_secret_function</code>是私有的，所以第二条（私有性）规则生效了。根模块既不是<code>middle_secret_function</code>的当前模块（<code>outermost</code>是），也不是<code>middle_secret_function</code>当前模块的子模块。</p>
+<p>叫做<code>inside</code>的模块是私有的且没有子模块，所以它只能被当前模块访问，<code>outermost</code>。这意味着<code>try_me</code>函数不允许调用<code>outermost::inside::inner_function</code>或<code>outermost::inside::secret_function</code>任何一个。</p>
+<h4>修改错误</h4>
+<p>这里有一些尝试修复错误的代码修改意见。在你尝试他们之前，猜测一下他们哪个能修复错误，接着编译查看你是否猜对了，并结合私有性规则理解为什么。</p>
+<ul>
+<li>如果<code>inside</code>模块是公有的？</li>
+<li>如果<code>outermost</code>是公有的而<code>inside</code>是私有的？</li>
+<li>如果在<code>inner_function</code>函数体中调用<code>::outermost::middle_secret_function()</code>？（开头的两个冒号意味着从根模块开始引用模块。）</li>
+</ul>
+<p>请随意设计更多的实验并尝试理解他们！</p>
+<p>接下来，让我们讨论一下使用<code>use</code>关键字来将项引入作用域。</p>
+
                 </div>
 
                 <!-- Mobile navigation buttons -->
