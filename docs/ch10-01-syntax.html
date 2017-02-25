@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Rust 程序设计语言 中文版</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> 结构体</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> 方法语法</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> 枚举和模式匹配</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> 定义枚举</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> <code>match</code>控制流运算符</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code>简单控制流</a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> 模块</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code>和文件系统</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> 使用<code>pub</code>控制可见性</a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> 使用<code>use</code>导入命名</a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> 通用集合类型</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> vector</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> 字符串</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> 哈希 map</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> 错误处理</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> <code>panic!</code>与不可恢复的错误</a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> <code>Result</code>与可恢复的错误</a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> <code>panic!</code>还是不<code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> 泛型、trait 和生命周期</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html" class="active"><strong>10.1.</strong> 泛型数据类型</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> trait：定义共享的行为</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> 生命周期与引用有效性</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>泛型数据类型</h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch10-01-syntax.md">ch10-01-syntax.md</a>
+<br>
+commit 55d9e75ffec92e922273c997026bb10613a76578</p>
+</blockquote>
+<p>泛型用于通常我们放置类型的位置，比如函数签名或结构体，允许我们创建可以代替许多具体数据类型的结构体定义。让我们看看如何使用泛型定义函数、结构体、枚举和方法，并且在本部分的结尾我们会讨论泛型代码的性能。</p>
+<h3>在函数定义中使用泛型</h3>
+<p>定义函数时可以在函数签名的参数数据类型和返回值中使用泛型。以这种方式编写的代码将更灵活并能向函数调用者提供更多功能，同时不引入重复代码。</p>
+<p>回到<code>largest</code>函数上，列表 10-4 中展示了两个提供了相同的寻找 slice 中最大值功能的函数。第一个是从列表 10-3 中提取的寻找 slice 中<code>i32</code>最大值的函数。第二个函数寻找 slice 中<code>char</code>的最大值：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">fn largest_i32(list: &amp;[i32]) -&gt; i32 {
+    let mut largest = list[0];
+
+    for &amp;item in list.iter() {
+        if item &gt; largest {
+            largest = item;
+        }
+    }
+
+    largest
+}
+
+fn largest_char(list: &amp;[char]) -&gt; char {
+    let mut largest = list[0];
+
+    for &amp;item in list.iter() {
+        if item &gt; largest {
+            largest = item;
+        }
+    }
+
+    largest
+}
+
+fn main() {
+    let numbers = vec![34, 50, 25, 100, 65];
+
+    let result = largest_i32(&amp;numbers);
+    println!(&quot;The largest number is {}&quot;, result);
+#    assert_eq!(result, 100);
+
+    let chars = vec!['y', 'm', 'a', 'q'];
+
+    let result = largest_char(&amp;chars);
+    println!(&quot;The largest char is {}&quot;, result);
+#    assert_eq!(result, 'y');
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-4: Two functions that differ only in their names and the types in
+their signatures</p>
+</figcaption>
+</figure>
+<p>这里<code>largest_i32</code>和<code>largest_char</code>有着完全相同的函数体，所以能够将这两个函数变成一个来减少重复就太好了。所幸通过引入一个泛型参数就能实现。</p>
+<p>为了参数化我们要定义的函数的签名中的类型</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch10-00-generics.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch10-02-traits.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch10-00-generics.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch10-02-traits.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

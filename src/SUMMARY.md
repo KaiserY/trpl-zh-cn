@@ -39,3 +39,13 @@
     - [vector](ch08-01-vectors.md)
     - [字符串](ch08-02-strings.md)
     - [哈希 map](ch08-03-hash-maps.md)
+
+- [错误处理](ch09-00-error-handling.md)
+    - [`panic!`与不可恢复的错误](ch09-01-unrecoverable-errors-with-panic.md)
+    - [`Result`与可恢复的错误](ch09-02-recoverable-errors-with-result.md)
+    - [`panic!`还是不`panic!`](ch09-03-to-panic-or-not-to-panic.md)
+
+- [泛型、trait 和生命周期](ch10-00-generics.md)
+    - [泛型数据类型](ch10-01-syntax.md)
+    - [trait：定义共享的行为](ch10-02-traits.md)
+    - [生命周期与引用有效性](ch10-03-lifetime-syntax.md)
