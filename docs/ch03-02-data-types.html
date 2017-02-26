@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>数据类型 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>数据类型</h2>
+                    <a class="header" href="#数据类型" name="数据类型"><h2>数据类型</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch03-02-data-types.md">ch03-02-data-types.md</a>
 <br>
@@ -87,9 +87,9 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
   = note: type annotations or generic parameter binding required
 </code></pre>
 <p>在我们讨论各种数据类型时会看到不同的类型注解。</p>
-<h3>标量类型</h3>
+<a class="header" href="#标量类型" name="标量类型"><h3>标量类型</h3></a>
 <p><strong>标量</strong>类型代表一个单独的值。Rust 有四种基本的标量类型：整型、浮点型、布尔类型和字符类型。你可能在其他语言中见过他们，不过让我们深入了解他们在 Rust 中时如何工作的。</p>
-<h4>整型</h4>
+<a class="header" href="#整型" name="整型"><h4>整型</h4></a>
 <p><strong>整数</strong>是一个没有小数部分的数字。我们在这一章的前面使用过一个整型，<code>i32</code>类型。这个类型声明表明在 32 位系统上它关联的值应该是一个有符号整数（因为这个<code>i</code>，与<code>u</code>代表的无符号相对）。表格 3-1 展示了 Rust 内建的整数类型。每一个变体的有符号和无符号列（例如，<em>i32</em>）可以用来声明对应的整数值。</p>
 <figure>
 <figcaption>
@@ -120,7 +120,7 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 </table>
 </figure>
 <p>那么如何知晓该使用哪种类型的数字呢？如果对此拿不定主意，Rust 的默认类型通常就是一个很好的选择，这个默认数字类型是<code>i32</code>：它通常是最快的，甚至是在 64 位系统上。使用<code>isize</code>或<code>usize</code>的主要场景是索引一些集合。</p>
-<h4>浮点型</h4>
+<a class="header" href="#浮点型" name="浮点型"><h4>浮点型</h4></a>
 <p>Rust 也有两个主要的<strong>浮点数</strong>（<em>floating-point numbers</em>）类型，他们是有小数点的数字。Rust 的浮点数类型是<code>f32</code>和<code>f64</code>，分别是 32 位 和 64 位大小。默认类型是<code>f64</code>，因为它基本上与<code>f32</code>一样快不过精度更高。在 32 位系统上使用<code>f64</code>是可能的，不过会比<code>f32</code>要慢。大部分情况，牺牲潜在可能的更低性能来换取更高的精度是一个合理的首要选择，同时如果怀疑浮点数的大小有问题的时候应该对代码进行性能测试。</p>
 <p>这是一个展示浮点数的实例：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -131,7 +131,7 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 }
 </code></pre>
 <p>浮点数采用 IEEE-754 标准表示。<code>f32</code>是单精度浮点数，<code>f64</code>是双精度浮点数。</p>
-<h4>数字运算符</h4>
+<a class="header" href="#数字运算符" name="数字运算符"><h4>数字运算符</h4></a>
 <p>Rust 支持所有数字类型常见的基本数学运算操作：加法、减法、乘法、除法以及余数。如下代码展示了如何使用一个<code>let</code>语句来使用他们：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -152,7 +152,7 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 }
 </code></pre>
 <p>这些语句中的每个表达式使用了一个数学运算符并计算出了一个值，他们绑定到了一个变量。附录 B 包含了一个 Rust 提供的所有运算符的列表。</p>
-<h4>布尔型</h4>
+<a class="header" href="#布尔型" name="布尔型"><h4>布尔型</h4></a>
 <p>正如其他大部分编程语言一样，Rust 中的布尔类型有两个可能的值：<code>true</code>和<code>false</code>。Rust 中的布尔类型使用<code>bool</code>表示。例如：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -162,7 +162,7 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 }
 </code></pre>
 <p>使用布尔值的主要场景是条件语句，例如<code>if</code>。在“控制流”（“Control Flow”）部分将讲到<code>if</code>语句在 Rust 中如何工作。</p>
-<h4>字符类型</h4>
+<a class="header" href="#字符类型" name="字符类型"><h4>字符类型</h4></a>
 <p>目前为止只使用到了数字，不过 Rust 也支持字符。Rust 的<code>char</code>类型是大部分语言中基本字母字符类型，如下代码展示了如何使用它：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -172,9 +172,9 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 }
 </code></pre>
 <p>Rust 的<code>char</code>类型代表了一个 Unicode 变量值（Unicode Scalar Value），这意味着它可以比 ASCII 表示更多内容。拼音字母（Accented letters），中文/日文/汉语等象形文字，emoji（絵文字）以及零长度的空白字符对于 Rust <code>char</code>类型都是有效的。Unicode 标量值包含从 <code>U+0000</code> 到 <code>U+D7FF</code> 和 <code>U+E000</code> 到 <code>U+10FFFF</code> 之间的值。不过，“字符”并不是一个 Unicode 中的概念，所以人直觉上的“字符”可能与 Rust 中的<code>char</code>并不符合。第八章的“字符串”部分将详细讨论这个主题。</p>
-<h3>复合类型</h3>
+<a class="header" href="#复合类型" name="复合类型"><h3>复合类型</h3></a>
 <p><strong>复合类型</strong>可以将多个其他类型的值组合成一个类型。Rust 有两个原生的复合类型：元组（tuple）和数组（array）。</p>
-<h4>将值组合进元组</h4>
+<a class="header" href="#将值组合进元组" name="将值组合进元组"><h4>将值组合进元组</h4></a>
 <p>元组是一个将多个其他类型的值组合进一个复合类型的组要方式。</p>
 <p>我们使用一个括号中的逗号分隔的值列表来创建一个元组。元组中的每一个位置都有一个类型，而且这写不同值的类型也不必是相同的。这个例子中使用了额外的可选类型注解：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -206,7 +206,7 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 }
 </code></pre>
 <p>这个程序创建了一个元组，<code>x</code>，并接着使用索引为每个元素创建新变量。跟大多数编程语言一样，元组的第一个索引值是 0。</p>
-<h4>数组</h4>
+<a class="header" href="#数组" name="数组"><h4>数组</h4></a>
 <p>另一个获取一个多个值集合的方式是<strong>数组</strong>（<em>array</em>）。与元组不同，数组中的每个元素的类型必须相同。Rust 中的数组与一些其他语言中的数组不同，因为 Rust 中的数组是固定长度的：一旦声明，他们的长度不能增长或缩小。</p>
 <p>Rust 中数组的值位于中括号中的逗号分隔的列表中：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -219,7 +219,7 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 <pre><code class="language-rust">let months = [&quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quot;April&quot;, &quot;May&quot;, &quot;June&quot;, &quot;July&quot;,
               &quot;August&quot;, &quot;September&quot;, &quot;October&quot;, &quot;November&quot;, &quot;December&quot;];
 </code></pre>
-<h5>访问数组元素</h5>
+<a class="header" href="#访问数组元素" name="访问数组元素"><h5>访问数组元素</h5></a>
 <p>数组是一整块分配在栈上的内存。可以使用索引来访问数组的元素，像这样：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -230,7 +230,7 @@ commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
 }
 </code></pre>
 <p>在这个例子中，叫做<code>first</code>的变量的值是<code>1</code>，因为它是数组索引<code>[0]</code>的值。<code>second</code>将会是数组索引<code>[1]</code>的值<code>2</code>。</p>
-<h5>无效的数组元素访问</h5>
+<a class="header" href="#无效的数组元素访问" name="无效的数组元素访问"><h5>无效的数组元素访问</h5></a>
 <p>如果我们访问数组结尾之后的元素会发生什么呢？比如我们将上面的例子改为如下：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {

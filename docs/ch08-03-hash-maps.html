@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>哈希 map - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>哈希 map</h2>
+                    <a class="header" href="#哈希-map" name="哈希-map"><h2>哈希 map</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch08-03-hash-maps.md">ch08-03-hash-maps.md</a>
 <br>
@@ -76,7 +76,7 @@ commit 0d229cc5a3da341196e15a6761735b2952281569</p>
 <p>最后要介绍的常用集合类型是<strong>哈希 map</strong>（<em>hash map</em>）。<code>HashMap&lt;K, V&gt;</code>类型储存了一个键类型<code>K</code>对应一个值类型<code>V</code>的映射。它通过一个<strong>哈希函数</strong>（<em>hashing function</em>）来实现映射，它决定了如何将键和值放入内存中。很多编程语言支持这种数据结构，不过通常有不同的名字：哈希、map、对象、哈希表或者关联数组，仅举几例。</p>
 <p>哈希 map 可以用于需要任何类型作为键来寻找数据的情况，而不是像 vector 那样通过索引。例如，在一个游戏中，你可以将每个团队的分数记录到哈希 map 中，其中键是队伍的名字而值是每个队伍的分数。给出一个队名，就能得到他们的得分。</p>
 <p>本章我们会介绍哈希 map 的基本 API，不过还有更多吸引人的功能隐藏于标准库中的<code>HashMap</code>定义的函数中。请一如既往地查看标准库文档来了解更多信息。</p>
-<h3>新建一个哈希 map</h3>
+<a class="header" href="#新建一个哈希-map" name="新建一个哈希-map"><h3>新建一个哈希 map</h3></a>
 <p>可以使用<code>new</code>创建一个空的<code>HashMap</code>，并使用<code>insert</code>来增加元素。这里我们记录两支队伍的分数，分别是蓝队和黄队。蓝队开始有 10 分而黄队开始有 50 分：</p>
 <pre><code class="language-rust">use std::collections::HashMap;
 
@@ -96,7 +96,7 @@ let initial_scores = vec![10, 50];
 let scores: HashMap&lt;_, _&gt; = teams.iter().zip(initial_scores.iter()).collect();
 </code></pre>
 <p>这里<code>HashMap&lt;_, _&gt;</code>类型注解是必要的，因为可能<code>collect</code>进很多不同的数据结构，而除非显式指定 Rust 无从得知你需要的类型。但是对于键和值的参数来说，可以使用下划线而 Rust 可以根据 vector 中数据的类型推断出哈希 map 所包含的类型。</p>
-<h3>哈希 map 和所有权</h3>
+<a class="header" href="#哈希-map-和所有权" name="哈希-map-和所有权"><h3>哈希 map 和所有权</h3></a>
 <p>对于像<code>i32</code>这样的实现了<code>Copy</code> trait 的类型，其值可以拷贝进哈希 map。对于像<code>String</code>这样拥有所有权的值，其值将被移动而哈希 map 会成为这些值的所有者：</p>
 <pre><code class="language-rust">use std::collections::HashMap;
 
@@ -109,7 +109,7 @@ map.insert(field_name, field_value);
 </code></pre>
 <p>当<code>insert</code>调用将<code>field_name</code>和<code>field_value</code>移动到哈希 map 中后，将不能使用这两个绑定。</p>
 <p>如果将值的引用插入哈希 map，这些值本身将不会被移动进哈希 map。但是这些引用指向的值必须至少在哈希 map 有效时也是有效的。第十章生命周期部分将会更多的讨论这个问题。</p>
-<h3>访问哈希 map 中的值</h3>
+<a class="header" href="#访问哈希-map-中的值" name="访问哈希-map-中的值"><h3>访问哈希 map 中的值</h3></a>
 <p>可以通过<code>get</code>方法并提供对应的键来从哈希 map 中获取值：</p>
 <pre><code class="language-rust">use std::collections::HashMap;
 
@@ -138,9 +138,9 @@ for (key, value) in &amp;scores {
 <pre><code>Yellow: 50
 Blue: 10
 </code></pre>
-<h3>更新哈希 map</h3>
+<a class="header" href="#更新哈希-map" name="更新哈希-map"><h3>更新哈希 map</h3></a>
 <p>虽然键值对的数量是可以增长的，不过每个单独的键同时只能关联一个值。当你想要改变哈希 map 中的数据时，必须选择是用新值替代旧值，还是完全无视旧值。我们也可以选择保留旧值而忽略新值，并只在键<strong>没有</strong>对应一个值时增加新值。或者可以结合新值和旧值。让我们看看着每一种方式是如何工作的！</p>
-<h4>覆盖一个值</h4>
+<a class="header" href="#覆盖一个值" name="覆盖一个值"><h4>覆盖一个值</h4></a>
 <p>如果我们插入了一个键值对，接着用相同的键插入一个不同的值，与这个键相关联的旧值将被替换。即便下面的代码调用了两次<code>insert</code>，哈希 map 也只会包含一个键值对，因为两次都是对蓝队的键插入的值：</p>
 <pre><code class="language-rust">use std::collections::HashMap;
 
@@ -152,7 +152,7 @@ scores.insert(String::from(&quot;Blue&quot;), 25);
 println!(&quot;{:?}&quot;, scores);
 </code></pre>
 <p>这会打印出<code>{&quot;Blue&quot;: 25}</code>。原始的值 10 将被覆盖。</p>
-<h4>只在键没有对应值时插入</h4>
+<a class="header" href="#只在键没有对应值时插入" name="只在键没有对应值时插入"><h4>只在键没有对应值时插入</h4></a>
 <p>我们经常会检查某个特定的键是否有值，如果没有就插入一个值。为此哈希 map 有一个特有的 API，叫做<code>entry</code>，它获取我们想要检查的键作为参数。<code>entry</code>函数的返回值是一个枚举，<code>Entry</code>，它代表了可能存在也可能不存在的值。比如说我们想要检查黄队的键是否关联了一个值。如果没有，就插入值 50，对于蓝队也是如此。使用 entry API 的代码看起来像这样：</p>
 <pre><code class="language-rust">use std::collections::HashMap;
 
@@ -166,7 +166,7 @@ println!(&quot;{:?}&quot;, scores);
 </code></pre>
 <p><code>Entry</code>的<code>or_insert</code>方法在键对应的值存在时就返回这个值的<code>Entry</code>，如果不存在则将参数作为新值插入并返回修改过的<code>Entry</code>。这比编写自己的逻辑要简明的多，另外也与借用检查器结合得更好。</p>
 <p>这段代码会打印出<code>{&quot;Yellow&quot;: 50, &quot;Blue&quot;: 10}</code>。第一个<code>entry</code>调用会插入黄队的键和值 50，因为黄队并没有一个值。第二个<code>entry</code>调用不会改变哈希 map 因为蓝队已经有了值 10。</p>
-<h4>根据旧值更新一个值</h4>
+<a class="header" href="#根据旧值更新一个值" name="根据旧值更新一个值"><h4>根据旧值更新一个值</h4></a>
 <p>另一个常见的哈希 map 的应用场景是找到一个键对应的值并根据旧的值更新它。例如，如果我们想要计数一些文本中每一个单词分别出现了多少次，就可以使用哈希 map，以单词作为键并递增其值来记录我们遇到过几次这个单词。如果是第一次看到某个单词，就插入值<code>0</code>。</p>
 <pre><code class="language-rust">use std::collections::HashMap;
 
@@ -182,9 +182,9 @@ for word in text.split_whitespace() {
 println!(&quot;{:?}&quot;, map);
 </code></pre>
 <p>这会打印出<code>{&quot;world&quot;: 2, &quot;hello&quot;: 1, &quot;wonderful&quot;: 1}</code>，<code>or_insert</code>方法事实上会返回这个键的值的一个可变引用（<code>&amp;mut V</code>）。这里我们将这个可变引用储存在<code>count</code>变量中，所以为了赋值必须首先使用星号（<code>*</code>）解引用<code>count</code>。这个可变引用在<code>for</code>循环的结尾离开作用域，这样所有这些改变都是安全的并被借用规则所允许。</p>
-<h3>哈希函数</h3>
+<a class="header" href="#哈希函数" name="哈希函数"><h3>哈希函数</h3></a>
 <p><code>HashMap</code>默认使用一个密码学上是安全的哈希函数，它可以提供抵抗拒绝服务（Denial of Service, DoS）攻击的能力。这并不是现有最快的哈希函数，不过为了更好的安全性带来一些性能下降也是值得的。如果你监控你的代码并发现默认哈希函数对你来说非常慢，可以通过指定一个不同的 <em>hasher</em> 来切换为另一个函数。hasher 是一个实现了<code>BuildHasher</code> trait 的类型。第十章会讨论 trait 和如何实现他们。你并不需要从头开始实现你自己的 hasher；crates.io 有其他人分享的实现了许多常用哈希算法的 hasher 的库。</p>
-<h2>总结</h2>
+<a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>vector、字符串和哈希 map 会在你的程序需要储存、访问和修改数据时帮助你。这里有一些你应该能够解决的练习问题：</p>
 <ul>
 <li>给定一系列数字，使用 vector 并返回这个列表的平均数（mean, average）、中位数（排列数组后位于中间的值）和众数（mode，出现次数最多的值；这里哈希函数会很有帮助）。</li>

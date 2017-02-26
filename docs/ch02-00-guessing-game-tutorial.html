@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>猜猜看教程 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h1>猜猜看</h1>
+                    <a class="header" href="#猜猜看" name="猜猜看"><h1>猜猜看</h1></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch02-00-guessing-game-tutorial.md">ch02-00-guessing-game-tutorial.md</a>
 <br>
@@ -75,7 +75,7 @@ commit 77370c073661548dd56bbcb43cc64713585acbba</p>
 </blockquote>
 <p>让我们通过自己动手的方式一起完成一个项目来快速上手 Rust！本章通过展示如何在真实的项目中运用的方式向你介绍一些常用的 Rust 概念。你将会学到<code>let</code>、<code>match</code>、方法、关联函数、使用外部 crate 等更多的知识！接下来的章节会探索这些概念的细节。在这一章，我们练习基础。</p>
 <p>我们会实现一个经典新手编程问题：猜猜看游戏。它是这么工作的：程序将会随机生成一个 1 到 100 之间的随机整数。接着它会提示玩家输入一个猜测。当输入了一个猜测后，它会告诉提示猜测是太大了还是太小了。猜对了，它会打印出祝贺并退出。</p>
-<h2>准备一个新项目</h2>
+<a class="header" href="#准备一个新项目" name="准备一个新项目"><h2>准备一个新项目</h2></a>
 <p>要创建一个新项目，进入你在第一章创建的<strong>项目</strong>目录，并使用 Cargo 创建它，像这样：</p>
 <pre><code class="language-sh">$ cargo new guessing_game --bin
 $ cd guessing_game
@@ -105,7 +105,7 @@ Hello, world!
 </code></pre>
 <p><code>run</code>命令在你需要快速迭代项目时就派上用场了，而这个游戏就正是这么一个项目：我们需要在进行下一步之前快速测试每次迭代。</p>
 <p>重新打开 <em>src/main.rs</em> 文件。我们将会在这个文件编写全部的代码。</p>
-<h2>处理一次猜测</h2>
+<a class="header" href="#处理一次猜测" name="处理一次猜测"><h2>处理一次猜测</h2></a>
 <p>程序的第一部分会请求用户输入，处理输入，并检查输入是否为期望的形式。首先，允许玩家输入一个猜测。在 <em>src/main.rs</em> 中输入列表 2-1 中的代码。</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -142,7 +142,7 @@ fn main() {
 println!(&quot;Please input your guess.&quot;);
 </code></pre>
 <p>这些代码仅仅打印一个提示，说明游戏的内容并请求用户输入。</p>
-<h3>用变量储存值</h3>
+<a class="header" href="#用变量储存值" name="用变量储存值"><h3>用变量储存值</h3></a>
 <p>接下来，创建一个地方储存用户输入，像这样：</p>
 <pre><code class="language-rust,ignore">let mut guess = String::new();
 </code></pre>
@@ -175,7 +175,7 @@ let mut bar = 5; // mutable
 <pre><code class="language-rust,ignore">io::stdin().read_line(&amp;mut guess).expect(&quot;Failed to read line&quot;);
 </code></pre>
 <p>不过，过长的代码行难以阅读，所以最好拆开来写，两行代码两个方法调用。现在来看看这行代码干了什么。</p>
-<h3>使用<code>Result</code>类型来处理潜在的错误</h3>
+<a class="header" href="#使用result类型来处理潜在的错误" name="使用result类型来处理潜在的错误"><h3>使用<code>Result</code>类型来处理潜在的错误</h3></a>
 <p>之前提到过，<code>read_line</code>将用户输入放入到传递给它字符串中，不过它也返回一个值————一个<a href="../std/io/type.Result.html"><code>io::Result</code></a><!-- ignore -->。Rust 标准库中有很多叫做<code>Result</code>的类型。一个<a href="../std/result/enum.Result.html"><code>Result</code></a><!-- ignore -->泛型以及对应子模块的特定版本，比如<code>io::Result</code>。</p>
 <p><code>Result</code>类型是 <a href="ch06-00-enums.html"><em>枚举</em>（<em>enumerations</em>）</a><!-- ignore -->，通常也写作 <em>enums</em>。枚举拥有固定值集合的类型，而这些值被称为枚举的<strong>成员</strong>（<em>variants</em>）。第六章会更详细的介绍枚举。</p>
 <p>对于<code>Result</code>，它的成员是<code>Ok</code>或<code>Err</code>，<code>Ok</code>表明操作成功了，同时<code>Ok</code>成员之中包含成功生成的值。<code>Err</code>意味着操作失败，<code>Err</code>之中包含操作是为什么或如何失败的信息。</p>
@@ -189,7 +189,7 @@ src/main.rs:10     io::stdin().read_line(&amp;mut guess);
                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 </code></pre>
 <p>Rust 警告说我们没有使用<code>read_line</code>返回的值<code>Result</code>，表明程序没有处理一个可能的错误。消除警告的正确方式是老实编写错误处理，不过因为我们仅仅希望程序出现问题就崩溃，可以使用<code>expect</code>。你会在第九章学习从错误中恢复。</p>
-<h3>使用<code>println!</code>占位符打印值</h3>
+<a class="header" href="#使用println占位符打印值" name="使用println占位符打印值"><h3>使用<code>println!</code>占位符打印值</h3></a>
 <p>除了位于结尾的大括号，目前为止编写的代码就只有一行代码值得讨论一下了，就是这一行：</p>
 <pre><code class="language-rust,ignore">println!(&quot;You guessed: {}&quot;, guess);
 </code></pre>
@@ -200,7 +200,7 @@ let y = 10;
 println!(&quot;x = {} and y = {}&quot;, x, y);
 </code></pre>
 <p>这行代码会打印出<code>x = 5 and y = 10</code>。</p>
-<h3>测试第一部分代码</h3>
+<a class="header" href="#测试第一部分代码" name="测试第一部分代码"><h3>测试第一部分代码</h3></a>
 <p>让我们来测试下猜猜看游戏的第一部分。使用<code>cargo run</code>运行它：</p>
 <pre><code class="language-sh">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
@@ -211,9 +211,9 @@ Please input your guess.
 You guessed: 6
 </code></pre>
 <p>至此为止，游戏的第一部分已经完成：我们从键盘获取了输入并打印了出来。</p>
-<h2>生成一个秘密数字</h2>
+<a class="header" href="#生成一个秘密数字" name="生成一个秘密数字"><h2>生成一个秘密数字</h2></a>
 <p>接下来，需要生成一个秘密数字，用户会尝试猜测它。秘密数字应该每次都不同，这样多玩几次才会有意思。生成一个 1 到 100 之间的随机数这样游戏也不会太难。Rust 标准库中还未包含随机数功能。然而，Rust 团队确实提供了一个<a href="https://crates.io/crates/rand"><code>rand</code> crate</a>。</p>
-<h2>使用 crate 来增加更多功能</h2>
+<a class="header" href="#使用-crate-来增加更多功能" name="使用-crate-来增加更多功能"><h2>使用 crate 来增加更多功能</h2></a>
 <p>记住 <em>crate</em> 是一个 Rust 代码的包。我们正在构建的项目是一个<strong>二进制 crate</strong>，它生成一个可执行文件。 <code>rand</code> crate 是一个 <em>库 crate</em>，它包含意在被其他程序使用的代码。</p>
 <p>Cargo 对外部 crate 的运用是其真正闪光的地方。在我们可以使用<code>rand</code>编写代码之前，需要编辑 <em>Cargo.toml</em> 来包含<code>rand</code>作为一个依赖。现在打开这个文件并在<code>[dependencies]</code>部分标题（Cargo 为你创建了它）的下面添加如下代码：</p>
 <p><span class="filename">Filename: Cargo.toml</span></p>
@@ -245,10 +245,10 @@ as a dependency</p>
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 </code></pre>
 <p>这一行表明 Cargo 只构建了对 <em>src/main.rs</em> 文件做出的微小修改。依赖没有被修改，所以 Cargo 知道可以复用已经为此下载并编译的代码。它只是重新构建了部分（项目）代码。</p>
-<h4>The <em>Cargo.lock</em> 文件确保构建是可重现的</h4>
+<a class="header" href="#the-cargolock-文件确保构建是可重现的" name="the-cargolock-文件确保构建是可重现的"><h4>The <em>Cargo.lock</em> 文件确保构建是可重现的</h4></a>
 <p>Cargo 有一个机制来确保每次任何人重新构建代码都会生成相同的成品：Cargo 只会使用你指定的依赖的版本，除非你又手动指定了别的。例如，如果下周<code>rand</code> crate 的<code>v0.3.15</code>版本出来了，而它包含一个重要的 bug 修改并也含有一个会破坏代码运行的缺陷的时候会发生什么呢？</p>
 <p>这个问题的答案是 <em>Cargo.lock</em> 文件，它在第一次运行<code>cargo build</code>时被创建并位于 <em>guessing_game</em> 目录。当第一次构建项目时，Cargo 计算出所有符合要求的依赖版本并接着写入 <em>Cargo.lock</em> 文件中。当将来构建项目时，Cargo 发现 <em>Cargo.lock</em> 存在就会使用这里指定的版本，而不是重新进行所有版本的计算。这使得你拥有了一个自动的可重现的构建。换句话说，项目会继续使用<code>0.3.14</code>直到你显式升级，多亏了 <em>Cargo.lock</em> 文件。我们将会在这个文件编写全部的代码。</p>
-<h4>更新 crate 到一个新版本</h4>
+<a class="header" href="#更新-crate-到一个新版本" name="更新-crate-到一个新版本"><h4>更新 crate 到一个新版本</h4></a>
 <p>当你<strong>确实</strong>需要升级 crate 时，Cargo 提供了另一个命令，<code>update</code>，他会：</p>
 <ol>
 <li>忽略 <em>Cargo.lock</em> 文件并计算出所有符合 <em>Cargo.toml</em> 中规格的最新版本。</li>
@@ -267,7 +267,7 @@ rand = &quot;0.4.0&quot;
 </code></pre>
 <p>下一次运行<code>cargo build</code>时，Cargo 会更新 registry 中可用的 crate 并根据你指定新版本重新计算<code>rand</code>的要求。</p>
 <p>第十四章会讲到<a href="http://doc.crates.io">Cargo</a><!-- ignore --> 和<a href="http://doc.crates.io/crates-io.html">它的生态系统</a><!-- ignore -->的更多内容，不过目前你只需要了解这么多。Cargo 使得复用库文件变得非常容易，所以 Rustacean 们能够通过组合很多包来编写出更轻巧的项目。</p>
-<h3>生成一个随机数</h3>
+<a class="header" href="#生成一个随机数" name="生成一个随机数"><h3>生成一个随机数</h3></a>
 <p>让我们开始<strong>使用</strong><code>rand</code>。下一步是更新 <em>src/main.rs</em>，如列表 2-3：</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -320,7 +320,7 @@ Please input your guess.
 You guessed: 5
 </code></pre>
 <p>你应该能得到不同的随机数，同时他们应该都是在 1 和 100 之间的。干得漂亮！</p>
-<h2>比较猜测与秘密数字</h2>
+<a class="header" href="#比较猜测与秘密数字" name="比较猜测与秘密数字"><h2>比较猜测与秘密数字</h2></a>
 <p>现在有了用户输入和一个随机数，我们可以比较他们。这个步骤如列表 2-4：</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -439,7 +439,7 @@ Too big!
 </code></pre>
 <p>漂亮！即便是在猜测之前添加了空格，程序依然能判断出用户猜测了 76。多运行程序几次来检验不同类型输入的相应行为：猜一个正确的数字，猜一个过大的数字和猜一个过小的数字。</p>
 <p>现在游戏已经大体上能玩了，不过用户只能猜一次。增加一个循环来改变它吧！</p>
-<h2>使用循环来允许多次猜测</h2>
+<a class="header" href="#使用循环来允许多次猜测" name="使用循环来允许多次猜测"><h2>使用循环来允许多次猜测</h2></a>
 <p><code>loop</code>关键字提供了一个无限循环。增加它后给了用户多次猜测的机会：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate rand;
@@ -502,7 +502,7 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/guess` (exit code: 101)
 </code></pre>
 <p>输入<code>quit</code>就会退出程序，同时其他任何非数字输入也一样。然而，毫不夸张的说这是不理想的。我们想要当猜测正确的数字时游戏能自动退出。</p>
-<h3>猜测正确后退出</h3>
+<a class="header" href="#猜测正确后退出" name="猜测正确后退出"><h3>猜测正确后退出</h3></a>
 <p>让我们增加一个<code>break</code>来在用户胜利时退出游戏：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate rand;
@@ -543,7 +543,7 @@ fn main() {
 }
 </code></pre>
 <p>通过在<code>You win!</code>之后增加一行<code>break</code>，程序在用户猜对了神秘数字后会退出循环。退出循环也就意味着退出程序，因为循环是<code>main</code>的最后一部分。</p>
-<h3>处理无效输入</h3>
+<a class="header" href="#处理无效输入" name="处理无效输入"><h3>处理无效输入</h3></a>
 <p>为了进一步改善游戏性，而不是在用户输入非数字时崩溃，需要让游戏忽略非数字从而用户可以继续猜测。可以通过修改<code>guess</code>从<code>String</code>转化为<code>u32</code>那部分代码来实现：</p>
 <pre><code class="language-rust,ignore">let guess: u32 = match guess.trim().parse() {
     Ok(num) =&gt; num,
@@ -618,7 +618,7 @@ fn main() {
 <p>Listing 2-5: Complete code of the guessing game</p>
 </figcaption>
 </figure>
-<h2>总结一下，</h2>
+<a class="header" href="#总结一下" name="总结一下"><h2>总结一下，</h2></a>
 <p>此时此刻，你顺利完成了猜猜看游戏！恭喜！</p>
 <p>这是一个通过动手实践的方式想你介绍许多 Rust 新知识的项目：<code>let</code>、<code>match</code>、方法、关联函数，使用外部 crate，等等。接下来的几章，我们将会详细学习这些概念。第三章涉及到大部分编程语言都有的概念，比如变量、数据类型和函数，以及如何在 Rust 中使用他们。第四章探索所有权（ownership），这是一个 Rust 同其他语言都不相同的功能。第五章讨论结构体和方法语法，而第六章侧重解释枚举。</p>
 

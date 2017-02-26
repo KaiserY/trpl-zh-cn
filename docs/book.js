@@ -22,6 +22,10 @@ $( document ).ready(function() {
     $('code').each(function(i, block) {
         hljs.highlightBlock(block);
     });
+    
+    // Adding the hljs class gives code blocks the color css
+    // even if highlighting doesn't apply
+    $('code').addClass('hljs');
 
     var KEY_CODES = {
         PREVIOUS_KEY: 37,
@@ -50,19 +54,6 @@ $( document ).ready(function() {
     var sidebar = $("#sidebar");
     var page_wrapper = $("#page-wrapper");
     var content = $("#content");
-
-
-    // Add anchors for all content headers
-    content.find("h1, h2, h3, h4, h5").wrap(function(){
-        var wrapper = $("<a class=\"header\">");
-        wrapper.attr("name", $(this).text());
-        // Add so that when you click the link actually shows up in the url bar...
-        // Remove any existing anchor then append the new one
-        // ensuring eg. no spaces are present within it ie. they become %20
-        wrapper.attr("href", $(location).attr('href').split("#")[0] + "#" + encodeURIComponent($(this).text().trim()) );
-        return wrapper;
-    });
-
 
     // Toggle sidebar
     $("#sidebar-toggle").click(function(event){

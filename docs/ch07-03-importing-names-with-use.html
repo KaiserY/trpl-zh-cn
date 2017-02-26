@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>使用`use`导入命名 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>导入命名</h2>
+                    <a class="header" href="#导入命名" name="导入命名"><h2>导入命名</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch07-03-importing-names-with-use.md">ch07-03-importing-names-with-use.md</a>
 <br>
@@ -94,7 +94,7 @@ namespaces</p>
 </figcaption>
 </figure>
 <p>如你所见，指定函数的完全限定名称可能会非常冗长。所幸 Rust 有一个关键字使得这些调用显得更简洁。</p>
-<h3>使用<code>use</code>的简单导入</h3>
+<a class="header" href="#使用use的简单导入" name="使用use的简单导入"><h3>使用<code>use</code>的简单导入</h3></a>
 <p>Rust 的<code>use</code>关键字的工作是缩短冗长的函数调用，通过将想要调用的函数所在的模块引入到作用域中。这是一个将<code>a::series::of</code>模块导入一个二进制 crate 的根作用域的例子：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">pub mod a {
@@ -144,7 +144,7 @@ fn main() {
     let green = TrafficLight::Green; // because we didn’t `use` TrafficLight::Green
 }
 </code></pre>
-<h3>使用<code>*</code>的全局引用导入</h3>
+<a class="header" href="#使用的全局引用导入" name="使用的全局引用导入"><h3>使用<code>*</code>的全局引用导入</h3></a>
 <p>为了一次导入某个命名空间的所有项，可以使用<code>*</code>语法。例如：</p>
 <pre><code class="language-rust">enum TrafficLight {
     Red,
@@ -161,7 +161,7 @@ fn main() {
 }
 </code></pre>
 <p><code>*</code>被称为<strong>全局导入</strong>（<em>glob</em>），它会导入命名空间中所有可见的项。全局导入应该保守的使用：他们是方便的，但是也可能会引入多于你预期的内容从而导致命名冲突。</p>
-<h3>使用<code>super</code>访问父模块</h3>
+<a class="header" href="#使用super访问父模块" name="使用super访问父模块"><h3>使用<code>super</code>访问父模块</h3></a>
 <p>正如我们已经知道的，当创建一个库 crate 时，Cargo 会生成一个<code>tests</code>模块。现在让我们来深入了解一下。在<code>communicator</code>项目中，打开 <em>src/lib.rs</em>。</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust,ignore">pub mod client;
@@ -238,7 +238,7 @@ test tests::it_works ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<h2>总结</h2>
+<a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>现在你掌握了组织代码的核心科技！利用他们将相关的代码组合在一起、防止代码文件过长并将一个整洁的公有 API 展现给库的用户。</p>
 <p>接下来，让我们看看一些标准库提供的集合数据类型，你可以利用他们编写出漂亮整洁的代码。</p>
 

@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>定义枚举 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h1>定义枚举</h1>
+                    <a class="header" href="#定义枚举" name="定义枚举"><h1>定义枚举</h1></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch06-01-defining-an-enum.md">ch06-01-defining-an-enum.md</a>
 <br>
@@ -82,7 +82,7 @@ commit 396e2db4f7de2e5e7869b1f8bc905c45c631ad7d</p>
 }
 </code></pre>
 <p>现在<code>IpAddrKind</code>就是一个可以在代码中使用的自定义类型了。</p>
-<h3>枚举值</h3>
+<a class="header" href="#枚举值" name="枚举值"><h3>枚举值</h3></a>
 <p>可以像这样创建<code>IpAddrKind</code>两个不同成员的实例：</p>
 <pre><code class="language-rust"># enum IpAddrKind {
 #     V4,
@@ -226,7 +226,7 @@ m.call();
 </code></pre>
 <p>方法体使用了<code>self</code>来获取调用方法的值。这个例子中，创建了一个拥有类型<code>Message::Write(&quot;hello&quot;)</code>的变量<code>m</code>，而且这就是当<code>m.call()</code>运行时<code>call</code>方法中的<code>self</code>的值。</p>
 <p>让我们看看标准库中的另一个非常常见和实用的枚举：<code>Option</code>。</p>
-<h3><code>Option</code>枚举和其相对空值的优势</h3>
+<a class="header" href="#option枚举和其相对空值的优势" name="option枚举和其相对空值的优势"><h3><code>Option</code>枚举和其相对空值的优势</h3></a>
 <p>在之前的部分，我们看到了<code>IpAddr</code>枚举如何利用 Rust 的类型系统编码更多信息而不单单是程序中的数据。这一部分探索一个<code>Option</code>的案例分析，它是标准库定义的另一个枚举。<code>Option</code>类型应用广泛因为它编码了一个非常普遍的场景，就是一个值可能是某个值或者什么都不是。从类型系统的角度来表达这个概念就意味着编译器需要检查是否处理了所有应该处理的情况，这样就可以避免在其他编程语言中非常常见的 bug。</p>
 <p>编程语言的设计经常从其包含功能的角度考虑问题，但是从不包含的功能的角度思考也很重要。Rust 并没有很多其他语言中有的空值功能。<strong>空值</strong>（<em>Null</em> ）是一个值它代表没有值。在有空值的语言中，变量总是这两种状态之一：空值和非空值。</p>
 <p>在“Null References: The Billion Dollar Mistake”中，Tony Hoare，null 的发明者，曾经说到：</p>

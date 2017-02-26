@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>控制流 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,14 +67,14 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>控制流</h2>
+                    <a class="header" href="#控制流" name="控制流"><h2>控制流</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch03-05-control-flow.md">ch03-05-control-flow.md</a>
 <br>
 commit 784a3ec5e8b9c6bff456ab9f0efd4dabcc180dda</p>
 </blockquote>
 <p>通过条件是不是真来决定是否某些代码，或者根据条件是否为真来重复运行一段代码是大部分编程语言的基本组成部分。Rust 代码中最常见的用来控制执行流的结构是<code>if</code>表达式和循环。</p>
-<h3><code>if</code>表达式</h3>
+<a class="header" href="#if表达式" name="if表达式"><h3><code>if</code>表达式</h3></a>
 <p><code>if</code>表达式允许根据条件执行不同的代码分支。我们提供一个条件并表示“如果符合这个条件，运行这段代码。如果条件不满足，不运行这段代码。”</p>
 <p>在 <em>projects</em> 目录创建一个叫做 <em>branches</em> 的新项目来学习<code>if</code>表达式。在 <em>src/main.rs</em> 文件中，输入如下内容：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -139,7 +139,7 @@ Could not compile `branches`.
 }
 </code></pre>
 <p>运行代码会打印出<code>number was something other than zero</code>。</p>
-<h4>使用<code>else if</code>实现多重条件</h4>
+<a class="header" href="#使用else-if实现多重条件" name="使用else-if实现多重条件"><h4>使用<code>else if</code>实现多重条件</h4></a>
 <p>可以将<code>else if</code>表达式与<code>if</code>和<code>else</code>组合来实现多重条件。例如：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -164,7 +164,7 @@ number is divisible by 3
 </code></pre>
 <p>当执行这个程序，它按顺序检查每个<code>if</code>表达式并执行第一个条件为真的代码块。注意即使 6 可以被 2 整除，也不会出现<code>number is divisible by 2</code>的输出，更不会出现<code>else</code>块中的<code>number is not divisible by 4, 3, or 2</code>。原因是 Rust 只会执行第一个条件为真的代码块，并且它一旦找到一个以后，就不会检查剩下的条件了。</p>
 <p>使用过多的<code>else if</code>表达式会使代码显得杂乱无章，所以如果有多于一个<code>else if</code>，最好重构代码。为此第六章介绍了 Rust 一个叫做<code>match</code>的强大的分支结构（branching construct）。</p>
-<h4>在<code>let</code>语句中使用<code>if</code></h4>
+<a class="header" href="#在let语句中使用if" name="在let语句中使用if"><h4>在<code>let</code>语句中使用<code>if</code></h4></a>
 <p>因为<code>if</code>是一个表达式，我们可以在<code>let</code>语句的右侧使用它，例如列表 3-4：</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -215,10 +215,10 @@ error[E0308]: if and else have incompatible types
   = note:    found type `&amp;’static str`
 </code></pre>
 <p><code>if</code>代码块的表达式返回一个整型，而<code>else</code>代码块返回一个字符串。这并不可行因为变量必须只有一个类型。Rust 需要在编译时就确切的知道<code>number</code>变量的类型，这样它就可以在编译时证明其他使用<code>number</code>变量的地方它的类型是有效的。Rust 并不能够在<code>number</code>的类型只能在运行时确定的情况下完成这些功能；这样会使编译器变得更复杂而且只能为代码提供更少的保障，因为它不得不记录所有变量的多种可能的类型。</p>
-<h3>使用循环重复执行</h3>
+<a class="header" href="#使用循环重复执行" name="使用循环重复执行"><h3>使用循环重复执行</h3></a>
 <p>多次执行一段代码是很常用的。为了这个功能，Rust 提供了多种<strong>循环</strong>（<em>loops</em>）。一个循环执行循环体中的代码直到结尾并紧接着从回到开头继续执行。为了实验一下循环，让我们创建一个叫做 <em>loops</em> 的新项目。</p>
 <p>Rust 有三种循环类型：<code>loop</code>、<code>while</code>和<code>for</code>。让我们每一个都试试。</p>
-<h4>使用<code>loop</code>重复执行代码</h4>
+<a class="header" href="#使用loop重复执行代码" name="使用loop重复执行代码"><h4>使用<code>loop</code>重复执行代码</h4></a>
 <p><code>loop</code>关键字告诉 Rust 一遍又一遍的执行一段代码直到你明确要求停止。</p>
 <p>作为一个例子，将 <em>loops</em> 目录中的 <em>src/main.rs</em> 文件修改为如下：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -240,7 +240,7 @@ again!
 </code></pre>
 <p>符号<code>^C</code>代表你在这按下了 ctrl-C。在<code>^C</code>之后你可能看到<code>again!</code>也可能看不到，这依赖于在接收到终止信号时代码执行到了循环的何处。</p>
 <p>幸运的是，Rust 提供了另一个更可靠的方式来退出循环。可以使用<code>break</code>关键字来告诉程序何时停止执行循环。还记得我们在第二章猜猜看游戏的“猜测正确后退出”部分使用过它来在用户猜对数字赢得游戏后退出程序吗。</p>
-<h4><code>while</code>条件循环</h4>
+<a class="header" href="#while条件循环" name="while条件循环"><h4><code>while</code>条件循环</h4></a>
 <p>在程序中计算循环的条件也很常见。当条件为真，执行循环。当条件不再为真，调用<code>break</code>停止循环。这个循环类型可以通过组合<code>loop</code>、<code>if</code>、<code>else</code>和<code>break</code>来实现；如果你喜欢的话，现在就可以在程序中试试。</p>
 <p>然而，这个模式太常见了所以 Rust 为此提供了一个内建的语言结构，它被称为<code>while</code>循环。下面的例子使用了<code>while</code>：程序循环三次，每次数字都减一。接着，在循环之后，打印出另一个信息并退出：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -257,7 +257,7 @@ again!
 }
 </code></pre>
 <p>这个结构消除了很多需要嵌套使用<code>loop</code>、<code>if</code>、<code>else</code>和<code>break</code>的代码，这样显得更加清楚。当条件为真就执行，否则退出循环。</p>
-<h4>使用<code>for</code>遍历集合</h4>
+<a class="header" href="#使用for遍历集合" name="使用for遍历集合"><h4>使用<code>for</code>遍历集合</h4></a>
 <p>可以使用<code>while</code>结构来遍历一个元素集合，比如数组。例如：</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -316,7 +316,7 @@ the value is: 50
 }
 </code></pre>
 <p>这段代码看起来更帅气不是吗？</p>
-<h2>总结</h2>
+<a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>你做到了！这是一个相当可观的章节：你学习了变量，标量和<code>if</code>表达式，还有循环！如果你想要实践本章讨论的概念，尝试构建如下的程序：</p>
 <ul>
 <li>相互转换摄氏与华氏温度</li>

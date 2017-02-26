@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>什么是所有权 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>什么是所有权</h2>
+                    <a class="header" href="#什么是所有权" name="什么是所有权"><h2>什么是所有权</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch04-01-what-is-ownership.md">ch04-01-what-is-ownership.md</a>
 <br>
@@ -79,7 +79,7 @@ commit cc053d91f41793e54d5321abe027b0c163d735b8</p>
 <p>当你理解了所有权系统，你就会对这个使 Rust 如此独特的功能有一个坚实的基础。在本章中，你将会通过一些例子来学习所有权，他们关注一个非常常见的数据结构：字符串。</p>
 <!-- PROD: START BOX -->
 <blockquote>
-<h3>栈（Stack）与堆（Heap）</h3>
+<a class="header" href="#栈stack与堆heap" name="栈stack与堆heap"><h3>栈（Stack）与堆（Heap）</h3></a>
 <p>在很多语言中并不经常需要考虑到栈与堆。不过在像 Rust 这样的系统变成语言中，值是位于栈上还是堆上在更大程度上影响了语言的行为以及为何必须做出特定的选择。我们会在本章的稍后部分描述所有权与堆与栈相关的部分，所以这里只是一个用来预热的简要解释。</p>
 <p>栈和堆都是代码在运行时可供使用的内存部分，不过他们以不同的结构组成。栈以放入值的顺序存储并以相反顺序取出值。这也被称作<strong>后进先出</strong>（<em>last in, first out</em>）。想象一下一叠盘子：当增加更多盘子时，把他们放在盘子堆的顶部，当需要盘子时，也从顶部拿走。不能从中间也不能从底部增加或拿走盘子！增加数据叫做<strong>进栈</strong>（<em>pushing onto the stack</em>），而移出数据叫做<strong>出栈</strong>（<em>popping off the stack</em>）。</p>
 <p>操作栈是非常快的，因为它访问数据的方式：永远也不需要寻找一个位置放入新数据或者取出数据因为这个位置总是在栈顶。另一个使得栈快速的性质是栈中的所有数据都必须是一个已知的固定的大小。</p>
@@ -90,7 +90,7 @@ commit cc053d91f41793e54d5321abe027b0c163d735b8</p>
 <p>记录何处的代码在使用堆上的什么数据，最小化堆上的冗余数据的数量以及清理堆上不再使用的数据以致不至于用完空间，这些所有的问题正是所有权系统要处理的。一旦理解了所有权，你就不需要经常考虑栈和堆了，不过理解如何管理堆内存可以帮助我们理解所有权为什么存在以及为什么以它的方式工作。</p>
 </blockquote>
 <!-- PROD: END BOX -->
-<h3>所有权规则</h3>
+<a class="header" href="#所有权规则" name="所有权规则"><h3>所有权规则</h3></a>
 <p>首先，让我们看一下所有权的规则。记住这些规则正如我们将完成一些说明这些规则的例子：</p>
 <blockquote>
 <ol>
@@ -99,7 +99,7 @@ commit cc053d91f41793e54d5321abe027b0c163d735b8</p>
 <li>当所有者变量离开作用域，这个值将被丢弃。</li>
 </ol>
 </blockquote>
-<h3>变量作用域</h3>
+<a class="header" href="#变量作用域" name="变量作用域"><h3>变量作用域</h3></a>
 <p>我们在第二章已经完成过一个 Rust 程序的例子了。现在我们已经掌握了基本语法，所以不会在所有的例子中包含<code>fn main() {</code>代码了，所以如果你是一路跟过来的，必须手动将之后例子的代码放入一个<code>main</code>函数中。为此，例子将显得更加具体，使我们可以关注具体细节而不是样板代码。</p>
 <p>作为所有权的第一个例子，我们看看一些变量的<strong>作用域</strong>（<em>scope</em>）。作用域是一个 item 在程序中有效的范围。假如有一个这样的变量：</p>
 <pre><code class="language-rust">let s = &quot;hello&quot;;
@@ -122,7 +122,7 @@ commit cc053d91f41793e54d5321abe027b0c163d735b8</p>
 <li>这一直持续到它<strong>离开作用域</strong>为止。</li>
 </ol>
 <p>目前为止，变量是否有效与作用域的关系跟其他变成语言是类似的。现在我们要在此基础上介绍<code>String</code>类型。</p>
-<h3><code>String</code>类型</h3>
+<a class="header" href="#string类型" name="string类型"><h3><code>String</code>类型</h3></a>
 <p>为了演示所有权的规则，我们需要一个比第三章讲到的任何一个都要复杂的数据类型。之前出现的数据类型都是储存在栈上的并且当离开作用域时被移出栈，不过我们需要寻找一个储存在堆上的数据来探索 Rust 如何知道该在何时清理数据。</p>
 <p>这里使用<code>String</code>作为例子并专注于<code>String</code>与所有权相关的部分。这些方面也同样适用于其他标准库提供的或你创建的复杂数据类型。在第八章会更深入地讲解<code>String</code>。</p>
 <p>我们已经见过字符串字面值了，它被硬编码进程序里。字符串字面值是很方便，不过他们并不总是适合所有需要使用文本的场景。原因之一就是他们是不可变的。另一个原因是不是所有字符串的值都能在编写代码时就知道：例如，如果想要获取用户输入并储存该怎么办呢？为此，Rust 有第二个字符串类型，<code>String</code>。这个类型储存在堆上所以储存在编译时未知大小的文本。可以用<code>from</code>从字符串字面值来创建<code>String</code>，如下：</p>
@@ -137,7 +137,7 @@ s.push_str(&quot;, world!&quot;); // push_str() appends a literal to a String
 println!(&quot;{}&quot;, s); // This will print `hello, world!`
 </code></pre>
 <p>那么这里有什么区别呢？为什么<code>String</code>可变而字面值却不行呢？区别在于两个类型对内存的处理上。</p>
-<h3>内存与分配</h3>
+<a class="header" href="#内存与分配" name="内存与分配"><h3>内存与分配</h3></a>
 <p>字符串字面值的情况，我们在编译时就知道内容所以它直接被硬编码进最终的可执行文件中，这使得字符串字面值快速和高效。不过这些属性都只来源于它的不可变形。不幸的是，我们不能为了每一个在编译时未知大小的文本而将一块内存放入二进制文件中而它的大小还可能随着程序运行而改变。</p>
 <p>对于<code>String</code>类型，为了支持一个可变，可增长的文本片段，需要在堆上分配一块在编译时未知大小的内存来存放内容。这意味着：</p>
 <ol>
@@ -159,7 +159,7 @@ println!(&quot;{}&quot;, s); // This will print `hello, world!`
 <p>注意：在 C++ 中，这种 item 在生命周期结束时释放资源的方法有时被称作<strong>资源获取即初始化</strong>（<em>Resource Acquisition Is Initialization (RAII)</em>）。如果你使用过 RAII 模式的话应该对 Rust 的<code>drop</code>函数不陌生。</p>
 </blockquote>
 <p>这个模式对编写 Rust 代码的方式有着深远的影响。它现在看起来很简单，不过在更复杂的场景下代码的行为可能是不可预测的，比如当有多个变量使用在堆上分配的内存时。现在让我们探索一些这样的场景。</p>
-<h4>变量与数据交互：移动</h4>
+<a class="header" href="#变量与数据交互移动" name="变量与数据交互移动"><h4>变量与数据交互：移动</h4></a>
 <p>Rust 中的多个变量以一种独特的方式与同一数据交互。让我们看看列表 4-2 中一个使用整型的例子：</p>
 <figure>
 <pre><code class="language-rust">let x = 5;
@@ -228,7 +228,7 @@ which does not implement the `Copy` trait
 </figure>
 <p>这样就解决了我们的麻烦！因为只有<code>s2</code>是有效的，当其离开作用域，它就释放自己的内存，完毕。</p>
 <p>另外，这里还隐含了一个设计选择：Rust 永远也不会自动创建数据的“深拷贝”。因此，任何<strong>自动</strong>的复制可以被认为对运行时性能影响较小。</p>
-<h4>变量与数据交互：克隆</h4>
+<a class="header" href="#变量与数据交互克隆" name="变量与数据交互克隆"><h4>变量与数据交互：克隆</h4></a>
 <p>如果我们<strong>确实</strong>需要深度复制<code>String</code>中堆上的数据，而不仅仅是栈上的数据，可以使用一个叫做<code>clone</code>的通用函数。第五章会讨论方法语法，不过因为方法在很多语言中是一个常见功能，所以之前你可能已经见过了。</p>
 <p>这是一个实际使用<code>clone</code>方法的例子：</p>
 <pre><code class="language-rust">let s1 = String::from(&quot;hello&quot;);
@@ -238,7 +238,7 @@ println!(&quot;s1 = {}, s2 = {}&quot;, s1, s2);
 </code></pre>
 <p>这段代码能正常运行，也是如何显式产生图 4-5 中行为的方式，这里堆上的数据<strong>被复制了</strong>。</p>
 <p>当出现<code>clone</code>调用时，你知道一些特有的代码被执行而且这些代码可能相当消耗资源。所以它作为一个可视化的标识代表了不同的行为。</p>
-<h4>只在栈上的数据：拷贝</h4>
+<a class="header" href="#只在栈上的数据拷贝" name="只在栈上的数据拷贝"><h4>只在栈上的数据：拷贝</h4></a>
 <p>这里还有一个没有提到的小窍门。这些代码使用了整型并且是有效的，他们是之前列表 4-2 中的一部分：</p>
 <pre><code class="language-rust">let x = 5;
 let y = x;
@@ -255,7 +255,7 @@ println!(&quot;x = {}, y = {}&quot;, x, y);
 <li>所有浮点数类型，比如<code>f64</code>。</li>
 <li>元组，当且仅当其包含的类型也都是<code>Copy</code>的时候。<code>(i32, i32)</code>是<code>Copy</code>的，不过<code>(i32, String)</code>就不是。</li>
 </ul>
-<h3>所有权与函数</h3>
+<a class="header" href="#所有权与函数" name="所有权与函数"><h3>所有权与函数</h3></a>
 <p>将值传递给函数在语言上与给变量赋值相似。向函数传递值可能会移动或者复制，就像赋值语句一样。列表 4-7 是一个带有变量何时进入和离开作用域标注的例子：</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -287,7 +287,7 @@ fn makes_copy(some_integer: i32) { // some_integer comes into scope.
 </figcaption>
 </figure>
 <p>当尝试在调用<code>takes_ownership</code>后使用<code>s</code>时，Rust 会抛出一个编译时错误。这些静态检查使我们免于犯错。试试在<code>main</code>函数中添加使用<code>s</code>和<code>x</code>的代码来看看哪里能使用他们，和哪里所有权规则会阻止我们这么做。</p>
-<h3>返回值与作用域</h3>
+<a class="header" href="#返回值与作用域" name="返回值与作用域"><h3>返回值与作用域</h3></a>
 <p>返回值也可以转移作用域。这里是一个有与列表 4-7 中类似标注的例子：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {

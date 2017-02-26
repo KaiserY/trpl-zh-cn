@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>函数如何工作 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>函数如何工作</h2>
+                    <a class="header" href="#函数如何工作" name="函数如何工作"><h2>函数如何工作</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch03-03-how-functions-work.md">ch03-03-how-functions-work.md</a>
 <br>
@@ -96,7 +96,7 @@ Hello, world!
 Another function.
 </code></pre>
 <p>代码在<code>main</code>函数中按照他们出现的顺序被执行。首先，打印“Hello, world!”信息，接着<code>another_function</code>被调用并打印它的信息。</p>
-<h3>函数参数</h3>
+<a class="header" href="#函数参数" name="函数参数"><h3>函数参数</h3></a>
 <p>函数也可以被定义为拥有<strong>参数</strong>（<em>parameters</em>），他们是作为函数签名一部分的特殊变量。当函数拥有参数，可以为这些参数提供具体的值。技术上讲，这些具体值被称为参数（ <em>arguments</em>），不过通常的习惯是倾向于在函数定义中的变量和调用函数时传递的具体值都可以用 &quot;parameter&quot; 和 &quot;argument&quot; 而不加区别。</p>
 <p>如下被重写的<code>another_function</code>版本展示了 Rust 中参数是什么样的：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -136,9 +136,9 @@ The value of x is: 5
 The value of y is: 6
 </code></pre>
 <p>因为我们使用<code>5</code>作为<code>x</code>的值和<code>6</code>作为<code>y</code>的值来调用函数，这两个字符串使用这些值并被打印出来。</p>
-<h3>函数体</h3>
+<a class="header" href="#函数体" name="函数体"><h3>函数体</h3></a>
 <p>函数体由一系列的语句和一个可选的表达式构成。目前为止，我们只涉及到了没有结尾表达式的函数，不过我们见过表达式作为了语句的一部分。因为 Rust 是一个基于表达式（expression-based）的语言，这是一个需要理解的（不同于其他语言）重要区别。其他语言并没有这样的区别，所以让我们看看语句与表达式有什么区别以及他们是如何影响函数体的。</p>
-<h3>语句与表达式</h3>
+<a class="header" href="#语句与表达式" name="语句与表达式"><h3>语句与表达式</h3></a>
 <p>我们已经用过语句与表达式了。<strong>语句</strong>（<em>Statements</em>）是执行一些操作但不返回值的指令。表达式（<em>Expressions</em>）计算并产生一个值。让我们看看一些例子：</p>
 <p>使用<code>let</code>关键字创建变量并绑定一个值是一个语句。在列表 3-3 中，<code>let y = 6;</code>是一个语句：</p>
 <figure>
@@ -190,7 +190,7 @@ error: expected expression, found statement (`let`)
 }
 </code></pre>
 <p>这个代码块的值是<code>4</code>。这个值作为<code>let</code>语句的一部分被绑定到<code>y</code>上。注意结尾没有分号的那一行，与大部分我们见过的代码行不同。表达式并不包含结尾的分号。如果在表达式的结尾加上分号，他就变成了语句，这也就使其不返回一个值。在接下来的探索中记住函数和表达式都返回值就行了。</p>
-<h3>函数的返回值</h3>
+<a class="header" href="#函数的返回值" name="函数的返回值"><h3>函数的返回值</h3></a>
 <p>可以向调用它的代码返回值。并不对返回值命名，不过会在一个箭头（<code>-&gt;</code>）后声明它的类型。在 Rust 中，函数的返回值等同于函数体最后一个表达式的值。这是一个有返回值的函数的例子：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn five() -&gt; i32 {

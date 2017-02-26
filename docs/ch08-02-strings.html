@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>字符串 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>字符串</h2>
+                    <a class="header" href="#字符串" name="字符串"><h2>字符串</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch08-02-strings.md">ch08-02-strings.md</a>
 <br>
@@ -75,11 +75,11 @@ commit 4dc0001ccba4189e210ba47d6fe6c3c5fa729da6</p>
 </blockquote>
 <p>第四章已经讲过一些字符串的内容，不过现在让我们更深入地了解一下它。字符串是新晋 Rustacean 们通常会被困住的领域。这是由于三方面内容的结合：Rust 倾向于确保暴露出可能的错误，字符串是比很多程序员所想象的要更为复杂的数据结构，以及 UTF-8。所有这些结合起来对于来自其他语言背景的程序员就可能显得很困难了。</p>
 <p>字符串出现在集合章节的原因是，字符串是作为字节的集合外加一些方法实现的，当这些字节被解释为文本时，这些方法提供了实用的功能。在这一部分，我们会讲到<code>String</code>那些任何集合类型都有的操作，比如创建、更新和读取。也会讨论<code>String</code>于其他集合不一样的地方，例如索引<code>String</code>是很复杂的，由于人和计算机理解<code>String</code>数据的不同方式。</p>
-<h3>什么是字符串？</h3>
+<a class="header" href="#什么是字符串" name="什么是字符串"><h3>什么是字符串？</h3></a>
 <p>在开始深入这些方面之前，我们需要讨论一下术语<strong>字符串</strong>的具体意义。Rust 的核心语言中事实上就只有一种字符串类型：<code>str</code>，字符串 slice，它通常以被借用的形式出现，<code>&amp;str</code>。第四章讲到了<strong>字符串 slice</strong>：他们是一些储存在别处的 UTF-8 编码字符串数据的引用。比如字符串字面值被储存在程序的二进制输出中，字符串 slice 也是如此。</p>
 <p>称作<code>String</code>的类型是由标准库提供的，而没有写进核心语言部分，它是可增长的、可变的、有所有权的、UTF-8 编码的字符串类型。当 Rustacean 们谈到 Rust 的“字符串”时，他们通常指的是<code>String</code>和字符串 slice <code>&amp;str</code>类型，而不是其中一个。这一部分大部分是关于<code>String</code>的，不过这些类型在 Rust 标准库中都被广泛使用。<code>String</code>和字符串 slice 都是 UTF-8 编码的。</p>
 <p>Rust 标准库中还包含一系列其他字符串类型，比如<code>OsString</code>、<code>OsStr</code>、<code>CString</code>和<code>CStr</code>。相关库 crate 甚至会提供更多储存字符串数据的选择。与<code>*String</code>/<code>*Str</code>的命名类似，他们通常也提供有所有权和可借用的变体，就比如说<code>String</code>/<code>&amp;str</code>。这些字符串类型在储存的编码或内存表现形式上可能有所不同。本章将不会讨论其他这些字符串类型；查看 API 文档来更多的了解如何使用他们以及各自适合的场景。</p>
-<h3>新建字符串</h3>
+<a class="header" href="#新建字符串" name="新建字符串"><h3>新建字符串</h3></a>
 <p>很多<code>Vec</code>可用的操作在<code>String</code>中同样可用，从以<code>new</code>函数创建字符串开始，像这样：</p>
 <pre><code class="language-rust">let s = String::new();
 </code></pre>
@@ -110,9 +110,9 @@ let hello = &quot;Olá&quot;;
 let hello = &quot;Здравствуйте&quot;;
 let hello = &quot;Hola&quot;;
 </code></pre>
-<h3>更新字符串</h3>
+<a class="header" href="#更新字符串" name="更新字符串"><h3>更新字符串</h3></a>
 <p><code>String</code>的大小可以增长其内容也可以改变，就像可以放入更多数据来改变<code>Vec</code>的内容一样。另外，<code>String</code>实现了<code>+</code>运算符作为级联运算符以便于使用。</p>
-<h4>附加字符串</h4>
+<a class="header" href="#附加字符串" name="附加字符串"><h4>附加字符串</h4></a>
 <p>可以通过<code>push_str</code>方法来附加字符串 slice，从而使<code>String</code>变长：</p>
 <pre><code class="language-rust">let mut s = String::from(&quot;foo&quot;);
 s.push_str(&quot;bar&quot;);
@@ -127,7 +127,7 @@ s1.push_str(&amp;s2);
 s.push('l');
 </code></pre>
 <p>执行这些代码之后，<code>s</code>将会包含“lol”。</p>
-<h4>使用 + 运算符或<code>format!</code>宏级联字符串</h4>
+<a class="header" href="#使用--运算符或format宏级联字符串" name="使用--运算符或format宏级联字符串"><h4>使用 + 运算符或<code>format!</code>宏级联字符串</h4></a>
 <p>通常我们希望将两个已知的字符串合并在一起。一种办法是像这样使用<code>+</code>运算符：</p>
 <pre><code class="language-rust">let s1 = String::from(&quot;Hello, &quot;);
 let s2 = String::from(&quot;world!&quot;);
@@ -154,7 +154,7 @@ let s3 = String::from(&quot;toe&quot;);
 let s = format!(&quot;{}-{}-{}&quot;, s1, s2, s3);
 </code></pre>
 <p>这些代码也会将<code>s</code>设置为“tic-tac-toe”。<code>format!</code>与<code>println!</code>的工作原理相同，不过不同于将输出打印到屏幕上，它返回一个带有结果的<code>String</code>。这个版本就好理解的多，并且不会获取任何参数的所有权。</p>
-<h3>索引字符串</h3>
+<a class="header" href="#索引字符串" name="索引字符串"><h3>索引字符串</h3></a>
 <p>在很多语言中，通过索引来引用字符串中的单独字符是有效且常见的操作。然而在 Rust 中，如果我们尝试使用索引语法访问<code>String</code>的一部分，会出现一个错误。比如如下代码：</p>
 <pre><code class="language-rust,ignore">let s1 = String::from(&quot;hello&quot;);
 let h = s1[0];
@@ -168,7 +168,7 @@ satisfied [--explain E0277]
 note: the type `std::string::String` cannot be indexed by `_`
 </code></pre>
 <p>错误和提示说明了全部问题：Rust 的字符串不支持索引。那么接下来的问题是，为什么不支持呢？为了回答这个问题，我们必须先聊一聊 Rust 如何在内存中储存字符串。</p>
-<h4>内部表示</h4>
+<a class="header" href="#内部表示" name="内部表示"><h4>内部表示</h4></a>
 <p><code>String</code>是一个<code>Vec&lt;u8&gt;</code>的封装。让我们看看之前一些正确编码的字符串的例子。首先是这一个：</p>
 <pre><code class="language-rust">let len = String::from(&quot;Hola&quot;).len();
 </code></pre>
@@ -181,7 +181,7 @@ note: the type `std::string::String` cannot be indexed by `_`
 let answer = &amp;hello[0];
 </code></pre>
 <p><code>answer</code>的值应该是什么呢？它应该是第一个字符<code>З</code>吗？当使用 UTF-8 编码时，<code>З</code>的第一个字节是<code>208</code>，第二个是<code>151</code>，所以<code>answer</code>实际上应该是<code>208</code>，不过<code>208</code>自身并不是一个有效的字母。返回<code>208</code>可不是一个请求字符串第一个字母的人所希望看到的，不过它是 Rust 在字节索引零位置所能提供的唯一数据。返回字节值可能不是人们希望看到的，即便是只有拉丁字母时：<code>&amp;&quot;hello&quot;[0]</code>会返回<code>104</code>而不是<code>h</code>。为了避免返回意想不到值并造成不能立刻发现的 bug。Rust 选择不编译这些代码并及早杜绝了误会的放生。</p>
-<h4>字节、标量值和字形簇！天呐！</h4>
+<a class="header" href="#字节标量值和字形簇天呐" name="字节标量值和字形簇天呐"><h4>字节、标量值和字形簇！天呐！</h4></a>
 <p>这引起了关于 UTF-8 的另外一个问题：从 Rust 的角度来讲，事实上有三种相关方式可以理解字符串：字节、标量值和字形簇（最接近人们眼中<strong>字母</strong>的概念）。</p>
 <p>比如这个用梵文书写的印度语单词“नमस्ते”，最终它储存在<code>Vec</code>中的<code>u8</code>值看起来像这样：</p>
 <pre><code>[224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224, 164, 164,
@@ -195,7 +195,7 @@ let answer = &amp;hello[0];
 </code></pre>
 <p>Rust 提供了多种不同的方式来解释计算机储存的原始字符串数据，这样程序就可以选择它需要的表现方式，而无所谓是何种人类语言。</p>
 <p>最后一个 Rust 不允许使用索引获取<code>String</code>字符的原因是索引操作预期总是需要常数时间 (O(1))。但是对于<code>String</code>不可能保证这样的性能，因为 Rust 不得不检查从字符串的开头到索引位置的内容来确定这里有多少有效的字符。</p>
-<h3>字符串 slice</h3>
+<a class="header" href="#字符串-slice" name="字符串-slice"><h3>字符串 slice</h3></a>
 <p>因为字符串索引应该返回的类型是不明确的，而且索引字符串通常也是一个坏点子，所以 Rust 不建议这么做，而如果你确实需要它的话则需要更加明确一些。比使用<code>[]</code>和单个值的索引更加明确的方式是使用<code>[]</code>和一个 range 来创建包含特定字节的字符串 slice：</p>
 <pre><code class="language-rust">let hello = &quot;Здравствуйте&quot;;
 
@@ -207,7 +207,7 @@ let s = &amp;hello[0..4];
 character boundary', ../src/libcore/str/mod.rs:1694
 </code></pre>
 <p>你应该小心谨慎的使用这个操作，因为它可能会使你的程序崩溃。</p>
-<h3>遍历字符串的方法</h3>
+<a class="header" href="#遍历字符串的方法" name="遍历字符串的方法"><h3>遍历字符串的方法</h3></a>
 <p>幸运的是，这里还有其他获取字符串元素的方式。</p>
 <p>如果你需要操作单独的 Unicode 标量值，最好的选择是使用<code>chars</code>方法。堆“नमस्ते”调用<code>chars</code>方法会将其分开并返回六个<code>char</code>类型的值，接着就可以遍历结果来访问每一个元素了：</p>
 <pre><code class="language-rust">for c in &quot;नमस्ते&quot;.chars() {
@@ -236,7 +236,7 @@ character boundary', ../src/libcore/str/mod.rs:1694
 </code></pre>
 <p>不过请记住有效的 Unicode 标量值可能会由不止一个字节组成。</p>
 <p>从字符串中获取字形簇是很复杂的，所以标准库并没有提供这个功能。crates.io 上有些提供这样功能的 crate。</p>
-<h3>字符串并不简单</h3>
+<a class="header" href="#字符串并不简单" name="字符串并不简单"><h3>字符串并不简单</h3></a>
 <p>总而言之，字符串还是很复杂的。不同的语言选择了不同的向程序员展示其复杂性的方式。Rust 选择了以准确的方式处理<code>String</code>数据作为所有 Rust 程序的默认行为，这意味着程序员们必须更多的思考如何在前台处理 UTF-8 数据。这种权衡取舍相比其他语言更多的暴露出了字符串的复杂性，不过也使你在开发生命周期中免于处理涉及非 ASCII 字符的错误。</p>
 <p>现在让我们转向一些不太复杂的集合：哈希 map！</p>
 

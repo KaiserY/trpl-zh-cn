@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>引用 &amp; 借用 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>引用与借用</h2>
+                    <a class="header" href="#引用与借用" name="引用与借用"><h2>引用与借用</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch04-02-references-and-borrowing.md">ch04-02-references-and-borrowing.md</a>
 <br>
@@ -138,7 +138,7 @@ fn change(some_string: &amp;String) {
   |     ^^^^^^^^^^^
 </code></pre>
 <p>正如变量默认是不可变的，引用也一样。不允许修改引用的值。</p>
-<h3>可变引用</h3>
+<a class="header" href="#可变引用" name="可变引用"><h3>可变引用</h3></a>
 <p>可以通过一个小调整来修复在列表 4-9 代码中的错误，在列表 4-9 的代码中：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -210,7 +210,7 @@ immutable
 </code></pre>
 <p>哇哦！我们<strong>也</strong>不能在拥有不可变引用的同时拥有可变引用。不可变引用的用户可不希望在它的眼皮底下值突然就被改变了！然而，多个不可变引用是没有问题的因为没有哪个读取数据的人有能力影响其他人读取到的数据。</p>
 <p>即使这些错误有时是使人沮丧的。记住这是 Rust 编译器在提早指出一个潜在的 bug（在编译时而不是运行时）并明确告诉你问题在哪而不是任由你去追踪为何有时数据并不是你想象中的那样。</p>
-<h3>悬垂引用</h3>
+<a class="header" href="#悬垂引用" name="悬垂引用"><h3>悬垂引用</h3></a>
 <p>在存在指针的语言中，容易错误地生成一个<strong>悬垂指针</strong>（<em>dangling pointer</em>），一个引用某个内存位置的指针，这个内存可能已经因为被分配给别人，因为释放内存时指向内存的指针被保留了下来。相比之下，在 Rust 中编译器确保引用永远也不会变成悬垂状态：当我们拥有一些数据的引用，编译器确保数据不会在其引用之前离开作用域。</p>
 <p>让我们尝试创建一个悬垂引用：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -259,7 +259,7 @@ for it to be borrowed from.
 }
 </code></pre>
 <p>这样就可以没有任何错误的运行了。所有权被移动出去，所以没有值被释放掉。</p>
-<h3>引用的规则</h3>
+<a class="header" href="#引用的规则" name="引用的规则"><h3>引用的规则</h3></a>
 <p>简要的概括一下对引用的讨论：</p>
 <ol>
 <li>特定时间，<strong>只能</strong>拥有如下中的一个：</li>

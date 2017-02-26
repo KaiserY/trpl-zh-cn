@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>变量和可变性 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>变量和可变性</h2>
+                    <a class="header" href="#变量和可变性" name="变量和可变性"><h2>变量和可变性</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch03-01-variables-and-mutability.md">ch03-01-variables-and-mutability.md</a>
 <br>
@@ -118,14 +118,14 @@ The value of x is: 6
 </code></pre>
 <p>通过<code>mut</code>，允许把绑定到<code>x</code>的值从<code>5</code>改成<code>6</code>。在一些情况下，你会想要使一个变量可变，因为这比只使用不可变变量实现的代码更易于编写。</p>
 <p>除了避免 bug 外，这里还有数个需要权衡取舍的地方。例如，有时使用大型数据结构时，适当地使变量可变可能比复制和返回新分配的实例要更快。对于较小的数据结构，总是创建新实例并采用一种更函数式的编程风格可能会使代码更易理解。所以为了可读性而造成的性能惩罚也许使值得的。</p>
-<h3>变量和常量的区别</h3>
+<a class="header" href="#变量和常量的区别" name="变量和常量的区别"><h3>变量和常量的区别</h3></a>
 <p>不能改变一个变量的值可能会使你想起另一个大部分编程语言都有的概念：<strong>常量</strong>（<em>constants</em>）。常量也是绑定到一个名称的不允许改变的值，不过常量与变量还是有一些区别。首先，不允许对常量使用<code>mut</code>：常量不光是默认不能改变，它总是不能改变。常量使用<code>const</code>关键字而不是<code>let</code>关键字声明，而且<em>必须</em>注明值的类型。现在我们准备在下一部分，“数据类型”，涉及到类型和类型注解，所以现在无需担心这些细节。常量可以在任何作用域声明，包括全局作用域，这在一个值需要被很多部分的代码用到时很有用。最后一个区别是常量只能用于常量表达式，而不能作为函数调用的结果或任何其他只在运行时使用到的值。</p>
 <p>这是一个常量声明的例子，它的名称是<code>MAX_POINTS</code>而它的值是 100,000。Rust 常量的命名规范是使用大写字母和单词间使用下划线：</p>
 <pre><code class="language-rust">const MAX_POINTS: u32 = 100_000;
 </code></pre>
 <p>常量在整个程序生命周期中都有效，位于它声明的作用域之中。这使得常量可以用作多个部分的代码可能需要知道的程序范围的值，例如一个游戏中任何玩家可以获得的最高分或者一年的秒数。</p>
 <p>将用于整个程序的硬编码的值命名为常量（并编写文档）对为将来代码维护者表明值的意义是很有用的。它也能帮助你将硬编码的值至于一处以便将来可能需要修改他们。</p>
-<h3>覆盖</h3>
+<a class="header" href="#覆盖" name="覆盖"><h3>覆盖</h3></a>
 <p>如第二章猜猜看游戏所讲到的，我们可以定义一个与之前变量名称相同的新变量，而新变量会<strong>覆盖</strong>之前的变量。Rustacean 们称其为第一个变量被第二个<strong>给覆盖</strong>了，这意味着第二个变量的值是使用这个变量时会看到的值。可以用相同变量名称来覆盖它自己以及重复使用<code>let</code>关键字来多次覆盖，如下所示：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {

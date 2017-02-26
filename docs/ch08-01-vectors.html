@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>vector - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,14 +67,14 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>vector</h2>
+                    <a class="header" href="#vector" name="vector"><h2>vector</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch08-01-vectors.md">ch08-01-vectors.md</a>
 <br>
 commit 0d229cc5a3da341196e15a6761735b2952281569</p>
 </blockquote>
 <p>我们要讲到的第一个类型是<code>Vec&lt;T&gt;</code>，也被称为 <em>vector</em>。vector 允许我们在一个单独的数据结构中储存多于一个值，它在内存中彼此相邻的排列所有的值。vector 只能储存相同类型的值。他们在拥有一系列的场景下非常实用，例如文件中的文本行或是购物车中商品的价格。</p>
-<h3>新建 vector</h3>
+<a class="header" href="#新建-vector" name="新建-vector"><h3>新建 vector</h3></a>
 <p>为了创建一个新的，空的 vector，可以调用<code>Vec::new</code>函数：</p>
 <pre><code class="language-rust">let v: Vec&lt;i32&gt; = Vec::new();
 </code></pre>
@@ -83,7 +83,7 @@ commit 0d229cc5a3da341196e15a6761735b2952281569</p>
 <pre><code class="language-rust">let v = vec![1, 2, 3];
 </code></pre>
 <p>因为我们提供了<code>i32</code>类型的初始值，Rust 可以推断出<code>v</code>的类型是<code>Vec&lt;i32&gt;</code>，因此类型注解就不是必须的。接下来让我们看看如何修改一个 vector。</p>
-<h3>更新 vector</h3>
+<a class="header" href="#更新-vector" name="更新-vector"><h3>更新 vector</h3></a>
 <p>对于新建一个 vector 并向其增加元素，可以使用<code>push</code>方法：</p>
 <pre><code class="language-rust">let mut v = Vec::new();
 
@@ -93,7 +93,7 @@ v.push(7);
 v.push(8);
 </code></pre>
 <p>如第三章中讨论的任何变量一样，如果想要能够改变它的值，必须使用<code>mut</code>关键字使其可变。放入其中的所有值都是<code>i32</code>类型的，而且 Rust 也根据数据如此判断，所以不需要<code>Vec&lt;i32&gt;</code>注解。</p>
-<h3>丢弃 vector 时也会丢弃其所有元素</h3>
+<a class="header" href="#丢弃-vector-时也会丢弃其所有元素" name="丢弃-vector-时也会丢弃其所有元素"><h3>丢弃 vector 时也会丢弃其所有元素</h3></a>
 <p>类似于任何其他的<code>struct</code>，vector 在其离开作用域时会被释放：</p>
 <pre><code class="language-rust">{
     let v = vec![1, 2, 3, 4];
@@ -103,7 +103,7 @@ v.push(8);
 } // &lt;- v goes out of scope and is freed here
 </code></pre>
 <p>当 vector 被丢弃时，所有其内容也会被丢弃，这意味着这里它包含的整数将被清理。这可能看起来非常直观，不过一旦开始使用 vector 元素的引用情况就变得有些复杂了。下面让我们处理这种情况！</p>
-<h3>读取 vector 的元素</h3>
+<a class="header" href="#读取-vector-的元素" name="读取-vector-的元素"><h3>读取 vector 的元素</h3></a>
 <p>现在你知道如何创建、更新和销毁 vector 了，接下来的一步最好了解一下如何读取他们的内容。有两种方法引用 vector 中储存的值。为了更加清楚的说明这个例子，我们标注这些函数返回的值的类型。</p>
 <p>这个例子展示了访问 vector 中一个值的两种方式，索引语法或者<code>get</code>方法：</p>
 <pre><code class="language-rust">let v = vec![1, 2, 3, 4, 5];
@@ -120,7 +120,7 @@ let does_not_exist = v.get(100);
 </code></pre>
 <p>当运行这段代码，你会发现对于第一个<code>[]</code>方法，当引用一个不存在的元素时 Rust 会造成<code>panic!</code>。这个方法更适合当程序认为尝试访问超过 vector 结尾的元素是一个严重错误的情况，这时应该使程序崩溃。</p>
 <p>当<code>get</code>方法被传递了一个数组外的索引时，它不会 panic 而是返回<code>None</code>。当偶尔出现超过 vector 范围的访问属于正常情况的时候可以考虑使用它。接着你的代码可以有处理<code>Some(&amp;element)</code>或<code>None</code>的逻辑，如第六章讨论的那样。例如，索引可能来源于用户输入的数字。如果他们不慎输入了一个过大的数字那么程序就会得到<code>None</code>值，你可以告诉用户<code>Vec</code>当前元素的数量并再请求他们输入一个有效的值。这就比因为输入错误而使程序崩溃要友好的多！</p>
-<h4>无效引用</h4>
+<a class="header" href="#无效引用" name="无效引用"><h4>无效引用</h4></a>
 <p>一旦程序获取了一个有效的引用，借用检查器将会执行第四章讲到的所有权和借用规则来确保 vector 内容的这个引用和任何其他引用保持有效。回忆一下不能在相同作用域中同时存在可变和不可变引用的规则。这个规则适用于这个例子，当我们获取了 vector 的第一个元素的不可变引用并尝试在 vector 末尾增加一个元素的时候：</p>
 <pre><code class="language-rust,ignore">let mut v = vec![1, 2, 3, 4, 5];
 
@@ -144,7 +144,7 @@ immutable
 <blockquote>
 <p>注意：关于更多内容，查看 Nomicon <em>https://doc.rust-lang.org/stable/nomicon/vec.html</em></p>
 </blockquote>
-<h3>使用枚举来储存多种类型</h3>
+<a class="header" href="#使用枚举来储存多种类型" name="使用枚举来储存多种类型"><h3>使用枚举来储存多种类型</h3></a>
 <p>在本章的开始，我们提到 vector 只能储存相同类型的值。这是很不方便的；绝对会有需要储存一系列不同类型的值的用例。幸运的是，枚举的成员都被定义为相同的枚举类型，所以当需要在 vector 中储存不同类型值时，我们可以定义并使用一个枚举！</p>
 <p>例如，假如我们想要从电子表格的一行中获取值，而这一行的有些列包含数字，有些包含浮点值，还有些是字符串。我们可以定义一个枚举，其成员会存放这些不同类型的值，同时所有这些枚举成员都会被当作相同类型，那个枚举的类型。接着可以创建一个储存枚举值的 vector，这样最终就能够储存不同类型的值了：</p>
 <pre><code class="language-rust">enum SpreadsheetCell {

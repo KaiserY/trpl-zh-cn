@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>`Result`与可恢复的错误 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2><code>Result</code>与可恢复的错误</h2>
+                    <a class="header" href="#result与可恢复的错误" name="result与可恢复的错误"><h2><code>Result</code>与可恢复的错误</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch09-02-recoverable-errors-with-result.md">ch09-01-unrecoverable-errors-with-panic.md</a>
 <br>
@@ -138,7 +138,7 @@ might have</p>
 <pre><code>thread 'main' panicked at 'There was a problem opening the file: Error { repr:
 Os { code: 2, message: &quot;No such file or directory&quot; } }', src/main.rs:8
 </code></pre>
-<h3>匹配不同的错误</h3>
+<a class="header" href="#匹配不同的错误" name="匹配不同的错误"><h3>匹配不同的错误</h3></a>
 <p>列表 9-3 中的代码不管<code>File::open</code>是因为什么原因失败都会<code>panic!</code>。我们真正希望的是对不同的错误原因采取不同的行为：如果<code>File::open</code>因为文件不存在而失败，我们希望创建这个文件并返回新文件的句柄。如果<code>File::open</code>因为任何其他原因失败，例如没有打开文件的权限，我们仍然希望像列表 9-3 那样<code>panic!</code>。让我们看看列表 9-4，其中<code>match</code>增加了另一个分支：</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -177,7 +177,7 @@ fn main() {
 <p><code>File::open</code>返回的<code>Err</code>成员中的值类型<code>io::Error</code>，它是一个标准库中提供的结构体。这个结构体有一个返回<code>io::ErrorKind</code>值的<code>kind</code>方法可供调用。<code>io::ErrorKind</code>是一个标准库提供的枚举，它的成员对应<code>io</code>操作可能导致的不同错误类型。我们感兴趣的成员是<code>ErrorKind::NotFound</code>，它代表尝试打开的文件并不存在。</p>
 <p><code>if error.kind() == ErrorKind::NotFound</code>条件被称作 <em>match guard</em>：它是一个进一步完善<code>match</code>分支模式的额外的条件。这个条件必须为真才能使分支的代码被执行；否则，模式匹配会继续并考虑<code>match</code>中的下一个分支。模式中的<code>ref</code>是必须的，这样<code>error</code>就不会被移动到 guard 条件中而只是仅仅引用它。第十八章会详细解释为什么在模式中使用<code>ref</code>而不是<code>&amp;</code>来获取一个引用。简而言之，在模式的上下文中，<code>&amp;</code>匹配一个引用并返回它的值，而<code>ref</code>匹配一个值并返回一个引用。</p>
 <p>在 match guard 中我们想要检查的条件是<code>error.kind()</code>是否是<code>ErrorKind</code>枚举的<code>NotFound</code>成员。如果是，尝试用<code>File::create</code>创建文件。然而<code>File::create</code>也可能会失败，我们还需要增加一个内部<code>match</code>语句。当文件不能被打开，会打印出一个不同的错误信息。外部<code>match</code>的最后一个分支保持不变这样对任何除了文件不存在的错误会使程序 panic。</p>
-<h3>失败时 panic 的捷径：<code>unwrap</code>和<code>expect</code></h3>
+<a class="header" href="#失败时-panic-的捷径unwrap和expect" name="失败时-panic-的捷径unwrap和expect"><h3>失败时 panic 的捷径：<code>unwrap</code>和<code>expect</code></h3></a>
 <p><code>match</code>能够胜任它的工作，不过它可能有点冗长并且并不总是能很好的表明意图。<code>Result&lt;T, E&gt;</code>类型定义了很多辅助方法来处理各种情况。其中之一叫做<code>unwrap</code>，它的实现就类似于列表 9-3 中的<code>match</code>语句。如果<code>Result</code>值是成员<code>Ok</code>，<code>unwrap</code>会返回<code>Ok</code>中的值。如果<code>Result</code>是成员<code>Err</code>，<code>unwrap</code>会为我们调用<code>panic!</code>。</p>
 <pre><code class="language-rust,should_panic">use std::fs::File;
 
@@ -202,7 +202,7 @@ fn main() {
 2, message: &quot;No such file or directory&quot; } }',
 /stable-dist-rustc/build/src/libcore/result.rs:868
 </code></pre>
-<h3>传播错误</h3>
+<a class="header" href="#传播错误" name="传播错误"><h3>传播错误</h3></a>
 <p>当编写一个其实现会调用一些可能会失败的操作的函数时，除了在这个函数中处理错误外，还可以选择让调用者知道这个错误并决定该如何处理。这被称为<strong>传播</strong>（<em>propagating</em>）错误，这样能更好的控制代码调用，因为比起你代码所拥有的上下文，调用者可能拥有更多信息或逻辑来决定应该如何处理错误。</p>
 <p>例如，列表 9-5 展示了一个从文件中读取用户名的函数。如果文件不存在或不能读取，这个函数会将这些错误返回给调用它的代码：</p>
 <figure>
@@ -235,7 +235,7 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
 <p>接着我们在变量<code>s</code>中创建了一个新<code>String</code>并调用文件句柄<code>f</code>的<code>read_to_string</code>方法来将文件的内容读取到<code>s</code>中。<code>read_to_string</code>方法也返回一个<code>Result</code>因为它也可能会失败：哪怕是<code>File::open</code>已经成功了。所以我们需要另一个<code>match</code>来处理这个<code>Result</code>：如果<code>read_to_string</code>成功了，那么这个函数就成功了，并返回文件中的用户名，它现在位于被封装进<code>Ok</code>的<code>s</code>中。如果<code>read_to_string</code>失败了，则像之前处理<code>File::open</code>的返回值的<code>match</code>那样返回错误值。并不需要显式的调用<code>return</code>，因为这是函数的最后一个表达式。</p>
 <p>调用这个函数的代码最终会得到一个包含用户名的<code>Ok</code>值，亦或一个包含<code>io::Error</code>的<code>Err</code>值。我们无从得知调用者会如何处理这些值。例如，如果他们得到了一个<code>Err</code>值，他们可能会选择<code>panic!</code>并使程序崩溃、使用一个默认的用户名或者从文件之外的地方寻找用户名。我们没有足够的信息知晓调用者具体会如何尝试，所以将所有的成功或失败信息向上传播，让他们选择合适处理方法。</p>
 <p>这种传播错误的模式在 Rust 是如此的常见，以至于有一个更简便的专用语法：<code>?</code>。</p>
-<h3>传播错误的捷径：<code>?</code></h3>
+<a class="header" href="#传播错误的捷径" name="传播错误的捷径"><h3>传播错误的捷径：<code>?</code></h3></a>
 <p>列表 9-6 展示了一个<code>read_username_from_file</code>的实现，它实现了与列表 9-5 中的代码相同的功能，不过这个实现是使用了问号运算符：</p>
 <figure>
 <pre><code class="language-rust">use std::io;
@@ -268,7 +268,7 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
 }
 </code></pre>
 <p>在<code>s</code>中创建新的<code>String</code>被放到了函数开头；这没有什么变化。我们对<code>File::open(&quot;hello.txt&quot;)?</code>的结果直接链式调用了<code>read_to_string</code>，而不再创建变量<code>f</code>。仍然需要<code>read_to_string</code>调用结尾的<code>?</code>，而且当<code>File::open</code>和<code>read_to_string</code>都成功没有失败时返回包含用户名<code>s</code>的<code>Ok</code>值。其功能再一次与列表 9-5 和列表 9-5 保持一致，不过这是一个与众不同且更符合工程学的写法。</p>
-<h3><code>?</code>只能被用于返回<code>Result</code>的函数</h3>
+<a class="header" href="#只能被用于返回result的函数" name="只能被用于返回result的函数"><h3><code>?</code>只能被用于返回<code>Result</code>的函数</h3></a>
 <p><code>?</code>只能被用于返回值类型为<code>Result</code>的函数，因为他被定义为与列表 9-5 中的<code>match</code>表达式有着完全相同的工作方式。<code>match</code>的<code>return Err(e)</code>部分要求返回值类型是<code>Result</code>，所以函数的返回值必须是<code>Result</code>才能与这个<code>return</code>相兼容。</p>
 <p>让我们看看在<code>main</code>函数中使用<code>?</code>会发生什么，如果你还记得的话它的返回值类型是<code>()</code>：</p>
 <pre><code class="language-rust,ignore">use std::fs::File;

@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>`mod`和文件系统 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2><code>mod</code>和文件系统</h2>
+                    <a class="header" href="#mod和文件系统" name="mod和文件系统"><h2><code>mod</code>和文件系统</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch07-01-mod-and-the-filesystem.md">ch07-01-mod-and-the-filesystem.md</a>
 <br>
@@ -90,7 +90,7 @@ mod tests {
 <p>Cargo 创建了一个空的测试来帮助我们开始库项目，不像使用<code>--bin</code>参数那样创建一个“Hello, world!”二进制项目。稍后一点会介绍<code>#[]</code>和<code>mod tests</code>语法，目前只需确保他们位于 <em>src/lib.rs</em> 中。</p>
 <p>因为没有 <em>src/main.rs</em> 文件，所以没有可供 Cargo 的<code>cargo run</code>执行的东西。因此，我们将使用<code>cargo build</code>命令只是编译库 crate 的代码。</p>
 <p>我们将学习根据编写代码的意图来选择不同的织库项目代码组织来适应多种场景。</p>
-<h3>模块定义</h3>
+<a class="header" href="#模块定义" name="模块定义"><h3>模块定义</h3></a>
 <p>对于<code>communicator</code>网络库，首先我们要定义一个叫做<code>network</code>的模块，它包含一个叫做<code>connect</code>的函数定义。Rust 中所有模块的定义以关键字<code>mod</code>开始。在 <em>src/lib.rs</em> 文件的开头在测试代码的上面增加这些代码：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">mod network {
@@ -147,7 +147,7 @@ in <em>src/lib.rs</em></p>
      └── client
 </code></pre>
 <p>可以看到列表 7-2 中，<code>client</code>是<code>network</code>的子模块，而不是它的同级模块。更为负责的项目可以有很多的模块，所以他们需要符合逻辑地组合在一起以便记录他们。在项目中“符合逻辑”的意义全凭你得理解和库的用户对你项目领域的认识。利用我们这里讲到的技术来创建同级模块和嵌套的模块将是你会喜欢的结构。</p>
-<h3>将模块移动到其他文件</h3>
+<a class="header" href="#将模块移动到其他文件" name="将模块移动到其他文件"><h3>将模块移动到其他文件</h3></a>
 <p>位于层级结构中的模块，非常类似计算机领域的另一个我们非常熟悉的结构：文件系统！我们可以利用 Rust 的模块系统连同多个文件一起分解 Rust 项目，这样就不是所有的内容都落到 <em>src/lib.rs</em> 中了。作为例子，我们将从列表 7-3 中的代码开始：</p>
 <figure>
 <span class="filename">Filename: src/lib.rs</span>
@@ -300,7 +300,7 @@ $ mv src/server.rs src/network
 </code></pre>
 <p>在这个例子中，仍然有这三个模块，<code>client</code>、<code>network</code>和<code>network::client</code>。如果按照与上面最开始将模块提取到文件中相同的步骤来操作，对于<code>client</code>模块会创建 <em>src/client.rs</em>。对于<code>network</code>模块，会创建 <em>src/network.rs</em>。但是接下来不能将<code>network::client</code>模块提取到 <em>src/client.rs</em> 文件中，因为它已经存在了，对应顶层的<code>client</code>模块！如果将<code>client</code>和<code>network::client</code>的代码都放入 <em>src/client.rs</em> 文件，Rust 将无从可知这些代码是属于<code>client</code>还是<code>network::client</code>的。</p>
 <p>因此，一旦想要将<code>network</code>模块的子模块<code>network::client</code>提取到一个文件中，需要为<code>network</code>模块新建一个目录替代 <em>src/network.rs</em> 文件。接着<code>network</code>模块的代码将进入 <em>src/network/mod.rs</em> 文件，而子模块<code>network::client</code>将拥有其自己的文件 <em>src/network/client.rs</em>。现在顶层的 <em>src/client.rs</em> 中的代码毫无疑问的都属于<code>client</code>模块。</p>
-<h3>模块文件系统的规则</h3>
+<a class="header" href="#模块文件系统的规则" name="模块文件系统的规则"><h3>模块文件系统的规则</h3></a>
 <p>与文件系统相关的模块规则总结如下：</p>
 <ul>
 <li>如果一个叫做<code>foo</code>的模块没有子模块，应该将<code>foo</code>的声明放入叫做 <em>foo.rs</em> 的文件中。</li>

@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>`match`控制流运算符 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2><code>match</code>控制流运算符</h2>
+                    <a class="header" href="#match控制流运算符" name="match控制流运算符"><h2><code>match</code>控制流运算符</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch06-02-match.md">ch06-02-match.md</a>
 <br>
@@ -121,7 +121,7 @@ fn value_in_cents(coin: Coin) -&gt; i32 {
     }
 }
 </code></pre>
-<h3>绑定值的模式</h3>
+<a class="header" href="#绑定值的模式" name="绑定值的模式"><h3>绑定值的模式</h3></a>
 <p>匹配分支的另一个有用的功能是可以绑定匹配的模式的部分值。这也就是如何从枚举成员中提取值。</p>
 <p>作为一个例子，让我们修改枚举的一个成员来存放数据。1999 年到 2008 年间，美帝在 25 美分的硬币的一侧为 50 个州每一个都印刷了不同的设计。其他的硬币都没有这种区分州的设计，所以只有这些 25 美分硬币有特殊的价值。可以将这些信息加入我们的<code>enum</code>，通过改变<code>Quarter</code>成员来包含一个<code>State</code>值，列表 6-4 中完成了这些修改：</p>
 <figure>
@@ -172,7 +172,7 @@ fn value_in_cents(coin: Coin) -&gt; i32 {
 }
 </code></pre>
 <p>如果调用<code>value_in_cents(Coin::Quarter(UsState::Alaska))</code>，<code>coin</code>将是<code>Coin::Quarter(UsState::Alaska)</code>。当将值与每个分支相比较时，没有分支会匹配知道遇到<code>Coin::Quarter(state)</code>。这时，<code>state</code>绑定的将会是值<code>UsState::Alaska</code>。接着就可以在<code>println!</code>表达式中使用这个绑定了，像这样就可以获取<code>Coin</code>枚举的<code>Quarter</code>成员中内部的州的值。</p>
-<h3>匹配<code>Option&lt;T&gt;</code></h3>
+<a class="header" href="#匹配optiont" name="匹配optiont"><h3>匹配<code>Option&lt;T&gt;</code></h3></a>
 <p>在之前的部分在使用<code>Option&lt;T&gt;</code>时我们想要从<code>Some</code>中取出其内部的<code>T</code>值；也可以像处理<code>Coin</code>枚举那样使用<code>match</code>处理<code>Option&lt;T&gt;</code>！与其直接比较硬币，我们将比较<code>Option&lt;T&gt;</code>的成员，不过<code>match</code>表达式的工作方式保持不变。</p>
 <p>比如想要编写一个函数，它获取一个<code>Option&lt;i32&gt;</code>并且如果其中有一个值，将其加一。如果其中没有值，函数应该返回<code>None</code>值并不尝试执行任何操作。</p>
 <p>编写这个函数非常简单，得益于<code>match</code>，它将看起来像列表 6-5 中这样：</p>
@@ -192,7 +192,7 @@ let none = plus_one(None);
 <p>Listing 6-5: A function that uses a <code>match</code> expression on an <code>Option&lt;i32&gt;</code></p>
 </figcaption>
 </figure>
-<h4>匹配<code>Some(T)</code></h4>
+<a class="header" href="#匹配somet" name="匹配somet"><h4>匹配<code>Some(T)</code></h4></a>
 <p>更仔细的检查<code>plus_one</code>的第一行操作。当调用<code>plus_one(five)</code>时，<code>plus_one</code>函数体中的<code>x</code>将会是值<code>Some(5)</code>。接着将其与每个分支比较。</p>
 <pre><code class="language-rust,ignore">None =&gt; None,
 </code></pre>
@@ -200,13 +200,13 @@ let none = plus_one(None);
 <pre><code class="language-rust,ignore">Some(i) =&gt; Some(i + 1),
 </code></pre>
 <p><code>Some(5)</code>与<code>Some(i)</code>匹配吗？为什么不呢！他们是相同的成员。<code>i</code>绑定了<code>Some</code>中包含的值，所以<code>i</code>的值是<code>5</code>。接着匹配分支的代码被执行，所以我们将<code>i</code>的值加一并返回一个含有值<code>6</code>的新<code>Some</code>。</p>
-<h4>匹配<code>None</code></h4>
+<a class="header" href="#匹配none" name="匹配none"><h4>匹配<code>None</code></h4></a>
 <p>接着考虑下列表 6-5 中<code>plus_one</code>的第二个调用，这里<code>x</code>是<code>None</code>。我们进入<code>match</code>并与第一个分支相比较。</p>
 <pre><code class="language-rust,ignore">None =&gt; None,
 </code></pre>
 <p>匹配上了！这里没有值来加一，所以程序结束并返回<code>=&gt;</code>右侧的值<code>None</code>，因为第一个分支就匹配到了，其他的分支将不再比较。</p>
 <p>将<code>match</code>与枚举相结合在很多场景中都是有用的。你会在 Rust 代码中看到很多这样的模式：<code>match</code>一个枚举，绑定其中的值到一个变量，接着根据其值执行代码。这在一开有点复杂，不过一旦习惯了，你将希望所有语言都拥有它！这一直是用户的最爱。</p>
-<h3>匹配是穷尽的</h3>
+<a class="header" href="#匹配是穷尽的" name="匹配是穷尽的"><h3>匹配是穷尽的</h3></a>
 <p><code>match</code>还有另一方面需要讨论。考虑一下<code>plus_one</code>函数的这个版本：</p>
 <pre><code class="language-rust,ignore">fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
     match x {
@@ -222,7 +222,7 @@ let none = plus_one(None);
   |               ^ pattern `None` not covered
 </code></pre>
 <p>Rust 知道我们没有覆盖所有可能的情况甚至知道那些模式被忘记了！Rust 中的匹配是<strong>穷尽的</strong>（*exhaustive）：必须穷举到最后的可能性来使代码有效。特别的在这个<code>Option&lt;T&gt;</code>的例子中，Rust 防止我们忘记明确的处理<code>None</code>的情况，这使我们免于假设拥有一个实际上为空的值，这造成了之前提到过的价值亿万的错误。</p>
-<h3><code>_</code>通配符</h3>
+<a class="header" href="#_通配符" name="_通配符"><h3><code>_</code>通配符</h3></a>
 <p>Rust 也提供了一个模式用于不想列举出所有可能值的场景。例如，<code>u8</code>可以拥有 0 到 255 的有效的值，如果我们只关心 1、3、5 和 7 这几个值，就并不想必须列出 0、2、4、6、8、9 一直到 255 的值。所幸我们不必这么做：可以使用特殊的模式<code>_</code>替代：</p>
 <pre><code class="language-rust">let some_u8_value = 0u8;
 match some_u8_value {

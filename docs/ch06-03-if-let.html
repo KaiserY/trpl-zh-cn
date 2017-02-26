@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>`if let`简单控制流 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2><code>if let</code>简单控制流</h2>
+                    <a class="header" href="#if-let简单控制流" name="if-let简单控制流"><h2><code>if let</code>简单控制流</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch06-03-if-let.md">ch06-03-if-let.md</a>
 <br>
@@ -138,7 +138,7 @@ if let Coin::Quarter(state) = coin {
 }
 </code></pre>
 <p>如果你的程序遇到一个使用<code>match</code>表达起来过于啰嗦的逻辑，记住<code>if let</code>也在你的 Rust 工具箱中。</p>
-<h2>总结</h2>
+<a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>现在我们涉及到了如何使用枚举来创建有一系列可列举值的自定义类型。我们也展示了标准库的<code>Option&lt;T&gt;</code>类型是如何帮助你利用类型系统来避免出错。当枚举值包含数据时，你可以根据需要处理多少情况来选择使用<code>match</code>或<code>if let</code>来获取并使用这些值。</p>
 <p>你的 Rust 程序现在能够使用结构体和枚举在自己的作用域内表现其内容了。在你的 API 中使用自定义类型保证了类型安全：编译器会确保你的函数只会得到它期望的类型的值。</p>
 <p>为了向你的用户提供一个组织良好的 API，它使用直观且只向用户暴露他们确实需要的部分，那么让我们转向 Rust 的模块系统吧。</p>

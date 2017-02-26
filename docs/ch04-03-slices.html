@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>Slices - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Slices</h2>
+                    <a class="header" href="#slices" name="slices"><h2>Slices</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch04-03-slices.md">ch04-03-slices.md</a>
 <br>
@@ -150,7 +150,7 @@ changing the <code>String</code> contents</p>
 </code></pre>
 <p>现在我们跟踪了一个开始索引<strong>和</strong>一个结尾索引，同时有了更多从数据的某个特定状态计算而来的值，他们也完全没有与这个状态相关联。现在有了三个飘忽不定的不相关变量都需要被同步。</p>
 <p>幸运的是，Rust 为这个问题提供了一个解决方案：字符串 slice。</p>
-<h3>字符串 slice</h3>
+<a class="header" href="#字符串-slice" name="字符串-slice"><h3>字符串 slice</h3></a>
 <p><strong>字符串 slice</strong>（<em>string slice</em>）是<code>String</code>中一部分值的引用，它看起来像这样：</p>
 <pre><code class="language-rust">let s = String::from(&quot;hello world&quot;);
 
@@ -225,12 +225,12 @@ fn main() {
 ^
 </code></pre>
 <p>回忆一下借用规则，当拥有某值的不可变引用时。不能再获取一个可变引用。因为<code>clear</code>需要清空<code>String</code>，它尝试获取一个可变引用，它失败了。Rust 不仅使得我们的 API 简单易用，也在编译时就消除了一整个错误类型！</p>
-<h4>字符串字面值就是 slice</h4>
+<a class="header" href="#字符串字面值就是-slice" name="字符串字面值就是-slice"><h4>字符串字面值就是 slice</h4></a>
 <p>还记得我们讲到过字符串字面值被储存在二进制文件中吗。现在知道 slice 了，我们就可以正确的理解字符串字面值了：</p>
 <pre><code class="language-rust">let s = &quot;Hello, world!&quot;;
 </code></pre>
 <p>这里<code>s</code>的类型是<code>&amp;str</code>：它是一个指向二进制程序特定位置的 slice。这也就是为什么字符串字面值是不可变的；<code>&amp;str</code>是一个不可变引用。</p>
-<h4>字符串 slice 作为参数</h4>
+<a class="header" href="#字符串-slice-作为参数" name="字符串-slice-作为参数"><h4>字符串 slice 作为参数</h4></a>
 <p>在知道了能够获取字面值和<code>String</code>的 slice 后引起了另一个对<code>first_word</code>的改进，这是它的签名：</p>
 <pre><code class="language-rust,ignore">fn first_word(s: &amp;String) -&gt; &amp;str {
 </code></pre>
@@ -266,7 +266,7 @@ fn main() {
     let word = first_word(my_string_literal);
 }
 </code></pre>
-<h3>其他 slice</h3>
+<a class="header" href="#其他-slice" name="其他-slice"><h3>其他 slice</h3></a>
 <p>字符串 slice，正如你想象的那样，是针对字符串的。不过也有更通用的 slice 类型。考虑一下这个数组：</p>
 <pre><code class="language-rust">let a = [1, 2, 3, 4, 5];
 </code></pre>
@@ -276,7 +276,7 @@ fn main() {
 let slice = &amp;a[1..3];
 </code></pre>
 <p>这个 slice 的类型是<code>&amp;[i32]</code>。它跟以跟字符串 slice 一样的方式工作，通过储存第一个元素的引用和一个长度。你可以对其他所有类型的集合使用这类 slice。第八章讲到 vector 时会详细讨论这些集合。</p>
-<h2>总结</h2>
+<a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>所有权、借用和 slice 这些概念是 Rust 何以在编译时保障内存安全的关键所在。Rust 像其他系统编程语言那样给予你对内存使用的控制，但拥有数据所有者在离开作用域后自动清除其数据的功能意味着你无须额外编写和调试相关的控制代码。</p>
 <p>所有权系统影响了 Rust 中其他很多部分如何工作，所以我们会继续讲到这些概念，贯穿本书的余下内容。让我们开始下一个章节，来看看如何将多份数据组合进一个<code>struct</code>中。</p>
 

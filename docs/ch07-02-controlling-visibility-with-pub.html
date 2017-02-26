@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>使用`pub`控制可见性 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>使用<code>pub</code>控制可见性</h2>
+                    <a class="header" href="#使用pub控制可见性" name="使用pub控制可见性"><h2>使用<code>pub</code>控制可见性</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch07-02-controlling-visibility-with-pub.md">ch07-02-controlling-visibility-with-pub.md</a>
 <br>
@@ -113,7 +113,7 @@ fn main() {
 </code></pre>
 <p>啊哈！这告诉了我们<code>client</code>模块是私有的，这也正是那些警告的症结所在。这也是我们第一次在 Rust 上下文中涉及到<strong>公有</strong>和<strong>私有</strong>的概念。Rust 所有代码的默认状态是私有的：除了自己之外别人不允许使用这些代码。如果不在自己的项目中使用一个私有函数，因为程序自身是唯一允许使用这个函数的代码，Rust 会警告说函数未被使用。</p>
 <p>一旦我们指定一个像<code>client::connect</code>的函数为公有，不光二进制 crate 中的函数调用会被允许，函数未被使用的警告也会消失。将其标记为公有让 Rust 知道了我们意在使函数在我们程序的外部被使用。现在这个可能的理论上的外部可用性使 Rust 认为这个函数“已经被使用”。因此。当某项被标记为公有，Rust 不再要求它在程序自身被使用并停止警告某项未被使用。</p>
-<h3>标记函数为公有</h3>
+<a class="header" href="#标记函数为公有" name="标记函数为公有"><h3>标记函数为公有</h3></a>
 <p>为了告诉 Rust 某项为公有，在想要标记为公有的项的声明开头加上<code>pub</code>关键字。现在我们将致力于修复<code>client::connect</code>未被使用的警告，以及二进制 crate 中“模块<code>client</code>是私有的”的错误。像这样修改 <em>src/lib.rs</em> 使<code>client</code>模块公有：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust,ignore">pub mod client;
@@ -182,13 +182,13 @@ pub mod network;
   | ^
 </code></pre>
 <p>只剩一个警告了！尝试自食其力修改它吧！</p>
-<h3>私有性规则</h3>
+<a class="header" href="#私有性规则" name="私有性规则"><h3>私有性规则</h3></a>
 <p>总的来说，有如下项的可见性规则：</p>
 <ol>
 <li>如果一个项是公有的，它能被任何父模块访问</li>
 <li>如果一个项是私有的，它只能被当前模块或其子模块访问</li>
 </ol>
-<h3>私有性示例</h3>
+<a class="header" href="#私有性示例" name="私有性示例"><h3>私有性示例</h3></a>
 <p>让我们看看更多例子作为练习。创建一个新的库项目并在新项目的 <em>src/lib.rs</em> 输入列表 7-5 中的代码：</p>
 <figure>
 <span class="filename">Filename: src/lib.rs</span>
@@ -217,12 +217,12 @@ incorrect</p>
 </figcaption>
 </figure>
 <p>在尝试编译这些代码之前，猜测一下<code>try_me</code>函数的哪一行会出错。接着编译项目来看看是否猜对了，然后继续阅读后面关于错误的讨论！</p>
-<h4>检查错误</h4>
+<a class="header" href="#检查错误" name="检查错误"><h4>检查错误</h4></a>
 <p><code>try_me</code>函数位于项目的根模块。叫做<code>outermost</code>的模块是私有的，不过第二条私有性规则说明<code>try_me</code>函数允许访问<code>outermost</code>模块，因为<code>outermost</code>位于当前（根）模块，<code>try_me</code>也是。</p>
 <p><code>outermost::middle_function</code>的调用是正确的。因为<code>middle_function</code>是公有的，而<code>try_me</code>通过其父模块访问<code>middle_function</code>，<code>outermost</code>。根据上一段的规则我们可以确定这个模块是可访问的。</p>
 <p><code>outermost::middle_secret_function</code>的调用会造成一个编译错误。<code>middle_secret_function</code>是私有的，所以第二条（私有性）规则生效了。根模块既不是<code>middle_secret_function</code>的当前模块（<code>outermost</code>是），也不是<code>middle_secret_function</code>当前模块的子模块。</p>
 <p>叫做<code>inside</code>的模块是私有的且没有子模块，所以它只能被当前模块访问，<code>outermost</code>。这意味着<code>try_me</code>函数不允许调用<code>outermost::inside::inner_function</code>或<code>outermost::inside::secret_function</code>任何一个。</p>
-<h4>修改错误</h4>
+<a class="header" href="#修改错误" name="修改错误"><h4>修改错误</h4></a>
 <p>这里有一些尝试修复错误的代码修改意见。在你尝试他们之前，猜测一下他们哪个能修复错误，接着编译查看你是否猜对了，并结合私有性规则理解为什么。</p>
 <ul>
 <li>如果<code>inside</code>模块是公有的？</li>

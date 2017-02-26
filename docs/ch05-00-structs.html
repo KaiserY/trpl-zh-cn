@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rust 程序设计语言 中文版</title>
+        <title>结构体 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust 程序设计语言 中文版">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <base href="">
@@ -59,7 +59,7 @@
                         <i id="theme-toggle" class="fa fa-paint-brush"></i>
                     </div>
 
-                    <h1 class="menu-title">Rust 程序设计语言 中文版</h1>
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
 
                     <div class="right-buttons">
                         <i id="print-button" class="fa fa-print" title="Print this book"></i>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h1>结构体</h1>
+                    <a class="header" href="#结构体" name="结构体"><h1>结构体</h1></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch05-00-structs.md">ch05-00-structs.md</a>
 <br>
@@ -104,7 +104,7 @@ let user1 = User {
 };
 </code></pre>
 <p>为了从结构体中获取某个值，可以使用点号。如果我们只想要用户的邮箱地址，可以用<code>user1.email</code>。</p>
-<h2>结构体数据的所有权</h2>
+<a class="header" href="#结构体数据的所有权" name="结构体数据的所有权"><h2>结构体数据的所有权</h2></a>
 <p>在列表 5-1 中的<code>User</code>结构体的定义中，我们使用了自身拥有所有权的<code>String</code>类型而不是<code>&amp;str</code>字符串 slice 类型。这是一个有意而为之的选择，因为我们想要这个结构体拥有它所有的数据，为此只要整个结构体是有效的话其数据也应该是有效的。</p>
 <p>可以使结构体储存被其他对象拥有的数据的引用，不过这么做的话需要用上<strong>生命周期</strong>（<em>lifetimes</em>），这是第十章会讨论的一个 Rust 的功能。生命周期确保结构体引用的数据有效性跟结构体本身保持一致。如果你尝试在结构体中储存一个引用而不指定生命周期，比如这样：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -138,7 +138,7 @@ error[E0106]: missing lifetime specifier
   |            ^ expected lifetime parameter
 </code></pre>
 <p>第十章会讲到如何修复这个问题以便在结构体中储存引用，不过现在，通过通过从像<code>&amp;str</code>这样的引用切换到像<code>String</code>这类拥有所有权的类型来修改修改这个错误。</p>
-<h2>一个示例程序</h2>
+<a class="header" href="#一个示例程序" name="一个示例程序"><h2>一个示例程序</h2></a>
 <p>为了理解何时会需要使用结构体，让我们编写一个计算长方形面积的程序。我们会从单独的变量开始，接着重构程序直到使用结构体替代他们为止。</p>
 <p>使用 Cargo 来创建一个叫做 <em>rectangles</em> 的新二进制程序，它会获取一个长方形以像素为单位的长度和宽度并计算它的面积。列表 5-2 中是项目的 <em>src/main.rs</em> 文件中为此实现的一个小程序：</p>
 <figure>
@@ -165,7 +165,7 @@ width in separate variables</p>
 <p>尝试使用<code>cargo run</code>运行程序：</p>
 <pre><code>The area of the rectangle is 1500 square pixels.
 </code></pre>
-<h3>使用元组重构</h3>
+<a class="header" href="#使用元组重构" name="使用元组重构"><h3>使用元组重构</h3></a>
 <p>我们的小程序能正常运行；它调用<code>area</code>函数用长方形的每个维度来计算出面积。不过我们可以做的更好。长度和宽度是相关联的，因为他们一起才能定义一个长方形。</p>
 <p>这个做法的问题突显在<code>area</code>的签名上：</p>
 <pre><code class="language-rust,ignore">fn area(length: u32, width: u32) -&gt; u32 {
@@ -198,7 +198,7 @@ we're in libreoffice /Carol -->
 <pre><code class="language-rust,ignore">dimensions.0 * dimensions.1
 </code></pre>
 <p>在面积计算时混淆长宽并没有什么问题，不过当在屏幕上绘制长方形时就有问题了！我们将不得不记住元组索引<code>0</code>是<code>length</code>而<code>1</code>是<code>width</code>。如果其他人要使用这些代码，他们也不得不搞清楚后再记住。容易忘记或者混淆这些值而造成错误，因为我们没有表达我们代码中数据的意义。</p>
-<h3>使用结构体重构：增加更多意义</h3>
+<a class="header" href="#使用结构体重构增加更多意义" name="使用结构体重构增加更多意义"><h3>使用结构体重构：增加更多意义</h3></a>
 <p>现在引入结构体。我们可以将元组转换为一个有整体名称而且每个部分也有对应名字的数据类型，如列表 5-4 所示：</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -228,7 +228,7 @@ fn area(rectangle: &amp;Rectangle) -&gt; u32 {
 <p>这里我们定义了一个结构体并称其为<code>Rectangle</code>。在<code>{}</code>中定义了字段<code>length</code>和<code>width</code>，都是<code>u32</code>类型的。接着在<code>main</code>中，我们创建了一个长度为 50 和宽度为 30 的<code>Rectangle</code>的具体实例。</p>
 <p>函数<code>area</code>现在被定义为接收一个名叫<code>rectangle</code>的参数，它的类型是一个结构体<code>Rectangle</code>实例的不可变借用。第四章讲到过，我们希望借用结构体而不是获取它的所有权这样<code>main</code>函数就可以保持<code>rect1</code>的所有权并继续使用它，所以这就是为什么在函数签名和调用的地方会有<code>&amp;</code>。</p>
 <p><code>area</code>函数访问<code>Rectangle</code>的<code>length</code>和<code>width</code>字段。<code>area</code>的签名现在明确的表明了我们的意图：计算一个<code>Rectangle</code>的面积，通过其<code>length</code>和<code>width</code>字段。这表明了长度和宽度是相互联系的，并为这些值提供了描述性的名称而不是使用元组的索引值<code>0</code>和<code>1</code>。这是明确性的胜利。</p>
-<h3>通过衍生 trait 增加实用功能</h3>
+<a class="header" href="#通过衍生-trait-增加实用功能" name="通过衍生-trait-增加实用功能"><h3>通过衍生 trait 增加实用功能</h3></a>
 <p>如果能够在调试程序时打印出<code>Rectangle</code>实例来查看其所有字段的值就更好了。列表 5-5 尝试像往常一样使用<code>println!</code>宏：</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
