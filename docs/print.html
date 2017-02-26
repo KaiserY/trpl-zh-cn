@@ -4820,7 +4820,175 @@ values of different types</p>
 </figure>
 <p>现在所有这些<code>Point</code>实例都是被允许的了！你可以在定义中使用任意多的泛型类型参数，不过太多的话代码将难以阅读和理解。如果你处于一个需要很多泛型类型的位置，这可能是一个需要重新组织代码并分隔成一些更小部分的信号。</p>
 <a class="header" href="#枚举定义中的泛型数据类型" name="枚举定义中的泛型数据类型"><h3>枚举定义中的泛型数据类型</h3></a>
-<p>类似于结构体，枚举也可以在其成员中存放泛型数据类型。</p>
+<p>类似于结构体，枚举也可以在其成员中存放泛型数据类型。第六章我们使用过了标准库提供的<code>Option&lt;T&gt;</code>枚举，现在这个定义看起来就更容易理解了。让我们再看看：</p>
+<pre><code class="language-rust">enum Option&lt;T&gt; {
+    Some(T),
+    None,
+}
+</code></pre>
+<p>换句话说<code>Option&lt;T&gt;</code>是一个拥有泛型<code>T</code>的枚举。它有两个成员：<code>Some</code>，它存放了一个类型<code>T</code>的值，和不存在任何值的<code>None</code>。标准库中只有这一个定义来支持创建任何具体类型的枚举值。“一个可能的值”是一个比具体类型的值更抽象的概念，而 Rust 允许我们不引入重复就能表现抽象的概念。</p>
+<p>枚举也可以拥有多个泛型类型。第九章使用过的<code>Result</code>枚举定义就是一个这样的例子：</p>
+<pre><code class="language-rust">enum Result&lt;T, E&gt; {
+    Ok(T),
+    Err(E),
+}
+</code></pre>
+<p><code>Result</code>枚举有两个泛型类型，<code>T</code>和<code>E</code>。<code>Result</code>有两个成员：<code>Ok</code>，它存放一个类型<code>T</code>的值，而<code>Err</code>则存放一个类型<code>E</code>的值。这个定义使得<code>Result</code>枚举能很方便的表达任何可能成功（返回<code>T</code>类型的值）也可能失败（返回<code>E</code>类型的值）的操作。回忆一下列表 9-2 中打开一个文件的场景，当文件被成功打开<code>T</code>被放入了<code>std::fs::File</code>类型而当打开文件出现问题时<code>E</code>被放入了<code>std::io::Error</code>类型。</p>
+<p>当发现代码中有多个只有存放的值的类型有所不同的结构体或枚举定义时，你就应该像之前的函数定义中那样引入泛型类型来减少重复。</p>
+<a class="header" href="#方法定义中的枚举数据类型" name="方法定义中的枚举数据类型"><h3>方法定义中的枚举数据类型</h3></a>
+<p>可以像第五章介绍的那样来为其定义中带有泛型的结构体或枚举实现方法。列表 10-9 中展示了列表 10-6 中定义的结构体<code>Point&lt;T&gt;</code>。接着我们在<code>Point&lt;T&gt;</code>上定义了一个叫做<code>x</code>的方法来返回字段<code>x</code>中数据的引用：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">struct Point&lt;T&gt; {
+    x: T,
+    y: T,
+}
+
+impl&lt;T&gt; Point&lt;T&gt; {
+    fn x(&amp;self) -&gt; &amp;T {
+        &amp;self.x
+    }
+}
+
+fn main() {
+    let p = Point { x: 5, y: 10 };
+
+    println!(&quot;p.x = {}&quot;, p.x());
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-9: Implementing a method named <code>x</code> on the <code>Point&lt;T&gt;</code> struct that
+will return a reference to the <code>x</code> field, which is of type <code>T</code>.</p>
+</figcaption>
+</figure>
+<p>注意必须在<code>impl</code>后面声明<code>T</code>，这样就可以在<code>Point&lt;T&gt;</code>上实现的方法中使用它了。</p>
+<p>结构体定义中的泛型类型参数并不总是与结构体方法签名中使用的泛型是同一类型。列表 10-10 中在列表 10-8 中的结构体<code>Point&lt;T, U&gt;</code>上定义了一个方法<code>mixup</code>。这个方法获取另一个<code>Point</code>作为参数，而它可能与调用<code>mixup</code>的<code>self</code>是不同的<code>Point</code>类型。这个方法用<code>self</code>的<code>Point</code>类型的<code>x</code>值（类型<code>T</code>）和参数的<code>Point</code>类型的<code>y</code>值（类型<code>W</code>）来创建一个新<code>Point</code>类型的实例：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">struct Point&lt;T, U&gt; {
+    x: T,
+    y: U,
+}
+
+impl&lt;T, U&gt; Point&lt;T, U&gt; {
+    fn mixup&lt;V, W&gt;(&amp;self, other: &amp;Point&lt;V, W&gt;) -&gt; Point&lt;T, W&gt; {
+        Point {
+            x: self.x,
+            y: other.y,
+        }
+    }
+}
+
+fn main() {
+    let p1 = Point { x: 5, y: 10.4 };
+    let p2 = Point { x: &quot;Hello&quot;, y: 'c'};
+
+    let p3 = p1.mixup(p2);
+
+    println!(&quot;p3.x = {}, p3.y = {}&quot;, p3.x, p3.y);
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-10: Methods that use different generic types than their struct's
+definition</p>
+</figcaption>
+</figure>
+<p>在<code>main</code>函数中，定义了一个有<code>i32</code>类型的<code>x</code>（其值为<code>5</code>）和<code>f64</code>的<code>y</code>（其值为<code>10.4</code>）的<code>Point</code>。<code>p2</code>则是一个有着字符串 slice 类型的<code>x</code>（其值为<code>&quot;Hello&quot;</code>）和<code>char</code>类型的<code>y</code>（其值为<code>c</code>）的<code>Point</code>。在<code>p1</code>上以<code>p2</code>调用<code>mixup</code>会返回一个<code>p3</code>，它会有一个<code>i32</code>类型的<code>x</code>，因为<code>x</code>来自<code>p1</code>，并拥有一个<code>char</code>类型的<code>y</code>，因为<code>y</code>来自<code>p2</code>。<code>println!</code>会打印出<code>p3.x = 5, p3.y = c</code>。</p>
+<p>注意泛型参数<code>T</code>和<code>U</code>声明于<code>impl</code>之后，因为他们于结构体定义相对应。而泛型参数<code>V</code>和<code>W</code>声明于<code>fn mixup</code>之后，因为他们只是相对于方法本身的。</p>
+<a class="header" href="#泛型代码的性能" name="泛型代码的性能"><h3>泛型代码的性能</h3></a>
+<p>在阅读本部分的内容的同时你可能会好奇使用泛型类型参数是否会有运行时消耗。好消息是：Rust 实现泛型泛型的方式意味着你的代码使用泛型类型参数相比指定具体类型并没有任何速度上的损失。</p>
+<p>Rust 通过在编译时进行泛型代码的<strong>单态化</strong>（<em>monomorphization</em>）来保证效率。单态化是一个将泛型代码转变为实际放入的具体类型的特定代码的过程。</p>
+<p>编译器所做的工作正好与列表 10-5 中我们创建泛型函数的步骤相反。编译器寻找所有泛型代码被调用的位置并使用泛型代码针对具体类型生成代码。</p>
+<p>让我们看看一个使用标准库中<code>Option</code>枚举的例子：</p>
+<pre><code class="language-rust">let integer = Some(5);
+let float = Some(5.0);
+</code></pre>
+<p>当 Rust 编译这些代码的时候，它会进行单态化。编译器会读取传递给<code>Option</code>的值并发现有两种<code>Option&lt;T&gt;</code>：一个对应<code>i32</code>另一个对应<code>f64</code>。为此，它会将泛型定义<code>Option&lt;T&gt;</code>展开为<code>Option_i32</code>和<code>Option_f64</code>，接着将泛型定义替换为这两个具体的定义。</p>
+<p>编译器生成的单态化版本的代码看起来像这样，并包含将泛型<code>Option</code>替换为编译器创建的具体定义后的用例代码：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">enum Option_i32 {
+    Some(i32),
+    None,
+}
+
+enum Option_f64 {
+    Some(f64),
+    None,
+}
+
+fn main() {
+    let integer = Option_i32::Some(5);
+    let float = Option_f64::Some(5.0);
+}
+</code></pre>
+<p>我们可以使用泛型来编写不重复的代码，而 Rust 会将会为每一个实例编译其特定类型的代码。这意味着在使用泛型时没有运行时开销；当代码运行，它的执行效率就跟好像手写每个具体定义的重复代码一样。这个单态化过程正是 Rust 泛型在运行时极其高效的原因。</p>
+<a class="header" href="#trait定义共享的行为" name="trait定义共享的行为"><h2>trait：定义共享的行为</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch10-02-traits.md">ch10-02-traits.md</a>
+<br>
+commit 709eb1eaca48864fafd9263042f5f9d9d6ffe08d</p>
+</blockquote>
+<p>trait 允许我们进行另一种抽象：他们让我们可以抽象类型所通用的行为。<em>trait</em> 告诉 Rust 编译器某个特定类型拥有可能与其他类型共享的功能。在使用泛型类型参数的场景中，可以使用 <em>trait bounds</em> 在编译时指定泛型可以是任何实现了某个 trait 的类型，并由此在这个场景下拥有我们希望的功能。</p>
+<blockquote>
+<p>注意：<em>trait</em> 类似于其他语言中的常被称为<strong>接口</strong>（<em>interfaces</em>）的功能，虽然有一些不同。</p>
+</blockquote>
+<a class="header" href="#定义-trait" name="定义-trait"><h3>定义 trait</h3></a>
+<p>一个类型的行为由其可供调用的方法构成。如果可以对不同类型调用相同的方法的话，这些类型就可以共享相同的行为了。trait 定义是一种将方法签名组合起来的方法，目的是定义一个实现某些目的所必须行为的集合。</p>
+<p>例如，这里有多个存放了不同类型和属性文本的结构体：结构体<code>NewsArticle</code>用于存放发生于世界各地的新闻故事，而结构体<code>Tweet</code>最多只能存放 140 个字符的内容，以及像是否转推或是否是对推友的回复这样的元数据。</p>
+<p>我们想要创建一个多媒体聚合库用来显示可能储存在<code>NewsArticle</code>或<code>Tweet</code>实例中的数据的总结。每一个结构体都需要的行为是他们是能够被总结的，这样的话就可以调用实例的<code>summary</code>方法来请求总结。列表 10-11 中展示了一个表现这个概念的<code>Summarizable</code> trait 的定义：</p>
+<figure>
+<span class="filename">Filename: lib.rs</span>
+<pre><code class="language-rust">pub trait Summarizable {
+    fn summary(&amp;self) -&gt; String;
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-11: Definition of a <code>Summarizable</code> trait that consists of the
+behavior provided by a <code>summary</code> method</p>
+</figcaption>
+</figure>
+<p>使用<code>trait</code>关键字来定义一个 trait，后面是 trait 的名字，在这个例子中是<code>Summarizable</code>。在大括号中声明描述实现这个 trait 的类型所需要的行为的方法签名，在这个例子中是是<code>fn summary(&amp;self) -&gt; String</code>。在方法签名后跟分号而不是在大括号中提供其实现。接着每一个实现这个 trait 的类型都需要提供其自定义行为的方法体，编译器也会确保任何实现<code>Summarizable</code> trait 的类型都拥有与这个签名的定义完全一致的<code>summary</code>方法。</p>
+<p>trait 体中可以有多个方法，一行一个方法签名且都以分号结尾。</p>
+<a class="header" href="#为类型实现-trait" name="为类型实现-trait"><h3>为类型实现 trait</h3></a>
+<p>现在我们定义了<code>Summarizable</code> trait，接着就可以在多媒体聚合库中需要拥有这个行为的类型上实现它了。列表 10-12 中展示了<code>NewsArticle</code>结构体上<code>Summarizable</code> trait 的一个实现，它使用标题、作者和创建的位置作为<code>summary</code>的返回值。对于<code>Tweet</code>结构体，我们选择将<code>summary</code>定义为用户名后跟推文的全部文本作为返回值，并假设推文内容已经被限制为 140 字符以内。</p>
+<figure>
+<span class="filename">Filename: lib.rs</span>
+<pre><code class="language-rust"># pub trait Summarizable {
+#     fn summary(&amp;self) -&gt; String;
+# }
+#
+pub struct NewsArticle {
+    pub headline: String,
+    pub location: String,
+    pub author: String,
+    pub content: String,
+}
+
+impl Summarizable for NewsArticle {
+    fn summary(&amp;self) -&gt; String {
+        format!(&quot;{}, by {} ({})&quot;, self.headline, self.author, self.location)
+    }
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+    pub reply: bool,
+    pub retweet: bool,
+}
+
+impl Summarizable for Tweet {
+    fn summary(&amp;self) -&gt; String {
+        format!(&quot;{}: {}&quot;, self.username, self.content)
+    }
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-12: Implementing the <code>Summarizable</code> trait on the <code>NewsArticle</code> and
+<code>Tweet</code> types</p>
+</figcaption>
+</figure>
+<p>在类型上实现 trait 类似与实现与 trait 无关的方法。区别在于<code>impl</code>关键字之后，我们提供需要实现 trait 的名称，接着是<code>for</code>和需要实现 trait 的类型的名称。</p>
 
                 </div>
 

@@ -237,4 +237,145 @@ values of different types
 
 ### 枚举定义中的泛型数据类型
 
-类似于结构体，枚举也可以在其成员中存放泛型数据类型。
+类似于结构体，枚举也可以在其成员中存放泛型数据类型。第六章我们使用过了标准库提供的`Option<T>`枚举，现在这个定义看起来就更容易理解了。让我们再看看：
+
+```rust
+enum Option<T> {
+    Some(T),
+    None,
+}
+```
+
+换句话说`Option<T>`是一个拥有泛型`T`的枚举。它有两个成员：`Some`，它存放了一个类型`T`的值，和不存在任何值的`None`。标准库中只有这一个定义来支持创建任何具体类型的枚举值。“一个可能的值”是一个比具体类型的值更抽象的概念，而 Rust 允许我们不引入重复就能表现抽象的概念。
+
+枚举也可以拥有多个泛型类型。第九章使用过的`Result`枚举定义就是一个这样的例子：
+
+```rust
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+```
+
+`Result`枚举有两个泛型类型，`T`和`E`。`Result`有两个成员：`Ok`，它存放一个类型`T`的值，而`Err`则存放一个类型`E`的值。这个定义使得`Result`枚举能很方便的表达任何可能成功（返回`T`类型的值）也可能失败（返回`E`类型的值）的操作。回忆一下列表 9-2 中打开一个文件的场景，当文件被成功打开`T`被放入了`std::fs::File`类型而当打开文件出现问题时`E`被放入了`std::io::Error`类型。
+
+当发现代码中有多个只有存放的值的类型有所不同的结构体或枚举定义时，你就应该像之前的函数定义中那样引入泛型类型来减少重复。
+
+### 方法定义中的枚举数据类型
+
+可以像第五章介绍的那样来为其定义中带有泛型的结构体或枚举实现方法。列表 10-9 中展示了列表 10-6 中定义的结构体`Point<T>`。接着我们在`Point<T>`上定义了一个叫做`x`的方法来返回字段`x`中数据的引用：
+
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+struct Point<T> {
+    x: T,
+    y: T,
+}
+
+impl<T> Point<T> {
+    fn x(&self) -> &T {
+        &self.x
+    }
+}
+
+fn main() {
+    let p = Point { x: 5, y: 10 };
+
+    println!("p.x = {}", p.x());
+}
+```
+
+<figcaption>
+
+Listing 10-9: Implementing a method named `x` on the `Point<T>` struct that
+will return a reference to the `x` field, which is of type `T`.
+
+</figcaption>
+</figure>
+
+注意必须在`impl`后面声明`T`，这样就可以在`Point<T>`上实现的方法中使用它了。
+
+结构体定义中的泛型类型参数并不总是与结构体方法签名中使用的泛型是同一类型。列表 10-10 中在列表 10-8 中的结构体`Point<T, U>`上定义了一个方法`mixup`。这个方法获取另一个`Point`作为参数，而它可能与调用`mixup`的`self`是不同的`Point`类型。这个方法用`self`的`Point`类型的`x`值（类型`T`）和参数的`Point`类型的`y`值（类型`W`）来创建一个新`Point`类型的实例：
+
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+struct Point<T, U> {
+    x: T,
+    y: U,
+}
+
+impl<T, U> Point<T, U> {
+    fn mixup<V, W>(&self, other: &Point<V, W>) -> Point<T, W> {
+        Point {
+            x: self.x,
+            y: other.y,
+        }
+    }
+}
+
+fn main() {
+    let p1 = Point { x: 5, y: 10.4 };
+    let p2 = Point { x: "Hello", y: 'c'};
+
+    let p3 = p1.mixup(p2);
+
+    println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
+}
+```
+
+<figcaption>
+
+Listing 10-10: Methods that use different generic types than their struct's
+definition
+
+</figcaption>
+</figure>
+
+在`main`函数中，定义了一个有`i32`类型的`x`（其值为`5`）和`f64`的`y`（其值为`10.4`）的`Point`。`p2`则是一个有着字符串 slice 类型的`x`（其值为`"Hello"`）和`char`类型的`y`（其值为`c`）的`Point`。在`p1`上以`p2`调用`mixup`会返回一个`p3`，它会有一个`i32`类型的`x`，因为`x`来自`p1`，并拥有一个`char`类型的`y`，因为`y`来自`p2`。`println!`会打印出`p3.x = 5, p3.y = c`。
+
+注意泛型参数`T`和`U`声明于`impl`之后，因为他们于结构体定义相对应。而泛型参数`V`和`W`声明于`fn mixup`之后，因为他们只是相对于方法本身的。
+
+### 泛型代码的性能
+
+在阅读本部分的内容的同时你可能会好奇使用泛型类型参数是否会有运行时消耗。好消息是：Rust 实现泛型泛型的方式意味着你的代码使用泛型类型参数相比指定具体类型并没有任何速度上的损失。
+
+Rust 通过在编译时进行泛型代码的**单态化**（*monomorphization*）来保证效率。单态化是一个将泛型代码转变为实际放入的具体类型的特定代码的过程。
+
+编译器所做的工作正好与列表 10-5 中我们创建泛型函数的步骤相反。编译器寻找所有泛型代码被调用的位置并使用泛型代码针对具体类型生成代码。
+
+让我们看看一个使用标准库中`Option`枚举的例子：
+
+```rust
+let integer = Some(5);
+let float = Some(5.0);
+```
+
+当 Rust 编译这些代码的时候，它会进行单态化。编译器会读取传递给`Option`的值并发现有两种`Option<T>`：一个对应`i32`另一个对应`f64`。为此，它会将泛型定义`Option<T>`展开为`Option_i32`和`Option_f64`，接着将泛型定义替换为这两个具体的定义。
+
+编译器生成的单态化版本的代码看起来像这样，并包含将泛型`Option`替换为编译器创建的具体定义后的用例代码：
+
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+enum Option_i32 {
+    Some(i32),
+    None,
+}
+
+enum Option_f64 {
+    Some(f64),
+    None,
+}
+
+fn main() {
+    let integer = Option_i32::Some(5);
+    let float = Option_f64::Some(5.0);
+}
+```
+
+我们可以使用泛型来编写不重复的代码，而 Rust 会将会为每一个实例编译其特定类型的代码。这意味着在使用泛型时没有运行时开销；当代码运行，它的执行效率就跟好像手写每个具体定义的重复代码一样。这个单态化过程正是 Rust 泛型在运行时极其高效的原因。
