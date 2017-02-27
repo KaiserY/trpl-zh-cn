@@ -4988,7 +4988,375 @@ impl Summarizable for Tweet {
 <code>Tweet</code> types</p>
 </figcaption>
 </figure>
-<p>在类型上实现 trait 类似与实现与 trait 无关的方法。区别在于<code>impl</code>关键字之后，我们提供需要实现 trait 的名称，接着是<code>for</code>和需要实现 trait 的类型的名称。</p>
+<p>在类型上实现 trait 类似与实现与 trait 无关的方法。区别在于<code>impl</code>关键字之后，我们提供需要实现 trait 的名称，接着是<code>for</code>和需要实现 trait 的类型的名称。在<code>impl</code>块中，使用 trait 定义中的方法签名，不过不再后跟分号，而是需要在大括号中编写函数体来为特定类型实现 trait 方法所拥有的行为。</p>
+<p>一旦实现了 trait，我们就可以用与<code>NewsArticle</code>和<code>Tweet</code>实例的非 trait 方法一样的方式调用 trait 方法了：</p>
+<pre><code class="language-rust,ignore">let tweet = Tweet {
+    username: String::from(&quot;horse_ebooks&quot;),
+    content: String::from(&quot;of course, as you probably already know, people&quot;),
+    reply: false,
+    retweet: false,
+};
+
+println!(&quot;1 new tweet: {}&quot;, tweet.summary());
+</code></pre>
+<p>这会打印出<code>1 new tweet: horse_ebooks: of course, as you probably already know, people</code>。</p>
+<p>注意因为列表 10-12 中我们在相同的<code>lib.rs</code>力定义了<code>Summarizable</code> trait 和<code>NewsArticle</code>与<code>Tweet</code>类型，所以他们是位于同一作用域的。如果这个<code>lib.rs</code>是对应<code>aggregator</code> crate 的，而别人想要利用我们 crate 的功能外加为其<code>WeatherForecast</code>结构体实现<code>Summarizable</code> trait，在实现<code>Summarizable</code> trait 之前他们首先就需要将其导入其作用域中，如列表 10-13 所示：</p>
+<figure>
+<span class="filename">Filename: lib.rs</span>
+<pre><code class="language-rust,ignore">extern crate aggregator;
+
+use aggregator::Summarizable;
+
+struct WeatherForecast {
+    high_temp: f64,
+    low_temp: f64,
+    chance_of_precipitation: f64,
+}
+
+impl Summarizable for WeatherForecast {
+    fn summary(&amp;self) -&gt; String {
+        format!(&quot;The high will be {}, and the low will be {}. The chance of
+        precipitation is {}%.&quot;, self.high_temp, self.low_temp,
+        self.chance_of_precipitation)
+    }
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-13: Bringing the <code>Summarizable</code> trait from our <code>aggregator</code> crate
+into scope in another crate</p>
+</figcaption>
+</figure>
+<p>另外这段代码假设<code>Summarizable</code>是一个公有 trait，这是因为列表 10-11 中<code>trait</code>之前使用了<code>pub</code>关键字。</p>
+<p>trait 实现的一个需要注意的限制是：只能在 trait 或对应类型位于我们 crate 本地的时候为其实现 trait。换句话说，不允许对外部类型实现外部 trait。例如，不能<code>Vec</code>上实现<code>Display</code> trait，因为<code>Display</code>和<code>Vec</code>都定义于标准库中。允许在像<code>Tweet</code>这样作为我们<code>aggregator</code>crate 部分功能的自定义类型上实现标准库中的 trait <code>Display</code>。也允许在<code>aggregator</code>crate中为<code>Vec</code>实现<code>Summarizable</code>，因为<code>Summarizable</code>定义与此。这个限制是我们称为 <em>orphan rule</em> 的一部分，如果你感兴趣的可以在类型理论中找到它。简单来说，它被称为 orphan rule 是因为其父类型不存在。没有这条规则的话，两个 crate 可以分别对相同类型是实现相同的 trait，因而这两个实现会相互冲突：Rust 将无从得知应该使用哪一个。因为 Rust 强制执行 orphan rule，其他人编写的代码不会破坏你代码，反之亦是如此。</p>
+<a class="header" href="#默认实现" name="默认实现"><h3>默认实现</h3></a>
+<p>有时为 trait 中的某些或全部提供默认的行为，而不是在每个类型的每个实现中都定义自己的行为是很有用的。这样当为某个特定类型实现 trait 时，可以选择保留或重载每个方法的默认行为。</p>
+<p>列表 10-14 中展示了如何为<code>Summarize</code> trait 的<code>summary</code>方法指定一个默认的字符串值，而不是像列表 10-11 中那样只是定义方法签名：</p>
+<figure>
+<span class="filename">Filename: lib.rs</span>
+<pre><code class="language-rust">pub trait Summarizable {
+    fn summary(&amp;self) -&gt; String {
+        String::from(&quot;(Read more...)&quot;)
+    }
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-14: Definition of a <code>Summarizable</code> trait with a default
+implementation of the <code>summary</code> method</p>
+</figcaption>
+</figure>
+<p>如果想要对<code>NewsArticle</code>实例使用这个默认实现，而不是像列表 10-12 中那样定义一个自己的实现，则可以指定一个空的<code>impl</code>块：</p>
+<pre><code class="language-rust,ignore">impl Summarizable for NewsArticle {}
+</code></pre>
+<p>即便选择不再直接为<code>NewsArticle</code>定义<code>summary</code>方法了，因为<code>summary</code>方法有一个默认实现而且<code>NewsArticle</code>被指定为实现了<code>Summarizable</code> trait，我们仍然可以对<code>NewsArticle</code>的实例调用<code>summary</code>方法：</p>
+<pre><code class="language-rust,ignore">let article = NewsArticle {
+    headline: String::from(&quot;Penguins win the Stanley Cup Championship!&quot;),
+    location: String::from(&quot;Pittsburgh, PA, USA&quot;),
+    author: String::from(&quot;Iceburgh&quot;),
+    content: String::from(&quot;The Pittsburgh Penguins once again are the best
+    hockey team in the NHL.&quot;),
+};
+
+println!(&quot;New article available! {}&quot;, article.summary());
+</code></pre>
+<p>这段代码会打印<code>New article available! (Read more...)</code>。</p>
+<p>将<code>Summarizable</code> trait 改变为拥有默认<code>summary</code>实现并不要求对列表 10-12 中的<code>Tweet</code>和列表 10-13 中的<code>WeatherForecast</code>对<code>Summarizable</code>的实现做任何改变：重载一个默认实现的语法与实现没有默认实现的 trait 方法时完全一样的。</p>
+<p>默认实现允许调用相同 trait 中的其他方法，哪怕这些方法没有默认实现。通过这种方法，trait 可以实现很多有用的功能而只需实现一小部分特定内容。我们可以选择让<code>Summarizable</code> trait 也拥有一个要求实现的<code>author_summary</code>方法，接着<code>summary</code>方法则提供默认实现并调用<code>author_summary</code>方法：</p>
+<pre><code class="language-rust">pub trait Summarizable {
+    fn author_summary(&amp;self) -&gt; String;
+
+    fn summary(&amp;self) -&gt; String {
+        format!(&quot;(Read more from {}...)&quot;, self.author_summary())
+    }
+}
+</code></pre>
+<p>为了使用这个版本的<code>Summarizable</code>，只需在实现 trait 时定义<code>author_summary</code>即可：</p>
+<pre><code class="language-rust,ignore">impl Summarizable for Tweet {
+    fn author_summary(&amp;self) -&gt; String {
+        format!(&quot;@{}&quot;, self.username)
+    }
+}
+</code></pre>
+<p>一旦定义了<code>author_summary</code>，我们就可以对<code>Tweet</code>结构体的实例调用<code>summary</code>了，而<code>summary</code>的默认实现会调用我们提供的<code>author_summary</code>定义。</p>
+<pre><code class="language-rust,ignore">let tweet = Tweet {
+    username: String::from(&quot;horse_ebooks&quot;),
+    content: String::from(&quot;of course, as you probably already know, people&quot;),
+    reply: false,
+    retweet: false,
+};
+
+println!(&quot;1 new tweet: {}&quot;, tweet.summary());
+</code></pre>
+<p>这会打印出<code>1 new tweet: (Read more from @horse_ebooks...)</code>。</p>
+<p>注意在重载过的实现中调用默认实现是不可能的。</p>
+<a class="header" href="#trait-bounds" name="trait-bounds"><h3>trait bounds</h3></a>
+<p>现在我们定义了 trait 并在类型上实现了这些 trait，也可以对泛型类型参数使用 trait。我们可以限制泛型不再适用于任何类型，编译器会确保其被限制为那么实现了特定 trait 的类型，由此泛型就会拥有我们希望其类型所拥有的功能。这被称为指定泛型的 <em>trait bounds</em>。</p>
+<p>例如在列表 10-12 中为<code>NewsArticle</code>和<code>Tweet</code>类型实现了<code>Summarizable</code> trait。我们可以定义一个函数<code>notify</code>来调用<code>summary</code>方法，它拥有一个泛型类型<code>T</code>的参数<code>item</code>。为了能够在<code>item</code>上调用<code>summary</code>而不出现错误，我们可以在<code>T</code>上使用 trait bounds 来指定<code>item</code>必须是实现了<code>Summarizable</code> trait 的类型：</p>
+<pre><code class="language-rust,ignore">pub fn notify&lt;T: Summarizable&gt;(item: T) {
+    println!(&quot;Breaking news! {}&quot;, item.summary());
+}
+</code></pre>
+<p>trait bounds 连同泛型类型参数声明一同出现，位于尖括号中的冒号后面。由于<code>T</code>上的 trait bounds，我们可以传递任何<code>NewsArticle</code>或<code>Tweet</code>的实例来调用<code>notify</code>函数。列表 10-13 中使用我们<code>aggregator</code> crate 的外部代码也可以传递一个<code>WeatherForecast</code>的实例来调用<code>notify</code>函数，因为<code>WeatherForecast</code>同样也实现了<code>Summarizable</code>。使用任何其他类型，比如<code>String</code>或<code>i32</code>，来调用<code>notify</code>的代码将不能编译，因为这些类型没有实现<code>Summarizable</code>。</p>
+<p>可以通过<code>+</code>来为泛型指定多个 trait bounds。如果我们需要能够在函数中使用<code>T</code>类型的显示格式的同时也能使用<code>summary</code>方法，则可以使用 trait bounds <code>T: Summarizable + Display</code>。这意味着<code>T</code>可以是任何是实现了<code>Summarizable</code>和<code>Display</code>的类型。</p>
+<p>对于拥有多个泛型类型参数的函数，每一个泛型都可以有其自己的 trait bounds。在函数名和参数列表之间的尖括号中指定很多的 trait bound 信息将是难以阅读的，所以有另外一个指定 trait bounds 的语法，它将其移动到函数签名后的<code>where</code>从句中。所以相比这样写：</p>
+<pre><code class="language-rust,ignore">fn some_function&lt;T: Display + Clone, U: Clone + Debug&gt;(t: T, u: U) -&gt; i32 {
+</code></pre>
+<p>我们也可以使用<code>where</code>从句：</p>
+<pre><code class="language-rust,ignore">fn some_function&lt;T, U&gt;(t: T, u: U) -&gt; i32
+    where T: Display + Clone,
+          U: Clone + Debug
+{
+</code></pre>
+<p>这就显得不那么杂乱，同时也使这个函数看起来更像没有很多 trait bounds 的函数。这时函数名、参数列表和返回值类型都离得很近。</p>
+<a class="header" href="#使用-trait-bounds-来修复largest函数" name="使用-trait-bounds-来修复largest函数"><h3>使用 trait bounds 来修复<code>largest</code>函数</h3></a>
+<p>所以任何想要对泛型使用 trait 定义的行为的时候，都需要在泛型参数类型上指定 trait bounds。现在我们就可以修复列表 10-5 中那个使用泛型类型参数的<code>largest</code>函数定义了！当我们将其放置不管的时候，它会出现这个错误：</p>
+<pre><code>error[E0369]: binary operation `&gt;` cannot be applied to type `T`
+  |
+5 |         if item &gt; largest {
+  |            ^^^^
+  |
+note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
+</code></pre>
+<p>在<code>largest</code>函数体中我们想要使用大于运算符比较两个<code>T</code>类型的值。这个运算符被定义为标准库中 trait <code>std::cmp::PartialOrd</code> 的一个默认方法。所以为了能够使用大于运算符，需要在<code>T</code>的 trait bounds 中指定<code>PartialOrd</code>，这样<code>largest</code>函数可以用于任何可以比较大小的类型的 slice。因为<code>PartialOrd</code>位于 prelude 中所以并不需要手动将其引入作用域。</p>
+<pre><code class="language-rust,ignore">fn largest&lt;T: PartialOrd&gt;(list: &amp;[T]) -&gt; T {
+</code></pre>
+<p>但是如果编译代码的话，会出现不同的错误：</p>
+<pre><code class="language-text">error[E0508]: cannot move out of type `[T]`, a non-copy array
+ --&gt; src/main.rs:4:23
+  |
+4 |     let mut largest = list[0];
+  |         -----------   ^^^^^^^ cannot move out of here
+  |         |
+  |         hint: to prevent move, use `ref largest` or `ref mut largest`
+
+error[E0507]: cannot move out of borrowed content
+ --&gt; src/main.rs:6:9
+  |
+6 |     for &amp;item in list.iter() {
+  |         ^----
+  |         ||
+  |         |hint: to prevent move, use `ref item` or `ref mut item`
+  |         cannot move out of borrowed content
+</code></pre>
+<p>错误的核心是<code>cannot move out of type [T], a non-copy array</code>，对于非泛型版本的<code>largest</code>函数，我们只尝试了寻找最大的<code>i32</code>和<code>char</code>。正如第四章讨论过的，像<code>i32</code>和<code>char</code>这样的类型是已知大小的并可以储存在栈上，所以他们实现了<code>Copy</code> trait。当我们将<code>largest</code>函数改成使用泛型后，现在<code>list</code>参数的类型就有可能是没有实现<code>Copy</code> trait 的，这意味着我们可能不能将<code>list[0]</code>的值移动到<code>largest</code>变量中。</p>
+<p>如果只想对实现了<code>Copy</code>的类型调用这些带啊吗，可以在<code>T</code>的 trait bounds 中增加<code>Copy</code>！列表 10-15 中展示了一个可以编译的泛型版本的<code>largest</code>函数的完整代码，只要传递给<code>largest</code>的 slice 值的类型实现了<code>PartialOrd</code>和<code>Copy</code>这两个 trait，例如<code>i32</code>和<code>char</code>：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">use std::cmp::PartialOrd;
+
+fn largest&lt;T: PartialOrd + Copy&gt;(list: &amp;[T]) -&gt; T {
+    let mut largest = list[0];
+
+    for &amp;item in list.iter() {
+        if item &gt; largest {
+            largest = item;
+        }
+    }
+
+    largest
+}
+
+fn main() {
+    let numbers = vec![34, 50, 25, 100, 65];
+
+    let result = largest(&amp;numbers);
+    println!(&quot;The largest number is {}&quot;, result);
+
+    let chars = vec!['y', 'm', 'a', 'q'];
+
+    let result = largest(&amp;chars);
+    println!(&quot;The largest char is {}&quot;, result);
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-15: A working definition of the <code>largest</code> function that works on any
+generic type that implements the <code>PartialOrd</code> and <code>Copy</code> traits</p>
+</figcaption>
+</figure>
+<p>如果并不希望限制<code>largest</code>函数只能用于实现了<code>Copy</code> trait 的类型，我们可以在<code>T</code>的 trait bounds 中指定<code>Clone</code>而不是<code>Copy</code>，并克隆 slice 的每一个值使得<code>largest</code>函数拥有其所有权。但是使用<code>clone</code>函数潜在意味着更多的堆分配，而且堆分配在涉及大量数据时可能会相当缓慢。另一种<code>largest</code>的实现方式是返回 slice 中一个<code>T</code>值的引用。如果我们将函数返回值从<code>T</code>改为<code>&amp;T</code>并改变函数体使其能够返回一个引用，我们将不需要任何<code>Clone</code>或<code>Copy</code>的 trait bounds 而且也不会有任何的堆分配。尝试自己实现这种替代解决方式吧！</p>
+<p>trait 和 trait bounds 让我们使用泛型类型参数来减少重复，并仍然能够向编译器明确指定泛型类型需要拥有哪些行为。因为我们向编译器提供了 trait bounds 信息，它就可以检查代码中所用到的具体类型是否提供了正确的行为。在动态类型语言中，如果我们尝试调用一个类型并没有实现的方法，会在运行时出现错误。Rust 将这些错误移动到了编译时，甚至在代码能够运行之前就强迫我们修复错误。另外，我们也无需编写运行时检查行为的代码，因为在编译时就已经检查过了，这样相比其他那些不愿放弃泛型灵活性的语言有更好的性能。</p>
+<p>这里还有一种泛型，我们一直在使用它甚至都没有察觉它的存在，这就是<strong>生命周期</strong>（<em>lifetimes</em>）。不同于其他泛型帮助我们确保类型拥有期望的行为，生命周期则有助于确保引用在我们需要他们的时候一直有效。让我们学习生命周期是如何做到这些的。</p>
+<a class="header" href="#生命周期与引用有效性" name="生命周期与引用有效性"><h2>生命周期与引用有效性</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch10-03-lifetime-syntax.md">ch10-03-lifetime-syntax.md</a>
+<br>
+commit d7a4e99554da53619dd71044273535ba0186f40a</p>
+</blockquote>
+<p>当在第四章讨论引用时，我们遗漏了一个重要的细节：Rust 中的每一个引用都有其<strong>生命周期</strong>，也就是引用保持有效的作用域。大部分时候生命周期是隐含并可以推断的，正如大部分时候类型也是可以推断的一样。类似于当因为有多种可能类型的时候必须注明类型，也会出现引用的生命周期以多种不同方式向关联的情况，所以 Rust 需要我们使用泛型生命周期参数来注明他们的关系，这样就能确保运行时实际使用的引用绝对是有效的。</p>
+<p>好吧，这有点不太寻常，而且也不同于其他语言中使用的工具。生命周期，从某种意义上说，是 Rust 最与众不同的功能。</p>
+<p>生命周期是一个很广泛的话题，本章不可能涉及到它全部的内容，所以这里我们会讲到一些通常你可能会遇到的生命周期语法以便你熟悉这个概念。第十九章会包含生命周期所有功能的更高级的内容。</p>
+<a class="header" href="#生命周期避免了悬垂引用" name="生命周期避免了悬垂引用"><h3>生命周期避免了悬垂引用</h3></a>
+<p>生命周期的主要目标是避免悬垂引用，它会导致程序引用了并非其期望引用的数据。考虑一下列表 10-16 中的程序，它有一个外部作用域和一个内部作用域，外部作用域声明了一个没有初值的变量<code>r</code>，而内部作用域声明了一个初值为 5 的变量<code>x</code>。在内部作用域中，我们尝试将<code>r</code>的值设置为一个<code>x</code>的引用。接着在内部作用域结束后，尝试打印出<code>r</code>的值：</p>
+<figure>
+<pre><code class="language-rust,ignore">{
+    let r;
+
+    {
+        let x = 5;
+        r = &amp;x;
+    }
+
+    println!(&quot;r: {}&quot;, r);
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-16: An attempt to use a reference whose value has gone out of scope</p>
+</figcaption>
+</figure>
+<blockquote>
+<a class="header" href="#未初始化变量不能被使用" name="未初始化变量不能被使用"><h3>未初始化变量不能被使用</h3></a>
+<p>接下来的一些例子中声明了没有初始值的变量，以便这些变量存在于外部作用域。这看起来好像和 Rust 不允许存在空值相冲突。然而这是可以的，如果我们尝试在给它一个值之前使用这个变量，会出现一个编译时错误。请自行尝试！</p>
+</blockquote>
+<p>当编译这段代码时会得到一个错误：</p>
+<pre><code>error: `x` does not live long enough
+   |
+6  |         r = &amp;x;
+   |              - borrow occurs here
+7  |     }
+   |     ^ `x` dropped here while still borrowed
+...
+10 | }
+   | - borrowed value needs to live until here
+</code></pre>
+<p>变量<code>x</code>并没有“存在的足够久”。为什么呢？好吧，<code>x</code>在到达第 7 行的大括号的结束时就离开了作用域，这也是内部作用域的结尾。不过<code>r</code>在外部作用域也是有效的；作用域越大我们就说它“存在的越久”。如果 Rust 允许这段代码工作，<code>r</code>将会引用在<code>x</code>离开作用域时被释放的内存，这时尝试对<code>r</code>做任何操作都会不能正常工作。那么 Rust 是如何决定这段代码是不被允许的呢？</p>
+<a class="header" href="#借用检查器" name="借用检查器"><h4>借用检查器</h4></a>
+<p>编译器的这一部分叫做<strong>借用检查器</strong>（<em>borrow checker</em>），它比较作用域来确保所有的借用都是有效的。列表 10-17 展示了与列表 10-16 相同的例子不过带有变量声明周期的注释：</p>
+<figure>
+<pre><code class="language-rust,ignore">{
+    let r;         // -------+-- 'a
+                   //        |
+    {              //        |
+        let x = 5; // -+-----+-- 'b
+        r = &amp;x;    //  |     |
+    }              // -+     |
+                   //        |
+    println!(&quot;r: {}&quot;, r); // |
+                   //        |
+                   // -------+
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-17: Annotations of the lifetimes of <code>x</code> and <code>r</code>, named <code>'a</code> and <code>'b</code>
+respectively</p>
+</figcaption>
+</figure>
+<!-- Just checking I'm reading this right: the inside block is the b lifetime,
+correct? I want to leave a note for production, make sure we can make that
+clear -->
+<!-- Yes, the inside block for the `'b` lifetime starts with the `let x = 5;`
+line and ends with the first closing curly brace on the 7th line. Do you think
+the text art comments work or should we make an SVG diagram that has nicer
+looking arrows and labels? /Carol -->
+<p>我们将<code>r</code>的声明周期标记为<code>'a</code>而将<code>x</code>的生命周期标记为<code>'b</code>。如你所见，内部的<code>'b</code>块要比外部的生命周期<code>'a</code>小得多。在编译时，Rust 比较这两个生命周期的大小，并发现<code>r</code>拥有声明周期<code>'a</code>，不过它引用了一个拥有生命周期<code>'b</code>的对象。程序被拒绝编译，因为生命周期<code>'b</code>比生命周期<code>'a</code>要小：引用者没有比被引用者存在的更久。</p>
+<p>让我们看看列表 10-18 中这个并没有产生悬垂引用且可以正常编译的例子：</p>
+<figure>
+<pre><code class="language-rust">{
+    let x = 5;            // -----+-- 'b
+                          //      |
+    let r = &amp;x;           // --+--+-- 'a
+                          //   |  |
+    println!(&quot;r: {}&quot;, r); //   |  |
+                          // --+  |
+}                         // -----+
+</code></pre>
+<figcaption>
+<p>Listing 10-18: A valid reference because the data has a longer lifetime than
+the reference</p>
+</figcaption>
+</figure>
+<p><code>x</code>拥有生命周期 <code>'b</code>，在这里它比 <code>'a</code>要大。这就意味着<code>r</code>可以引用<code>x</code>：Rust 知道<code>r</code>中的引用在<code>x</code>有效的时候也会一直有效。</p>
+<p>现在我们已经在一个具体的例子中展示了引用的声明周期位于何处，并讨论了 Rust 如何分析生命周期来保证引用总是有效的，接下来让我们聊聊在函数的上下文中参数和返回值的泛型生命周期。</p>
+<a class="header" href="#函数中的泛型生命周期" name="函数中的泛型生命周期"><h3>函数中的泛型生命周期</h3></a>
+<p>让我们来编写一个返回两个字符串 slice 中最长的那一个的函数。我们希望能够通过传递两个字符串 slice 来调用这个函数，并希望返回一个字符串 slice。一旦我们实现了<code>longest</code>函数，列表 10-19 中的代码应该会打印出<code>The longest string is abcd</code>：</p>
+<figure>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">fn main() {
+    let string1 = String::from(&quot;abcd&quot;);
+    let string2 = &quot;xyz&quot;;
+
+    let result = longest(string1.as_str(), string2);
+    println!(&quot;The longest string is {}&quot;, result);
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-19: A <code>main</code> function that calls the <code>longest</code> function to find the
+longest of two string slices</p>
+</figcaption>
+</figure>
+<p>注意函数期望获取字符串 slice（如第四章所讲到的这是引用）因为我们并不希望<code>longest</code>函数获取其参数的引用。我们希望函数能够接受<code>String</code>的 slice（也就是变量<code>string1</code>的类型）和字符串字面值（也就是变量<code>string2</code>包含的值）。</p>
+<!-- why is `a` a slice and `b` a literal? You mean "a" from the string "abcd"? -->
+<!-- I've changed the variable names to remove ambiguity between the variable
+name `a` and the "a" from the string "abcd". `string1` is not a slice, it's a
+`String`, but we're going to pass a slice that refers to that `String` to the
+`longest` function (`string1.as_str()` creates a slice that references the
+`String` stored in `string1`). We chose to have `string2` be a literal since
+the reader might have code with both `String`s and string literals, and the way
+most readers first get into problems with lifetimes is involving string slices,
+so we wanted to demonstrate the flexibility of taking string slices as
+arguments but the issues you might run into because string slices are
+references.
+All of the `String`/string slice/string literal concepts here are covered
+thoroughly in Chapter 4, which is why we put two back references here (above
+and below). If these topics are confusing you in this context, I'd be
+interested to know if rereading Chapter 4 clears up that confusion.
+/Carol -->
+<p>参考之前第四章中的“字符串 slice 作为参数”部分中更多关于为什么上面例子中的参数正是我们想要的讨论。</p>
+<p>如果尝试像列表 10-20 中那样实现<code>longest</code>函数，它并不能编译：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust,ignore">fn longest(x: &amp;str, y: &amp;str) -&gt; &amp;str {
+    if x.len() &gt; y.len() {
+        x
+    } else {
+        y
+    }
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-20: An implementation of the <code>longest</code> function that returns the
+longest of two string slices, but does not yet compile</p>
+</figcaption>
+</figure>
+<p>将会出现如下有关生命周期的错误：</p>
+<pre><code>error[E0106]: missing lifetime specifier
+   |
+1  | fn longest(x: &amp;str, y: &amp;str) -&gt; &amp;str {
+   |                                 ^ expected lifetime parameter
+   |
+   = help: this function's return type contains a borrowed value, but the
+   signature does not say whether it is borrowed from `x` or `y`
+</code></pre>
+<p>提示文本告诉我们返回值需要一个泛型生命周期参数，因为 Rust 并不知道将要返回的引用是指向<code>x</code>或<code>y</code>。事实上我们也不知道，因为函数体中<code>if</code>块返回一个<code>x</code>的引用而<code>else</code>块返回一个<code>y</code>的引用。</p>
+<p>虽然我们定义了这个函数，但是并不知道传递给函数的具体值，所以也不知道到底是<code>if</code>还是<code>else</code>会被执行。我们也不知道传入的引用的具体生命周期，所以也就不能像列表 10-17 和 10-18 那样通过观察作用域来确定返回的引用总是有效的。借用检查器自身同样也无法确定，因为它不知道<code>x</code>和<code>y</code>的生命周期是如何与返回值的生命周期相关联的。接下来我们将增加泛型生命周期参数来定义引用间的关系以便借用检查器可以进行相关分析。</p>
+<a class="header" href="#生命周期注解语法" name="生命周期注解语法"><h3>生命周期注解语法</h3></a>
+<p>生命周期注解并不改变任何引用的生命周期的长短。与当函数签名中指定了泛型类型参数后就可以接受任何类型一样，当指定了泛型生命周期后函数也能接受任何生命周期的引用。生命周期注解所做的就是将多个引用的生命周期联系起来。</p>
+<p>生命周期注解有着一个不太常见的语法：生命周期参数名称必须以撇号（<code>'</code>）开头。生命周期参数的名称通常全是小写，而且类似于泛型类型，其名称通常非常短。<code>'a</code>是大多数人默认使用的名称。生命周期参数注解位于引用的<code>&amp;</code>之后，并有一个空格来将引用类型与生命周期注解分隔开。</p>
+<p>这里有一些例子：我们有一个没有生命周期参数的<code>i32</code>的引用，一个有叫做<code>'a</code>的生命周期参数的<code>i32</code>的引用，和一个也有的生命周期参数<code>'a</code>的<code>i32</code>的可变引用：</p>
+<pre><code class="language-rust,ignore">&amp;i32        // a reference
+&amp;'a i32     // a reference with an explicit lifetime
+&amp;'a mut i32 // a mutable reference with an explicit lifetime
+</code></pre>
+<p>生命周期注解本身没有多少意义：生命周期注解告诉 Rust 多个引用的泛型生命周期参数如何相互联系。如果函数有一个生命周期<code>'a</code>的<code>i32</code>的引用的参数<code>first</code>，还有另一个同样是生命周期<code>'a</code>的<code>i32</code>的引用的参数<code>second</code>，这两个生命周期注解有相同的名称意味着<code>first</code>和<code>second</code>必须与这相同的泛型生命周期存在得一样久。</p>
+<a class="header" href="#函数签名中的生命周期注解" name="函数签名中的生命周期注解"><h3>函数签名中的生命周期注解</h3></a>
+<p>来看看我们编写的<code>longest</code>函数的上下文中的生命周期。就像泛型类型参数，泛型生命周期参数需要声明在函数名和参数列表间的加括号中。这里我们想要告诉 Rust 关于参数中的引用和返回值之间的限制是他们都必须拥有相同的生命周期，就像列表 10-21 中在每个引用中都加上了<code>'a</code>那样：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
+    if x.len() &gt; y.len() {
+        x
+    } else {
+        y
+    }
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-21: The <code>longest</code> function definition that specifies all the
+references in the signature must have the same lifetime, <code>'a</code></p>
+</figcaption>
+</figure>
+<p>这段代码能够编译并会产生我们想要使用列表 10-19 中的<code>main</code>函数得到的结果。</p>
+<p>现在函数签名表明对于某些生命周期<code>'a</code>，函数会获取两个参数，他们都是与生命周期<code>'a</code>存在的一样长的字符串 slice。函数会返回一个同样也与生命周期<code>'a</code>存在的一样长的字符串 slice。这就是我们告诉 Rust 需要其保证的协议。</p>
+<p>通过在函数签名中指定生命周期参数，我们不会改变任何参数或返回值的生命周期，不过我们说过任何不坚持这个协议的类型都将被借用检查器拒绝。这个函数并不知道（或需要知道）<code>x</code>和<code>y</code>具体会存在多久，不过只需要知道一些可以使用<code>'a</code>替代的作用域将会满足这个签名。</p>
+<p>当在函数中使用生命周期注解时，这些注解出现在函数签名中，而不存在于函数体中的任何代码中。这是因为 Rust 能够分析函数中代码而不需要任何协助，不过当函数引用或被函数之外的代码引用时，参数或返回值的生命周期可能在每次函数被调用时都不同。这可能会产生惊人的消耗并且对于 Rust 来说经常都是不可能分析的。在这种情况下，我们需要自己标注生命周期。</p>
 
                 </div>
 

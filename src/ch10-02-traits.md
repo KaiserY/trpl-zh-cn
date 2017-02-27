@@ -84,4 +84,267 @@ Listing 10-12: Implementing the `Summarizable` trait on the `NewsArticle` and
 </figcaption>
 </figure>
 
-在类型上实现 trait 类似与实现与 trait 无关的方法。区别在于`impl`关键字之后，我们提供需要实现 trait 的名称，接着是`for`和需要实现 trait 的类型的名称。
+在类型上实现 trait 类似与实现与 trait 无关的方法。区别在于`impl`关键字之后，我们提供需要实现 trait 的名称，接着是`for`和需要实现 trait 的类型的名称。在`impl`块中，使用 trait 定义中的方法签名，不过不再后跟分号，而是需要在大括号中编写函数体来为特定类型实现 trait 方法所拥有的行为。
+
+一旦实现了 trait，我们就可以用与`NewsArticle`和`Tweet`实例的非 trait 方法一样的方式调用 trait 方法了：
+
+```rust,ignore
+let tweet = Tweet {
+    username: String::from("horse_ebooks"),
+    content: String::from("of course, as you probably already know, people"),
+    reply: false,
+    retweet: false,
+};
+
+println!("1 new tweet: {}", tweet.summary());
+```
+
+这会打印出`1 new tweet: horse_ebooks: of course, as you probably already know, people`。
+
+注意因为列表 10-12 中我们在相同的`lib.rs`力定义了`Summarizable` trait 和`NewsArticle`与`Tweet`类型，所以他们是位于同一作用域的。如果这个`lib.rs`是对应`aggregator` crate 的，而别人想要利用我们 crate 的功能外加为其`WeatherForecast`结构体实现`Summarizable` trait，在实现`Summarizable` trait 之前他们首先就需要将其导入其作用域中，如列表 10-13 所示：
+
+<figure>
+<span class="filename">Filename: lib.rs</span>
+
+```rust,ignore
+extern crate aggregator;
+
+use aggregator::Summarizable;
+
+struct WeatherForecast {
+    high_temp: f64,
+    low_temp: f64,
+    chance_of_precipitation: f64,
+}
+
+impl Summarizable for WeatherForecast {
+    fn summary(&self) -> String {
+        format!("The high will be {}, and the low will be {}. The chance of
+        precipitation is {}%.", self.high_temp, self.low_temp,
+        self.chance_of_precipitation)
+    }
+}
+```
+
+<figcaption>
+
+Listing 10-13: Bringing the `Summarizable` trait from our `aggregator` crate
+into scope in another crate
+
+</figcaption>
+</figure>
+
+另外这段代码假设`Summarizable`是一个公有 trait，这是因为列表 10-11 中`trait`之前使用了`pub`关键字。
+
+trait 实现的一个需要注意的限制是：只能在 trait 或对应类型位于我们 crate 本地的时候为其实现 trait。换句话说，不允许对外部类型实现外部 trait。例如，不能`Vec`上实现`Display` trait，因为`Display`和`Vec`都定义于标准库中。允许在像`Tweet`这样作为我们`aggregator`crate 部分功能的自定义类型上实现标准库中的 trait `Display`。也允许在`aggregator`crate中为`Vec`实现`Summarizable`，因为`Summarizable`定义与此。这个限制是我们称为 *orphan rule* 的一部分，如果你感兴趣的可以在类型理论中找到它。简单来说，它被称为 orphan rule 是因为其父类型不存在。没有这条规则的话，两个 crate 可以分别对相同类型是实现相同的 trait，因而这两个实现会相互冲突：Rust 将无从得知应该使用哪一个。因为 Rust 强制执行 orphan rule，其他人编写的代码不会破坏你代码，反之亦是如此。
+
+### 默认实现
+
+有时为 trait 中的某些或全部提供默认的行为，而不是在每个类型的每个实现中都定义自己的行为是很有用的。这样当为某个特定类型实现 trait 时，可以选择保留或重载每个方法的默认行为。
+
+列表 10-14 中展示了如何为`Summarize` trait 的`summary`方法指定一个默认的字符串值，而不是像列表 10-11 中那样只是定义方法签名：
+
+<figure>
+<span class="filename">Filename: lib.rs</span>
+
+```rust
+pub trait Summarizable {
+    fn summary(&self) -> String {
+        String::from("(Read more...)")
+    }
+}
+```
+
+<figcaption>
+
+Listing 10-14: Definition of a `Summarizable` trait with a default
+implementation of the `summary` method
+
+</figcaption>
+</figure>
+
+如果想要对`NewsArticle`实例使用这个默认实现，而不是像列表 10-12 中那样定义一个自己的实现，则可以指定一个空的`impl`块：
+
+```rust,ignore
+impl Summarizable for NewsArticle {}
+```
+
+即便选择不再直接为`NewsArticle`定义`summary`方法了，因为`summary`方法有一个默认实现而且`NewsArticle`被指定为实现了`Summarizable` trait，我们仍然可以对`NewsArticle`的实例调用`summary`方法：
+
+```rust,ignore
+let article = NewsArticle {
+    headline: String::from("Penguins win the Stanley Cup Championship!"),
+    location: String::from("Pittsburgh, PA, USA"),
+    author: String::from("Iceburgh"),
+    content: String::from("The Pittsburgh Penguins once again are the best
+    hockey team in the NHL."),
+};
+
+println!("New article available! {}", article.summary());
+```
+
+这段代码会打印`New article available! (Read more...)`。
+
+将`Summarizable` trait 改变为拥有默认`summary`实现并不要求对列表 10-12 中的`Tweet`和列表 10-13 中的`WeatherForecast`对`Summarizable`的实现做任何改变：重载一个默认实现的语法与实现没有默认实现的 trait 方法时完全一样的。
+
+默认实现允许调用相同 trait 中的其他方法，哪怕这些方法没有默认实现。通过这种方法，trait 可以实现很多有用的功能而只需实现一小部分特定内容。我们可以选择让`Summarizable` trait 也拥有一个要求实现的`author_summary`方法，接着`summary`方法则提供默认实现并调用`author_summary`方法：
+
+```rust
+pub trait Summarizable {
+    fn author_summary(&self) -> String;
+
+    fn summary(&self) -> String {
+        format!("(Read more from {}...)", self.author_summary())
+    }
+}
+```
+
+为了使用这个版本的`Summarizable`，只需在实现 trait 时定义`author_summary`即可：
+
+
+```rust,ignore
+impl Summarizable for Tweet {
+    fn author_summary(&self) -> String {
+        format!("@{}", self.username)
+    }
+}
+```
+
+一旦定义了`author_summary`，我们就可以对`Tweet`结构体的实例调用`summary`了，而`summary`的默认实现会调用我们提供的`author_summary`定义。
+
+```rust,ignore
+let tweet = Tweet {
+    username: String::from("horse_ebooks"),
+    content: String::from("of course, as you probably already know, people"),
+    reply: false,
+    retweet: false,
+};
+
+println!("1 new tweet: {}", tweet.summary());
+```
+
+这会打印出`1 new tweet: (Read more from @horse_ebooks...)`。
+
+注意在重载过的实现中调用默认实现是不可能的。
+
+### trait bounds
+
+现在我们定义了 trait 并在类型上实现了这些 trait，也可以对泛型类型参数使用 trait。我们可以限制泛型不再适用于任何类型，编译器会确保其被限制为那么实现了特定 trait 的类型，由此泛型就会拥有我们希望其类型所拥有的功能。这被称为指定泛型的 *trait bounds*。
+
+例如在列表 10-12 中为`NewsArticle`和`Tweet`类型实现了`Summarizable` trait。我们可以定义一个函数`notify`来调用`summary`方法，它拥有一个泛型类型`T`的参数`item`。为了能够在`item`上调用`summary`而不出现错误，我们可以在`T`上使用 trait bounds 来指定`item`必须是实现了`Summarizable` trait 的类型：
+
+```rust,ignore
+pub fn notify<T: Summarizable>(item: T) {
+    println!("Breaking news! {}", item.summary());
+}
+```
+
+trait bounds 连同泛型类型参数声明一同出现，位于尖括号中的冒号后面。由于`T`上的 trait bounds，我们可以传递任何`NewsArticle`或`Tweet`的实例来调用`notify`函数。列表 10-13 中使用我们`aggregator` crate 的外部代码也可以传递一个`WeatherForecast`的实例来调用`notify`函数，因为`WeatherForecast`同样也实现了`Summarizable`。使用任何其他类型，比如`String`或`i32`，来调用`notify`的代码将不能编译，因为这些类型没有实现`Summarizable`。
+
+可以通过`+`来为泛型指定多个 trait bounds。如果我们需要能够在函数中使用`T`类型的显示格式的同时也能使用`summary`方法，则可以使用 trait bounds `T: Summarizable + Display`。这意味着`T`可以是任何是实现了`Summarizable`和`Display`的类型。
+
+对于拥有多个泛型类型参数的函数，每一个泛型都可以有其自己的 trait bounds。在函数名和参数列表之间的尖括号中指定很多的 trait bound 信息将是难以阅读的，所以有另外一个指定 trait bounds 的语法，它将其移动到函数签名后的`where`从句中。所以相比这样写：
+
+```rust,ignore
+fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32 {
+```
+
+我们也可以使用`where`从句：
+
+```rust,ignore
+fn some_function<T, U>(t: T, u: U) -> i32
+    where T: Display + Clone,
+          U: Clone + Debug
+{
+```
+
+这就显得不那么杂乱，同时也使这个函数看起来更像没有很多 trait bounds 的函数。这时函数名、参数列表和返回值类型都离得很近。
+
+### 使用 trait bounds 来修复`largest`函数
+
+所以任何想要对泛型使用 trait 定义的行为的时候，都需要在泛型参数类型上指定 trait bounds。现在我们就可以修复列表 10-5 中那个使用泛型类型参数的`largest`函数定义了！当我们将其放置不管的时候，它会出现这个错误：
+
+```
+error[E0369]: binary operation `>` cannot be applied to type `T`
+  |
+5 |         if item > largest {
+  |            ^^^^
+  |
+note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
+```
+
+在`largest`函数体中我们想要使用大于运算符比较两个`T`类型的值。这个运算符被定义为标准库中 trait `std::cmp::PartialOrd` 的一个默认方法。所以为了能够使用大于运算符，需要在`T`的 trait bounds 中指定`PartialOrd`，这样`largest`函数可以用于任何可以比较大小的类型的 slice。因为`PartialOrd`位于 prelude 中所以并不需要手动将其引入作用域。
+
+```rust,ignore
+fn largest<T: PartialOrd>(list: &[T]) -> T {
+```
+
+但是如果编译代码的话，会出现不同的错误：
+
+```text
+error[E0508]: cannot move out of type `[T]`, a non-copy array
+ --> src/main.rs:4:23
+  |
+4 |     let mut largest = list[0];
+  |         -----------   ^^^^^^^ cannot move out of here
+  |         |
+  |         hint: to prevent move, use `ref largest` or `ref mut largest`
+
+error[E0507]: cannot move out of borrowed content
+ --> src/main.rs:6:9
+  |
+6 |     for &item in list.iter() {
+  |         ^----
+  |         ||
+  |         |hint: to prevent move, use `ref item` or `ref mut item`
+  |         cannot move out of borrowed content
+```
+
+错误的核心是`cannot move out of type [T], a non-copy array`，对于非泛型版本的`largest`函数，我们只尝试了寻找最大的`i32`和`char`。正如第四章讨论过的，像`i32`和`char`这样的类型是已知大小的并可以储存在栈上，所以他们实现了`Copy` trait。当我们将`largest`函数改成使用泛型后，现在`list`参数的类型就有可能是没有实现`Copy` trait 的，这意味着我们可能不能将`list[0]`的值移动到`largest`变量中。
+
+如果只想对实现了`Copy`的类型调用这些带啊吗，可以在`T`的 trait bounds 中增加`Copy`！列表 10-15 中展示了一个可以编译的泛型版本的`largest`函数的完整代码，只要传递给`largest`的 slice 值的类型实现了`PartialOrd`和`Copy`这两个 trait，例如`i32`和`char`：
+
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+use std::cmp::PartialOrd;
+
+fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
+    let mut largest = list[0];
+
+    for &item in list.iter() {
+        if item > largest {
+            largest = item;
+        }
+    }
+
+    largest
+}
+
+fn main() {
+    let numbers = vec![34, 50, 25, 100, 65];
+
+    let result = largest(&numbers);
+    println!("The largest number is {}", result);
+
+    let chars = vec!['y', 'm', 'a', 'q'];
+
+    let result = largest(&chars);
+    println!("The largest char is {}", result);
+}
+```
+
+<figcaption>
+
+Listing 10-15: A working definition of the `largest` function that works on any
+generic type that implements the `PartialOrd` and `Copy` traits
+
+</figcaption>
+</figure>
+
+如果并不希望限制`largest`函数只能用于实现了`Copy` trait 的类型，我们可以在`T`的 trait bounds 中指定`Clone`而不是`Copy`，并克隆 slice 的每一个值使得`largest`函数拥有其所有权。但是使用`clone`函数潜在意味着更多的堆分配，而且堆分配在涉及大量数据时可能会相当缓慢。另一种`largest`的实现方式是返回 slice 中一个`T`值的引用。如果我们将函数返回值从`T`改为`&T`并改变函数体使其能够返回一个引用，我们将不需要任何`Clone`或`Copy`的 trait bounds 而且也不会有任何的堆分配。尝试自己实现这种替代解决方式吧！
+
+trait 和 trait bounds 让我们使用泛型类型参数来减少重复，并仍然能够向编译器明确指定泛型类型需要拥有哪些行为。因为我们向编译器提供了 trait bounds 信息，它就可以检查代码中所用到的具体类型是否提供了正确的行为。在动态类型语言中，如果我们尝试调用一个类型并没有实现的方法，会在运行时出现错误。Rust 将这些错误移动到了编译时，甚至在代码能够运行之前就强迫我们修复错误。另外，我们也无需编写运行时检查行为的代码，因为在编译时就已经检查过了，这样相比其他那些不愿放弃泛型灵活性的语言有更好的性能。
+
+这里还有一种泛型，我们一直在使用它甚至都没有察觉它的存在，这就是**生命周期**（*lifetimes*）。不同于其他泛型帮助我们确保类型拥有期望的行为，生命周期则有助于确保引用在我们需要他们的时候一直有效。让我们学习生命周期是如何做到这些的。
