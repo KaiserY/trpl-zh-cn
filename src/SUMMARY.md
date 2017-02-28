@@ -49,3 +49,8 @@
     - [泛型数据类型](ch10-01-syntax.md)
     - [trait：定义共享的行为](ch10-02-traits.md)
     - [生命周期与引用有效性](ch10-03-lifetime-syntax.md)
+
+- [测试](ch11-00-testing.md)
+    - [编写测试](ch11-01-writing-tests.md)
+    - [运行测试](ch11-02-running-tests.md)
+    - [测试的组织结构](ch11-03-test-organization.md)
