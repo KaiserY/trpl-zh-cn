@@ -5621,6 +5621,423 @@ commit c9fd8eb1da7a79deee97020e8ad49af8ded78f9c</p>
 <br>
 commit 77370c073661548dd56bbcb43cc64713585acbba</p>
 </blockquote>
+<p>测试是一种使用特定功能的 Rust 函数，它用来验证非测试的代码按照期望的方式运行。我们讨论过的任何 Rust 代码规则都适用于测试！让我们看看 Rust 提供的具体用来编写测试的功能：<code>test</code>属性、一些宏和<code>should_panic</code>属性。</p>
+<a class="header" href="#test属性" name="test属性"><h3><code>test</code>属性</h3></a>
+<p>作为最简单例子，Rust 中的测试就是一个带有<code>test</code>属性注解的函数。让我们使用 Cargo 来创建一个新的库项目<code>adder</code>：</p>
+<pre><code>$ cargo new adder
+     Created library `adder` project
+$ cd adder
+</code></pre>
+<p>Cargo 在创建新的库项目时自动生成一个简单的测试。这是<code>src/lib.rs</code>中的内容：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+    }
+}
+</code></pre>
+<p>现在让我们暂时忽略<code>tests</code>模块和<code>#[cfg(test)]</code>注解并只关注函数。注意它之前的<code>#[test]</code>：这个属性表明这是一个测试函数。这个函数目前没有任何内容，所以绝对是可以通过的！使用<code>cargo test</code>来运行测试：</p>
+<pre><code>$ cargo test
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
+     Running target/debug/deps/adder-abcabcabc
+
+running 1 test
+test it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>Cargo 编译并运行了测试。这里有两部分输出：本章我们将关注第一部分。第二部分是文档测试的输出，第十四章会介绍他们。现在注意看这一行：</p>
+<pre><code class="language-text">test it_works ... ok
+</code></pre>
+<p><code>it_works</code>文本来源于测试函数的名称。</p>
+<p>这里也有一行总结告诉我们所有测试的聚合结果：</p>
+<pre><code>test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<a class="header" href="#assert宏" name="assert宏"><h3><code>assert!</code>宏</h3></a>
+<p>空的测试函数之所以能通过是因为任何没有<code>panic!</code>的测试都是通过的，而任何<code>panic!</code>的测试都算是失败。让我们使用`assert!宏来使测试失败：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[test]
+fn it_works() {
+    assert!(false);
+}
+</code></pre>
+<p><code>assert!</code>宏由标准库提供，它获取一个参数，如果参数是<code>true</code>，什么也不会发生。如果参数是<code>false</code>，这个宏会<code>panic!</code>。再次运行测试：</p>
+<pre><code>$ cargo test
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
+     Running target/debug/deps/adder-abcabcabc
+
+running 1 test
+test it_works ... FAILED
+
+failures:
+
+---- it_works stdout ----
+    thread 'it_works' panicked at 'assertion failed: false', src/lib.rs:5
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+
+failures:
+    it_works
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+
+error: test failed
+</code></pre>
+<p>Rust 表明测试失败了：</p>
+<pre><code>test it_works ... FAILED
+</code></pre>
+<p>并展示了测试是因为src/lib.rs<code>的第 5 行</code>assert!<code>宏得到了一个</code>false`值而失败的：</p>
+<pre><code>thread 'it_works' panicked at 'assertion failed: false', src/lib.rs:5
+</code></pre>
+<p>失败的测试也体现在了总结行中：</p>
+<pre><code>test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+</code></pre>
+<a class="header" href="#使用assert_eq和assert_ne宏来测试相等" name="使用assert_eq和assert_ne宏来测试相等"><h3>使用<code>assert_eq!</code>和<code>assert_ne!</code>宏来测试相等</h3></a>
+<p>测试功能的一个常用方法是将需要测试代码的值与期望值做比较，并检查是否相等。可以通过向<code>assert!</code>宏传递一个使用<code>==</code>宏的表达式来做到。不过这个操作实在是太常见了，以至于标注库提供了一对宏来编译处理这些操作：<code>assert_eq!</code>和<code>assert_ne!</code>。这两个宏分别比较两个值是相等还是不相等。使用这些宏的另一个优势是当断言失败时他们会打印出这两个值具体是什么，以便于观察测试<strong>为什么</strong>失败，而<code>assert!</code>只会打印出它从<code>==</code>表达式中得到了<code>false</code>值。</p>
+<p>下面是分别使用这两个宏其会测试通过的例子：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code>#[test]
+fn it_works() {
+    assert_eq!(&quot;Hello&quot;, &quot;Hello&quot;);
+
+    assert_ne!(&quot;Hello&quot;, &quot;world&quot;);
+}
+</code></pre>
+<p>也可以对这些宏指定可选的第三个参数，它是一个会加入错误信息的自定义文本。这两个宏展开后的逻辑看起来像这样：</p>
+<pre><code class="language-rust,ignore">// assert_eq! - panic if the values aren't equal
+if left_val != right_val {
+    panic!(
+        &quot;assertion failed: `(left == right)` (left: `{:?}`, right: `{:?}`): {}&quot;
+        left_val,
+        right_val,
+        optional_custom_message
+    )
+}
+
+// assert_ne! - panic if the values are equal
+if left_val == right_val {
+    panic!(
+        &quot;assertion failed: `(left != right)` (left: `{:?}`, right: `{:?}`): {}&quot;
+        left_val,
+        right_val,
+        optional_custom_message
+    )
+}
+</code></pre>
+<p>看看这个因为<code>hello</code>不等于<code>world</code>而失败的测试。我们还增加了一个自定义的错误信息，<code>greeting operation failed</code>：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[test]
+fn a_simple_case() {
+    let result = &quot;hello&quot;; // this value would come from running your code
+    assert_eq!(result, &quot;world&quot;, &quot;greeting operation failed&quot;);
+}
+</code></pre>
+<p>毫无疑问运行这个测试会失败，而错误信息解释了为什么测试失败了并且带有我们的指定的自定义错误信息：</p>
+<pre><code class="language-text">---- a_simple_case stdout ----
+    thread 'a_simple_case' panicked at 'assertion failed: `(left == right)`
+    (left: `&quot;hello&quot;`, right: `&quot;world&quot;`): greeting operation failed',
+    src/main.rs:4
+</code></pre>
+<p><code>assert_eq!</code>的两个参数被称为 &quot;left&quot; 和 &quot;right&quot; ，而不是 &quot;expected&quot; 和 &quot;actual&quot; ；值的顺序和硬编码的值并没有什么影响。</p>
+<p>因为这些宏使用了<code>==</code>和<code>!=</code>运算符并使用调试格式打印这些值，进行比较的值必须实现<code>PartialEq</code>和<code>Debug</code> trait。Rust 提供的类型实现了这些 trait，不过自定义的结构体和枚举则需要自己实现<code>PartialEq</code>以便能够断言这些值是否相等，和实现<code>Debug</code>以便在断言失败时打印出这些值。因为第五章提到过这两个 trait 都是 derivable trait，所以通常可以直接在结构体或枚举上加上<code>#[derive(PartialEq, Debug)]</code>注解。查看附录 C 来寻找更多关于这些和其他 derivable trait 的信息。</p>
+<a class="header" href="#使用should_panic测试期望的失败" name="使用should_panic测试期望的失败"><h2>使用<code>should_panic</code>测试期望的失败</h2></a>
+<p>可以使用另一个属性来反转测试中的失败：<code>should_panic</code>。这在测试调用特定的函数会产生错误的函数时很有帮助。例如，让我们测试第八章中的一些我们知道会 panic 的代码：尝试使用 range 语法和并不组成完整字母的字节索引来创建一个字符串 slice。在有<code>#[test]</code>属性的函数之前增加<code>#[should_panic]</code>属性，如列表 11-1 所示：</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
+<pre><code class="language-rust">#[test]
+#[should_panic]
+fn slice_not_on_char_boundaries() {
+    let s = &quot;Здравствуйте&quot;;
+    &amp;s[0..1];
+}
+</code></pre>
+<figcaption>
+<p>Listing 11-1: A test expecting a <code>panic!</code></p>
+</figcaption>
+</figure>
+<p>这个测试是成功的，因为我们表示代码应该会 panic。相反如果代码因为某种原因没有产生<code>panic!</code>则测试会失败。</p>
+<p>使用<code>should_panic</code>的测试是脆弱的，因为难以保证测试不会因为一个不同于我们期望的原因失败。为了帮助解决这个问题，<code>should_panic</code>属性可以增加一个可选的<code>expected</code>参数。测试工具会确保错误信息里包含我们提供的文本。一个比列表 11-1 更健壮的版本如列表 11-2 所示：</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
+<pre><code class="language-rust">#[test]
+#[should_panic(expected = &quot;do not lie on character boundary&quot;)]
+fn slice_not_on_char_boundaries() {
+    let s = &quot;Здравствуйте&quot;;
+    &amp;s[0..1];
+}
+</code></pre>
+<!-- I will add ghosting in libreoffice /Carol -->
+<figcaption>
+<p>Listing 11-2: A test expecting a <code>panic!</code> with a particular message</p>
+</figcaption>
+</figure>
+<p>请自行尝试当<code>should_panic</code>的测试出现 panic 但并不符合期望的信息时会发生什么：在测试中因为不同原因造成<code>panic!</code>，或者将期望的 panic 信息改为并不与字母字节边界 panic 信息相匹配。</p>
+<a class="header" href="#运行测试" name="运行测试"><h2>运行测试</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch11-02-running-tests.md">ch11-02-running-tests.md</a>
+<br>
+commit cf52d81371e24e14ce31a5582bfcb8c5b80d26cc</p>
+</blockquote>
+<p>类似于<code>cargo run</code>会编译代码并运行生成的二进制文件，<code>cargo test</code>在测试模式下编译代码并运行生成的测试二进制文件。<code>cargo test</code>生成的二进制文件默认会并行的运行所有测试并在测试过程中捕获生成的输出，这样就更容易阅读测试结果的输出。</p>
+<p>可以通过指定命令行选项来改变这些运行测试的默认行为。这些选项的一部分可以传递给<code>cargo test</code>，而另一些则需要传递给生成的测试二进制文件。分隔这些参数的方法是<code>--</code>：<code>cargo test</code>之后列出了传递给<code>cargo test</code>的参数，接着是分隔符<code>--</code>，之后是传递给测试二进制文件的参数。</p>
+<a class="header" href="#并行运行测试" name="并行运行测试"><h3>并行运行测试</h3></a>
+<p>测试使用线程来并行运行。为此，编写测试时需要注意测试之间不要相互依赖或者存在任何共享状态。共享状态也可能包含在运行环境中，比如当前工作目录或者环境变量。</p>
+<p>如果你不希望它这样运行，或者想要更加精确的控制使用线程的数量，可以传递<code>--test-threads</code>参数和线程的数量给测试二进制文件。将线程数设置为 1 意味着没有任何并行操作：</p>
+<pre><code>$ cargo test -- --test-threads=1
+</code></pre>
+<a class="header" href="#捕获测试输出" name="捕获测试输出"><h3>捕获测试输出</h3></a>
+<p>Rust 的测试库默认捕获并丢弃标准输出和标准错误中的输出，除非测试失败了。例如，如果在测试中调用了<code>println!</code>而测试通过了，你将不会在终端看到<code>println!</code>的输出。这个行为可以通过向测试二进制文件传递<code>--nocapture</code>参数来禁用：</p>
+<pre><code>$ cargo test -- --nocapture
+</code></pre>
+<a class="header" href="#通过名称来运行测试的子集" name="通过名称来运行测试的子集"><h3>通过名称来运行测试的子集</h3></a>
+<p>有时运行整个测试集会耗费很多时间。如果你负责特定位置的代码，你可能会希望只与这些代码相关的测试。<code>cargo test</code>有一个参数允许你通过指定名称来运行特定的测试。</p>
+<p>列表 11-3 中创建了三个如下名称的测试：</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
+<pre><code class="language-rust">#[test]
+fn add_two_and_two() {
+    assert_eq!(4, 2 + 2);
+}
+
+#[test]
+fn add_three_and_two() {
+    assert_eq!(5, 3 + 2);
+}
+
+#[test]
+fn one_hundred() {
+    assert_eq!(102, 100 + 2);
+}
+</code></pre>
+<figcaption>
+<p>Listing 11-3: Three tests with a variety of names</p>
+</figcaption>
+</figure>
+<p>使用不同的参数会运行不同的测试子集。没有参数的话，如你所见会运行所有的测试：</p>
+<pre><code>$ cargo test
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-abcabcabc
+
+running 3 tests
+test add_three_and_two ... ok
+test one_hundred ... ok
+test add_two_and_two ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>可以传递任意测试的名称来只运行那个测试：</p>
+<pre><code>$ cargo test one_hundred
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-abcabcabc
+
+running 1 test
+test one_hundred ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>也可以传递名称的一部分，<code>cargo test</code>会运行所有匹配的测试：</p>
+<pre><code>$ cargo test add
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-abcabcabc
+
+running 2 tests
+test add_three_and_two ... ok
+test add_two_and_two ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>模块名也作为测试名的一部分，所以类似的模块名也可以用来指定测试特定模块。例如，如果将我们的代码组织成一个叫<code>adding</code>的模块和一个叫<code>subtracting</code>的模块并分别带有测试，如列表 11-4 所示：</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
+<pre><code class="language-rust">mod adding {
+    #[test]
+    fn add_two_and_two() {
+        assert_eq!(4, 2 + 2);
+    }
+
+    #[test]
+    fn add_three_and_two() {
+        assert_eq!(5, 3 + 2);
+    }
+
+    #[test]
+    fn one_hundred() {
+        assert_eq!(102, 100 + 2);
+    }
+}
+
+mod subtracting {
+    #[test]
+    fn subtract_three_and_two() {
+        assert_eq!(1, 3 - 2);
+    }
+}
+</code></pre>
+<figcaption>
+<p>Listing 11-4: Tests in two modules named <code>adding</code> and <code>subtracting</code></p>
+</figcaption>
+</figure>
+<p>执行<code>cargo test</code>会运行所有的测试，而模块名会出现在输出的测试名中：</p>
+<pre><code>$ cargo test
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-abcabcabc
+
+running 4 tests
+test adding::add_two_and_two ... ok
+test adding::add_three_and_two ... ok
+test subtracting::subtract_three_and_two ... ok
+test adding::one_hundred ... ok
+</code></pre>
+<p>运行<code>cargo test adding</code>将只会运行对应模块的测试而不会运行任何 subtracting 模块中的测试：</p>
+<pre><code>$ cargo test adding
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-abcabcabc
+
+running 3 tests
+test adding::add_three_and_two ... ok
+test adding::one_hundred ... ok
+test adding::add_two_and_two ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<a class="header" href="#除非指定否则忽略某些测试" name="除非指定否则忽略某些测试"><h3>除非指定否则忽略某些测试</h3></a>
+<p>有时一些特定的测试执行起来是非常耗费时间的，所以对于大多数<code>cargo test</code>命令，我们希望能排除它。无需为<code>cargo test</code>创建一个用来在运行所有测试时排除特定测试的参数并每次都要记得使用它，我们可以对这些测试使用<code>ignore</code>属性：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[test]
+fn it_works() {
+    assert!(true);
+}
+
+#[test]
+#[ignore]
+fn expensive_test() {
+    // code that takes an hour to run
+}
+</code></pre>
+<p>现在运行测试，将会发现<code>it_works</code>运行了，而<code>expensive_test</code>没有：</p>
+<pre><code>$ cargo test
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.24 secs
+     Running target/debug/deps/adder-abcabcabc
+
+running 2 tests
+test expensive_test ... ignored
+test it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>我们可以通过<code>cargo test -- --ignored</code>来明确请求只运行那些耗时的测试：</p>
+<pre><code>$ cargo test -- --ignored
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-abcabcabc
+
+running 1 test
+test expensive_test ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>通过这种方式，大部分时间运行<code>cargo test</code>将是快速的。当需要检查<code>ignored</code>测试的结果而且你也有时间等待这个结果的话，可以选择执行<code>cargo test -- --ignored</code>。</p>
+<a class="header" href="#测试的组织结构" name="测试的组织结构"><h2>测试的组织结构</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch11-03-test-organization.md">ch11-03-test-organization.md</a>
+<br>
+commit cf52d81371e24e14ce31a5582bfcb8c5b80d26cc</p>
+</blockquote>
+<p>正如之前提到的，测试是一个很广泛的学科，而且不同的人有时也采用不同的技术和组织。Rust 社区倾向于根据测试的两个主要分类来考虑问题：<strong>单元测试</strong>（<em>unit tests</em>）与<strong>集成测试</strong>（<em>unit tests</em>）。单元测试倾向于更小而更专注，在隔离的环境中一次测试一个模块。他们也可以测试私有接口。集成测试对于你的库来说则完全是外部的。他们与其他用户使用相同的方式使用你得代码，他们只针对共有接口而且每个测试会测试多个模块。这两类测试对于从独立和整体的角度保证你的库符合期望是非常重要的。</p>
+<a class="header" href="#单元测试" name="单元测试"><h3>单元测试</h3></a>
+<p>单元测试的目的是在隔离与其他部分的环境中测试每一个单元的代码，以便于快速而准确的定位何处的代码是否符合预期。单元测试位于 <em>src</em> 目录中，与他们要测试的代码存在于相同的文件中。他们被分离进每个文件中他们自有的<code>tests</code>模块中。</p>
+<a class="header" href="#测试模块和cfgtest" name="测试模块和cfgtest"><h4>测试模块和<code>cfg(test)</code></h4></a>
+<p>通过将测试放进他们自己的模块并对该模块使用<code>cfg</code>注解，我们可以告诉 Rust 只在执行<code>cargo test</code>时才编译和运行测试代码。这在当我们只希望用<code>cargo build</code>编译库代码时可以节省编译时间，并减少编译产物的大小因为并没有包含测试。</p>
+<p>还记得上一部分新建的<code>adder</code>项目吗？Cargo 为我们生成了如下代码：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+    }
+}
+</code></pre>
+<p>我们忽略了模块相关的信息以便更关注模块中测试代码的机制，不过现在让我们看看测试周围的代码。</p>
+<p>首先，这里有一个属性<code>cfg</code>。<code>cfg</code>属性让我们声明一些内容只在给定特定的<strong>配置</strong>（<em>configuration</em>）时才被包含进来。Rust 提供了<code>test</code>配置用来编译和运行测试。通过这个属性，Cargo 只会在尝试运行测试时才编译测试代码。</p>
+<p>接下来，<code>tests</code>包含了所有测试函数，而我们的代码则位于<code>tests</code>模块之外。<code>tests</code>模块的名称是一个惯例，除此之外这是一个遵守第七章讲到的常见可见性规则的普通模块。因为这是一个内部模块，我们需要将要测试的代码引入作用域。这对于一个大的模块来说是很烦人的，所以这里经常使用全局导入。</p>
+<p>从本章到现在，我们一直在为<code>adder</code>项目编写并没有实际调用任何代码的测试。现在让我们做一些改变！在 <em>src/lib.rs</em> 中，放入<code>add_two</code>函数和带有一个检验代码的测试的<code>tests</code>模块，如列表 11-5 所示：</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
+<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
+    a + 2
+}
+
+#[cfg(test)]
+mod tests {
+    use add_two;
+
+    #[test]
+    fn it_works() {
+        assert_eq!(4, add_two(2));
+    }
+}
+</code></pre>
+<figcaption>
+<p>Listing 11-5: Testing the function <code>add_two</code> in a child <code>tests</code> module</p>
+</figcaption>
+</figure>
+<p>注意除了测试函数之外，我们还在<code>tests</code>模块中添加了<code>use add_two;</code>。这将我们想要测试的代码引入到了内部的<code>tests</code>模块的作用域中，正如任何内部模块需要做的那样。如果现在使用<code>cargo test</code>运行测试，它会通过：</p>
+<pre><code>running 1 test
+test tests::it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>如果我们忘记将<code>add_two</code>函数引入作用域，将会得到一个 unresolved name 错误，因为<code>tests</code>模块并不知道任何关于<code>add_two</code>函数的信息：</p>
+<pre><code>error[E0425]: unresolved name `add_two`
+ --&gt; src/lib.rs:9:23
+  |
+9 |         assert_eq!(4, add_two(2));
+  |                       ^^^^^^^ unresolved name
+</code></pre>
+<p>如果这个模块包含很多希望测试的代码，在测试中列出每一个<code>use</code>语句将是很烦人的。相反在测试子模块中使用<code>use super::*;</code>来一次将所有内容导入作用域中是很常见的。</p>
+<a class="header" href="#测试私有函数" name="测试私有函数"><h4>测试私有函数</h4></a>
+<p>测试社区中一直存在关于是否应该对私有函数进行单元测试的论战。不过无论你坚持哪种测试意识形态，Rust 确实允许你测试私有函数，由于私有性规则。考虑列表 11-6 中带有私有函数<code>internal_adder</code>的代码：</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
+<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
+    internal_adder(a, 2)
+}
+
+fn internal_adder(a: i32, b: i32) -&gt; i32 {
+    a + b
+}
+
+#[cfg(test)]
+mod tests {
+    use internal_adder;
+
+    #[test]
+    fn internal() {
+        assert_eq!(4, internal_adder(2, 2));
+    }
+}
+</code></pre>
+<figcaption>
+<p>Listing 11-6: Testing a private function</p>
+</figcaption>
+</figure>
+<p>因为测试也不过是 Rust 代码而<code>tests</code>也只是另一个模块，我们完全可以在一个测试中导入并调用<code>internal_adder</code>。如果你并不认为私有函数应该被测试，Rust 也不会强迫你这么做。</p>
+<a class="header" href="#集成测试" name="集成测试"><h3>集成测试</h3></a>
 
                 </div>
 
