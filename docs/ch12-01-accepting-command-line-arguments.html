@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>接受命令行参数 - Rust 程序设计语言 简体中文版</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> 结构体</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> 方法语法</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> 枚举和模式匹配</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> 定义枚举</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> <code>match</code>控制流运算符</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code>简单控制流</a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> 模块</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code>和文件系统</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> 使用<code>pub</code>控制可见性</a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> 使用<code>use</code>导入命名</a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> 通用集合类型</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> vector</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> 字符串</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> 哈希 map</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> 错误处理</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> <code>panic!</code>与不可恢复的错误</a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> <code>Result</code>与可恢复的错误</a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> <code>panic!</code>还是不<code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> 泛型、trait 和生命周期</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> 泛型数据类型</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> trait：定义共享的行为</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> 生命周期与引用有效性</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> 测试</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> 编写测试</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> 运行测试</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> 测试的组织结构</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> 一个 I/O 项目</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html" class="active"><strong>12.1.</strong> 接受命令行参数</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> 读取文件</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> 增强错误处理和模块化</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> 测试库的功能</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> 处理环境变量</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> 输出到<code>stderr</code>而不是<code>stdout</code></a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="#接受命令行参数" name="接受命令行参数"><h2>接受命令行参数</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/src/ch12-01-accepting-command-line-arguments.md">ch12-01-accepting-command-line-arguments.md</a>
+<br>
+commit 2d32840aae46d247250310219e8c7169c7349017</p>
+</blockquote>
+<p>第一个任务是让<code>greprs</code>接受两个命令行参数。crates.io 上有一些现存的库可以帮助我们，不过因为我们正在学习，我们将自己实现一个。</p>
+<p>我们需要调用一个 Rust 标准库提供的函数：<code>std::env::args</code>。这个函数返回一个传递给程序的命令行参数的<strong>迭代器</strong>（<em>iterator</em>）。我们还未讨论到迭代器，第十三章会全面的介绍他们。但是对于我们的目的来说，使用他们并不需要知道多少技术细节。我们只需要明白两点：</p>
+<ol>
+<li>迭代器生成一系列的值。</li>
+<li>在迭代器上调用<code>collect</code>方法可以将其生成的元素转换为一个 vector。</li>
+</ol>
+<p>让我们试试列表 12-1 中的代码：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">use std::env;
+
+fn main() {
+    let args: Vec&lt;String&gt; = env::args().collect();
+    println!(&quot;{:?}&quot;, args);
+}
+</code></pre>
+<figcaption>
+<p>Listing 12-1: Collect the command line arguments into a vector and print them out</p>
+</figcaption>
+</figure>
+<!-- Will add wingdings in libreoffice /Carol -->
+<p>首先使用<code>use</code>语句来将<code>std::env</code>模块引入作用域。当函数嵌套了多于一层模块时，比如说<code>std::env::args</code>，通常使用<code>use</code>将父模块引入作用域，而不是引入其本身。<code>env::args</code>比单独的<code>args</code>要明确一些。当然，如果使用了多余一个<code>std::env</code>中的函数，我们也只需要一个<code>use</code>语句。</p>
+<p>在<code>main</code>函数的第一行，我们调用了<code>env::args</code>，并立即使用<code>collect</code>来创建了一个 vector。这里我们也显式的注明了<code>args</code>的类型：<code>collect</code>可以被用来创建很多类型的集合。Rust 并不能推断出我们需要什么类型，所以类型注解是必须的。在 Rust 中我们很少会需要注明类型，不过<code>collect</code>是就一个通常需要这么做的函数。</p>
+<p>最后，我们使用调试格式<code>:?</code>打印出 vector。让我们尝试不用参数运行代码，接着用两个参数：</p>
+<pre><code>$ cargo run
+[&quot;target/debug/greprs&quot;]
+
+$ cargo run needle haystack
+...snip...
+[&quot;target/debug/greprs&quot;, &quot;needle&quot;, &quot;haystack&quot;]
+</code></pre>
+<p>你会注意一个有趣的事情：二进制文件的名字是第一个参数。其原因超出了本章介绍的范围</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch12-00-an-io-project.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch12-02-reading-a-file.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch12-00-an-io-project.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch12-02-reading-a-file.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

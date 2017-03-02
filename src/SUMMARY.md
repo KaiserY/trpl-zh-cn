@@ -54,3 +54,11 @@
     - [编写测试](ch11-01-writing-tests.md)
     - [运行测试](ch11-02-running-tests.md)
     - [测试的组织结构](ch11-03-test-organization.md)
+
+- [一个 I/O 项目](ch12-00-an-io-project.md)
+    - [接受命令行参数](ch12-01-accepting-command-line-arguments.md)
+    - [读取文件](ch12-02-reading-a-file.md)
+    - [增强错误处理和模块化](ch12-03-improving-error-handling-and-modularity.md)
+    - [测试库的功能](ch12-04-testing-the-librarys-functionality.md)
+    - [处理环境变量](ch12-05-working-with-environment-variables.md)
+    - [输出到`stderr`而不是`stdout`](ch12-06-writing-to-stderr-instead-of-stdout.md)
