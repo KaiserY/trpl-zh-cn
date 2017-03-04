@@ -285,7 +285,7 @@ $ carg
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch02-00-guessing-game-tutorial.md">ch02-00-guessing-game-tutorial.md</a>
 <br>
-commit 77370c073661548dd56bbcb43cc64713585acbba</p>
+commit 7c1c935560190fcd64c0851e75dbeabf75fedd19</p>
 </blockquote>
 <p>让我们通过自己动手的方式一起完成一个项目来快速上手 Rust！本章通过展示如何在真实的项目中运用的方式向你介绍一些常用的 Rust 概念。你将会学到<code>let</code>、<code>match</code>、方法、关联函数、使用外部 crate 等更多的知识！接下来的章节会探索这些概念的细节。在这一章，我们练习基础。</p>
 <p>我们会实现一个经典新手编程问题：猜猜看游戏。它是这么工作的：程序将会随机生成一个 1 到 100 之间的随机整数。接着它会提示玩家输入一个猜测。当输入了一个猜测后，它会告诉提示猜测是太大了还是太小了。猜对了，它会打印出祝贺并退出。</p>
@@ -342,10 +342,10 @@ fn main() {
 <p>Listing 2-1: Code to get a guess from the user and print it out</p>
 </figcaption>
 </figure>
-<p>这些代码包含很多信息，所以让我们一点一点地过一遍。为了获取用户输入并接着打印结果作为输出，我们需要从标准库（被称为<code>std</code>）中引用<code>io</code>（输入/输出）库：</p>
+<p>这些代码包含很多信息，所以让我们一点一点地过一遍。为了获取用户输入并接着打印结果作为输出，我们需要将<code>io</code>（输入/输出）库引入作用域中。<code>io</code>库来自于标准库（也被称为<code>std</code>）：</p>
 <pre><code class="language-rust,ignore">use std::io;
 </code></pre>
-<p>Rust 默认只在每个程序的 <a href="https://doc.rust-lang.org/std/prelude/"><em>prelude</em></a><!-- ignore --> 中引用很少的一些类型。如果想要使用的类型并不在 prelude 中，你必须使用一个<code>use</code>语句显式的将其导入到程序中。使用<code>std::io</code>库将提供很多<code>io</code>相关的功能，接受用户输入的功能。</p>
+<p>Rust 默认只在每个程序的 <a href="https://doc.rust-lang.org/std/prelude/"><em>prelude</em></a><!-- ignore --> 中引用很少的一些类型。如果想要使用的类型并不在 prelude 中，你必须使用一个<code>use</code>语句显式的将其引入到作用域中。使用<code>std::io</code>库将提供很多<code>io</code>相关的功能，接受用户输入的功能。</p>
 <p>正如第一章所讲，<code>main</code>函数是程序的入口点：</p>
 <pre><code class="language-rust,ignore">fn main() {
 </code></pre>
@@ -514,7 +514,7 @@ fn main() {
 <p>我们在顶部增加一行<code>extern crate rand;</code>来让 Rust 知道我们要使用外部依赖。这也会调用相应的<code>use rand</code>，所以现在可以使用<code>rand::</code>前缀来调用<code>rand</code>中的任何内容。</p>
 <p>接下来，我们增加了另一行<code>use</code>：<code>use rand::Rng</code>。<code>Rng</code>是一个定义了随机数生成器应实现方法的 trait，如果要使用这些方法的话这个 trait 必须在作用域中。第十章会详细介绍 trait。</p>
 <p>另外，中间还新增加了两行。<code>rand::thread_rng</code>函数会提供具体会使用的随机数生成器：它位于当前执行线程本地并从操作系统获取 seed。接下来，调用随机数生成器的<code>gen_range</code>方法。这个方法由我们使用<code>use rand::Rng</code>语句引入到作用域的<code>Rng</code> trait 定义。<code>gen_range</code>方法获取两个数作为参数并生成一个两者之间的随机数。它包含下限但不包含上限，所以需要指定<code>1</code>和<code>101</code>来请求一个<code>1</code>和<code>100</code>之间的数。</p>
-<p>并不仅仅能够知道该引用哪个 trait 和该从 crate 中使用哪个方法。如何使用 crate 的说明在每个 crate 的文档中。Cargo 另一个很棒的功能是可以运行<code>cargo doc --open</code>命令来构建所有本地依赖提供的文档并在浏览器中打开。例如，如果你对<code>rand</code> crate 中的其他功能感兴趣，运行<code>cargo doc --open</code>并点击左侧导航栏的<code>rand</code>。</p>
+<p>并不仅仅能够知道该 use 哪个 trait 和该从 crate 中调用哪个方法。如何使用 crate 的说明在每个 crate 的文档中。Cargo 另一个很棒的功能是可以运行<code>cargo doc --open</code>命令来构建所有本地依赖提供的文档并在浏览器中打开。例如，如果你对<code>rand</code> crate 中的其他功能感兴趣，运行<code>cargo doc --open</code>并点击左侧导航栏的<code>rand</code>。</p>
 <p>新增加的第二行代码打印出了秘密数字。这在开发程序时很有用，因为我们可以去测试它，不过在最终版本我们会删掉它。游戏一开始就打印出结果就没什么可玩的了！</p>
 <p>尝试运行程序几次：</p>
 <pre><code class="language-sh">$ cargo run
@@ -579,7 +579,7 @@ fn main() {
     Ordering::Equal   =&gt; println!(&quot;You win!&quot;),
 }
 </code></pre>
-<p><code>cmp</code>方法比较两个值并可以在任何可比较的值上调用。它获取一个任何你想要比较的值的引用：这里是把<code>guess</code>与<code>secret_number</code>做比较。<code>cmp</code>返回一个使用<code>use</code>语句引用的<code>Ordering</code>枚举的成员。我们使用一个<a href="ch06-02-match.html"><code>match</code></a><!-- ignore -->表达式根据对<code>guess</code>和<code>secret_number</code>中的值调用<code>cmp</code>后返回的哪个<code>Ordering</code>枚举成员来决定接下来干什么。</p>
+<p><code>cmp</code>方法比较两个值并可以在任何可比较的值上调用。它获取一个任何你想要比较的值的引用：这里是把<code>guess</code>与<code>secret_number</code>做比较。<code>cmp</code>返回一个使用<code>use</code>语句引入作用域的<code>Ordering</code>枚举的成员。我们使用一个<a href="ch06-02-match.html"><code>match</code></a><!-- ignore -->表达式根据对<code>guess</code>和<code>secret_number</code>中的值调用<code>cmp</code>后返回的哪个<code>Ordering</code>枚举成员来决定接下来干什么。</p>
 <p>一个<code>match</code>表达式由 <strong>分支（arms）</strong> 构成。一个分支包含一个 <strong>模式</strong>（<em>pattern</em>）和代码，这些代码在<code>match</code>表达式开头给出的值符合分支的模式时将被执行。Rust 获取提供给<code>match</code>的值并挨个检查每个分支的模式。<code>match</code>结构和模式是 Rust 中非常强大的功能，它帮助你体现代码可能遇到的多种情形并帮助你处理全部的可能。这些功能将分别在第六章和第十九章详细介绍。</p>
 <p>让我们看看一个使用这里的<code>match</code>表达式会发生什么的例子。假设用户猜了 50，这时随机生成的秘密数字是 38。当代码比较 50 与 38 时，<code>cmp</code>方法会返回<code>Ordering::Greater</code>，因为 50 比 38 要大。<code>Ordering::Greater</code>是<code>match</code>表达式得到的值。它检查第一个分支的模式，<code>Ordering::Less</code>，不过值<code>Ordering::Greater</code>并不匹配<code>Ordering::Less</code>。所以它忽略了这个分支的代码并移动到下一个分支。下一个分支的模式，<code>Ordering::Greater</code>，<strong>正确</strong>匹配了<code>Ordering::Greater</code>！这个分支关联的代码会被执行并在屏幕打印出<code>Too big!</code>。<code>match</code>表达式就此终止，因为在这个特定场景下没有检查最后一个分支的必要。</p>
 <p>然而，列表 2-4 的代码并不能编译，尝试一下：</p>
@@ -949,17 +949,17 @@ spaces = spaces.len();
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch03-02-data-types.md">ch03-02-data-types.md</a>
 <br>
-commit d05b7c63ff50b3f9126bb5533e0ba5dd424b83d1</p>
+commit 6436ebee2a84820adf77231cead6b5691c8e2744</p>
 </blockquote>
 <p>Rust 中的任何值都有一个具体的<strong>类型</strong>（<em>type</em>），这告诉了 Rust 它被指定为何种数据这样 Rust 就知道如何处理这些数据了。这一部分将讲到一些语言内建的类型。我们将这些类型分为两个子集：标量（scalar）和复合（compound）。</p>
 <p>贯穿整个部分，请记住 Rust 是一个<strong>静态类型</strong>（<em>statically typed</em>）语言，也就是说必须在编译时就知道所有变量的类型。编译器通常可以通过值以及如何使用他们来推断出我们想要用的类型。当多个类型都是可能的时候，比如第二章中<code>parse</code>将<code>String</code>转换为数字类型，必须增加类型注解，像这样：</p>
-<pre><code class="language-rust">let guess: u32 = &quot;42&quot;.parse().unwrap();
+<pre><code class="language-rust">let guess: u32 = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
 </code></pre>
 <p>如果这里不添加类型注解，Rust 会显示如下错误，它意味着编译器需要我们提供更多我们想要使用哪个可能的类型的信息：</p>
 <pre><code class="language-sh">error[E0282]: unable to infer enough type information about `_`
  --&gt; src/main.rs:2:5
   |
-2 | let guess = &quot;42&quot;.parse().unwrap();
+2 | let guess = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
   |     ^^^^^ cannot infer type for `_`
   |
   = note: type annotations or generic parameter binding required
@@ -3815,7 +3815,7 @@ let row = vec![
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch08-02-strings.md">ch08-02-strings.md</a>
 <br>
-commit 4dc0001ccba4189e210ba47d6fe6c3c5fa729da6</p>
+commit 65f52921e21ad2e1c79d620fcfd01bde3ee30571</p>
 </blockquote>
 <p>第四章已经讲过一些字符串的内容，不过现在让我们更深入地了解一下它。字符串是新晋 Rustacean 们通常会被困住的领域。这是由于三方面内容的结合：Rust 倾向于确保暴露出可能的错误，字符串是比很多程序员所想象的要更为复杂的数据结构，以及 UTF-8。所有这些结合起来对于来自其他语言背景的程序员就可能显得很困难了。</p>
 <p>字符串出现在集合章节的原因是，字符串是作为字节的集合外加一些方法实现的，当这些字节被解释为文本时，这些方法提供了实用的功能。在这一部分，我们会讲到<code>String</code>那些任何集合类型都有的操作，比如创建、更新和读取。也会讨论<code>String</code>于其他集合不一样的地方，例如索引<code>String</code>是很复杂的，由于人和计算机理解<code>String</code>数据的不同方式。</p>
@@ -6132,9 +6132,9 @@ $ cd greprs
 <p>我们版本的<code>grep</code>的叫做“greprs”，这样就不会迷惑用户让他们以为这就是可能已经在系统上安装了功能更完整的<code>grep</code>。</p>
 <a class="header" href="#接受命令行参数" name="接受命令行参数"><h2>接受命令行参数</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch12-01-accepting-command-line-arguments.md">ch12-01-accepting-command-line-arguments.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-01-accepting-command-line-arguments.md">ch12-01-accepting-command-line-arguments.md</a>
 <br>
-commit 2d32840aae46d247250310219e8c7169c7349017</p>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
 <p>第一个任务是让<code>greprs</code>接受两个命令行参数。crates.io 上有一些现存的库可以帮助我们，不过因为我们正在学习，我们将自己实现一个。</p>
 <p>我们需要调用一个 Rust 标准库提供的函数：<code>std::env::args</code>。这个函数返回一个传递给程序的命令行参数的<strong>迭代器</strong>（<em>iterator</em>）。我们还未讨论到迭代器，第十三章会全面的介绍他们。但是对于我们的目的来说，使用他们并不需要知道多少技术细节。我们只需要明白两点：</p>
@@ -6167,7 +6167,28 @@ $ cargo run needle haystack
 ...snip...
 [&quot;target/debug/greprs&quot;, &quot;needle&quot;, &quot;haystack&quot;]
 </code></pre>
-<p>你会注意一个有趣的事情：二进制文件的名字是第一个参数。其原因超出了本章介绍的范围</p>
+<p>你会注意一个有趣的事情：二进制文件的名字是第一个参数。其原因超出了本章介绍的范围，不过这是我们必须记住的。</p>
+<p>现在我们有了一个访问所有参数的方法，让我们如列表 12-2 中所示将需要的变量存放到变量中：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">use std::env;
+
+fn main() {
+    let args: Vec&lt;String&gt; = env::args().collect();
+
+    let search = &amp;args[1];
+    let filename = &amp;args[2];
+
+    println!(&quot;Searching for {}&quot;, search);
+    println!(&quot;In file {}&quot;, filename);
+}
+</code></pre>
+<figcaption>
+<p>Listing 12-2: Create variables to hold the search argument and filename argument</p>
+</figcaption>
+</figure>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>记住，程序名称是是第一个参数，所以并不需要<code>args[0]</code>。我们决定从第一个参数将是需要搜索的字符串，所以</p>
 
                 </div>
 

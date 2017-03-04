@@ -71,7 +71,7 @@
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch02-00-guessing-game-tutorial.md">ch02-00-guessing-game-tutorial.md</a>
 <br>
-commit 77370c073661548dd56bbcb43cc64713585acbba</p>
+commit 7c1c935560190fcd64c0851e75dbeabf75fedd19</p>
 </blockquote>
 <p>让我们通过自己动手的方式一起完成一个项目来快速上手 Rust！本章通过展示如何在真实的项目中运用的方式向你介绍一些常用的 Rust 概念。你将会学到<code>let</code>、<code>match</code>、方法、关联函数、使用外部 crate 等更多的知识！接下来的章节会探索这些概念的细节。在这一章，我们练习基础。</p>
 <p>我们会实现一个经典新手编程问题：猜猜看游戏。它是这么工作的：程序将会随机生成一个 1 到 100 之间的随机整数。接着它会提示玩家输入一个猜测。当输入了一个猜测后，它会告诉提示猜测是太大了还是太小了。猜对了，它会打印出祝贺并退出。</p>
@@ -128,10 +128,10 @@ fn main() {
 <p>Listing 2-1: Code to get a guess from the user and print it out</p>
 </figcaption>
 </figure>
-<p>这些代码包含很多信息，所以让我们一点一点地过一遍。为了获取用户输入并接着打印结果作为输出，我们需要从标准库（被称为<code>std</code>）中引用<code>io</code>（输入/输出）库：</p>
+<p>这些代码包含很多信息，所以让我们一点一点地过一遍。为了获取用户输入并接着打印结果作为输出，我们需要将<code>io</code>（输入/输出）库引入作用域中。<code>io</code>库来自于标准库（也被称为<code>std</code>）：</p>
 <pre><code class="language-rust,ignore">use std::io;
 </code></pre>
-<p>Rust 默认只在每个程序的 <a href="https://doc.rust-lang.org/std/prelude/"><em>prelude</em></a><!-- ignore --> 中引用很少的一些类型。如果想要使用的类型并不在 prelude 中，你必须使用一个<code>use</code>语句显式的将其导入到程序中。使用<code>std::io</code>库将提供很多<code>io</code>相关的功能，接受用户输入的功能。</p>
+<p>Rust 默认只在每个程序的 <a href="https://doc.rust-lang.org/std/prelude/"><em>prelude</em></a><!-- ignore --> 中引用很少的一些类型。如果想要使用的类型并不在 prelude 中，你必须使用一个<code>use</code>语句显式的将其引入到作用域中。使用<code>std::io</code>库将提供很多<code>io</code>相关的功能，接受用户输入的功能。</p>
 <p>正如第一章所讲，<code>main</code>函数是程序的入口点：</p>
 <pre><code class="language-rust,ignore">fn main() {
 </code></pre>
@@ -300,7 +300,7 @@ fn main() {
 <p>我们在顶部增加一行<code>extern crate rand;</code>来让 Rust 知道我们要使用外部依赖。这也会调用相应的<code>use rand</code>，所以现在可以使用<code>rand::</code>前缀来调用<code>rand</code>中的任何内容。</p>
 <p>接下来，我们增加了另一行<code>use</code>：<code>use rand::Rng</code>。<code>Rng</code>是一个定义了随机数生成器应实现方法的 trait，如果要使用这些方法的话这个 trait 必须在作用域中。第十章会详细介绍 trait。</p>
 <p>另外，中间还新增加了两行。<code>rand::thread_rng</code>函数会提供具体会使用的随机数生成器：它位于当前执行线程本地并从操作系统获取 seed。接下来，调用随机数生成器的<code>gen_range</code>方法。这个方法由我们使用<code>use rand::Rng</code>语句引入到作用域的<code>Rng</code> trait 定义。<code>gen_range</code>方法获取两个数作为参数并生成一个两者之间的随机数。它包含下限但不包含上限，所以需要指定<code>1</code>和<code>101</code>来请求一个<code>1</code>和<code>100</code>之间的数。</p>
-<p>并不仅仅能够知道该引用哪个 trait 和该从 crate 中使用哪个方法。如何使用 crate 的说明在每个 crate 的文档中。Cargo 另一个很棒的功能是可以运行<code>cargo doc --open</code>命令来构建所有本地依赖提供的文档并在浏览器中打开。例如，如果你对<code>rand</code> crate 中的其他功能感兴趣，运行<code>cargo doc --open</code>并点击左侧导航栏的<code>rand</code>。</p>
+<p>并不仅仅能够知道该 use 哪个 trait 和该从 crate 中调用哪个方法。如何使用 crate 的说明在每个 crate 的文档中。Cargo 另一个很棒的功能是可以运行<code>cargo doc --open</code>命令来构建所有本地依赖提供的文档并在浏览器中打开。例如，如果你对<code>rand</code> crate 中的其他功能感兴趣，运行<code>cargo doc --open</code>并点击左侧导航栏的<code>rand</code>。</p>
 <p>新增加的第二行代码打印出了秘密数字。这在开发程序时很有用，因为我们可以去测试它，不过在最终版本我们会删掉它。游戏一开始就打印出结果就没什么可玩的了！</p>
 <p>尝试运行程序几次：</p>
 <pre><code class="language-sh">$ cargo run
@@ -365,7 +365,7 @@ fn main() {
     Ordering::Equal   =&gt; println!(&quot;You win!&quot;),
 }
 </code></pre>
-<p><code>cmp</code>方法比较两个值并可以在任何可比较的值上调用。它获取一个任何你想要比较的值的引用：这里是把<code>guess</code>与<code>secret_number</code>做比较。<code>cmp</code>返回一个使用<code>use</code>语句引用的<code>Ordering</code>枚举的成员。我们使用一个<a href="ch06-02-match.html"><code>match</code></a><!-- ignore -->表达式根据对<code>guess</code>和<code>secret_number</code>中的值调用<code>cmp</code>后返回的哪个<code>Ordering</code>枚举成员来决定接下来干什么。</p>
+<p><code>cmp</code>方法比较两个值并可以在任何可比较的值上调用。它获取一个任何你想要比较的值的引用：这里是把<code>guess</code>与<code>secret_number</code>做比较。<code>cmp</code>返回一个使用<code>use</code>语句引入作用域的<code>Ordering</code>枚举的成员。我们使用一个<a href="ch06-02-match.html"><code>match</code></a><!-- ignore -->表达式根据对<code>guess</code>和<code>secret_number</code>中的值调用<code>cmp</code>后返回的哪个<code>Ordering</code>枚举成员来决定接下来干什么。</p>
 <p>一个<code>match</code>表达式由 <strong>分支（arms）</strong> 构成。一个分支包含一个 <strong>模式</strong>（<em>pattern</em>）和代码，这些代码在<code>match</code>表达式开头给出的值符合分支的模式时将被执行。Rust 获取提供给<code>match</code>的值并挨个检查每个分支的模式。<code>match</code>结构和模式是 Rust 中非常强大的功能，它帮助你体现代码可能遇到的多种情形并帮助你处理全部的可能。这些功能将分别在第六章和第十九章详细介绍。</p>
 <p>让我们看看一个使用这里的<code>match</code>表达式会发生什么的例子。假设用户猜了 50，这时随机生成的秘密数字是 38。当代码比较 50 与 38 时，<code>cmp</code>方法会返回<code>Ordering::Greater</code>，因为 50 比 38 要大。<code>Ordering::Greater</code>是<code>match</code>表达式得到的值。它检查第一个分支的模式，<code>Ordering::Less</code>，不过值<code>Ordering::Greater</code>并不匹配<code>Ordering::Less</code>。所以它忽略了这个分支的代码并移动到下一个分支。下一个分支的模式，<code>Ordering::Greater</code>，<strong>正确</strong>匹配了<code>Ordering::Greater</code>！这个分支关联的代码会被执行并在屏幕打印出<code>Too big!</code>。<code>match</code>表达式就此终止，因为在这个特定场景下没有检查最后一个分支的必要。</p>
 <p>然而，列表 2-4 的代码并不能编译，尝试一下：</p>

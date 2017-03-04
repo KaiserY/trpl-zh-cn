@@ -1,8 +1,8 @@
 ## 接受命令行参数
 
-> [ch12-01-accepting-command-line-arguments.md](https://github.com/rust-lang/book/blob/master/src/ch12-01-accepting-command-line-arguments.md)
+> [ch12-01-accepting-command-line-arguments.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-01-accepting-command-line-arguments.md)
 > <br>
-> commit 2d32840aae46d247250310219e8c7169c7349017
+> commit 4f2dc564851dc04b271a2260c834643dfd86c724
 
 第一个任务是让`greprs`接受两个命令行参数。crates.io 上有一些现存的库可以帮助我们，不过因为我们正在学习，我们将自己实现一个。
 
@@ -49,4 +49,34 @@ $ cargo run needle haystack
 ["target/debug/greprs", "needle", "haystack"]
 ```
 
-你会注意一个有趣的事情：二进制文件的名字是第一个参数。其原因超出了本章介绍的范围
+你会注意一个有趣的事情：二进制文件的名字是第一个参数。其原因超出了本章介绍的范围，不过这是我们必须记住的。
+
+现在我们有了一个访问所有参数的方法，让我们如列表 12-2 中所示将需要的变量存放到变量中：
+
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+use std::env;
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    let search = &args[1];
+    let filename = &args[2];
+
+    println!("Searching for {}", search);
+    println!("In file {}", filename);
+}
+```
+
+<figcaption>
+
+Listing 12-2: Create variables to hold the search argument and filename argument
+
+</figcaption>
+</figure>
+
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+
+记住，程序名称是是第一个参数，所以并不需要`args[0]`。我们决定从第一个参数将是需要搜索的字符串，所以

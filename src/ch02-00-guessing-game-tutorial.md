@@ -2,7 +2,7 @@
 
 > [ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/master/src/ch02-00-guessing-game-tutorial.md)
 > <br>
-> commit 77370c073661548dd56bbcb43cc64713585acbba
+> commit 7c1c935560190fcd64c0851e75dbeabf75fedd19
 
 让我们通过自己动手的方式一起完成一个项目来快速上手 Rust！本章通过展示如何在真实的项目中运用的方式向你介绍一些常用的 Rust 概念。你将会学到`let`、`match`、方法、关联函数、使用外部 crate 等更多的知识！接下来的章节会探索这些概念的细节。在这一章，我们练习基础。
 
@@ -89,13 +89,13 @@ Listing 2-1: Code to get a guess from the user and print it out
 </figcaption>
 </figure>
 
-这些代码包含很多信息，所以让我们一点一点地过一遍。为了获取用户输入并接着打印结果作为输出，我们需要从标准库（被称为`std`）中引用`io`（输入/输出）库：
+这些代码包含很多信息，所以让我们一点一点地过一遍。为了获取用户输入并接着打印结果作为输出，我们需要将`io`（输入/输出）库引入作用域中。`io`库来自于标准库（也被称为`std`）：
 
 ```rust,ignore
 use std::io;
 ```
 
-Rust 默认只在每个程序的 [*prelude*][prelude]<!-- ignore --> 中引用很少的一些类型。如果想要使用的类型并不在 prelude 中，你必须使用一个`use`语句显式的将其导入到程序中。使用`std::io`库将提供很多`io`相关的功能，接受用户输入的功能。
+Rust 默认只在每个程序的 [*prelude*][prelude]<!-- ignore --> 中引用很少的一些类型。如果想要使用的类型并不在 prelude 中，你必须使用一个`use`语句显式的将其引入到作用域中。使用`std::io`库将提供很多`io`相关的功能，接受用户输入的功能。
 
 [prelude]: https://doc.rust-lang.org/std/prelude/
 
@@ -393,7 +393,7 @@ Listing 2-3: Code changes needed in order to generate a random number
 
 另外，中间还新增加了两行。`rand::thread_rng`函数会提供具体会使用的随机数生成器：它位于当前执行线程本地并从操作系统获取 seed。接下来，调用随机数生成器的`gen_range`方法。这个方法由我们使用`use rand::Rng`语句引入到作用域的`Rng` trait 定义。`gen_range`方法获取两个数作为参数并生成一个两者之间的随机数。它包含下限但不包含上限，所以需要指定`1`和`101`来请求一个`1`和`100`之间的数。
 
-并不仅仅能够知道该引用哪个 trait 和该从 crate 中使用哪个方法。如何使用 crate 的说明在每个 crate 的文档中。Cargo 另一个很棒的功能是可以运行`cargo doc --open`命令来构建所有本地依赖提供的文档并在浏览器中打开。例如，如果你对`rand` crate 中的其他功能感兴趣，运行`cargo doc --open`并点击左侧导航栏的`rand`。
+并不仅仅能够知道该 use 哪个 trait 和该从 crate 中调用哪个方法。如何使用 crate 的说明在每个 crate 的文档中。Cargo 另一个很棒的功能是可以运行`cargo doc --open`命令来构建所有本地依赖提供的文档并在浏览器中打开。例如，如果你对`rand` crate 中的其他功能感兴趣，运行`cargo doc --open`并点击左侧导航栏的`rand`。
 
 新增加的第二行代码打印出了秘密数字。这在开发程序时很有用，因为我们可以去测试它，不过在最终版本我们会删掉它。游戏一开始就打印出结果就没什么可玩的了！
 
@@ -476,7 +476,7 @@ match guess.cmp(&secret_number) {
 }
 ```
 
-`cmp`方法比较两个值并可以在任何可比较的值上调用。它获取一个任何你想要比较的值的引用：这里是把`guess`与`secret_number`做比较。`cmp`返回一个使用`use`语句引用的`Ordering`枚举的成员。我们使用一个[`match`][match]<!-- ignore -->表达式根据对`guess`和`secret_number`中的值调用`cmp`后返回的哪个`Ordering`枚举成员来决定接下来干什么。
+`cmp`方法比较两个值并可以在任何可比较的值上调用。它获取一个任何你想要比较的值的引用：这里是把`guess`与`secret_number`做比较。`cmp`返回一个使用`use`语句引入作用域的`Ordering`枚举的成员。我们使用一个[`match`][match]<!-- ignore -->表达式根据对`guess`和`secret_number`中的值调用`cmp`后返回的哪个`Ordering`枚举成员来决定接下来干什么。
 
 [match]: ch06-02-match.html
 
