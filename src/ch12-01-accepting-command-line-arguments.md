@@ -79,4 +79,25 @@ Listing 12-2: Create variables to hold the search argument and filename argument
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-记住，程序名称是是第一个参数，所以并不需要`args[0]`。我们决定从第一个参数将是需要搜索的字符串，所以
+记住，程序名称是是第一个参数，所以并不需要`args[0]`。我们决定从第一个参数将是需要搜索的字符串，所以将第一个参数的引用放入变量`search`中。第二个参数将是文件名，将其放入变量`filename`中。再次尝试运行程序：
+
+```
+$ cargo run test sample.txt
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target\debug\greprs.exe test sample.txt`
+Searching for test
+In file sample.txt
+```
+
+很棒！不过有一个问题。让我们不带参数运行：
+
+```
+$ cargo run
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target\debug\greprs.exe`
+thread 'main' panicked at 'index out of bounds: the len is 1
+but the index is 1', ../src/libcollections\vec.rs:1307
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+```
+
+因为 vector 中只有一个元素，就是程序名称，不过我们尝试访问第二元素，程序 panic 并提示越界访问。虽然这个错误信息是_准确的_，不过它对程序的用户来说就没有意义了。现在就可以修复这个问题，不过我先继续学习别的内容：在程序结束前我们会改善这个情况。
