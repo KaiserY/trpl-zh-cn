@@ -353,6 +353,323 @@ impl Config {
 </figcaption>
 </figure>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>现在<code>new</code>函数返回一个<code>Result</code>，在成功时带有一个<code>Config</code>实例而在出现错误时带有一个<code>&amp;'static str</code>。回忆一下第十章“静态声明周期”中讲到<code>&amp;'static str</code>是一个字符串字面值，他也是现在我们的错误信息。</p>
+<p><code>new</code>函数体中有两处修改：当没有足够参数时不再调用<code>panic!</code>，而是返回<code>Err</code>值。同时我们将<code>Config</code>返回值包装进<code>Ok</code>成员中。这些修改使得函数符合其新的类型签名。</p>
+<a class="header" href="#confignew调用和错误处理" name="confignew调用和错误处理"><h3><code>Config::new</code>调用和错误处理</h3></a>
+<p>现在我们需要对<code>main</code>做一些修改，如列表 12-9 所示：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust"># use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+// ...snip...
+use std::process;
+
+fn main() {
+    let args: Vec&lt;String&gt; = env::args().collect();
+
+    let config = Config::new(&amp;args).unwrap_or_else(|err| {
+        println!(&quot;Problem parsing arguments: {}&quot;, err);
+        process::exit(1);
+    });
+
+    println!(&quot;Searching for {}&quot;, config.search);
+    println!(&quot;In file {}&quot;, config.filename);
+
+    // ...snip...
+#
+#     let mut f = File::open(config.filename).expect(&quot;file not found&quot;);
+#
+#     let mut contents = String::new();
+#     f.read_to_string(&amp;mut contents).expect(&quot;something went wrong reading the file&quot;);
+#
+#     println!(&quot;With text:\n{}&quot;, contents);
+# }
+#
+# struct Config {
+#     search: String,
+#     filename: String,
+# }
+#
+# impl Config {
+#     fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+#         if args.len() &lt; 3 {
+#             return Err(&quot;not enough arguments&quot;);
+#         }
+#
+#         let search = args[1].clone();
+#         let filename = args[2].clone();
+#
+#         Ok(Config {
+#             search: search,
+#             filename: filename,
+#         })
+#     }
+# }
+</code></pre>
+<figcaption>
+<p>Listing 12-9: Exiting with an error code if creating a new <code>Config</code> fails</p>
+</figcaption>
+</figure>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>新增了一个<code>use</code>行来从标准库中导入<code>process</code>。在<code>main</code>函数中我们将处理<code>new</code>函数返回的<code>Result</code>值，并在其返回<code>Config::new</code>时以一种更加清楚的方式结束进程。</p>
+<p>这里使用了一个之前没有讲到的标准库中定义的<code>Result&lt;T, E&gt;</code>的方法：<code>unwrap_or_else</code>。当<code>Result</code>是<code>Ok</code>时其行为类似于<code>unwrap</code>：它返回<code>Ok</code>内部封装的值。与<code>unwrap</code>不同的是，当<code>Result</code>是<code>Err</code>时，它调用一个<strong>闭包</strong>（<em>closure</em>），也就是一个我们定义的作为参数传递给<code>unwrap_or_else</code>的匿名函数。第XX章会更详细的介绍闭包；这里需要理解的重要部分是<code>unwrap_or_else</code>会将<code>Err</code>的内部值传递给闭包中位于两道竖线间的参数<code>err</code>。使用<code>unwrap_or_else</code>允许我们进行一些自定义的非<code>panic!</code>的错误处理。</p>
+<p>上述的错误处理其实只有两行：我们打印出了错误，接着调用了<code>std::process::exit</code>。这个函数立刻停止程序的执行并将传递给它的数组作为返回码。依照惯例，零代表成功而任何其他数字表示失败。就结果来说这依然类似于列表 12-7 中的基于<code>panic!</code>的错误处理，但是不再会有额外的输出了，让我们试一试：</p>
+<pre><code class="language-text">$ cargo run
+   Compiling greprs v0.1.0 (file:///projects/greprs)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.48 secs
+     Running `target\debug\greprs.exe`
+Problem parsing arguments: not enough arguments
+</code></pre>
+<p>非常好！现在输出就友好多了。</p>
+<a class="header" href="#run函数中的错误处理" name="run函数中的错误处理"><h3><code>run</code>函数中的错误处理</h3></a>
+<p>现在重构完了参数解析部分，让我们再改进一下程序的逻辑。列表 12-10 中展示了在<code>main</code>函数中调用提取出函数<code>run</code>之后的代码。<code>run</code>函数包含之前位于<code>main</code>中的部分代码：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust"># use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+# use std::process;
+#
+fn main() {
+#     let args: Vec&lt;String&gt; = env::args().collect();
+#
+#     let config = Config::new(&amp;args).unwrap_or_else(|err| {
+#         println!(&quot;Problem parsing arguments: {}&quot;, err);
+#         process::exit(1);
+#     });
+    // ...snip...
+
+    println!(&quot;Searching for {}&quot;, config.search);
+    println!(&quot;In file {}&quot;, config.filename);
+
+    run(config);
+}
+
+fn run(config: Config) {
+    let mut f = File::open(config.filename).expect(&quot;file not found&quot;);
+
+    let mut contents = String::new();
+    f.read_to_string(&amp;mut contents).expect(&quot;something went wrong reading the file&quot;);
+
+    println!(&quot;With text:\n{}&quot;, contents);
+}
+
+// ...snip...
+#
+# struct Config {
+#     search: String,
+#     filename: String,
+# }
+#
+# impl Config {
+#     fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+#         if args.len() &lt; 3 {
+#             return Err(&quot;not enough arguments&quot;);
+#         }
+#
+#         let search = args[1].clone();
+#         let filename = args[2].clone();
+#
+#         Ok(Config {
+#             search: search,
+#             filename: filename,
+#         })
+#     }
+# }
+</code></pre>
+<figcaption>
+<p>Listing 12-10: Extracting a <code>run</code> functionality for the rest of the program logic</p>
+</figcaption>
+</figure>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p><code>run</code>函数的内容是之前位于<code>main</code>中的几行，而且<code>run</code>函数获取一个<code>Config</code>作为参数。现在有了一个单独的函数了，我们就可以像列表 12-8 中的<code>Config::new</code>那样进行类似的改进了。列表 12-11 展示了另一个<code>use</code>语句将<code>std::error::Error</code>结构引入了作用域，还有使<code>run</code>函数返回<code>Result</code>的修改：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">use std::error::Error;
+# use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+# use std::process;
+
+// ...snip...
+# fn main() {
+#     let args: Vec&lt;String&gt; = env::args().collect();
+#
+#     let config = Config::new(&amp;args).unwrap_or_else(|err| {
+#         println!(&quot;Problem parsing arguments: {}&quot;, err);
+#         process::exit(1);
+#     });
+#
+#     println!(&quot;Searching for {}&quot;, config.search);
+#     println!(&quot;In file {}&quot;, config.filename);
+#
+#     run(config);
+#
+# }
+
+fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
+    let mut f = File::open(config.filename)?;
+
+    let mut contents = String::new();
+    f.read_to_string(&amp;mut contents)?;
+
+    println!(&quot;With text:\n{}&quot;, contents);
+
+    Ok(())
+}
+#
+# struct Config {
+#     search: String,
+#     filename: String,
+# }
+#
+# impl Config {
+#     fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+#         if args.len() &lt; 3 {
+#             return Err(&quot;not enough arguments&quot;);
+#         }
+#
+#         let search = args[1].clone();
+#         let filename = args[2].clone();
+#
+#         Ok(Config {
+#             search: search,
+#             filename: filename,
+#         })
+#     }
+# }
+</code></pre>
+<figcaption>
+<p>Listing 12-11: Changing the <code>run</code> function to return <code>Result</code></p>
+</figcaption>
+</figure>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>这里有三个大的修改。第一个是现在<code>run</code>函数的返回值是<code>Result&lt;(), Box&lt;Error&gt;&gt;</code>类型的。之前，函数返回 unit 类型<code>()</code>，现在它仍然是<code>Ok</code>时的返回值。对于错误类型，我们将使用<code>Box&lt;Error&gt;</code>。这是一个<strong>trait 对象</strong>（<em>trait object</em>），第XX章会讲到。现在可以这样理解它：<code>Box&lt;Error&gt;</code>意味着函数返回了某个实现了<code>Error</code> trait 的类型，不过并没有指定具体的返回值类型。这样就比较灵活，因为在不同的错误场景可能有不同类型的错误返回值。<code>Box</code>是一个堆数据的智能指针，第YY章将会详细介绍<code>Box</code>。</p>
+<p>第二个改变是我们去掉了<code>expect</code>调用并替换为第9章讲到的<code>?</code>。不同于遇到错误就<code>panic!</code>，这会从函数中返回错误值并让调用者来处理它。</p>
+<p>第三个修改是现在成功时这个函数会返回一个<code>Ok</code>值。因为<code>run</code>函数签名中声明成功类型返回值是<code>()</code>，所以需要将 unit 类型值包装进<code>Ok</code>值中。<code>Ok(())</code>一开始看起来有点奇怪，不过这样使用<code>()</code>是表明我们调用<code>run</code>只是为了它的副作用的惯用方式；它并没有返回什么有意义的值。</p>
+<p>上述代码能够编译，不过会有一个警告：</p>
+<pre><code>warning: unused result which must be used, #[warn(unused_must_use)] on by default
+  --&gt; src\main.rs:39:5
+   |
+39 |     run(config);
+   |     ^^^^^^^^^^^^
+</code></pre>
+<p>Rust 尝试告诉我们忽略<code>Result</code>，它有可能是一个错误值。让我们现在来处理它。我们将采用类似于列表 12-9 中处理<code>Config::new</code>错误的技巧，不过还有少许不同：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">fn main() {
+    // ...snip...
+
+    println!(&quot;Searching for {}&quot;, config.search);
+    println!(&quot;In file {}&quot;, config.filename);
+
+    if let Err(e) = run(config) {
+        println!(&quot;Application error: {}&quot;, e);
+
+        process::exit(1);
+    }
+}
+
+fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
+    let mut f = File::open(config.filename)?;
+
+    let mut contents = String::new();
+    f.read_to_string(&amp;mut contents)?;
+
+    println!(&quot;With text:\n{}&quot;, contents);
+
+    Ok(())
+}
+</code></pre>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>不同于<code>unwrap_or_else</code>，我们使用<code>if let</code>来检查<code>run</code>是否返回<code>Err</code>，如果是则调用<code>process::exit(1)</code>。为什么呢？这个例子和<code>Config::new</code>的区别有些微妙。对于<code>Config::new</code>我们关心两件事：</p>
+<ol>
+<li>检测出任何可能发生的错误</li>
+<li>如果没有出现错误创建一个<code>Config</code></li>
+</ol>
+<p>而在这个情况下，因为<code>run</code>在成功的时候返回一个<code>()</code>，唯一需要担心的就是第一件事：检测错误。如果我们使用了<code>unwrap_or_else</code>，则会得到<code>()</code>的返回值。它并没有什么用处。</p>
+<p>虽然两种情况下<code>if let</code>和<code>unwrap_or_else</code>的内容都是一样的：打印出错误并退出。</p>
+<a class="header" href="#将代码拆分到库-crate" name="将代码拆分到库-crate"><h3>将代码拆分到库 crate</h3></a>
+<p>现在项目看起来好多了！还有一件我们尚未开始的工作：拆分 <em>src/main.rs</em> 并将一些代码放入 <em>src/lib.rs</em> 中。让我们现在就开始吧：将 <em>src/main.rs</em> 中的<code>run</code>函数移动到新建的 <em>src/lib.rs</em> 中。还需要移动相关的<code>use</code>语句和<code>Config</code>的定义，以及其<code>new</code>方法。现在 <em>src/lib.rs</em> 应该如列表 12-12 所示：</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
+<pre><code class="language-rust">use std::error::Error;
+use std::fs::File;
+use std::io::prelude::*;
+
+pub struct Config {
+    pub search: String,
+    pub filename: String,
+}
+
+impl Config {
+    pub fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+        if args.len() &lt; 3 {
+            return Err(&quot;not enough arguments&quot;);
+        }
+
+        let search = args[1].clone();
+        let filename = args[2].clone();
+
+        Ok(Config {
+            search: search,
+            filename: filename,
+        })
+    }
+}
+
+pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt;{
+    let mut f = File::open(config.filename)?;
+
+    let mut contents = String::new();
+    f.read_to_string(&amp;mut contents)?;
+
+    println!(&quot;With text:\n{}&quot;, contents);
+
+    Ok(())
+}
+</code></pre>
+<figcaption>
+<p>Listing 12-12: Moving <code>Config</code> and <code>run</code> into <em>src/lib.rs</em></p>
+</figcaption>
+</figure>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>注意我们还需要使用公有的<code>pub</code>：在<code>Config</code>和其字段、它的<code>new</code>方法和<code>run</code>函数上。</p>
+<p>现在在 <em>src/main.rs</em> 中，我们需要通过<code>extern crate greprs</code>来引入现在位于 <em>src/lib.rs</em> 的代码。接着需要增加一行<code>use greprs::Config</code>来引入<code>Config</code>到作用域，并对<code>run</code>函数加上 crate 名称前缀，如列表 12-13 所示：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust,ignore">extern crate greprs;
+
+use std::env;
+use std::process;
+
+use greprs::Config;
+
+fn main() {
+    let args: Vec&lt;String&gt; = env::args().collect();
+
+    let config = Config::new(&amp;args).unwrap_or_else(|err| {
+        println!(&quot;Problem parsing arguments: {}&quot;, err);
+        process::exit(1);
+    });
+
+    println!(&quot;Searching for {}&quot;, config.search);
+    println!(&quot;In file {}&quot;, config.filename);
+
+    if let Err(e) = greprs::run(config) {
+        println!(&quot;Application error: {}&quot;, e);
+
+        process::exit(1);
+    }
+}
+</code></pre>
+<figcaption>
+<p>Listing 12-13: Bringing the <code>greprs</code> crate into the scope of <em>src/main.rs</em></p>
+</figcaption>
+</figure>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>通过这些重构，所有代码应该都能运行了。运行几次<code>cargo run</code>来确保你没有破坏什么内容。好的！确实有很多的内容，不过已经为将来的成功奠定了基础。我们采用了一种更加优秀的方式来处理错误，并使得代码更模块化了一些。从现在开始几乎所有的工作都将在 <em>src/lib.rs</em> 中进行。</p>
+<p>让我们利用这新创建的模块的优势来进行一些在旧代码中难以开开展的工作，他们在新代码中却很简单：编写测试！</p>
 
                 </div>
 
