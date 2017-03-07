@@ -62,3 +62,11 @@
     - [测试库的功能](ch12-04-testing-the-librarys-functionality.md)
     - [处理环境变量](ch12-05-working-with-environment-variables.md)
     - [输出到`stderr`而不是`stdout`](ch12-06-writing-to-stderr-instead-of-stdout.md)
+
+## Rust 编程思想
+
+- [Rust 中的函数式语言功能](ch13-00-functional-features.md)
+    - [闭包](ch13-01-closures.md)
+    - [迭代器](ch13-02-iterators.md)
+    - [改进 I/O 项目](ch13-03-improving-our-io-project.md)
+    - [性能](ch13-04-performance.md)

@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>输出到`stderr`而不是`stdout` - Rust 程序设计语言 简体中文版</title>
+        <title>性能 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> 结构体</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> 方法语法</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> 枚举和模式匹配</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> 定义枚举</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> <code>match</code>控制流运算符</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code>简单控制流</a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> 模块</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code>和文件系统</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> 使用<code>pub</code>控制可见性</a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> 使用<code>use</code>导入命名</a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> 通用集合类型</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> vector</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> 字符串</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> 哈希 map</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> 错误处理</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> <code>panic!</code>与不可恢复的错误</a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> <code>Result</code>与可恢复的错误</a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> <code>panic!</code>还是不<code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> 泛型、trait 和生命周期</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> 泛型数据类型</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> trait：定义共享的行为</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> 生命周期与引用有效性</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> 测试</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> 编写测试</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> 运行测试</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> 测试的组织结构</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> 一个 I/O 项目</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> 接受命令行参数</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> 读取文件</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> 增强错误处理和模块化</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> 测试库的功能</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> 处理环境变量</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> 输出到<code>stderr</code>而不是<code>stdout</code></a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> 结构体</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> 方法语法</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> 枚举和模式匹配</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> 定义枚举</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> <code>match</code>控制流运算符</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code>简单控制流</a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> 模块</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code>和文件系统</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> 使用<code>pub</code>控制可见性</a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> 使用<code>use</code>导入命名</a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> 通用集合类型</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> vector</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> 字符串</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> 哈希 map</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> 错误处理</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> <code>panic!</code>与不可恢复的错误</a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> <code>Result</code>与可恢复的错误</a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> <code>panic!</code>还是不<code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> 泛型、trait 和生命周期</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> 泛型数据类型</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> trait：定义共享的行为</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> 生命周期与引用有效性</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> 测试</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> 编写测试</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> 运行测试</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> 测试的组织结构</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> 一个 I/O 项目</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> 接受命令行参数</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> 读取文件</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> 增强错误处理和模块化</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> 测试库的功能</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> 处理环境变量</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> 输出到<code>stderr</code>而不是<code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Rust 中的函数式语言功能</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> 闭包</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> 迭代器</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> 改进 I/O 项目</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> 性能</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -1618,7 +1618,7 @@ commit cc053d91f41793e54d5321abe027b0c163d735b8</p>
 <!-- PROD: START BOX -->
 <blockquote>
 <a class="header" href="#栈stack与堆heap" name="栈stack与堆heap"><h3>栈（Stack）与堆（Heap）</h3></a>
-<p>在很多语言中并不经常需要考虑到栈与堆。不过在像 Rust 这样的系统变成语言中，值是位于栈上还是堆上在更大程度上影响了语言的行为以及为何必须做出特定的选择。我们会在本章的稍后部分描述所有权与堆与栈相关的部分，所以这里只是一个用来预热的简要解释。</p>
+<p>在很多语言中并不经常需要考虑到栈与堆。不过在像 Rust 这样的系统编程语言中，值是位于栈上还是堆上在更大程度上影响了语言的行为以及为何必须做出特定的选择。我们会在本章的稍后部分描述所有权与堆与栈相关的部分，所以这里只是一个用来预热的简要解释。</p>
 <p>栈和堆都是代码在运行时可供使用的内存部分，不过他们以不同的结构组成。栈以放入值的顺序存储并以相反顺序取出值。这也被称作<strong>后进先出</strong>（<em>last in, first out</em>）。想象一下一叠盘子：当增加更多盘子时，把他们放在盘子堆的顶部，当需要盘子时，也从顶部拿走。不能从中间也不能从底部增加或拿走盘子！增加数据叫做<strong>进栈</strong>（<em>pushing onto the stack</em>），而移出数据叫做<strong>出栈</strong>（<em>popping off the stack</em>）。</p>
 <p>操作栈是非常快的，因为它访问数据的方式：永远也不需要寻找一个位置放入新数据或者取出数据因为这个位置总是在栈顶。另一个使得栈快速的性质是栈中的所有数据都必须是一个已知的固定的大小。</p>
 <p>相反对于在编译时未知大小或大小可能变化的数据，可以把他们储存在堆上。堆是缺乏组织的：当向堆放入数据时，我们请求一定大小的空间。操作系统在堆的某处找到一块足够大的空位，把它标记为已使用，并返回给我们一个它位置的指针。这个过程称作<strong>在堆上分配内存</strong>（<em>allocating on the heap</em>），并且有时这个过程就简称为“分配”（allocating）。向栈中放入数据并不被认为是分配。因为指针是已知的固定大小的，我们可以将指针储存在栈上，不过当需要实际数据时，必须访问指针。</p>
@@ -7151,6 +7151,196 @@ search string and the lines of the contents to lowercase before comparing them</
 </figure>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>首先，将<code>search</code>字符串转换为小写，并存放于一个同名的覆盖变量中。注意现在<code>search</code>是一个<code>String</code>而不是字符串 slice，所以在将<code>search</code>传递给<code>contains</code>时需要加上 &amp;，因为<code>contains</code>获取一个字符串 slice。</p>
+<p>接着在检查每个<code>line</code>是否包含<code>search</code>之前增加了一个<code>to_lowercase</code>调用。因为将<code>line</code>和<code>search</code>都转换为小写，我们就可以无视大小写的匹配文件和命令行参数了。看看测试是否通过了：</p>
+<pre><code>    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target\debug\deps\greprs-e58e9b12d35dc861.exe
+
+running 2 tests
+test test::case_insensitive ... ok
+test test::case_sensitive ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
+
+     Running target\debug\greprs-8a7faa2662b5030a.exe
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests greprs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>好的！现在，我们必须真正的使用新的<code>grep_case_insensitive</code>函数。首先，在<code>Config</code>结构体中增加一个配置项：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">pub struct Config {
+    pub search: String,
+    pub filename: String,
+    pub case_sensitive: bool,
+}
+</code></pre>
+<!-- Will add ghosting in libreoffice /Carol -->
+<p>接着在<code>run</code>函数中检查这个选项，并根据<code>case_sensitive</code>函数的值来决定调用哪个函数：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust,ignore">pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt;{
+    let mut f = File::open(config.filename)?;
+
+    let mut contents = String::new();
+    f.read_to_string(&amp;mut contents)?;
+
+    let results = if config.case_sensitive {
+        grep(&amp;config.search, &amp;contents)
+    } else {
+        grep_case_insensitive(&amp;config.search, &amp;contents)
+    };
+
+    for line in results {
+        println!(&quot;{}&quot;, line);
+    }
+
+    Ok(())
+}
+</code></pre>
+<!-- Will add ghosting in libreoffice /Carol -->
+<p>最后需要真正的检查环境变量。为了将标准库中的<code>env</code>模块引入作用域，在 <em>src/lib.rs</em> 开头增加一个<code>use</code>行：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">use std::env;
+</code></pre>
+<p>并接着在<code>Config::new</code>中使用<code>env</code>模块的<code>vars</code>方法：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust"># use std::env;
+#
+# struct Config {
+#     search: String,
+#     filename: String,
+#     case_sensitive: bool,
+# }
+#
+impl Config {
+    pub fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+        if args.len() &lt; 3 {
+            return Err(&quot;not enough arguments&quot;);
+        }
+
+        let search = args[1].clone();
+        let filename = args[2].clone();
+
+        let mut case_sensitive = true;
+
+        for (name, _) in env::vars() {
+            if name == &quot;CASE_INSENSITIVE&quot; {
+                case_sensitive = false;
+            }
+        }
+
+        Ok(Config {
+            search: search,
+            filename: filename,
+            case_sensitive: case_sensitive,
+        })
+    }
+}
+</code></pre>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>这里我们调用了<code>env::vars</code>，它与<code>env::args</code>的工作方式类似。区别是<code>env::vars</code>返回一个环境变量而不是命令行参数的迭代器。不同于使用<code>collect</code>来创建一个所有环境变量的 vector，我们使用<code>for</code>循环。<code>env::vars</code>返回一系列元组：环境变量的名称和其值。我们从来也不关心它的值，只关心它是否被设置了，所以可以使用<code>_</code>占位符来取代变量名来让 Rust 知道它不应该警告一个未使用的变量。最后，有一个默认为真的变量<code>case_sensitive</code>。如果我们找到了一个<code>CASE_INSENSITIVE</code>环境变量，就将<code>case_sensitive</code>设置为假。接着将其作为<code>Config</code>的一部分返回。</p>
+<p>尝试运行几次吧！</p>
+<pre><code>$ cargo run to poem.txt
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target\debug\greprs.exe to poem.txt`
+Are you nobody, too?
+How dreary to be somebody!
+</code></pre>
+<pre><code>$ CASE_INSENSITIVE=1 cargo run to poem.txt
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target\debug\greprs.exe to poem.txt`
+Are you nobody, too?
+How dreary to be somebody!
+To tell your name the livelong day
+To an admiring bog!
+</code></pre>
+<p>好极了！<code>greprs</code>现在可以通过环境变量的控制来进行大小写不敏感搜索了。现在你已经知道如何处理命令行参数或环境变量了！</p>
+<p>一些程序允许对相同配置同时使用参数_和_环境变量。在这种情况下，程序来决定参数和环境变量的优先级。作为一个留给你的测试，尝试同时通过一个命令行参数来控制大小写不敏感搜索，并在程序遇到矛盾值时决定其优先级。</p>
+<p><code>std::env</code>模块还包含了更多处理环境变量的实用功能；请查看官方文档来了解其可用的功能。</p>
+<a class="header" href="#输出到stderr而不是stdout" name="输出到stderr而不是stdout"><h2>输出到<code>stderr</code>而不是<code>stdout</code></h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-06-writing-to-stderr-instead-of-stdout.md">ch12-06-writing-to-stderr-instead-of-stdout.md</a>
+<br>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+</blockquote>
+<p>目前为止，我们将所有的输出都<code>println!</code>到了终端。这是可以的，不过大部分终端都提供了两种输出：“标准输出”对应大部分信息，而“标准错误”则用于错误信息。这使得处理类似于“将错误打印到终端而将其他信息输出到文件”的情况变得更容易。</p>
+<p>可以通过在命令行使用<code>&gt;</code>来将输出重定向到文件中，同时不使用任何参数运行来造成一个错误，就会发现我们的程序只能打印到<code>stdout</code>：</p>
+<pre><code>$ cargo run &gt; output.txt
+</code></pre>
+<p><code>&gt;</code>语法告诉 shell 将标准输出的内容写入到 <em>output.txt</em> 文件中而不是打印到屏幕上。然而，如果运行命令后打开 <em>output.txt</em> 就会发现错误：</p>
+<pre><code>Problem parsing arguments: not enough arguments
+</code></pre>
+<p>我们希望这个信息被打印到屏幕上，而只有成功运行产生的输出写入到文件中。让我们如列表 12-17 中所示改变如何打印错误信息的方法：</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust,ignore">extern crate greprs;
+
+use std::env;
+use std::process;
+use std::io::prelude::*;
+
+use greprs::Config;
+
+fn main() {
+    let mut stderr = std::io::stderr();
+    let args: Vec&lt;String&gt; = env::args().collect();
+
+    let config = Config::new(&amp;args).unwrap_or_else(|err| {
+        writeln!(
+            &amp;mut stderr,
+            &quot;Problem parsing arguments: {}&quot;,
+            err
+        ).expect(&quot;Could not write to stderr&quot;);
+
+        process::exit(1);
+    });
+
+    if let Err(e) = greprs::run(config) {
+
+        writeln!(
+            &amp;mut stderr,
+            &quot;Application error: {}&quot;,
+            e
+        ).expect(&quot;Could not write to stderr&quot;);
+
+        process::exit(1);
+    }
+}
+</code></pre>
+<figcaption>
+<p>Listing 12-17: Writing error messages to <code>stderr</code> instead of <code>stdout</code></p>
+</figcaption>
+</figure>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>Rust 并没有类似<code>println!</code>这样的方便写入标准错误的函数。相反，我们使用<code>writeln!</code>宏，它有点像<code>println!</code>，不过它获取一个额外的参数。第一个参数是希望写入内容的位置。可以通过<code>std::io::stderr</code>函数获取一个标准错误的句柄。我们将一个<code>stderr</code>的可变引用传递给<code>writeln!</code>；它需要是可变的因为这样才能写入信息！第二个和第三个参数就像<code>println!</code>的第一个和第二参数：一个格式化字符串和任何需要插入的变量。</p>
+<p>让我们再次用相同方式运行程序，不带任何参数并用 <code>&gt;</code>重定向<code>stdout</code>：</p>
+<pre><code>$ cargo run &gt; output.txt
+Problem parsing arguments: not enough arguments
+</code></pre>
+<p>现在我们看到了屏幕上的错误信息，不过 <code>output.txt</code> 里什么也没有。如果我们使用正确的参数再次运行：</p>
+<pre><code>$ cargo run to poem.txt &gt; output.txt
+</code></pre>
+<p>终端将没有输出，不过 <code>output.txt</code> 将会包含其结果：</p>
+<p><span class="filename">Filename: output.txt</span></p>
+<pre><code>Are you nobody, too?
+How dreary to be somebody!
+</code></pre>
+<a class="header" href="#总结" name="总结"><h2>总结</h2></a>
+<p>在这一章，我们涉及了如果在 Rust 中进行常规的 I/O 操作。通过使用命令行参数、文件、环境变量和写入<code>stderr</code>的功能。现在你已经准备好编写命令行程序了。结合前几章的知识，你的代码将会是组织良好的，并能有效的将数据存储到合适的数据结构中、更好的处理错误，并且还是经过良好测试的。我们也接触了一个真实情况下需要生命周期注解来保证引用一直有效的场景。</p>
+<p>接下来，让我们探索如何利用一些 Rust 中受函数式编程语言影响的功能”闭包和迭代器。</p>
+<a class="header" href="#rust-中的函数式语言功能--迭代器和闭包" name="rust-中的函数式语言功能--迭代器和闭包"><h1>Rust 中的函数式语言功能 —— 迭代器和闭包</h1></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch13-00-functional-features.md">ch13-00-functional-features.md</a>
+<br>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+</blockquote>
+<a class="header" href="#迭代器" name="迭代器"><h1>迭代器</h1></a>
 
                 </div>
 
