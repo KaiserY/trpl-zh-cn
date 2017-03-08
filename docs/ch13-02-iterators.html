@@ -67,7 +67,95 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#迭代器" name="迭代器"><h1>迭代器</h1></a>
+                    <a class="header" href="#迭代器" name="迭代器"><h2>迭代器</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch13-02-iterators.md">ch13-02-iterators.md</a>
+<br>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
+</blockquote>
+<p>迭代器是 Rust 中的一个模式，它允许你对一个项的序列进行某些处理。例如。列表 13-5 中对 vecctor 中的每一个数加一：</p>
+<pre><code class="language-rust">let v1 = vec![1, 2, 3];
+
+let v2: Vec&lt;i32&gt; = v1.iter().map(|x| x + 1).collect();
+
+assert_eq!(v2, [2, 3, 4]);
+</code></pre>
+<p><span class="caption">Listing 13-5: Using an iterator, <code>map</code>, and <code>collect</code> to
+add one to each number in a vector</span></p>
+<!-- Will add wingdings in libreoffice /Carol -->
+<p>vector 的<code>iter</code>方法允许从 vector 创建一个<strong>迭代器</strong>（<em>iterator</em>）。接着迭代器上的<code>map</code>方法调用允许我们处理每一个元素：在这里，我们向<code>map</code>传递了一个对每一个元素<code>x</code>加一的闭包。<code>map</code>是最基本的与比较交互的方法之一，因为依次处理每一个元素是非常有用的！最后<code>collect</code>方法消费了迭代器并将其元素存放到一个新的数据结构中。在这个例子中，因为我们指定<code>v2</code>的类型是<code>Vec&lt;i32&gt;</code>，<code>collect</code>将会创建一个<code>i32</code>的 vector。</p>
+<p>像<code>map</code>这样的迭代器方法有时被称为<strong>迭代器适配器</strong>（<em>iterator adaptors</em>），因为他们获取一个迭代器并产生一个新的迭代器。也就是说，<code>map</code>在之前迭代器的基础上通过调用传递给它的闭包来创建了一个新的值序列的迭代器。</p>
+<p>概括一下，这行代码进行了如下工作：</p>
+<ol>
+<li>从 vector 中创建了一个迭代器。</li>
+<li>使用<code>map</code>适配器和一个闭包参数对每一个元素加一。</li>
+<li>使用<code>collect</code>适配器来消费迭代去并生成了一个新的 vector。</li>
+</ol>
+<p>这就是如何产生结果<code>[2, 3, 4]</code>的。如你所见，闭包是使用迭代器的很重要的一部分：他们提供了一个自定义类似<code>map</code>这样的迭代器适配器的行为的方法。</p>
+<a class="header" href="#迭代器是惰性的" name="迭代器是惰性的"><h3>迭代器是惰性的</h3></a>
+<p>在上一部分，你可能已经注意到了一个微妙的用词区别：我们说<code>map</code><strong>适配</strong>（<em>adapts</em>）了一个迭代器，而<code>collect</code><strong>消费</strong>（<em>consumes</em>）了一个迭代器。这是有意为之的。单独的迭代器并不会做任何工作；他们是惰性的。也就是说，像列表 13-5 的代码但是不调用<code>collect</code>的话：</p>
+<pre><code class="language-rust">let v1: Vec&lt;i32&gt; = vec![1, 2, 3];
+
+v1.iter().map(|x| x + 1); // without collect
+</code></pre>
+<p>这可以编译，不过会给出一个警告：</p>
+<pre><code>warning: unused result which must be used: iterator adaptors are lazy and do
+nothing unless consumed, #[warn(unused_must_use)] on by default
+ --&gt; src/main.rs:4:1
+  |
+4 | v1.iter().map(|x| x + 1); // without collect
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^
+</code></pre>
+<p>这个警告是因为迭代器适配器实际上并不自己进行处理。他们需要一些其他方法来触发迭代器链的计算。我们称之为<strong>消费迭代器</strong>（<em>consuming adaptors</em>），而<code>collect</code>就是其中之一。</p>
+<p>那么如何知道迭代器方法是否消费了迭代器呢？还有哪些适配器是可用的呢？为此，让我们看看<code>Iterator</code> trait。</p>
+<a class="header" href="#iterator-trait" name="iterator-trait"><h3><code>Iterator</code> trait</h3></a>
+<p>迭代器都实现了一个标准库中叫做<code>Iterator</code>的 trait。其定义看起来像这样：</p>
+<pre><code class="language-rust">trait Iterator {
+    type Item;
+
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;;
+}
+</code></pre>
+<p>这里有一些还未讲到的新语法：<code>type Item</code>和<code>Self::Item</code>定义了这个 trait 的<strong>关联类型</strong>（<em>associated type</em>），第XX章会讲到关联类型。现在所有你需要知道就是这些代码表示<code>Iterator</code> trait 要求你也定义一个<code>Item</code>类型，而这个<code>Item</code>类型用作<code>next</code>方法的返回值。换句话说，<code>Item</code>类型将是迭代器返回的元素的类型。</p>
+<p>让我们使用<code>Iterator</code> trait 来创建一个从一数到五的迭代器<code>Counter</code>。首先，需要创建一个结构体来存放迭代器的当前状态，它有一个<code>u32</code>的字段<code>count</code>。我们也定义了一个<code>new</code>方法，当然这并不是必须的。因为我们希望<code>Counter</code>能从一数到五，所以它总是从零开始：</p>
+<pre><code class="language-rust">struct Counter {
+    count: u32,
+}
+
+impl Counter {
+    fn new() -&gt; Counter {
+        Counter { count: 0 }
+    }
+}
+</code></pre>
+<p>接下来，我们将通过定义<code>next</code>方法来为<code>Counter</code>类型实现<code>Iterator</code> trait。我们希望迭代器的工作方式是对当前状态加一（这就是为什么将<code>count</code>初始化为零，这样迭代器首先就会返回一）。如果<code>count</code>仍然小于六，将返回当前状态，不过如果<code>count</code>大于等于六，迭代器将返回<code>None</code>，如列表 13-6 所示：</p>
+<pre><code class="language-rust"># struct Counter {
+#     count: u32,
+# }
+#
+impl Iterator for Counter {
+    // Our iterator will produce u32s
+    type Item = u32;
+
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        // increment our count. This is why we started at zero.
+        self.count += 1;
+
+        // check to see if we've finished counting or not.
+        if self.count &lt; 6 {
+            Some(self.count)
+        } else {
+            None
+        }
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 13-6: Implementing the <code>Iterator</code> trait on our
+<code>Counter</code> struct</span></p>
+<!-- I will add wingdings in libreoffice /Carol -->
+<p><code>type Item = u32</code>这一行表明迭代器中<code>Item</code>的关联类型将是<code>u32</code>。同样无需担心关联类型，因为第XX章会涉及他们。</p>
+<p><code>next</code>方法是迭代器的主要接口，它返回一个<code>Option</code>。如果它是<code>Some(value)</code>，相当于可以迭代器中获取另一个值。如果它是<code>None</code>，迭代器就结束了。在<code>next</code>方法中可以进行任何迭代器需要的计算。在这个例子中，我们对当前状态加一，接着检查其是否仍然小于六。如果是，返回<code>Some(self.count)</code>来产生下一个值。如果大于等于六，迭代结束并返回<code>None</code>。</p>
+<p>迭代器 trait 指定当其返回<code>None</code>，就代表迭代结束。该 trait 并不强制任何在<code>next</code>方法返回<code>None</code>后再次调用时必须有的行为。在这个情况下，在第一次返回<code>None</code>后每一次调用<code>next</code>仍然返回<code>None</code>，不过其内部<code>count</code>字段会依次增长到<code>u32</code>的最大值，接着<code>count</code>会溢出（在调试模式会<code>panic!</code>而在发布模式则会折叠从最小值开始）。</p>
 
                 </div>
 
