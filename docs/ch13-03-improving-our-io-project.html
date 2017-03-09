@@ -67,7 +67,115 @@
                 </div>
 
                 <div id="content" class="content">
-                    
+                    <a class="header" href="#改进-io-项目" name="改进-io-项目"><h2>改进 I/O 项目</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch13-03-improving-our-io-project.md">ch13-03-improving-our-io-project.md</a>
+<br>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+</blockquote>
+<p>在我们上一章实现的<code>grep</code> I/O 项目中，其中有一些地方的代码可以使用迭代器来变得更清楚简洁一些。让我们看看迭代器如何能够改进<code>Config::new</code>函数和<code>grep</code>函数的实现。</p>
+<a class="header" href="#使用迭代器并去掉clone" name="使用迭代器并去掉clone"><h3>使用迭代器并去掉<code>clone</code></h3></a>
+<p>回到列表 12-8 中，这些代码获取一个<code>String</code> slice 并创建一个<code>Config</code>结构体的实例，它检查参数的数量、索引 slice 中的值、并克隆这些值以便<code>Config</code>可以拥有他们的所有权：</p>
+<pre><code class="language-rust,ignore">impl Config {
+    fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+        if args.len() &lt; 3 {
+            return Err(&quot;not enough arguments&quot;);
+        }
+
+        let search = args[1].clone();
+        let filename = args[2].clone();
+
+        Ok(Config {
+            search: search,
+            filename: filename,
+        })
+    }
+}
+</code></pre>
+<p>当时我们说不必担心这里的<code>clone</code>调用，因为将来会移除他们。好吧，就是现在了！所以，为什么这里需要<code>clone</code>呢？这里的问题是参数<code>args</code>中有一个<code>String</code>元素的 slice，而<code>new</code>函数并不拥有<code>args</code>。为了能够返回<code>Config</code>实例的所有权，我们需要克隆<code>Config</code>中字段<code>search</code>和<code>filename</code>的值，这样<code>Config</code>就能拥有这些值了。</p>
+<p>现在在认识了迭代器之后，我们可以将<code>new</code>函数改为获取一个有所有权的迭代器作为参数。可以使用迭代器来代替之前必要的 slice 长度检查和特定位置的索引。因为我们获取了迭代器的所有权，就不再需要借用所有权的索引操作了，我们可以直接将迭代器中的<code>String</code>值移动到<code>Config</code>中，而不用调用<code>clone</code>来创建一个新的实例。</p>
+<p>首先，让我们看看列表 12-6 中的<code>main</code>函数，将<code>env::args</code>的返回值改为传递给<code>Config::new</code>，而不是调用<code>collect</code>并传递一个 slice：</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let config = Config::new(env::args());
+    // ...snip...
+</code></pre>
+<!-- Will add ghosting in libreoffice /Carol -->
+<p>如果参看标准库中<code>env::args</code>函数的文档，我们会发现它的返回值类型是<code>std::env::Args</code>。所以下一步就是更新<code>Config::new</code>的签名使得参数<code>args</code>拥有<code>std::env::Args</code>类型而不是<code>&amp;[String]</code>：</p>
+<pre><code class="language-rust,ignore">impl Config {
+    fn new(args: std::env::Args) -&gt; Result&lt;Config, &amp;'static str&gt; {
+        // ...snip...
+</code></pre>
+<!-- Will add ghosting in libreoffice /Carol -->
+<p>之后我们将修复<code>Config::new</code>的函数体。因为标准库文档也表明，<code>std::env::Args</code>实现了<code>Iterator</code> trait，所以我们知道可以调用其<code>next</code>方法！如下就是新的代码：</p>
+<pre><code class="language-rust"># struct Config {
+#     search: String,
+#     filename: String,
+# }
+#
+impl Config {
+    fn new(mut args: std::env::Args) -&gt; Result&lt;Config, &amp;'static str&gt; {
+        args.next();
+
+        let search = match args.next() {
+            Some(arg) =&gt; arg,
+            None =&gt; return Err(&quot;Didn't get a search string&quot;),
+        };
+
+        let filename = match args.next() {
+            Some(arg) =&gt; arg,
+            None =&gt; return Err(&quot;Didn't get a file name&quot;),
+        };
+
+        Ok(Config {
+            search: search,
+            filename: filename,
+        })
+    }
+}
+</code></pre>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>还记得<code>env::args</code>返回值的第一个值是程序的名称吗。我们希望忽略它，所以首先调用<code>next</code>并不处理其返回值。第二次调用<code>next</code>的返回值应该是希望放入<code>Config</code>中<code>search</code>字段的值。使用<code>match</code>来在<code>next</code>返回<code>Some</code>时提取值，而在因为没有足够的参数（这会造成<code>next</code>调用返回<code>None</code>）而提早返回<code>Err</code>值。</p>
+<p>对<code>filename</code>值也进行相同处理。稍微有些可惜的是<code>search</code>和<code>filename</code>的<code>match</code>表达式是如此的相似。如果可以对<code>next</code>返回的<code>Option</code>使用<code>?</code>就好了，不过目前<code>?</code>只能用于<code>Result</code>值。即便我们可以像<code>Result</code>一样对<code>Option</code>使用<code>?</code>，得到的值也是借用的，而我们希望能够将迭代器中的<code>String</code>移动到<code>Config</code>中。</p>
+<a class="header" href="#使用迭代器适配器来使代码更简明" name="使用迭代器适配器来使代码更简明"><h3>使用迭代器适配器来使代码更简明</h3></a>
+<p>另一部分可以利用迭代器的代码位于列表 12-15 中实现的<code>grep</code>函数中：</p>
+<!-- We hadn't had a listing number for this code sample when we submitted
+chapter 12; we'll fix the listing numbers in that chapter after you've
+reviewed it. /Carol -->
+<pre><code class="language-rust">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    let mut results = Vec::new();
+
+    for line in contents.lines() {
+        if line.contains(search) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+</code></pre>
+<p>我们可以用一种更简短的方式来编写这些代码，并避免使用了一个作为可变中间值的<code>results</code> vector，像这样使用迭代器适配器方法来实现：</p>
+<pre><code class="language-rust">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    contents.lines()
+        .filter(|line| line.contains(search))
+        .collect()
+}
+</code></pre>
+<p>这里使用了<code>filter</code>适配器来只保留<code>line.contains(search)</code>为真的那些行。接着使用<code>collect</code>将他们放入另一个 vector 中。这就简单多了！</p>
+<p>也可以对列表 12-16 中定义的<code>grep_case_insensitive</code>函数使用如下同样的技术：</p>
+<!-- Similarly, the code snippet that will be 12-16 didn't have a listing
+number when we sent you chapter 12, we will fix it. /Carol -->
+<pre><code class="language-rust">fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    let search = search.to_lowercase();
+
+    contents.lines()
+        .filter(|line| {
+            line.to_lowercase().contains(&amp;search)
+        }).collect()
+}
+</code></pre>
+<p>看起来还不坏！那么到底该用哪种风格呢？大部分 Rust 程序员倾向于使用迭代器风格。开始这有点难以理解，不过一旦你对不同迭代器的工作方式有了直觉上的理解之后，他们将更加容易理解。相比使用很多看起来大同小异的循环并创建一个 vector，抽象出这些老生常谈的代码将使得我们更容易看清代码所特有的概念，比如迭代器中用于过滤每个元素的条件。</p>
+<p>不过他们真的完全等同吗？当然更底层的循环会更快一些。让我们聊聊性能吧。</p>
+
                 </div>
 
                 <!-- Mobile navigation buttons -->

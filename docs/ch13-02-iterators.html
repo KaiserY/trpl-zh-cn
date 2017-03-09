@@ -155,7 +155,68 @@ impl Iterator for Counter {
 <!-- I will add wingdings in libreoffice /Carol -->
 <p><code>type Item = u32</code>这一行表明迭代器中<code>Item</code>的关联类型将是<code>u32</code>。同样无需担心关联类型，因为第XX章会涉及他们。</p>
 <p><code>next</code>方法是迭代器的主要接口，它返回一个<code>Option</code>。如果它是<code>Some(value)</code>，相当于可以迭代器中获取另一个值。如果它是<code>None</code>，迭代器就结束了。在<code>next</code>方法中可以进行任何迭代器需要的计算。在这个例子中，我们对当前状态加一，接着检查其是否仍然小于六。如果是，返回<code>Some(self.count)</code>来产生下一个值。如果大于等于六，迭代结束并返回<code>None</code>。</p>
-<p>迭代器 trait 指定当其返回<code>None</code>，就代表迭代结束。该 trait 并不强制任何在<code>next</code>方法返回<code>None</code>后再次调用时必须有的行为。在这个情况下，在第一次返回<code>None</code>后每一次调用<code>next</code>仍然返回<code>None</code>，不过其内部<code>count</code>字段会依次增长到<code>u32</code>的最大值，接着<code>count</code>会溢出（在调试模式会<code>panic!</code>而在发布模式则会折叠从最小值开始）。</p>
+<p>迭代器 trait 指定当其返回<code>None</code>，就代表迭代结束。该 trait 并不强制任何在<code>next</code>方法返回<code>None</code>后再次调用时必须有的行为。在这个情况下，在第一次返回<code>None</code>后每一次调用<code>next</code>仍然返回<code>None</code>，不过其内部<code>count</code>字段会依次增长到<code>u32</code>的最大值，接着<code>count</code>会溢出（在调试模式会<code>panic!</code>而在发布模式则会折叠从最小值开始）。有些其他的迭代器则选择再次从头开始迭代。如果需要确保迭代器在返回第一个<code>None</code>之后所有的<code>next</code>方法调用都返回<code>None</code>，可以使用<code>fuse</code>方法来创建不同于任何其他的迭代器。</p>
+<p>一旦实现了<code>Iterator</code> trait，我们就有了一个迭代器！可以通过不停的调用<code>Counter</code>结构体的<code>next</code>方法来使用迭代器的功能：</p>
+<pre><code class="language-rust,ignore">let mut counter = Counter::new();
+
+let x = counter.next();
+println!(&quot;{:?}&quot;, x);
+
+let x = counter.next();
+println!(&quot;{:?}&quot;, x);
+
+let x = counter.next();
+println!(&quot;{:?}&quot;, x);
+
+let x = counter.next();
+println!(&quot;{:?}&quot;, x);
+
+let x = counter.next();
+println!(&quot;{:?}&quot;, x);
+
+let x = counter.next();
+println!(&quot;{:?}&quot;, x);
+</code></pre>
+<p>这会一次一行的打印出从<code>Some(1)</code>到<code>Some(5)</code>，之后就全是<code>None</code>。</p>
+<a class="header" href="#各种iterator适配器" name="各种iterator适配器"><h3>各种<code>Iterator</code>适配器</h3></a>
+<p>在列表 13-5 中有一个迭代器并调用了其像<code>map</code>和<code>collect</code>这样的方法。然而在列表 13-6 中，只实现了<code>Counter</code>的<code>next</code>方法。<code>Counter</code>如何才能得到像<code>map</code>和<code>collect</code>这样的方法呢？</p>
+<p>好吧，当讲到<code>Iterator</code>的定义时，我们故意省略一个小的细节。<code>Iterator</code>定义了一系列默认实现，他们会调用<code>next</code>方法。因为<code>next</code>是唯一一个<code>Iterator</code> trait 没有默认实现的方法，一旦实现之后，<code>Iterator</code>的所有其他的适配器就都可用了。这些适配器可不少！</p>
+<p>例如，处于某种原因我们希望获取一个<code>Counter</code>实例产生的头五个值，与另一个<code>Counter</code>实例第一个之后的值相组合，将每组数相乘，并只保留能被三整除的相乘结果，最后将保留结果相加，我们可以这么做：</p>
+<pre><code class="language-rust"># struct Counter {
+#     count: u32,
+# }
+#
+# impl Counter {
+#     fn new() -&gt; Counter {
+#         Counter { count: 0 }
+#     }
+# }
+#
+# impl Iterator for Counter {
+#     // Our iterator will produce u32s
+#     type Item = u32;
+#
+#     fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+#         // increment our count. This is why we started at zero.
+#         self.count += 1;
+#
+#         // check to see if we've finished counting or not.
+#         if self.count &lt; 6 {
+#             Some(self.count)
+#         } else {
+#             None
+#         }
+#     }
+# }
+let sum: u32 = Counter::new().take(5)
+                             .zip(Counter::new().skip(1))
+                             .map(|(a, b)| a * b)
+                             .filter(|x| x % 3 == 0)
+                             .sum();
+assert_eq!(18, sum);
+</code></pre>
+<p>注意<code>zip</code>只生成四对值；理论上的第五对值并不会产生，因为<code>zip</code>在任一输入返回<code>None</code>时也会返回<code>None</code>（这个迭代器最多就生成 5）。</p>
+<p>因为实现了<code>Iterator</code>的<code>next</code>方法，所有这些方法调用都是可能的。请查看标准库文档来寻找迭代器可能会用得上的方法。</p>
 
                 </div>
 

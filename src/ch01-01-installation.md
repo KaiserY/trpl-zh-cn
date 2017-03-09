@@ -1,8 +1,8 @@
 ## 安装
 
-> [ch01-01-installation.md](https://github.com/rust-lang/book/blob/master/src/ch01-01-installation.md)
+> [ch01-01-installation.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-01-installation.md)
 > <br>
-> commit f828919e62aa542aaaae03c1fb565da42374213e
+> commit 4f2dc564851dc04b271a2260c834643dfd86c724
 
 使用 Rust 的第一步是安装。你需要联网来执行本章的命令，因为我们要从网上下载 Rust。
 

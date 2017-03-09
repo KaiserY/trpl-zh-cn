@@ -1,8 +1,8 @@
 # 介绍
 
-> [ch01-00-introduction.md](https://github.com/rust-lang/book/blob/master/src/ch01-00-introduction.md)
+> [ch01-00-introduction.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-00-introduction.md)
 > <br>
-> commit c51c14215d2ee2cb481bc8a942a3769c6d9a2e1a
+> commit 4f2dc564851dc04b271a2260c834643dfd86c724
 
 欢迎阅读“Rust 程序设计语言”，一本关于 Rust 的介绍性书籍。Rust 是一个着用于安全、速度和并发的编程语言。它的设计不仅可以使程序获得性能和对底层语言的控制，并且能够享受高级语言强大的抽象能力。这些特性使得 Rust 适合那些有类似 C 语言经验并正在寻找一个更安全的替代者的程序员，同时也适合那些来自类似 Python 语言背景，正在探索在不牺牲表现力的情况下编写更好性能代码的人们。
 

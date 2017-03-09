@@ -118,4 +118,78 @@ impl Iterator for Counter {
 
 `next`方法是迭代器的主要接口，它返回一个`Option`。如果它是`Some(value)`，相当于可以迭代器中获取另一个值。如果它是`None`，迭代器就结束了。在`next`方法中可以进行任何迭代器需要的计算。在这个例子中，我们对当前状态加一，接着检查其是否仍然小于六。如果是，返回`Some(self.count)`来产生下一个值。如果大于等于六，迭代结束并返回`None`。
 
-迭代器 trait 指定当其返回`None`，就代表迭代结束。该 trait 并不强制任何在`next`方法返回`None`后再次调用时必须有的行为。在这个情况下，在第一次返回`None`后每一次调用`next`仍然返回`None`，不过其内部`count`字段会依次增长到`u32`的最大值，接着`count`会溢出（在调试模式会`panic!`而在发布模式则会折叠从最小值开始）。
+迭代器 trait 指定当其返回`None`，就代表迭代结束。该 trait 并不强制任何在`next`方法返回`None`后再次调用时必须有的行为。在这个情况下，在第一次返回`None`后每一次调用`next`仍然返回`None`，不过其内部`count`字段会依次增长到`u32`的最大值，接着`count`会溢出（在调试模式会`panic!`而在发布模式则会折叠从最小值开始）。有些其他的迭代器则选择再次从头开始迭代。如果需要确保迭代器在返回第一个`None`之后所有的`next`方法调用都返回`None`，可以使用`fuse`方法来创建不同于任何其他的迭代器。
+
+一旦实现了`Iterator` trait，我们就有了一个迭代器！可以通过不停的调用`Counter`结构体的`next`方法来使用迭代器的功能：
+
+```rust,ignore
+let mut counter = Counter::new();
+
+let x = counter.next();
+println!("{:?}", x);
+
+let x = counter.next();
+println!("{:?}", x);
+
+let x = counter.next();
+println!("{:?}", x);
+
+let x = counter.next();
+println!("{:?}", x);
+
+let x = counter.next();
+println!("{:?}", x);
+
+let x = counter.next();
+println!("{:?}", x);
+```
+
+这会一次一行的打印出从`Some(1)`到`Some(5)`，之后就全是`None`。
+
+### 各种`Iterator`适配器
+
+在列表 13-5 中有一个迭代器并调用了其像`map`和`collect`这样的方法。然而在列表 13-6 中，只实现了`Counter`的`next`方法。`Counter`如何才能得到像`map`和`collect`这样的方法呢？
+
+好吧，当讲到`Iterator`的定义时，我们故意省略一个小的细节。`Iterator`定义了一系列默认实现，他们会调用`next`方法。因为`next`是唯一一个`Iterator` trait 没有默认实现的方法，一旦实现之后，`Iterator`的所有其他的适配器就都可用了。这些适配器可不少！
+
+例如，处于某种原因我们希望获取一个`Counter`实例产生的头五个值，与另一个`Counter`实例第一个之后的值相组合，将每组数相乘，并只保留能被三整除的相乘结果，最后将保留结果相加，我们可以这么做：
+
+
+```rust
+# struct Counter {
+#     count: u32,
+# }
+#
+# impl Counter {
+#     fn new() -> Counter {
+#         Counter { count: 0 }
+#     }
+# }
+#
+# impl Iterator for Counter {
+#     // Our iterator will produce u32s
+#     type Item = u32;
+#
+#     fn next(&mut self) -> Option<Self::Item> {
+#         // increment our count. This is why we started at zero.
+#         self.count += 1;
+#
+#         // check to see if we've finished counting or not.
+#         if self.count < 6 {
+#             Some(self.count)
+#         } else {
+#             None
+#         }
+#     }
+# }
+let sum: u32 = Counter::new().take(5)
+                             .zip(Counter::new().skip(1))
+                             .map(|(a, b)| a * b)
+                             .filter(|x| x % 3 == 0)
+                             .sum();
+assert_eq!(18, sum);
+```
+
+注意`zip`只生成四对值；理论上的第五对值并不会产生，因为`zip`在任一输入返回`None`时也会返回`None`（这个迭代器最多就生成 5）。
+
+因为实现了`Iterator`的`next`方法，所有这些方法调用都是可能的。请查看标准库文档来寻找迭代器可能会用得上的方法。

@@ -69,9 +69,9 @@
                 <div id="content" class="content">
                     <a class="header" href="#介绍" name="介绍"><h1>介绍</h1></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch01-00-introduction.md">ch01-00-introduction.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-00-introduction.md">ch01-00-introduction.md</a>
 <br>
-commit c51c14215d2ee2cb481bc8a942a3769c6d9a2e1a</p>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
 <p>欢迎阅读“Rust 程序设计语言”，一本关于 Rust 的介绍性书籍。Rust 是一个着用于安全、速度和并发的编程语言。它的设计不仅可以使程序获得性能和对底层语言的控制，并且能够享受高级语言强大的抽象能力。这些特性使得 Rust 适合那些有类似 C 语言经验并正在寻找一个更安全的替代者的程序员，同时也适合那些来自类似 Python 语言背景，正在探索在不牺牲表现力的情况下编写更好性能代码的人们。</p>
 <p>Rust 在编译时进行其绝大多数的安全检查和内存管理决策，因此程序的运行时性能没有受到影响。这让其在许多其他语言不擅长的应用场景中得以大显身手：有可预测空间和时间要求的程序，嵌入到其他语言中，以及编写底层代码，如设备驱动和操作系统。Rust 也很擅长 web 程序：它驱动着 Rust 包注册网站（package
@@ -81,9 +81,9 @@ registry site），<a href="https://crates.io/">crates.io</a>！我们期待看�
 <p>本书是开源的。如果你发现任何错误，请不要犹豫，<a href="https://github.com/rust-lang/book">在 GitHub 上</a>发起 issue 或提交 pull request。</p>
 <a class="header" href="#安装" name="安装"><h2>安装</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch01-01-installation.md">ch01-01-installation.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-01-installation.md">ch01-01-installation.md</a>
 <br>
-commit f828919e62aa542aaaae03c1fb565da42374213e</p>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
 <p>使用 Rust 的第一步是安装。你需要联网来执行本章的命令，因为我们要从网上下载 Rust。</p>
 <p>我们将会展示很多使用终端的命令，并且这些代码都以<code>$</code>开头。并不需要真正输入<code>$</code>，它们在这里代表每行指令的开头。在网上会看到很多使用这个惯例的教程和例子：<code>$</code>代表以常规用户运行命令，<code>#</code>代表需要用管理员运行的命令。没有以<code>$</code>（或<code>#</code>）的行通常是之前命令的输出。</p>
@@ -120,9 +120,9 @@ commit f828919e62aa542aaaae03c1fb565da42374213e</p>
 <p>任何你太确认标准库提供的类型或函数是干什么的时候，使用文档 API 查找！</p>
 <a class="header" href="#hello-world" name="hello-world"><h2>Hello, World!</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch01-02-hello-world.md">ch01-02-hello-world.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-02-hello-world.md">ch01-02-hello-world.md</a>
 <br>
-commit ccbeea7b9fe115cd545881618fe14229d18b307f</p>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
 <p>现在你已经安装好了 Rust，让我们来编写你的第一个 Rust 程序。当学习一门新语言的时候，编写一个在屏幕上打印 “Hello, world!” 文本的小程序是一个传统，而在这一部分，我们将遵循这个传统。</p>
 <blockquote>
@@ -7561,7 +7561,217 @@ impl Iterator for Counter {
 <!-- I will add wingdings in libreoffice /Carol -->
 <p><code>type Item = u32</code>这一行表明迭代器中<code>Item</code>的关联类型将是<code>u32</code>。同样无需担心关联类型，因为第XX章会涉及他们。</p>
 <p><code>next</code>方法是迭代器的主要接口，它返回一个<code>Option</code>。如果它是<code>Some(value)</code>，相当于可以迭代器中获取另一个值。如果它是<code>None</code>，迭代器就结束了。在<code>next</code>方法中可以进行任何迭代器需要的计算。在这个例子中，我们对当前状态加一，接着检查其是否仍然小于六。如果是，返回<code>Some(self.count)</code>来产生下一个值。如果大于等于六，迭代结束并返回<code>None</code>。</p>
-<p>迭代器 trait 指定当其返回<code>None</code>，就代表迭代结束。该 trait 并不强制任何在<code>next</code>方法返回<code>None</code>后再次调用时必须有的行为。在这个情况下，在第一次返回<code>None</code>后每一次调用<code>next</code>仍然返回<code>None</code>，不过其内部<code>count</code>字段会依次增长到<code>u32</code>的最大值，接着<code>count</code>会溢出（在调试模式会<code>panic!</code>而在发布模式则会折叠从最小值开始）。</p>
+<p>迭代器 trait 指定当其返回<code>None</code>，就代表迭代结束。该 trait 并不强制任何在<code>next</code>方法返回<code>None</code>后再次调用时必须有的行为。在这个情况下，在第一次返回<code>None</code>后每一次调用<code>next</code>仍然返回<code>None</code>，不过其内部<code>count</code>字段会依次增长到<code>u32</code>的最大值，接着<code>count</code>会溢出（在调试模式会<code>panic!</code>而在发布模式则会折叠从最小值开始）。有些其他的迭代器则选择再次从头开始迭代。如果需要确保迭代器在返回第一个<code>None</code>之后所有的<code>next</code>方法调用都返回<code>None</code>，可以使用<code>fuse</code>方法来创建不同于任何其他的迭代器。</p>
+<p>一旦实现了<code>Iterator</code> trait，我们就有了一个迭代器！可以通过不停的调用<code>Counter</code>结构体的<code>next</code>方法来使用迭代器的功能：</p>
+<pre><code class="language-rust,ignore">let mut counter = Counter::new();
+
+let x = counter.next();
+println!(&quot;{:?}&quot;, x);
+
+let x = counter.next();
+println!(&quot;{:?}&quot;, x);
+
+let x = counter.next();
+println!(&quot;{:?}&quot;, x);
+
+let x = counter.next();
+println!(&quot;{:?}&quot;, x);
+
+let x = counter.next();
+println!(&quot;{:?}&quot;, x);
+
+let x = counter.next();
+println!(&quot;{:?}&quot;, x);
+</code></pre>
+<p>这会一次一行的打印出从<code>Some(1)</code>到<code>Some(5)</code>，之后就全是<code>None</code>。</p>
+<a class="header" href="#各种iterator适配器" name="各种iterator适配器"><h3>各种<code>Iterator</code>适配器</h3></a>
+<p>在列表 13-5 中有一个迭代器并调用了其像<code>map</code>和<code>collect</code>这样的方法。然而在列表 13-6 中，只实现了<code>Counter</code>的<code>next</code>方法。<code>Counter</code>如何才能得到像<code>map</code>和<code>collect</code>这样的方法呢？</p>
+<p>好吧，当讲到<code>Iterator</code>的定义时，我们故意省略一个小的细节。<code>Iterator</code>定义了一系列默认实现，他们会调用<code>next</code>方法。因为<code>next</code>是唯一一个<code>Iterator</code> trait 没有默认实现的方法，一旦实现之后，<code>Iterator</code>的所有其他的适配器就都可用了。这些适配器可不少！</p>
+<p>例如，处于某种原因我们希望获取一个<code>Counter</code>实例产生的头五个值，与另一个<code>Counter</code>实例第一个之后的值相组合，将每组数相乘，并只保留能被三整除的相乘结果，最后将保留结果相加，我们可以这么做：</p>
+<pre><code class="language-rust"># struct Counter {
+#     count: u32,
+# }
+#
+# impl Counter {
+#     fn new() -&gt; Counter {
+#         Counter { count: 0 }
+#     }
+# }
+#
+# impl Iterator for Counter {
+#     // Our iterator will produce u32s
+#     type Item = u32;
+#
+#     fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+#         // increment our count. This is why we started at zero.
+#         self.count += 1;
+#
+#         // check to see if we've finished counting or not.
+#         if self.count &lt; 6 {
+#             Some(self.count)
+#         } else {
+#             None
+#         }
+#     }
+# }
+let sum: u32 = Counter::new().take(5)
+                             .zip(Counter::new().skip(1))
+                             .map(|(a, b)| a * b)
+                             .filter(|x| x % 3 == 0)
+                             .sum();
+assert_eq!(18, sum);
+</code></pre>
+<p>注意<code>zip</code>只生成四对值；理论上的第五对值并不会产生，因为<code>zip</code>在任一输入返回<code>None</code>时也会返回<code>None</code>（这个迭代器最多就生成 5）。</p>
+<p>因为实现了<code>Iterator</code>的<code>next</code>方法，所有这些方法调用都是可能的。请查看标准库文档来寻找迭代器可能会用得上的方法。</p>
+<a class="header" href="#改进-io-项目" name="改进-io-项目"><h2>改进 I/O 项目</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch13-03-improving-our-io-project.md">ch13-03-improving-our-io-project.md</a>
+<br>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+</blockquote>
+<p>在我们上一章实现的<code>grep</code> I/O 项目中，其中有一些地方的代码可以使用迭代器来变得更清楚简洁一些。让我们看看迭代器如何能够改进<code>Config::new</code>函数和<code>grep</code>函数的实现。</p>
+<a class="header" href="#使用迭代器并去掉clone" name="使用迭代器并去掉clone"><h3>使用迭代器并去掉<code>clone</code></h3></a>
+<p>回到列表 12-8 中，这些代码获取一个<code>String</code> slice 并创建一个<code>Config</code>结构体的实例，它检查参数的数量、索引 slice 中的值、并克隆这些值以便<code>Config</code>可以拥有他们的所有权：</p>
+<pre><code class="language-rust,ignore">impl Config {
+    fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+        if args.len() &lt; 3 {
+            return Err(&quot;not enough arguments&quot;);
+        }
+
+        let search = args[1].clone();
+        let filename = args[2].clone();
+
+        Ok(Config {
+            search: search,
+            filename: filename,
+        })
+    }
+}
+</code></pre>
+<p>当时我们说不必担心这里的<code>clone</code>调用，因为将来会移除他们。好吧，就是现在了！所以，为什么这里需要<code>clone</code>呢？这里的问题是参数<code>args</code>中有一个<code>String</code>元素的 slice，而<code>new</code>函数并不拥有<code>args</code>。为了能够返回<code>Config</code>实例的所有权，我们需要克隆<code>Config</code>中字段<code>search</code>和<code>filename</code>的值，这样<code>Config</code>就能拥有这些值了。</p>
+<p>现在在认识了迭代器之后，我们可以将<code>new</code>函数改为获取一个有所有权的迭代器作为参数。可以使用迭代器来代替之前必要的 slice 长度检查和特定位置的索引。因为我们获取了迭代器的所有权，就不再需要借用所有权的索引操作了，我们可以直接将迭代器中的<code>String</code>值移动到<code>Config</code>中，而不用调用<code>clone</code>来创建一个新的实例。</p>
+<p>首先，让我们看看列表 12-6 中的<code>main</code>函数，将<code>env::args</code>的返回值改为传递给<code>Config::new</code>，而不是调用<code>collect</code>并传递一个 slice：</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let config = Config::new(env::args());
+    // ...snip...
+</code></pre>
+<!-- Will add ghosting in libreoffice /Carol -->
+<p>如果参看标准库中<code>env::args</code>函数的文档，我们会发现它的返回值类型是<code>std::env::Args</code>。所以下一步就是更新<code>Config::new</code>的签名使得参数<code>args</code>拥有<code>std::env::Args</code>类型而不是<code>&amp;[String]</code>：</p>
+<pre><code class="language-rust,ignore">impl Config {
+    fn new(args: std::env::Args) -&gt; Result&lt;Config, &amp;'static str&gt; {
+        // ...snip...
+</code></pre>
+<!-- Will add ghosting in libreoffice /Carol -->
+<p>之后我们将修复<code>Config::new</code>的函数体。因为标准库文档也表明，<code>std::env::Args</code>实现了<code>Iterator</code> trait，所以我们知道可以调用其<code>next</code>方法！如下就是新的代码：</p>
+<pre><code class="language-rust"># struct Config {
+#     search: String,
+#     filename: String,
+# }
+#
+impl Config {
+    fn new(mut args: std::env::Args) -&gt; Result&lt;Config, &amp;'static str&gt; {
+        args.next();
+
+        let search = match args.next() {
+            Some(arg) =&gt; arg,
+            None =&gt; return Err(&quot;Didn't get a search string&quot;),
+        };
+
+        let filename = match args.next() {
+            Some(arg) =&gt; arg,
+            None =&gt; return Err(&quot;Didn't get a file name&quot;),
+        };
+
+        Ok(Config {
+            search: search,
+            filename: filename,
+        })
+    }
+}
+</code></pre>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>还记得<code>env::args</code>返回值的第一个值是程序的名称吗。我们希望忽略它，所以首先调用<code>next</code>并不处理其返回值。第二次调用<code>next</code>的返回值应该是希望放入<code>Config</code>中<code>search</code>字段的值。使用<code>match</code>来在<code>next</code>返回<code>Some</code>时提取值，而在因为没有足够的参数（这会造成<code>next</code>调用返回<code>None</code>）而提早返回<code>Err</code>值。</p>
+<p>对<code>filename</code>值也进行相同处理。稍微有些可惜的是<code>search</code>和<code>filename</code>的<code>match</code>表达式是如此的相似。如果可以对<code>next</code>返回的<code>Option</code>使用<code>?</code>就好了，不过目前<code>?</code>只能用于<code>Result</code>值。即便我们可以像<code>Result</code>一样对<code>Option</code>使用<code>?</code>，得到的值也是借用的，而我们希望能够将迭代器中的<code>String</code>移动到<code>Config</code>中。</p>
+<a class="header" href="#使用迭代器适配器来使代码更简明" name="使用迭代器适配器来使代码更简明"><h3>使用迭代器适配器来使代码更简明</h3></a>
+<p>另一部分可以利用迭代器的代码位于列表 12-15 中实现的<code>grep</code>函数中：</p>
+<!-- We hadn't had a listing number for this code sample when we submitted
+chapter 12; we'll fix the listing numbers in that chapter after you've
+reviewed it. /Carol -->
+<pre><code class="language-rust">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    let mut results = Vec::new();
+
+    for line in contents.lines() {
+        if line.contains(search) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+</code></pre>
+<p>我们可以用一种更简短的方式来编写这些代码，并避免使用了一个作为可变中间值的<code>results</code> vector，像这样使用迭代器适配器方法来实现：</p>
+<pre><code class="language-rust">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    contents.lines()
+        .filter(|line| line.contains(search))
+        .collect()
+}
+</code></pre>
+<p>这里使用了<code>filter</code>适配器来只保留<code>line.contains(search)</code>为真的那些行。接着使用<code>collect</code>将他们放入另一个 vector 中。这就简单多了！</p>
+<p>也可以对列表 12-16 中定义的<code>grep_case_insensitive</code>函数使用如下同样的技术：</p>
+<!-- Similarly, the code snippet that will be 12-16 didn't have a listing
+number when we sent you chapter 12, we will fix it. /Carol -->
+<pre><code class="language-rust">fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    let search = search.to_lowercase();
+
+    contents.lines()
+        .filter(|line| {
+            line.to_lowercase().contains(&amp;search)
+        }).collect()
+}
+</code></pre>
+<p>看起来还不坏！那么到底该用哪种风格呢？大部分 Rust 程序员倾向于使用迭代器风格。开始这有点难以理解，不过一旦你对不同迭代器的工作方式有了直觉上的理解之后，他们将更加容易理解。相比使用很多看起来大同小异的循环并创建一个 vector，抽象出这些老生常谈的代码将使得我们更容易看清代码所特有的概念，比如迭代器中用于过滤每个元素的条件。</p>
+<p>不过他们真的完全等同吗？当然更底层的循环会更快一些。让我们聊聊性能吧。</p>
+<a class="header" href="#性能" name="性能"><h2>性能</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch13-04-performance.md">ch13-04-performance.md</a>
+<br>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+</blockquote>
+<p>哪一个版本的<code>grep</code>函数会更快一些呢：是直接使用<code>for</code>循环的版本还是使用迭代器的版本呢？我们将运行一个性能测试，通过将阿瑟·柯南·道尔的“福尔摩斯探案集”的全部内容加载进<code>String</code>并寻找其中的单词 &quot;the&quot;。如下是<code>for</code>循环版本和迭代器版本的 grep 函数的性能测试结果：</p>
+<pre><code>test bench_grep_for  ... bench:  19,620,300 ns/iter (+/- 915,700)
+test bench_grep_iter ... bench:  19,234,900 ns/iter (+/- 657,200)
+</code></pre>
+<p>结果迭代器版本还要稍微快一点！这里我们将不会查看性能测试的代码，光是这一点并不是为了证明他们是完全等同的，而是提供了一个大体上比较这两种实现的方向。对于<strong>真正</strong>的性能测试，将会检查不同长度的文本、不同的搜索单词、不同长度的单词和所有其他的可变情况。这里所要表达的是：迭代器，作为一个高级的抽象，被编译成了与手写的底层代码大体一致性能代码。迭代器是 Rust 的<strong>零成本抽象</strong>（<em>zero-cost abstractions</em>）之一，它意味着抽象并不会强加运行时开销，它与本贾尼·斯特劳斯特卢普，C++ 的设计和实现者所定义的<strong>零开销</strong>（<em>zero-overhead</em>）如出一辙：</p>
+<blockquote>
+<p>In general, C++ implementations obey the zero-overhead principle: What you don’t use, you don’t pay for. And further: What you do use, you couldn’t hand code any better.</p>
+<ul>
+<li>Bjarne Stroustrup &quot;Foundations of C++&quot;</li>
+</ul>
+<p>从整体来说，C++ 的实现遵循了零开销原则：你不需要的，无需为他们买单。更有甚者的是：你需要的时候，也不可能找到其他更好的代码了。</p>
+<ul>
+<li>本贾尼·斯特劳斯特卢普 &quot;Foundations of C++&quot;</li>
+</ul>
+</blockquote>
+<p>作为另一个例子，这里有一些来自于音频解码器的代码。这些代码使用迭代器链来对作用域中的三个变量进行了某种数学计算：一个叫<code>buffer</code>的数据 slice、一个 12 个系数列表的<code>coefficients</code>、和一个移位位数的<code>qlp_shift</code>。例子中声明了这些变量但并没有提供任何值；虽然这些代码在其上下文之外没有什么意义，不过仍是一个简洁的现实中的例子，来展示 Rust 如何将高级概念转换为底层代码：</p>
+<pre><code class="language-rust,ignore">let buffer: &amp;mut [i32];
+let coefficients: [i64; 12];
+let qlp_shift: i16;
+
+for i in 12..buffer.len() {
+    let prediction = coefficients.iter()
+                                 .zip(&amp;buffer[i - 12..i])
+                                 .map(|(&amp;c, &amp;s)| c * s as i64)
+                                 .sum::&lt;i64&gt;() &gt;&gt; qlp_shift;
+    let delta = buffer[i];
+    buffer[i] = prediction as i32 + delta;
+}
+</code></pre>
+<p>为了计算<code>prediction</code>的值，这些代码遍历了<code>coefficients</code>中的 12 个值，使用<code>zip</code>方法将系数与<code>buffer</code>的前 12 个值组合在一起。接着将每一对值相乘，再将所有结果相加，然后将总和右移<code>qlp_shift</code>位。</p>
+<p>像音频解码器这样的程序通常非常看重计算的性能。这里，我们创建了一个迭代器，使用了两个适配器，接着消费了其值。Rust 代码将会被编译为什么样的汇编代码呢？好吧，在编写本书的这个时候，它被编译成与手写的相同的汇编代码。遍历<code>coefficients</code>的值完全用不到循环：Rust 知道这里会迭代 12 次，所以它“展开”了循环。所有的系数都被储存在了寄存器中（这意味着访问他们非常快）。也没有数组访问边界检查。这是极端有效率的。</p>
+<p>现在知道这些了，请放心大胆的使用迭代器和闭包吧！他们使得代码看起来更高级，但并不为此引入运行时性能损失。</p>
+<a class="header" href="#总结" name="总结"><h2>总结</h2></a>
+<p>闭包和迭代器是 Rust 受函数式编程语言观念所启发的功能。他们对 Rust 直白的表达高级概念的能力有很大贡献。闭包和迭代器的实现，以及 Rust 的零成本抽象，也使得运行时性能不受影响。</p>
+<p>现在我们改进了我们 I/O 项目的（代码）表现力，让我们看一看更多<code>cargo</code>的功能，他们是如何将项目准备好分享给世界的。</p>
 
                 </div>
 
