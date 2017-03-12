@@ -70,3 +70,10 @@
     - [迭代器](ch13-02-iterators.md)
     - [改进 I/O 项目](ch13-03-improving-our-io-project.md)
     - [性能](ch13-04-performance.md)
+
+- [更多关于 Cargo 和 Crates.io](ch14-00-more-about-cargo.md)
+    - [发布配置](ch14-01-release-profiles.md)
+    - [将 crate 发布到 Crates.io](ch14-02-publishing-to-crates-io.md)
+    - [Cargo 工作空间](ch14-03-cargo-workspaces.md)
+    - [使用`cargo install`从 Crates.io 安装文件](ch14-04-installing-binaries.md)
+    - [Cargo 自定义扩展命令](ch14-05-extending-cargo.md)

@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>性能 - Rust 程序设计语言 简体中文版</title>
+        <title>Cargo 自定义扩展命令 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> 结构体</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> 方法语法</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> 枚举和模式匹配</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> 定义枚举</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> <code>match</code>控制流运算符</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code>简单控制流</a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> 模块</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code>和文件系统</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> 使用<code>pub</code>控制可见性</a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> 使用<code>use</code>导入命名</a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> 通用集合类型</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> vector</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> 字符串</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> 哈希 map</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> 错误处理</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> <code>panic!</code>与不可恢复的错误</a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> <code>Result</code>与可恢复的错误</a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> <code>panic!</code>还是不<code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> 泛型、trait 和生命周期</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> 泛型数据类型</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> trait：定义共享的行为</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> 生命周期与引用有效性</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> 测试</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> 编写测试</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> 运行测试</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> 测试的组织结构</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> 一个 I/O 项目</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> 接受命令行参数</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> 读取文件</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> 增强错误处理和模块化</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> 测试库的功能</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> 处理环境变量</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> 输出到<code>stderr</code>而不是<code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Rust 中的函数式语言功能</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> 闭包</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> 迭代器</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> 改进 I/O 项目</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> 性能</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> 结构体</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> 方法语法</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> 枚举和模式匹配</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> 定义枚举</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> <code>match</code>控制流运算符</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code>简单控制流</a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> 模块</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code>和文件系统</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> 使用<code>pub</code>控制可见性</a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> 使用<code>use</code>导入命名</a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> 通用集合类型</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> vector</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> 字符串</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> 哈希 map</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> 错误处理</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> <code>panic!</code>与不可恢复的错误</a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> <code>Result</code>与可恢复的错误</a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> <code>panic!</code>还是不<code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> 泛型、trait 和生命周期</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> 泛型数据类型</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> trait：定义共享的行为</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> 生命周期与引用有效性</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> 测试</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> 编写测试</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> 运行测试</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> 测试的组织结构</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> 一个 I/O 项目</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> 接受命令行参数</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> 读取文件</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> 增强错误处理和模块化</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> 测试库的功能</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> 处理环境变量</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> 输出到<code>stderr</code>而不是<code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Rust 中的函数式语言功能</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> 闭包</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> 迭代器</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> 改进 I/O 项目</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> 性能</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> 更多关于 Cargo 和 Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> 发布配置</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> 将 crate 发布到 Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo 工作空间</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> 使用<code>cargo install</code>从 Crates.io 安装文件</a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Cargo 自定义扩展命令</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -7772,6 +7772,390 @@ for i in 12..buffer.len() {
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>闭包和迭代器是 Rust 受函数式编程语言观念所启发的功能。他们对 Rust 直白的表达高级概念的能力有很大贡献。闭包和迭代器的实现，以及 Rust 的零成本抽象，也使得运行时性能不受影响。</p>
 <p>现在我们改进了我们 I/O 项目的（代码）表现力，让我们看一看更多<code>cargo</code>的功能，他们是如何将项目准备好分享给世界的。</p>
+<a class="header" href="#更多关于-cargo-和-cratesio" name="更多关于-cargo-和-cratesio"><h1>更多关于 Cargo 和 Crates.io</h1></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch14-00-more-about-cargo.md">ch14-00-more-about-cargo.md</a>
+<br>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+</blockquote>
+<p>目前为止本书已经使用过一些 Cargo 的功能了，不过这是最基本的那些。我们使用 Cargo 构建、运行和测试代码，不过它还可以做更多。现在就让我们来了解这些其他功能。Cargo 所能做的比本章所涉及的内容还要多；作为一个完整的参考，请查看文档。</p>
+<p>我们将要涉及到：</p>
+<ul>
+<li>使用发布配置来自定义构建</li>
+<li>将库发布到 crates.io</li>
+<li>使用工作空间来组织更大的项目</li>
+<li>从 crates.io 安装二进制文件</li>
+<li>使用自定义的命令来扩展 Cargo</li>
+</ul>
+<a class="header" href="#发布配置" name="发布配置"><h2>发布配置</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch14-01-release-profiles.md">ch14-01-release-profiles.md</a>
+<br>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+</blockquote>
+<p>Cargo 支持一个叫做<strong>发布配置</strong>（<em>release profiles</em>）的概念。这些配置控制各种代码编译参数而且彼此相互独立。在构建的输出中你已经见过了这个功能的影子：</p>
+<pre><code>$ cargo build
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+$ cargo build --release
+    Finished release [optimized] target(s) in 0.0 secs
+</code></pre>
+<p>这里的 &quot;debug&quot; 和 &quot;release&quot; 提示表明编译器在使用不同的配置。Cargo 支持四种配置：</p>
+<ul>
+<li><code>dev</code>：用于<code>cargo build</code></li>
+<li><code>release</code>：用于<code>cargo build --release</code></li>
+<li><code>test</code>：用于<code>cargo test</code></li>
+<li><code>doc</code>：<code>cargo doc</code></li>
+</ul>
+<p>可以通过自定义<code>Cargo.toml</code>文件中的<code>[profile.*]</code>部分来调整这些配置的编译器参数。例如，这里是<code>dev</code>和<code>release</code>配置的默认参数：</p>
+<pre><code class="language-toml">[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3
+</code></pre>
+<p><code>opt-level</code>设置控制 Rust 会进行何种程度的优化。这个配置的值从 0 到 3。越高的优化级别需要更多的时间。当开发时经常需要编译，你通常希望能在牺牲一些代码性能的情况下编译得快一些。当准备发布时，一次花费更多时间编译来换取每次都要运行的更快的编译结果将更好一些。</p>
+<p>可以在<code>Cargo.toml</code>中覆盖这些默认设置。例如，如果你想在开发时开启一级优化：</p>
+<pre><code class="language-toml">[profile.dev]
+opt-level = 1
+</code></pre>
+<p>这将覆盖默认的设置<code>0</code>，而现在开发构建将获得更多的优化。虽然不如发布构建，但也多少有一些。</p>
+<p>对于每个配置的设置和其默认值的完整列表，请查看<a href="http://doc.crates.io/">Cargo 的 文档</a>。</p>
+<a class="header" href="#将-crate-发布到-cratesio" name="将-crate-发布到-cratesio"><h2>将 crate 发布到 Crates.io</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch14-02-publishing-to-crates-io.md">ch14-02-publishing-to-crates-io.md</a>
+<br>
+commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894</p>
+</blockquote>
+<p>我们曾经在项目中增加 crates.io 上的 crate 作为依赖。也可以选择将代码分享给其他人。Crates.io 用来分发包的源代码，所以它主要用于分发开源代码。</p>
+<p>Rust 和 Cargo 有一些帮助人们找到和使用你发布的包的功能。我们将介绍这些功能，接着讲到如何发布一个包。</p>
+<a class="header" href="#文档注释" name="文档注释"><h3>文档注释</h3></a>
+<p>在第三章中，我们见到了以<code>//</code>开头的注释，Rust 还有第二种注释：<strong>文档注释</strong>（<em>documentation comment</em>）。注释固然对阅读代码的人有帮助，也可以生成 HTML 代码来显式公有 API 的文档注释，这有助于那些对如何<strong>使用</strong> crate 有兴趣而不关心如何<strong>实现</strong>的人。注意只有库 crate 能生成文档，因为二进制 crate 并没有人们需要知道如何使用的公有 API。</p>
+<p>文档注释使用<code>///</code>而不是<code>//</code>并支持 Markdown 注解。他们就位于需要文档的项的之前。如下是一个<code>add_one</code>函数的文档注释：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">/// Adds one to the number given.
+///
+/// # Examples
+///
+/// ```
+/// let five = 5;
+///
+/// assert_eq!(6, add_one(5));
+/// # fn add_one(x: i32) -&gt; i32 {
+/// #     x + 1
+/// # }
+/// ```
+pub fn add_one(x: i32) -&gt; i32 {
+    x + 1
+}
+</code></pre>
+<p><span class="caption">Listing 14-1: A documentation comment for a
+function</span></p>
+<p><code>cargo doc</code>运行一个由 Rust 分发的工具，<code>rustdoc</code>，来为这些注释生成 HTML 文档。可以运行<code>cargo doc --open</code>在本地尝试一下，这会构建当前状态的文档（以及 crate 的依赖）并在浏览器中打开。导航到<code>add_one</code>函数将会发现文档注释是如何渲染的。</p>
+<p>在文档注释中增加示例代码块是一个清楚的表明如何使用库的方法。这么做还有一个额外的好处：<code>cargo test</code>也会像测试那样运行文档中的示例代码！没有什么比有例子的文档更好的了！也没有什么比不能正常工作的例子更糟的了，因为代码在编写文档时已经改变。尝试<code>cargo test</code>运行列表 14-1 中<code>add_one</code>函数的文档；将会看到如下测试结果：</p>
+<pre><code class="language-test">   Doc-tests add-one
+
+running 1 test
+test add_one_0 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>尝试改变示例或函数并观察<code>cargo test</code>会捕获不再能运行的例子！</p>
+<p>还有另一种风格的文档注释，<code>//!</code>，用于注释包含项的结构（例如：crate、模块或函数），而不是其之后的项。这通常用在 crate 的根（lib.rs）或模块的根（mod.rs）来分别编写 crate 或模块整体的文档。如下是包含整个标准库的<code>libstd</code>模块的文档：</p>
+<pre><code>//! # The Rust Standard Library
+//!
+//! The Rust Standard Library provides the essential runtime
+//! functionality for building portable Rust software.
+</code></pre>
+<a class="header" href="#使用pub-use来导出合适的公有-api" name="使用pub-use来导出合适的公有-api"><h3>使用<code>pub use</code>来导出合适的公有 API</h3></a>
+<p>第七章介绍了如何使用<code>mod</code>关键字来将代码组织进模块中，如何使用<code>pub</code>关键字将项变为公有，和如何使用<code>use</code>关键字将项引入作用域。当发布 crate 给并不熟悉其使用的库的实现的人时，就值得花时间考虑 crate 的结构对于开发和对于依赖 crate 的人来说是否同样有用。如果结构对于供其他库使用来说并不方便，也无需重新安排内部组织：可以选择使用<code>pub use</code>来重新导出一个不同的公有结构。</p>
+<p>例如列表 14-2中，我们创建了一个库<code>art</code>，其包含一个<code>kinds</code>模块，模块中包含枚举<code>Color</code>和包含函数<code>mix</code>的模块<code>utils</code>：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust,ignore">//! # Art
+//!
+//! A library for modeling artistic concepts.
+
+pub mod kinds {
+    /// The primary colors according to the RYB color model.
+    pub enum PrimaryColor {
+        Red,
+        Yellow,
+        Blue,
+    }
+
+    /// The secondary colors according to the RYB color model.
+    pub enum SecondaryColor {
+        Orange,
+        Green,
+        Purple,
+    }
+}
+
+pub mod utils {
+    use kinds::*;
+
+    /// Combines two primary colors in equal amounts to create
+    /// a secondary color.
+    pub fn mix(c1: PrimaryColor, c2: PrimaryColor) -&gt; SecondaryColor {
+        // ...snip...
+#         SecondaryColor::Green
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 14-2: An <code>art</code> library with items organized into
+<code>kinds</code> and <code>utils</code> modules</span></p>
+<p>为了使用这个库，列表 14-3 中另一个 crate 中使用了<code>use</code>语句：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">extern crate art;
+
+use art::kinds::PrimaryColor;
+use art::utils::mix;
+
+fn main() {
+    let red = PrimaryColor::Red;
+    let yellow = PrimaryColor::Yellow;
+    mix(red, yellow);
+}
+</code></pre>
+<p><span class="caption">Listing 14-3: A program using the <code>art</code> crate's items
+with its internal structure exported</span></p>
+<p>使用并不需要知道<code>PrimaryColor</code>和<code>SecondaryColor</code>位于<code>kinds</code>模块中和<code>mix</code>位于<code>utils</code>模块中；这些结构对于内部组织是有帮助的，不过对于外部的观点来说没有什么意义。</p>
+<p>为此，可以选择在列表 14-2 中增加如下<code>pub use</code>语句来将这些类型重新导出到顶级结构，如列表 14-4 所示：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust,ignore">//! # Art
+//!
+//! A library for modeling artistic concepts.
+
+pub use kinds::PrimaryColor;
+pub use kinds::SecondaryColor;
+pub use utils::mix;
+
+pub mod kinds {
+    // ...snip...
+</code></pre>
+<p><span class="caption">Listing 14-4: Adding <code>pub use</code> statements to re-export
+items</span></p>
+<!-- Will add ghosting in libreoffice /Carol -->
+<p>重导出的项将会被连接和排列在 crate API 文档的头版。<code>art</code> crate 的用户仍然可以像列表 14-3 那样使用内部结构，或者使用列表 14-4 中更方便的结构，如列表 14-5 所示：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">extern crate art;
+
+use art::PrimaryColor;
+use art::mix;
+
+fn main() {
+    // ...snip...
+}
+</code></pre>
+<p><span class="caption">Listing 14-5: Using the re-exported items from the <code>art</code>
+crate</span></p>
+<!-- Will add ghosting in libreoffice /Carol -->
+<p>创建一个有用的公有 API 结构更像一种艺术而不是科学。选择<code>pub use</code>提供了如何向用户暴露 crate 内部结构的灵活性。观察一些你所安装的 crate 的代码来看看其内部结构是否不同于公有 API。</p>
+<a class="header" href="#在第一次发布之前" name="在第一次发布之前"><h3>在第一次发布之前</h3></a>
+<p>在能够发布任何 crate 之前，你需要在<a href="https://crates.io">crates.io</a>上注册一个账号并获取一个 API token。为此，<a href="https://crates.io">访问其官网</a>并使用 GitHub 账号登陆。目前 GitHub 账号是必须的，不过将来网站可能会支持其他创建账号的方法。一旦登陆之后，查看<a href="https://crates.io/me">Account Settings</a>页面并使用其中指定的 API key 运行<code>cargo login</code>命令，这看起来像这样：</p>
+<pre><code>$ cargo login abcdefghijklmnopqrstuvwxyz012345
+</code></pre>
+<p>这个命令会通知 Cargo 你的 API token 并将其储存在本地的 <em>~/.cargo/config</em> 文件中。注意这个 token 是一个<strong>秘密</strong>（<strong>secret</strong>）并不应该与其他人共享。如果因为任何原因与他人共享了这个信息，应该立即重新生成这个 token。</p>
+<a class="header" href="#在发布新-crate-之前" name="在发布新-crate-之前"><h3>在发布新 crate 之前</h3></a>
+<p>首先，crate 必须有一个位移的名称。虽然在本地开发 crate 时，可以使用任何你喜欢的名字，不过<a href="https://crates.io">crates.io</a>上的 crate 名称遵守先到先得的原则分配。一旦一个 crate 名被使用，就不能被另一个 crate 所使用，所以请确认你喜欢的名字在网站上是可用的。</p>
+<p>如果尝试发布由<code>cargo new</code>生成的 crate，会出现一个警告接着是一个错误：</p>
+<pre><code>$ cargo publish
+    Updating registry `https://github.com/rust-lang/crates.io-index`
+warning: manifest has no description, license, license-file, documentation,
+homepage or repository.
+...snip...
+error: api errors: missing or empty metadata fields: description, license.
+Please see http://doc.crates.io/manifest.html#package-metadata for how to
+upload metadata
+</code></pre>
+<p>我们可以在包的 <em>Cargo.toml</em> 文件中包含更多的信息。其中一些字段是可选的，不过描述和 license 是发布所必须的，因为这样人们才能知道 crate 是干什么的已经在什么样的条款下可以使用他们。</p>
+<p>描述连同 crate 一起出现在搜索结果和 crate 页面中。描述通常是一两句话。<code>license</code>字段获取一个 license 标识符值，其可能的值由 Linux 基金会的<a href="http://spdx.org/licenses/">Software Package Data Exchange (SPDX)</a>指定。如果你想要使用一个并存在于此的 license，则不使用<code>license</code>值，使用<code>license-file</code>来指定项目中包含你想要使用的 license 的文本的文件名。</p>
+<p>关于项目所适用的 license 的指导超出了本书的范畴。很多 Rust 社区成员选择与 Rust 自身相同的 license，它是一个双许可的<code>MIT/Apache-2.0</code>，这表明可以通过斜杠来分隔指定多个 license。所以一个准备好发布的项目的 <em>Cargo.toml</em> 文件看起来像这样：</p>
+<pre><code class="language-toml">[package]
+name = &quot;guessing_game&quot;
+version = &quot;0.1.0&quot;
+authors = [&quot;Your Name &lt;you@example.com&gt;&quot;]
+description = &quot;A fun game where you guess what number the computer has chosen.&quot;
+license = &quot;MIT/Apache-2.0&quot;
+
+[dependencies]
+</code></pre>
+<p>请查看<a href="http://doc.crates.io/manifest.html#package-metadata">crates.io 的文档</a>中关于其他可以指定元数据的内容，他们可以帮助你的 crate 更容易被发现和使用！</p>
+<a class="header" href="#发布到-cratesio" name="发布到-cratesio"><h3>发布到 Crates.io</h3></a>
+<p>现在我们创建了一个账号，保存了 API token，为 crate 选择了一个名字，并指定了所需的元数据，我们已经准备好发布了！发布 crate 是一个特定版本的 crate 被上传并托管在 crates.io 的过程。</p>
+<p>发布 crate 请多加小心，因为发布是<strong>永久性的</strong>。对应版本不能被覆盖，其代码也不可能被删除。然而，可以被发布的版本号却没有限制。</p>
+<p>让我们运行<code>cargo publish</code>命令，这次它应该会成功因为已经指定了必须的元数据：</p>
+<pre><code>$ cargo publish
+ Updating registry `https://github.com/rust-lang/crates.io-index`
+Packaging guessing_game v0.1.0 (file:///projects/guessing_game)
+Verifying guessing_game v0.1.0 (file:///projects/guessing_game)
+Compiling guessing_game v0.1.0
+(file:///projects/guessing_game/target/package/guessing_game-0.1.0)
+ Finished debug [unoptimized + debuginfo] target(s) in 0.19 secs
+Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
+</code></pre>
+<p>恭喜！你现在向 Rust 社区分享了代码，而且任何人都可以轻松的将你的 crate 加入他们项目的依赖。</p>
+<a class="header" href="#发布已有-crate-的新版本" name="发布已有-crate-的新版本"><h3>发布已有 crate 的新版本</h3></a>
+<p>当你修改了 crate 并准备好发布新版本时，改变 <em>Cargo.toml</em> 中<code>version</code>所指定的值。请使用<a href="http://semver.org/">语义化版本规则</a>来根据修改的类型决定下一个版本呢号。接着运行<code>cargo publish</code>来上传新版本。</p>
+<a class="header" href="#使用cargo-yank从-cratesio-删除版本" name="使用cargo-yank从-cratesio-删除版本"><h3>使用<code>cargo yank</code>从 Crates.io 删除版本</h3></a>
+<p>发布版本时可能会出现意外，因为这样那样的原因导致功能被破坏，比如语法错误或忘记引入某些文件。对于这种情况，Cargo 支持 <em>yanking</em> 一个版本。</p>
+<p>标记一个版本的 crate 为 yank 意味着没有项目能够再开始依赖这个版本，不过现存的已经依赖这个版本的项目仍然能够下载和依赖这个版本的内容。crates.io 的一个主要目的是作为一个代码的永久档案库，这样能够保证所有的项目都能继续构建，而允许删除一个版本违反了这个目标。本质上来说，yank 意味着所有带有 <em>Cargo.lock</em> 的项目并不会被破坏，同时任何未来生成的 <em>Cargo.lock</em> 将不能使用被撤回的版本。</p>
+<p>yank 并<strong>不</strong>意味着删除了任何代码。例如 yank 功能不打算删除意外上传的 secret。如果这发生了，请立刻重置这些 secret。</p>
+<p>为了 yank 一个版本的 crate，运行<code>cargo yank</code>并指定需要 yank 的版本：</p>
+<pre><code>$ cargo yank --vers 1.0.1
+</code></pre>
+<p>也可以撤销 yank，并允许项目开始依赖这个版本，通过在命令中加上<code>--undo</code>：</p>
+<pre><code>$ cargo yank --vers 1.0.1 --undo
+</code></pre>
+<a class="header" href="#cargo-工作空间" name="cargo-工作空间"><h2>Cargo 工作空间</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch14-03-cargo-workspaces.md">ch14-03-cargo-workspaces.md</a>
+<br>
+commit d945f6d4046f4fc3c09326213100492790aebb45</p>
+</blockquote>
+<p>第十二章中，我们构建一个包含二进制 crate 和库 crate 的包。不过如果库 crate 继续变得更大而我们想要进一步将包拆分为多个库 crate 呢？随着包增长，拆分出其主要组件将是非常有帮助的。对于这种情况，Cargo 提供了一个叫<strong>工作空间</strong>（<em>workspaces</em>）的功能，它可以帮助我们管理多个相关的并行开发的包。</p>
+<p><strong>工作空间</strong>是一系列的包都共享同样的 <em>Cargo.lock</em> 和输出目录。让我们使用工作空间创建一个项目，这是我们熟悉的所以就可以关注工作空间的结构了。这里有一个二进制项目它使用了两个库：一个会提供<code>add_one</code>方法而第二个会提供<code>add_two</code>方法。让我们为这个二进制项目创建一个新 crate 作为开始：</p>
+<pre><code>$ cargo new --bin adder
+     Created binary (application) `adder` project
+$ cd adder
+</code></pre>
+<p>需要修改二进制包的 <em>Cargo.toml</em> 来告诉 Cargo 包<code>adder</code>是一个工作空间。再文件末尾增加如下：</p>
+<pre><code class="language-toml">[workspace]
+</code></pre>
+<p>类似于很多 Cargo 的功能，工作空间支持配置惯例：只要遵循这些惯例就无需再增加任何配置了。这个惯例是任何作为子目录依赖的 crate 将是工作空间的一部分。让我们像这样在 <em>Cargo.toml</em> 中的<code>[dependencies]</code>增加一个<code>adder</code> crate 的路径依赖：</p>
+<pre><code class="language-toml">[dependencies]
+add-one = { path = &quot;add-one&quot; }
+</code></pre>
+<p>如果增加依赖但没有指定<code>path</code>，这将是一个不位于工作空间的正常的依赖。</p>
+<p>接下来，在<code>adder</code>目录中生成<code>add-one</code> crate：</p>
+<pre><code>$ cargo new add-one
+     Created library `add-one` project
+</code></pre>
+<p>现在<code>adder</code>目录应该有如下目录和文件：</p>
+<pre><code>├── Cargo.toml
+├── add-one
+│   ├── Cargo.toml
+│   └── src
+│       └── lib.rs
+└── src
+    └── main.rs
+</code></pre>
+<p>在 <em>add-one/src/lib.rs</em> 中增加<code>add_one</code>函数的实现：</p>
+<p><span class="filename">Filename: add-one/src/lib.rs</span></p>
+<pre><code class="language-rust">pub fn add_one(x: i32) -&gt; i32 {
+    x + 1
+}
+</code></pre>
+<p>打开<code>adder</code>的 <em>src/main.rs</em> 并增加一行<code>extern crate</code>将新的<code>add-one</code>库引入作用域，并修改<code>main</code>函数来使用<code>add_one</code>函数：</p>
+<pre><code class="language-rust,ignore">extern crate add_one;
+
+fn main() {
+    let num = 10;
+    println!(&quot;Hello, world! {} plus one is {}!&quot;, num, add_one::add_one(num));
+}
+</code></pre>
+<p>让我们构建一下！</p>
+<pre><code>$ cargo build
+   Compiling add-one v0.1.0 (file:///projects/adder/add-one)
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.68 secs
+</code></pre>
+<p>注意在 <em>adder</em> 目录运行<code>cargo build</code>会构建这个 crate 和 <em>adder/add-one</em> 中的<code>add-one</code> crate，不过只创建一个 <em>Cargo.lock</em> 和一个 <em>target</em> 目录，他们都位于 <em>adder</em> 目录。试试你能否用相同的方式增加<code>add-two</code> crate。</p>
+<p>假如我们想要在<code>add-one</code> crate 中使用<code>rand</code> crate。一如既往在<code>Cargo.toml</code>的<code>[dependencies]</code>部分增加这个 crate：</p>
+<p><span class="filename">Filename: add-one/Cargo.toml</span></p>
+<pre><code class="language-toml">[dependencies]
+
+rand = &quot;0.3.14&quot;
+</code></pre>
+<p>如果在 <em>add-one/src/lib.rs</em> 中加上<code>extern crate rand;</code>后再运行<code>cargo build</code>，则会编译成功：</p>
+<pre><code>$ cargo build
+    Updating registry `https://github.com/rust-lang/crates.io-index`
+ Downloading rand v0.3.14
+   ...snip...
+   Compiling rand v0.3.14
+   Compiling add-one v0.1.0 (file:///projects/adder/add-one)
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 10.18 secs
+</code></pre>
+<p>现在 <em>Cargo.lock</em> 的顶部反映了<code>add-one</code>依赖<code>rand</code>这一事实。然而即使在工作空间的某处使用了<code>rand</code>，也不能在工作空间的其他 crate 使用它，除非在对应的 <em>Cargo.toml</em> 也增加<code>rand</code>的依赖。例如，如果在顶层的<code>adder</code> crate 的 <em>src/main.rs</em> 中增加<code>extern crate rand;</code>，将会出现一个错误：</p>
+<pre><code>$ cargo build
+   Compiling adder v0.1.0 (file:///projects/adder)
+error[E0463]: can't find crate for `rand`
+ --&gt; src/main.rs:1:1
+  |
+1 | extern crate rand;
+  | ^^^^^^^^^^^^^^^^^^^ can't find crate
+</code></pre>
+<p>为了修复这个错误，修改顶层的 <em>Cargo.toml</em> 并表明<code>rand</code>是<code>adder</code> crate 的一个依赖。</p>
+<p>作为另一个提高，为 crate 中的<code>add_one::add_one</code>函数增加一个测试：</p>
+<p><span class="filename">Filename: add-one/src/lib.rs</span></p>
+<pre><code class="language-rust">pub fn add_one(x: i32) -&gt; i32 {
+    x + 1
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_works() {
+        assert_eq!(3, add_one(2));
+    }
+}
+</code></pre>
+<p>现在在顶层的 <em>adder</em> 目录运行<code>cargo test</code>：</p>
+<pre><code>$ cargo test
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.27 secs
+     Running target/debug/adder-f0253159197f7841
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>等等，零个测试？我们不是刚增加了一个吗？如果我们观察输出，就不难发现在工作空间中的<code>cargo test</code>只运行顶层 crate 的测试。为了运行其他 crate 的测试，需要使用<code>-p</code>参数来表明我们希望与逆行测试包的测试：</p>
+<pre><code>$ cargo test -p add-one
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/add_one-abcabcabc
+
+running 1 test
+test tests::it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests add-one
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>类似的，如果选择将工作空间发布到 crates.io，其中的每一个包都需要单独发布。</p>
+<p>随着项目增长，考虑使用工作空间：每一个更小的组件比一大块代码要容易理解。将 crate 保持在工作空间中易于协调他们的改变，如果他们一起运行并经常需要同时被修改的话。</p>
+<a class="header" href="#使用cargo-install从-cratesio-安装文件" name="使用cargo-install从-cratesio-安装文件"><h2>使用<code>cargo install</code>从 Crates.io 安装文件</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch14-04-installing-binaries.md">ch14-04-installing-binaries.md</a>
+<br>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+</blockquote>
+<p><code>cargo install</code>命令用于在本地安装和使用二进制 crate。它并不打算替换系统中的包；它意在作为一个方便 Rust 开发者安装他人在 crates.io 共享的工具的手段。只有有二进制目标文件的包能够安装，而且所有二进制文件都被安装到 Rust 安装根目录的 <em>bin</em> 文件夹中。如果你使用 <em>rustup.rs</em> 安装的 Rust 且没有自定义任何配置，这将是<code>$HOME/.cargo/bin</code>。将这个目录添加到<code>$PATH</code>环境变量中就能够运行通过<code>cargo install</code>安装的程序了。</p>
+<p>例如，第十二章提到的叫做<code>ripgrep</code>的用于搜索文件的<code>grep</code>的 Rust 实现。如果想要安装<code>ripgrep</code>，可以运行如下：</p>
+<pre><code>$ cargo install ripgrep
+Updating registry `https://github.com/rust-lang/crates.io-index`
+ Downloading ripgrep v0.3.2
+ ...snip...
+   Compiling ripgrep v0.3.2
+    Finished release [optimized + debuginfo] target(s) in 97.91 secs
+  Installing ~/.cargo/bin/rg
+</code></pre>
+<p>最后一行输出展示了安装的二进制文件的位置和名称，在这里<code>ripgrep</code>被命名为<code>rg</code>。只要你像上面提到的那样将安装目录假如<code>$PATH</code>，就可以运行<code>rg --help</code>并开始使用一个更快更 Rust 的工具来搜索文件了！</p>
+<a class="header" href="#cargo-自定义扩展命令" name="cargo-自定义扩展命令"><h2>Cargo 自定义扩展命令</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch14-05-extending-cargo.md">ch14-05-extending-cargo.md</a>
+<br>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+</blockquote>
+<p>Cargo 被设计为可扩展的，通过新的子命令而无须修改 Cargo 自身。如果<code>$PATH</code>中有类似<code>cargo-something</code>的二进制文件，就可以通过<code>cargo something</code>来像 Cargo 子命令一样运行它。像这样的自定义命令也可以运行<code>cargo --list</code>来展示出来，通过<code>cargo install</code>向 Cargo 安装扩展并可以如内建 Cargo 工具那样运行他们是很方便的！</p>
+<a class="header" href="#总结" name="总结"><h2>总结</h2></a>
+<p>通过 Cargo 和 crates.io 来分享代码是使得 Rust 生态环境可以用于许多不同的任务的重要组成部分。Rust 的标准库是小而稳定的，不过 crate 易于分享和使用，并采用一个不同语言自身的时间线来提供改进。不要羞于在 crates.io 上共享对你有用的代码；因为它很有可能对别人也很有用！</p>
 
                 </div>
 
