@@ -77,3 +77,11 @@
     - [Cargo 工作空间](ch14-03-cargo-workspaces.md)
     - [使用`cargo install`从 Crates.io 安装文件](ch14-04-installing-binaries.md)
     - [Cargo 自定义扩展命令](ch14-05-extending-cargo.md)
+
+- [智能指针](ch15-00-smart-pointers.md)
+    - [`Box<T>`用于已知大小的堆上数据](ch15-01-box.md)
+    - [`Deref` Trait 允许通过引用访问数据](ch15-02-deref.md)
+    - [`Drop` Trait 运行清理代码](ch15-03-drop.md)
+    - [`Rc<T>` 引用计数智能指针](ch15-04-rc.md)
+    - [`RefCell<T>`和内部可变性模式](ch15-05-interior-mutability.md)
+    - [引用循环和内存泄漏是安全的](ch15-06-reference-cycles.md)
