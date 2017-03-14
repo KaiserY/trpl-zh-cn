@@ -8291,7 +8291,106 @@ commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 
 assert_eq!(6, x);
 </code></pre>
-<p>我们使用<code>*y</code>来访问可变引用<code>y</code>所指向的数据，</p>
+<p>我们使用<code>*y</code>来访问可变引用<code>y</code>所指向的数据，而是可变引用本身。接着可以修改它的数据，在这里对其加一。</p>
+<p>引用并不是智能指针，他们只是引用指向的一个值，所以这个解引用操作是很直接的。智能指针还会储存指针或数据的元数据。当解引用一个智能指针时，我们只想要数据，而不需要元数据。我们希望能在使用常规引用的地方也能使用智能指针。为此，可以通过实现<code>Deref</code> trait 来重载<code>*</code>运算符的行为。</p>
+<p>列表 15-7 展示了一个定义为储存 mp3 数据和元数据的结构体通过<code>Deref</code> trait 来重载<code>*</code>的例子。<code>Mp3</code>，在某种意义上是一个智能指针：它拥有包含音频的<code>Vec&lt;u8&gt;</code>数据。另外，它储存了一些可选的元数据，在这个例子中是音频数据中艺术家和歌曲的名称。我们希望能够方便的访问音频数据而不是元数据，所以需要实现<code>Deref</code> trait 来返回音频数据。实现<code>Deref</code> trait 需要一个叫做<code>deref</code>的方法，它借用<code>self</code>并返回其内部数据：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">use std::ops::Deref;
+
+struct Mp3 {
+    audio: Vec&lt;u8&gt;,
+    artist: Option&lt;String&gt;,
+    title: Option&lt;String&gt;,
+}
+
+impl Deref for Mp3 {
+    type Target = Vec&lt;u8&gt;;
+
+    fn deref(&amp;self) -&gt; &amp;Vec&lt;u8&gt; {
+        &amp;self.audio
+    }
+}
+
+fn main() {
+    let my_favorite_song = Mp3 {
+        // we would read the actual audio data from an mp3 file
+        audio: vec![1, 2, 3],
+        artist: Some(String::from(&quot;Nirvana&quot;)),
+        title: Some(String::from(&quot;Smells Like Teen Spirit&quot;)),
+    };
+
+    assert_eq!(vec![1, 2, 3], *my_favorite_song);
+}
+</code></pre>
+<p><span class="caption">Listing 15-7: An implementation of the <code>Deref</code> trait on a
+struct that holds mp3 file data and metadata</span></p>
+<p>大部分代码看起来都比较熟悉：一个结构体、一个 trait 实现、和一个创建了结构体示例的 main 函数。其中有一部分我们还未全面的讲解：类似于第十三章学习迭代器 trait 时出现的<code>type Item</code>，<code>type Target = T;</code>语法用于定义关联类型，第十九章会更详细的介绍。不必过分担心例子中的这一部分；它只是一个稍显不同的定义泛型参数的方式。</p>
+<p>在<code>assert_eq!</code>中，我们验证<code>vec![1, 2, 3]</code>是否为<code>Mp3</code>实例<code>*my_favorite_song</code>解引用的值，结果正是如此因为我们实现了<code>deref</code>方法来返回音频数据。如果没有为<code>Mp3</code>实现<code>Deref</code> trait，Rust 将不会编译<code>*my_favorite_song</code>：会出现错误说<code>Mp3</code>类型不能被解引用。</p>
+<p>代码能够工作的原因在于调用<code>*my_favorite_song</code>时<code>*</code>在背后所做的操作：</p>
+<pre><code class="language-rust,ignore">*(my_favorite_song.deref())
+</code></pre>
+<p>这对<code>my_favorite_song</code>调用了<code>deref</code>方法，它借用了<code>my_favorite_song</code>并返回指向<code>my_favorite_song.audio</code>的引用，这正是列表 15-5 中<code>deref</code>所定义的。引用的<code>*</code>被定义为仅仅从引用中返回其数据，所以上面<code>*</code>的展开形式对于外部<code>*</code>来说并不是递归的。最终的数据类型是<code>Vec&lt;u8&gt;</code>，它与列表 15-5 中<code>assert_eq!</code>的<code>vec![1, 2, 3]</code>相匹配。</p>
+<p><code>deref</code>方法的返回值类型仍然是引用和为何必须解引用方法的结果的原因是如果<code>deref</code>方法就返回值，使用<code>*</code>总是会获取其所有权。</p>
+<a class="header" href="#函数和方法的隐式解引用强制多态" name="函数和方法的隐式解引用强制多态"><h3>函数和方法的隐式解引用强制多态</h3></a>
+<p>Rust 倾向于偏爱明确而不是隐晦，不过一个情况下这并不成立，就是函数和方法的参数的<strong>解引用强制多态</strong>（<em>deref coercions</em>）。解引用强制多态会自动的将指针或智能指针的引用转换为指针内容的引用。解引用强制多态发生于一个值被传递给函数或方法，并只发生于需要将传递的值类型与签名中参数类型相匹配的时候。解引用强制多态的加入使得 Rust 调用函数或方法时无需很多使用<code>&amp;</code>和<code>*</code>的引用和解引用。</p>
+<p>使用列表 15-5 中的<code>Mp3</code>结构体，如下是一个获取<code>u8</code> slice 并压缩 mp3 音频数据的函数签名：</p>
+<pre><code class="language-rust,ignore">fn compress_mp3(audio: &amp;[u8]) -&gt; Vec&lt;u8&gt; {
+    // the actual implementation would go here
+}
+</code></pre>
+<p>如果 Rust 没有解引用强制多态，为了使用<code>my_favorite_song</code>中的音频数据调用此函数，必须写成：</p>
+<pre><code class="language-rust,ignore">compress_mp3(my_favorite_song.audio.as_slice())
+</code></pre>
+<p>也就是说，必须明确表用需要<code>my_favorite_song</code>中的<code>audio</code>字段而且我们希望有一个 slice 来引用这整个<code>Vec&lt;u8&gt;</code>。如果有很多地方需要用相同的方式处理<code>audio</code>数据，那么<code>.audio.as_slice()</code>就显得冗长重复了。</p>
+<p>然而，因为解引用强制多态和<code>Mp3</code>的<code>Deref</code> trait 实现，我们可以使用如下代码使用<code>my_favorite_song</code>中的数据调用这个函数：</p>
+<pre><code class="language-rust,ignore">let result = compress_mp3(&amp;my_favorite_song);
+</code></pre>
+<p>只有<code>&amp;</code>和实例，好的！我们可以把智能指针当成普通的引用。也就是说解引用强制多态意味着 Rust 利用了<code>Deref</code>实现的优势：Rust 知道<code>Mp3</code>实现了<code>Deref</code> trait 并从<code>deref</code>方法返回<code>&amp;Vec&lt;u8&gt;</code>。它也知道标准库实现了<code>Vec&lt;T&gt;</code>的<code>Deref</code> trait，其<code>deref</code>方法返回<code>&amp;[T]</code>（我们也可以通过查阅<code>Vec&lt;T&gt;</code>的 API 文档来发现这一点）。所以，在编译时，Rust 会发现它可以调用两次<code>Deref::deref</code>来将<code>&amp;Mp3</code>变成<code>&amp;Vec&lt;u8&gt;</code>再变成<code>&amp;[T]</code>来满足<code>compress_mp3</code>的签名。这意味着我们可以少写一些代码！Rust 会多次分析<code>Deref::deref</code>的返回值类型直到它满足参数的类型，只要相关类型实现了<code>Deref</code> trait。这些间接转换在编译时进行，所以利用解引用强制多态并没有运行时惩罚。</p>
+<p>这里还有一个重载了<code>&amp;mut T</code>的<code>*</code>的<code>DerefMut</code> trait，它以与<code>Deref</code>重载<code>&amp;T</code>的<code>*</code>相同的方式用于参数中。</p>
+<p>Rust 在发现类型和 trait 实现满足三种情况时会进行解引用强制多态：</p>
+<ul>
+<li>从<code>&amp;T</code>到<code>&amp;U</code>当<code>T: Deref&lt;Target=U&gt;</code>。</li>
+<li>从<code>&amp;mut T</code>到<code>&amp;mut U</code>当<code>T: DerefMut&lt;Target=U&gt;</code>。</li>
+<li>从<code>&amp;mut T</code>到<code>&amp;U</code>当<code>T: Deref&lt;Target=U&gt;</code>。</li>
+</ul>
+<p>头两个情况除了可变性之外是相同的：如果有一个<code>&amp;T</code>，而<code>T</code>实现了返回<code>U</code>类型的<code>Deref</code>，可以直接得到<code>&amp;U</code>。对于可变引用也是一样。最后一个有些微妙：如果有一个可变引用，它也可以强转为一个不可变引用。反之则是_不可能_的：不可变引用永远也不能强转为可变引用。</p>
+<p><code>Deref</code> trait 对于只能指针模式十分重要的原因在于智能指针可以被看作普通引用并用于期望使用引用的地方。例如，无需重新编写方法和函数来直接获取智能指针。</p>
+<a class="header" href="#drop-trait-运行清理代码" name="drop-trait-运行清理代码"><h2><code>Drop</code> Trait 运行清理代码</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch15-03-drop.md">ch15-03-drop.md</a>
+<br>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
+</blockquote>
+<p>对于智能指针模式来说另一个重要的 trait 是<code>Drop</code>。<code>Drop</code>运行我们在值要离开作用域时执行一些代码。智能指针在被丢弃时会执行一些重要的清理工作，比如释放内存或减少引用计数。更一般的来讲，数据类型可以管理多于内存的资源，比如文件或网络连接，而使用<code>Drop</code>在代码处理完他们之后释放这些资源。我们在智能指针上下文中讨论<code>Drop</code>是因为其功能几乎总是用于实现智能指针。</p>
+<p>在其他一些语言中，必须每次总是必须记住在使用完智能指针实例后调用清理内存或资源的代码。如果忘记的话，运行代码的系统可能会因为负荷过重而崩溃。在 Rust 中，可以指定一些代码应该在值离开作用域时被执行，而编译器会自动插入这些代码。这意味着无需记住在所有处理完这些类型实例后调用清理代码，而仍然不会泄露资源！</p>
+<p>指定在值离开作用域时应该执行的代码的方式是实现<code>Drop</code> trait。<code>Drop</code> trait 要求我们实现一个叫做<code>drop</code>的方法，它获取一个<code>self</code>的可变引用。</p>
+<p>列表 15-8 展示了并没有实际功能的结构体<code>CustomSmartPointer</code>，不过我们会在创建实例之后打印出<code>CustomSmartPointer created.</code>，而在实例离开作用域时打印出<code>Dropping CustomSmartPointer!</code>，这样就能看出哪些代码被执行了。不同于<code>println!</code>语句，我们在智能指针需要执行清理代码时使用<code>drop</code>：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">struct CustomSmartPointer {
+    data: String,
+}
+
+impl Drop for CustomSmartPointer {
+    fn drop(&amp;mut self) {
+        println!(&quot;Dropping CustomSmartPointer!&quot;);
+    }
+}
+
+fn main() {
+    let c = CustomSmartPointer { data: String::from(&quot;some data&quot;) };
+    println!(&quot;CustomSmartPointer created.&quot;);
+    println!(&quot;Wait for it...&quot;);
+}
+</code></pre>
+<p><span class="caption">Listing 15-8: A <code>CustomSmartPointer</code> struct that
+implements the <code>Drop</code> trait, where we could put code that would clean up after
+the <code>CustomSmartPointer</code>.</span></p>
+<p><code>Drop</code> trait 位于 prelude 中，所以无需导入它。<code>drop</code>方法的实现调用了<code>println!</code>；这里是你需要实际需要放入关闭套接字代码的地方。在<code>main</code>函数中，我们创建一个<code>CustomSmartPointer</code>的新实例并打印出<code>CustomSmartPointer created.</code>以便在运行时知道代码运行到此出。在<code>main</code>的结尾，<code>CustomSmartPointer</code>的实例会离开作用域。注意我们没有显式调用<code>drop</code>方法：</p>
+<p>当运行这个程序，我们会看到：</p>
+<pre><code>CustomSmartPointer created.
+Wait for it...
+Dropping CustomSmartPointer!
+</code></pre>
 
                 </div>
 
