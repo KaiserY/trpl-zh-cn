@@ -1783,7 +1783,7 @@ let y = x;
 
 println!(&quot;x = {}, y = {}&quot;, x, y);
 </code></pre>
-<p>他们似乎与我们刚刚学到的内容向抵触：没有调用<code>clone</code>，不过<code>x</code>依然有效且没有被移动到<code>y</code>中。</p>
+<p>他们似乎与我们刚刚学到的内容相抵触：没有调用<code>clone</code>，不过<code>x</code>依然有效且没有被移动到<code>y</code>中。</p>
 <p>原因是像整型这样的在编译时已知大小的类型被整个储存在栈上，所以拷贝其实际的值是快速的。这意味着没有理由在创建变量<code>y</code>后使<code>x</code>无效。换句话说，这里没有深浅拷贝的区别，所以调用<code>clone</code>并不会与通常的浅拷贝有什么不同，我们可以不用管它。</p>
 <p>Rust 有一个叫做<code>Copy</code> trait 的特殊注解，可以用在类似整型这样的储存在栈上的类型（第十章详细讲解 trait）。如果一个类型拥有<code>Copy</code> trait，一个旧的变量在（重新）赋值后仍然可用。Rust 不允许自身或其任何部分实现了<code>Drop</code> trait 的类型使用<code>Copy</code> trait。如果我们对其值离开作用域时需要特殊处理的类型使用<code>Copy</code>注解，将会出现一个编译时错误。</p>
 <p>那么什么类型是<code>Copy</code>的呢？可以查看给定类型的文档来确认，不过作为一个通用的规则，任何简单标量值的组合可以是<code>Copy</code>的，任何不需要分配内存或类似形式资源的类型是<code>Copy</code>的，如下是一些<code>Copy</code>的类型：</p>
@@ -2072,7 +2072,7 @@ for it to be borrowed from.
 <a class="header" href="#引用的规则" name="引用的规则"><h3>引用的规则</h3></a>
 <p>简要的概括一下对引用的讨论：</p>
 <ol>
-<li>特定时间，<strong>只能</strong>拥有如下中的一个：</li>
+<li>在任意给定时间，<strong>只能</strong>拥有如下中的一个：</li>
 </ol>
 <ul>
 <li>一个可变引用。</li>
@@ -8391,6 +8391,157 @@ the <code>CustomSmartPointer</code>.</span></p>
 Wait for it...
 Dropping CustomSmartPointer!
 </code></pre>
+<p>被打印到屏幕上，它展示了 Rust 在实例离开作用域时自动调用了<code>drop</code>。</p>
+<p>可以使用<code>std::mem::drop</code>函数来在值离开作用域之前丢弃它。这通常是不必要的；整个<code>Drop</code> trait 的要点在于它自动的帮我们处理清理工作。在第十六章讲到并发时我们会看到一个需要在离开作用域之前丢弃值的例子。现在知道这是可能的即可，<code>std::mem::drop</code>位于 prelude 中所以可以如列表 15-9 所示直接调用<code>drop</code>：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">fn main() {
+    let c = CustomSmartPointer { data: String::from(&quot;some data&quot;) };
+    println!(&quot;CustomSmartPointer created.&quot;);
+    drop(c);
+    println!(&quot;Wait for it...&quot;);
+}
+</code></pre>
+<p><span class="caption">Listing 15-9: Calling <code>std::mem::drop</code> to explicitly drop
+a value before it goes out of scope</span></p>
+<p>运行这段代码会打印出如下内容，因为<code>Dropping CustomSmartPointer!</code>在<code>CustomSmartPointer created.</code>和<code>Wait for it...</code>之间被打印出来，表明析构代码被执行了：</p>
+<pre><code>CustomSmartPointer created.
+Dropping CustomSmartPointer!
+Wait for it...
+</code></pre>
+<p>注意不允许直接调用我们定义的<code>drop</code>方法：如果将列表 15-9 中的<code>drop(c)</code>替换为<code>c.drop()</code>，会得到一个编译错误表明<code>explicit destructor calls not allowed</code>。不允许直接调用<code>Drop::drop</code>的原因是 Rust 在值离开作用域时会自动插入<code>Drop::drop</code>，这样就会丢弃值两次。丢弃一个值两次可能会造成错误或破坏内存，所以 Rust 就不允许这么做。相应的可以调用<code>std::mem::drop</code>，它的定义是：</p>
+<pre><code class="language-rust">pub mod std {
+    pub mod mem {
+        pub fn drop&lt;T&gt;(x: T) { }
+    }
+}
+</code></pre>
+<p>这个函数对于<code>T</code>是泛型的，所以可以传递任何值。这个函数的函数体并没有任何实际内容，所以它也不会利用其参数。这个空函数的作用在于<code>drop</code>获取其参数的所有权，它意味着在这个函数结尾<code>x</code>离开作用域时<code>x</code>会被丢弃。</p>
+<p>使用<code>Drop</code> trait 实现指定的代码在很多方面都使得清理值变得方便和安全：比如可以使用它来创建我们自己的内存分配器！通过<code>Drop</code> trait 和 Rust 所有权系统，就无需担心之后清理代码，因为 Rust 会自动考虑这些问题。如果代码在值仍被使用时就清理它会出现编译错误，因为所有权系统确保了引用总是有效的，这也就保证了<code>drop</code>只会在值不再被使用时被调用一次。</p>
+<p>现在我们学习了<code>Box&lt;T&gt;</code>和一些智能指针的特性，让我们聊聊一些其他标准库中定义的拥有各种实用功能的智能指针。</p>
+<a class="header" href="#rct-引用计数智能指针" name="rct-引用计数智能指针"><h2><code>Rc&lt;T&gt;</code> 引用计数智能指针</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch15-04-rc.md">ch15-04-rc.md</a>
+<br>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
+</blockquote>
+<p>大部分情况下所有权是非常明确的：可以准确的知道哪个变量拥有某个值。然而并不总是如此；有时确实可能需要多个所有者。为此，Rust 有一个叫做<code>Rc&lt;T&gt;</code>的类型。它的名字是<strong>引用计数</strong>（<em>reference counting</em>）的缩写。引用计数意味着它记录一个值引用的数量来知晓这个值是否仍在被使用。如果这个值有零个引用，就知道可以在没有有效引用的前提下清理这个值。</p>
+<p>根据现实生活场景来想象的话，它就像一个客厅的电视。当一个人进来看电视时，他打开电视。其他人也会进来看电视。当最后一个人离开房间时，他关掉电视因为它不再被使用了。如果某人在其他人还在看的时候关掉了电视，正在看电视人肯定会抓狂的！</p>
+<p><code>Rc&lt;T&gt;</code>用于当我们希望在堆上分配一些内存供程序的多个部分读取，而且无法在编译时确定程序的那一部分会最后结束使用它。如果我们知道的话那么常规的所有权规则会在编译时强制起作用。</p>
+<p>注意<code>Rc&lt;T&gt;</code>只能用于单线程场景；下一章并发会涉及到如何在多线程程序中进行引用计数。如果尝试在多线程中使用<code>Rc&lt;T&gt;</code>则会得到一个编译错误。</p>
+<a class="header" href="#使用rct分享数据" name="使用rct分享数据"><h3>使用<code>Rc&lt;T&gt;</code>分享数据</h3></a>
+<p>让我们回到列表 15-5 中的 cons list 例子。在列表 15-11 中尝试使用<code>Box&lt;T&gt;</code>定义的<code>List</code>。首先创建了一个包含 5 接着是 10 的列表实例。之后我们想要创建另外两个列表：一个以 3 开始并后接第一个包含 5 和 10 的列表，另一个以 4 开始其后<strong>也</strong>是第一个列表。换句话说，我们希望这两个列表共享第三个列表的所有权，概念上类似于图 15-10：</p>
+<p><img alt="Two lists that share ownership of a third list" src="img/trpl15-03.svg" class="center" /></p>
+<p><span class="caption">Figure 15-10: Two lists, <code>b</code> and <code>c</code>, sharing ownership
+of a third list, <code>a</code></span></p>
+<p>尝试使用<code>Box&lt;T&gt;</code>定义的<code>List</code>并不能工作，如列表 15-11 所示：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">enum List {
+    Cons(i32, Box&lt;List&gt;),
+    Nil,
+}
+
+use List::{Cons, Nil};
+
+fn main() {
+    let a = Cons(5,
+        Box::new(Cons(10,
+            Box::new(Nil))));
+    let b = Cons(3, Box::new(a));
+    let c = Cons(4, Box::new(a));
+}
+</code></pre>
+<p><span class="caption">Listing 15-11: Having two lists using <code>Box&lt;T&gt;</code> that try
+to share ownership of a third list won't work</span></p>
+<p>编译会得出如下错误：</p>
+<pre><code>error[E0382]: use of moved value: `a`
+  --&gt; src/main.rs:13:30
+   |
+12 |     let b = Cons(3, Box::new(a));
+   |                              - value moved here
+13 |     let c = Cons(4, Box::new(a));
+   |                              ^ value used here after move
+   |
+   = note: move occurs because `a` has type `List`, which does not
+   implement the `Copy` trait
+</code></pre>
+<p><code>Cons</code>成员拥有其储存的数据，所以当创建<code>b</code>列表时将<code>a</code>的所有权移动到了<code>b</code>。接着当再次尝使用<code>a</code>创建<code>c</code>时，这不被允许因为<code>a</code>的所有权已经被移动。</p>
+<p>相反可以改变<code>Cons</code>的定义来存放一个引用，不过接着必须指定生命周期参数，而且也必须以使得列表的每一个元素都与列表本身存在的一样久那样构造列表的元素。否则借用检查器甚至都不会允许我们编译代码。</p>
+<p>如列表 15-12 所示，可以将<code>List</code>的定义从<code>Box&lt;T&gt;</code>改为<code>Rc&lt;T&gt;</code>：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">enum List {
+    Cons(i32, Rc&lt;List&gt;),
+    Nil,
+}
+
+use List::{Cons, Nil};
+use std::rc::Rc;
+
+fn main() {
+    let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
+    let b = Cons(3, a.clone());
+    let c = Cons(4, a.clone());
+}
+</code></pre>
+<p><span class="caption">Listing 15-12: A definition of <code>List</code> that uses
+<code>Rc&lt;T&gt;</code></span></p>
+<p>注意必须为<code>Rc</code>增加<code>use</code>语句因为它不在 prelude 中。在<code>main</code>中创建了存放 5 和 10 的列表并将其存放在一个叫做<code>a</code>的新的<code>Rc</code>中。接着当创建<code>b</code>和<code>c</code>时，我们对<code>a</code>调用了<code>clone</code>方法。</p>
+<a class="header" href="#克隆rct会增加引用计数" name="克隆rct会增加引用计数"><h3>克隆<code>Rc&lt;T&gt;</code>会增加引用计数</h3></a>
+<p>之前我们见过<code>clone</code>方法，当时使用它来创建某些数据的完整拷贝。但是对于<code>Rc&lt;T&gt;</code>来说，它并不创建一个完整的拷贝。<code>Rc&lt;T&gt;</code>存放了<strong>引用计数</strong>，也就是说，一个存在多少个克隆的数量。让我们像列表 15-13 那样在创建<code>c</code>时增加一个内部作用域，并在不同的位置打印出关联函数<code>Rc::strong_count</code>的结果。<code>Rc::strong_count</code>返回传递给它的<code>Rc</code>值的引用计数，而在本章的稍后部分介绍避免引用循环时讲到它为什么叫做<code>strong_count</code>。</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust"># enum List {
+#     Cons(i32, Rc&lt;List&gt;),
+#     Nil,
+# }
+#
+# use List::{Cons, Nil};
+# use std::rc::Rc;
+#
+fn main() {
+    let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
+    println!(&quot;rc = {}&quot;, Rc::strong_count(&amp;a));
+    let b = Cons(3, a.clone());
+    println!(&quot;rc after creating b = {}&quot;, Rc::strong_count(&amp;a));
+    {
+        let c = Cons(4, a.clone());
+        println!(&quot;rc after creating c = {}&quot;, Rc::strong_count(&amp;a));
+    }
+    println!(&quot;rc after c goes out of scope = {}&quot;, Rc::strong_count(&amp;a));
+}
+</code></pre>
+<p><span class="caption">Listing 15-13: Printing out the reference count</span></p>
+<p>这会打印出：</p>
+<pre><code>rc = 1
+rc after creating b = 2
+rc after creating c = 3
+rc after c goes out of scope = 2
+</code></pre>
+<p>不难看出<code>a</code>的初始引用计数是一。接着每次调用<code>clone</code>，计数会加一。当<code>c</code>离开作用域时，计数减一，这发生在<code>Rc&lt;T&gt;</code>的<code>Drop</code> trait 实现中。这个例子中不能看到的是当<code>b</code>接着是<code>a</code>在<code>main</code>函数的结尾离开作用域时，包含 5 和 10 的列表的引用计数会是 0，这时列表将被丢弃。这个策略允许拥有多个所有者，而引用计数会确保任何所有者存在时这个值保持有效。</p>
+<p>在本部分的开始，我们说<code>Rc&lt;T&gt;</code>只允许程序的多个部分读取<code>Rc&lt;T&gt;</code>中<code>T</code>的不可变引用。如果<code>Rc&lt;T&gt;</code>允许一个可变引用，我们将遇到第四章讨论的借用规则所不允许的问题：两个指向同一位置的可变借用会导致数据竞争和不一致。不过可变数据是非常有用的！在下一部分，我们将讨论内部可变性模式和<code>RefCell&lt;T&gt;</code>类型，它可以与<code>Rc&lt;T&gt;</code>结合使用来处理不可变性的限制。</p>
+<a class="header" href="#refcellt和内部可变性模式" name="refcellt和内部可变性模式"><h2><code>RefCell&lt;T&gt;</code>和内部可变性模式</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch15-05-interior-mutability.md">ch15-05-interior-mutability.md</a>
+<br>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
+</blockquote>
+<p><strong>内部可变性</strong>（<em>Interior mutability</em>）是 Rust 中的一个设计模式，它允许你即使在有不可变引用时改变数据，这通常是借用规则所不允许。内部可变性模式涉及到在数据结构中使用<code>unsafe</code>代码来绕过 Rust 通常的可变性和借用规则。我们还未讲到不安全代码；第十九章会学习他们。内部可变性模式用于当你可以确保代码在运行时也会遵守借用规则，哪怕编译器也不能保证的情况。引入的<code>unsafe</code>代码将被封装进安全的 API 中，而外部类型仍然是不可变的。</p>
+<p>让我们通过遵循内部可变性模式的<code>RefCell&lt;T&gt;</code>类型来开始探索。</p>
+<a class="header" href="#refcellt拥有内部可变性" name="refcellt拥有内部可变性"><h3><code>RefCell&lt;T&gt;</code>拥有内部可变性</h3></a>
+<p>不同于<code>Rc&lt;T&gt;</code>，<code>RefCell&lt;T&gt;</code>代表其数据的唯一的所有权。那么是什么让<code>RefCell&lt;T&gt;</code>不同于像<code>Box&lt;T&gt;</code>这样的类型呢？回忆一下第四章所学的借用规则：</p>
+<ol>
+<li>在任意给定时间，<strong>只能</strong>拥有如下中的一个：</li>
+</ol>
+<ul>
+<li>一个可变引用。</li>
+<li>任意属性的不可变引用。</li>
+</ul>
+<ol start="2">
+<li>引用必须总是有效的。</li>
+</ol>
+<p>对于引用和<code>Box&lt;T&gt;</code>，借用规则的不可变性作用于编译时。对于<code>RefCell&lt;T&gt;</code>，这些不可变性作用于<strong>运行时</strong>。对于引用，如果违反这些规则，会得到一个编译错误。而对于<code>RefCell&lt;T&gt;</code>，违反这些规则会<code>panic!</code>。</p>
+<p>Rust 编译器执行的静态分析时天生保守的。代码的一些属性则不可能通过分析代码发现：其中最著名的就是停机问题（停机问题），这超出了本书的范畴，不过如果你感兴趣的话这是一个值得研究的有趣主题。</p>
+<p>因为一些分析是不可能的，Rust 编译器在其不确定的时候甚至都不尝试猜测，所以说它是保守的而且有时会拒绝事实上不会违反 Rust 保证的正确的程序。换句话说，如果 Rust 接受不正确的程序，那么人们也就不会相信 Rust 所做的保证了。如果 Rust 拒绝正确的程序，会给程序员带来不变，但不会带来灾难。<code>RefCell&lt;T&gt;</code>正是用于当你知道代码遵守借用规则，而编译器不能理解的时候。</p>
+<p>类似于<code>Rc&lt;T&gt;</code>，<code>RefCell&lt;T&gt;</code>只能用于单线程场景。在并发章节会介绍如何在多线程程序中使用<code>RefCell&lt;T&gt;</code>的功能。现在所有你需要知道的就是如果尝试在多线程上下文中使用<code>RefCell&lt;T&gt;</code>，会得到一个编译错误。</p>
+<p>对于引用，可以使用<code>&amp;</code>和<code>&amp;mut</code>语法来分别创建不可变和可变的引用。不过对于<code>RefCell&lt;T&gt;</code>，我们使用<code>borrow</code>和<code>borrow_mut</code>方法，它是<code>RefCell&lt;T&gt;</code>拥有的安全 API 的一部分。<code>borrow</code>返回<code>Ref</code>类型的智能指针，而<code>borrow_mut</code>返回<code>RefMut</code>类型的智能指针。这两个类型实现了<code>Deref</code>所以可以被当作常规引用处理。<code>Ref</code>和<code>RefMut</code>动态的借用所有权，而他们的<code>Drop</code>实现也动态的释放借用。</p>
 
                 </div>
 
