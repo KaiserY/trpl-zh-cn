@@ -67,7 +67,86 @@
                 </div>
 
                 <div id="content" class="content">
-                    
+                    <a class="header" href="#引用循环和内存泄漏是安全的" name="引用循环和内存泄漏是安全的"><h2>引用循环和内存泄漏是安全的</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch15-06-reference-cycles.md">ch15-06-reference-cycles.md</a>
+<br>
+commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894</p>
+</blockquote>
+<p>我们讨论过 Rust 做出的一些保证，例如永远也不会遇到一个空值，而且数据竞争也会在编译时被阻止。Rust 的内存安全保证也使其更难以制造从不被清理的内存，这被称为<strong>内存泄露</strong>。然而 Rust 并不是<strong>不可能</strong>出现内存泄漏，避免内存泄露<strong>并</strong>不是 Rust 的保证之一。换句话说，内存泄露是安全的。</p>
+<p>在使用<code>Rc&lt;T&gt;</code>和<code>RefCell&lt;T&gt;</code>时，有可能创建循环引用，这时各个项相互引用并形成环。这是不好的因为每一项的引用计数将永远也到不了 0，其值也永远也不会被丢弃。让我们看看这是如何发生的以及如何避免它。</p>
+<p>在列表 15-16 中，我们将使用列表 15-5 中<code>List</code>定义的另一个变体。我们将回到储存<code>i32</code>值作为<code>Cons</code>成员的第一个元素。现在<code>Cons</code>成员的第二个元素是<code>RefCell&lt;Rc&lt;List&gt;&gt;</code>：这时就不能修改<code>i32</code>值了，但是能够修改<code>Cons</code>成员指向的哪个<code>List</code>。还需要增加一个<code>tail</code>方法来方便我们在拥有一个<code>Cons</code>成员时访问第二个项：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">#[derive(Debug)]
+enum List {
+    Cons(i32, RefCell&lt;Rc&lt;List&gt;&gt;),
+    Nil,
+}
+
+impl List {
+    fn tail(&amp;self) -&gt; Option&lt;&amp;RefCell&lt;Rc&lt;List&gt;&gt;&gt; {
+        match *self {
+            Cons(_, ref item) =&gt; Some(item),
+            Nil =&gt; None,
+        }
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 15-16: A cons list definition that holds a
+<code>RefCell</code> so that we can modify what a <code>Cons</code> variant is referring to</span></p>
+<p>接下来，在列表 15-17 中，我们将在变量<code>a</code>中创建一个<code>List</code>值，其内部是一个<code>5, Nil</code>的列表。接着在变量<code>b</code>创建一个值 10 和指向<code>a</code>中列表的<code>List</code>值。最后修改<code>a</code>指向<code>b</code>而不是<code>Nil</code>，这会创建一个循环：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust"># #[derive(Debug)]
+# enum List {
+#     Cons(i32, RefCell&lt;Rc&lt;List&gt;&gt;),
+#     Nil,
+# }
+#
+# impl List {
+#     fn tail(&amp;self) -&gt; Option&lt;&amp;RefCell&lt;Rc&lt;List&gt;&gt;&gt; {
+#         match *self {
+#             Cons(_, ref item) =&gt; Some(item),
+#             Nil =&gt; None,
+#         }
+#     }
+# }
+#
+use List::{Cons, Nil};
+use std::rc::Rc;
+use std::cell::RefCell;
+
+fn main() {
+
+    let a = Rc::new(Cons(5, RefCell::new(Rc::new(Nil))));
+
+    println!(&quot;a initial rc count = {}&quot;, Rc::strong_count(&amp;a));
+    println!(&quot;a next item = {:?}&quot;, a.tail());
+
+    let b = Rc::new(Cons(10, RefCell::new(a.clone())));
+
+    println!(&quot;a rc count after b creation = {}&quot;, Rc::strong_count(&amp;a));
+    println!(&quot;b initial rc count = {}&quot;, Rc::strong_count(&amp;b));
+    println!(&quot;b next item = {:?}&quot;, b.tail());
+
+    if let Some(ref link) = a.tail() {
+        *link.borrow_mut() = b.clone();
+    }
+
+    println!(&quot;b rc count after changing a = {}&quot;, Rc::strong_count(&amp;b));
+    println!(&quot;a rc count after changing a = {}&quot;, Rc::strong_count(&amp;a));
+
+    // Uncomment the next line to see that we have a cycle; it will
+    // overflow the stack
+    // println!(&quot;a next item = {:?}&quot;, a.tail());
+}
+</code></pre>
+<p><span class="caption">Listing 15-17: Creating a reference cycle of two <code>List</code>
+values pointing to each other</span></p>
+<p>使用<code>tail</code>方法来获取<code>a</code>中<code>RefCell</code>的引用，并将其放入变量<code>link</code>中。接着对<code>RefCell</code>使用<code>borrow_mut</code>方法将其中的值从存放<code>Nil</code>值的<code>Rc</code>改为<code>b</code>中的<code>Rc</code>。这创建了一个看起来像图 15-18 所示的引用循环：</p>
+<p><img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" style="width: 50%;" /></p>
+<p><span class="caption">Figure 15-18: A reference cycle of lists <code>a</code> and <code>b</code>
+pointing to each other</span></p>
+
                 </div>
 
                 <!-- Mobile navigation buttons -->

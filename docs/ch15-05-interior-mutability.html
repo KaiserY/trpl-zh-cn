@@ -73,7 +73,7 @@
 <br>
 commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
-<p><strong>内部可变性</strong>（<em>Interior mutability</em>）是 Rust 中的一个设计模式，它允许你即使在有不可变引用时改变数据，这通常是借用规则所不允许。内部可变性模式涉及到在数据结构中使用<code>unsafe</code>代码来绕过 Rust 通常的可变性和借用规则。我们还未讲到不安全代码；第十九章会学习他们。内部可变性模式用于当你可以确保代码在运行时也会遵守借用规则，哪怕编译器也不能保证的情况。引入的<code>unsafe</code>代码将被封装进安全的 API 中，而外部类型仍然是不可变的。</p>
+<p><strong>内部可变性</strong>（<em>Interior mutability</em>）是 Rust 中的一个设计模式，它允许你即使在有不可变引用时改变数据，这通常是借用规则所不允许。内部可变性模式涉及到在数据结构中使用<code>unsafe</code>代码来模糊 Rust 通常的可变性和借用规则。我们还未讲到不安全代码；第十九章会学习他们。内部可变性模式用于当你可以确保代码在运行时也会遵守借用规则，哪怕编译器也不能保证的情况。引入的<code>unsafe</code>代码将被封装进安全的 API 中，而外部类型仍然是不可变的。</p>
 <p>让我们通过遵循内部可变性模式的<code>RefCell&lt;T&gt;</code>类型来开始探索。</p>
 <a class="header" href="#refcellt拥有内部可变性" name="refcellt拥有内部可变性"><h3><code>RefCell&lt;T&gt;</code>拥有内部可变性</h3></a>
 <p>不同于<code>Rc&lt;T&gt;</code>，<code>RefCell&lt;T&gt;</code>代表其数据的唯一的所有权。那么是什么让<code>RefCell&lt;T&gt;</code>不同于像<code>Box&lt;T&gt;</code>这样的类型呢？回忆一下第四章所学的借用规则：</p>
@@ -92,6 +92,113 @@ commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 <p>因为一些分析是不可能的，Rust 编译器在其不确定的时候甚至都不尝试猜测，所以说它是保守的而且有时会拒绝事实上不会违反 Rust 保证的正确的程序。换句话说，如果 Rust 接受不正确的程序，那么人们也就不会相信 Rust 所做的保证了。如果 Rust 拒绝正确的程序，会给程序员带来不变，但不会带来灾难。<code>RefCell&lt;T&gt;</code>正是用于当你知道代码遵守借用规则，而编译器不能理解的时候。</p>
 <p>类似于<code>Rc&lt;T&gt;</code>，<code>RefCell&lt;T&gt;</code>只能用于单线程场景。在并发章节会介绍如何在多线程程序中使用<code>RefCell&lt;T&gt;</code>的功能。现在所有你需要知道的就是如果尝试在多线程上下文中使用<code>RefCell&lt;T&gt;</code>，会得到一个编译错误。</p>
 <p>对于引用，可以使用<code>&amp;</code>和<code>&amp;mut</code>语法来分别创建不可变和可变的引用。不过对于<code>RefCell&lt;T&gt;</code>，我们使用<code>borrow</code>和<code>borrow_mut</code>方法，它是<code>RefCell&lt;T&gt;</code>拥有的安全 API 的一部分。<code>borrow</code>返回<code>Ref</code>类型的智能指针，而<code>borrow_mut</code>返回<code>RefMut</code>类型的智能指针。这两个类型实现了<code>Deref</code>所以可以被当作常规引用处理。<code>Ref</code>和<code>RefMut</code>动态的借用所有权，而他们的<code>Drop</code>实现也动态的释放借用。</p>
+<p>列表 15-14 展示了如何使用<code>RefCell&lt;T&gt;</code>来使函数不可变的和可变的借用它的参数。注意<code>data</code>变量使用<code>let data</code>而不是<code>let mut data</code>来声明为不可变的，而<code>a_fn_that_mutably_borrows</code>则允许可变的借用数据并修改它！</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">use std::cell::RefCell;
+
+fn a_fn_that_immutably_borrows(a: &amp;i32) {
+    println!(&quot;a is {}&quot;, a);
+}
+
+fn a_fn_that_mutably_borrows(b: &amp;mut i32) {
+    *b += 1;
+}
+
+fn demo(r: &amp;RefCell&lt;i32&gt;) {
+    a_fn_that_immutably_borrows(&amp;r.borrow());
+    a_fn_that_mutably_borrows(&amp;mut r.borrow_mut());
+    a_fn_that_immutably_borrows(&amp;r.borrow());
+}
+
+fn main() {
+    let data = RefCell::new(5);
+    demo(&amp;data);
+}
+</code></pre>
+<p><span class="caption">Listing 15-14: Using <code>RefCell&lt;T&gt;</code>, <code>borrow</code>, and
+<code>borrow_mut</code></span></p>
+<p>这个例子打印出：</p>
+<pre><code>a is 5
+a is 6
+</code></pre>
+<p>在<code>main</code>函数中，我们新声明了一个包含值 5 的<code>RefCell&lt;T&gt;</code>，并储存在变量<code>data</code>中，声明时并没有使用<code>mut</code>关键字。接着使用<code>data</code>的一个不可变引用来调用<code>demo</code>函数：对于<code>main</code>函数而言<code>data</code>是不可变的！</p>
+<p>在<code>demo</code>函数中，通过调用<code>borrow</code>方法来获取到<code>RefCell&lt;T&gt;</code>中值的不可变引用，并使用这个不可变引用调用了<code>a_fn_that_immutably_borrows</code>函数。更为有趣的是，可以通过<code>borrow_mut</code>方法来获取<code>RefCell&lt;T&gt;</code>中值的<strong>可变</strong>引用，而<code>a_fn_that_mutably_borrows</code>函数就允许修改这个值。可以看到下一次调用<code>a_fn_that_immutably_borrows</code>时打印出的值是 6 而不是 5。</p>
+<a class="header" href="#refcellt在运行时检查借用规则" name="refcellt在运行时检查借用规则"><h3><code>RefCell&lt;T&gt;</code>在运行时检查借用规则</h3></a>
+<p>回忆一下第四章因为借用规则，尝试使用常规引用在同一作用域中创建两个可变引用的代码无法编译：</p>
+<pre><code class="language-rust,ignore">let mut s = String::from(&quot;hello&quot;);
+
+let r1 = &amp;mut s;
+let r2 = &amp;mut s;
+</code></pre>
+<p>这会得到一个编译错误：</p>
+<pre><code>error[E0499]: cannot borrow `s` as mutable more than once at a time
+ --&gt;
+  |
+5 |     let r1 = &amp;mut s;
+  |                   - first mutable borrow occurs here
+6 |     let r2 = &amp;mut s;
+  |                   ^ second mutable borrow occurs here
+7 | }
+  | - first borrow ends here
+</code></pre>
+<p>与此相反，使用<code>RefCell&lt;T&gt;</code>并在同一作用域调用两次<code>borrow_mut</code>的代码是<strong>可以</strong>编译的，不过它会在运行时 panic。如下代码：</p>
+<pre><code class="language-rust,should_panic">use std::cell::RefCell;
+
+fn main() {
+    let s = RefCell::new(String::from(&quot;hello&quot;));
+
+    let r1 = s.borrow_mut();
+    let r2 = s.borrow_mut();
+}
+</code></pre>
+<p>能够编译不过在<code>cargo run</code>运行时会出现如下错误：</p>
+<pre><code>    Finished dev [unoptimized + debuginfo] target(s) in 0.83 secs
+     Running `target/debug/refcell`
+thread 'main' panicked at 'already borrowed: BorrowMutError',
+/stable-dist-rustc/build/src/libcore/result.rs:868
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+</code></pre>
+<p>这个运行时<code>BorrowMutError</code>类似于编译错误：它表明已经可变的借用过<code>s</code>一次了，所以不允许再次借用它。我们并没有绕过借用规则，只是选择让 Rust 在运行时而不是编译时执行他们。你可以选择在任何时候任何地方使用<code>RefCell&lt;T&gt;</code>，不过除了不得不编写很多<code>RefCell</code>之外，最终还是可能会发现其中的问题（可能是在生产环境而不是开发环境）。另外，在运行时检查借用规则有性能惩罚。</p>
+<a class="header" href="#结合rct和refcellt来拥有多个可变数据所有者" name="结合rct和refcellt来拥有多个可变数据所有者"><h3>结合<code>Rc&lt;T&gt;</code>和<code>RefCell&lt;T&gt;</code>来拥有多个可变数据所有者</h3></a>
+<p>那么为什么要权衡考虑选择引入<code>RefCell&lt;T&gt;</code>呢？好吧，还记得我们说过<code>Rc&lt;T&gt;</code>只能拥有一个<code>T</code>的不可变引用吗？考虑到<code>RefCell&lt;T&gt;</code>是不可变的，但是拥有内部可变性，可以将<code>Rc&lt;T&gt;</code>与<code>RefCell&lt;T&gt;</code>结合来创造一个既有引用计数又可变的类型。列表 15-15 展示了一个这么做的例子，再次回到列表 15-5 中的 cons list。在这个例子中，不同于在 cons list 中储存<code>i32</code>值，我们储存一个<code>Rc&lt;RefCell&lt;i32&gt;&gt;</code>值。希望储存这个类型是因为其可以拥有不属于列表一部分的这个值的所有者（<code>Rc&lt;T&gt;</code>提供的多个所有者功能），而且还可以改变内部的<code>i32</code>值（<code>RefCell&lt;T&gt;</code>提供的内部可变性功能）：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">#[derive(Debug)]
+enum List {
+    Cons(Rc&lt;RefCell&lt;i32&gt;&gt;, Rc&lt;List&gt;),
+    Nil,
+}
+
+use List::{Cons, Nil};
+use std::rc::Rc;
+use std::cell::RefCell;
+
+fn main() {
+    let value = Rc::new(RefCell::new(5));
+
+    let a = Cons(value.clone(), Rc::new(Nil));
+    let shared_list = Rc::new(a);
+
+    let b = Cons(Rc::new(RefCell::new(6)), shared_list.clone());
+    let c = Cons(Rc::new(RefCell::new(10)), shared_list.clone());
+
+    *value.borrow_mut() += 10;
+
+    println!(&quot;shared_list after = {:?}&quot;, shared_list);
+    println!(&quot;b after = {:?}&quot;, b);
+    println!(&quot;c after = {:?}&quot;, c);
+}
+</code></pre>
+<p><span class="caption">Listing 15-15: Using <code>Rc&lt;RefCell&lt;i32&gt;&gt;</code> to create a
+<code>List</code> that we can mutate</span></p>
+<p>我们创建了一个值，它是<code>Rc&lt;RefCell&lt;i32&gt;&gt;</code>的实例。将其储存在变量<code>value</code>中因为我们希望之后能直接访问它。接着在<code>a</code>中创建了一个拥有存放了<code>value</code>值的<code>Cons</code>成员的<code>List</code>，而且<code>value</code>需要被克隆因为我们希望除了<code>a</code>之外还拥有<code>value</code>的所有权。接着将<code>a</code>封装进<code>Rc&lt;T&gt;</code>中这样就可以创建都引用<code>a</code>的有着不同开头的列表<code>b</code>和<code>c</code>，类似列表 15-12 中所做的那样。</p>
+<p>一旦创建了<code>shared_list</code>、<code>b</code>和<code>c</code>，接下来就可以通过解引用<code>Rc&lt;T&gt;</code>和对<code>RefCell</code>调用<code>borrow_mut</code>来将 10 与 5 相加了。</p>
+<p>当打印出<code>shared_list</code>、<code>b</code>和<code>c</code>时，可以看到他们都拥有被修改的值 15：</p>
+<pre><code>shared_list after = Cons(RefCell { value: 15 }, Nil)
+b after = Cons(RefCell { value: 6 }, Cons(RefCell { value: 15 }, Nil))
+c after = Cons(RefCell { value: 10 }, Cons(RefCell { value: 15 }, Nil))
+</code></pre>
+<p>这是非常巧妙的！通过使用<code>RefCell&lt;T&gt;</code>，我们可以拥有一个表面上不可变的<code>List</code>，不过可以使用<code>RefCell&lt;T&gt;</code>中提供内部可变性的方法来在需要时修改数据。<code>RefCell&lt;T&gt;</code>的运行时借用规则检查也确实保护我们免于出现数据竞争，而且我们也决定牺牲一些速度来换取数据结构的灵活性。</p>
+<p><code>RefCell&lt;T&gt;</code>并不是标准库中唯一提供内部可变性的类型。<code>Cell&lt;T&gt;</code>有点类似，不过不同于<code>RefCell&lt;T&gt;</code>那样提供内部值的引用，其值被拷贝进和拷贝出<code>Cell&lt;T&gt;</code>。<code>Mutex&lt;T&gt;</code>提供线程间安全的内部可变性，下一章并发会讨论它的应用。请查看标准库来获取更多细节和不同类型的区别。</p>
 
                 </div>
 
