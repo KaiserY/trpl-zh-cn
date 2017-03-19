@@ -1,10 +1,10 @@
 ## 数据类型
 
-> [ch03-02-data-types.md](https://github.com/rust-lang/book/blob/master/src/ch03-02-data-types.md)
+> [ch03-02-data-types.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch03-02-data-types.md)
 > <br>
-> commit 6436ebee2a84820adf77231cead6b5691c8e2744
+> commit 04aa3a45eb72855b34213703718f50a12a3eeec8
 
-Rust 中的任何值都有一个具体的**类型**（*type*），这告诉了 Rust 它被指定为何种数据这样 Rust 就知道如何处理这些数据了。这一部分将讲到一些语言内建的类型。我们将这些类型分为两个子集：标量（scalar）和复合（compound）。
+Rust 中的任何值都有一个具体的**类型**（*type*），这告诉了 Rust 它被指定了何种数据，这样 Rust 就知道如何处理这些数据了。这一部分将讲到一些语言内建的类型。我们将这些类型分为两个子集：标量（scalar）和复合（compound）。
 
 贯穿整个部分，请记住 Rust 是一个**静态类型**（*statically typed*）语言，也就是说必须在编译时就知道所有变量的类型。编译器通常可以通过值以及如何使用他们来推断出我们想要用的类型。当多个类型都是可能的时候，比如第二章中`parse`将`String`转换为数字类型，必须增加类型注解，像这样：
 
@@ -14,12 +14,12 @@ let guess: u32 = "42".parse().expect("Not a number!");
 
 如果这里不添加类型注解，Rust 会显示如下错误，它意味着编译器需要我们提供更多我们想要使用哪个可能的类型的信息：
 
-```sh
+```
 error[E0282]: unable to infer enough type information about `_`
- --> src/main.rs:2:5
+ --> src/main.rs:2:9
   |
-2 | let guess = "42".parse().expect("Not a number!");
-  |     ^^^^^ cannot infer type for `_`
+2 |     let guess = "42".parse().expect("Not a number!");
+  |         ^^^^^ cannot infer type for `_`
   |
   = note: type annotations or generic parameter binding required
 ```
@@ -34,12 +34,7 @@ error[E0282]: unable to infer enough type information about `_`
 
 **整数**是一个没有小数部分的数字。我们在这一章的前面使用过一个整型，`i32`类型。这个类型声明表明在 32 位系统上它关联的值应该是一个有符号整数（因为这个`i`，与`u`代表的无符号相对）。表格 3-1 展示了 Rust 内建的整数类型。每一个变体的有符号和无符号列（例如，*i32*）可以用来声明对应的整数值。
 
-<figure>
-<figcaption>
-
-Table 3-1: Integer Types in Rust
-
-</figcaption>
+<span class="caption">Table 3-1: Integer Types in Rust</span>
 
 | Length | Signed | Unsigned |
 |--------|--------|----------|
@@ -49,8 +44,6 @@ Table 3-1: Integer Types in Rust
 | 64-bit | i64    | u64      |
 | arch   | isize  | usize    |
 
-</figure>
-
 每一种变体都可以是有符号或无符号的并有一个显式的大小。有符号和无符号代表数字是否能够是正数或负数；换句话说，数字是否需要有一个符号（有符号数）或者永远只需要是正的这样就可以不用符号（无符号数）。这有点像在纸上书写数字：当需要考虑符号的时候，数字前面会加上一个加号或减号；然而，当可以安全地假设为正数时，可以不带符号（加号）。有符号数以二进制补码形式（two’s complement representation）存储（如果你不清楚这是什么，可以在网上搜索；对其的解释超出了本书的范畴）。
 
 每一个有符号的变体可以储存包含从 -(2<sup>n - 1</sup>) 到 2<sup>n - 1</sup> - 1 在内的数字，这里`n`是变体使用的位数。所以`i8`可以储存从 -(2<sup>7</sup>) 到 2<sup>7</sup> - 1 在内的数字，也就是从 -128 到 127。无符号的变体可以储存从 0 到 2<sup>n</sup> - 1 的数字，所以`u8`可以储存从 0 到 2<sup>8</sup> - 1 的数字，也就是从 0 到 255。
@@ -59,12 +52,7 @@ Table 3-1: Integer Types in Rust
 
 可以使用表格 3-2 中的任何一种形式编写数字字面值。注意除了字节字面值以外的数字字面值允许使用类型后缀，例如`57u8`，而`_`是可视化分隔符（visual separator），例如`1_000`位的。
 
-<figure>
-<figcaption>
-
-Table 3-2: Integer Literals in Rust
-
-</figcaption>
+<span class="caption">Table 3-2: Integer Literals in Rust</span>
 
 | Number literals  | Example       |
 |------------------|---------------|
@@ -74,13 +62,11 @@ Table 3-2: Integer Literals in Rust
 | Binary           | `0b1111_0000` |
 | Byte (`u8` only) | `b'A'`        |
 
-</figure>
-
 那么如何知晓该使用哪种类型的数字呢？如果对此拿不定主意，Rust 的默认类型通常就是一个很好的选择，这个默认数字类型是`i32`：它通常是最快的，甚至是在 64 位系统上。使用`isize`或`usize`的主要场景是索引一些集合。
 
 #### 浮点型
 
-Rust 也有两个主要的**浮点数**（*floating-point numbers*）类型，他们是有小数点的数字。Rust 的浮点数类型是`f32`和`f64`，分别是 32 位 和 64 位大小。默认类型是`f64`，因为它基本上与`f32`一样快不过精度更高。在 32 位系统上使用`f64`是可能的，不过会比`f32`要慢。大部分情况，牺牲潜在可能的更低性能来换取更高的精度是一个合理的首要选择，同时如果怀疑浮点数的大小有问题的时候应该对代码进行性能测试。
+Rust 也有两个主要的**浮点数**（*floating-point numbers*）类型，他们是有小数点的数字。Rust 的浮点数类型是`f32`和`f64`，分别是 32 位 和 64 位大小。默认类型是`f64`，因为它基本上与`f32`一样快不过精度更高。在 32 位系统上使用`f64`是可能的，不过会比`f32`要慢。大部分情况，牺牲潜在可能的更低性能来换取更高的精度是一个合理的初始选择，同时如果怀疑浮点数的大小有问题的时候应该先对代码进行性能测试。
 
 这是一个展示浮点数的实例：
 
@@ -190,7 +176,7 @@ fn main() {
 
 程序首先创建了一个元组并绑定到`tup`变量上。接着使用了`let`和一个模式将`tup`分成了三个不同的变量，`x`、`y`和`z`。这叫做*解构*（*destructuring*），因为它将一个元组拆成了三个部分。最后，程序打印出了`y`的值，也就是`6.4`。
 
-除了使用模式匹配解构之外，也可以使用点号（`.`）后跟值的索引来直接访问。例如：
+除了使用模式匹配解构之外，也可以使用点号（`.`）后跟值的索引来直接访问他们。例如：
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -266,7 +252,7 @@ fn main() {
 
 使用`cargo run`运行代码后会产生如下结果：
 
-```sh
+```
 $ cargo run
    Compiling arrays v0.1.0 (file:///projects/arrays)
      Running `target/debug/arrays`

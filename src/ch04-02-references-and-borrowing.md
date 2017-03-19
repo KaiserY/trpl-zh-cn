@@ -1,8 +1,8 @@
 ## 引用与借用
 
-> [ch04-02-references-and-borrowing.md](https://github.com/rust-lang/book/blob/master/src/ch04-02-references-and-borrowing.md)
+> [ch04-02-references-and-borrowing.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch04-02-references-and-borrowing.md)
 > <br>
-> commit c9fd8eb1da7a79deee97020e8ad49af8ded78f9c
+> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
 
 在上一部分的结尾处的使用元组的代码是有问题的，我们需要将`String`返回给调用者函数这样就可以在调用`calculate_length`后仍然可以使用`String`了，因为`String`先被移动到了`calculate_length`。
 
@@ -28,16 +28,9 @@ fn calculate_length(s: &String) -> usize {
 
 这些 & 符号就是**引用**，他们允许你使用值但不获取它的所有权。图 4-8 展示了一个图解。
 
-
-<figure>
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
-<figcaption>
-
-Figure 4-8: `&String s` pointing at `String s1`
-
-</figcaption>
-</figure>
+<span class="caption">Figure 4-8: `&String s` pointing at `String s1`</span>
 
 仔细看看这个函数调用：
 
@@ -67,7 +60,6 @@ fn calculate_length(s: &String) -> usize { // s is a reference to a String
 
 那么如果我们尝试修改借用的变量呢？尝试列表 4-9 中的代码。剧透：这行不通！
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -82,16 +74,11 @@ fn change(some_string: &String) {
 }
 ```
 
-<figcaption>
-
-Listing 4-9: Attempting to modify a borrowed value
-
-</figcaption>
-</figure>
+<span class="caption">Listing 4-9: Attempting to modify a borrowed value</span>
 
 这里是错误：
 
-```sh
+```
 error: cannot borrow immutable borrowed content `*some_string` as mutable
  --> error.rs:8:5
   |
@@ -134,7 +121,7 @@ let r2 = &mut s;
 
 具体错误如下：
 
-```text
+```
 error[E0499]: cannot borrow `s` as mutable more than once at a time
  --> borrow_twice.rs:5:19
   |
@@ -156,7 +143,7 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
 
 数据竞争会导致未定义行为并且当在运行时尝试追踪时可能会变得难以诊断和修复；Rust 阻止了这种情况的发生，因为存在数据竞争的代码根本就不能编译！
 
-一如既往，使用大括号来创建一个新的作用域，允许拥有多个可变引用，只是不能**同时**拥有：
+一如既往，可以使用大括号来创建一个新的作用域来允许拥有多个可变引用，只是不能**同时**拥有：
 
 ```rust
 let mut s = String::from("hello");
@@ -171,7 +158,6 @@ let r2 = &mut s;
 
 当结合可变和不可变引用时有一个类似的规则存在。这些代码会导致一个错误：
 
-
 ```rust,ignore
 let mut s = String::from("hello");
 
@@ -182,7 +168,7 @@ let r3 = &mut s; // BIG PROBLEM
 
 错误如下：
 
-```sh
+```
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as
 immutable
  --> borrow_thrice.rs:6:19
@@ -205,7 +191,6 @@ immutable
 在存在指针的语言中，容易错误地生成一个**悬垂指针**（*dangling pointer*），一个引用某个内存位置的指针，这个内存可能已经因为被分配给别人，因为释放内存时指向内存的指针被保留了下来。相比之下，在 Rust 中编译器确保引用永远也不会变成悬垂状态：当我们拥有一些数据的引用，编译器确保数据不会在其引用之前离开作用域。
 
 让我们尝试创建一个悬垂引用：
-
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -276,7 +261,7 @@ fn no_dangle() -> String {
 
 1. 在任意给定时间，**只能**拥有如下中的一个：
   * 一个可变引用。
-  * 任意属性的不可变引用。
+  * 任意数量的不可变引用。
 2. 引用必须总是有效的。
 
-接下来，我们来看看一种不同类型的引用：slices。
+接下来，我们来看看一种不同类型的引用：slice。

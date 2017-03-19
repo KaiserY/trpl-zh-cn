@@ -71,7 +71,7 @@
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch03-05-control-flow.md">ch03-05-control-flow.md</a>
 <br>
-commit 784a3ec5e8b9c6bff456ab9f0efd4dabcc180dda</p>
+commit 04aa3a45eb72855b34213703718f50a12a3eeec8</p>
 </blockquote>
 <p>通过条件是不是真来决定是否某些代码，或者根据条件是否为真来重复运行一段代码是大部分编程语言的基本组成部分。Rust 代码中最常见的用来控制执行流的结构是<code>if</code>表达式和循环。</p>
 <a class="header" href="#if表达式" name="if表达式"><h3><code>if</code>表达式</h3></a>
@@ -88,9 +88,10 @@ commit 784a3ec5e8b9c6bff456ab9f0efd4dabcc180dda</p>
     }
 }
 </code></pre>
+<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 <p>所有<code>if</code>表达式以<code>if</code>关键字开头，它后跟一个条件。在这个例子中，条件检查<code>number</code>是否有一个小于 5 的值。在条件为真时希望执行的代码块位于紧跟条件之后的大括号中。<code>if</code>表达式中与条件关联的代码块有时被叫做 <em>arms</em>，就像第二章“比较猜测与秘密数字”部分中讨论到的<code>match</code>表达式中分支一样。也可以包含一个可选的<code>else</code>表达式，这里我们就这么做了，来提供一个在条件为假时应当执行的代码块。如果不提供<code>else</code>表达式并且条件为假时，程序会直接忽略<code>if</code>代码块并继续执行下面的代码。</p>
 <p>尝试运行代码，应该能看到如下输出：</p>
-<pre><code class="language-sh">$ cargo run
+<pre><code>$ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 condition was true
@@ -99,7 +100,7 @@ condition was true
 <pre><code class="language-rust,ignore">let number = 7;
 </code></pre>
 <p>再次运行程序并查看输出：</p>
-<pre><code class="language-sh">$ cargo run
+<pre><code>$ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 condition was false
@@ -115,18 +116,14 @@ condition was false
 }
 </code></pre>
 <p>这里<code>if</code>条件的值是<code>3</code>，Rust 抛出了一个错误：</p>
-<pre><code class="language-sh">   Compiling branches v0.1.0 (file:///projects/branches)
-error[E0308]: mismatched types
+<pre><code>error[E0308]: mismatched types
  --&gt; src/main.rs:4:8
   |
 4 |     if number {
   |        ^^^^^^ expected bool, found integral variable
   |
   = note: expected type `bool`
-  = note:    found type `{integer}`
-
-error: aborting due to previous error
-Could not compile `branches`.
+             found type `{integer}`
 </code></pre>
 <p>这个错误表明 Rust 期望一个<code>bool</code>不过却得到了一个整型。Rust 并不会尝试自动地将非布尔值转换为布尔值，不像例如 Ruby 和 JavaScript 这样的语言。必须总是显式地使用<code>boolean</code>作为<code>if</code>的条件。例如如果想要<code>if</code>代码块只在一个数字不等于<code>0</code>时执行，可以把<code>if</code>表达式修改为如下：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -157,17 +154,16 @@ Could not compile `branches`.
 }
 </code></pre>
 <p>这个程序有四个可能的执行路径。运行后应该能看到如下输出：</p>
-<pre><code class="language-sh">$ cargo run
+<pre><code>$ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 number is divisible by 3
 </code></pre>
 <p>当执行这个程序，它按顺序检查每个<code>if</code>表达式并执行第一个条件为真的代码块。注意即使 6 可以被 2 整除，也不会出现<code>number is divisible by 2</code>的输出，更不会出现<code>else</code>块中的<code>number is not divisible by 4, 3, or 2</code>。原因是 Rust 只会执行第一个条件为真的代码块，并且它一旦找到一个以后，就不会检查剩下的条件了。</p>
-<p>使用过多的<code>else if</code>表达式会使代码显得杂乱无章，所以如果有多于一个<code>else if</code>，最好重构代码。为此第六章介绍了 Rust 一个叫做<code>match</code>的强大的分支结构（branching construct）。</p>
+<p>使用过多的<code>else if</code>表达式会使代码显得杂乱无章，所以如果有多于一个<code>else if</code>，最好重构代码。为此第六章会介绍 Rust 中一个叫做<code>match</code>的强大的分支结构（branching construct）。</p>
 <a class="header" href="#在let语句中使用if" name="在let语句中使用if"><h4>在<code>let</code>语句中使用<code>if</code></h4></a>
-<p>因为<code>if</code>是一个表达式，我们可以在<code>let</code>语句的右侧使用它，例如列表 3-4：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p>因为<code>if</code>是一个表达式，我们可以在<code>let</code>语句的右侧使用它，例如在列表 3-4 中：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let condition = true;
     let number = if condition {
@@ -179,17 +175,15 @@ number is divisible by 3
     println!(&quot;The value of number is: {}&quot;, number);
 }
 </code></pre>
-<figcaption>
-<p>Listing 3-4: Assigning the result of an <code>if</code> expression to a variable</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 3-4: Assigning the result of an <code>if</code> expression
+to a variable</span></p>
 <p><code>number</code>变量将会绑定到基于<code>if</code>表达式结果的值。运行这段代码看看会出现什么：</p>
-<pre><code class="language-sh">$ cargo run
+<pre><code>$ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 The value of number is: 5
 </code></pre>
-<p>还记得代码块的值是其最后一个表达式的值，以及数字本身也是一个表达式吗。在这个例子中，整个<code>if</code>表达式的值依赖哪个代码块被执行。这意味着<code>if</code>的每个分支的可能的返回值都必须是相同类型；在列表 3-4 中，<code>if</code>分支和<code>else</code>分支的结果都是<code>i32</code>整型。不过如果像下面的例子一样这些类型并不相同会怎么样呢？</p>
+<p>还记得代码块的值是其最后一个表达式的值，以及数字本身也是一个表达式吗。在这个例子中，整个<code>if</code>表达式的值依赖哪个代码块被执行。这意味着<code>if</code>的每个分支的可能的返回值都必须是相同类型；在列表 3-4 中，<code>if</code>分支和<code>else</code>分支的结果都是<code>i32</code>整型。不过如果像下面的例子那样这些类型并不匹配会怎么样呢？</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
     let condition = true;
@@ -204,17 +198,21 @@ The value of number is: 5
 }
 </code></pre>
 <p>当运行这段代码，会得到一个错误。<code>if</code>和<code>else</code>分支的值类型是不相容的，同时 Rust 也准确地表明了在程序中的何处发现的这个问题：</p>
-<pre><code class="language-sh">   Compiling branches v0.1.0 (file:///projects/branches)
-error[E0308]: if and else have incompatible types
+<pre><code>error[E0308]: if and else have incompatible types
  --&gt; src/main.rs:4:18
   |
-4 |     let number = if condition {
-  |                  ^ expected integral variable, found reference
+4 |       let number = if condition {
+  |  __________________^ starting here...
+5 | |         5
+6 | |     } else {
+7 | |         &quot;six&quot;
+8 | |     };
+  | |_____^ ...ending here: expected integral variable, found reference
   |
   = note: expected type `{integer}`
-  = note:    found type `&amp;’static str`
+             found type `&amp;'static str`
 </code></pre>
-<p><code>if</code>代码块的表达式返回一个整型，而<code>else</code>代码块返回一个字符串。这并不可行因为变量必须只有一个类型。Rust 需要在编译时就确切的知道<code>number</code>变量的类型，这样它就可以在编译时证明其他使用<code>number</code>变量的地方它的类型是有效的。Rust 并不能够在<code>number</code>的类型只能在运行时确定的情况下完成这些功能；这样会使编译器变得更复杂而且只能为代码提供更少的保障，因为它不得不记录所有变量的多种可能的类型。</p>
+<p><code>if</code>代码块的表达式返回一个整型，而<code>else</code>代码块返回一个字符串。这并不可行，因为变量必须只有一个类型。Rust 需要在编译时就确切的知道<code>number</code>变量的类型，这样它就可以在编译时证明其他使用<code>number</code>变量的地方它的类型是有效的。Rust 并不能够在<code>number</code>的类型只能在运行时确定的情况下工作；这样会使编译器变得更复杂而且只能为代码提供更少的保障，因为它不得不记录所有变量的多种可能的类型。</p>
 <a class="header" href="#使用循环重复执行" name="使用循环重复执行"><h3>使用循环重复执行</h3></a>
 <p>多次执行一段代码是很常用的。为了这个功能，Rust 提供了多种<strong>循环</strong>（<em>loops</em>）。一个循环执行循环体中的代码直到结尾并紧接着从回到开头继续执行。为了实验一下循环，让我们创建一个叫做 <em>loops</em> 的新项目。</p>
 <p>Rust 有三种循环类型：<code>loop</code>、<code>while</code>和<code>for</code>。让我们每一个都试试。</p>
@@ -242,7 +240,7 @@ again!
 <p>幸运的是，Rust 提供了另一个更可靠的方式来退出循环。可以使用<code>break</code>关键字来告诉程序何时停止执行循环。还记得我们在第二章猜猜看游戏的“猜测正确后退出”部分使用过它来在用户猜对数字赢得游戏后退出程序吗。</p>
 <a class="header" href="#while条件循环" name="while条件循环"><h4><code>while</code>条件循环</h4></a>
 <p>在程序中计算循环的条件也很常见。当条件为真，执行循环。当条件不再为真，调用<code>break</code>停止循环。这个循环类型可以通过组合<code>loop</code>、<code>if</code>、<code>else</code>和<code>break</code>来实现；如果你喜欢的话，现在就可以在程序中试试。</p>
-<p>然而，这个模式太常见了所以 Rust 为此提供了一个内建的语言结构，它被称为<code>while</code>循环。下面的例子使用了<code>while</code>：程序循环三次，每次数字都减一。接着，在循环之后，打印出另一个信息并退出：</p>
+<p>然而，这个模式太常见了以至于 Rust 为此提供了一个内建的语言结构，它被称为<code>while</code>循环。下面的例子使用了<code>while</code>：程序循环三次，每次数字都减一。接着，在循环之后，打印出另一个信息并退出：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let mut number = 3;
@@ -259,8 +257,7 @@ again!
 <p>这个结构消除了很多需要嵌套使用<code>loop</code>、<code>if</code>、<code>else</code>和<code>break</code>的代码，这样显得更加清楚。当条件为真就执行，否则退出循环。</p>
 <a class="header" href="#使用for遍历集合" name="使用for遍历集合"><h4>使用<code>for</code>遍历集合</h4></a>
 <p>可以使用<code>while</code>结构来遍历一个元素集合，比如数组。例如：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let a = [10, 20, 30, 40, 50];
     let mut index = 0;
@@ -272,10 +269,8 @@ again!
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 3-5: Looping through each element of a collection using a <code>while</code> loop</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 3-5: Looping through each element of a collection
+using a <code>while</code> loop</span></p>
 <p>这里代码对数组中的元素进行计数。它从索引<code>0</code>开始，并接着循环直到遇到数组的最后一个索引（这时，<code>index &lt; 5</code>不再为真）。运行这段代码会打印出数组中的每一个元素：</p>
 <pre><code class="language-sh">$ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)

@@ -69,9 +69,9 @@
                 <div id="content" class="content">
                     <a class="header" href="#slices" name="slices"><h2>Slices</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch04-03-slices.md">ch04-03-slices.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch04-03-slices.md">ch04-03-slices.md</a>
 <br>
-commit c9fd8eb1da7a79deee97020e8ad49af8ded78f9c</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
 <p>另一个没有所有权的数据类型是 <em>slice</em>。slice 允许你引用集合中一段连续的元素序列，而不用引用整个集合。</p>
 <p>这里有一个小的编程问题：编写一个获取一个字符串并返回它在其中找到的第一个单词的函数。如果函数没有在字符串中找到一个空格，就意味着整个字符串是一个单词，所以整个字符串都应该返回。</p>
@@ -79,8 +79,7 @@ commit c9fd8eb1da7a79deee97020e8ad49af8ded78f9c</p>
 <pre><code class="language-rust,ignore">fn first_word(s: &amp;String) -&gt; ?
 </code></pre>
 <p><code>first_word</code>这个函数有一个参数<code>&amp;String</code>。因为我们不需要所有权，所以这没有问题。不过应该返回什么呢？我们并没有一个真正获取<strong>部分</strong>字符串的办法。不过，我们可以返回单词结尾的索引。让我们试试如列表 4-10 所示的代码：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn first_word(s: &amp;String) -&gt; usize {
     let bytes = s.as_bytes();
 
@@ -93,18 +92,15 @@ commit c9fd8eb1da7a79deee97020e8ad49af8ded78f9c</p>
     s.len()
 }
 </code></pre>
-<figcaption>
-<p>Listing 4-10: The <code>first_word</code> function that returns a byte index value into
-the <code>String</code> parameter</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 4-10: The <code>first_word</code> function that returns a
+byte index value into the <code>String</code> parameter</span></p>
 <p>让我们将代码分解成小块。因为需要一个元素一个元素的检查<code>String</code>中的值是否是空格，需要用<code>as_bytes</code>方法将<code>String</code>转化为字节数组：</p>
 <pre><code class="language-rust,ignore">let bytes = s.as_bytes();
 </code></pre>
-<p>Next, we create an iterator over the array of bytes using the <code>iter</code> method :</p>
+<p>接下来，使用<code>iter</code>方法在字节数据上创建一个迭代器：</p>
 <pre><code class="language-rust,ignore">for (i, &amp;item) in bytes.iter().enumerate() {
 </code></pre>
-<p>第十六章将讨论迭代器的更多细节。现在，只需知道<code>iter</code>方法返回集合中的每一个元素，而<code>enumerate</code>包装<code>iter</code>的结果并返回一个元组，其中每一个元素是元组的一部分。返回元组的第一个元素是索引，第二个元素是集合中元素的引用。这比我们自己计算索引要方便一些。</p>
+<p>第十三章将讨论迭代器的更多细节。现在，只需知道<code>iter</code>方法返回集合中的每一个元素，而<code>enumerate</code>包装<code>iter</code>的结果并返回一个元组，其中每一个元素是元组的一部分。返回元组的第一个元素是索引，第二个元素是集合中元素的引用。这比我们自己计算索引要方便一些。</p>
 <p>因为<code>enumerate</code>方法返回一个元组，我们可以使用模式来解构它，就像 Rust 中其他地方一样。所以在<code>for</code>循环中，我们指定了一个模式，其中<code>i</code>是元组中的索引而<code>&amp;item</code>是单个字节。因为从<code>.iter().enumerate()</code>中获取了集合元素的引用，我们在模式中使用了<code>&amp;</code>。</p>
 <p>我们通过字节的字面值来寻找代表空格的字节。如果找到了，返回它的位置。否则，使用<code>s.len()</code>返回字符串的长度：</p>
 <pre><code class="language-rust,ignore">    if item == b' ' {
@@ -114,8 +110,7 @@ the <code>String</code> parameter</p>
 s.len()
 </code></pre>
 <p>现在有了一个找到字符串中第一个单词结尾索引的方法了，不过这有一个问题。我们返回了单单一个<code>usize</code>，不过它只在<code>&amp;String</code>的上下文中才是一个有意义的数字。换句话说，因为它是一个与<code>String</code>像分离的值，无法保证将来它仍然有效。考虑一下列表 4-11 中使用了列表 4-10 <code>first_word</code>函数的程序：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># fn first_word(s: &amp;String) -&gt; usize {
 #     let bytes = s.as_bytes();
 #
@@ -139,11 +134,8 @@ fn main() {
     // we could meaningfully use the value 5 with. word is now totally invalid!
 }
 </code></pre>
-<figcaption>
-<p>Listing 4-11: Storing the result from calling the <code>first_word</code> function then
-changing the <code>String</code> contents</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 4-11: Storing the result from calling the
+<code>first_word</code> function then changing the <code>String</code> contents</span></p>
 <p>这个程序编译时没有任何错误，而且在调用<code>s.clear()</code>之后使用<code>word</code>也不会出错。这时<code>word</code>与<code>s</code>状态就没有联系了，所以<code>word</code>仍然包含值<code>5</code>。可以尝试用值<code>5</code>来提取变量<code>s</code>的第一个单词，不过这是有 bug 的，因为在我们将<code>5</code>保存到<code>word</code>之后<code>s</code>的内容已经改变。</p>
 <p>不得不担心<code>word</code>的索引与<code>s</code>中的数据不再同步是乏味且容易出错的！如果编写一个<code>second_word</code>函数的话管理索引将更加容易出问题。它的签名看起来像这样：</p>
 <pre><code class="language-rust,ignore">fn second_word(s: &amp;String) -&gt; (usize, usize) {
@@ -160,12 +152,9 @@ let world = &amp;s[6..11];
 <p>这类似于获取整个<code>String</code>的引用不过带有额外的<code>[0..5]</code>部分。不同于整个<code>String</code>的引用，这是一个包含<code>String</code>内部的一个位置和所需元素数量的引用。</p>
 <p>我们使用一个 range <code>[starting_index..ending_index]</code>来创建 slice，不过 slice 的数据结构实际上储存了开始位置和 slice 的长度。所以就<code>let world = &amp;s[6..11];</code>来说，<code>world</code>将是一个包含指向<code>s</code>第 6 个字节的指针和长度值 5 的 slice。</p>
 <p>图 4-12 展示了一个图例</p>
-<figure>
-<img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
-<figcaption>
-<p>Figure 4-12: String slice referring to part of a <code>String</code></p>
-</figcaption>
-</figure>
+<p><img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" /></p>
+<p><span class="caption">Figure 4-12: String slice referring to part of a
+<code>String</code></span></p>
 <p>对于 Rust 的<code>..</code> range 语法，如果想要从第一个索引（0）开始，可以不写两个点号之前的值。换句话说，如下两个语句是相同的：</p>
 <pre><code class="language-rust">let s = String::from(&quot;hello&quot;);
 

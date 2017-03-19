@@ -1,8 +1,8 @@
 ## 函数如何工作
 
-> [ch03-03-how-functions-work.md](https://github.com/rust-lang/book/blob/master/src/ch03-03-how-functions-work.md)
+> [ch03-03-how-functions-work.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch03-03-how-functions-work.md)
 > <br>
-> commit 52b7fcbfdd35915cb21e6d492fb6c86764f53b47
+> commit 04aa3a45eb72855b34213703718f50a12a3eeec8
 
 函数在 Rust 代码中应用广泛。你已经见过一个语言中最重要的函数：`main`函数，它时很多程序的入口点。你也见过了`fn`关键字，它用来声明新函数。
 
@@ -24,11 +24,11 @@ fn another_function() {
 
 Rust 中的函数定义以`fn`开始并在函数名后跟一对括号。大括号告诉编译器哪里是函数体的开始和结尾。
 
-可以使用定义过的函数名后跟括号来调用任意函数。因为`another_function`在程序中已经定义过了，它可以在`main`函数中被调用。注意，源码中`another_function`在`main`函数*之后*被定义；也可以在之前定义。Rust 不关心函数定义于何处，只要他们被定义了。
+可以使用定义过的函数名后跟括号来调用任意函数。因为`another_function`已经在程序中定义过了，它可以在`main`函数中被调用。注意，源码中`another_function`在`main`函数*之后*被定义；也可以在其之前定义。Rust 不关心函数定义于何处，只要他们被定义了。
 
-让我们开始一个叫做*functions*的新二进制项目来进一步探索函数。将上面的`another_function`例子写入 *src/main.rs* 中并运行。你应该会看到如下输出：
+让我们开始一个叫做 *functions* 的新二进制项目来进一步探索函数。将上面的`another_function`例子写入 *src/main.rs* 中并运行。你应该会看到如下输出：
 
-```sh
+```
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
@@ -40,7 +40,7 @@ Another function.
 
 ### 函数参数
 
-函数也可以被定义为拥有**参数**（*parameters*），他们是作为函数签名一部分的特殊变量。当函数拥有参数，可以为这些参数提供具体的值。技术上讲，这些具体值被称为参数（ *arguments*），不过通常的习惯是倾向于在函数定义中的变量和调用函数时传递的具体值都可以用 "parameter" 和 "argument" 而不加区别。
+函数也可以被定义为拥有**参数**（*parameters*），他们是作为函数签名一部分的特殊变量。当函数拥有参数，可以为这些参数提供具体的值。技术上讲，这些具体值被称为参数（ *arguments*），不过通常的习惯是倾向于在函数定义中的变量和调用函数时传递的具体值都可以用“parameter”和“argument”而不加区别。
 
 如下被重写的`another_function`版本展示了 Rust 中参数是什么样的：
 
@@ -85,7 +85,7 @@ fn another_function(x: i32, y: i32) {
 }
 ```
 
-这个例子创建了一个有两个参数的函数，都是`i32`类型的。函数打印出了这两个参数的值。注意函数参数并一定都是相同的————这个例子中他们只是碰巧相同。
+这个例子创建了一个有两个参数的函数，都是`i32`类型的。函数打印出了这两个参数的值。注意函数参数并不一定都是相同类型的，这个例子中他们只是碰巧相同罢了。
 
 尝试运行代码。使用上面的例子替换当前 *function* 项目的 *src/main.rs* 文件，并`cargo run`运行它：
 
@@ -97,12 +97,11 @@ The value of x is: 5
 The value of y is: 6
 ```
 
-因为我们使用`5`作为`x`的值和`6`作为`y`的值来调用函数，这两个字符串使用这些值并被打印出来。
+因为我们使用`5`作为`x`的值和`6`作为`y`的值来调用函数，这两个字符串和他们的值并被打印出来。
 
 ### 函数体
 
 函数体由一系列的语句和一个可选的表达式构成。目前为止，我们只涉及到了没有结尾表达式的函数，不过我们见过表达式作为了语句的一部分。因为 Rust 是一个基于表达式（expression-based）的语言，这是一个需要理解的（不同于其他语言）重要区别。其他语言并没有这样的区别，所以让我们看看语句与表达式有什么区别以及他们是如何影响函数体的。
-
 
 ### 语句与表达式
 
@@ -110,7 +109,6 @@ The value of y is: 6
 
 使用`let`关键字创建变量并绑定一个值是一个语句。在列表 3-3 中，`let y = 6;`是一个语句：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -119,12 +117,7 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 3-3: A `main` function declaration containing one statement.
-
-</figcaption>
-</figure>
+<span class="caption">Listing 3-3: A `main` function declaration containing one statement.</span>
 
 函数定义也是语句；上面整个例子本身就是一个语句。
 
@@ -140,7 +133,7 @@ fn main() {
 
 当运行这个程序，会得到如下错误：
 
-```sh
+```
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
 error: expected expression, found statement (`let`)
@@ -154,7 +147,7 @@ error: expected expression, found statement (`let`)
 
 `let y = 6`语句并不返回值，所以并没有`x`可以绑定的值。这与其他语言不同，例如 C 和 Ruby，他们的赋值语句返回所赋的值。在这些语言中，可以这么写`x = y = 6`这样`x`和`y`的值都是`6`；这在 Rust 中可不行。
 
-表达式进行计算而且他们组成了其余大部分 Rust 代码。考虑一个简单的数学运算，比如`5 + 6`，这是一个表达式并计算出值`11`。表达式可以是语句的一部分：在列表 3-3 中有这个语句`let y = 6;`，`6`是一个表达式它计算出的值是`6`。函数调用是一个表达式。宏调用是一个表达式。我们用来创新建作用域的大括号（代码块），`{}`，也是一个表达式，例如：
+表达式计算出一些值，而且他们组成了其余大部分你将会编写的 Rust 代码。考虑一个简单的数学运算，比如`5 + 6`，这是一个表达式并计算出值`11`。表达式可以是语句的一部分：在列表 3-3 中有这个语句`let y = 6;`，`6`是一个表达式它计算出的值是`6`。函数调用是一个表达式。宏调用是一个表达式。我们用来创新建作用域的大括号（代码块），`{}`，也是一个表达式，例如：
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -200,9 +193,9 @@ fn main() {
 }
 ```
 
-在函数`five`中并没有函数调用、宏、甚至也没有`let`语句————只有数字`5`它子集。这在 Rust 中是一个完全有效的函数。注意函数的返回值类型也被指定了，就是`-> i32`。尝试运行代码；输出应该看起来像这样：
+在函数`five`中并没有函数调用、宏、甚至也没有`let`语句————只有数字`5`它自己。这在 Rust 中是一个完全有效的函数。注意函数的返回值类型也被指定了，就是`-> i32`。尝试运行代码；输出应该看起来像这样：
 
-```sh
+```
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
@@ -215,7 +208,7 @@ The value of x is: 5
 let x = 5;
 ```
 
-再次，函数`five`没有参数并定义了返回值类型，不过函数体只有单单一个`5`也没有分号，因为这是我们想要返回值的表达式。让我们看看另一个例子：
+其次，函数`five`没有参数并定义了返回值类型，不过函数体只有单单一个`5`也没有分号，因为这是我们想要返回值的表达式。让我们看看另一个例子：
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -233,6 +226,8 @@ fn plus_one(x: i32) -> i32 {
 
 运行代码会打印出`The value of x is: 6`。如果在包含`x + 1`的那一行的结尾加上一个分号，把它从表达式变成语句后会怎样呢？
 
+<span class="filename">Filename: src/main.rs</span>
+
 ```rust,ignore
 fn main() {
     let x = plus_one(5);
@@ -247,13 +242,18 @@ fn plus_one(x: i32) -> i32 {
 
 运行代码会产生一个错误，如下：
 
-```sh
-error[E0269]: not all control paths return a value
- --> src/main.rs:7:1
+```
+error[E0308]: mismatched types
+ --> src/main.rs:7:28
   |
-7 | fn plus_one(x: i32) -> i32 {
-  | ^
+7 |   fn plus_one(x: i32) -> i32 {
+  |  ____________________________^ starting here...
+8 | |     x + 1;
+9 | | }
+  | |_^ ...ending here: expected i32, found ()
   |
+  = note: expected type `i32`
+             found type `()`
 help: consider removing this semicolon:
  --> src/main.rs:8:10
   |
@@ -261,4 +261,4 @@ help: consider removing this semicolon:
   |          ^
 ```
 
-主要的错误信息，“并非所有控制路径都返回一个值”（“not all control paths return a value,”），揭示了代码的核心问题。函数`plus_one`的定义说明它要返回一个`i32`，不过语句并不返回一个值。因此，这个函数没有返回任何值，这与函数定义相矛盾并导致一个错误。在输出中，Rust 提供了一个可能会对修正问题有帮助的信息：它建议去掉分号，这会修复这个错误。
+主要的错误信息，“mismatched types,”（类型不匹配），揭示了代码的核心问题。函数`plus_one`的定义说明它要返回一个`i32`，不过语句并不返回一个值，这由那个空元组`()`表明。因此，这个函数没有返回任何值，这与函数定义相矛盾并导致一个错误。在输出中，Rust 提供了一个可能会对修正问题有帮助的信息：它建议去掉分号，这会修复这个错误。

@@ -2,7 +2,7 @@
 
 > [ch03-05-control-flow.md](https://github.com/rust-lang/book/blob/master/src/ch03-05-control-flow.md)
 > <br>
-> commit 784a3ec5e8b9c6bff456ab9f0efd4dabcc180dda
+> commit 04aa3a45eb72855b34213703718f50a12a3eeec8
 
 通过条件是不是真来决定是否某些代码，或者根据条件是否为真来重复运行一段代码是大部分编程语言的基本组成部分。Rust 代码中最常见的用来控制执行流的结构是`if`表达式和循环。
 
@@ -26,11 +26,13 @@ fn main() {
 }
 ```
 
+<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
+
 所有`if`表达式以`if`关键字开头，它后跟一个条件。在这个例子中，条件检查`number`是否有一个小于 5 的值。在条件为真时希望执行的代码块位于紧跟条件之后的大括号中。`if`表达式中与条件关联的代码块有时被叫做 *arms*，就像第二章“比较猜测与秘密数字”部分中讨论到的`match`表达式中分支一样。也可以包含一个可选的`else`表达式，这里我们就这么做了，来提供一个在条件为假时应当执行的代码块。如果不提供`else`表达式并且条件为假时，程序会直接忽略`if`代码块并继续执行下面的代码。
 
 尝试运行代码，应该能看到如下输出：
 
-```sh
+```
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
@@ -45,7 +47,7 @@ let number = 7;
 
 再次运行程序并查看输出：
 
-```sh
+```
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
@@ -68,8 +70,7 @@ fn main() {
 
 这里`if`条件的值是`3`，Rust 抛出了一个错误：
 
-```sh
-   Compiling branches v0.1.0 (file:///projects/branches)
+```
 error[E0308]: mismatched types
  --> src/main.rs:4:8
   |
@@ -77,10 +78,7 @@ error[E0308]: mismatched types
   |        ^^^^^^ expected bool, found integral variable
   |
   = note: expected type `bool`
-  = note:    found type `{integer}`
-
-error: aborting due to previous error
-Could not compile `branches`.
+             found type `{integer}`
 ```
 
 这个错误表明 Rust 期望一个`bool`不过却得到了一个整型。Rust 并不会尝试自动地将非布尔值转换为布尔值，不像例如 Ruby 和 JavaScript 这样的语言。必须总是显式地使用`boolean`作为`if`的条件。例如如果想要`if`代码块只在一个数字不等于`0`时执行，可以把`if`表达式修改为如下：
@@ -123,7 +121,7 @@ fn main() {
 
 这个程序有四个可能的执行路径。运行后应该能看到如下输出：
 
-```sh
+```
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
@@ -132,13 +130,12 @@ number is divisible by 3
 
 当执行这个程序，它按顺序检查每个`if`表达式并执行第一个条件为真的代码块。注意即使 6 可以被 2 整除，也不会出现`number is divisible by 2`的输出，更不会出现`else`块中的`number is not divisible by 4, 3, or 2`。原因是 Rust 只会执行第一个条件为真的代码块，并且它一旦找到一个以后，就不会检查剩下的条件了。
 
-使用过多的`else if`表达式会使代码显得杂乱无章，所以如果有多于一个`else if`，最好重构代码。为此第六章介绍了 Rust 一个叫做`match`的强大的分支结构（branching construct）。
+使用过多的`else if`表达式会使代码显得杂乱无章，所以如果有多于一个`else if`，最好重构代码。为此第六章会介绍 Rust 中一个叫做`match`的强大的分支结构（branching construct）。
 
 #### 在`let`语句中使用`if`
 
-因为`if`是一个表达式，我们可以在`let`语句的右侧使用它，例如列表 3-4：
+因为`if`是一个表达式，我们可以在`let`语句的右侧使用它，例如在列表 3-4 中：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -154,23 +151,19 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 3-4: Assigning the result of an `if` expression to a variable
-
-</figcaption>
-</figure>
+<span class="caption">Listing 3-4: Assigning the result of an `if` expression
+to a variable</span>
 
 `number`变量将会绑定到基于`if`表达式结果的值。运行这段代码看看会出现什么：
 
-```sh
+```
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 The value of number is: 5
 ```
 
-还记得代码块的值是其最后一个表达式的值，以及数字本身也是一个表达式吗。在这个例子中，整个`if`表达式的值依赖哪个代码块被执行。这意味着`if`的每个分支的可能的返回值都必须是相同类型；在列表 3-4 中，`if`分支和`else`分支的结果都是`i32`整型。不过如果像下面的例子一样这些类型并不相同会怎么样呢？
+还记得代码块的值是其最后一个表达式的值，以及数字本身也是一个表达式吗。在这个例子中，整个`if`表达式的值依赖哪个代码块被执行。这意味着`if`的每个分支的可能的返回值都必须是相同类型；在列表 3-4 中，`if`分支和`else`分支的结果都是`i32`整型。不过如果像下面的例子那样这些类型并不匹配会怎么样呢？
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -190,19 +183,23 @@ fn main() {
 
 当运行这段代码，会得到一个错误。`if`和`else`分支的值类型是不相容的，同时 Rust 也准确地表明了在程序中的何处发现的这个问题：
 
-```sh
-   Compiling branches v0.1.0 (file:///projects/branches)
+```
 error[E0308]: if and else have incompatible types
  --> src/main.rs:4:18
   |
-4 |     let number = if condition {
-  |                  ^ expected integral variable, found reference
+4 |       let number = if condition {
+  |  __________________^ starting here...
+5 | |         5
+6 | |     } else {
+7 | |         "six"
+8 | |     };
+  | |_____^ ...ending here: expected integral variable, found reference
   |
   = note: expected type `{integer}`
-  = note:    found type `&’static str`
+             found type `&'static str`
 ```
 
-`if`代码块的表达式返回一个整型，而`else`代码块返回一个字符串。这并不可行因为变量必须只有一个类型。Rust 需要在编译时就确切的知道`number`变量的类型，这样它就可以在编译时证明其他使用`number`变量的地方它的类型是有效的。Rust 并不能够在`number`的类型只能在运行时确定的情况下完成这些功能；这样会使编译器变得更复杂而且只能为代码提供更少的保障，因为它不得不记录所有变量的多种可能的类型。
+`if`代码块的表达式返回一个整型，而`else`代码块返回一个字符串。这并不可行，因为变量必须只有一个类型。Rust 需要在编译时就确切的知道`number`变量的类型，这样它就可以在编译时证明其他使用`number`变量的地方它的类型是有效的。Rust 并不能够在`number`的类型只能在运行时确定的情况下工作；这样会使编译器变得更复杂而且只能为代码提供更少的保障，因为它不得不记录所有变量的多种可能的类型。
 
 ### 使用循环重复执行
 
@@ -247,7 +244,7 @@ again!
 
 在程序中计算循环的条件也很常见。当条件为真，执行循环。当条件不再为真，调用`break`停止循环。这个循环类型可以通过组合`loop`、`if`、`else`和`break`来实现；如果你喜欢的话，现在就可以在程序中试试。
 
-然而，这个模式太常见了所以 Rust 为此提供了一个内建的语言结构，它被称为`while`循环。下面的例子使用了`while`：程序循环三次，每次数字都减一。接着，在循环之后，打印出另一个信息并退出：
+然而，这个模式太常见了以至于 Rust 为此提供了一个内建的语言结构，它被称为`while`循环。下面的例子使用了`while`：程序循环三次，每次数字都减一。接着，在循环之后，打印出另一个信息并退出：
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -271,7 +268,6 @@ fn main() {
 
 可以使用`while`结构来遍历一个元素集合，比如数组。例如：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -287,12 +283,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 3-5: Looping through each element of a collection using a `while` loop
-
-</figcaption>
-</figure>
+<span class="caption">Listing 3-5: Looping through each element of a collection
+using a `while` loop</span>
 
 这里代码对数组中的元素进行计数。它从索引`0`开始，并接着循环直到遇到数组的最后一个索引（这时，`index < 5`不再为真）。运行这段代码会打印出数组中的每一个元素：
 

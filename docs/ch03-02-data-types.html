@@ -69,20 +69,20 @@
                 <div id="content" class="content">
                     <a class="header" href="#数据类型" name="数据类型"><h2>数据类型</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch03-02-data-types.md">ch03-02-data-types.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch03-02-data-types.md">ch03-02-data-types.md</a>
 <br>
-commit 6436ebee2a84820adf77231cead6b5691c8e2744</p>
+commit 04aa3a45eb72855b34213703718f50a12a3eeec8</p>
 </blockquote>
-<p>Rust 中的任何值都有一个具体的<strong>类型</strong>（<em>type</em>），这告诉了 Rust 它被指定为何种数据这样 Rust 就知道如何处理这些数据了。这一部分将讲到一些语言内建的类型。我们将这些类型分为两个子集：标量（scalar）和复合（compound）。</p>
+<p>Rust 中的任何值都有一个具体的<strong>类型</strong>（<em>type</em>），这告诉了 Rust 它被指定了何种数据，这样 Rust 就知道如何处理这些数据了。这一部分将讲到一些语言内建的类型。我们将这些类型分为两个子集：标量（scalar）和复合（compound）。</p>
 <p>贯穿整个部分，请记住 Rust 是一个<strong>静态类型</strong>（<em>statically typed</em>）语言，也就是说必须在编译时就知道所有变量的类型。编译器通常可以通过值以及如何使用他们来推断出我们想要用的类型。当多个类型都是可能的时候，比如第二章中<code>parse</code>将<code>String</code>转换为数字类型，必须增加类型注解，像这样：</p>
 <pre><code class="language-rust">let guess: u32 = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
 </code></pre>
 <p>如果这里不添加类型注解，Rust 会显示如下错误，它意味着编译器需要我们提供更多我们想要使用哪个可能的类型的信息：</p>
-<pre><code class="language-sh">error[E0282]: unable to infer enough type information about `_`
- --&gt; src/main.rs:2:5
+<pre><code>error[E0282]: unable to infer enough type information about `_`
+ --&gt; src/main.rs:2:9
   |
-2 | let guess = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
-  |     ^^^^^ cannot infer type for `_`
+2 |     let guess = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
+  |         ^^^^^ cannot infer type for `_`
   |
   = note: type annotations or generic parameter binding required
 </code></pre>
@@ -91,10 +91,7 @@ commit 6436ebee2a84820adf77231cead6b5691c8e2744</p>
 <p><strong>标量</strong>类型代表一个单独的值。Rust 有四种基本的标量类型：整型、浮点型、布尔类型和字符类型。你可能在其他语言中见过他们，不过让我们深入了解他们在 Rust 中时如何工作的。</p>
 <a class="header" href="#整型" name="整型"><h4>整型</h4></a>
 <p><strong>整数</strong>是一个没有小数部分的数字。我们在这一章的前面使用过一个整型，<code>i32</code>类型。这个类型声明表明在 32 位系统上它关联的值应该是一个有符号整数（因为这个<code>i</code>，与<code>u</code>代表的无符号相对）。表格 3-1 展示了 Rust 内建的整数类型。每一个变体的有符号和无符号列（例如，<em>i32</em>）可以用来声明对应的整数值。</p>
-<figure>
-<figcaption>
-<p>Table 3-1: Integer Types in Rust</p>
-</figcaption>
+<p><span class="caption">Table 3-1: Integer Types in Rust</span></p>
 <table><thead><tr><td> Length </td><td> Signed </td><td> Unsigned </td></tr></thead>
 <tr><td> 8-bit  </td><td> i8     </td><td> u8       </td></tr>
 <tr><td> 16-bit </td><td> i16    </td><td> u16      </td></tr>
@@ -102,15 +99,11 @@ commit 6436ebee2a84820adf77231cead6b5691c8e2744</p>
 <tr><td> 64-bit </td><td> i64    </td><td> u64      </td></tr>
 <tr><td> arch   </td><td> isize  </td><td> usize    </td></tr>
 </table>
-</figure>
 <p>每一种变体都可以是有符号或无符号的并有一个显式的大小。有符号和无符号代表数字是否能够是正数或负数；换句话说，数字是否需要有一个符号（有符号数）或者永远只需要是正的这样就可以不用符号（无符号数）。这有点像在纸上书写数字：当需要考虑符号的时候，数字前面会加上一个加号或减号；然而，当可以安全地假设为正数时，可以不带符号（加号）。有符号数以二进制补码形式（two’s complement representation）存储（如果你不清楚这是什么，可以在网上搜索；对其的解释超出了本书的范畴）。</p>
 <p>每一个有符号的变体可以储存包含从 -(2<sup>n - 1</sup>) 到 2<sup>n - 1</sup> - 1 在内的数字，这里<code>n</code>是变体使用的位数。所以<code>i8</code>可以储存从 -(2<sup>7</sup>) 到 2<sup>7</sup> - 1 在内的数字，也就是从 -128 到 127。无符号的变体可以储存从 0 到 2<sup>n</sup> - 1 的数字，所以<code>u8</code>可以储存从 0 到 2<sup>8</sup> - 1 的数字，也就是从 0 到 255。</p>
 <p>另外，<code>isize</code>和<code>usize</code>类型依赖运行程序的计算机类型（构架）：64 位构架他们是 64 位的而 32 位构架他们就是 32 位的。</p>
 <p>可以使用表格 3-2 中的任何一种形式编写数字字面值。注意除了字节字面值以外的数字字面值允许使用类型后缀，例如<code>57u8</code>，而<code>_</code>是可视化分隔符（visual separator），例如<code>1_000</code>位的。</p>
-<figure>
-<figcaption>
-<p>Table 3-2: Integer Literals in Rust</p>
-</figcaption>
+<p><span class="caption">Table 3-2: Integer Literals in Rust</span></p>
 <table><thead><tr><td> Number literals  </td><td> Example       </td></tr></thead>
 <tr><td> Decimal          </td><td> <code>98_222</code>      </td></tr>
 <tr><td> Hex              </td><td> <code>0xff</code>        </td></tr>
@@ -118,10 +111,9 @@ commit 6436ebee2a84820adf77231cead6b5691c8e2744</p>
 <tr><td> Binary           </td><td> <code>0b1111_0000</code> </td></tr>
 <tr><td> Byte (<code>u8</code> only) </td><td> <code>b'A'</code>        </td></tr>
 </table>
-</figure>
 <p>那么如何知晓该使用哪种类型的数字呢？如果对此拿不定主意，Rust 的默认类型通常就是一个很好的选择，这个默认数字类型是<code>i32</code>：它通常是最快的，甚至是在 64 位系统上。使用<code>isize</code>或<code>usize</code>的主要场景是索引一些集合。</p>
 <a class="header" href="#浮点型" name="浮点型"><h4>浮点型</h4></a>
-<p>Rust 也有两个主要的<strong>浮点数</strong>（<em>floating-point numbers</em>）类型，他们是有小数点的数字。Rust 的浮点数类型是<code>f32</code>和<code>f64</code>，分别是 32 位 和 64 位大小。默认类型是<code>f64</code>，因为它基本上与<code>f32</code>一样快不过精度更高。在 32 位系统上使用<code>f64</code>是可能的，不过会比<code>f32</code>要慢。大部分情况，牺牲潜在可能的更低性能来换取更高的精度是一个合理的首要选择，同时如果怀疑浮点数的大小有问题的时候应该对代码进行性能测试。</p>
+<p>Rust 也有两个主要的<strong>浮点数</strong>（<em>floating-point numbers</em>）类型，他们是有小数点的数字。Rust 的浮点数类型是<code>f32</code>和<code>f64</code>，分别是 32 位 和 64 位大小。默认类型是<code>f64</code>，因为它基本上与<code>f32</code>一样快不过精度更高。在 32 位系统上使用<code>f64</code>是可能的，不过会比<code>f32</code>要慢。大部分情况，牺牲潜在可能的更低性能来换取更高的精度是一个合理的初始选择，同时如果怀疑浮点数的大小有问题的时候应该先对代码进行性能测试。</p>
 <p>这是一个展示浮点数的实例：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -193,7 +185,7 @@ commit 6436ebee2a84820adf77231cead6b5691c8e2744</p>
 }
 </code></pre>
 <p>程序首先创建了一个元组并绑定到<code>tup</code>变量上。接着使用了<code>let</code>和一个模式将<code>tup</code>分成了三个不同的变量，<code>x</code>、<code>y</code>和<code>z</code>。这叫做<em>解构</em>（<em>destructuring</em>），因为它将一个元组拆成了三个部分。最后，程序打印出了<code>y</code>的值，也就是<code>6.4</code>。</p>
-<p>除了使用模式匹配解构之外，也可以使用点号（<code>.</code>）后跟值的索引来直接访问。例如：</p>
+<p>除了使用模式匹配解构之外，也可以使用点号（<code>.</code>）后跟值的索引来直接访问他们。例如：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let x: (i32, f64, u8) = (500, 6.4, 1);
@@ -242,7 +234,7 @@ commit 6436ebee2a84820adf77231cead6b5691c8e2744</p>
 }
 </code></pre>
 <p>使用<code>cargo run</code>运行代码后会产生如下结果：</p>
-<pre><code class="language-sh">$ cargo run
+<pre><code>$ cargo run
    Compiling arrays v0.1.0 (file:///projects/arrays)
      Running `target/debug/arrays`
 thread '&lt;main&gt;' panicked at 'index out of bounds: the len is 5 but the index is

@@ -69,9 +69,9 @@
                 <div id="content" class="content">
                     <a class="header" href="#引用与借用" name="引用与借用"><h2>引用与借用</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch04-02-references-and-borrowing.md">ch04-02-references-and-borrowing.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch04-02-references-and-borrowing.md">ch04-02-references-and-borrowing.md</a>
 <br>
-commit c9fd8eb1da7a79deee97020e8ad49af8ded78f9c</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
 <p>在上一部分的结尾处的使用元组的代码是有问题的，我们需要将<code>String</code>返回给调用者函数这样就可以在调用<code>calculate_length</code>后仍然可以使用<code>String</code>了，因为<code>String</code>先被移动到了<code>calculate_length</code>。</p>
 <p>下面是如何定义并使用一个（新的）<code>calculate_length</code>函数，它以一个对象的<strong>引用</strong>作为参数而不是获取值的所有权：</p>
@@ -90,12 +90,8 @@ fn calculate_length(s: &amp;String) -&gt; usize {
 </code></pre>
 <p>首先，注意变量声明和函数返回值中的所有元组代码都消失了。其次，注意我们传递<code>&amp;s1</code>给<code>calculate_length</code>，同时在函数定义中，我们获取<code>&amp;String</code>而不是<code>String</code>。</p>
 <p>这些 &amp; 符号就是<strong>引用</strong>，他们允许你使用值但不获取它的所有权。图 4-8 展示了一个图解。</p>
-<figure>
-<img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
-<figcaption>
-<p>Figure 4-8: <code>&amp;String s</code> pointing at <code>String s1</code></p>
-</figcaption>
-</figure>
+<p><img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" /></p>
+<p><span class="caption">Figure 4-8: <code>&amp;String s</code> pointing at <code>String s1</code></span></p>
 <p>仔细看看这个函数调用：</p>
 <pre><code class="language-rust"># fn calculate_length(s: &amp;String) -&gt; usize {
 #     s.len()
@@ -114,8 +110,7 @@ let len = calculate_length(&amp;s1);
 <p>变量<code>s</code>有效的作用域与函数参数的作用域一样，不过当引用离开作用域后并不丢弃它指向的数据因为我们没有所有权。函数使用引用而不是实际值作为参数意味着无需返回值来交还所有权，因为就不曾拥有它。</p>
 <p>我们将获取引用作为函数参数称为<strong>借用</strong>（<em>borrowing</em>）。正如现实生活中，如果一个人拥有某样东西，你可以从它哪里借来。当你使用完毕，必须还回去。</p>
 <p>那么如果我们尝试修改借用的变量呢？尝试列表 4-9 中的代码。剧透：这行不通！</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
     let s = String::from(&quot;hello&quot;);
 
@@ -126,12 +121,9 @@ fn change(some_string: &amp;String) {
     some_string.push_str(&quot;, world&quot;);
 }
 </code></pre>
-<figcaption>
-<p>Listing 4-9: Attempting to modify a borrowed value</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 4-9: Attempting to modify a borrowed value</span></p>
 <p>这里是错误：</p>
-<pre><code class="language-sh">error: cannot borrow immutable borrowed content `*some_string` as mutable
+<pre><code>error: cannot borrow immutable borrowed content `*some_string` as mutable
  --&gt; error.rs:8:5
   |
 8 |     some_string.push_str(&quot;, world&quot;);
@@ -160,7 +152,7 @@ let r1 = &amp;mut s;
 let r2 = &amp;mut s;
 </code></pre>
 <p>具体错误如下：</p>
-<pre><code class="language-text">error[E0499]: cannot borrow `s` as mutable more than once at a time
+<pre><code>error[E0499]: cannot borrow `s` as mutable more than once at a time
  --&gt; borrow_twice.rs:5:19
   |
 4 |     let r1 = &amp;mut s;
@@ -178,7 +170,7 @@ let r2 = &amp;mut s;
 <li>没有被用来同步数据访问的机制。</li>
 </ol>
 <p>数据竞争会导致未定义行为并且当在运行时尝试追踪时可能会变得难以诊断和修复；Rust 阻止了这种情况的发生，因为存在数据竞争的代码根本就不能编译！</p>
-<p>一如既往，使用大括号来创建一个新的作用域，允许拥有多个可变引用，只是不能<strong>同时</strong>拥有：</p>
+<p>一如既往，可以使用大括号来创建一个新的作用域来允许拥有多个可变引用，只是不能<strong>同时</strong>拥有：</p>
 <pre><code class="language-rust">let mut s = String::from(&quot;hello&quot;);
 
 {
@@ -196,7 +188,7 @@ let r2 = &amp;s; // no problem
 let r3 = &amp;mut s; // BIG PROBLEM
 </code></pre>
 <p>错误如下：</p>
-<pre><code class="language-sh">error[E0502]: cannot borrow `s` as mutable because it is also borrowed as
+<pre><code>error[E0502]: cannot borrow `s` as mutable because it is also borrowed as
 immutable
  --&gt; borrow_thrice.rs:6:19
   |
@@ -266,12 +258,12 @@ for it to be borrowed from.
 </ol>
 <ul>
 <li>一个可变引用。</li>
-<li>任意属性的不可变引用。</li>
+<li>任意数量的不可变引用。</li>
 </ul>
 <ol start="2">
 <li>引用必须总是有效的。</li>
 </ol>
-<p>接下来，我们来看看一种不同类型的引用：slices。</p>
+<p>接下来，我们来看看一种不同类型的引用：slice。</p>
 
                 </div>
 

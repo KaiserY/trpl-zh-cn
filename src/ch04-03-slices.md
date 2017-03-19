@@ -1,8 +1,8 @@
 ## Slices
 
-> [ch04-03-slices.md](https://github.com/rust-lang/book/blob/master/src/ch04-03-slices.md)
+> [ch04-03-slices.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch04-03-slices.md)
 > <br>
-> commit c9fd8eb1da7a79deee97020e8ad49af8ded78f9c
+> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
 
 另一个没有所有权的数据类型是 *slice*。slice 允许你引用集合中一段连续的元素序列，而不用引用整个集合。
 
@@ -16,7 +16,6 @@ fn first_word(s: &String) -> ?
 
 `first_word`这个函数有一个参数`&String`。因为我们不需要所有权，所以这没有问题。不过应该返回什么呢？我们并没有一个真正获取**部分**字符串的办法。不过，我们可以返回单词结尾的索引。让我们试试如列表 4-10 所示的代码：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -33,13 +32,8 @@ fn first_word(s: &String) -> usize {
 }
 ```
 
-<figcaption>
-
-Listing 4-10: The `first_word` function that returns a byte index value into
-the `String` parameter
-
-</figcaption>
-</figure>
+<span class="caption">Listing 4-10: The `first_word` function that returns a
+byte index value into the `String` parameter</span>
 
 让我们将代码分解成小块。因为需要一个元素一个元素的检查`String`中的值是否是空格，需要用`as_bytes`方法将`String`转化为字节数组：
 
@@ -47,13 +41,13 @@ the `String` parameter
 let bytes = s.as_bytes();
 ```
 
-Next, we create an iterator over the array of bytes using the `iter` method :
+接下来，使用`iter`方法在字节数据上创建一个迭代器：
 
 ```rust,ignore
 for (i, &item) in bytes.iter().enumerate() {
 ```
 
-第十六章将讨论迭代器的更多细节。现在，只需知道`iter`方法返回集合中的每一个元素，而`enumerate`包装`iter`的结果并返回一个元组，其中每一个元素是元组的一部分。返回元组的第一个元素是索引，第二个元素是集合中元素的引用。这比我们自己计算索引要方便一些。
+第十三章将讨论迭代器的更多细节。现在，只需知道`iter`方法返回集合中的每一个元素，而`enumerate`包装`iter`的结果并返回一个元组，其中每一个元素是元组的一部分。返回元组的第一个元素是索引，第二个元素是集合中元素的引用。这比我们自己计算索引要方便一些。
 
 因为`enumerate`方法返回一个元组，我们可以使用模式来解构它，就像 Rust 中其他地方一样。所以在`for`循环中，我们指定了一个模式，其中`i`是元组中的索引而`&item`是单个字节。因为从`.iter().enumerate()`中获取了集合元素的引用，我们在模式中使用了`&`。
 
@@ -69,7 +63,6 @@ s.len()
 
 现在有了一个找到字符串中第一个单词结尾索引的方法了，不过这有一个问题。我们返回了单单一个`usize`，不过它只在`&String`的上下文中才是一个有意义的数字。换句话说，因为它是一个与`String`像分离的值，无法保证将来它仍然有效。考虑一下列表 4-11 中使用了列表 4-10 `first_word`函数的程序：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -97,13 +90,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 4-11: Storing the result from calling the `first_word` function then
-changing the `String` contents
-
-</figcaption>
-</figure>
+<span class="caption">Listing 4-11: Storing the result from calling the
+`first_word` function then changing the `String` contents</span>
 
 这个程序编译时没有任何错误，而且在调用`s.clear()`之后使用`word`也不会出错。这时`word`与`s`状态就没有联系了，所以`word`仍然包含值`5`。可以尝试用值`5`来提取变量`s`的第一个单词，不过这是有 bug 的，因为在我们将`5`保存到`word`之后`s`的内容已经改变。
 
@@ -134,16 +122,10 @@ let world = &s[6..11];
 
 图 4-12 展示了一个图例
 
-
-<figure>
 <img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
-<figcaption>
-
-Figure 4-12: String slice referring to part of a `String`
-
-</figcaption>
-</figure>
+<span class="caption">Figure 4-12: String slice referring to part of a
+`String`</span>
 
 对于 Rust 的`..` range 语法，如果想要从第一个索引（0）开始，可以不写两个点号之前的值。换句话说，如下两个语句是相同的：
 
