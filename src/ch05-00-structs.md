@@ -2,15 +2,13 @@
 
 > [ch05-00-structs.md](https://github.com/rust-lang/book/blob/master/src/ch05-00-structs.md)
 > <br>
-> commit 255b44b409585e472e14c396ebc75d28f540a1ac
+> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
 
-`struct`，是 *structure* 的缩写，是一个允许我们命名并将多个相关值包装进一个有意义的组合的自定义类型。如果你来自一个面向对象编程语言背景，`struct`就像对象中的数据属性（字段）。在这一章的下一部分会讲到如何在结构体上定义方法；方法是如何为结构体数据指定**行为**的函数。`struct`和`enum`（将在第六章讲到）是为了充分利用 Rust 的编译时类型检查，来在程序范围创建新类型的基本组件。
+`struct`，是 *structure* 的缩写，是一个允许我们命名并将多个相关值包装进一个有意义的组合的自定义类型。如果你来自一个面向对象编程语言背景，`struct`就像对象中的数据属性（字段）。在这一章的下一部分会讲到如何在结构体上定义方法；方法是如何为结构体数据指定**行为**的函数。`struct`和`enum`（将在第六章讲到）是为了充分利用 Rust 的编译时类型检查来在程序范围内创建新类型的基本组件。
 
-对结构体的一种看法是他们与元组类似，这个我们在第三章讲过了。就像元组，结构体的每一部分可以是不同类型。可以命令各部分数据所以能更清楚的知道其值是什么意思。由于有了这些名字使得结构体更灵活：不需要依赖顺序来指定或访问实例中的值。
+对结构体的一种看法是他们与元组类似，这个我们在第三章讲过了。就像元组，结构体的每一部分可以是不同类型。可以命名各部分数据以便能更清楚的知道其值的意义。由于有了这些名字使得结构体更灵活：不需要依赖顺序来指定或访问实例中的值。
 
-为了定义结构体，通过`struct`关键字并为整个结构体提供一个名字。结构体的名字需要描述它所组合的数据的意义。接着，在大括号中，定义每一部分数据的名字，他们被称作**字段**（*fields*），并定义字段类型。例如，列表 5-1 展示了一个储存用户账号信息的结构体：
-
-<figure>
+为了定义结构体，通过`struct`关键字并为整个结构体提供一个名字。结构体的名字需要描述它所组合的数据的意义。接着，在大括号中，定义每一部分数据的名字，他们被称作**字段**（*field*），并定义字段类型。例如，列表 5-1 展示了一个储存用户账号信息的结构体：
 
 ```rust
 struct User {
@@ -21,14 +19,9 @@ struct User {
 }
 ```
 
-<figcaption>
+<span class="caption">Listing 5-1: A `User` struct definition</span>
 
-Listing 5-1: A `User` struct definition
-
-</figcaption>
-</figure>
-
-一旦定义后为了使用它，通过为每个字段指定具体值来创建这个结构体的**实例**。创建一个实例需要以结构体的名字开头，接着在大括号中使用`key: value`对的形式提供字段，其中 key 是字段的名字而 value 是需要储存在字段中的数据值。这时字段的顺序并不必要与在结构体中声明他们的顺序一致。换句话说，结构体的定义就像一个这个类型的通用模板。例如，我们可以像这样来声明一个特定的用户：
+一旦定义了结构体后为了使用它，通过为每个字段指定具体值来创建这个结构体的**实例**。创建一个实例需要以结构体的名字开头，接着在大括号中使用`key: value`对的形式提供字段，其中 key 是字段的名字而 value 是需要储存在字段中的数据值。这时字段的顺序并不必要与在结构体中声明他们的顺序一致。换句话说，结构体的定义就像一个这个类型的通用模板，而实例则会在这个模板中放入特定数据来创建这个类型的值。例如，我们可以像这样来声明一个特定的用户：
 
 ```rust
 # struct User {
@@ -98,7 +91,6 @@ error[E0106]: missing lifetime specifier
 
 使用 Cargo 来创建一个叫做 *rectangles* 的新二进制程序，它会获取一个长方形以像素为单位的长度和宽度并计算它的面积。列表 5-2 中是项目的 *src/main.rs* 文件中为此实现的一个小程序：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -117,13 +109,8 @@ fn area(length: u32, width: u32) -> u32 {
 }
 ```
 
-<figcaption>
-
-Listing 5-2: Calculating the area of a rectangle specified by its length and
-width in separate variables
-
-</figcaption>
-</figure>
+<span class="caption">Listing 5-2: Calculating the area of a rectangle
+specified by its length and width in separate variables</span>
 
 尝试使用`cargo run`运行程序：
 
@@ -133,7 +120,7 @@ The area of the rectangle is 1500 square pixels.
 
 ### 使用元组重构
 
-我们的小程序能正常运行；它调用`area`函数用长方形的每个维度来计算出面积。不过我们可以做的更好。长度和宽度是相关联的，因为他们一起才能定义一个长方形。
+我们的小程序能正常运行；它调用`area`函数用长方形的每个维度来计算出面积。不过我们可以做的更好。长度和宽度是相关联的，因为他们在一起才能定义一个长方形。
 
 这个做法的问题突显在`area`的签名上：
 
@@ -145,7 +132,6 @@ fn area(length: u32, width: u32) -> u32 {
 
 第三章已经讨论过了一种可行的方法：元组。列表 5-3 是一个使用元组的版本：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -163,16 +149,12 @@ fn area(dimensions: (u32, u32)) -> u32 {
 }
 ```
 
-<figcaption>
-
-Listing 5-3: Specifying the length and width of the rectangle with a tuple
-
-</figcaption>
-</figure>
+<span class="caption">Listing 5-3: Specifying the length and width of the
+rectangle with a tuple</span>
 
 <!-- I will add ghosting & wingdings once we're in libreoffice /Carol -->
 
-在某种程度上说这样好一点了。元组帮助我们增加了一些结构，现在在调用`area`的时候只用传递一个参数。不过另一方面这个方法却更不明确了：元组并没有给出它元素的名称，所以计算变得更费解了，因为不得不使用索引来获取元组的每一部分：
+在某种程度上说这样好一点了。元组帮助我们增加了一些结构性，现在在调用`area`的时候只用传递一个参数。不过另一方面这个方法却更不明确了：元组并没有给出它元素的名称，所以计算变得更费解了，因为不得不使用索引来获取元组的每一部分：
 
 <!-- I will change this to use wingdings instead of repeating this code once
 we're in libreoffice /Carol -->
@@ -181,14 +163,12 @@ we're in libreoffice /Carol -->
 dimensions.0 * dimensions.1
 ```
 
-在面积计算时混淆长宽并没有什么问题，不过当在屏幕上绘制长方形时就有问题了！我们将不得不记住元组索引`0`是`length`而`1`是`width`。如果其他人要使用这些代码，他们也不得不搞清楚后再记住。容易忘记或者混淆这些值而造成错误，因为我们没有表达我们代码中数据的意义。
+在面积计算时混淆长宽并没有什么问题，不过当在屏幕上绘制长方形时就有问题了！我们将不得不记住元组索引`0`是`length`而`1`是`width`。如果其他人要使用这些代码，他们也不得不搞清楚后再记住他们。容易忘记或者混淆这些值而造成错误，因为我们没有表明代码中数据的意义。
 
 ### 使用结构体重构：增加更多意义
 
-现在引入结构体。我们可以将元组转换为一个有整体名称而且每个部分也有对应名字的数据类型，如列表 5-4 所示：
+现在引入结构体的时候了。我们可以将元组转换为一个有整体名称而且每个部分也有对应名字的数据类型，如列表 5-4 所示：
 
-
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -211,12 +191,7 @@ fn area(rectangle: &Rectangle) -> u32 {
 }
 ```
 
-<figcaption>
-
-Listing 5-4: Defining a `Rectangle` struct
-
-</figcaption>
-</figure>
+<span class="caption">Listing 5-4: Defining a `Rectangle` struct</span>
 
 <!-- Will add ghosting & wingdings once we're in libreoffice /Carol -->
 
@@ -224,13 +199,12 @@ Listing 5-4: Defining a `Rectangle` struct
 
 函数`area`现在被定义为接收一个名叫`rectangle`的参数，它的类型是一个结构体`Rectangle`实例的不可变借用。第四章讲到过，我们希望借用结构体而不是获取它的所有权这样`main`函数就可以保持`rect1`的所有权并继续使用它，所以这就是为什么在函数签名和调用的地方会有`&`。
 
-`area`函数访问`Rectangle`的`length`和`width`字段。`area`的签名现在明确的表明了我们的意图：计算一个`Rectangle`的面积，通过其`length`和`width`字段。这表明了长度和宽度是相互联系的，并为这些值提供了描述性的名称而不是使用元组的索引值`0`和`1`。这是明确性的胜利。
+`area`函数访问`Rectangle`的`length`和`width`字段。`area`的签名现在明确的表明了我们的意图：通过其`length`和`width`字段，计算一个`Rectangle`的面积，。这表明了长度和宽度是相互联系的，并为这些值提供了描述性的名称而不是使用元组的索引值`0`和`1`。这是明确性的胜利。
 
 ### 通过衍生 trait 增加实用功能
 
 如果能够在调试程序时打印出`Rectangle`实例来查看其所有字段的值就更好了。列表 5-5 尝试像往常一样使用`println!`宏：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -246,12 +220,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 5-5: Attempting to print a `Rectangle` instance
-
-</figcaption>
-</figure>
+<span class="caption">Listing 5-5: Attempting to print a `Rectangle`
+instance</span>
 
 如果运行代码，会出现带有如下核心信息的错误：
 
@@ -285,8 +255,6 @@ crate, add `#[derive(Debug)]` or manually implement it
 
 Rust **确实**包含了打印出调试信息的功能，不过我们必须为结构体显式选择这个功能。为此，在结构体定义之前加上`#[derive(Debug)]`注解，如列表 5-6 所示：
 
-<figure>
-
 ```rust
 #[derive(Debug)]
 struct Rectangle {
@@ -301,13 +269,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 5-6: Adding the annotation to derive the `Debug` trait and printing the
-`Rectangle` instance using debug formatting
-
-</figcaption>
-</figure>
+<span class="caption">Listing 5-6: Adding the annotation to derive the `Debug`
+trait and printing the `Rectangle` instance using debug formatting</span>
 
 此时此刻运行程序，运行这个程序，不会有任何错误并会出现如下输出：
 

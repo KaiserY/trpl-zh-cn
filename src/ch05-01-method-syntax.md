@@ -2,15 +2,14 @@
 
 > [ch05-01-method-syntax.md](https://github.com/rust-lang/book/blob/master/src/ch05-01-method-syntax.md)
 > <br>
-> commit c9fd8eb1da7a79deee97020e8ad49af8ded78f9c
+> commit 8c1c1a55d5c0f9bc3c866ee79b267df9dc5c04e2
 
-**方法**与函数类似：他们使用`fn`关键和名字声明，他们可以拥有参数和返回值，同时包含一些代码会在某处被调用时执行。不过方法与方法是不同的，因为他们在结构体（或者枚举或者 trait 对象，将分别在第六章和第十三章讲解）的上下文中被定义，并且他们第一个参数总是`self`，它代表方法被调用的结构体的实例。
+**方法**与函数类似：他们使用`fn`关键和名字声明，他们可以拥有参数和返回值，同时包含一些代码会在某处被调用时执行。不过方法与方法是不同的，因为他们在结构体（或者枚举或者 trait 对象，将分别在第六章和第十七章讲解）的上下文中被定义，并且他们第一个参数总是`self`，它代表方法被调用的结构体的实例。
 
 ### 定义方法
 
 让我们将获取一个`Rectangle`实例作为参数的`area`函数改写成一个定义于`Rectangle`结构体上的`area`方法，如列表 5-7 所示：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -36,12 +35,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 5-7: Defining an `area` method on the `Rectangle` struct
-
-</figcaption>
-</figure>
+<span class="caption">Listing 5-7: Defining an `area` method on the `Rectangle`
+struct</span>
 
 <!-- Will add ghosting and wingdings here in libreoffice /Carol -->
 
@@ -51,7 +46,7 @@ Listing 5-7: Defining an `area` method on the `Rectangle` struct
 
 这里选择`&self`跟在函数版本中使用`&Rectangle`出于同样的理由：我们并不想获取所有权，只希望能够读取结构体中的数据，而不是写入。如果想要能够在方法中改变调用方法的实例的话，需要将抵押给参数改为`&mut self`。通过仅仅使用`self`作为第一个参数来使方法获取实例的所有权，不过这是很少见的；这通常用在当方法将`self`转换成别的实例的时候，同时我们想要防止调用者在转换之后使用原始的实例。
 
-使用方法而不是函数，除了使用了方法语法和不需要在每个函数签名中重复`self`类型外，其主要好处在于组织性。我将某个类型实例能做的所有事情都一起放入`impl`块中，而不是让将来的用户在我们的代码中到处寻找`Rectangle的功能。
+使用方法而不是函数，除了使用了方法语法和不需要在每个函数签名中重复`self`类型外，其主要好处在于组织性。我将某个类型实例能做的所有事情都一起放入`impl`块中，而不是让将来的用户在我们的代码中到处寻找`Rectangle`的功能。
 
 <!-- PROD: START BOX -->
 
@@ -92,7 +87,6 @@ Listing 5-7: Defining an `area` method on the `Rectangle` struct
 
 让我们更多的实践一下方法，通过为`Rectangle`结构体实现第二个方法。这回，我们让一个`Rectangle`的实例获取另一个`Rectangle`实例并返回`self`能否完全包含第二个长方形，如果能返回`true`若不能则返回`false`。当我们定义了`can_hold`方法，就可以运行列表 5-8 中的代码了：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -106,12 +100,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 5-8: Demonstration of using the as-yet-unwritten `can_hold` method
-
-</figcaption>
-</figure>
+<span class="caption">Listing 5-8: Demonstration of using the as-yet-unwritten
+`can_hold` method</span>
 
 我们希望看到如下输出，因为`rect2`的长宽都小于`rect1`，而`rect3`比`rect1`要宽：
 
@@ -120,8 +110,7 @@ Can rect1 hold rect2? true
 Can rect1 hold rect3? false
 ```
 
-因为我们想定义一个方法，所以它应该位于`impl Rectangle`块中。方法名是`can_hold`，并且它会获取另一个`Rectangle`的不可变借用作为参数。通过观察调用点可以看出参数是什么类型的：`rect1.can_hold(&rect2)`传入了`&rect2`，它是一个`Rectangle`的实例`rect2`的不可变借用。这是可以理解的，因为我们只需要读取`rect2`（而不是写入，这意味着我们需要一个可变借用）而且希望`main`保持`rect2`的所有权这样就可以在调用这个方法后继续使用它。`can_hold`的返回值是一个布尔值，其实现会分别检查`self`的长宽是够都大于另一个`Rectangle`。让我们在列表 5-7 的`impl`块中增加这个新方法：
-
+因为我们想定义一个方法，所以它应该位于`impl Rectangle`块中。方法名是`can_hold`，并且它会获取另一个`Rectangle`的不可变借用作为参数。通过观察调用点可以看出参数是什么类型的：`rect1.can_hold(&rect2)`传入了`&rect2`，它是一个`Rectangle`的实例`rect2`的不可变借用。这是可以理解的，因为我们只需要读取`rect2`（而不是写入，这意味着我们需要一个可变借用）而且希望`main`保持`rect2`的所有权这样就可以在调用这个方法后继续使用它。`can_hold`的返回值是一个布尔值，其实现会分别检查`self`的长宽是够都大于另一个`Rectangle`。让我们在列表 5-7 的`impl`块中增加这个新方法，如列表 5-9 所示：
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -142,6 +131,9 @@ impl Rectangle {
     }
 }
 ```
+
+<span class="caption">Listing 5-9: Implementing the `can_hold` method on 
+`Rectangle` that takes another `Rectangle` instance as an argument</span>
 
 <!-- Will add ghosting here in libreoffice /Carol -->
 

@@ -2,7 +2,7 @@
 
 > [ch06-01-defining-an-enum.md](https://github.com/rust-lang/book/blob/master/src/ch06-01-defining-an-enum.md)
 > <br>
-> commit 396e2db4f7de2e5e7869b1f8bc905c45c631ad7d
+> commit e6d6caab41471f7115a621029bd428a812c5260e
 
 让我们通过一用代码来表现的场景，来看看为什么这里枚举是有用的而且比结构体更合适。比如我们要处理 IP 地。目前被广泛使用的两个主要 IP 标准：IPv4（version four）和 IPv6（version six）。这是我们的程序只可能会遇到两种 IP 地址：我们可以**枚举**出所有可能的值，这也正是它名字的由来。
 

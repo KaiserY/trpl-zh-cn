@@ -1034,7 +1034,7 @@ commit 04aa3a45eb72855b34213703718f50a12a3eeec8</p>
 <a class="header" href="#复合类型" name="复合类型"><h3>复合类型</h3></a>
 <p><strong>复合类型</strong>可以将多个其他类型的值组合成一个类型。Rust 有两个原生的复合类型：元组（tuple）和数组（array）。</p>
 <a class="header" href="#将值组合进元组" name="将值组合进元组"><h4>将值组合进元组</h4></a>
-<p>元组是一个将多个其他类型的值组合进一个复合类型的组要方式。</p>
+<p>元组是一个将多个其他类型的值组合进一个复合类型的主要方式。</p>
 <p>我们使用一个括号中的逗号分隔的值列表来创建一个元组。元组中的每一个位置都有一个类型，而且这写不同值的类型也不必是相同的。这个例子中使用了额外的可选类型注解：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -2233,12 +2233,11 @@ let slice = &amp;a[1..3];
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch05-00-structs.md">ch05-00-structs.md</a>
 <br>
-commit 255b44b409585e472e14c396ebc75d28f540a1ac</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
-<p><code>struct</code>，是 <em>structure</em> 的缩写，是一个允许我们命名并将多个相关值包装进一个有意义的组合的自定义类型。如果你来自一个面向对象编程语言背景，<code>struct</code>就像对象中的数据属性（字段）。在这一章的下一部分会讲到如何在结构体上定义方法；方法是如何为结构体数据指定<strong>行为</strong>的函数。<code>struct</code>和<code>enum</code>（将在第六章讲到）是为了充分利用 Rust 的编译时类型检查，来在程序范围创建新类型的基本组件。</p>
-<p>对结构体的一种看法是他们与元组类似，这个我们在第三章讲过了。就像元组，结构体的每一部分可以是不同类型。可以命令各部分数据所以能更清楚的知道其值是什么意思。由于有了这些名字使得结构体更灵活：不需要依赖顺序来指定或访问实例中的值。</p>
-<p>为了定义结构体，通过<code>struct</code>关键字并为整个结构体提供一个名字。结构体的名字需要描述它所组合的数据的意义。接着，在大括号中，定义每一部分数据的名字，他们被称作<strong>字段</strong>（<em>fields</em>），并定义字段类型。例如，列表 5-1 展示了一个储存用户账号信息的结构体：</p>
-<figure>
+<p><code>struct</code>，是 <em>structure</em> 的缩写，是一个允许我们命名并将多个相关值包装进一个有意义的组合的自定义类型。如果你来自一个面向对象编程语言背景，<code>struct</code>就像对象中的数据属性（字段）。在这一章的下一部分会讲到如何在结构体上定义方法；方法是如何为结构体数据指定<strong>行为</strong>的函数。<code>struct</code>和<code>enum</code>（将在第六章讲到）是为了充分利用 Rust 的编译时类型检查来在程序范围内创建新类型的基本组件。</p>
+<p>对结构体的一种看法是他们与元组类似，这个我们在第三章讲过了。就像元组，结构体的每一部分可以是不同类型。可以命名各部分数据以便能更清楚的知道其值的意义。由于有了这些名字使得结构体更灵活：不需要依赖顺序来指定或访问实例中的值。</p>
+<p>为了定义结构体，通过<code>struct</code>关键字并为整个结构体提供一个名字。结构体的名字需要描述它所组合的数据的意义。接着，在大括号中，定义每一部分数据的名字，他们被称作<strong>字段</strong>（<em>field</em>），并定义字段类型。例如，列表 5-1 展示了一个储存用户账号信息的结构体：</p>
 <pre><code class="language-rust">struct User {
     username: String,
     email: String,
@@ -2246,11 +2245,8 @@ commit 255b44b409585e472e14c396ebc75d28f540a1ac</p>
     active: bool,
 }
 </code></pre>
-<figcaption>
-<p>Listing 5-1: A <code>User</code> struct definition</p>
-</figcaption>
-</figure>
-<p>一旦定义后为了使用它，通过为每个字段指定具体值来创建这个结构体的<strong>实例</strong>。创建一个实例需要以结构体的名字开头，接着在大括号中使用<code>key: value</code>对的形式提供字段，其中 key 是字段的名字而 value 是需要储存在字段中的数据值。这时字段的顺序并不必要与在结构体中声明他们的顺序一致。换句话说，结构体的定义就像一个这个类型的通用模板。例如，我们可以像这样来声明一个特定的用户：</p>
+<p><span class="caption">Listing 5-1: A <code>User</code> struct definition</span></p>
+<p>一旦定义了结构体后为了使用它，通过为每个字段指定具体值来创建这个结构体的<strong>实例</strong>。创建一个实例需要以结构体的名字开头，接着在大括号中使用<code>key: value</code>对的形式提供字段，其中 key 是字段的名字而 value 是需要储存在字段中的数据值。这时字段的顺序并不必要与在结构体中声明他们的顺序一致。换句话说，结构体的定义就像一个这个类型的通用模板，而实例则会在这个模板中放入特定数据来创建这个类型的值。例如，我们可以像这样来声明一个特定的用户：</p>
 <pre><code class="language-rust"># struct User {
 #     username: String,
 #     email: String,
@@ -2303,8 +2299,7 @@ error[E0106]: missing lifetime specifier
 <a class="header" href="#一个示例程序" name="一个示例程序"><h2>一个示例程序</h2></a>
 <p>为了理解何时会需要使用结构体，让我们编写一个计算长方形面积的程序。我们会从单独的变量开始，接着重构程序直到使用结构体替代他们为止。</p>
 <p>使用 Cargo 来创建一个叫做 <em>rectangles</em> 的新二进制程序，它会获取一个长方形以像素为单位的长度和宽度并计算它的面积。列表 5-2 中是项目的 <em>src/main.rs</em> 文件中为此实现的一个小程序：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let length1 = 50;
     let width1 = 30;
@@ -2319,23 +2314,19 @@ fn area(length: u32, width: u32) -&gt; u32 {
     length * width
 }
 </code></pre>
-<figcaption>
-<p>Listing 5-2: Calculating the area of a rectangle specified by its length and
-width in separate variables</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 5-2: Calculating the area of a rectangle
+specified by its length and width in separate variables</span></p>
 <p>尝试使用<code>cargo run</code>运行程序：</p>
 <pre><code>The area of the rectangle is 1500 square pixels.
 </code></pre>
 <a class="header" href="#使用元组重构" name="使用元组重构"><h3>使用元组重构</h3></a>
-<p>我们的小程序能正常运行；它调用<code>area</code>函数用长方形的每个维度来计算出面积。不过我们可以做的更好。长度和宽度是相关联的，因为他们一起才能定义一个长方形。</p>
+<p>我们的小程序能正常运行；它调用<code>area</code>函数用长方形的每个维度来计算出面积。不过我们可以做的更好。长度和宽度是相关联的，因为他们在一起才能定义一个长方形。</p>
 <p>这个做法的问题突显在<code>area</code>的签名上：</p>
 <pre><code class="language-rust,ignore">fn area(length: u32, width: u32) -&gt; u32 {
 </code></pre>
 <p>函数<code>area</code>本应该计算一个长方形的面积，不过函数却有两个参数。这两个参数是相关联的，不过程序自身却哪里也没有表现出这一点。将长度和宽度组合在一起将更易懂也更易处理。</p>
 <p>第三章已经讨论过了一种可行的方法：元组。列表 5-3 是一个使用元组的版本：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let rect1 = (50, 30);
 
@@ -2349,21 +2340,18 @@ fn area(dimensions: (u32, u32)) -&gt; u32 {
     dimensions.0 * dimensions.1
 }
 </code></pre>
-<figcaption>
-<p>Listing 5-3: Specifying the length and width of the rectangle with a tuple</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 5-3: Specifying the length and width of the
+rectangle with a tuple</span></p>
 <!-- I will add ghosting & wingdings once we're in libreoffice /Carol -->
-<p>在某种程度上说这样好一点了。元组帮助我们增加了一些结构，现在在调用<code>area</code>的时候只用传递一个参数。不过另一方面这个方法却更不明确了：元组并没有给出它元素的名称，所以计算变得更费解了，因为不得不使用索引来获取元组的每一部分：</p>
+<p>在某种程度上说这样好一点了。元组帮助我们增加了一些结构性，现在在调用<code>area</code>的时候只用传递一个参数。不过另一方面这个方法却更不明确了：元组并没有给出它元素的名称，所以计算变得更费解了，因为不得不使用索引来获取元组的每一部分：</p>
 <!-- I will change this to use wingdings instead of repeating this code once
 we're in libreoffice /Carol -->
 <pre><code class="language-rust,ignore">dimensions.0 * dimensions.1
 </code></pre>
-<p>在面积计算时混淆长宽并没有什么问题，不过当在屏幕上绘制长方形时就有问题了！我们将不得不记住元组索引<code>0</code>是<code>length</code>而<code>1</code>是<code>width</code>。如果其他人要使用这些代码，他们也不得不搞清楚后再记住。容易忘记或者混淆这些值而造成错误，因为我们没有表达我们代码中数据的意义。</p>
+<p>在面积计算时混淆长宽并没有什么问题，不过当在屏幕上绘制长方形时就有问题了！我们将不得不记住元组索引<code>0</code>是<code>length</code>而<code>1</code>是<code>width</code>。如果其他人要使用这些代码，他们也不得不搞清楚后再记住他们。容易忘记或者混淆这些值而造成错误，因为我们没有表明代码中数据的意义。</p>
 <a class="header" href="#使用结构体重构增加更多意义" name="使用结构体重构增加更多意义"><h3>使用结构体重构：增加更多意义</h3></a>
-<p>现在引入结构体。我们可以将元组转换为一个有整体名称而且每个部分也有对应名字的数据类型，如列表 5-4 所示：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p>现在引入结构体的时候了。我们可以将元组转换为一个有整体名称而且每个部分也有对应名字的数据类型，如列表 5-4 所示：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct Rectangle {
     length: u32,
     width: u32,
@@ -2382,18 +2370,14 @@ fn area(rectangle: &amp;Rectangle) -&gt; u32 {
     rectangle.length * rectangle.width
 }
 </code></pre>
-<figcaption>
-<p>Listing 5-4: Defining a <code>Rectangle</code> struct</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 5-4: Defining a <code>Rectangle</code> struct</span></p>
 <!-- Will add ghosting & wingdings once we're in libreoffice /Carol -->
 <p>这里我们定义了一个结构体并称其为<code>Rectangle</code>。在<code>{}</code>中定义了字段<code>length</code>和<code>width</code>，都是<code>u32</code>类型的。接着在<code>main</code>中，我们创建了一个长度为 50 和宽度为 30 的<code>Rectangle</code>的具体实例。</p>
 <p>函数<code>area</code>现在被定义为接收一个名叫<code>rectangle</code>的参数，它的类型是一个结构体<code>Rectangle</code>实例的不可变借用。第四章讲到过，我们希望借用结构体而不是获取它的所有权这样<code>main</code>函数就可以保持<code>rect1</code>的所有权并继续使用它，所以这就是为什么在函数签名和调用的地方会有<code>&amp;</code>。</p>
-<p><code>area</code>函数访问<code>Rectangle</code>的<code>length</code>和<code>width</code>字段。<code>area</code>的签名现在明确的表明了我们的意图：计算一个<code>Rectangle</code>的面积，通过其<code>length</code>和<code>width</code>字段。这表明了长度和宽度是相互联系的，并为这些值提供了描述性的名称而不是使用元组的索引值<code>0</code>和<code>1</code>。这是明确性的胜利。</p>
+<p><code>area</code>函数访问<code>Rectangle</code>的<code>length</code>和<code>width</code>字段。<code>area</code>的签名现在明确的表明了我们的意图：通过其<code>length</code>和<code>width</code>字段，计算一个<code>Rectangle</code>的面积，。这表明了长度和宽度是相互联系的，并为这些值提供了描述性的名称而不是使用元组的索引值<code>0</code>和<code>1</code>。这是明确性的胜利。</p>
 <a class="header" href="#通过衍生-trait-增加实用功能" name="通过衍生-trait-增加实用功能"><h3>通过衍生 trait 增加实用功能</h3></a>
 <p>如果能够在调试程序时打印出<code>Rectangle</code>实例来查看其所有字段的值就更好了。列表 5-5 尝试像往常一样使用<code>println!</code>宏：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">struct Rectangle {
     length: u32,
     width: u32,
@@ -2405,10 +2389,8 @@ fn main() {
     println!(&quot;rect1 is {}&quot;, rect1);
 }
 </code></pre>
-<figcaption>
-<p>Listing 5-5: Attempting to print a <code>Rectangle</code> instance</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 5-5: Attempting to print a <code>Rectangle</code>
+instance</span></p>
 <p>如果运行代码，会出现带有如下核心信息的错误：</p>
 <pre><code>error[E0277]: the trait bound `Rectangle: std::fmt::Display` is not satisfied
 </code></pre>
@@ -2426,7 +2408,6 @@ fn main() {
 crate, add `#[derive(Debug)]` or manually implement it
 </code></pre>
 <p>Rust <strong>确实</strong>包含了打印出调试信息的功能，不过我们必须为结构体显式选择这个功能。为此，在结构体定义之前加上<code>#[derive(Debug)]</code>注解，如列表 5-6 所示：</p>
-<figure>
 <pre><code class="language-rust">#[derive(Debug)]
 struct Rectangle {
     length: u32,
@@ -2439,11 +2420,8 @@ fn main() {
     println!(&quot;rect1 is {:?}&quot;, rect1);
 }
 </code></pre>
-<figcaption>
-<p>Listing 5-6: Adding the annotation to derive the <code>Debug</code> trait and printing the
-<code>Rectangle</code> instance using debug formatting</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 5-6: Adding the annotation to derive the <code>Debug</code>
+trait and printing the <code>Rectangle</code> instance using debug formatting</span></p>
 <p>此时此刻运行程序，运行这个程序，不会有任何错误并会出现如下输出：</p>
 <pre><code>rect1 is Rectangle { length: 50, width: 30 }
 </code></pre>
@@ -2459,13 +2437,12 @@ fn main() {
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch05-01-method-syntax.md">ch05-01-method-syntax.md</a>
 <br>
-commit c9fd8eb1da7a79deee97020e8ad49af8ded78f9c</p>
+commit 8c1c1a55d5c0f9bc3c866ee79b267df9dc5c04e2</p>
 </blockquote>
-<p><strong>方法</strong>与函数类似：他们使用<code>fn</code>关键和名字声明，他们可以拥有参数和返回值，同时包含一些代码会在某处被调用时执行。不过方法与方法是不同的，因为他们在结构体（或者枚举或者 trait 对象，将分别在第六章和第十三章讲解）的上下文中被定义，并且他们第一个参数总是<code>self</code>，它代表方法被调用的结构体的实例。</p>
+<p><strong>方法</strong>与函数类似：他们使用<code>fn</code>关键和名字声明，他们可以拥有参数和返回值，同时包含一些代码会在某处被调用时执行。不过方法与方法是不同的，因为他们在结构体（或者枚举或者 trait 对象，将分别在第六章和第十七章讲解）的上下文中被定义，并且他们第一个参数总是<code>self</code>，它代表方法被调用的结构体的实例。</p>
 <a class="header" href="#定义方法" name="定义方法"><h3>定义方法</h3></a>
 <p>让我们将获取一个<code>Rectangle</code>实例作为参数的<code>area</code>函数改写成一个定义于<code>Rectangle</code>结构体上的<code>area</code>方法，如列表 5-7 所示：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">#[derive(Debug)]
 struct Rectangle {
     length: u32,
@@ -2487,15 +2464,13 @@ fn main() {
     );
 }
 </code></pre>
-<figcaption>
-<p>Listing 5-7: Defining an <code>area</code> method on the <code>Rectangle</code> struct</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 5-7: Defining an <code>area</code> method on the <code>Rectangle</code>
+struct</span></p>
 <!-- Will add ghosting and wingdings here in libreoffice /Carol -->
 <p>为了使函数定义于<code>Rectangle</code>的上下文中，我们开始了一个<code>impl</code>块（<code>impl</code>是 <em>implementation</em> 的缩写）。接着将函数移动到<code>impl</code>大括号中，并将签名中的第一个（在这里也是唯一一个）参数和函数体中其他地方的对应参数改成<code>self</code>。然后在<code>main</code>中将我们调用<code>area</code>方法并传递<code>rect1</code>作为参数的地方，改成使用<strong>方法语法</strong>在<code>Rectangle</code>实例上调用<code>area</code>方法。方法语法获取一个实例并加上一个点号后跟方法名、括号以及任何参数。</p>
 <p>在<code>area</code>的签名中，开始使用<code>&amp;self</code>来替代<code>rectangle: &amp;Rectangle</code>，因为该方法位于<code>impl Rectangle</code> 上下文中所以 Rust 知道<code>self</code>的类型是<code>Rectangle</code>。注意仍然需要在<code>self</code>前面加上<code>&amp;</code>，就像<code>&amp;Rectangle</code>一样。方法可以选择获取<code>self</code>的所有权，像我们这里一样不可变的借用<code>self</code>，或者可变的借用<code>self</code>，就跟其他别的参数一样。</p>
 <p>这里选择<code>&amp;self</code>跟在函数版本中使用<code>&amp;Rectangle</code>出于同样的理由：我们并不想获取所有权，只希望能够读取结构体中的数据，而不是写入。如果想要能够在方法中改变调用方法的实例的话，需要将抵押给参数改为<code>&amp;mut self</code>。通过仅仅使用<code>self</code>作为第一个参数来使方法获取实例的所有权，不过这是很少见的；这通常用在当方法将<code>self</code>转换成别的实例的时候，同时我们想要防止调用者在转换之后使用原始的实例。</p>
-<p>使用方法而不是函数，除了使用了方法语法和不需要在每个函数签名中重复<code>self</code>类型外，其主要好处在于组织性。我将某个类型实例能做的所有事情都一起放入<code>impl</code>块中，而不是让将来的用户在我们的代码中到处寻找`Rectangle的功能。</p>
+<p>使用方法而不是函数，除了使用了方法语法和不需要在每个函数签名中重复<code>self</code>类型外，其主要好处在于组织性。我将某个类型实例能做的所有事情都一起放入<code>impl</code>块中，而不是让将来的用户在我们的代码中到处寻找<code>Rectangle</code>的功能。</p>
 <!-- PROD: START BOX -->
 <blockquote>
 <a class="header" href="#-运算符到哪去了" name="-运算符到哪去了"><h3><code>-&gt;</code>运算符到哪去了？</h3></a>
@@ -2526,8 +2501,7 @@ p1.distance(&amp;p2);
 <!-- PROD: END BOX -->
 <a class="header" href="#带有更多参数的方法" name="带有更多参数的方法"><h3>带有更多参数的方法</h3></a>
 <p>让我们更多的实践一下方法，通过为<code>Rectangle</code>结构体实现第二个方法。这回，我们让一个<code>Rectangle</code>的实例获取另一个<code>Rectangle</code>实例并返回<code>self</code>能否完全包含第二个长方形，如果能返回<code>true</code>若不能则返回<code>false</code>。当我们定义了<code>can_hold</code>方法，就可以运行列表 5-8 中的代码了：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
     let rect1 = Rectangle { length: 50, width: 30 };
     let rect2 = Rectangle { length: 40, width: 10 };
@@ -2537,15 +2511,13 @@ p1.distance(&amp;p2);
     println!(&quot;Can rect1 hold rect3? {}&quot;, rect1.can_hold(&amp;rect3));
 }
 </code></pre>
-<figcaption>
-<p>Listing 5-8: Demonstration of using the as-yet-unwritten <code>can_hold</code> method</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 5-8: Demonstration of using the as-yet-unwritten
+<code>can_hold</code> method</span></p>
 <p>我们希望看到如下输出，因为<code>rect2</code>的长宽都小于<code>rect1</code>，而<code>rect3</code>比<code>rect1</code>要宽：</p>
 <pre><code>Can rect1 hold rect2? true
 Can rect1 hold rect3? false
 </code></pre>
-<p>因为我们想定义一个方法，所以它应该位于<code>impl Rectangle</code>块中。方法名是<code>can_hold</code>，并且它会获取另一个<code>Rectangle</code>的不可变借用作为参数。通过观察调用点可以看出参数是什么类型的：<code>rect1.can_hold(&amp;rect2)</code>传入了<code>&amp;rect2</code>，它是一个<code>Rectangle</code>的实例<code>rect2</code>的不可变借用。这是可以理解的，因为我们只需要读取<code>rect2</code>（而不是写入，这意味着我们需要一个可变借用）而且希望<code>main</code>保持<code>rect2</code>的所有权这样就可以在调用这个方法后继续使用它。<code>can_hold</code>的返回值是一个布尔值，其实现会分别检查<code>self</code>的长宽是够都大于另一个<code>Rectangle</code>。让我们在列表 5-7 的<code>impl</code>块中增加这个新方法：</p>
+<p>因为我们想定义一个方法，所以它应该位于<code>impl Rectangle</code>块中。方法名是<code>can_hold</code>，并且它会获取另一个<code>Rectangle</code>的不可变借用作为参数。通过观察调用点可以看出参数是什么类型的：<code>rect1.can_hold(&amp;rect2)</code>传入了<code>&amp;rect2</code>，它是一个<code>Rectangle</code>的实例<code>rect2</code>的不可变借用。这是可以理解的，因为我们只需要读取<code>rect2</code>（而不是写入，这意味着我们需要一个可变借用）而且希望<code>main</code>保持<code>rect2</code>的所有权这样就可以在调用这个方法后继续使用它。<code>can_hold</code>的返回值是一个布尔值，其实现会分别检查<code>self</code>的长宽是够都大于另一个<code>Rectangle</code>。让我们在列表 5-7 的<code>impl</code>块中增加这个新方法，如列表 5-9 所示：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># #[derive(Debug)]
 # struct Rectangle {
@@ -2563,6 +2535,8 @@ impl Rectangle {
     }
 }
 </code></pre>
+<p><span class="caption">Listing 5-9: Implementing the <code>can_hold</code> method on
+<code>Rectangle</code> that takes another <code>Rectangle</code> instance as an argument</span></p>
 <!-- Will add ghosting here in libreoffice /Carol -->
 <p>如果结合列表 5-8 的<code>main</code>函数来运行，就会看到想要得到的输出！方法可以在<code>self</code>后增加多个参数，而且这些参数就像函数中的参数一样工作。</p>
 <a class="header" href="#关联函数" name="关联函数"><h3>关联函数</h3></a>
@@ -2589,7 +2563,7 @@ impl Rectangle {
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch06-00-enums.md">ch06-00-enums.md</a>
 <br>
-commit 396e2db4f7de2e5e7869b1f8bc905c45c631ad7d</p>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
 <p>本章介绍<strong>枚举</strong>，也被称作 <em>enums</em>。枚举允许你通过列举可能的值来定义一个类型。首先，我们会定义并使用一个枚举来展示它是如何连同数据一起编码信息的。接下来，我们会探索一个特别有用的枚举，叫做<code>Option</code>，它代表一个值要么是一些值要么什么都不是。然后会讲到<code>match</code>表达式中的模式匹配如何使对枚举不同的值运行不同的代码变得容易。最后会涉及到<code>if let</code>，另一个简洁方便处理代码中枚举的结构。</p>
 <p>枚举是一个很多语言都有的功能，不过不同语言中的功能各不相同。Rust 的枚举与像F#、OCaml 和 Haskell这样的函数式编程语言中的<strong>代数数据类型</strong>（<em>algebraic data types</em>）最为相似。</p>
@@ -2597,7 +2571,7 @@ commit 396e2db4f7de2e5e7869b1f8bc905c45c631ad7d</p>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch06-01-defining-an-enum.md">ch06-01-defining-an-enum.md</a>
 <br>
-commit 396e2db4f7de2e5e7869b1f8bc905c45c631ad7d</p>
+commit e6d6caab41471f7115a621029bd428a812c5260e</p>
 </blockquote>
 <p>让我们通过一用代码来表现的场景，来看看为什么这里枚举是有用的而且比结构体更合适。比如我们要处理 IP 地。目前被广泛使用的两个主要 IP 标准：IPv4（version four）和 IPv6（version six）。这是我们的程序只可能会遇到两种 IP 地址：我们可以<strong>枚举</strong>出所有可能的值，这也正是它名字的由来。</p>
 <p>任何一个 IP 地址要么是 IPv4 的要么是 IPv6 的而不能两者都是。IP 地址的这个特性使得枚举数据结构非常适合这个场景，因为枚举值尽可能是其一个成员。IPv4 和 IPv6 从根本上讲都是 IP 地址，所以当代码在处理申请任何类型的 IP 地址的场景时应该把他们当作相同的类型。</p>
@@ -8827,7 +8801,412 @@ commit 55b294f20fc846a13a9be623bf322d8b364cee77</p>
 </blockquote>
 <p>在今天使用的大部分操作系统中，当程序执行时，操作系统运行代码的上下文称为<strong>进程</strong>（<em>process</em>）。操作系统可以运行很多进程，而操作系统也管理这些进程使得多个程序可以在电脑上同时运行。</p>
 <p>我们可以将每个进程运行一个程序的概念再往下抽象一层：程序也可以在其上下文中同时运行独立的部分。这个功能叫做<strong>线程</strong>（<em>thread</em>）。</p>
-<p>将程序需要执行的计算拆分到多个线程中可以提高性能，因为程序可以在同时进行很多工作。</p>
+<p>将程序需要执行的计算拆分到多个线程中可以提高性能，因为程序可以在同时进行很多工作。不过使用线程会增加程序复杂性。因为线程是同时运行的，所以无法预先保证不同线程中的代码的执行顺序。这可能会由于线程以不一致的顺序访问数据或资源而导致竞争状态，或由于两个线程相互阻止对方继续运行而造成死锁，以及仅仅出现于特定场景并难以稳定重现的 bug。Rust 减少了这些或那些使用线程的负面影响，不过在多线程上下文中编程仍然需要以与只期望在单个线程中编程不同的方式思考和组织代码。</p>
+<p>编程语言有一些不同的方法来实现线程。很多操作系统提供了创建新线程的 API。另外，很多编程语言提供了自己的特殊的线程实现。编程语言提供的线程有时被称作<strong>轻量级</strong>（<em>lightweight</em>）或<strong>绿色</strong>（<em>green</em>）线程。这些语言将一系列绿色线程放入不同数量的操作系统线程中执行。因为这个原因，语言调用操作系统 API 创建线程的模型有时被称为 <em>1:1</em>，一个 OS 线程对应一个语言线程。绿色线程模型被称为 <em>M:N</em> 模型，<code>M</code>个绿色线程对应<code>N</code>个 OS 线程，这里<code>M</code>和<code>N</code>不必相同。</p>
+<p>每一个模型都有其自己的优势和取舍。对于 Rust 来说最重要的取舍是运行时支持。<strong>运行时</strong>是一个令人迷惑的概念；在不同上下文中它可能有不同的含义。这里其代表二进制文件中包含的语言自身的代码。对于一些语言，这些代码是庞大的，另一些则很小。通俗的说，“没有运行时”通常被人们用来指代“小运行时”，因为任何非汇编语言都存在一定数量的运行时。更小的运行时拥有更少的功能不过其优势在于更小的二进制输出。更小的二进制文件更容易在更多上下文中与其他语言结合。虽然很多语言觉得增加运行时来换取更多功能没有什么问题，但是 Rust 需要做到几乎没有运行时，同时不能在为了维持性能而能够在 C 语言中调用方面做出妥协。</p>
+<p>绿色线程模型功能要求更大的运行时来管理这些线程。为此，Rust 标准库只提供了 1:1 线程模型实现。因为 Rust 是这么一个底层语言，所以有相应的 crate 实现了 M:N 线程模型，如果你宁愿牺牲性能来换取例如更多的线程控制和更低的上下文切换消耗。</p>
+<p>现在我们明白了 Rust 中的线程是如何定义的，让我们开始探索如何使用标准库提供的线程相关的 API吧。</p>
+<a class="header" href="#使用spawn创建新线程" name="使用spawn创建新线程"><h3>使用<code>spawn</code>创建新线程</h3></a>
+<p>为了创建一个新线程，调用<code>thread::spawn</code>函数并传递一个闭包（第十三章学习了闭包），它包含希望在新线程运行的代码。列表 16-1 中的例子在新线程中打印了一些文本而其余的文本在主线程中打印：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">use std::thread;
+
+fn main() {
+    thread::spawn(|| {
+        for i in 1..10 {
+            println!(&quot;hi number {} from the spawned thread!&quot;, i);
+        }
+    });
+
+    for i in 1..5 {
+        println!(&quot;hi number {} from the main thread!&quot;, i);
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 16-1: Creating a new thread to print one thing
+while the main thread is printing something else</span></p>
+<p>注意这个函数编写的方式，当主线程结束时，它也会停止新线程。这个程序的输出每次可能都略微不同，不过它大体上看起来像这样：</p>
+<pre><code class="language-text">hi number 1 from the main thread!
+hi number 1 from the spawned thread!
+hi number 2 from the main thread!
+hi number 2 from the spawned thread!
+hi number 3 from the main thread!
+hi number 3 from the spawned thread!
+hi number 4 from the main thread!
+hi number 4 from the spawned thread!
+hi number 5 from the spawned thread!
+</code></pre>
+<p>这些线程可能会轮流运行，不过并不保证如此。在这里，主线程先行打印，即便新创建线程的打印语句位于程序的开头。甚至即便我们告诉新建的线程打印直到<code>i</code>等于 9 ，它在主线程结束之前也只打印到了 5。如果你只看到了一个线程，或没有出现重叠打印的现象，尝试增加 range 的数值来增加线程暂停并切换到其他线程运行的机会。</p>
+<a class="header" href="#使用join等待所有线程结束" name="使用join等待所有线程结束"><h4>使用<code>join</code>等待所有线程结束</h4></a>
+<p>由于主线程先于新建线程结束，不仅列表 16-1 中的代码大部分时候不能保证新建线程执行完毕，甚至不能实际保证新建线程会被执行！可以通过保存<code>thread::spawn</code>的返回值来解决这个问题，这是一个<code>JoinHandle</code>。这看起来如列表 16-2 所示：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">use std::thread;
+
+fn main() {
+    let handle = thread::spawn(|| {
+        for i in 1..10 {
+            println!(&quot;hi number {} from the spawned thread!&quot;, i);
+        }
+    });
+
+    for i in 1..5 {
+        println!(&quot;hi number {} from the main thread!&quot;, i);
+    }
+
+    handle.join();
+}
+</code></pre>
+<p><span class="caption">Listing 16-2: Saving a <code>JoinHandle</code> from <code>thread::spawn</code>
+to guarantee the thread is run to completion</span></p>
+<p><code>JoinHandle</code>是一个拥有所有权的值，它可以等待一个线程结束，这也正是<code>join</code>方法所做的。通过调用这个句柄的<code>join</code>，当前线程会阻塞直到句柄所代表的线程结束。因为我们将<code>join</code>调用放在了主线程的<code>for</code>循环之后，运行这个例子将产生类似这样的输出：</p>
+<pre><code>hi number 1 from the main thread!
+hi number 2 from the main thread!
+hi number 1 from the spawned thread!
+hi number 3 from the main thread!
+hi number 2 from the spawned thread!
+hi number 4 from the main thread!
+hi number 3 from the spawned thread!
+hi number 4 from the spawned thread!
+hi number 5 from the spawned thread!
+hi number 6 from the spawned thread!
+hi number 7 from the spawned thread!
+hi number 8 from the spawned thread!
+hi number 9 from the spawned thread!
+</code></pre>
+<p>这两个线程仍然会交替执行，不过主线程会由于<code>handle.join()</code>调用会等待直到新建线程执行完毕。</p>
+<p>如果将<code>handle.join()</code>放在主线程的<code>for</code>循环之前，像这样：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">use std::thread;
+
+fn main() {
+    let handle = thread::spawn(|| {
+        for i in 1..10 {
+            println!(&quot;hi number {} from the spawned thread!&quot;, i);
+        }
+    });
+
+    handle.join();
+
+    for i in 1..5 {
+        println!(&quot;hi number {} from the main thread!&quot;, i);
+    }
+}
+</code></pre>
+<p>主线程会等待直到新建线程执行完毕之后才开始执行<code>for</code>循环，所以输出将不会交替出现：</p>
+<pre><code>hi number 1 from the spawned thread!
+hi number 2 from the spawned thread!
+hi number 3 from the spawned thread!
+hi number 4 from the spawned thread!
+hi number 5 from the spawned thread!
+hi number 6 from the spawned thread!
+hi number 7 from the spawned thread!
+hi number 8 from the spawned thread!
+hi number 9 from the spawned thread!
+hi number 1 from the main thread!
+hi number 2 from the main thread!
+hi number 3 from the main thread!
+hi number 4 from the main thread!
+</code></pre>
+<p>稍微考虑一下将<code>join</code>放置与何处会影响线程是否同时运行。</p>
+<a class="header" href="#线程和move闭包" name="线程和move闭包"><h3>线程和<code>move</code>闭包</h3></a>
+<p>第十三章有一个我们没有讲到的闭包功能，它经常用于<code>thread::spawn</code>：<code>move</code>闭包。第十三章中讲到：</p>
+<blockquote>
+<p>获取他们环境中值的闭包主要用于开始新线程的场景</p>
+</blockquote>
+<p>现在我们正在创建新线程，所以让我们讨论一下获取环境值的闭包吧！</p>
+<p>注意列表 16-1 中传递给<code>thread::spawn</code>的闭包并没有任何参数：并没有在新建线程代码中使用任何主线程的数据。为了在新建线程中使用来自于主线程的数据，需要新建线程的闭包获取它需要的值。列表 16-3 展示了一个尝试在主线程中创建一个 vector 并用于新建线程的例子，不过这么写还不能工作：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">use std::thread;
+
+fn main() {
+    let v = vec![1, 2, 3];
+
+    let handle = thread::spawn(|| {
+        println!(&quot;Here's a vector: {:?}&quot;, v);
+    });
+
+    handle.join();
+}
+</code></pre>
+<p><span class="caption">Listing 16-3: Attempting to use a vector created by the
+main thread from another thread</span></p>
+<p>闭包使用了<code>v</code>，所以闭包会获取<code>v</code>并使其成为闭包环境的一部分。因为<code>thread::spawn</code>在一个新线程中运行这个闭包，所以可以在新线程中访问<code>v</code>。</p>
+<p>然而当编译这个例子时，会得到如下错误：</p>
+<pre><code>error[E0373]: closure may outlive the current function, but it borrows `v`,
+which is owned by the current function
+ --&gt;
+  |
+6 |     let handle = thread::spawn(|| {
+  |                                ^^ may outlive borrowed value `v`
+7 |         println!(&quot;Here's a vector: {:?}&quot;, v);
+  |                                           - `v` is borrowed here
+  |
+help: to force the closure to take ownership of `v` (and any other referenced
+variables), use the `move` keyword, as shown:
+  |     let handle = thread::spawn(move || {
+</code></pre>
+<p>当在闭包环境中获取某些值时，Rust 会尝试推断如何获取它。<code>println!</code>只需要<code>v</code>的一个引用，所以闭包尝试借用<code>v</code>。但是这有一个问题：我们并不知道新建线程会运行多久，所以无法知道<code>v</code>是否一直时有效的。</p>
+<p>考虑一下列表 16-4 中的代码，它展示了一个<code>v</code>的引用很有可能不再有效的场景：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">use std::thread;
+
+fn main() {
+    let v = vec![1, 2, 3];
+
+    let handle = thread::spawn(|| {
+        println!(&quot;Here's a vector: {:?}&quot;, v);
+    });
+
+    drop(v); // oh no!
+
+    handle.join();
+}
+</code></pre>
+<p><span class="caption">Listing 16-4: A thread with a closure that attempts to
+capture a reference to <code>v</code> from a main thread that drops <code>v</code></span></p>
+<p>这些代码可以运行，而新建线程则可能直接就出错了并完全没有机会运行。新建线程内部有一个<code>v</code>的引用，不过主线程仍在执行：它立刻丢弃了<code>v</code>，使用了第十五章提到的显式丢弃其参数的<code>drop</code>函数。接着，新建线程开始执行，现在<code>v</code>是无效的了，所以它的引用也就是无效得的。噢，这太糟了！</p>
+<p>为了修复这个问题，我们可以听取错误信息的建议：</p>
+<pre><code>help: to force the closure to take ownership of `v` (and any other referenced
+variables), use the `move` keyword, as shown:
+  |     let handle = thread::spawn(move || {
+</code></pre>
+<p>通过在闭包之前增加<code>move</code>关键字，我们强制闭包获取它使用的值的所有权，而不是引用借用。列表 16-5 中展示的对列表 16-3 代码的修改可以按照我们的预期编译并运行：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">use std::thread;
+
+fn main() {
+    let v = vec![1, 2, 3];
+
+    let handle = thread::spawn(move || {
+        println!(&quot;Here's a vector: {:?}&quot;, v);
+    });
+
+    handle.join();
+}
+</code></pre>
+<p><span class="caption">Listing 16-5: Using the <code>move</code> keyword to force a closure
+to take ownership of the values it uses</span></p>
+<p>那么列表 16-4 中那个主线程调用了<code>drop</code>的代码该怎么办呢？如果在闭包上增加了<code>move</code>，就将<code>v</code>移动到了闭包的环境中，我们将不能对其调用<code>drop</code>了。相反会出现这个编译时错误：</p>
+<pre><code>error[E0382]: use of moved value: `v`
+  --&gt;
+   |
+6  |     let handle = thread::spawn(move || {
+   |                                ------- value moved (into closure) here
+...
+10 |     drop(v); // oh no!
+   |          ^ value used here after move
+   |
+   = note: move occurs because `v` has type `std::vec::Vec&lt;i32&gt;`, which does
+   not implement the `Copy` trait
+</code></pre>
+<p>Rust 的所有权规则又一次帮助了我们！</p>
+<p>现在我们有一个线程和线程 API 的基本了解，让我们讨论一下使用线程实际可以<strong>做</strong>什么吧。</p>
+<a class="header" href="#使用消息传递在线程间传送数据" name="使用消息传递在线程间传送数据"><h2>使用消息传递在线程间传送数据</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch16-02-message-passing.md">ch16-02-message-passing.md</a>
+<br>
+commit da15de39eaabd50100d6fa662c653169254d9175</p>
+</blockquote>
+<p>最近人气正在上升的一个并发方式是<strong>消息传递</strong>（<em>message passing</em>），这里线程或 actor 通过发送包含数据的消息来沟通。这个思想来源于口号：</p>
+<blockquote>
+<p>Do not communicate by sharing memory; instead, share memory by
+communicating.</p>
+<p>不要共享内存来通讯；而是要通讯来共享内存。</p>
+<p>--<a href="http://golang.org/doc/effective_go.html">Effective Go</a></p>
+</blockquote>
+<p>实现这个目标的主要工具是<strong>通道</strong>（<em>channel</em>）。通道有两部分组成，一个发送者（transmitter）和一个接收者（receiver）。代码的一部分可以调用发送者和想要发送的数据，而另一部分代码可以在接收的那一端收取消息。</p>
+<p>我们将编写一个例子使用一个线程生成值并向通道发送他们。主线程会接收这些值并打印出来。</p>
+<p>首先，如列表 16-6 所示，先创建一个通道但不做任何事：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">use std::sync::mpsc;
+
+fn main() {
+    let (tx, rx) = mpsc::channel();
+#     tx.send(()).unwrap();
+}
+</code></pre>
+<p><span class="caption">Listing 16-6: Creating a channel and assigning the two
+halves to <code>tx</code> and <code>rx</code></span></p>
+<p><code>mpsc::channel</code>函数创建一个新的通道。<code>mpsc</code>是<strong>多个生产者，单个消费者</strong>（<em>multiple producer, single consumer</em>）的缩写。简而言之，可以有多个产生值的<strong>发送端</strong>，但只能有一个消费这些值的<strong>接收端</strong>。现在我们以一个单独的生产者开始，不过一旦例子可以工作了就会增加多个生产者。</p>
+<p><code>mpsc::channel</code>返回一个元组：第一个元素是发送端，而第二个元素是接收端。由于历史原因，很多人使用<code>tx</code>和<code>rx</code>作为<strong>发送者</strong>和<strong>接收者</strong>的缩写，所以这就是我们将用来绑定这两端变量的名字。这里使用了一个<code>let</code>语句和模式来解构了元组。第十八章会讨论<code>let</code>语句中的模式和解构。</p>
+<p>让我们将发送端移动到一个新建线程中并发送一个字符串，如列表 16-7 所示：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">use std::thread;
+use std::sync::mpsc;
+
+fn main() {
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        let val = String::from(&quot;hi&quot;);
+        tx.send(val).unwrap();
+    });
+}
+</code></pre>
+<p><span class="caption">Listing 16-7: Moving <code>tx</code> to a spawned thread and sending
+&quot;hi&quot;</span></p>
+<p>正如上一部分那样使用<code>thread::spawn</code>来创建一个新线程。并使用一个<code>move</code>闭包来将<code>tx</code>移动进闭包这样新建线程就是其所有者。</p>
+<p>通道的发送端有一个<code>send</code>方法用来获取需要放入通道的值。<code>send</code>方法返回一个<code>Result&lt;T, E&gt;</code>类型，因为如果接收端被丢弃了，将没有发送值的目标，所以发送操作会出错。在这个例子中，我们简单的调用<code>unwrap</code>来忽略错误，不过对于一个真实程序，需要合理的处理它。第九章是你复习正确错误处理策略的好地方。</p>
+<p>在列表 16-8 中，让我们在主线程中从通道的接收端获取值：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">use std::thread;
+use std::sync::mpsc;
+
+fn main() {
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        let val = String::from(&quot;hi&quot;);
+        tx.send(val).unwrap();
+    });
+
+    let received = rx.recv().unwrap();
+    println!(&quot;Got: {}&quot;, received);
+}
+</code></pre>
+<p><span class="caption">Listing 16-8: Receiving the value &quot;hi&quot; in the main thread
+and printing it out</span></p>
+<p>通道的接收端有两个有用的方法：<code>recv</code>和<code>try_recv</code>。这里，我们使用了<code>recv</code>，它是 <em>receive</em> 的缩写。这个方法会阻塞执行直到从通道中接收一个值。一旦发送了一个值，<code>recv</code>会在一个<code>Result&lt;T, E&gt;</code>中返回它。当通道发送端关闭，<code>recv</code>会返回一个错误。<code>try_recv</code>不会阻塞；相反它立刻返回一个<code>Result&lt;T, E&gt;</code>。</p>
+<p>如果运行列表 16-8 中的代码，我们将会看到主线程打印出这个值：</p>
+<pre><code>Got: hi
+</code></pre>
+<a class="header" href="#通道与所有权如何交互" name="通道与所有权如何交互"><h3>通道与所有权如何交互</h3></a>
+<p>现在让我们做一个试验来看看通道与所有权如何在一起工作：我们将尝试在新建线程中的通道中发送完<code>val</code>之后再使用它。尝试编译列表 16-9 中的代码：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">use std::thread;
+use std::sync::mpsc;
+
+fn main() {
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        let val = String::from(&quot;hi&quot;);
+        tx.send(val).unwrap();
+        println!(&quot;val is {}&quot;, val);
+    });
+
+    let received = rx.recv().unwrap();
+    println!(&quot;Got: {}&quot;, received);
+}
+</code></pre>
+<p><span class="caption">Listing 16-9: Attempting to use <code>val</code> after we have sent
+it down the channel</span></p>
+<p>这里尝试在通过<code>tx.send</code>发送<code>val</code>到通道中之后将其打印出来。这是一个坏主意：一旦将值发送到另一个线程后，那个线程可能会在我们在此使用它之前就修改或者丢弃它。这会由于不一致或不存在的数据而导致错误或意外的结果。</p>
+<p>尝试编译这些代码，Rust 会报错：</p>
+<pre><code>error[E0382]: use of moved value: `val`
+  --&gt; src/main.rs:10:31
+   |
+9  |         tx.send(val).unwrap();
+   |                 --- value moved here
+10 |         println!(&quot;val is {}&quot;, val);
+   |                               ^^^ value used here after move
+   |
+   = note: move occurs because `val` has type `std::string::String`, which does
+   not implement the `Copy` trait
+</code></pre>
+<p>我们的并发错误会造成一个编译时错误！<code>send</code>获取其参数的所有权并移动这个值归接收者所有。这个意味着不可能意外的在发送后再次使用这个值；所有权系统检查一切是否合乎规则。</p>
+<p>在这一点上，消息传递非常类似于 Rust 的单所有权系统。消息传递的拥护者出于相似的原因支持消息传递，就像 Rustacean 们欣赏 Rust 的所有权一样：单所有权意味着特定类型问题的消失。如果一次只有一个线程可以使用某些内存，就没有出现数据竞争的机会。</p>
+<a class="header" href="#发送多个值并观察接收者的等待" name="发送多个值并观察接收者的等待"><h3>发送多个值并观察接收者的等待</h3></a>
+<p>列表 16-8 中的代码可以编译和运行，不过这并不是很有趣：通过它难以看出两个独立的线程在一个通道上相互通讯。列表 16-10 则有一些改进会证明这些代码是并发执行的：新建线程现在会发送多个消息并在每个消息之间暂定一段时间。</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">use std::thread;
+use std::sync::mpsc;
+use std::time::Duration;
+
+fn main() {
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        let vals = vec![
+            String::from(&quot;hi&quot;),
+            String::from(&quot;from&quot;),
+            String::from(&quot;the&quot;),
+            String::from(&quot;thread&quot;),
+        ];
+
+        for val in vals {
+            tx.send(val).unwrap();
+            thread::sleep(Duration::new(1, 0));
+        }
+    });
+
+    for received in rx {
+        println!(&quot;Got: {}&quot;, received);
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 16-10: Sending multiple messages and pausing
+between each one</span></p>
+<p>这一次，在新建线程中有一个字符串 vector 希望发送到主线程。我们遍历他们，单独的发送每一个字符串并通过一个<code>Duration</code>值调用<code>thread::sleep</code>函数来暂停一秒。</p>
+<p>在主线程中，不再显式的调用<code>recv</code>函数：而是将<code>rx</code>当作一个迭代器。对于每一个接收到的值，我们将其打印出来。当通道被关闭时，迭代器也将结束。</p>
+<p>当运行列表 16-10 中的代码时，将看到如下输出，每一行都会暂停一秒：</p>
+<pre><code>Got: hi
+Got: from
+Got: the
+Got: thread
+</code></pre>
+<p>在主线程中并没有任何暂停或位于<code>for</code>循环中用于等待的代码，所以可以说主线程是在等待从新建线程中接收值。</p>
+<a class="header" href="#通过克隆发送者来创建多个生产者" name="通过克隆发送者来创建多个生产者"><h3>通过克隆发送者来创建多个生产者</h3></a>
+<p>差不多在本部分的开头，我们提到了<code>mpsc</code>是 <em>multiple producer, single consumer</em> 的缩写。可以扩展列表 16-11 中的代码来创建都向同一接收者发送值的多个线程。这可以通过克隆通道的发送端在来做到，如列表 16-11 所示：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust"># use std::thread;
+# use std::sync::mpsc;
+# use std::time::Duration;
+#
+# fn main() {
+// ...snip...
+let (tx, rx) = mpsc::channel();
+
+let tx1 = tx.clone();
+thread::spawn(move || {
+    let vals = vec![
+        String::from(&quot;hi&quot;),
+        String::from(&quot;from&quot;),
+        String::from(&quot;the&quot;),
+        String::from(&quot;thread&quot;),
+    ];
+
+    for val in vals {
+        tx1.send(val).unwrap();
+        thread::sleep(Duration::new(1, 0));
+    }
+});
+
+thread::spawn(move || {
+    let vals = vec![
+        String::from(&quot;more&quot;),
+        String::from(&quot;messages&quot;),
+        String::from(&quot;for&quot;),
+        String::from(&quot;you&quot;),
+    ];
+
+    for val in vals {
+        tx.send(val).unwrap();
+        thread::sleep(Duration::new(1, 0));
+    }
+});
+// ...snip...
+#
+#     for received in rx {
+#         println!(&quot;Got: {}&quot;, received);
+#     }
+# }
+</code></pre>
+<p><span class="caption">Listing 16-11: Sending multiple messages and pausing
+between each one</span></p>
+<p>这一次，在创建新线程之前，我们对通道的发送端调用了<code>clone</code>方法。这会给我们一个可以传递给第一个新建线程的发送端句柄。我们会将原始的通道发送端传递给第二个新建线程，这样每个线程将向通道的接收端发送不同的消息。</p>
+<p>如果运行这些代码，你<strong>可能</strong>会看到这样的输出：</p>
+<pre><code>Got: hi
+Got: more
+Got: from
+Got: messages
+Got: for
+Got: the
+Got: thread
+Got: you
+</code></pre>
+<p>虽然你可能会看到这些以不同的顺序出现。这依赖于你的系统！这也就是并发既有趣又困难的原因。如果你拿<code>thread::sleep</code>做实验，在不同的线程中提供不同的值，就会发现他们的运行更加不确定并每次都会产生不同的输出。</p>
+<p>现在我们见识过了通道如何工作，再看看共享内存并发吧。</p>
 
                 </div>
 

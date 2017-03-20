@@ -71,7 +71,7 @@
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/src/ch06-01-defining-an-enum.md">ch06-01-defining-an-enum.md</a>
 <br>
-commit 396e2db4f7de2e5e7869b1f8bc905c45c631ad7d</p>
+commit e6d6caab41471f7115a621029bd428a812c5260e</p>
 </blockquote>
 <p>让我们通过一用代码来表现的场景，来看看为什么这里枚举是有用的而且比结构体更合适。比如我们要处理 IP 地。目前被广泛使用的两个主要 IP 标准：IPv4（version four）和 IPv6（version six）。这是我们的程序只可能会遇到两种 IP 地址：我们可以<strong>枚举</strong>出所有可能的值，这也正是它名字的由来。</p>
 <p>任何一个 IP 地址要么是 IPv4 的要么是 IPv6 的而不能两者都是。IP 地址的这个特性使得枚举数据结构非常适合这个场景，因为枚举值尽可能是其一个成员。IPv4 和 IPv6 从根本上讲都是 IP 地址，所以当代码在处理申请任何类型的 IP 地址的场景时应该把他们当作相同的类型。</p>
