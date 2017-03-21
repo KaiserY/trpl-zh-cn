@@ -67,7 +67,253 @@
                 </div>
 
                 <div id="content" class="content">
-                    
+                    <a class="header" href="#共享状态并发" name="共享状态并发"><h2>共享状态并发</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch16-03-shared-state.md">ch16-03-shared-state.md</a>
+<br>
+commit 9df612e93e038b05fc959db393c15a5402033f47</p>
+</blockquote>
+<p>虽然消息传递是一个很好的处理并发的方式，但并不是唯一的一个。再次考虑一下它的口号：</p>
+<blockquote>
+<p>Do not communicate by sharing memory; instead, share memory by
+communicating.</p>
+<p>不要共享内存来通讯；而是要通讯来共享内存。</p>
+</blockquote>
+<p>那么“共享内存来通讯”看起来是怎样的呢？共享内存并发有点像多所有权：多个线程可以同时访问相同的内存位置。正如第十五章中智能指针使得多所有权成为可能时我们所看到的，这会增加额外的复杂性，因为需要以某种方式管理这些不同的所有者。</p>
+<p>但是 Rust 的类型系统和所有权可以很好的帮助我们正确的进行管理。例如，让我们看看一个共享内存中更常见的并发原语：互斥器（mutexes）。</p>
+<a class="header" href="#互斥器一次只允许一个线程访问数据" name="互斥器一次只允许一个线程访问数据"><h3>互斥器一次只允许一个线程访问数据</h3></a>
+<p><strong>互斥器</strong>（<em>mutex</em>）是一个用于共享内存的并发原语。它是“mutual exclusion”的缩写，也就是说，任何给定时间它只允许一个线程访问某些数据。互斥器以难以使用著称，因为你不得不记住：</p>
+<ol>
+<li>必须记住在使用数据之前尝试获取锁。</li>
+<li>一旦处理完被互斥器所保护的数据之后，必须记得解锁数据这样其他线程才能够获取锁。</li>
+</ol>
+<p>对于一个现实中的互斥器的例子，想象一下在一个会议中的专门小组讨论会上，不过只有一个麦克风。在一个小组成员可能发言之前，他们必须请求或示意他们需要使用麦克风。一旦得到了麦克风，他们可以发言任意长的时间，接着将麦克风交给系一个希望讲话的小组成员。如果小组成员在没有麦克风的时候就开始叫喊或者在其他成员发言结束之前就取得麦克风将是很无理的。如果对这个共享的麦克风的管理因为任何这些原因出现问题，讨论会将无法如期进行。</p>
+<p>正确的管理互斥器是异常复杂的，这也就是为什么这么多人都热衷于通道。然而，在 Rust 中，得益于类型系统和所有权，我们不可能会在锁和解锁上出错。</p>
+<a class="header" href="#mutext的-api" name="mutext的-api"><h3><code>Mutex&lt;T&gt;</code>的 API</h3></a>
+<p>让我们看看列表 16-12 中使用互斥器的例子，现在并不涉及到多线程：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">use std::sync::Mutex;
+
+fn main() {
+    let m = Mutex::new(5);
+
+    {
+        let mut num = m.lock().unwrap();
+        *num = 6;
+    }
+
+    println!(&quot;m = {:?}&quot;, m);
+}
+</code></pre>
+<p><span class="caption">Listing 16-12: Exploring the API of <code>Mutex&lt;T&gt;</code> in a
+single threaded context for simplicity</span></p>
+<p>与很多类型一样，我们通过叫做<code>new</code>的关联函数来创建一个<code>Mutex&lt;T&gt;</code>。为了访问互斥器中的数据，使用<code>lock</code>方法来获取锁。这个调用会阻塞到直到轮到我们拥有锁为止。如果另一个线程拥有锁接着那个线程 panic 了则这个调用会失败。类似于上一部分列表 16-6 那样，我们暂时使用<code>unwrap()</code>而不是更好的错误处理。请查看第九章中提供的更好的工具。</p>
+<p>一旦获取了锁，就可以将返回值（在这里是<code>num</code>）作为一个数据的可变引用使用了。类型系统是 Rust 如何保证使用值之前必须获取锁的：<code>Mutex&lt;i32&gt;</code>并不是一个<code>i32</code>，所以<strong>必须</strong>获取锁才能使用这个<code>i32</code>值。我们是不会忘记这么做的；类否则型系统是不会允许的。</p>
+<p>与你可能怀疑的一样，<code>Mutex&lt;T&gt;</code>是一个智能指针。好吧，更准确的说，<code>lock</code>调用返回一个叫做<code>MutexGuard</code>的智能指针。类似我们在第十五章见过的智能指针，它实现了<code>Deref</code>来指向其内部数据。另外<code>MutexGuard</code>有一个用来释放锁的<code>Drop</code>实现。这样就不会忘记释放锁了。这在<code>MutexGuard</code>离开作用域时会自动发生，例如它发生于列表 16-12 中内部作用域的结尾。接着可以打印出互斥器的值并发现能够将其内部的<code>i32</code>改为 6。</p>
+<a class="header" href="#在线程间共享mutext" name="在线程间共享mutext"><h4>在线程间共享<code>Mutex&lt;T&gt;</code></h4></a>
+<p>现在让我们尝试使用<code>Mutex&lt;T&gt;</code>在多个线程间共享值。我们将启动十个线程，并在每一个线程中对一个计数器值加一，这样计数器将从 0 变为 10。注意接下来的几个例子会有编译错误，而我们将利用这些错误来学习如何使用
+<code>Mutex&lt;T&gt;</code>以及 Rust 又是怎样帮助我们正确使用它的。列表 16-13 是最开始的例子：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">use std::sync::Mutex;
+use std::thread;
+
+fn main() {
+    let counter = Mutex::new(0);
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let handle = thread::spawn(|| {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!(&quot;Result: {}&quot;, *counter.lock().unwrap());
+}
+</code></pre>
+<p><span class="caption">Listing 16-13: The start of a program having 10 threads
+each increment a counter guarded by a <code>Mutex&lt;T&gt;</code></span></p>
+<p>这里创建了一个<code>counter</code>变量来存放内含<code>i32</code>的<code>Mutex&lt;T&gt;</code>，类似列表 16-12 那样。接下来使用 range 创建了 10 个线程。这里使用了<code>thread::spawn</code>并对所有线程使用了相同的闭包：他们每一个都将调用<code>lock</code>方法来获取<code>Mutex&lt;T&gt;</code>上的锁并对接着互斥器中的值加一。当一个线程结束执行其闭包，<code>num</code>会离开作用域并释放锁这样另一个线程就可以获取它了。</p>
+<p>在主线程中，我们像列表 16-2 那样收集了所有的 join 句柄，并接着每一个的<code>join</code>方法来确保所有线程都会结束。那时，主线程会获取锁并打印出程序的结果。</p>
+<p>之前提示过这个例子不能编译，让我们看看为什么！</p>
+<pre><code>error[E0373]: closure may outlive the current function, but it borrows
+`counter`, which is owned by the current function
+  --&gt;
+   |
+9  |         let handle = thread::spawn(|| {
+   |                                    ^^ may outlive borrowed value `counter`
+10 |             let mut num = counter.lock().unwrap();
+   |                           ------- `counter` is borrowed here
+   |
+help: to force the closure to take ownership of `counter` (and any other
+referenced variables), use the `move` keyword, as shown:
+   |         let handle = thread::spawn(move || {
+</code></pre>
+<p>这类似于列表 16-5 中解决了的问题。考虑到启动了多个线程，Rust 无法知道这些线程会运行多久而<code>counter</code>是否在每一个线程尝试借用它时仍然保持有效。帮助信息提醒了我们如何解决它：可以使用<code>move</code>来给予每个线程其所有权。试试将这个修改用到闭包上：</p>
+<pre><code class="language-rust,ignore">thread::spawn(move || {
+</code></pre>
+<p>再次尝试编译。这会出现了一个不同的错误！</p>
+<pre><code>error[E0382]: capture of moved value: `counter`
+  --&gt;
+   |
+9  |         let handle = thread::spawn(move || {
+   |                                    ------- value moved (into closure) here
+10 |             let mut num = counter.lock().unwrap();
+   |                           ^^^^^^^ value captured here after move
+   |
+   = note: move occurs because `counter` has type `std::sync::Mutex&lt;i32&gt;`,
+   which does not implement the `Copy` trait
+
+error[E0382]: use of moved value: `counter`
+  --&gt;
+   |
+9  |         let handle = thread::spawn(move || {
+   |                                    ------- value moved (into closure) here
+...
+21 |     println!(&quot;Result: {}&quot;, *counter.lock().unwrap());
+   |                             ^^^^^^^ value used here after move
+   |
+   = note: move occurs because `counter` has type `std::sync::Mutex&lt;i32&gt;`,
+   which does not implement the `Copy` trait
+
+error: aborting due to 2 previous errors
+</code></pre>
+<p><code>move</code>并没有像列表 16-5 中那样解决这个程序中的问题。为什么没有呢？这个错误信息有些难以理解，因为它表明<code>counter</code>被移动进了闭包，接着它在调用<code>lock</code>时被捕获。这听起来像是我们希望的，不过这是不允许的。</p>
+<p>让我们推理一下。现在不再使用<code>for</code>循环创建 10 个线程，让我们不用循环而只创建两个线程来看看会发生什么。将列表 16-13 中第一个<code>for</code>循环替换为如下代码：</p>
+<pre><code class="language-rust,ignore">let handle = thread::spawn(move || {
+    let mut num = counter.lock().unwrap();
+
+    *num += 1;
+});
+handles.push(handle);
+
+let handle2 = thread::spawn(move || {
+    let mut num2 = counter.lock().unwrap();
+
+    *num2 += 1;
+});
+handles.push(handle2);
+</code></pre>
+<p>这里创建了两个线程，并将用于第二个线程的变量名改为<code>handle2</code>和<code>num2</code>。现在我们简化了例子来看看是否能够理解错误信息。这一次编译给出如下信息：</p>
+<pre><code class="language-text">error[E0382]: capture of moved value: `counter`
+  --&gt;
+   |
+8  |     let handle = thread::spawn(move || {
+   |                                ------- value moved (into closure) here
+...
+16 |         let mut num2 = counter.lock().unwrap();
+   |                        ^^^^^^^ value captured here after move
+   |
+   = note: move occurs because `counter` has type `std::sync::Mutex&lt;i32&gt;`,
+   which does not implement the `Copy` trait
+
+error[E0382]: use of moved value: `counter`
+  --&gt;
+   |
+8  |     let handle = thread::spawn(move || {
+   |                                ------- value moved (into closure) here
+...
+26 |     println!(&quot;Result: {}&quot;, *counter.lock().unwrap());
+   |                             ^^^^^^^ value used here after move
+   |
+   = note: move occurs because `counter` has type `std::sync::Mutex&lt;i32&gt;`,
+   which does not implement the `Copy` trait
+
+error: aborting due to 2 previous errors
+</code></pre>
+<p>啊哈！在第一个错误信息中，Rust 表明了<code>counter</code>被移动进了<code>handle</code>所代表线程的闭包中。这个移动阻止我们在对其调用<code>lock</code>并将结果储存在<code>num2</code>中时捕获<code>counter</code>，这是已经在第二个线程中了！所以 Rust 告诉我们不能将<code>counter</code>的所有权移动到多个线程中。这在之前很难看出是因为我们在循环中创建多个线程，而 Rust 无法在循环的迭代中指明不同的线程（没有临时变量）。</p>
+<a class="header" href="#多线程和多所有权" name="多线程和多所有权"><h4>多线程和多所有权</h4></a>
+<p>在第十五章中，我们可以通过使用智能指针<code>Rc&lt;T&gt;</code>来创建引用计数的值来拥有多所有权。同时第十五章提到了<code>Rc&lt;T&gt;</code>只能用于单线程上下文，不过还是让我们在这里试用<code>Rc&lt;T&gt;</code>来观察会发生什么。列表 16-14 将<code>Mutex&lt;T&gt;</code>封装进了<code>Rc&lt;T&gt;</code>中，并在移动到线程中之前克隆了<code>Rc&lt;T&gt;</code>。切换回循环来创建线程，并保留闭包中的<code>move</code>关键字：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">use std::rc::Rc;
+use std::sync::Mutex;
+use std::thread;
+
+fn main() {
+    let counter = Rc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = counter.clone();
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!(&quot;Result: {}&quot;, *counter.lock().unwrap());
+}
+</code></pre>
+<p><span class="caption">Listing 16-14: Attempting to use <code>Rc&lt;T&gt;</code> to allow
+multiple threads to own the <code>Mutex&lt;T&gt;</code></span></p>
+<p>又一次，编译并...出现了不同的错误！编译器真是教会了我们很多东西！</p>
+<pre><code>error[E0277]: the trait bound `std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;:
+std::marker::Send` is not satisfied
+  --&gt;
+   |
+11 |         let handle = thread::spawn(move || {
+   |                      ^^^^^^^^^^^^^ the trait `std::marker::Send` is not
+   implemented for `std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;`
+   |
+   = note: `std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;` cannot be sent between threads
+   safely
+   = note: required because it appears within the type
+   `[closure@src/main.rs:11:36: 15:10
+   counter:std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;]`
+   = note: required by `std::thread::spawn`
+</code></pre>
+<p>哇哦，太长不看！需要指出一些重要的部分：第一个提示表明<code>Rc&lt;Mutex&lt;i32&gt;&gt;</code>不能安全的在线程间传递。理由也在错误信息中，经过提取之后，表明“不满足<code>Send</code> trait bound”（<code>the trait bound Send is not satisfied</code>）。下一部分将会讨论<code>Send</code>，它是一个确保确保用于线程的类型是适合并发环境的 trait。</p>
+<p>不幸的是，<code>Rc&lt;T&gt;</code>并不能安全的在线程间共享。当<code>Rc&lt;T&gt;</code>管理引用计数时，它必须在每一个<code>clone</code>调用时增加计数并在每一个克隆被丢弃时减少计数。<code>Rc&lt;T&gt;</code>并没有使用任何并发原语来确保改变计数的操作不会被其他线程打断。在计数出错时这可能会导致诡异的 bug，比如可能会造成内存泄漏或在使用结束之前就丢弃一个值。那么如果有一个正好与<code>Rc&lt;T&gt;</code>类似，不过以一种线程安全的方式改变引用计数的类型会怎么样呢？</p>
+<a class="header" href="#原子引用计数arct" name="原子引用计数arct"><h4>原子引用计数<code>Arc&lt;T&gt;</code></h4></a>
+<p>如果你思考过像之前那样的问题的话，你就是正确的。确实有一个类似<code>Rc&lt;T&gt;</code>并可以安全的用于并发环境的类型：<code>Arc&lt;T&gt;</code>。字母“a”代表<strong>原子性</strong>（<em>atomic</em>），所以这是一个<strong>原子引用计数</strong>（<em>atomically reference counted</em>）类型。原子性是另一类这里还未涉及到的并发原语；请查看标准库中<code>std::sync::atomic</code>的文档来获取更多细节。其中的要点就是：原子性类型工作起来类似原始类型，不过可以安全的在线程间共享。</p>
+<p>那为什么不是所有的原始类型都是原子性的呢，然后为什么不是所有标准库中的类型都默认使用<code>Arc&lt;T&gt;</code>实现呢？线程安全伴随一些性能惩罚，我们只希望在需要时才为此付出代价。如果只是在单线程中会值进行操作，因为并不需要原子性提供的保证代码可以运行的更快。</p>
+<p>回到之前的例子：<code>Arc&lt;T&gt;</code>和<code>Rc&lt;T&gt;</code>除了<code>Arc&lt;T&gt;</code>内部的原子性之外他们是等价的。其 API 也是一样的，所以可以修改<code>use</code>行和<code>new</code>调用。列表 16-15 中的代码最终可以编译和运行：</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">use std::sync::{Mutex, Arc};
+use std::thread;
+
+fn main() {
+    let counter = Arc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = counter.clone();
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!(&quot;Result: {}&quot;, *counter.lock().unwrap());
+}
+</code></pre>
+<p><span class="caption">Listing 16-15: Using an <code>Arc&lt;T&gt;</code> to wrap the <code>Mutex&lt;T&gt;</code>
+to be able to share ownership across multiple threads</span></p>
+<p>这会打印出：</p>
+<pre><code>Result: 10
+</code></pre>
+<p>成功了！我们从 0 数到了 10，这可能并不是很显眼，不过一路上我们学习了很多关于<code>Mutex&lt;T&gt;</code>和线程安全的内容！这个例子中构建的结构可以用于比增加计数更为复杂的操作。可以被分解为独立部分的计算可以像这样被分散到多个线程中，并可以使用<code>Mutex&lt;T&gt;</code>来允许每个线程在他们自己的部分更新最终的结果。</p>
+<p>你可能注意到了，因为<code>counter</code>是不可变的，不过可以获取其内部值的可变引用，这意味着<code>Mutex&lt;T&gt;</code>提供了内部可变性，就像<code>Cell</code>系列类型那样。正如第十五章中使用<code>RefCell&lt;T&gt;</code>可以改变<code>Rc&lt;T&gt;</code>中的内容那样，同样的可以使用<code>Mutex&lt;T&gt;</code>来改变<code>Arc&lt;T&gt;</code>中的内容。</p>
+<p>回忆一下<code>Rc&lt;T&gt;</code>并没有避免所有可能的问题：我们也讨论了当两个<code>Rc&lt;T&gt;</code>相互引用时的引用循环的可能性，这可能造成内存泄露。<code>Mutex&lt;T&gt;</code>有一个类似的 Rust 同样也不能避免的问题：死锁。<strong>死锁</strong>（<em>deadlock</em>）是一个场景中操作需要锁定两个资源，而两个线程分别拥有一个锁并永远相互等待的问题。如果</p>
+
                 </div>
 
                 <!-- Mobile navigation buttons -->

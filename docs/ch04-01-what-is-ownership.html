@@ -118,7 +118,7 @@ valid</span></p>
 <li>当<code>s</code><strong>进入作用域</strong>，它就是有效的。</li>
 <li>这一直持续到它<strong>离开作用域</strong>为止。</li>
 </ol>
-<p>目前为止，变量是否有效与作用域的关系跟其他变成语言是类似的。现在我们在此基础上介绍<code>String</code>类型。</p>
+<p>目前为止，变量是否有效与作用域的关系跟其他编程语言是类似的。现在我们在此基础上介绍<code>String</code>类型。</p>
 <a class="header" href="#string类型" name="string类型"><h3><code>String</code>类型</h3></a>
 <p>为了演示所有权的规则，我们需要一个比第三章讲到的任何一个都要复杂的数据类型。之前出现的数据类型都是储存在栈上的并且当离开作用域时被移出栈，不过我们需要寻找一个储存在堆上的数据来探索 Rust 如何知道该在何时清理数据的。</p>
 <p>这里使用<code>String</code>作为例子并专注于<code>String</code>与所有权相关的部分。这些方面也同样适用于其他标准库提供的或你自己创建的复杂数据类型。在第八章会更深入地讲解<code>String</code>。</p>
@@ -201,7 +201,7 @@ println!(&quot;{}&quot;, s1);
   = note: move occurs because `s1` has type `std::string::String`,
 which does not implement the `Copy` trait
 </code></pre>
-<p>如果你在其他语言中听说过术语“浅拷贝”（“shallow copy”）和“深拷贝”（“deep copy”），那么拷贝指针、长度和容量而不拷贝数据可能听起来像浅拷贝。不过因为 Rust 同时使第一个变量无效化了，这个操作被成为<strong>移动</strong>（<em>move</em>），而不是浅拷贝。上面的例子可以解读为<code>s1</code>被<strong>移动</strong>到了<code>s2</code>中。那么具体发生了什么如图 4-6 所示。</p>
+<p>如果你在其他语言中听说过术语“浅拷贝”（“shallow copy”）和“深拷贝”（“deep copy”），那么拷贝指针、长度和容量而不拷贝数据可能听起来像浅拷贝。不过因为 Rust 同时使第一个变量无效化了，这个操作被称为<strong>移动</strong>（<em>move</em>），而不是浅拷贝。上面的例子可以解读为<code>s1</code>被<strong>移动</strong>到了<code>s2</code>中。那么具体发生了什么如图 4-6 所示。</p>
 <p><img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" /></p>
 <p><span class="caption">Figure 4-6: Representation in memory after <code>s1</code> has been
 invalidated</span></p>
@@ -296,7 +296,7 @@ fn takes_and_gives_back(a_string: String) -&gt; String { // a_string comes into
     a_string  // a_string is returned and moves out to the calling function.
 }
 </code></pre>
-<p>变量的所有权总是遵循相同的模式：将值赋值给另一个变量时移动它，并且当变量值的堆书卷离开作用域时，如果数据的所有权没有被移动到另外一个变量时，其值将通过<code>drop</code>被清理掉。</p>
+<p>变量的所有权总是遵循相同的模式：将值赋值给另一个变量时移动它，并且当持有堆中数据值的变量离开作用域时，如果数据的所有权没有被移动到另外一个变量时，其值将通过<code>drop</code>被清理掉。</p>
 <p>在每一个函数中都获取并接着返回所有权是冗余乏味的。如果我们想要函数使用一个值但不获取所有权改怎么办呢？如果我们还要接着使用它的话，每次都传递出去再传回来就有点烦人了，另外我们也可能想要返回函数体产生的任何（不止一个）数据。</p>
 <p>使用元组来返回多个值是可能的，像这样：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
