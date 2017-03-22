@@ -69,11 +69,11 @@
                 <div id="content" class="content">
                     <a class="header" href="#mod和文件系统" name="mod和文件系统"><h2><code>mod</code>和文件系统</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch07-01-mod-and-the-filesystem.md">ch07-01-mod-and-the-filesystem.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-01-mod-and-the-filesystem.md">ch07-01-mod-and-the-filesystem.md</a>
 <br>
-commit e2a129961ae346f726f8b342455ec2255cdfed68</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
-<p>我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过我们不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章我们见过的<code>rand</code>就是这样的 crate。</p>
+<p>我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章我们见过的<code>rand</code>就是这样的 crate。</p>
 <p>我们将创建一个提供一些通用网络功能的项目的骨架结构；我们将专注于模块和函数的组织，而不担心函数体中的具体代码。这个项目叫做<code>communicator</code>。Cargo 默认会创建一个库 crate 除非指定其他项目类型，所以如果不像一直以来那样加入<code>--bin</code>参数则项目将会是一个库：</p>
 <pre><code>$ cargo new communicator
 $ cd communicator
@@ -91,7 +91,7 @@ mod tests {
 <p>因为没有 <em>src/main.rs</em> 文件，所以没有可供 Cargo 的<code>cargo run</code>执行的东西。因此，我们将使用<code>cargo build</code>命令只是编译库 crate 的代码。</p>
 <p>我们将学习根据编写代码的意图来选择不同的织库项目代码组织来适应多种场景。</p>
 <a class="header" href="#模块定义" name="模块定义"><h3>模块定义</h3></a>
-<p>对于<code>communicator</code>网络库，首先我们要定义一个叫做<code>network</code>的模块，它包含一个叫做<code>connect</code>的函数定义。Rust 中所有模块的定义以关键字<code>mod</code>开始。在 <em>src/lib.rs</em> 文件的开头在测试代码的上面增加这些代码：</p>
+<p>对于<code>communicator</code>网络库，首先要定义一个叫做<code>network</code>的模块，它包含一个叫做<code>connect</code>的函数定义。Rust 中所有模块的定义以关键字<code>mod</code>开始。在 <em>src/lib.rs</em> 文件的开头在测试代码的上面增加这些代码：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">mod network {
     fn connect() {
@@ -100,8 +100,7 @@ mod tests {
 </code></pre>
 <p><code>mod</code>关键字的后面是模块的名字，<code>network</code>，接着是位于大括号中的代码块。代码块中的一切都位于<code>network</code>命名空间中。在这个例子中，只有一个函数，<code>connect</code>。如果想要在<code>network</code>模块外面的代码中调用这个函数，需要指定模块名并使用命名空间语法<code>::</code>，像这样：<code>network::connect()</code>，而不是只是<code>connect()</code>。</p>
 <p>也可以在 <em>src/lib.rs</em> 文件中同时存在多个模块。例如，再拥有一个<code>client</code>模块，它也有一个叫做<code>connect</code>的函数，如列表 7-1 中所示那样增加这个模块：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">mod network {
     fn connect() {
     }
@@ -112,15 +111,11 @@ mod client {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 7-1: The <code>network</code> module and the <code>client</code> module defined side-by-side
-in <em>src/lib.rs</em></p>
-</figcaption>
-</figure>
-<p>现在我们有了<code>network::connect</code>函数和<code>client::connect</code>函数。他们可能有着完全不同的功能，同时他们也不会彼此冲突因为他们位于不同的模块。</p>
+<p><span class="caption">Listing 7-1: The <code>network</code> module and the <code>client</code> module
+defined side-by-side in <em>src/lib.rs</em></span></p>
+<p>现在我们有了<code>network::connect</code>函数和<code>client::connect</code>函数。他们可能有着完全不同的功能，同时他们也不会彼此冲突，因为他们位于不同的模块。</p>
 <p>虽然在这个例子中，我们构建了一个库，但是 <em>src/lib.rs</em> 并没有什么特殊意义。也可以在 <em>src/main.rs</em> 中使用子模块。事实上，也可以将模块放入其他模块中。这有助于随着模块的增长，将相关的功能组织在一起并又保持各自独立。如何选择组织代码依赖于如何考虑代码不同部分之间的关系。例如，对于库的用户来说，<code>client</code>模块和它的函数<code>connect</code>可能放在<code>network</code>命名空间里显得更有道理，如列表 7-2 所示：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">mod network {
     fn connect() {
     }
@@ -131,10 +126,8 @@ in <em>src/lib.rs</em></p>
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 7-2: Moving the <code>client</code> module inside of the <code>network</code> module</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 7-2: Moving the <code>client</code> module inside of the
+<code>network</code> module</span></p>
 <p>在 <em>src/lib.rs</em> 文件中，将现有的<code>mod network</code>和<code>mod client</code>的定义替换为<code>client</code>模块作为<code>network</code>的一个内部模块。现在我们有了<code>network::connect</code>和<code>network::client::connect</code>函数：又一次，这两个<code>connect</code>函数也不相冲突，因为他们在不同的命名空间中。</p>
 <p>这样，模块之间形成了一个层次结构。<em>src/lib.rs</em> 的内容位于最顶层，而其子模块位于较低的层次。这是列表 7-1 中的例子以这种方式考虑的组织结构：</p>
 <pre><code>communicator
@@ -149,8 +142,7 @@ in <em>src/lib.rs</em></p>
 <p>可以看到列表 7-2 中，<code>client</code>是<code>network</code>的子模块，而不是它的同级模块。更为负责的项目可以有很多的模块，所以他们需要符合逻辑地组合在一起以便记录他们。在项目中“符合逻辑”的意义全凭你得理解和库的用户对你项目领域的认识。利用我们这里讲到的技术来创建同级模块和嵌套的模块将是你会喜欢的结构。</p>
 <a class="header" href="#将模块移动到其他文件" name="将模块移动到其他文件"><h3>将模块移动到其他文件</h3></a>
 <p>位于层级结构中的模块，非常类似计算机领域的另一个我们非常熟悉的结构：文件系统！我们可以利用 Rust 的模块系统连同多个文件一起分解 Rust 项目，这样就不是所有的内容都落到 <em>src/lib.rs</em> 中了。作为例子，我们将从列表 7-3 中的代码开始：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">mod client {
     fn connect() {
     }
@@ -166,16 +158,28 @@ mod network {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 7-3: Three modules, <code>client</code>, <code>network</code>, and <code>network::server</code>, all
-defined in <em>src/lib.rs</em></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 7-3: Three modules, <code>client</code>, <code>network</code>, and
+<code>network::server</code>, all defined in <em>src/lib.rs</em></span></p>
 <p>这是模块层次结构：</p>
 <pre><code>communicator
  ├── client
  └── network
      └── server
+</code></pre>
+<p>如果这些模块有很多函数，而这些函数又很长，将难以在文件中寻找我们需要的代码。因为这些函数被嵌套进一个或多个模块中，同时函数中的代码也会开始变长。这就有充分的理由将<code>client</code>、<code>network</code>和<code>server</code>每一个模块从 <em>src/lib.rs</em> 抽出并放入他们自己的文件中。</p>
+<p>让我们开始把<code>client</code>模块提取到另一个文件中。首先，将 <em>src/lib.rs</em> 中的<code>client</code>模块代码替换为如下：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust,ignore">mod client;
+
+mod network {
+    fn connect() {
+    }
+
+    mod server {
+        fn connect() {
+        }
+    }
+}
 </code></pre>
 <p>这里我们仍然<strong>定义</strong>了<code>client</code>模块，不过去掉了大括号和<code>client</code>模块中的定义并替换为一个分号，这使得 Rust 知道去其他地方寻找模块中定义的代码。</p>
 <p>那么现在需要创建对应模块名的外部文件。在 <em>src/</em> 目录创建一个 <em>client.rs</em> 文件，接着打开它并输入如下内容，它是上一步<code>client</code>模块中被去掉的<code>connect</code>函数：</p>
@@ -183,7 +187,7 @@ defined in <em>src/lib.rs</em></p>
 <pre><code class="language-rust">fn connect() {
 }
 </code></pre>
-<p>注意这个文件中并不需要一个<code>mod</code>声明；因为已经在 <em>src/lib.rs</em> 中已经使用<code>mod</code>声明了<code>client</code>模块。这个文件仅仅提供<code>client</code>模块的内容。如果在这里加上一个<code>mod client</code>，那么就等于给<code>client</code>模块增加了一个叫做<code>client</code>的子模块！</p>
+<p>注意这个文件中并不需要一个<code>mod</code>声明；因为已经在 <em>src/lib.rs</em> 中已经使用<code>mod</code>声明了<code>client</code>模块。这个文件仅仅提供<code>client</code>模块的<strong>内容</strong>。如果在这里加上一个<code>mod client</code>，那么就等于给<code>client</code>模块增加了一个叫做<code>client</code>的子模块了！</p>
 <p>Rust 默认只知道 <em>src/lib.rs</em> 中的内容。如果想要对项目加入更多文件，我们需要在 <em>src/lib.rs</em> 中告诉 Rust 去寻找其他文件；这就是为什么<code>mod client</code>需要被定义在 <em>src/lib.rs</em> 而不是在 <em>src/client.rs</em>。</p>
 <p>现在，一切应该能成功编译，虽然会有一些警告。记住使用<code>cargo build</code>而不是<code>cargo run</code>因为这是一个库 crate 而不是二进制 crate：</p>
 <pre><code>$ cargo build
@@ -238,7 +242,6 @@ mod server;
 }
 </code></pre>
 <p>当尝试运行<code>cargo build</code>时，会出现如列表 7-4 中所示的错误：</p>
-<figure>
 <pre><code class="language-text">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 error: cannot declare a new module at this location
@@ -258,14 +261,11 @@ note: ... or maybe `use` the module `server` instead of possibly redeclaring it
 4 | mod server;
   |     ^^^^^^
 </code></pre>
-<figcaption>
-<p>Listing 7-4: Error when trying to extract the <code>server</code> submodule into
-<em>src/server.rs</em></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 7-4: Error when trying to extract the <code>server</code>
+submodule into <em>src/server.rs</em></span></p>
 <p>这个错误说明“不能在这个位置新声明一个模块”并指出 <em>src/network.rs</em> 中的<code>mod server;</code>这一行。看来 <em>src/network.rs</em> 与 <em>src/lib.rs</em> 在某些方面是不同的；让我们继续阅读以理解这是为什么。</p>
 <p>列表 7-4 中间的记录事实上是非常有帮助的，因为它指出了一些我们还未讲到的操作：</p>
-<pre><code class="language-text">note: maybe move this module `network` to its own directory via `network/mod.rs`
+<pre><code>note: maybe move this module `network` to its own directory via `network/mod.rs`
 </code></pre>
 <p>我们可以按照记录所建议的去操作，而不是继续使用之前的与模块同名的文件的模式：</p>
 <ol>

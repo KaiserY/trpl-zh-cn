@@ -1,12 +1,10 @@
 ## `if let`简单控制流
 
-> [ch06-03-if-let.md](https://github.com/rust-lang/book/blob/master/src/ch06-03-if-let.md)
+> [ch06-03-if-let.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch06-03-if-let.md)
 > <br>
-> commit 396e2db4f7de2e5e7869b1f8bc905c45c631ad7d
+> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
 
 `if let`语法让我们以一种不那么冗长的方式结合`if`和`let`，来处理匹配一个模式的值而忽略其他的值。考虑列表 6-6 中的程序，它匹配一个`Option<u8>`值并只希望当值是三时执行代码：
-
-<figure>
 
 ```rust
 let some_u8_value = Some(0u8);
@@ -16,13 +14,8 @@ match some_u8_value {
 }
 ```
 
-<figcaption>
-
-Listing 6-6: A `match` that only cares about executing code when the value is
-`Some(3)`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 6-6: A `match` that only cares about executing
+code when the value is `Some(3)`</span>
 
 我们想要对`Some(3)`匹配进行操作不过不想处理任何其他`Some<u8>`值或`None`值。为了满足`match`表达式（穷尽性）的要求，必须在处理完这唯一的成员后加上`_ => ()`，这样也要增加很多样板代码。
 
@@ -96,4 +89,4 @@ if let Coin::Quarter(state) = coin {
 
 你的 Rust 程序现在能够使用结构体和枚举在自己的作用域内表现其内容了。在你的 API 中使用自定义类型保证了类型安全：编译器会确保你的函数只会得到它期望的类型的值。
 
-为了向你的用户提供一个组织良好的 API，它使用直观且只向用户暴露他们确实需要的部分，那么让我们转向 Rust 的模块系统吧。
+为了向你的用户提供一个组织良好的 API，它使用起来很直观并且只向用户暴露他们确实需要的部分，那么现在就让我们转向 Rust 的模块系统吧。

@@ -2231,7 +2231,7 @@ let slice = &amp;a[1..3];
 <p>所有权系统影响了 Rust 中其他很多部分如何工作，所以我们会继续讲到这些概念，贯穿本书的余下内容。让我们开始下一个章节，来看看如何将多份数据组合进一个<code>struct</code>中。</p>
 <a class="header" href="#结构体" name="结构体"><h1>结构体</h1></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch05-00-structs.md">ch05-00-structs.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch05-00-structs.md">ch05-00-structs.md</a>
 <br>
 commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
@@ -2435,7 +2435,7 @@ trait and printing the <code>Rectangle</code> instance using debug formatting</s
 <p>我们的<code>area</code>函数是非常明确的————它只是计算了长方形的面积。如果这个行为与<code>Rectangle</code>结构体再结合得更紧密一些就更好了，因为这明显就是<code>Rectangle</code>类型的行为。现在让我们看看如何继续重构这些代码，来将<code>area</code>函数协调进<code>Rectangle</code>类型定义的<code>area</code><strong>方法</strong>中。</p>
 <a class="header" href="#方法语法" name="方法语法"><h2>方法语法</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch05-01-method-syntax.md">ch05-01-method-syntax.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch05-01-method-syntax.md">ch05-01-method-syntax.md</a>
 <br>
 commit 8c1c1a55d5c0f9bc3c866ee79b267df9dc5c04e2</p>
 </blockquote>
@@ -2561,7 +2561,7 @@ impl Rectangle {
 <p>结构体并不是创建自定义类型的唯一方法；让我们转向 Rust 的<code>enum</code>功能并为自己的工具箱再填一个工具。</p>
 <a class="header" href="#枚举和模式匹配" name="枚举和模式匹配"><h1>枚举和模式匹配</h1></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch06-00-enums.md">ch06-00-enums.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch06-00-enums.md">ch06-00-enums.md</a>
 <br>
 commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
@@ -2569,12 +2569,12 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 <p>枚举是一个很多语言都有的功能，不过不同语言中的功能各不相同。Rust 的枚举与像F#、OCaml 和 Haskell这样的函数式编程语言中的<strong>代数数据类型</strong>（<em>algebraic data types</em>）最为相似。</p>
 <a class="header" href="#定义枚举" name="定义枚举"><h1>定义枚举</h1></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch06-01-defining-an-enum.md">ch06-01-defining-an-enum.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch06-01-defining-an-enum.md">ch06-01-defining-an-enum.md</a>
 <br>
 commit e6d6caab41471f7115a621029bd428a812c5260e</p>
 </blockquote>
-<p>让我们通过一用代码来表现的场景，来看看为什么这里枚举是有用的而且比结构体更合适。比如我们要处理 IP 地。目前被广泛使用的两个主要 IP 标准：IPv4（version four）和 IPv6（version six）。这是我们的程序只可能会遇到两种 IP 地址：我们可以<strong>枚举</strong>出所有可能的值，这也正是它名字的由来。</p>
-<p>任何一个 IP 地址要么是 IPv4 的要么是 IPv6 的而不能两者都是。IP 地址的这个特性使得枚举数据结构非常适合这个场景，因为枚举值尽可能是其一个成员。IPv4 和 IPv6 从根本上讲都是 IP 地址，所以当代码在处理申请任何类型的 IP 地址的场景时应该把他们当作相同的类型。</p>
+<p>让我们通过一用代码来表现的场景，来看看为什么这里枚举是有用的而且比结构体更合适。比如我们要处理 IP 地。目前被广泛使用的两个主要 IP 标准：IPv4（version four）和 IPv6（version six）。这是我们的程序只可能会遇到两种 IP 地址：所以可以<strong>枚举</strong>出所有可能的值，这也正是它名字的由来。</p>
+<p>任何一个 IP 地址要么是 IPv4 的要么是 IPv6 的而不能两者都是。IP 地址的这个特性使得枚举数据结构非常适合这个场景，因为枚举值只可能是其中一个成员。IPv4 和 IPv6 从根本上讲仍是 IP 地址，所以当代码在处理申请任何类型的 IP 地址的场景时应该把他们当作相同的类型。</p>
 <p>可以通过在代码中定义一个<code>IpAddrKind</code>枚举来表现这个概念并列出可能的 IP 地址类型，<code>V4</code>和<code>V6</code>。这被称为枚举的<strong>成员</strong>（<em>variants</em>）：</p>
 <pre><code class="language-rust">enum IpAddrKind {
     V4,
@@ -2611,8 +2611,7 @@ fn route(ip_type: IpAddrKind) { }
 route(IpAddrKind::V4);
 route(IpAddrKind::V6);
 </code></pre>
-<p>使用枚举甚至还有更多优势。进一步考虑一下我们的 IP 地址类型，目前没有一个储存实际 IP 地址<strong>数据</strong>的方法；只知道它是什么<strong>类型</strong>的。考虑到已经在第五章学习过结构体了，你可以想如列表 6-1 那样修改这个问题：</p>
-<figure>
+<p>使用枚举甚至还有更多优势。进一步考虑一下我们的 IP 地址类型，目前没有一个储存实际 IP 地址<strong>数据</strong>的方法；只知道它是什么<strong>类型</strong>的。考虑到已经在第五章学习过结构体了，你可以像列表 6-1 那样修改这个问题：</p>
 <pre><code class="language-rust">enum IpAddrKind {
     V4,
     V6,
@@ -2633,11 +2632,8 @@ let loopback = IpAddr {
     address: String::from(&quot;::1&quot;),
 };
 </code></pre>
-<figcaption>
-<p>Listing 6-1: Storing the data and <code>IpAddrKind</code> variant of an IP address using a
-<code>struct</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 6-1: Storing the data and <code>IpAddrKind</code> variant of
+an IP address using a <code>struct</code></span></p>
 <p>这里我们定义了一个有两个字段的结构体<code>IpAddr</code>：<code>kind</code>字段是<code>IpAddrKind</code>（之前定义的枚举）类型的而<code>address</code>字段是<code>String</code>类型的。这里有两个结构体的实例。第一个，<code>home</code>，它的<code>kind</code>的值是<code>IpAddrKind::V4</code>与之相关联的地址数据是<code>127.0.0.1</code>。第二个实例，<code>loopback</code>，<code>kind</code>的值是<code>IpAddrKind</code>的另一个成员，<code>V6</code>，关联的地址是<code>::1</code>。我们使用了要给结构体来将<code>kind</code>和<code>address</code>打包在一起，现在枚举成员就与值相关联了。</p>
 <p>我们可以使用一种更简洁的方式来表达相同的概念，仅仅使用枚举并将数据直接放进每一个枚举成员而不是将枚举作为结构体的一部分。<code>IpAddr</code>枚举的新定义表明了<code>V4</code>和<code>V6</code>成员都关联了<code>String</code>值：</p>
 <pre><code class="language-rust">enum IpAddr {
@@ -2660,7 +2656,7 @@ let home = IpAddr::V4(127, 0, 0, 1);
 
 let loopback = IpAddr::V6(String::from(&quot;::1&quot;));
 </code></pre>
-<p>这些代码展示了使用枚举来储存两种不同 IP 地址的几种可能的选择。然而，事实证明储存和编码 IP 地址实在是太常见了<a href="../std/net/enum.IpAddr.html">以致标准库提供了一个可供使用的定义！</a><!-- ignore -->让我们看看标准库如何定义<code>IpAddr</code>的：它正有着跟我们定义和使用的一样的枚举和成员，不过它将成员种的地址数据嵌入到了两个不同形式的结构体中，他们对不同的成员的定义是不同的：</p>
+<p>这些代码展示了使用枚举来储存两种不同 IP 地址的几种可能的选择。然而，事实证明储存和编码 IP 地址实在是太常见了<a href="https://doc.rust-lang.org/std/net/enum.IpAddr.html">以致标准库提供了一个可供使用的定义！</a><!-- ignore -->让我们看看标准库如何定义<code>IpAddr</code>的：它正有着跟我们定义和使用的一样的枚举和成员，不过它将成员种的地址数据嵌入到了两个不同形式的结构体中，他们对不同的成员的定义是不同的：</p>
 <pre><code class="language-rust">struct Ipv4Addr {
     // details elided
 }
@@ -2674,10 +2670,9 @@ enum IpAddr {
     V6(Ipv6Addr),
 }
 </code></pre>
-<p>这些代码展示了可以将任意类型的数据放入枚举成员中：例如字符串、数字类型或者结构体。甚至可以包含另一个枚举！另外，标准库中的类型通常并不比你可能设想出来的要复杂多少。</p>
+<p>这些代码展示了可以将任意类型的数据放入枚举成员中：例如字符串、数字类型或者结构体。甚至可以包含另一个枚举！另外，标准库中的类型通常并不比你设想出来的要复杂多少。</p>
 <p>注意虽然标准库中包含一个<code>IpAddr</code>的定义，仍然可以创建和使用我们自己的定义而不会有冲突，因为我们并没有将标准库中的定义引入作用域。第七章会讲到如何导入类型。</p>
 <p>来看看列表 6-2 中的另一个枚举的例子：它的成员中内嵌了多种多样的类型：</p>
-<figure>
 <pre><code class="language-rust">enum Message {
     Quit,
     Move { x: i32, y: i32 },
@@ -2685,11 +2680,8 @@ enum IpAddr {
     ChangeColor(i32, i32, i32),
 }
 </code></pre>
-<figcaption>
-<p>Listing 6-2: A <code>Message</code> enum whose variants each store different amounts and
-types of values</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 6-2: A <code>Message</code> enum whose variants each store
+different amounts and types of values</span></p>
 <p>这个枚举有四个含有不同类型的成员：</p>
 <ul>
 <li><code>Quit</code>没有关联任何数据。</li>
@@ -2697,7 +2689,7 @@ types of values</p>
 <li><code>Write</code>包含单独一个<code>String</code>。</li>
 <li><code>ChangeColor</code>包含三个<code>i32</code>。</li>
 </ul>
-<p>定义一个像列表 6-2 中的枚举类似于定义不同类型的结构体，除了枚举不使用<code>struct</code>关键字而且所有成员都被组合在一起位于<code>Message</code>下。如下这些结构体可以包含与之前枚举成员中相同的数据：</p>
+<p>定义一个像列表 6-2 中的枚举类似于定义不同类型的结构体，除了枚举不使用<code>struct</code>关键字而且所有成员都被组合在一起位于<code>Message</code>下之外。如下这些结构体可以包含与之前枚举成员中相同的数据：</p>
 <pre><code class="language-rust">struct QuitMessage; // unit struct
 struct MoveMessage {
     x: i32,
@@ -2728,14 +2720,22 @@ m.call();
 <p>让我们看看标准库中的另一个非常常见和实用的枚举：<code>Option</code>。</p>
 <a class="header" href="#option枚举和其相对空值的优势" name="option枚举和其相对空值的优势"><h3><code>Option</code>枚举和其相对空值的优势</h3></a>
 <p>在之前的部分，我们看到了<code>IpAddr</code>枚举如何利用 Rust 的类型系统编码更多信息而不单单是程序中的数据。这一部分探索一个<code>Option</code>的案例分析，它是标准库定义的另一个枚举。<code>Option</code>类型应用广泛因为它编码了一个非常普遍的场景，就是一个值可能是某个值或者什么都不是。从类型系统的角度来表达这个概念就意味着编译器需要检查是否处理了所有应该处理的情况，这样就可以避免在其他编程语言中非常常见的 bug。</p>
-<p>编程语言的设计经常从其包含功能的角度考虑问题，但是从不包含的功能的角度思考也很重要。Rust 并没有很多其他语言中有的空值功能。<strong>空值</strong>（<em>Null</em> ）是一个值它代表没有值。在有空值的语言中，变量总是这两种状态之一：空值和非空值。</p>
+<p>编程语言的设计经常从其包含功能的角度考虑问题，但是从其所没有的功能的角度思考也很重要。Rust 并没有很多其他语言中有的空值功能。<strong>空值</strong>（<em>Null</em> ）是一个值，它代表没有值。在有空值的语言中，变量总是这两种状态之一：空值和非空值。</p>
 <p>在“Null References: The Billion Dollar Mistake”中，Tony Hoare，null 的发明者，曾经说到：</p>
 <blockquote>
+<p>I call it my billion-dollar mistake. At that time, I was designing the first
+comprehensive type system for references in an object-oriented language. My
+goal was to ensure that all use of references should be absolutely safe, with
+checking performed automatically by the compiler. But I couldn't resist the
+temptation to put in a null reference, simply because it was so easy to
+implement. This has led to innumerable errors, vulnerabilities, and system
+crashes, which have probably caused a billion dollars of pain and damage in
+the last forty years.</p>
 <p>我称之为我万亿美元的错误。当时，我在在一个面向对象语言设计第一个综合性的面向引用的类型系统。我的目标是通过编译器的自动检查来保证所有引用的应有都应该是绝对安全的。不过我未能抗拒引入一个空引用的诱惑，仅仅是因为它是这么的容易实现。这引发了无数错误、漏洞和系统崩溃，在之后的四十多年中造成了数以万计美元的苦痛和伤害。</p>
 </blockquote>
 <p>空值的为题在于当你尝试像一个非空值那样使用一个空值，会出现某种形式的错误。因为空和非空的属性是无处不在的，非常容易出现这类错误。</p>
 <p>然而，空值尝试表达的概念仍然是有意义的：空值是一个因为某种原因目前无效或缺失的值。</p>
-<p>问题不在于实际的概念而在于具体的实现。为此，Rust 并没有空值，不过它确实拥有一个可以编码存在或不存在概念的枚举。这个枚举是<code>Option&lt;T&gt;</code>，而且它<a href="../std/option/enum.Option.html">定义于标准库中</a><!-- ignore -->，如下:</p>
+<p>问题不在于具体的概念而在于特定的实现。为此，Rust 并没有空值，不过它确实拥有一个可以编码存在或不存在概念的枚举。这个枚举是<code>Option&lt;T&gt;</code>，而且它<a href="https://doc.rust-lang.org/std/option/enum.Option.html">定义于标准库中</a><!-- ignore -->，如下:</p>
 <pre><code class="language-rust">enum Option&lt;T&gt; {
     Some(T),
     None,
@@ -2766,20 +2766,19 @@ not satisfied
   |
 </code></pre>
 <p>哇哦！事实上，错误信息意味着 Rust 不知道该如何将<code>Option&lt;i8&gt;</code>与<code>i8</code>相加。当在 Rust 中拥有一个像<code>i8</code>这样类型的值时，编译器确保它总是有一个有效的值。我们可以自信使用而无需判空。只有当使用<code>Option&lt;i8&gt;</code>（或者任何用到的类型）是需要担心可能没有一个值，而编译器会确保我们在使用值之前处理为空的情况。</p>
-<p>换句话说，在对<code>Option&lt;T&gt;</code>进行<code>T</code>的运算之前必须转为<code>T</code>。通常这能帮助我们捕获空值最常见的问题之一：假设某值不为空但实际上为空。</p>
-<p>无需担心错过非空值的假设（和处理）让我们对代码更加有信心，为了拥有一个可能为空的值，必须显式的将其放入对应类型的<code>Option&lt;T&gt;</code>中。接着，当使用这个值时，必须明确的处理值为空的情况。任何地方一个值不是<code>Option&lt;T&gt;</code>类型的话，<strong>可以</strong>安全的假设它的值不为空。这是 Rust 的一个有意为之的设计选择，来限制空值的泛滥和增加 Rust 代码的安全性。</p>
-<p>那么当有一个<code>Option&lt;T&gt;</code>的值时，如何从<code>Some</code>成员中取出<code>T</code>的值来使用它呢？<code>Option&lt;T&gt;</code>枚举拥有大量用于各种情况的方法：你可以查看<a href="../std/option/enum.Option.html">相关代码</a><!-- ignore -->。熟悉<code>Option&lt;T&gt;</code>的方法将对你的 Rust 之旅提供巨大的帮助。</p>
+<p>换句话说，在对<code>Option&lt;T&gt;</code>进行<code>T</code>的运算之前必须转为<code>T</code>。通常这能帮助我们捕获空值最常见的问题之一：假设某值不为空但实际上为空的情况。</p>
+<p>无需担心错过存在非空值的假设让我们对代码更加有信心，为了拥有一个可能为空的值，必须显式的将其放入对应类型的<code>Option&lt;T&gt;</code>中。接着，当使用这个值时，必须明确的处理值为空的情况。任何地方一个值不是<code>Option&lt;T&gt;</code>类型的话，<strong>可以</strong>安全的假设它的值不为空。这是 Rust 的一个有意为之的设计选择，来限制空值的泛滥和增加 Rust 代码的安全性。</p>
+<p>那么当有一个<code>Option&lt;T&gt;</code>的值时，如何从<code>Some</code>成员中取出<code>T</code>的值来使用它呢？<code>Option&lt;T&gt;</code>枚举拥有大量用于各种情况的方法：你可以查看<a href="https://doc.rust-lang.org/std/option/enum.Option.html">相关代码</a><!-- ignore -->。熟悉<code>Option&lt;T&gt;</code>的方法将对你的 Rust 之旅提供巨大的帮助。</p>
 <p>总的来说，为了使用<code>Option&lt;T&gt;</code>值，需要编写处理每个成员的代码。我们想要一些代码只当拥有<code>Some(T)</code>值时运行，这些代码允许使用其中的<code>T</code>。也希望一些代码当在<code>None</code>值时运行，这些代码并没有一个可用的<code>T</code>值。<code>match</code>表达式就是这么一个处理枚举的控制流结构：它会根据枚举的成员运行不同的代码，这些代码可以使用匹配到的值中的数据。</p>
 <a class="header" href="#match控制流运算符" name="match控制流运算符"><h2><code>match</code>控制流运算符</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch06-02-match.md">ch06-02-match.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch06-02-match.md">ch06-02-match.md</a>
 <br>
-commit 396e2db4f7de2e5e7869b1f8bc905c45c631ad7d</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
 <p>Rust 有一个叫做<code>match</code>的极为强大的控制流运算符，它允许我们将一个值与一系列的模式相比较并根据匹配的模式执行代码。模式可由字面值、变量、通配符和许多其他内容构成；第十八章会讲到所有不同种类的模式以及他们的作用。<code>match</code>的力量来源于模式的表现力以及编译器检查，它确保了所有可能的情况都得到处理。</p>
-<p>把<code>match</code>表达式想象成某种硬币分啦机：硬币滑入有着不同大小孔洞的轨道，每一个硬币都会掉入符合它大小的孔洞。同样地，值也会检查<code>match</code>的每一个模式，并且在遇到第一个“符合”的模式时，值会进入相关联的代码块并在执行中被使用。</p>
+<p>把<code>match</code>表达式想象成某种硬币分类器：硬币滑入有着不同大小孔洞的轨道，每一个硬币都会掉入符合它大小的孔洞。同样地，值也会检查<code>match</code>的每一个模式，并且在遇到第一个“符合”的模式时，值会进入相关联的代码块并在执行中被使用。</p>
 <p>因为刚刚提到了硬币，让我们用他们来作为一个使用<code>match</code>的例子！我们可以编写一个函数来获取一个未知的（美国）硬币，并以一种类似验钞机的方式，确定它是何种硬币并返回它的美分值，如列表 6-3 中所示：</p>
-<figure>
 <pre><code class="language-rust">enum Coin {
     Penny,
     Nickel,
@@ -2796,15 +2795,13 @@ fn value_in_cents(coin: Coin) -&gt; i32 {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 6-3: An enum and a <code>match</code> expression that has the variants of the enum
-as its patterns.</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 6-3: An enum and a <code>match</code> expression that has
+the variants of the enum as its patterns.</span></p>
 <p>拆开<code>value_in_cents</code>函数中的<code>match</code>来看。首先，我们列出<code>match</code>关键字后跟一个表达式，在这个例子中是<code>coin</code>的值。这看起来非常像<code>if</code>使用的表达式，不过这里有一个非常大的区别：对于<code>if</code>，表达式必须返回一个布尔值。而这里它可以是任何类型的。例子中的<code>coin</code>的类型是列表 6-3 中定义的<code>Coin</code>枚举。</p>
 <p>接下来是<code>match</code>的分支。一个分支有两个部分：一个模式和一些代码。第一个分支的模式是值<code>Coin::Penny</code>而之后的<code>=&gt;</code>运算符将模式和将要运行的代码分开。这里的代码就仅仅是值<code>1</code>。每一个分支之间使用逗号分隔。</p>
+<p>当<code>match</code>表达式执行时，它将结果值按顺序与每一个分支的模式相比较，如果模式匹配了这个值，这个模式相关联的代码将被执行。如果模式并不匹配这个值，将继续执行下一个分支，非常像一个硬币分类器。可以拥有任意多的分支：列表 6-3 中的<code>match</code>有四个分支。</p>
 <p>每个分支相关联的代码是一个表达式，而表达式的结果值将作为整个<code>match</code>表达式的返回值。</p>
-<p>如果分支代码较短的话可以不适用大括号，正如列表 6-3 中的每个分支都只是返回一个值。如果想要在分支中运行多行代码，可以使用大括号。例如，如下代码在每次使用<code>Coin::Penny</code>调用时都会打印出“Lucky penny!”，同时仍然返回代码块最后的值，<code>1</code>：</p>
+<p>如果分支代码较短的话通常不使用大括号，正如列表 6-3 中的每个分支都只是返回一个值。如果想要在分支中运行多行代码，可以使用大括号。例如，如下代码在每次使用<code>Coin::Penny</code>调用时都会打印出“Lucky penny!”，同时仍然返回代码块最后的值，<code>1</code>：</p>
 <pre><code class="language-rust"># enum Coin {
 #    Penny,
 #    Nickel,
@@ -2826,8 +2823,7 @@ fn value_in_cents(coin: Coin) -&gt; i32 {
 </code></pre>
 <a class="header" href="#绑定值的模式" name="绑定值的模式"><h3>绑定值的模式</h3></a>
 <p>匹配分支的另一个有用的功能是可以绑定匹配的模式的部分值。这也就是如何从枚举成员中提取值。</p>
-<p>作为一个例子，让我们修改枚举的一个成员来存放数据。1999 年到 2008 年间，美帝在 25 美分的硬币的一侧为 50 个州每一个都印刷了不同的设计。其他的硬币都没有这种区分州的设计，所以只有这些 25 美分硬币有特殊的价值。可以将这些信息加入我们的<code>enum</code>，通过改变<code>Quarter</code>成员来包含一个<code>State</code>值，列表 6-4 中完成了这些修改：</p>
-<figure>
+<p>作为一个例子，让我们修改枚举的一个成员来存放数据。1999 年到 2008 年间，美帝在 25 美分的硬币的一侧为 50 个州的每一个都印刷了不同的设计。其他的硬币都没有这种区分州的设计，所以只有这些 25 美分硬币有特殊的价值。可以将这些信息加入我们的<code>enum</code>，通过改变<code>Quarter</code>成员来包含一个<code>State</code>值，列表 6-4 中完成了这些修改：</p>
 <pre><code class="language-rust">#[derive(Debug)] // So we can inspect the state in a minute
 enum UsState {
     Alabama,
@@ -2842,13 +2838,10 @@ enum Coin {
     Quarter(UsState),
 }
 </code></pre>
-<figcaption>
-<p>Listing 6-4: A <code>Coin</code> enum where the <code>Quarter</code> variant also holds a <code>UsState</code>
-value</p>
-</figcaption>
-</figure>
-<p>想象一下我们的一个朋友尝试收集所有 50 个州的 25 美分硬币。在根据硬币类型分类零钱的同时，也可以报告出每个 25 美分硬币所对应的州名称，这样如何我们的朋友没有的话，他可以把它加入收藏。</p>
-<p>在这些代码的匹配表达式中，我们在匹配<code>Coin::Quarter</code>成员的分支的模式中增加了一个叫做<code>state</code>的变量。当匹配到<code>Coin::Quarter</code>时，变量<code>state</code>将会绑定 25 美分硬币所对应州的值。接着在代码那个分支中使用<code>state</code>，如下：</p>
+<p><span class="caption">Listing 6-4: A <code>Coin</code> enum where the <code>Quarter</code> variant
+also holds a <code>UsState</code> value</span></p>
+<p>想象一下我们的一个朋友尝试收集所有 50 个州的 25 美分硬币。在根据硬币类型分类零钱的同时，也可以报告出每个 25 美分硬币所对应的州名称，这样如果我们的朋友没有的话，他可以把它加入收藏。</p>
+<p>在这些代码的匹配表达式中，我们在匹配<code>Coin::Quarter</code>成员的分支的模式中增加了一个叫做<code>state</code>的变量。当匹配到<code>Coin::Quarter</code>时，变量<code>state</code>将会绑定 25 美分硬币所对应州的值。接着在那个分支的代码中使用<code>state</code>，如下：</p>
 <pre><code class="language-rust"># #[derive(Debug)]
 # enum UsState {
 #    Alabama,
@@ -2877,9 +2870,8 @@ fn value_in_cents(coin: Coin) -&gt; i32 {
 <p>如果调用<code>value_in_cents(Coin::Quarter(UsState::Alaska))</code>，<code>coin</code>将是<code>Coin::Quarter(UsState::Alaska)</code>。当将值与每个分支相比较时，没有分支会匹配知道遇到<code>Coin::Quarter(state)</code>。这时，<code>state</code>绑定的将会是值<code>UsState::Alaska</code>。接着就可以在<code>println!</code>表达式中使用这个绑定了，像这样就可以获取<code>Coin</code>枚举的<code>Quarter</code>成员中内部的州的值。</p>
 <a class="header" href="#匹配optiont" name="匹配optiont"><h3>匹配<code>Option&lt;T&gt;</code></h3></a>
 <p>在之前的部分在使用<code>Option&lt;T&gt;</code>时我们想要从<code>Some</code>中取出其内部的<code>T</code>值；也可以像处理<code>Coin</code>枚举那样使用<code>match</code>处理<code>Option&lt;T&gt;</code>！与其直接比较硬币，我们将比较<code>Option&lt;T&gt;</code>的成员，不过<code>match</code>表达式的工作方式保持不变。</p>
-<p>比如想要编写一个函数，它获取一个<code>Option&lt;i32&gt;</code>并且如果其中有一个值，将其加一。如果其中没有值，函数应该返回<code>None</code>值并不尝试执行任何操作。</p>
+<p>比如我们想要编写一个函数，它获取一个<code>Option&lt;i32&gt;</code>并且如果其中有一个值，将其加一。如果其中没有值，函数应该返回<code>None</code>值并不尝试执行任何操作。</p>
 <p>编写这个函数非常简单，得益于<code>match</code>，它将看起来像列表 6-5 中这样：</p>
-<figure>
 <pre><code class="language-rust">fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
     match x {
         None =&gt; None,
@@ -2891,10 +2883,8 @@ let five = Some(5);
 let six = plus_one(five);
 let none = plus_one(None);
 </code></pre>
-<figcaption>
-<p>Listing 6-5: A function that uses a <code>match</code> expression on an <code>Option&lt;i32&gt;</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 6-5: A function that uses a <code>match</code> expression on
+an <code>Option&lt;i32&gt;</code></span></p>
 <a class="header" href="#匹配somet" name="匹配somet"><h4>匹配<code>Some(T)</code></h4></a>
 <p>更仔细的检查<code>plus_one</code>的第一行操作。当调用<code>plus_one(five)</code>时，<code>plus_one</code>函数体中的<code>x</code>将会是值<code>Some(5)</code>。接着将其与每个分支比较。</p>
 <pre><code class="language-rust,ignore">None =&gt; None,
@@ -2908,7 +2898,7 @@ let none = plus_one(None);
 <pre><code class="language-rust,ignore">None =&gt; None,
 </code></pre>
 <p>匹配上了！这里没有值来加一，所以程序结束并返回<code>=&gt;</code>右侧的值<code>None</code>，因为第一个分支就匹配到了，其他的分支将不再比较。</p>
-<p>将<code>match</code>与枚举相结合在很多场景中都是有用的。你会在 Rust 代码中看到很多这样的模式：<code>match</code>一个枚举，绑定其中的值到一个变量，接着根据其值执行代码。这在一开有点复杂，不过一旦习惯了，你将希望所有语言都拥有它！这一直是用户的最爱。</p>
+<p>将<code>match</code>与枚举相结合在很多场景中都是有用的。你会在 Rust 代码中看到很多这样的模式：<code>match</code>一个枚举，绑定其中的值到一个变量，接着根据其值执行代码。这在一开有点复杂，不过一旦习惯了，你会希望所有语言都拥有它！这一直都是用户的最爱。</p>
 <a class="header" href="#匹配是穷尽的" name="匹配是穷尽的"><h3>匹配是穷尽的</h3></a>
 <p><code>match</code>还有另一方面需要讨论。考虑一下<code>plus_one</code>函数的这个版本：</p>
 <pre><code class="language-rust,ignore">fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
@@ -2940,23 +2930,19 @@ match some_u8_value {
 <p>然而，<code>match</code>在只关心<strong>一个</strong>情况的场景中可能就有点啰嗦了。为此 Rust 提供了<code>if let</code>。</p>
 <a class="header" href="#if-let简单控制流" name="if-let简单控制流"><h2><code>if let</code>简单控制流</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch06-03-if-let.md">ch06-03-if-let.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch06-03-if-let.md">ch06-03-if-let.md</a>
 <br>
-commit 396e2db4f7de2e5e7869b1f8bc905c45c631ad7d</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
 <p><code>if let</code>语法让我们以一种不那么冗长的方式结合<code>if</code>和<code>let</code>，来处理匹配一个模式的值而忽略其他的值。考虑列表 6-6 中的程序，它匹配一个<code>Option&lt;u8&gt;</code>值并只希望当值是三时执行代码：</p>
-<figure>
 <pre><code class="language-rust">let some_u8_value = Some(0u8);
 match some_u8_value {
     Some(3) =&gt; println!(&quot;three&quot;),
     _ =&gt; (),
 }
 </code></pre>
-<figcaption>
-<p>Listing 6-6: A <code>match</code> that only cares about executing code when the value is
-<code>Some(3)</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 6-6: A <code>match</code> that only cares about executing
+code when the value is <code>Some(3)</code></span></p>
 <p>我们想要对<code>Some(3)</code>匹配进行操作不过不想处理任何其他<code>Some&lt;u8&gt;</code>值或<code>None</code>值。为了满足<code>match</code>表达式（穷尽性）的要求，必须在处理完这唯一的成员后加上<code>_ =&gt; ()</code>，这样也要增加很多样板代码。</p>
 <p>不过我们可以使用<code>if let</code>这种更短的方式编写。如下代码与列表 6-6 中的<code>match</code>行为一致：</p>
 <pre><code class="language-rust"># let some_u8_value = Some(0u8);
@@ -3012,12 +2998,12 @@ if let Coin::Quarter(state) = coin {
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>现在我们涉及到了如何使用枚举来创建有一系列可列举值的自定义类型。我们也展示了标准库的<code>Option&lt;T&gt;</code>类型是如何帮助你利用类型系统来避免出错。当枚举值包含数据时，你可以根据需要处理多少情况来选择使用<code>match</code>或<code>if let</code>来获取并使用这些值。</p>
 <p>你的 Rust 程序现在能够使用结构体和枚举在自己的作用域内表现其内容了。在你的 API 中使用自定义类型保证了类型安全：编译器会确保你的函数只会得到它期望的类型的值。</p>
-<p>为了向你的用户提供一个组织良好的 API，它使用直观且只向用户暴露他们确实需要的部分，那么让我们转向 Rust 的模块系统吧。</p>
+<p>为了向你的用户提供一个组织良好的 API，它使用起来很直观并且只向用户暴露他们确实需要的部分，那么现在就让我们转向 Rust 的模块系统吧。</p>
 <a class="header" href="#模块" name="模块"><h1>模块</h1></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch07-00-modules.md">ch07-00-modules.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-00-modules.md">ch07-00-modules.md</a>
 <br>
-commit e2a129961ae346f726f8b342455ec2255cdfed68</p>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
 <p>在你刚开始编写 Rust 程序时，代码可能仅仅位于<code>main</code>函数里。随着代码数量的增长，最终你会将功能移动到其他函数中，为了复用也为了更好的组织。通过将代码分隔成更小的块，每一个块代码自身就更易于理解。不过当你发现自己有太多的函数了该怎么办呢？Rust 有一个模块系统来处理编写可复用代码同时保持代码组织度的问题。</p>
 <p>就跟你将代码行提取到一个函数中一样，也可以将函数（和其他类似结构体和枚举的代码）提取到不同模块中。<strong>模块</strong>（<em>module</em>）是一个包含函数或类型定义的命名空间，你可以选择这些定义是能（公有）还是不能（私有）在其模块外可见。这是一个模块如何工作的概括：</p>
@@ -3029,11 +3015,11 @@ commit e2a129961ae346f726f8b342455ec2255cdfed68</p>
 <p>我们会逐一了解这每一部分并学习如何将他们结合在一起。</p>
 <a class="header" href="#mod和文件系统" name="mod和文件系统"><h2><code>mod</code>和文件系统</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch07-01-mod-and-the-filesystem.md">ch07-01-mod-and-the-filesystem.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-01-mod-and-the-filesystem.md">ch07-01-mod-and-the-filesystem.md</a>
 <br>
-commit e2a129961ae346f726f8b342455ec2255cdfed68</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
-<p>我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过我们不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章我们见过的<code>rand</code>就是这样的 crate。</p>
+<p>我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章我们见过的<code>rand</code>就是这样的 crate。</p>
 <p>我们将创建一个提供一些通用网络功能的项目的骨架结构；我们将专注于模块和函数的组织，而不担心函数体中的具体代码。这个项目叫做<code>communicator</code>。Cargo 默认会创建一个库 crate 除非指定其他项目类型，所以如果不像一直以来那样加入<code>--bin</code>参数则项目将会是一个库：</p>
 <pre><code>$ cargo new communicator
 $ cd communicator
@@ -3051,7 +3037,7 @@ mod tests {
 <p>因为没有 <em>src/main.rs</em> 文件，所以没有可供 Cargo 的<code>cargo run</code>执行的东西。因此，我们将使用<code>cargo build</code>命令只是编译库 crate 的代码。</p>
 <p>我们将学习根据编写代码的意图来选择不同的织库项目代码组织来适应多种场景。</p>
 <a class="header" href="#模块定义" name="模块定义"><h3>模块定义</h3></a>
-<p>对于<code>communicator</code>网络库，首先我们要定义一个叫做<code>network</code>的模块，它包含一个叫做<code>connect</code>的函数定义。Rust 中所有模块的定义以关键字<code>mod</code>开始。在 <em>src/lib.rs</em> 文件的开头在测试代码的上面增加这些代码：</p>
+<p>对于<code>communicator</code>网络库，首先要定义一个叫做<code>network</code>的模块，它包含一个叫做<code>connect</code>的函数定义。Rust 中所有模块的定义以关键字<code>mod</code>开始。在 <em>src/lib.rs</em> 文件的开头在测试代码的上面增加这些代码：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">mod network {
     fn connect() {
@@ -3060,8 +3046,7 @@ mod tests {
 </code></pre>
 <p><code>mod</code>关键字的后面是模块的名字，<code>network</code>，接着是位于大括号中的代码块。代码块中的一切都位于<code>network</code>命名空间中。在这个例子中，只有一个函数，<code>connect</code>。如果想要在<code>network</code>模块外面的代码中调用这个函数，需要指定模块名并使用命名空间语法<code>::</code>，像这样：<code>network::connect()</code>，而不是只是<code>connect()</code>。</p>
 <p>也可以在 <em>src/lib.rs</em> 文件中同时存在多个模块。例如，再拥有一个<code>client</code>模块，它也有一个叫做<code>connect</code>的函数，如列表 7-1 中所示那样增加这个模块：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">mod network {
     fn connect() {
     }
@@ -3072,15 +3057,11 @@ mod client {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 7-1: The <code>network</code> module and the <code>client</code> module defined side-by-side
-in <em>src/lib.rs</em></p>
-</figcaption>
-</figure>
-<p>现在我们有了<code>network::connect</code>函数和<code>client::connect</code>函数。他们可能有着完全不同的功能，同时他们也不会彼此冲突因为他们位于不同的模块。</p>
+<p><span class="caption">Listing 7-1: The <code>network</code> module and the <code>client</code> module
+defined side-by-side in <em>src/lib.rs</em></span></p>
+<p>现在我们有了<code>network::connect</code>函数和<code>client::connect</code>函数。他们可能有着完全不同的功能，同时他们也不会彼此冲突，因为他们位于不同的模块。</p>
 <p>虽然在这个例子中，我们构建了一个库，但是 <em>src/lib.rs</em> 并没有什么特殊意义。也可以在 <em>src/main.rs</em> 中使用子模块。事实上，也可以将模块放入其他模块中。这有助于随着模块的增长，将相关的功能组织在一起并又保持各自独立。如何选择组织代码依赖于如何考虑代码不同部分之间的关系。例如，对于库的用户来说，<code>client</code>模块和它的函数<code>connect</code>可能放在<code>network</code>命名空间里显得更有道理，如列表 7-2 所示：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">mod network {
     fn connect() {
     }
@@ -3091,10 +3072,8 @@ in <em>src/lib.rs</em></p>
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 7-2: Moving the <code>client</code> module inside of the <code>network</code> module</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 7-2: Moving the <code>client</code> module inside of the
+<code>network</code> module</span></p>
 <p>在 <em>src/lib.rs</em> 文件中，将现有的<code>mod network</code>和<code>mod client</code>的定义替换为<code>client</code>模块作为<code>network</code>的一个内部模块。现在我们有了<code>network::connect</code>和<code>network::client::connect</code>函数：又一次，这两个<code>connect</code>函数也不相冲突，因为他们在不同的命名空间中。</p>
 <p>这样，模块之间形成了一个层次结构。<em>src/lib.rs</em> 的内容位于最顶层，而其子模块位于较低的层次。这是列表 7-1 中的例子以这种方式考虑的组织结构：</p>
 <pre><code>communicator
@@ -3109,8 +3088,7 @@ in <em>src/lib.rs</em></p>
 <p>可以看到列表 7-2 中，<code>client</code>是<code>network</code>的子模块，而不是它的同级模块。更为负责的项目可以有很多的模块，所以他们需要符合逻辑地组合在一起以便记录他们。在项目中“符合逻辑”的意义全凭你得理解和库的用户对你项目领域的认识。利用我们这里讲到的技术来创建同级模块和嵌套的模块将是你会喜欢的结构。</p>
 <a class="header" href="#将模块移动到其他文件" name="将模块移动到其他文件"><h3>将模块移动到其他文件</h3></a>
 <p>位于层级结构中的模块，非常类似计算机领域的另一个我们非常熟悉的结构：文件系统！我们可以利用 Rust 的模块系统连同多个文件一起分解 Rust 项目，这样就不是所有的内容都落到 <em>src/lib.rs</em> 中了。作为例子，我们将从列表 7-3 中的代码开始：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">mod client {
     fn connect() {
     }
@@ -3126,16 +3104,28 @@ mod network {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 7-3: Three modules, <code>client</code>, <code>network</code>, and <code>network::server</code>, all
-defined in <em>src/lib.rs</em></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 7-3: Three modules, <code>client</code>, <code>network</code>, and
+<code>network::server</code>, all defined in <em>src/lib.rs</em></span></p>
 <p>这是模块层次结构：</p>
 <pre><code>communicator
  ├── client
  └── network
      └── server
+</code></pre>
+<p>如果这些模块有很多函数，而这些函数又很长，将难以在文件中寻找我们需要的代码。因为这些函数被嵌套进一个或多个模块中，同时函数中的代码也会开始变长。这就有充分的理由将<code>client</code>、<code>network</code>和<code>server</code>每一个模块从 <em>src/lib.rs</em> 抽出并放入他们自己的文件中。</p>
+<p>让我们开始把<code>client</code>模块提取到另一个文件中。首先，将 <em>src/lib.rs</em> 中的<code>client</code>模块代码替换为如下：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust,ignore">mod client;
+
+mod network {
+    fn connect() {
+    }
+
+    mod server {
+        fn connect() {
+        }
+    }
+}
 </code></pre>
 <p>这里我们仍然<strong>定义</strong>了<code>client</code>模块，不过去掉了大括号和<code>client</code>模块中的定义并替换为一个分号，这使得 Rust 知道去其他地方寻找模块中定义的代码。</p>
 <p>那么现在需要创建对应模块名的外部文件。在 <em>src/</em> 目录创建一个 <em>client.rs</em> 文件，接着打开它并输入如下内容，它是上一步<code>client</code>模块中被去掉的<code>connect</code>函数：</p>
@@ -3143,7 +3133,7 @@ defined in <em>src/lib.rs</em></p>
 <pre><code class="language-rust">fn connect() {
 }
 </code></pre>
-<p>注意这个文件中并不需要一个<code>mod</code>声明；因为已经在 <em>src/lib.rs</em> 中已经使用<code>mod</code>声明了<code>client</code>模块。这个文件仅仅提供<code>client</code>模块的内容。如果在这里加上一个<code>mod client</code>，那么就等于给<code>client</code>模块增加了一个叫做<code>client</code>的子模块！</p>
+<p>注意这个文件中并不需要一个<code>mod</code>声明；因为已经在 <em>src/lib.rs</em> 中已经使用<code>mod</code>声明了<code>client</code>模块。这个文件仅仅提供<code>client</code>模块的<strong>内容</strong>。如果在这里加上一个<code>mod client</code>，那么就等于给<code>client</code>模块增加了一个叫做<code>client</code>的子模块了！</p>
 <p>Rust 默认只知道 <em>src/lib.rs</em> 中的内容。如果想要对项目加入更多文件，我们需要在 <em>src/lib.rs</em> 中告诉 Rust 去寻找其他文件；这就是为什么<code>mod client</code>需要被定义在 <em>src/lib.rs</em> 而不是在 <em>src/client.rs</em>。</p>
 <p>现在，一切应该能成功编译，虽然会有一些警告。记住使用<code>cargo build</code>而不是<code>cargo run</code>因为这是一个库 crate 而不是二进制 crate：</p>
 <pre><code>$ cargo build
@@ -3198,7 +3188,6 @@ mod server;
 }
 </code></pre>
 <p>当尝试运行<code>cargo build</code>时，会出现如列表 7-4 中所示的错误：</p>
-<figure>
 <pre><code class="language-text">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 error: cannot declare a new module at this location
@@ -3218,14 +3207,11 @@ note: ... or maybe `use` the module `server` instead of possibly redeclaring it
 4 | mod server;
   |     ^^^^^^
 </code></pre>
-<figcaption>
-<p>Listing 7-4: Error when trying to extract the <code>server</code> submodule into
-<em>src/server.rs</em></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 7-4: Error when trying to extract the <code>server</code>
+submodule into <em>src/server.rs</em></span></p>
 <p>这个错误说明“不能在这个位置新声明一个模块”并指出 <em>src/network.rs</em> 中的<code>mod server;</code>这一行。看来 <em>src/network.rs</em> 与 <em>src/lib.rs</em> 在某些方面是不同的；让我们继续阅读以理解这是为什么。</p>
 <p>列表 7-4 中间的记录事实上是非常有帮助的，因为它指出了一些我们还未讲到的操作：</p>
-<pre><code class="language-text">note: maybe move this module `network` to its own directory via `network/mod.rs`
+<pre><code>note: maybe move this module `network` to its own directory via `network/mod.rs`
 </code></pre>
 <p>我们可以按照记录所建议的去操作，而不是继续使用之前的与模块同名的文件的模式：</p>
 <ol>

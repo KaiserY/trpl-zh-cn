@@ -1,6 +1,6 @@
 # 结构体
 
-> [ch05-00-structs.md](https://github.com/rust-lang/book/blob/master/src/ch05-00-structs.md)
+> [ch05-00-structs.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch05-00-structs.md)
 > <br>
 > commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
 

@@ -1,16 +1,14 @@
 ## `match`控制流运算符
 
-> [ch06-02-match.md](https://github.com/rust-lang/book/blob/master/src/ch06-02-match.md)
+> [ch06-02-match.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch06-02-match.md)
 > <br>
-> commit 396e2db4f7de2e5e7869b1f8bc905c45c631ad7d
+> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
 
 Rust 有一个叫做`match`的极为强大的控制流运算符，它允许我们将一个值与一系列的模式相比较并根据匹配的模式执行代码。模式可由字面值、变量、通配符和许多其他内容构成；第十八章会讲到所有不同种类的模式以及他们的作用。`match`的力量来源于模式的表现力以及编译器检查，它确保了所有可能的情况都得到处理。
 
-把`match`表达式想象成某种硬币分啦机：硬币滑入有着不同大小孔洞的轨道，每一个硬币都会掉入符合它大小的孔洞。同样地，值也会检查`match`的每一个模式，并且在遇到第一个“符合”的模式时，值会进入相关联的代码块并在执行中被使用。
+把`match`表达式想象成某种硬币分类器：硬币滑入有着不同大小孔洞的轨道，每一个硬币都会掉入符合它大小的孔洞。同样地，值也会检查`match`的每一个模式，并且在遇到第一个“符合”的模式时，值会进入相关联的代码块并在执行中被使用。
 
 因为刚刚提到了硬币，让我们用他们来作为一个使用`match`的例子！我们可以编写一个函数来获取一个未知的（美国）硬币，并以一种类似验钞机的方式，确定它是何种硬币并返回它的美分值，如列表 6-3 中所示：
-
-<figure>
 
 ```rust
 enum Coin {
@@ -30,21 +28,18 @@ fn value_in_cents(coin: Coin) -> i32 {
 }
 ```
 
-<figcaption>
-
-Listing 6-3: An enum and a `match` expression that has the variants of the enum
-as its patterns.
-
-</figcaption>
-</figure>
+<span class="caption">Listing 6-3: An enum and a `match` expression that has
+the variants of the enum as its patterns.</span>
 
 拆开`value_in_cents`函数中的`match`来看。首先，我们列出`match`关键字后跟一个表达式，在这个例子中是`coin`的值。这看起来非常像`if`使用的表达式，不过这里有一个非常大的区别：对于`if`，表达式必须返回一个布尔值。而这里它可以是任何类型的。例子中的`coin`的类型是列表 6-3 中定义的`Coin`枚举。
 
 接下来是`match`的分支。一个分支有两个部分：一个模式和一些代码。第一个分支的模式是值`Coin::Penny`而之后的`=>`运算符将模式和将要运行的代码分开。这里的代码就仅仅是值`1`。每一个分支之间使用逗号分隔。
 
+当`match`表达式执行时，它将结果值按顺序与每一个分支的模式相比较，如果模式匹配了这个值，这个模式相关联的代码将被执行。如果模式并不匹配这个值，将继续执行下一个分支，非常像一个硬币分类器。可以拥有任意多的分支：列表 6-3 中的`match`有四个分支。
+
 每个分支相关联的代码是一个表达式，而表达式的结果值将作为整个`match`表达式的返回值。
 
-如果分支代码较短的话可以不适用大括号，正如列表 6-3 中的每个分支都只是返回一个值。如果想要在分支中运行多行代码，可以使用大括号。例如，如下代码在每次使用`Coin::Penny`调用时都会打印出“Lucky penny!”，同时仍然返回代码块最后的值，`1`：
+如果分支代码较短的话通常不使用大括号，正如列表 6-3 中的每个分支都只是返回一个值。如果想要在分支中运行多行代码，可以使用大括号。例如，如下代码在每次使用`Coin::Penny`调用时都会打印出“Lucky penny!”，同时仍然返回代码块最后的值，`1`：
 
 ```rust
 # enum Coin {
@@ -71,9 +66,7 @@ fn value_in_cents(coin: Coin) -> i32 {
 
 匹配分支的另一个有用的功能是可以绑定匹配的模式的部分值。这也就是如何从枚举成员中提取值。
 
-作为一个例子，让我们修改枚举的一个成员来存放数据。1999 年到 2008 年间，美帝在 25 美分的硬币的一侧为 50 个州每一个都印刷了不同的设计。其他的硬币都没有这种区分州的设计，所以只有这些 25 美分硬币有特殊的价值。可以将这些信息加入我们的`enum`，通过改变`Quarter`成员来包含一个`State`值，列表 6-4 中完成了这些修改：
-
-<figure>
+作为一个例子，让我们修改枚举的一个成员来存放数据。1999 年到 2008 年间，美帝在 25 美分的硬币的一侧为 50 个州的每一个都印刷了不同的设计。其他的硬币都没有这种区分州的设计，所以只有这些 25 美分硬币有特殊的价值。可以将这些信息加入我们的`enum`，通过改变`Quarter`成员来包含一个`State`值，列表 6-4 中完成了这些修改：
 
 ```rust
 #[derive(Debug)] // So we can inspect the state in a minute
@@ -91,17 +84,12 @@ enum Coin {
 }
 ```
 
-<figcaption>
+<span class="caption">Listing 6-4: A `Coin` enum where the `Quarter` variant
+also holds a `UsState` value</span>
 
-Listing 6-4: A `Coin` enum where the `Quarter` variant also holds a `UsState`
-value
+想象一下我们的一个朋友尝试收集所有 50 个州的 25 美分硬币。在根据硬币类型分类零钱的同时，也可以报告出每个 25 美分硬币所对应的州名称，这样如果我们的朋友没有的话，他可以把它加入收藏。
 
-</figcaption>
-</figure>
-
-想象一下我们的一个朋友尝试收集所有 50 个州的 25 美分硬币。在根据硬币类型分类零钱的同时，也可以报告出每个 25 美分硬币所对应的州名称，这样如何我们的朋友没有的话，他可以把它加入收藏。
-
-在这些代码的匹配表达式中，我们在匹配`Coin::Quarter`成员的分支的模式中增加了一个叫做`state`的变量。当匹配到`Coin::Quarter`时，变量`state`将会绑定 25 美分硬币所对应州的值。接着在代码那个分支中使用`state`，如下：
+在这些代码的匹配表达式中，我们在匹配`Coin::Quarter`成员的分支的模式中增加了一个叫做`state`的变量。当匹配到`Coin::Quarter`时，变量`state`将会绑定 25 美分硬币所对应州的值。接着在那个分支的代码中使用`state`，如下：
 
 ```rust
 # #[derive(Debug)]
@@ -136,11 +124,9 @@ fn value_in_cents(coin: Coin) -> i32 {
 
 在之前的部分在使用`Option<T>`时我们想要从`Some`中取出其内部的`T`值；也可以像处理`Coin`枚举那样使用`match`处理`Option<T>`！与其直接比较硬币，我们将比较`Option<T>`的成员，不过`match`表达式的工作方式保持不变。
 
-比如想要编写一个函数，它获取一个`Option<i32>`并且如果其中有一个值，将其加一。如果其中没有值，函数应该返回`None`值并不尝试执行任何操作。
+比如我们想要编写一个函数，它获取一个`Option<i32>`并且如果其中有一个值，将其加一。如果其中没有值，函数应该返回`None`值并不尝试执行任何操作。
 
 编写这个函数非常简单，得益于`match`，它将看起来像列表 6-5 中这样：
-
-<figure>
 
 ```rust
 fn plus_one(x: Option<i32>) -> Option<i32> {
@@ -155,12 +141,8 @@ let six = plus_one(five);
 let none = plus_one(None);
 ```
 
-<figcaption>
-
-Listing 6-5: A function that uses a `match` expression on an `Option<i32>`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 6-5: A function that uses a `match` expression on
+an `Option<i32>`</span>
 
 #### 匹配`Some(T)`
 
@@ -189,7 +171,7 @@ None => None,
 
 匹配上了！这里没有值来加一，所以程序结束并返回`=>`右侧的值`None`，因为第一个分支就匹配到了，其他的分支将不再比较。
 
-将`match`与枚举相结合在很多场景中都是有用的。你会在 Rust 代码中看到很多这样的模式：`match`一个枚举，绑定其中的值到一个变量，接着根据其值执行代码。这在一开有点复杂，不过一旦习惯了，你将希望所有语言都拥有它！这一直是用户的最爱。
+将`match`与枚举相结合在很多场景中都是有用的。你会在 Rust 代码中看到很多这样的模式：`match`一个枚举，绑定其中的值到一个变量，接着根据其值执行代码。这在一开有点复杂，不过一旦习惯了，你会希望所有语言都拥有它！这一直都是用户的最爱。
 
 ### 匹配是穷尽的
 

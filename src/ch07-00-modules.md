@@ -1,8 +1,8 @@
 # 模块
 
-> [ch07-00-modules.md](https://github.com/rust-lang/book/blob/master/src/ch07-00-modules.md)
+> [ch07-00-modules.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-00-modules.md)
 > <br>
-> commit e2a129961ae346f726f8b342455ec2255cdfed68
+> commit 4f2dc564851dc04b271a2260c834643dfd86c724
 
 在你刚开始编写 Rust 程序时，代码可能仅仅位于`main`函数里。随着代码数量的增长，最终你会将功能移动到其他函数中，为了复用也为了更好的组织。通过将代码分隔成更小的块，每一个块代码自身就更易于理解。不过当你发现自己有太多的函数了该怎么办呢？Rust 有一个模块系统来处理编写可复用代码同时保持代码组织度的问题。
 
