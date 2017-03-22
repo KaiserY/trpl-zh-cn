@@ -312,7 +312,9 @@ to be able to share ownership across multiple threads</span></p>
 </code></pre>
 <p>成功了！我们从 0 数到了 10，这可能并不是很显眼，不过一路上我们学习了很多关于<code>Mutex&lt;T&gt;</code>和线程安全的内容！这个例子中构建的结构可以用于比增加计数更为复杂的操作。可以被分解为独立部分的计算可以像这样被分散到多个线程中，并可以使用<code>Mutex&lt;T&gt;</code>来允许每个线程在他们自己的部分更新最终的结果。</p>
 <p>你可能注意到了，因为<code>counter</code>是不可变的，不过可以获取其内部值的可变引用，这意味着<code>Mutex&lt;T&gt;</code>提供了内部可变性，就像<code>Cell</code>系列类型那样。正如第十五章中使用<code>RefCell&lt;T&gt;</code>可以改变<code>Rc&lt;T&gt;</code>中的内容那样，同样的可以使用<code>Mutex&lt;T&gt;</code>来改变<code>Arc&lt;T&gt;</code>中的内容。</p>
-<p>回忆一下<code>Rc&lt;T&gt;</code>并没有避免所有可能的问题：我们也讨论了当两个<code>Rc&lt;T&gt;</code>相互引用时的引用循环的可能性，这可能造成内存泄露。<code>Mutex&lt;T&gt;</code>有一个类似的 Rust 同样也不能避免的问题：死锁。<strong>死锁</strong>（<em>deadlock</em>）是一个场景中操作需要锁定两个资源，而两个线程分别拥有一个锁并永远相互等待的问题。如果</p>
+<p>回忆一下<code>Rc&lt;T&gt;</code>并没有避免所有可能的问题：我们也讨论了当两个<code>Rc&lt;T&gt;</code>相互引用时的引用循环的可能性，这可能造成内存泄露。<code>Mutex&lt;T&gt;</code>有一个类似的 Rust 同样也不能避免的问题：死锁。<strong>死锁</strong>（<em>deadlock</em>）是一个场景中操作需要锁定两个资源，而两个线程分别拥有一个锁并永远相互等待的问题。如果你对这个主题感兴趣，尝试编写一个带有死锁的 Rust 程序，接着研究任何其他语言中使用互斥器的死锁规避策略并尝试在 Rust 中实现他们。标准库中<code>Mutex&lt;T&gt;</code>和<code>MutexGuard</code>的 API 文档会提供拥有的信息。</p>
+<p>Rust 的类型系统和所有权确保了线程在更新共享值时拥有独占的访问权限，所以线程不会以一种不可预测的方式覆盖彼此的操作。为了和编译器一起使一切正确运行花了一些时间，不过我们节省了未来可能需要重现只在线程以特定顺序执行才会出现的诡异错误场景的时间。</p>
+<p>接下来，为了丰富本章的内容，让我们讨论一下<code>Send</code>和<code>Sync</code> trait 以及如何对自定义类型使用他们。</p>
 
                 </div>
 

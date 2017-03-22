@@ -109,7 +109,7 @@ byte index value into the <code>String</code> parameter</span></p>
 }
 s.len()
 </code></pre>
-<p>现在有了一个找到字符串中第一个单词结尾索引的方法了，不过这有一个问题。我们返回了单单一个<code>usize</code>，不过它只在<code>&amp;String</code>的上下文中才是一个有意义的数字。换句话说，因为它是一个与<code>String</code>像分离的值，无法保证将来它仍然有效。考虑一下列表 4-11 中使用了列表 4-10 <code>first_word</code>函数的程序：</p>
+<p>现在有了一个找到字符串中第一个单词结尾索引的方法了，不过这有一个问题。我们返回了单单一个<code>usize</code>，不过它只在<code>&amp;String</code>的上下文中才是一个有意义的数字。换句话说，因为它是一个与<code>String</code>相分离的值，无法保证将来它仍然有效。考虑一下列表 4-11 中使用了列表 4-10 <code>first_word</code>函数的程序：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># fn first_word(s: &amp;String) -&gt; usize {
 #     let bytes = s.as_bytes();

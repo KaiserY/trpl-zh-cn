@@ -1967,7 +1967,7 @@ immutable
 <p>哇哦！我们<strong>也</strong>不能在拥有不可变引用的同时拥有可变引用。不可变引用的用户可不希望在它的眼皮底下值突然就被改变了！然而，多个不可变引用是没有问题的因为没有哪个读取数据的人有能力影响其他人读取到的数据。</p>
 <p>即使这些错误有时是使人沮丧的。记住这是 Rust 编译器在提早指出一个潜在的 bug（在编译时而不是运行时）并明确告诉你问题在哪而不是任由你去追踪为何有时数据并不是你想象中的那样。</p>
 <a class="header" href="#悬垂引用" name="悬垂引用"><h3>悬垂引用</h3></a>
-<p>在存在指针的语言中，容易错误地生成一个<strong>悬垂指针</strong>（<em>dangling pointer</em>），一个引用某个内存位置的指针，这个内存可能已经因为被分配给别人，因为释放内存时指向内存的指针被保留了下来。相比之下，在 Rust 中编译器确保引用永远也不会变成悬垂状态：当我们拥有一些数据的引用，编译器确保数据不会在其引用之前离开作用域。</p>
+<p>在存在指针的语言中，容易通过释放内存时保留指向它的指针而错误地生成一个<strong>悬垂指针</strong>（<em>dangling pointer</em>），所谓悬垂指针是其指向的内存可能已经被分配给其它持有者，。相比之下，在 Rust 中编译器确保引用永远也不会变成悬垂状态：当我们拥有一些数据的引用，编译器确保数据不会在其引用之前离开作用域。</p>
 <p>让我们尝试创建一个悬垂引用：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
@@ -2070,7 +2070,7 @@ byte index value into the <code>String</code> parameter</span></p>
 }
 s.len()
 </code></pre>
-<p>现在有了一个找到字符串中第一个单词结尾索引的方法了，不过这有一个问题。我们返回了单单一个<code>usize</code>，不过它只在<code>&amp;String</code>的上下文中才是一个有意义的数字。换句话说，因为它是一个与<code>String</code>像分离的值，无法保证将来它仍然有效。考虑一下列表 4-11 中使用了列表 4-10 <code>first_word</code>函数的程序：</p>
+<p>现在有了一个找到字符串中第一个单词结尾索引的方法了，不过这有一个问题。我们返回了单单一个<code>usize</code>，不过它只在<code>&amp;String</code>的上下文中才是一个有意义的数字。换句话说，因为它是一个与<code>String</code>相分离的值，无法保证将来它仍然有效。考虑一下列表 4-11 中使用了列表 4-10 <code>first_word</code>函数的程序：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># fn first_word(s: &amp;String) -&gt; usize {
 #     let bytes = s.as_bytes();
@@ -9452,7 +9452,32 @@ to be able to share ownership across multiple threads</span></p>
 </code></pre>
 <p>成功了！我们从 0 数到了 10，这可能并不是很显眼，不过一路上我们学习了很多关于<code>Mutex&lt;T&gt;</code>和线程安全的内容！这个例子中构建的结构可以用于比增加计数更为复杂的操作。可以被分解为独立部分的计算可以像这样被分散到多个线程中，并可以使用<code>Mutex&lt;T&gt;</code>来允许每个线程在他们自己的部分更新最终的结果。</p>
 <p>你可能注意到了，因为<code>counter</code>是不可变的，不过可以获取其内部值的可变引用，这意味着<code>Mutex&lt;T&gt;</code>提供了内部可变性，就像<code>Cell</code>系列类型那样。正如第十五章中使用<code>RefCell&lt;T&gt;</code>可以改变<code>Rc&lt;T&gt;</code>中的内容那样，同样的可以使用<code>Mutex&lt;T&gt;</code>来改变<code>Arc&lt;T&gt;</code>中的内容。</p>
-<p>回忆一下<code>Rc&lt;T&gt;</code>并没有避免所有可能的问题：我们也讨论了当两个<code>Rc&lt;T&gt;</code>相互引用时的引用循环的可能性，这可能造成内存泄露。<code>Mutex&lt;T&gt;</code>有一个类似的 Rust 同样也不能避免的问题：死锁。<strong>死锁</strong>（<em>deadlock</em>）是一个场景中操作需要锁定两个资源，而两个线程分别拥有一个锁并永远相互等待的问题。如果</p>
+<p>回忆一下<code>Rc&lt;T&gt;</code>并没有避免所有可能的问题：我们也讨论了当两个<code>Rc&lt;T&gt;</code>相互引用时的引用循环的可能性，这可能造成内存泄露。<code>Mutex&lt;T&gt;</code>有一个类似的 Rust 同样也不能避免的问题：死锁。<strong>死锁</strong>（<em>deadlock</em>）是一个场景中操作需要锁定两个资源，而两个线程分别拥有一个锁并永远相互等待的问题。如果你对这个主题感兴趣，尝试编写一个带有死锁的 Rust 程序，接着研究任何其他语言中使用互斥器的死锁规避策略并尝试在 Rust 中实现他们。标准库中<code>Mutex&lt;T&gt;</code>和<code>MutexGuard</code>的 API 文档会提供拥有的信息。</p>
+<p>Rust 的类型系统和所有权确保了线程在更新共享值时拥有独占的访问权限，所以线程不会以一种不可预测的方式覆盖彼此的操作。为了和编译器一起使一切正确运行花了一些时间，不过我们节省了未来可能需要重现只在线程以特定顺序执行才会出现的诡异错误场景的时间。</p>
+<p>接下来，为了丰富本章的内容，让我们讨论一下<code>Send</code>和<code>Sync</code> trait 以及如何对自定义类型使用他们。</p>
+<a class="header" href="#使用sync和send-trait-的可扩展并发" name="使用sync和send-trait-的可扩展并发"><h2>使用<code>Sync</code>和<code>Send</code> trait 的可扩展并发</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch16-04-extensible-concurrency-sync-and-send.md">ch16-04-extensible-concurrency-sync-and-send.md</a>
+<br>
+commit 55b294f20fc846a13a9be623bf322d8b364cee77</p>
+</blockquote>
+<p>Rust 的并发模型中一个有趣的方面是语言本身对并发知道的<strong>很少</strong>。我们讨论过的几乎所有内容都是标准库的一部分，而不是语言本身的内容。因为并不需要语言提供任何用于并发上下文中的内容，并发选择也不仅限于标准库或语言所提供的：我们可以编写自己的或使用别人编写的内容。</p>
+<p>我们说了<strong>几乎</strong>所有内容都不在语言本身，那么位于语言本身的是什么呢？这是两个 trait，都位于<code>std::marker</code>：<code>Sync</code>和<code>Send</code>。</p>
+<a class="header" href="#send用于表明所有权可能被传送给其他线程" name="send用于表明所有权可能被传送给其他线程"><h3><code>Send</code>用于表明所有权可能被传送给其他线程</h3></a>
+<p><code>Send</code>标记 trait 表明类型的所有权可能被在线程间传递。几乎所有的 Rust 类型都是<code>Send</code>的，不过有一些例外。标准库中提供的一个不是<code>Send</code>的类型是<code>Rc&lt;T&gt;</code>：如果克隆<code>Rc&lt;T&gt;</code>值并尝试将克隆的所有权传递给另一个线程，这两个线程可能会同时更新引用计数。正如上一部分提到的，<code>Rc&lt;T&gt;</code>被实现为用于单线程场景，这时不需要为拥有线程安全的引用计数而付出性能代价。</p>
+<p>因为<code>Rc&lt;T&gt;</code>没有标记为<code>Send</code>，Rust 的类型系统和 trait bound 会确保我们永远也不会忘记或错误的把一个<code>Rc&lt;T&gt;</code>值不安全的在线程间传递。列表 16-14 曾尝试这么做，不过得到了一个错误说<code>the trait Send is not implemented for Rc&lt;Mutex&lt;i32&gt;&gt;</code>。当切换为标记为<code>Send</code>的<code>Arc&lt;T&gt;</code>时，代码就可以编译了。</p>
+<p>任何完全由<code>Send</code>的类型组成的类型也会自动被标记为<code>Send</code>。几乎所有基本类型都是<code>Send</code>的，除了第十九章将会讨论的裸指针（raw pointer）之外。大部分标准库类型是<code>Send</code>的，除了<code>Rc&lt;T&gt;</code>之外。</p>
+<a class="header" href="#sync表明多线程访问是安全的" name="sync表明多线程访问是安全的"><h3><code>Sync</code>表明多线程访问是安全的</h3></a>
+<p><code>Sync</code>标记 trait 表明一个类型可以安全的在多个线程中拥有其值的引用。换一种方式来说就是对于任意类型<code>T</code>，如果<code>&amp;T</code>（<code>T</code>的引用）是<code>Send</code>的话<code>T</code>就是<code>Sync</code>的，这样其引用就可以安全的发送到另一个线程。类似于<code>Send</code>的情况，基本类型是<code>Sync</code>的，完全由<code>Sync</code>的类型组成的类型也是<code>Sync</code>的。</p>
+<p><code>Rc&lt;T&gt;</code>也不是<code>Sync</code>的，出于其不是<code>Send</code>的相同的原因。<code>RefCell&lt;T&gt;</code>（第十五章讨论过）和<code>Cell&lt;T&gt;</code>系列类型不是<code>Sync</code>的。<code>RefCell&lt;T&gt;</code>在运行时所进行的借用检查也不是线程安全的。<code>Mutex&lt;T&gt;</code>是<code>Sync</code>的，正如上一部分所讲的它可以被用来在多线程中共享访问。</p>
+<a class="header" href="#手动实现send和sync是不安全的" name="手动实现send和sync是不安全的"><h3>手动实现<code>Send</code>和<code>Sync</code>是不安全的</h3></a>
+<p>通常并不需要实现<code>Send</code>和<code>Sync</code> trait，因为由是<code>Send</code>和<code>Sync</code>的类型组成的类型也自动就是<code>Send</code>和<code>Sync</code>的了。因为他们是标记 trait，甚至都不需要实现任何方法。他们只是用来加强并发相关的不可变行性的。</p>
+<p>实现这些标记 trait 涉及到实现不安全的 Rust 代码。第十九章将会讲到如何使用不安全 Rust 代码；现在，重要的是在创建新的由不是<code>Send</code>和<code>Sync</code>的部分构成的并发类型时需要多加小心，以确保维持其安全保证。<a href="https://doc.rust-lang.org/stable/nomicon/vec.html">The Nomicon</a> 中由更多关于这些保证和如何维持他们的信息。</p>
+<a class="header" href="#总结" name="总结"><h2>总结</h2></a>
+<p>这不会是本书最后一个出现并发的章节；第二十章的项目会在更现实的场景中使用这些概念，而不像本章中讨论的这些小例子。</p>
+<p>正如我们提到的，因为 Rust 本身很少有处理并发的部分内容，有很多的并发方案都由 crate 实现。他们比标准库要发展的更快；请在网上搜索当前最新的用于多线程场景的 crate。</p>
+<p>Rust 提供了用于消息传递的通道，和像<code>Mutex&lt;T&gt;</code>和<code>Arc&lt;T&gt;</code>这样可以安全的用于并发上下文的智能指针。类型系统和借用检查器会确保这些场景中的代码不会出现数据竞争和无效的引用。一旦代码可以编译了，我们就可以坚信这些代码可以正确的运行于多线程环境，而不会出现其他语言中经常出现的那些难以追踪的 bug。并发编程不再是什么可怕的概念：无所畏惧的使你的程序使用并发吧！</p>
+<p>接下来，让我们讨论一下当 Rust 程序变得更大时那些符合习惯的模拟问题和结构的解决方案，以及 Rust 风格如何与面向对象编程（Object Oriented Programming）中那些你所熟悉的概念相联系。</p>
 
                 </div>
 
