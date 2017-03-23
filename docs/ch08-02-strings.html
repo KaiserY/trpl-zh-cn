@@ -69,9 +69,9 @@
                 <div id="content" class="content">
                     <a class="header" href="#字符串" name="字符串"><h2>字符串</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch08-02-strings.md">ch08-02-strings.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch08-02-strings.md">ch08-02-strings.md</a>
 <br>
-commit 65f52921e21ad2e1c79d620fcfd01bde3ee30571</p>
+commit d362dadae60a7cc3212b107b9e9562769b0f20e3</p>
 </blockquote>
 <p>第四章已经讲过一些字符串的内容，不过现在让我们更深入地了解一下它。字符串是新晋 Rustacean 们通常会被困住的领域。这是由于三方面内容的结合：Rust 倾向于确保暴露出可能的错误，字符串是比很多程序员所想象的要更为复杂的数据结构，以及 UTF-8。所有这些结合起来对于来自其他语言背景的程序员就可能显得很困难了。</p>
 <p>字符串出现在集合章节的原因是，字符串是作为字节的集合外加一些方法实现的，当这些字节被解释为文本时，这些方法提供了实用的功能。在这一部分，我们会讲到<code>String</code>那些任何集合类型都有的操作，比如创建、更新和读取。也会讨论<code>String</code>于其他集合不一样的地方，例如索引<code>String</code>是很复杂的，由于人和计算机理解<code>String</code>数据的不同方式。</p>
@@ -112,7 +112,7 @@ let hello = &quot;Hola&quot;;
 </code></pre>
 <a class="header" href="#更新字符串" name="更新字符串"><h3>更新字符串</h3></a>
 <p><code>String</code>的大小可以增长其内容也可以改变，就像可以放入更多数据来改变<code>Vec</code>的内容一样。另外，<code>String</code>实现了<code>+</code>运算符作为级联运算符以便于使用。</p>
-<a class="header" href="#附加字符串" name="附加字符串"><h4>附加字符串</h4></a>
+<a class="header" href="#使用-push-附加字符串" name="使用-push-附加字符串"><h4>使用 push 附加字符串</h4></a>
 <p>可以通过<code>push_str</code>方法来附加字符串 slice，从而使<code>String</code>变长：</p>
 <pre><code class="language-rust">let mut s = String::from(&quot;foo&quot;);
 s.push_str(&quot;bar&quot;);
@@ -137,7 +137,7 @@ let s3 = s1 + &amp;s2; // Note that s1 has been moved here and can no longer be 
 <pre><code class="language-rust,ignore">fn add(self, s: &amp;str) -&gt; String {
 </code></pre>
 <p>这并不是标准库中实际的签名；那个<code>add</code>使用泛型定义。这里的签名使用具体类型代替了泛型，这也正是当使用<code>String</code>值调用这个方法会发生的。第十章会讨论泛型。这个签名提供了理解<code>+</code>运算那奇怪的部分的线索。</p>
-<p>首先，<code>s2</code>使用了<code>&amp;</code>，意味着我们使用第二个字符串的<strong>引用</strong>与第一个字符串相加。这是因为<code>add</code>函数的<code>s</code>参数：只能将<code>&amp;str</code>和<code>String</code>相加，不能将两个<code>String</code>值相加。回忆之前第四章我们讲到<code>&amp;String</code>是如何被强转为<code>&amp;str</code>的：写成<code>&amp;s2</code>的话<code>String</code>将会被强转成一个合适的类型<code>&amp;str</code>。又因为方法没有获取参数的所有权，所以<code>s2</code>在这个操作后仍然有效。</p>
+<p>首先，<code>s2</code>使用了<code>&amp;</code>，意味着我们使用第二个字符串的<strong>引用</strong>与第一个字符串相加。这是因为<code>add</code>函数的<code>s</code>参数：只能将<code>&amp;str</code>和<code>String</code>相加，不能将两个<code>String</code>值相加。不过等一下——正如<code>add</code>的第二个参数所指定的，<code>&amp;s2</code>的类型是<code>&amp;String</code>而不是<code>&amp;str</code>。那么为什么代码还能编译呢？之所以能够在<code>add</code>调用中使用<code>&amp;s2</code>是因为<code>&amp;String</code>可以被<strong>强转</strong>（<em>coerced</em>）成 <code>&amp;str</code>——当<code>add</code>函数被调用时，Rust 使用了一个被成为<strong>解引用强制多态</strong>（<em>deref coercion</em>）的技术，你可以将其理解为它把<code>&amp;s2</code>变成了<code>&amp;s2[..]</code>以供<code>add</code>函数使用。第十五章会更深入的讨论解引用强制多态。因为<code>add</code>没有获取参数的所有权，所以<code>s2</code>在这个操作后仍然是有效的<code>String</code>。</p>
 <p>其次，可以发现签名中<code>add</code>获取了<code>self</code>的所有权，因为<code>self</code><strong>没有</strong>使用<code>&amp;</code>。这意味着上面例子中的<code>s1</code>的所有权将被移动到<code>add</code>调用中，之后就不再有效。所以虽然<code>let s3 = s1 + &amp;s2;</code>看起来就像它会复制两个字符串并创建一个新的字符串，而实际上这个语句会获取<code>s1</code>的所有权，附加上从<code>s2</code>中拷贝的内容，并返回结果的所有权。换句话说，它看起来好像生成了很多拷贝不过实际上并没有：这个实现比拷贝要更高效。</p>
 <p>如果想要级联多个字符串，<code>+</code>的行为就显得笨重了：</p>
 <pre><code class="language-rust">let s1 = String::from(&quot;tic&quot;);
@@ -167,7 +167,7 @@ satisfied [--explain E0277]
   |&gt;             ^^^^^
 note: the type `std::string::String` cannot be indexed by `_`
 </code></pre>
-<p>错误和提示说明了全部问题：Rust 的字符串不支持索引。那么接下来的问题是，为什么不支持呢？为了回答这个问题，我们必须先聊一聊 Rust 如何在内存中储存字符串。</p>
+<p>错误和提示说明了全部问题：Rust 的字符串不支持索引。那么接下来的问题是，为什么不支持呢？为了回答这个问题，我们必须先聊一聊 Rust 是如何在内存中储存字符串的。</p>
 <a class="header" href="#内部表示" name="内部表示"><h4>内部表示</h4></a>
 <p><code>String</code>是一个<code>Vec&lt;u8&gt;</code>的封装。让我们看看之前一些正确编码的字符串的例子。首先是这一个：</p>
 <pre><code class="language-rust">let len = String::from(&quot;Hola&quot;).len();

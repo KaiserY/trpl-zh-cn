@@ -69,12 +69,12 @@
                 <div id="content" class="content">
                     <a class="header" href="#result与可恢复的错误" name="result与可恢复的错误"><h2><code>Result</code>与可恢复的错误</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch09-02-recoverable-errors-with-result.md">ch09-01-unrecoverable-errors-with-panic.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch09-02-recoverable-errors-with-result.md">ch09-01-unrecoverable-errors-with-panic.md</a>
 <br>
-commit 0c1d55ef48e5f6cf6a3b221f5b6dd4c922130bb1</p>
+commit e6d6caab41471f7115a621029bd428a812c5260e</p>
 </blockquote>
-<p>大部分错误并没有严重到需要程序完全停止执行。有时，一个函数会因为一个容易理解并回应的原因失败。例如，如果尝试打开一个文件不过由于文件并不存在而操作就失败，这是我们可能想要创建这个文件而不是终止进程。</p>
-<p>回忆一下第二章“使用<code>Result</code>类型来处理潜在的错误”部分中的那个<code>Result</code>枚举，它定义有如下连个成员，<code>Ok</code>和<code>Err</code>：</p>
+<p>大部分错误并没有严重到需要程序完全停止执行。有时，一个函数会因为一个容易理解并做出反映的原因失败。例如，如果尝试打开一个文件不过由于文件并不存在而操作就失败，这是我们可能想要创建这个文件而不是终止进程。</p>
+<p>回忆一下第二章“使用<code>Result</code>类型来处理潜在的错误”部分中的那个<code>Result</code>枚举，它定义有如下两个成员，<code>Ok</code>和<code>Err</code>：</p>
 <pre><code class="language-rust">enum Result&lt;T, E&gt; {
     Ok(T),
     Err(E),
@@ -82,18 +82,14 @@ commit 0c1d55ef48e5f6cf6a3b221f5b6dd4c922130bb1</p>
 </code></pre>
 <p><code>T</code>和<code>E</code>是泛型类型参数；第十章会详细介绍泛型。现在你需要知道的就是<code>T</code>代表成功时返回的<code>Ok</code>成员中的数据的类型，而<code>E</code>代表失败时返回的<code>Err</code>成员中的错误的类型。因为<code>Result</code>有这些泛型类型参数，我们可以将<code>Result</code>类型和标准库中为其定义的函数用于很多不同的场景，这些情况中需要返回的成功值和失败值可能会各不相同。</p>
 <p>让我们调用一个返回<code>Result</code>的函数，因为它可能会失败：如列表 9-2 所示打开一个文件：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">use std::fs::File;
 
 fn main() {
     let f = File::open(&quot;hello.txt&quot;);
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-2: Opening a file</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-2: Opening a file</span></p>
 <p>如何知道<code>File::open</code>返回一个<code>Result</code>呢？我们可以查看标准库 API 文档，或者可以直接问编译器！如果给<code>f</code>某个我们知道<strong>不是</strong>函数返回值类型的类型注解，接着尝试编译代码，编译器会告诉我们类型不匹配。然后错误信息会告诉我们<code>f</code>的类型<strong>应该</strong>是什么，为此我们将<code>let f</code>语句改为：</p>
 <pre><code class="language-rust,ignore">let f: u32 = File::open(&quot;hello.txt&quot;);
 </code></pre>
@@ -112,8 +108,7 @@ fn main() {
 <p>这个返回值类型说明<code>File::open</code>调用可能会成功并返回一个可以进行读写的文件句柄。这个函数也可能会失败：例如，文件可能并不存在，或者可能没有访问文件的权限。<code>File::open</code>需要一个方式告诉我们是成功还是失败，并同时提供给我们文件句柄或错误信息。而这些信息正是<code>Result</code>枚举可以提供的。</p>
 <p>当<code>File::open</code>成功的情况下，变量<code>f</code>的值将会是一个包含文件句柄的<code>Ok</code>实例。在失败的情况下，<code>f</code>会是一个包含更多关于出现了何种错误信息的<code>Err</code>实例。</p>
 <p>我们需要在列表 9-2 的代码中增加根据<code>File::open</code>返回值进行不同处理的逻辑。列表 9-3 展示了一个处理<code>Result</code>的基本工具：第六章学习过的<code>match</code>表达式。</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,should_panic">use std::fs::File;
 
 fn main() {
@@ -127,11 +122,8 @@ fn main() {
     };
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-3: Using a <code>match</code> expression to handle the <code>Result</code> variants we
-might have</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-3: Using a <code>match</code> expression to handle the
+<code>Result</code> variants we might have</span></p>
 <p>注意与<code>Option</code>枚举一样，<code>Result</code>枚举和其成员也被导入到了 prelude 中，所以就不需要在<code>match</code>分支中的<code>Ok</code>和<code>Err</code>之前指定<code>Result::</code>。</p>
 <p>这里我们告诉 Rust 当结果是<code>Ok</code>，返回<code>Ok</code>成员中的<code>file</code>值，然后将这个文件句柄赋值给变量<code>f</code>。<code>match</code>之后，我们可以利用这个文件句柄来进行读写。</p>
 <p><code>match</code>的另一个分支处理从<code>File::open</code>得到<code>Err</code>值的情况。在这种情况下，我们选择调用<code>panic!</code>宏。如果当前目录没有一个叫做 <em>hello.txt</em> 的文件，当运行这段代码时会看到如下来自<code>panic!</code>宏的输出：</p>
@@ -140,8 +132,7 @@ Os { code: 2, message: &quot;No such file or directory&quot; } }', src/main.rs:8
 </code></pre>
 <a class="header" href="#匹配不同的错误" name="匹配不同的错误"><h3>匹配不同的错误</h3></a>
 <p>列表 9-3 中的代码不管<code>File::open</code>是因为什么原因失败都会<code>panic!</code>。我们真正希望的是对不同的错误原因采取不同的行为：如果<code>File::open</code>因为文件不存在而失败，我们希望创建这个文件并返回新文件的句柄。如果<code>File::open</code>因为任何其他原因失败，例如没有打开文件的权限，我们仍然希望像列表 9-3 那样<code>panic!</code>。让我们看看列表 9-4，其中<code>match</code>增加了另一个分支：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">use std::fs::File;
 use std::io::ErrorKind;
 
@@ -170,12 +161,10 @@ fn main() {
     };
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-4: Handling different kinds of errors in different ways</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-4: Handling different kinds of errors in
+different ways</span></p>
 <p><code>File::open</code>返回的<code>Err</code>成员中的值类型<code>io::Error</code>，它是一个标准库中提供的结构体。这个结构体有一个返回<code>io::ErrorKind</code>值的<code>kind</code>方法可供调用。<code>io::ErrorKind</code>是一个标准库提供的枚举，它的成员对应<code>io</code>操作可能导致的不同错误类型。我们感兴趣的成员是<code>ErrorKind::NotFound</code>，它代表尝试打开的文件并不存在。</p>
-<p><code>if error.kind() == ErrorKind::NotFound</code>条件被称作 <em>match guard</em>：它是一个进一步完善<code>match</code>分支模式的额外的条件。这个条件必须为真才能使分支的代码被执行；否则，模式匹配会继续并考虑<code>match</code>中的下一个分支。模式中的<code>ref</code>是必须的，这样<code>error</code>就不会被移动到 guard 条件中而只是仅仅引用它。第十八章会详细解释为什么在模式中使用<code>ref</code>而不是<code>&amp;</code>来获取一个引用。简而言之，在模式的上下文中，<code>&amp;</code>匹配一个引用并返回它的值，而<code>ref</code>匹配一个值并返回一个引用。</p>
+<p>条件<code>if error.kind() == ErrorKind::NotFound</code>被称作 <em>match guard</em>：它是一个进一步完善<code>match</code>分支模式的额外的条件。这个条件必须为真才能使分支的代码被执行；否则，模式匹配会继续并考虑<code>match</code>中的下一个分支。模式中的<code>ref</code>是必须的，这样<code>error</code>就不会被移动到 guard 条件中而只是仅仅引用它。第十八章会详细解释为什么在模式中使用<code>ref</code>而不是<code>&amp;</code>来获取一个引用。简而言之，在模式的上下文中，<code>&amp;</code>匹配一个引用并返回它的值，而<code>ref</code>匹配一个值并返回一个引用。</p>
 <p>在 match guard 中我们想要检查的条件是<code>error.kind()</code>是否是<code>ErrorKind</code>枚举的<code>NotFound</code>成员。如果是，尝试用<code>File::create</code>创建文件。然而<code>File::create</code>也可能会失败，我们还需要增加一个内部<code>match</code>语句。当文件不能被打开，会打印出一个不同的错误信息。外部<code>match</code>的最后一个分支保持不变这样对任何除了文件不存在的错误会使程序 panic。</p>
 <a class="header" href="#失败时-panic-的捷径unwrap和expect" name="失败时-panic-的捷径unwrap和expect"><h3>失败时 panic 的捷径：<code>unwrap</code>和<code>expect</code></h3></a>
 <p><code>match</code>能够胜任它的工作，不过它可能有点冗长并且并不总是能很好的表明意图。<code>Result&lt;T, E&gt;</code>类型定义了很多辅助方法来处理各种情况。其中之一叫做<code>unwrap</code>，它的实现就类似于列表 9-3 中的<code>match</code>语句。如果<code>Result</code>值是成员<code>Ok</code>，<code>unwrap</code>会返回<code>Ok</code>中的值。如果<code>Result</code>是成员<code>Err</code>，<code>unwrap</code>会为我们调用<code>panic!</code>。</p>
@@ -205,7 +194,6 @@ fn main() {
 <a class="header" href="#传播错误" name="传播错误"><h3>传播错误</h3></a>
 <p>当编写一个其实现会调用一些可能会失败的操作的函数时，除了在这个函数中处理错误外，还可以选择让调用者知道这个错误并决定该如何处理。这被称为<strong>传播</strong>（<em>propagating</em>）错误，这样能更好的控制代码调用，因为比起你代码所拥有的上下文，调用者可能拥有更多信息或逻辑来决定应该如何处理错误。</p>
 <p>例如，列表 9-5 展示了一个从文件中读取用户名的函数。如果文件不存在或不能读取，这个函数会将这些错误返回给调用它的代码：</p>
-<figure>
 <pre><code class="language-rust">use std::io;
 use std::io::Read;
 use std::fs::File;
@@ -226,19 +214,17 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-5: A function that returns errors to the calling code using <code>match</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-5: A function that returns errors to the
+calling code using <code>match</code></span></p>
 <p>首先让我们看看函数的返回值：<code>Result&lt;String, io::Error&gt;</code>。这意味着函数返回一个<code>Result&lt;T, E&gt;</code>类型的值，其中泛型参数<code>T</code>的具体类型是<code>String</code>，而<code>E</code>的具体类型是<code>io::Error</code>。如果这个函数没有出任何错误成功返回，函数的调用者会收到一个包含<code>String</code>的<code>Ok</code>值————函数从文件中读取到的用户名。如果函数遇到任何错误，函数的调用者会收到一个<code>Err</code>值，它储存了一个包含更多这个问题相关信息的<code>io::Error</code>实例。我们选择<code>io::Error</code>作为函数的返回值是因为它正好是函数体中那两个可能会失败的操作的错误返回值：<code>File::open</code>函数和<code>read_to_string</code>方法。</p>
 <p>函数体以<code>File::open</code>函数开头。接着使用<code>match</code>处理返回值<code>Result</code>，类似于列表 9-3 中的<code>match</code>，唯一的区别是不再当<code>Err</code>时调用<code>panic!</code>，而是提早返回并将<code>File::open</code>返回的错误值作为函数的错误返回值传递给调用者。如果<code>File::open</code>成功了，我们将文件句柄储存在变量<code>f</code>中并继续。</p>
 <p>接着我们在变量<code>s</code>中创建了一个新<code>String</code>并调用文件句柄<code>f</code>的<code>read_to_string</code>方法来将文件的内容读取到<code>s</code>中。<code>read_to_string</code>方法也返回一个<code>Result</code>因为它也可能会失败：哪怕是<code>File::open</code>已经成功了。所以我们需要另一个<code>match</code>来处理这个<code>Result</code>：如果<code>read_to_string</code>成功了，那么这个函数就成功了，并返回文件中的用户名，它现在位于被封装进<code>Ok</code>的<code>s</code>中。如果<code>read_to_string</code>失败了，则像之前处理<code>File::open</code>的返回值的<code>match</code>那样返回错误值。并不需要显式的调用<code>return</code>，因为这是函数的最后一个表达式。</p>
 <p>调用这个函数的代码最终会得到一个包含用户名的<code>Ok</code>值，亦或一个包含<code>io::Error</code>的<code>Err</code>值。我们无从得知调用者会如何处理这些值。例如，如果他们得到了一个<code>Err</code>值，他们可能会选择<code>panic!</code>并使程序崩溃、使用一个默认的用户名或者从文件之外的地方寻找用户名。我们没有足够的信息知晓调用者具体会如何尝试，所以将所有的成功或失败信息向上传播，让他们选择合适处理方法。</p>
 <p>这种传播错误的模式在 Rust 是如此的常见，以至于有一个更简便的专用语法：<code>?</code>。</p>
 <a class="header" href="#传播错误的捷径" name="传播错误的捷径"><h3>传播错误的捷径：<code>?</code></h3></a>
-<p>列表 9-6 展示了一个<code>read_username_from_file</code>的实现，它实现了与列表 9-5 中的代码相同的功能，不过这个实现是使用了问号运算符：</p>
-<figure>
+<p>列表 9-6 展示了一个<code>read_username_from_file</code>的实现，它实现了与列表 9-5 中的代码相同的功能，不过这个实现是使用了问号运算符的：</p>
 <pre><code class="language-rust">use std::io;
+use std::io::Read;
 use std::fs::File;
 
 fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
@@ -248,10 +234,8 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     Ok(s)
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-6: A function that returns errors to the calling code using <code>?</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-6: A function that returns errors to the
+calling code using <code>?</code></span></p>
 <p><code>Result</code>值之后的<code>?</code>被定义为与列表 9-5 中定义的处理<code>Result</code>值的<code>match</code>表达式有着完全相同的工作方式。如果<code>Result</code>的值是<code>Ok</code>，这个表达式将会返回<code>Ok</code>中的值而程序将继续执行。如果值是<code>Err</code>，<code>Err</code>中的值将作为整个函数的返回值，就好像使用了<code>return</code>关键字一样，这样错误值就被传播给了调用者。</p>
 <p>在列表 9-6 的上下文中，<code>File::open</code>调用结尾的<code>?</code>将会把<code>Ok</code>中的值返回给变量<code>f</code>。如果出现了错误，<code>?</code>会提早返回整个函数并将任何<code>Err</code>值传播给调用者。同理也适用于<code>read_to_string</code>调用结尾的<code>?</code>。</p>
 <p><code>?</code>消除了大量样板代码并使得函数的实现更简单。我们甚至可以在<code>?</code>之后直接使用链式方法调用来进一步缩短代码：</p>

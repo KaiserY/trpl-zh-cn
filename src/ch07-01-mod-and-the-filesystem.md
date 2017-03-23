@@ -2,7 +2,7 @@
 
 > [ch07-01-mod-and-the-filesystem.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-01-mod-and-the-filesystem.md)
 > <br>
-> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
+> commit 6fc32eabcd09f7a130094767abadb691dfcdddf7
 
 我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章我们见过的`rand`就是这样的 crate。
 

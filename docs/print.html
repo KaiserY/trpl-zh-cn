@@ -86,7 +86,7 @@ registry site），<a href="https://crates.io/">crates.io</a>！我们期待看�
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-01-installation.md">ch01-01-installation.md</a>
 <br>
-commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+commit c1b95a18dbcbb06aadf07c03759f27d88ccf62cf</p>
 </blockquote>
 <p>使用 Rust 的第一步是安装。你需要网络连接来执行本章的命令，因为我们要从网上下载 Rust。</p>
 <p>我们将会展示很多使用终端的命令，并且这些代码都以<code>$</code>开头。并不需要真正输入<code>$</code>，它们在这里代表每行指令的开头。在网上会看到很多使用这个惯例的教程和例子：<code>$</code>代表以常规用户运行命令，<code>#</code>代表需要用管理员运行的命令。没有以<code>$</code>（或<code>#</code>）的行通常是之前命令的输出。</p>
@@ -103,6 +103,10 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 <p>本书其余 Windows 相关的命令假设你使用<code>cmd</code>作为你的 shell。如果你使用不同的 shell，可能能够执行 Linux 和 Mac 用户相同的命令。如果都不行，请查看所使用的 shell 的文档。</p>
 <a class="header" href="#自定义安装" name="自定义安装"><h3>自定义安装</h3></a>
 <p>如果有理由倾向于不使用 rustup.rs，请查看<a href="https://www.rust-lang.org/install.html">Rust 安装页面</a>获取其他选择。</p>
+<a class="header" href="#更新" name="更新"><h3>更新</h3></a>
+<p>一旦安装完 Rust，更新到最新版本是简单的。在 shell 中运行更新脚本：</p>
+<pre><code>$ rustup update
+</code></pre>
 <a class="header" href="#卸载" name="卸载"><h3>卸载</h3></a>
 <p>卸载 Rust 同安装一样简单。在 shell 中运行卸载脚本</p>
 <pre><code>$ rustup self uninstall
@@ -3017,7 +3021,7 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-01-mod-and-the-filesystem.md">ch07-01-mod-and-the-filesystem.md</a>
 <br>
-commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
+commit 6fc32eabcd09f7a130094767abadb691dfcdddf7</p>
 </blockquote>
 <p>我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章我们见过的<code>rand</code>就是这样的 crate。</p>
 <p>我们将创建一个提供一些通用网络功能的项目的骨架结构；我们将专注于模块和函数的组织，而不担心函数体中的具体代码。这个项目叫做<code>communicator</code>。Cargo 默认会创建一个库 crate 除非指定其他项目类型，所以如果不像一直以来那样加入<code>--bin</code>参数则项目将会是一个库：</p>
@@ -3261,9 +3265,9 @@ $ mv src/server.rs src/network
 <p>接下来，我们讨论一下<code>pub</code>关键字，并除掉那些警告！</p>
 <a class="header" href="#使用pub控制可见性" name="使用pub控制可见性"><h2>使用<code>pub</code>控制可见性</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch07-02-controlling-visibility-with-pub.md">ch07-02-controlling-visibility-with-pub.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-02-controlling-visibility-with-pub.md">ch07-02-controlling-visibility-with-pub.md</a>
 <br>
-commit e2a129961ae346f726f8b342455ec2255cdfed68</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
 <p>我们通过将<code>network</code>和<code>network::server</code>的代码分别移动到 <em>src/network/mod.rs</em> 和 <em>src/network/server.rs</em> 文件中解决了列表 7-4 中出现的错误信息。现在，<code>cargo build</code>能够构建我们的项目，不过仍然有一些警告信息，表示<code>client::connect</code>、<code>network::connect</code>和<code>network::server::connect</code>函数没有被使用：</p>
 <pre><code>warning: function is never used: `connect`, #[warn(dead_code)] on by default
@@ -3284,7 +3288,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 1 | fn connect() {
   | ^
 </code></pre>
-<p>那么为什么会出现这些错误信息呢？我们构建的是一个库，它的函数的目的是被<strong>用户</strong>使用，而不一定要被项目自身使用，所以不应该担心这些函数是未被使用的。创建他们的意义就在于被另一个项目而不是被自己使用。</p>
+<p>那么为什么会出现这些错误信息呢？我们构建的是一个库，它的函数的目的是被<strong>用户</strong>使用，而不一定要被项目自身使用，所以不应该担心这些<code>connect</code>函数是未使用的。创建他们的意义就在于被另一个项目而不是被自己使用。</p>
 <p>为了理解为什么这个程序出现了这些警告，尝试作为另一个项目来使用这个<code>connect</code>库，从外部调用他们。为此，通过创建一个包含这些代码的 <em>src/main.rs</em> 文件，在与库 crate 相同的目录创建一个二进制 crate：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate communicator;
@@ -3304,7 +3308,7 @@ fn main() {
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 </code></pre>
 <p>啊哈！这告诉了我们<code>client</code>模块是私有的，这也正是那些警告的症结所在。这也是我们第一次在 Rust 上下文中涉及到<strong>公有</strong>和<strong>私有</strong>的概念。Rust 所有代码的默认状态是私有的：除了自己之外别人不允许使用这些代码。如果不在自己的项目中使用一个私有函数，因为程序自身是唯一允许使用这个函数的代码，Rust 会警告说函数未被使用。</p>
-<p>一旦我们指定一个像<code>client::connect</code>的函数为公有，不光二进制 crate 中的函数调用会被允许，函数未被使用的警告也会消失。将其标记为公有让 Rust 知道了我们意在使函数在我们程序的外部被使用。现在这个可能的理论上的外部可用性使 Rust 认为这个函数“已经被使用”。因此。当某项被标记为公有，Rust 不再要求它在程序自身被使用并停止警告某项未被使用。</p>
+<p>一旦我们指定一个像<code>client::connect</code>的函数为公有，不光二进制 crate 中的函数调用是允许的，函数未被使用的警告也会消失。将其标记为公有让 Rust 知道了我们意在使函数在我们程序的外部被使用。现在这个可能的理论上的外部可用性使得 Rust 认为这个函数“已经被使用”。因此。当某项被标记为公有，Rust 不再要求它在程序自身被使用并停止警告某项未被使用。</p>
 <a class="header" href="#标记函数为公有" name="标记函数为公有"><h3>标记函数为公有</h3></a>
 <p>为了告诉 Rust 某项为公有，在想要标记为公有的项的声明开头加上<code>pub</code>关键字。现在我们将致力于修复<code>client::connect</code>未被使用的警告，以及二进制 crate 中“模块<code>client</code>是私有的”的错误。像这样修改 <em>src/lib.rs</em> 使<code>client</code>模块公有：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
@@ -3382,8 +3386,7 @@ pub mod network;
 </ol>
 <a class="header" href="#私有性示例" name="私有性示例"><h3>私有性示例</h3></a>
 <p>让我们看看更多例子作为练习。创建一个新的库项目并在新项目的 <em>src/lib.rs</em> 输入列表 7-5 中的代码：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust,ignore">mod outermost {
     pub fn middle_function() {}
 
@@ -3403,11 +3406,8 @@ fn try_me() {
     outermost::inside::secret_function();
 }
 </code></pre>
-<figcaption>
-<p>Listing 7-5: Examples of private and public functions, some of which are
-incorrect</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 7-5: Examples of private and public functions,
+some of which are incorrect</span></p>
 <p>在尝试编译这些代码之前，猜测一下<code>try_me</code>函数的哪一行会出错。接着编译项目来看看是否猜对了，然后继续阅读后面关于错误的讨论！</p>
 <a class="header" href="#检查错误" name="检查错误"><h4>检查错误</h4></a>
 <p><code>try_me</code>函数位于项目的根模块。叫做<code>outermost</code>的模块是私有的，不过第二条私有性规则说明<code>try_me</code>函数允许访问<code>outermost</code>模块，因为<code>outermost</code>位于当前（根）模块，<code>try_me</code>也是。</p>
@@ -3425,13 +3425,12 @@ incorrect</p>
 <p>接下来，让我们讨论一下使用<code>use</code>关键字来将项引入作用域。</p>
 <a class="header" href="#导入命名" name="导入命名"><h2>导入命名</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch07-03-importing-names-with-use.md">ch07-03-importing-names-with-use.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-03-importing-names-with-use.md">ch07-03-importing-names-with-use.md</a>
 <br>
-commit e2a129961ae346f726f8b342455ec2255cdfed68</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
 <p>我们已经讲到了如何使用模块名称作为调用的一部分，来调用模块中的函数，如列表 7-6 中所示的<code>nested_modules</code>函数调用。</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
@@ -3444,11 +3443,8 @@ fn main() {
     a::series::of::nested_modules();
 }
 </code></pre>
-<figcaption>
-<p>Listing 7-6: Calling a function by fully specifying its enclosing module’s
-namespaces</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 7-6: Calling a function by fully specifying its
+enclosing module’s namespaces</span></p>
 <p>如你所见，指定函数的完全限定名称可能会非常冗长。所幸 Rust 有一个关键字使得这些调用显得更简洁。</p>
 <a class="header" href="#使用use的简单导入" name="使用use的简单导入"><h3>使用<code>use</code>的简单导入</h3></a>
 <p>Rust 的<code>use</code>关键字的工作是缩短冗长的函数调用，通过将想要调用的函数所在的模块引入到作用域中。这是一个将<code>a::series::of</code>模块导入一个二进制 crate 的根作用域的例子：</p>
@@ -3531,7 +3527,7 @@ mod tests {
     }
 }
 </code></pre>
-<p>第十二章会更详细的解释测试，不过其部分内容现在应该可以理解了：有一个叫做<code>tests</code>的模块紧邻其他模块，同时包含一个叫做<code>it_works</code>的函数。即便存在一些特殊注解，<code>tests</code>也不过是另外一个模块！所以我们的模块层次结构看起来像这样：</p>
+<p>第十一章会更详细的解释测试，不过其部分内容现在应该可以理解了：有一个叫做<code>tests</code>的模块紧邻其他模块，同时包含一个叫做<code>it_works</code>的函数。即便存在一些特殊注解，<code>tests</code>也不过是另外一个模块！所以我们的模块层次结构看起来像这样：</p>
 <pre><code>communicator
  ├── client
  ├── network
@@ -3599,9 +3595,9 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 <p>接下来，让我们看看一些标准库提供的集合数据类型，你可以利用他们编写出漂亮整洁的代码。</p>
 <a class="header" href="#通用集合类型" name="通用集合类型"><h1>通用集合类型</h1></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch08-00-common-collections.md">ch08-00-common-collections.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch08-00-common-collections.md">ch08-00-common-collections.md</a>
 <br>
-commit 0d229cc5a3da341196e15a6761735b2952281569</p>
+commit e6d6caab41471f7115a621029bd428a812c5260e</p>
 </blockquote>
 <p>Rust 标准库中包含一系列被称为<strong>集合</strong>（<em>collections</em>）的非常有用的数据结构。大部分其他数据类型都代表一个特定的值，不过集合可以包含多个值。不同于内建的数组和元组类型，这些集合指向的数据是储存在堆上的，这意味着数据的数量不必在编译时就可知并且可以随着程序的运行增长或缩小。每种集合都有着不同能力和代价，而为所处的场景选择合适的集合则是你将要始终发展的技能。在这一章里，我们将详细的了解三个在 Rust 程序中被广泛使用的集合：</p>
 <ul>
@@ -3609,15 +3605,15 @@ commit 0d229cc5a3da341196e15a6761735b2952281569</p>
 <li><strong>字符串</strong>（<em>string</em>）是一个字符的集合。我们之前见过<code>String</code>类型，现在将详细介绍它。</li>
 <li><strong>哈希 map</strong>（<em>hash map</em>）允许我们将值与一个特定的键（key）相关联。这是一个叫做 <em>map</em> 的更通用的数据结构的特定实现。</li>
 </ul>
-<p>对于标准库提供的其他类型的集合，请查看<a href="../std/collections">文档</a>。</p>
-<p>我们将讨论如何创建和更新 vector、字符串和哈希 map，以及他们何以如此特殊。</p>
+<p>对于标准库提供的其他类型的集合，请查看<a href="https://doc.rust-lang.org/std/collections">文档</a>。</p>
+<p>我们将讨论如何创建和更新 vector、字符串和哈希 map，以及他们有什么不同。</p>
 <a class="header" href="#vector" name="vector"><h2>vector</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch08-01-vectors.md">ch08-01-vectors.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch08-01-vectors.md">ch08-01-vectors.md</a>
 <br>
-commit 0d229cc5a3da341196e15a6761735b2952281569</p>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
-<p>我们要讲到的第一个类型是<code>Vec&lt;T&gt;</code>，也被称为 <em>vector</em>。vector 允许我们在一个单独的数据结构中储存多于一个值，它在内存中彼此相邻的排列所有的值。vector 只能储存相同类型的值。他们在拥有一系列的场景下非常实用，例如文件中的文本行或是购物车中商品的价格。</p>
+<p>我们要讲到的第一个类型是<code>Vec&lt;T&gt;</code>，也被称为 <em>vector</em>。vector 允许我们在一个单独的数据结构中储存多于一个值，它在内存中彼此相邻的排列所有的值。vector 只能储存相同类型的值。他们在拥有一系列项的场景下非常实用，例如文件中的文本行或是购物车中商品的价格。</p>
 <a class="header" href="#新建-vector" name="新建-vector"><h3>新建 vector</h3></a>
 <p>为了创建一个新的，空的 vector，可以调用<code>Vec::new</code>函数：</p>
 <pre><code class="language-rust">let v: Vec&lt;i32&gt; = Vec::new();
@@ -3708,9 +3704,9 @@ let row = vec![
 <p>现在我们了解了一些使用 vector 的最常见的方式，请一定去看看标准库中<code>Vec</code>定义的很多其他实用方法的 API 文档。例如，除了<code>push</code>之外还有一个<code>pop</code>方法，它会移除并返回 vector 的最后一个元素。让我们继续下一个集合类型：<code>String</code>！</p>
 <a class="header" href="#字符串" name="字符串"><h2>字符串</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch08-02-strings.md">ch08-02-strings.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch08-02-strings.md">ch08-02-strings.md</a>
 <br>
-commit 65f52921e21ad2e1c79d620fcfd01bde3ee30571</p>
+commit d362dadae60a7cc3212b107b9e9562769b0f20e3</p>
 </blockquote>
 <p>第四章已经讲过一些字符串的内容，不过现在让我们更深入地了解一下它。字符串是新晋 Rustacean 们通常会被困住的领域。这是由于三方面内容的结合：Rust 倾向于确保暴露出可能的错误，字符串是比很多程序员所想象的要更为复杂的数据结构，以及 UTF-8。所有这些结合起来对于来自其他语言背景的程序员就可能显得很困难了。</p>
 <p>字符串出现在集合章节的原因是，字符串是作为字节的集合外加一些方法实现的，当这些字节被解释为文本时，这些方法提供了实用的功能。在这一部分，我们会讲到<code>String</code>那些任何集合类型都有的操作，比如创建、更新和读取。也会讨论<code>String</code>于其他集合不一样的地方，例如索引<code>String</code>是很复杂的，由于人和计算机理解<code>String</code>数据的不同方式。</p>
@@ -3751,7 +3747,7 @@ let hello = &quot;Hola&quot;;
 </code></pre>
 <a class="header" href="#更新字符串" name="更新字符串"><h3>更新字符串</h3></a>
 <p><code>String</code>的大小可以增长其内容也可以改变，就像可以放入更多数据来改变<code>Vec</code>的内容一样。另外，<code>String</code>实现了<code>+</code>运算符作为级联运算符以便于使用。</p>
-<a class="header" href="#附加字符串" name="附加字符串"><h4>附加字符串</h4></a>
+<a class="header" href="#使用-push-附加字符串" name="使用-push-附加字符串"><h4>使用 push 附加字符串</h4></a>
 <p>可以通过<code>push_str</code>方法来附加字符串 slice，从而使<code>String</code>变长：</p>
 <pre><code class="language-rust">let mut s = String::from(&quot;foo&quot;);
 s.push_str(&quot;bar&quot;);
@@ -3776,7 +3772,7 @@ let s3 = s1 + &amp;s2; // Note that s1 has been moved here and can no longer be 
 <pre><code class="language-rust,ignore">fn add(self, s: &amp;str) -&gt; String {
 </code></pre>
 <p>这并不是标准库中实际的签名；那个<code>add</code>使用泛型定义。这里的签名使用具体类型代替了泛型，这也正是当使用<code>String</code>值调用这个方法会发生的。第十章会讨论泛型。这个签名提供了理解<code>+</code>运算那奇怪的部分的线索。</p>
-<p>首先，<code>s2</code>使用了<code>&amp;</code>，意味着我们使用第二个字符串的<strong>引用</strong>与第一个字符串相加。这是因为<code>add</code>函数的<code>s</code>参数：只能将<code>&amp;str</code>和<code>String</code>相加，不能将两个<code>String</code>值相加。回忆之前第四章我们讲到<code>&amp;String</code>是如何被强转为<code>&amp;str</code>的：写成<code>&amp;s2</code>的话<code>String</code>将会被强转成一个合适的类型<code>&amp;str</code>。又因为方法没有获取参数的所有权，所以<code>s2</code>在这个操作后仍然有效。</p>
+<p>首先，<code>s2</code>使用了<code>&amp;</code>，意味着我们使用第二个字符串的<strong>引用</strong>与第一个字符串相加。这是因为<code>add</code>函数的<code>s</code>参数：只能将<code>&amp;str</code>和<code>String</code>相加，不能将两个<code>String</code>值相加。不过等一下——正如<code>add</code>的第二个参数所指定的，<code>&amp;s2</code>的类型是<code>&amp;String</code>而不是<code>&amp;str</code>。那么为什么代码还能编译呢？之所以能够在<code>add</code>调用中使用<code>&amp;s2</code>是因为<code>&amp;String</code>可以被<strong>强转</strong>（<em>coerced</em>）成 <code>&amp;str</code>——当<code>add</code>函数被调用时，Rust 使用了一个被成为<strong>解引用强制多态</strong>（<em>deref coercion</em>）的技术，你可以将其理解为它把<code>&amp;s2</code>变成了<code>&amp;s2[..]</code>以供<code>add</code>函数使用。第十五章会更深入的讨论解引用强制多态。因为<code>add</code>没有获取参数的所有权，所以<code>s2</code>在这个操作后仍然是有效的<code>String</code>。</p>
 <p>其次，可以发现签名中<code>add</code>获取了<code>self</code>的所有权，因为<code>self</code><strong>没有</strong>使用<code>&amp;</code>。这意味着上面例子中的<code>s1</code>的所有权将被移动到<code>add</code>调用中，之后就不再有效。所以虽然<code>let s3 = s1 + &amp;s2;</code>看起来就像它会复制两个字符串并创建一个新的字符串，而实际上这个语句会获取<code>s1</code>的所有权，附加上从<code>s2</code>中拷贝的内容，并返回结果的所有权。换句话说，它看起来好像生成了很多拷贝不过实际上并没有：这个实现比拷贝要更高效。</p>
 <p>如果想要级联多个字符串，<code>+</code>的行为就显得笨重了：</p>
 <pre><code class="language-rust">let s1 = String::from(&quot;tic&quot;);
@@ -3806,7 +3802,7 @@ satisfied [--explain E0277]
   |&gt;             ^^^^^
 note: the type `std::string::String` cannot be indexed by `_`
 </code></pre>
-<p>错误和提示说明了全部问题：Rust 的字符串不支持索引。那么接下来的问题是，为什么不支持呢？为了回答这个问题，我们必须先聊一聊 Rust 如何在内存中储存字符串。</p>
+<p>错误和提示说明了全部问题：Rust 的字符串不支持索引。那么接下来的问题是，为什么不支持呢？为了回答这个问题，我们必须先聊一聊 Rust 是如何在内存中储存字符串的。</p>
 <a class="header" href="#内部表示" name="内部表示"><h4>内部表示</h4></a>
 <p><code>String</code>是一个<code>Vec&lt;u8&gt;</code>的封装。让我们看看之前一些正确编码的字符串的例子。首先是这一个：</p>
 <pre><code class="language-rust">let len = String::from(&quot;Hola&quot;).len();
@@ -3880,9 +3876,9 @@ character boundary', ../src/libcore/str/mod.rs:1694
 <p>现在让我们转向一些不太复杂的集合：哈希 map！</p>
 <a class="header" href="#哈希-map" name="哈希-map"><h2>哈希 map</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch08-03-hash-maps.md">ch08-03-hash-maps.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch08-03-hash-maps.md">ch08-03-hash-maps.md</a>
 <br>
-commit 0d229cc5a3da341196e15a6761735b2952281569</p>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
 <p>最后要介绍的常用集合类型是<strong>哈希 map</strong>（<em>hash map</em>）。<code>HashMap&lt;K, V&gt;</code>类型储存了一个键类型<code>K</code>对应一个值类型<code>V</code>的映射。它通过一个<strong>哈希函数</strong>（<em>hashing function</em>）来实现映射，它决定了如何将键和值放入内存中。很多编程语言支持这种数据结构，不过通常有不同的名字：哈希、map、对象、哈希表或者关联数组，仅举几例。</p>
 <p>哈希 map 可以用于需要任何类型作为键来寻找数据的情况，而不是像 vector 那样通过索引。例如，在一个游戏中，你可以将每个团队的分数记录到哈希 map 中，其中键是队伍的名字而值是每个队伍的分数。给出一个队名，就能得到他们的得分。</p>
@@ -4003,23 +3999,23 @@ println!(&quot;{:?}&quot;, map);
 <li>使用哈希 map 和 vector，创建一个文本接口来允许用户向公司的部门中增加员工的名字。例如，“Add Sally to Engineering”或“Add Amir to Sales”。接着让用户获取一个部门的所有员工的列表，或者公司每个部门的所有员工按照字母顺排序的列表。</li>
 </ul>
 <p>标准库 API 文档中描述的这些类型的方法将有助于你进行这些练习！</p>
-<p>我们已经开始解除可能会有失败操作的复杂程序了，这也意味着接下来是一个了解错误处理的绝佳时机！</p>
+<p>我们已经开始接触可能会有失败操作的复杂程序了，这也意味着接下来是一个了解错误处理的绝佳时机！</p>
 <a class="header" href="#错误处理" name="错误处理"><h1>错误处理</h1></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch09-00-error-handling.md">ch09-00-error-handling.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch09-00-error-handling.md">ch09-00-error-handling.md</a>
 <br>
-commit fc825966fabaa408067eb2df3aa45e4fa6644fb6</p>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
-<p>Rust 对可靠性的执着也扩展到了错误处理。错误对于软件来说是不可避免的，所以 Rust 有很多功能来处理当现错误的情况。在很多情况下，Rust 要求你承认出错的可能性可能性并在编译代码之前就采取行动。通过确保不会只有在将代码部署到生产环境之后才会发现错误来使得程序更可靠。</p>
+<p>Rust 对可靠性的执着也扩展到了错误处理。错误对于软件来说是不可避免的，所以 Rust 有很多功能来处理当现错误的情况。在很多情况下，Rust 要求你承认出错的可能性并在编译代码之前就采取行动。通过确保不会只有在将代码部署到生产环境之后才会发现错误来使得程序更可靠。</p>
 <p>Rust 将错误组合成两个主要类别：<strong>可恢复错误</strong>（<em>recoverable</em>）和<strong>不可恢复错误</strong>（<em>unrecoverable</em>）。可恢复错误通常代表向用户报告错误和重试操作是合理的情况，比如未找到文件。不可恢复错误通常是 bug 的同义词，比如尝试访问超过数组结尾的位置。</p>
 <p>大部分语言并不区分这两类错误，并采用类似异常这样方式统一处理他们。Rust 并没有异常。相反，对于可恢复错误有<code>Result&lt;T, E&gt;</code>值和<code>panic!</code>，它在遇到不可恢复错误时停止程序执行。这一章会首先介绍<code>panic!</code>调用，接着会讲到如何返回<code>Result&lt;T, E&gt;</code>。最后，我们会讨论当决定是尝试从错误中恢复还是停止执行时需要顾及的权衡考虑。</p>
 <a class="header" href="#panic与不可恢复的错误" name="panic与不可恢复的错误"><h2><code>panic!</code>与不可恢复的错误</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch09-01-unrecoverable-errors-with-panic.md">ch09-01-unrecoverable-errors-with-panic.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch09-01-unrecoverable-errors-with-panic.md">ch09-01-unrecoverable-errors-with-panic.md</a>
 <br>
-commit 380e6ee57c251f5ffa8df4c58b3949405448d914</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
-<p>突然有一天，糟糕的事情发生了，而你对此束手无策。对于这种情况，Rust 有`panic!宏。当执行这个宏时，程序会打印出一个错误信息，展开并清理栈数据，并接着退出。出现这种情况的场景通常是检测到一些类型的 bug 而且程序员并不清楚该如何处理它。</p>
+<p>突然有一天，糟糕的事情发生了，而你对此束手无策。对于这种情况，Rust 有<code>panic!</code>宏。当执行这个宏时，程序会打印出一个错误信息，展开并清理栈数据，然后接着退出。出现这种情况的场景通常是检测到一些类型的 bug 而且程序员并不清楚该如何处理它。</p>
 <blockquote>
 <a class="header" href="#panic-中的栈展开与终止" name="panic-中的栈展开与终止"><h3>Panic 中的栈展开与终止</h3></a>
 <p>当出现<code>panic!</code>时，程序默认会开始<strong>展开</strong>（<em>unwinding</em>），这意味着 Rust 会回溯栈并清理它遇到的每一个函数的数据，不过这个回溯并清理的过程有很多工作。另一种选择是直接<strong>终止</strong>（<em>abort</em>），这会不清理数据就退出程序。那么程序所使用的内存需要由操作系统来清理。如果你需要项目的最终二进制文件越小越好，可以由 panic 时展开切换为终止，通过在  <em>Cargo.toml</em> 的<code>[profile]</code>部分增加<code>panic = 'abort'</code>。例如，如果你想要在发布模式中 panic 时直接终止：</p>
@@ -4044,7 +4040,7 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 </code></pre>
 <p>最后三行包含<code>panic!</code>造成的错误信息。第一行显示了 panic 提供的信息并指明了源码中 panic 出现的位置：<em>src/main.rs:2</em> 表明这是 <em>src/main.rs</em> 文件的第二行。</p>
 <p>在这个例子中，被指明的那一行是我们代码的一部分，而且查看这一行的话就会发现<code>panic!</code>宏的调用。换句话说，<code>panic!</code>可能会出现在我们的代码调用的代码中。错误信息报告的文件名和行号可能指向别人代码中的<code>panic!</code>宏调用，而不是我们代码中最终导致<code>panic!</code>的那一行。可以使用<code>panic!</code>被调用的函数的 backtrace 来寻找（我们代码中出问题的地方）。</p>
-<a class="header" href="#使用panicbacktrace" name="使用panicbacktrace"><h3>使用<code>panic!</code>backtrace</h3></a>
+<a class="header" href="#使用panic的-backtrace" name="使用panic的-backtrace"><h3>使用<code>panic!</code>的 backtrace</h3></a>
 <p>让我们来看看另一个因为我们代码中的 bug 引起的别的库中<code>panic!</code>的例子，而不是直接的宏调用：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,should_panic">fn main() {
@@ -4067,7 +4063,6 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 </code></pre>
 <p>这指向了一个不是我们编写的文件，<em>libcollections/vec.rs</em>。这是标准库中<code>Vec&lt;T&gt;</code>的实现。这是当对 vector <code>v</code>使用<code>[]</code>时 <em>libcollections/vec.rs</em> 中会执行的代码，也是真正出现<code>panic!</code>的地方。</p>
 <p>接下来的几行提醒我们可以设置<code>RUST_BACKTRACE</code>环境变量来得到一个 backtrace 来调查究竟是什么导致了错误。让我们来试试看。列表 9-1 显示了其输出：</p>
-<figure>
 <pre><code>$ RUST_BACKTRACE=1 cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/panic`
@@ -4094,22 +4089,19 @@ core::ops::Index&lt;usize&gt;&gt;::index::h1204ab053b688140
   13:        0x109226b16 - std::rt::lang_start::h1204ab053b688140
   14:        0x1092206e9 - main
 </code></pre>
-<figcaption>
-<p>Listing 9-1: The backtrace generated by a call to <code>panic!</code> displayed when the
-environment variable <code>RUST_BACKTRACE</code> is set</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-1: The backtrace generated by a call to
+<code>panic!</code> displayed when the environment variable <code>RUST_BACKTRACE</code> is set</span></p>
 <p>这里有大量的输出！backtrace 第 11 行指向了我们程序中引起错误的行：<em>src/main.rs</em> 的第四行。backtrace 是一个执行到目前位置所有被调用的函数的列表。Rust 的 backtrace 跟其他语言中的一样：阅读 backtrace 的关键是从头开始读直到发现你编写的文件。这就是问题的发源地。这一行往上是你的代码调用的代码；往下则是调用你的代码的代码。这些行可能包含核心 Rust 代码，标准库代码或用到的 crate 代码。</p>
 <p>如果你不希望我们的程序 panic，第一个提到我们编写的代码行的位置是你应该开始调查的，以便查明是什么值如何在这个地方引起了 panic。在上面的例子中，我们故意编写会 panic 的代码来演示如何使用 backtrace，修复这个 panic 的方法就是不要尝试在一个只包含三个项的 vector 中请求索引是 100 的元素。当将来你得代码出现了 panic，你需要搞清楚在这特定的场景下代码中执行了什么操作和什么值导致了 panic，以及应当如何处理才能避免这个问题。</p>
 <p>本章的后面会再次回到<code>panic!</code>并讲到何时应该何时不应该使用这个方式。接下来，我们来看看如何使用<code>Result</code>来从错误中恢复。</p>
 <a class="header" href="#result与可恢复的错误" name="result与可恢复的错误"><h2><code>Result</code>与可恢复的错误</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch09-02-recoverable-errors-with-result.md">ch09-01-unrecoverable-errors-with-panic.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch09-02-recoverable-errors-with-result.md">ch09-01-unrecoverable-errors-with-panic.md</a>
 <br>
-commit 0c1d55ef48e5f6cf6a3b221f5b6dd4c922130bb1</p>
+commit e6d6caab41471f7115a621029bd428a812c5260e</p>
 </blockquote>
-<p>大部分错误并没有严重到需要程序完全停止执行。有时，一个函数会因为一个容易理解并回应的原因失败。例如，如果尝试打开一个文件不过由于文件并不存在而操作就失败，这是我们可能想要创建这个文件而不是终止进程。</p>
-<p>回忆一下第二章“使用<code>Result</code>类型来处理潜在的错误”部分中的那个<code>Result</code>枚举，它定义有如下连个成员，<code>Ok</code>和<code>Err</code>：</p>
+<p>大部分错误并没有严重到需要程序完全停止执行。有时，一个函数会因为一个容易理解并做出反映的原因失败。例如，如果尝试打开一个文件不过由于文件并不存在而操作就失败，这是我们可能想要创建这个文件而不是终止进程。</p>
+<p>回忆一下第二章“使用<code>Result</code>类型来处理潜在的错误”部分中的那个<code>Result</code>枚举，它定义有如下两个成员，<code>Ok</code>和<code>Err</code>：</p>
 <pre><code class="language-rust">enum Result&lt;T, E&gt; {
     Ok(T),
     Err(E),
@@ -4117,18 +4109,14 @@ commit 0c1d55ef48e5f6cf6a3b221f5b6dd4c922130bb1</p>
 </code></pre>
 <p><code>T</code>和<code>E</code>是泛型类型参数；第十章会详细介绍泛型。现在你需要知道的就是<code>T</code>代表成功时返回的<code>Ok</code>成员中的数据的类型，而<code>E</code>代表失败时返回的<code>Err</code>成员中的错误的类型。因为<code>Result</code>有这些泛型类型参数，我们可以将<code>Result</code>类型和标准库中为其定义的函数用于很多不同的场景，这些情况中需要返回的成功值和失败值可能会各不相同。</p>
 <p>让我们调用一个返回<code>Result</code>的函数，因为它可能会失败：如列表 9-2 所示打开一个文件：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">use std::fs::File;
 
 fn main() {
     let f = File::open(&quot;hello.txt&quot;);
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-2: Opening a file</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-2: Opening a file</span></p>
 <p>如何知道<code>File::open</code>返回一个<code>Result</code>呢？我们可以查看标准库 API 文档，或者可以直接问编译器！如果给<code>f</code>某个我们知道<strong>不是</strong>函数返回值类型的类型注解，接着尝试编译代码，编译器会告诉我们类型不匹配。然后错误信息会告诉我们<code>f</code>的类型<strong>应该</strong>是什么，为此我们将<code>let f</code>语句改为：</p>
 <pre><code class="language-rust,ignore">let f: u32 = File::open(&quot;hello.txt&quot;);
 </code></pre>
@@ -4147,8 +4135,7 @@ fn main() {
 <p>这个返回值类型说明<code>File::open</code>调用可能会成功并返回一个可以进行读写的文件句柄。这个函数也可能会失败：例如，文件可能并不存在，或者可能没有访问文件的权限。<code>File::open</code>需要一个方式告诉我们是成功还是失败，并同时提供给我们文件句柄或错误信息。而这些信息正是<code>Result</code>枚举可以提供的。</p>
 <p>当<code>File::open</code>成功的情况下，变量<code>f</code>的值将会是一个包含文件句柄的<code>Ok</code>实例。在失败的情况下，<code>f</code>会是一个包含更多关于出现了何种错误信息的<code>Err</code>实例。</p>
 <p>我们需要在列表 9-2 的代码中增加根据<code>File::open</code>返回值进行不同处理的逻辑。列表 9-3 展示了一个处理<code>Result</code>的基本工具：第六章学习过的<code>match</code>表达式。</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,should_panic">use std::fs::File;
 
 fn main() {
@@ -4162,11 +4149,8 @@ fn main() {
     };
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-3: Using a <code>match</code> expression to handle the <code>Result</code> variants we
-might have</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-3: Using a <code>match</code> expression to handle the
+<code>Result</code> variants we might have</span></p>
 <p>注意与<code>Option</code>枚举一样，<code>Result</code>枚举和其成员也被导入到了 prelude 中，所以就不需要在<code>match</code>分支中的<code>Ok</code>和<code>Err</code>之前指定<code>Result::</code>。</p>
 <p>这里我们告诉 Rust 当结果是<code>Ok</code>，返回<code>Ok</code>成员中的<code>file</code>值，然后将这个文件句柄赋值给变量<code>f</code>。<code>match</code>之后，我们可以利用这个文件句柄来进行读写。</p>
 <p><code>match</code>的另一个分支处理从<code>File::open</code>得到<code>Err</code>值的情况。在这种情况下，我们选择调用<code>panic!</code>宏。如果当前目录没有一个叫做 <em>hello.txt</em> 的文件，当运行这段代码时会看到如下来自<code>panic!</code>宏的输出：</p>
@@ -4175,8 +4159,7 @@ Os { code: 2, message: &quot;No such file or directory&quot; } }', src/main.rs:8
 </code></pre>
 <a class="header" href="#匹配不同的错误" name="匹配不同的错误"><h3>匹配不同的错误</h3></a>
 <p>列表 9-3 中的代码不管<code>File::open</code>是因为什么原因失败都会<code>panic!</code>。我们真正希望的是对不同的错误原因采取不同的行为：如果<code>File::open</code>因为文件不存在而失败，我们希望创建这个文件并返回新文件的句柄。如果<code>File::open</code>因为任何其他原因失败，例如没有打开文件的权限，我们仍然希望像列表 9-3 那样<code>panic!</code>。让我们看看列表 9-4，其中<code>match</code>增加了另一个分支：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">use std::fs::File;
 use std::io::ErrorKind;
 
@@ -4205,12 +4188,10 @@ fn main() {
     };
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-4: Handling different kinds of errors in different ways</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-4: Handling different kinds of errors in
+different ways</span></p>
 <p><code>File::open</code>返回的<code>Err</code>成员中的值类型<code>io::Error</code>，它是一个标准库中提供的结构体。这个结构体有一个返回<code>io::ErrorKind</code>值的<code>kind</code>方法可供调用。<code>io::ErrorKind</code>是一个标准库提供的枚举，它的成员对应<code>io</code>操作可能导致的不同错误类型。我们感兴趣的成员是<code>ErrorKind::NotFound</code>，它代表尝试打开的文件并不存在。</p>
-<p><code>if error.kind() == ErrorKind::NotFound</code>条件被称作 <em>match guard</em>：它是一个进一步完善<code>match</code>分支模式的额外的条件。这个条件必须为真才能使分支的代码被执行；否则，模式匹配会继续并考虑<code>match</code>中的下一个分支。模式中的<code>ref</code>是必须的，这样<code>error</code>就不会被移动到 guard 条件中而只是仅仅引用它。第十八章会详细解释为什么在模式中使用<code>ref</code>而不是<code>&amp;</code>来获取一个引用。简而言之，在模式的上下文中，<code>&amp;</code>匹配一个引用并返回它的值，而<code>ref</code>匹配一个值并返回一个引用。</p>
+<p>条件<code>if error.kind() == ErrorKind::NotFound</code>被称作 <em>match guard</em>：它是一个进一步完善<code>match</code>分支模式的额外的条件。这个条件必须为真才能使分支的代码被执行；否则，模式匹配会继续并考虑<code>match</code>中的下一个分支。模式中的<code>ref</code>是必须的，这样<code>error</code>就不会被移动到 guard 条件中而只是仅仅引用它。第十八章会详细解释为什么在模式中使用<code>ref</code>而不是<code>&amp;</code>来获取一个引用。简而言之，在模式的上下文中，<code>&amp;</code>匹配一个引用并返回它的值，而<code>ref</code>匹配一个值并返回一个引用。</p>
 <p>在 match guard 中我们想要检查的条件是<code>error.kind()</code>是否是<code>ErrorKind</code>枚举的<code>NotFound</code>成员。如果是，尝试用<code>File::create</code>创建文件。然而<code>File::create</code>也可能会失败，我们还需要增加一个内部<code>match</code>语句。当文件不能被打开，会打印出一个不同的错误信息。外部<code>match</code>的最后一个分支保持不变这样对任何除了文件不存在的错误会使程序 panic。</p>
 <a class="header" href="#失败时-panic-的捷径unwrap和expect" name="失败时-panic-的捷径unwrap和expect"><h3>失败时 panic 的捷径：<code>unwrap</code>和<code>expect</code></h3></a>
 <p><code>match</code>能够胜任它的工作，不过它可能有点冗长并且并不总是能很好的表明意图。<code>Result&lt;T, E&gt;</code>类型定义了很多辅助方法来处理各种情况。其中之一叫做<code>unwrap</code>，它的实现就类似于列表 9-3 中的<code>match</code>语句。如果<code>Result</code>值是成员<code>Ok</code>，<code>unwrap</code>会返回<code>Ok</code>中的值。如果<code>Result</code>是成员<code>Err</code>，<code>unwrap</code>会为我们调用<code>panic!</code>。</p>
@@ -4240,7 +4221,6 @@ fn main() {
 <a class="header" href="#传播错误" name="传播错误"><h3>传播错误</h3></a>
 <p>当编写一个其实现会调用一些可能会失败的操作的函数时，除了在这个函数中处理错误外，还可以选择让调用者知道这个错误并决定该如何处理。这被称为<strong>传播</strong>（<em>propagating</em>）错误，这样能更好的控制代码调用，因为比起你代码所拥有的上下文，调用者可能拥有更多信息或逻辑来决定应该如何处理错误。</p>
 <p>例如，列表 9-5 展示了一个从文件中读取用户名的函数。如果文件不存在或不能读取，这个函数会将这些错误返回给调用它的代码：</p>
-<figure>
 <pre><code class="language-rust">use std::io;
 use std::io::Read;
 use std::fs::File;
@@ -4261,19 +4241,17 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-5: A function that returns errors to the calling code using <code>match</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-5: A function that returns errors to the
+calling code using <code>match</code></span></p>
 <p>首先让我们看看函数的返回值：<code>Result&lt;String, io::Error&gt;</code>。这意味着函数返回一个<code>Result&lt;T, E&gt;</code>类型的值，其中泛型参数<code>T</code>的具体类型是<code>String</code>，而<code>E</code>的具体类型是<code>io::Error</code>。如果这个函数没有出任何错误成功返回，函数的调用者会收到一个包含<code>String</code>的<code>Ok</code>值————函数从文件中读取到的用户名。如果函数遇到任何错误，函数的调用者会收到一个<code>Err</code>值，它储存了一个包含更多这个问题相关信息的<code>io::Error</code>实例。我们选择<code>io::Error</code>作为函数的返回值是因为它正好是函数体中那两个可能会失败的操作的错误返回值：<code>File::open</code>函数和<code>read_to_string</code>方法。</p>
 <p>函数体以<code>File::open</code>函数开头。接着使用<code>match</code>处理返回值<code>Result</code>，类似于列表 9-3 中的<code>match</code>，唯一的区别是不再当<code>Err</code>时调用<code>panic!</code>，而是提早返回并将<code>File::open</code>返回的错误值作为函数的错误返回值传递给调用者。如果<code>File::open</code>成功了，我们将文件句柄储存在变量<code>f</code>中并继续。</p>
 <p>接着我们在变量<code>s</code>中创建了一个新<code>String</code>并调用文件句柄<code>f</code>的<code>read_to_string</code>方法来将文件的内容读取到<code>s</code>中。<code>read_to_string</code>方法也返回一个<code>Result</code>因为它也可能会失败：哪怕是<code>File::open</code>已经成功了。所以我们需要另一个<code>match</code>来处理这个<code>Result</code>：如果<code>read_to_string</code>成功了，那么这个函数就成功了，并返回文件中的用户名，它现在位于被封装进<code>Ok</code>的<code>s</code>中。如果<code>read_to_string</code>失败了，则像之前处理<code>File::open</code>的返回值的<code>match</code>那样返回错误值。并不需要显式的调用<code>return</code>，因为这是函数的最后一个表达式。</p>
 <p>调用这个函数的代码最终会得到一个包含用户名的<code>Ok</code>值，亦或一个包含<code>io::Error</code>的<code>Err</code>值。我们无从得知调用者会如何处理这些值。例如，如果他们得到了一个<code>Err</code>值，他们可能会选择<code>panic!</code>并使程序崩溃、使用一个默认的用户名或者从文件之外的地方寻找用户名。我们没有足够的信息知晓调用者具体会如何尝试，所以将所有的成功或失败信息向上传播，让他们选择合适处理方法。</p>
 <p>这种传播错误的模式在 Rust 是如此的常见，以至于有一个更简便的专用语法：<code>?</code>。</p>
 <a class="header" href="#传播错误的捷径" name="传播错误的捷径"><h3>传播错误的捷径：<code>?</code></h3></a>
-<p>列表 9-6 展示了一个<code>read_username_from_file</code>的实现，它实现了与列表 9-5 中的代码相同的功能，不过这个实现是使用了问号运算符：</p>
-<figure>
+<p>列表 9-6 展示了一个<code>read_username_from_file</code>的实现，它实现了与列表 9-5 中的代码相同的功能，不过这个实现是使用了问号运算符的：</p>
 <pre><code class="language-rust">use std::io;
+use std::io::Read;
 use std::fs::File;
 
 fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
@@ -4283,10 +4261,8 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     Ok(s)
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-6: A function that returns errors to the calling code using <code>?</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-6: A function that returns errors to the
+calling code using <code>?</code></span></p>
 <p><code>Result</code>值之后的<code>?</code>被定义为与列表 9-5 中定义的处理<code>Result</code>值的<code>match</code>表达式有着完全相同的工作方式。如果<code>Result</code>的值是<code>Ok</code>，这个表达式将会返回<code>Ok</code>中的值而程序将继续执行。如果值是<code>Err</code>，<code>Err</code>中的值将作为整个函数的返回值，就好像使用了<code>return</code>关键字一样，这样错误值就被传播给了调用者。</p>
 <p>在列表 9-6 的上下文中，<code>File::open</code>调用结尾的<code>?</code>将会把<code>Ok</code>中的值返回给变量<code>f</code>。如果出现了错误，<code>?</code>会提早返回整个函数并将任何<code>Err</code>值传播给调用者。同理也适用于<code>read_to_string</code>调用结尾的<code>?</code>。</p>
 <p><code>?</code>消除了大量样板代码并使得函数的实现更简单。我们甚至可以在<code>?</code>之后直接使用链式方法调用来进一步缩短代码：</p>
@@ -4335,11 +4311,11 @@ error message. /Carol --&gt;</p>
 <p>现在我们讨论过了调用<code>panic!</code>或返回<code>Result</code>的细节，是时候返回他们各自适合哪些场景的话题了。</p>
 <a class="header" href="#panic还是不panic" name="panic还是不panic"><h2><code>panic!</code>还是不<code>panic!</code></h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch09-03-to-panic-or-not-to-panic.md">ch09-03-to-panic-or-not-to-panic.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch09-03-to-panic-or-not-to-panic.md">ch09-03-to-panic-or-not-to-panic.md</a>
 <br>
-commit 0c1d55ef48e5f6cf6a3b221f5b6dd4c922130bb1</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
-<p>那么，该如何决定何时应该<code>panic!</code>以及何时应该返回<code>Result</code>呢？如果代码 panic，就没有恢复的可能。你可以选择对任何错误场景都调用<code>panic!</code>，不管是否有可能恢复，不过这样就你代替调用者决定了这是不可恢复的。选择返回<code>Result</code>值的话，就将选择权交给了调用者，而不是代替他们做出决定。调用者可能会选择以符合他们场景的方式尝试恢复，或者也可能干脆就认为<code>Err</code>是不可恢复的，所以他们也可能会调用<code>panic!</code>并将可恢复的错误变成了不可恢复的错误。因此返回<code>Result</code>是定义可能会失败的函数的一个好的默认选择。</p>
+<p>那么，该如何决定何时应该<code>panic!</code>以及何时应该返回<code>Result</code>呢？如果代码 panic，就没有恢复的可能。你可以选择对任何错误场景都调用<code>panic!</code>，不管是否有可能恢复，不过这样就是你代替调用者决定了这是不可恢复的。选择返回<code>Result</code>值的话，就将选择权交给了调用者，而不是代替他们做出决定。调用者可能会选择以符合他们场景的方式尝试恢复，或者也可能干脆就认为<code>Err</code>是不可恢复的，所以他们也可能会调用<code>panic!</code>并将可恢复的错误变成了不可恢复的错误。因此返回<code>Result</code>是定义可能会失败的函数的一个好的默认选择。</p>
 <p>有一些情况 panic 比返回<code>Result</code>更为合适，不过他们并不常见。让我们讨论一下为何在示例、代码原型和测试中，以及那些人们认为不会失败而编译器不这么看的情况下， panic 是合适的，最后会总结一些在库代码中如何决定是否要 panic 的通用指导原则。</p>
 <a class="header" href="#示例代码原型和测试非常适合-panic" name="示例代码原型和测试非常适合-panic"><h3>示例、代码原型和测试：非常适合 panic</h3></a>
 <p>当你编写一个示例来展示一些概念时，在拥有健壮的错误处理代码的同时也会使得例子不那么明确。例如，调用一个类似<code>unwrap</code>这样可能<code>panic!</code>的方法可以被理解为一个你实际希望程序处理错误方式的占位符，它根据其余代码运行方式可能会各不相同。</p>
@@ -4353,7 +4329,7 @@ let home = &quot;127.0.0.1&quot;.parse::&lt;IpAddr&gt;().unwrap();
 </code></pre>
 <p>我们通过解析一个硬编码的字符来创建一个<code>IpAddr</code>实例。可以看出<code>127.0.0.1</code>是一个有效的 IP 地址，所以这里使用<code>unwrap</code>是没有问题的。然而，拥有一个硬编码的有效的字符串也不能改变<code>parse</code>方法的返回值类型：它仍然是一个<code>Result</code>值，而编译器仍然就好像还是有可能出现<code>Err</code>成员那样要求我们处理<code>Result</code>，因为编译器还没有智能到可以识别出这个字符串总是一个有效的 IP 地址。如果 IP 地址字符串来源于用户而不是硬编码进程序中的话，那么就<strong>确实</strong>有失败的可能性，这时就绝对需要我们以一种更健壮的方式处理<code>Result</code>了。</p>
 <a class="header" href="#错误处理指导原则" name="错误处理指导原则"><h3>错误处理指导原则</h3></a>
-<p>在当有可能会导致有害状态的情况下建议使用<code>panic!</code>————在这里，有害状态是指当一些假设、保证、协议或不可变形被打破的状态，例如无效的值、自相矛盾的值或者被传递了不存在的值————外加如下几种情况：</p>
+<p>在当有可能会导致有害状态的情况下建议使用<code>panic!</code>——在这里，有害状态是指当一些假设、保证、协议或不可变性被打破的状态，例如无效的值、自相矛盾的值或者被传递了不存在的值——外加如下几种情况：</p>
 <ul>
 <li>有害状态并不包含<strong>预期</strong>会偶尔发生的错误</li>
 <li>之后的代码的运行依赖于不再处于这种有害状态</li>
@@ -4386,7 +4362,6 @@ let home = &quot;127.0.0.1&quot;.parse::&lt;IpAddr&gt;().unwrap();
 <p><code>if</code>表达式检查了值是否超出范围，告诉用户出了什么问题，并调用<code>continue</code>开始下一次循环，请求另一个猜测。<code>if</code>表达式之后，就可以在知道<code>guess</code>在 1 到 100 之间的情况下与秘密数字作比较了。</p>
 <p>然而，这并不是一个理想的解决方案：程序只处理 1 到 100 之间的值是绝对不可取的，而且如果有很多函数都有这样的要求，在每个函数中都有这样的检查将是非常冗余的（并可能潜在的影响性能）。</p>
 <p>相反我们可以创建一个新类型来将验证放入创建其实例的函数中，而不是到处重复这些检查。这样就可以安全的在函数签名中使用新类型并相信他们接收到的值。列表 9-8 中展示了一个定义<code>Guess</code>类型的方法，只有在<code>new</code>函数接收到 1 到 100 之间的值时才会创建<code>Guess</code>的实例：</p>
-<figure>
 <pre><code class="language-rust">struct Guess {
     value: u32,
 }
@@ -4407,11 +4382,8 @@ impl Guess {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-8: A <code>Guess</code> type that will only continue with values between 1 and
-100</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-8: A <code>Guess</code> type that will only continue with
+values between 1 and 100</span></p>
 <p>首先，我们定义了一个包含<code>u32</code>类型字段<code>value</code>的结构体<code>Guess</code>。这里是储存猜测值的地方。</p>
 <p>接着在<code>Guess</code>上实现了一个叫做<code>new</code>的关联函数来创建<code>Guess</code>的实例。<code>new</code>定义为接收一个<code>u32</code>类型的参数<code>value</code>并返回一个<code>Guess</code>。<code>new</code>函数中代码的测试确保了其值是在 1 到 100 之间的。如果<code>value</code>没有通过测试则调用<code>panic!</code>，这会警告调用这个函数的程序员有一个需要修改的 bug，因为创建一个<code>value</code>超出范围的<code>Guess</code>将会违反<code>Guess::new</code>所遵循的契约。<code>Guess::new</code>会出现 panic 的条件应该在其公有 API 文档中被提及；第十四章会涉及到在 API 文档中表明<code>panic!</code>可能性的相关规则。如果<code>value</code>通过了测试，我们新建一个<code>Guess</code>，其字段<code>value</code>将被设置为参数<code>value</code>的值，接着返回这个<code>Guess</code>。</p>
 <p>接着，我们实现了一个借用了<code>self</code>的方法<code>value</code>，它没有任何其他参数并返回一个<code>u32</code>。这类方法有时被称为 <em>getter</em>，因为它的目的就是返回对应字段的数据。这样的公有方法是必要的，因为<code>Guess</code>结构体的<code>value</code>字段是私有的。私有的字段<code>value</code>是很重要的，这样使用<code>Guess</code>结构体的代码将不允许直接设置<code>value</code>的值：调用者<strong>必须</strong>使用<code>Guess::new</code>方法来创建一个<code>Guess</code>的实例，这就确保了不会存在一个<code>value</code>没有通过<code>Guess::new</code>函数的条件检查的<code>Guess</code>。</p>
@@ -4421,20 +4393,19 @@ impl Guess {
 <p>现在我们已经见识过了标准库中<code>Option</code>和<code>Result</code>泛型枚举的能力了，让我们聊聊泛型是如何工作的，以及如果在你的代码中利用他们。</p>
 <a class="header" href="#泛型trait-和生命周期" name="泛型trait-和生命周期"><h1>泛型、trait 和生命周期</h1></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch10-00-generics.md">ch10-00-generics.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-00-generics.md">ch10-00-generics.md</a>
 <br>
-commit b335da755592f286fd97a64d98f0ca3be6a59327</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
 <p>每一个编程语言都有高效的处理重复概念的工具；在 Rust 中工具之一就是<strong>泛型</strong>（<em>generics</em>）。泛型是具体类型或其他属性的抽象替代。我们可以表达泛型的属性，比如他们的行为或如何与其他泛型相关联，而不需要在编写和编译代码时知道他们在这里实际上代表什么。</p>
-<p>同理为了编写一份可以用于多种具体值的代码，函数并不知道其参数为何值，这时就可以让函数获取泛型而不是像<code>i32</code>或<code>String</code>这样的具体值。我们已经使用过第六章的<code>Option&lt;T&gt;</code>，第八章的<code>Vec&lt;T&gt;</code>和<code>HashMap&lt;K, V&gt;</code>，以及第九章的<code>Result&lt;T, E&gt;</code>这些泛型了。本章会探索如何使用泛型定义我们自己自己的类型、函数和方法。</p>
+<p>同理为了编写一份可以用于多种具体值的代码，函数并不知道其参数为何值，这时就可以让函数获取泛型而不是像<code>i32</code>或<code>String</code>这样的具体值。我们已经使用过第六章的<code>Option&lt;T&gt;</code>，第八章的<code>Vec&lt;T&gt;</code>和<code>HashMap&lt;K, V&gt;</code>，以及第九章的<code>Result&lt;T, E&gt;</code>这些泛型了。本章会探索如何使用泛型定义我们自己自己的类型、函数和方法！</p>
 <p>首先，我们将回顾一下提取函数以减少代码重复的机制。接着使用一个只在参数类型上不同的泛型函数来实现相同的功能。我们也会讲到结构体和枚举定义中的泛型。</p>
 <p>之后，我们讨论 <em>traits</em>，这是一个定义泛型行为的方法。trait 可以与泛型结合来将泛型限制为拥有特定行为的类型，而不是任意类型。</p>
 <p>最后介绍<strong>生命周期</strong>（<em>lifetimes</em>），它是一类允许我们向编译器提供引用如何相互关联的泛型。Rust 的生命周期功能允许在很多场景下借用值同时仍然使编译器能够检查这些引用的有效性。</p>
 <a class="header" href="#提取函数来减少重复" name="提取函数来减少重复"><h2>提取函数来减少重复</h2></a>
 <p>在介绍泛型语法之前，首先来回顾一个不使用泛型的处理重复的技术：提取一个函数。当熟悉了这个技术以后，我们将使用相同的机制来提取一个泛型函数！如同你识别出可以提取到函数中重复代码那样，你也会开始识别出能够使用泛型的重复代码。</p>
 <p>考虑一下这个寻找列表中最大值的小程序，如列表 10-1 所示：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let numbers = vec![34, 50, 25, 100, 65];
 
@@ -4450,14 +4421,11 @@ commit b335da755592f286fd97a64d98f0ca3be6a59327</p>
 #  assert_eq!(largest, 100);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-1: Code to find the largest number in a list of numbers</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-1: Code to find the largest number in a list
+of numbers</span></p>
 <p>这段代码获取一个整型列表，存放在变量<code>numbers</code>中。它将列表的第一项放入了变量<code>largest</code>中。接着遍历了列表中的所有数字，如果当前值大于<code>largest</code>中储存的值，将<code>largest</code>替换为这个值。如果当前值小于目前为止的最大值，<code>largest</code>保持不变。当列表中所有值都被考虑到之后，<code>largest</code>将会是最大值，在这里也就是 100。</p>
 <p>如果需要在两个不同的列表中寻找最大值，我们可以重复列表 10-1 中的代码这样程序中就会存在两段相同逻辑的代码，如列表 10-2 所示：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let numbers = vec![34, 50, 25, 100, 65];
 
@@ -4484,10 +4452,8 @@ commit b335da755592f286fd97a64d98f0ca3be6a59327</p>
     println!(&quot;The largest number is {}&quot;, largest);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-2: Code to find the largest number in <em>two</em> lists of numbers</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-2: Code to find the largest number in <em>two</em>
+lists of numbers</span></p>
 <p>虽然代码能够执行，但是重复的代码是冗余且已于出错的，并且意味着当更新逻辑时需要修改多处地方的代码。</p>
 <!-- Are we safe assuming the reader will be familiar with the term
 "abstraction" in this context, or do we want to give a brief definition? -->
@@ -4495,8 +4461,7 @@ commit b335da755592f286fd97a64d98f0ca3be6a59327</p>
 <p>为了消除重复，我们可以创建一层抽象，在这个例子中将表现为一个获取任意整型列表作为参数并对其进行处理的函数。这将增加代码的简洁性并让我们将表达和推导寻找列表中最大值的这个概念与使用这个概念的特定位置相互独。
 立。</p>
 <p>在列表 10-3 的程序中将寻找最大值的代码提取到了一个叫做<code>largest</code>的函数中。这个程序可以找出两个不同数字列表的最大值，不过列表 10-1 中的代码只存在于一个位置：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn largest(list: &amp;[i32]) -&gt; i32 {
     let mut largest = list[0];
 
@@ -4523,10 +4488,8 @@ fn main() {
 #    assert_eq!(result, 6000);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-3: Abstracted code to find the largest number in two lists</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-3: Abstracted code to find the largest number
+in two lists</span></p>
 <p>这个函数有一个参数<code>list</code>，它代表会传递给函数的任何具体<code>i32</code>值的 slice。函数定义中的<code>list</code>代表任何<code>&amp;[i32]</code>。当调用<code>largest</code>函数时，其代码实际上运行于我们传递的特定值上。</p>
 <p>从列表 10-2 到列表 10-3 中涉及的机制经历了如下几步：</p>
 <ol>
@@ -4538,7 +4501,7 @@ fn main() {
 <p>如果我们有两个函数，一个寻找一个<code>i32</code>值的 slice 中的最大项而另一个寻找<code>char</code>值的 slice 中的最大项该怎么办？该如何消除重复呢？让我们拭目以待！</p>
 <a class="header" href="#泛型数据类型" name="泛型数据类型"><h2>泛型数据类型</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch10-01-syntax.md">ch10-01-syntax.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-01-syntax.md">ch10-01-syntax.md</a>
 <br>
 commit 55d9e75ffec92e922273c997026bb10613a76578</p>
 </blockquote>
@@ -4546,8 +4509,7 @@ commit 55d9e75ffec92e922273c997026bb10613a76578</p>
 <a class="header" href="#在函数定义中使用泛型" name="在函数定义中使用泛型"><h3>在函数定义中使用泛型</h3></a>
 <p>定义函数时可以在函数签名的参数数据类型和返回值中使用泛型。以这种方式编写的代码将更灵活并能向函数调用者提供更多功能，同时不引入重复代码。</p>
 <p>回到<code>largest</code>函数上，列表 10-4 中展示了两个提供了相同的寻找 slice 中最大值功能的函数。第一个是从列表 10-3 中提取的寻找 slice 中<code>i32</code>最大值的函数。第二个函数寻找 slice 中<code>char</code>的最大值：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn largest_i32(list: &amp;[i32]) -&gt; i32 {
     let mut largest = list[0];
 
@@ -4586,21 +4548,17 @@ fn main() {
 #    assert_eq!(result, 'y');
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-4: Two functions that differ only in their names and the types in
-their signatures</p>
-</figcaption>
-</figure>
-<p>这里<code>largest_i32</code>和<code>largest_char</code>有着完全相同的函数体，所以能够将这两个函数变成一个来减少重复就太好了。所幸通过引入一个泛型参数就能实现。</p>
-<p>为了参数化要定义的函数的签名中的类型，我们需要像给函数的值参数起名那样为这类型参数起一个名字。这里选择了名称<code>T</code>。任何标识符抖可以作为类型参数名，选择<code>T</code>是因为 Rust 的类型命名规范是骆驼命名法（CamelCase）。另外泛型类型参数的规范也倾向于简短，经常仅仅是一个字母。<code>T</code>作为“type”是大部分 Rust 程序员的首选。</p>
+<p><span class="caption">Listing 10-4: Two functions that differ only in their
+names and the types in their signatures</span></p>
+<p>这里<code>largest_i32</code>和<code>largest_char</code>有着完全相同的函数体，所以能够将这两个函数变成一个来减少重复就太好了。所幸通过引入一个泛型参数就能实现！</p>
+<p>为了参数化要定义的函数的签名中的类型，我们需要像给函数的值参数起名那样为这类型参数起一个名字。这里选择了名称<code>T</code>。任何标识符抖可以作为类型参数名，选择<code>T</code>是因为 Rust 的类型命名规范是骆驼命名法（CamelCase）。另外泛型类型参数的规范也倾向于简短，经常仅仅是一个字母。<code>T</code>作为“type”的缩写是大部分 Rust 程序员的首选。</p>
 <p>当需要再函数体中使用一个参数时，必须再函数签名中声明这个参数以便编译器能知道函数体中这个名称的意义。同理，当在函数签名中使用一个类型参数时，必须在使用它之前就声明它。类型参数声明位于函数名称与参数列表中间的尖括号中。</p>
 <p>我们将要定义的泛型版本的<code>largest</code>函数的签名看起来像这样：</p>
 <pre><code class="language-rust,ignore">fn largest&lt;T&gt;(list: &amp;[T]) -&gt; T {
 </code></pre>
 <p>这可以理解为：函数<code>largest</code>有泛型类型<code>T</code>。它有一个参数<code>list</code>，它的类型是一个<code>T</code>值的 slice。<code>largest</code>函数将会返回一个与<code>T</code>相同类型的值。</p>
 <p>列表 10-5 展示一个在签名中使用了泛型的统一的<code>largest</code>函数定义，并向我们展示了如何对<code>i32</code>值的 slice 或<code>char</code>值的 slice 调用<code>largest</code>函数。注意这些代码还不能编译！</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn largest&lt;T&gt;(list: &amp;[T]) -&gt; T {
     let mut largest = list[0];
 
@@ -4625,11 +4583,8 @@ fn main() {
     println!(&quot;The largest char is {}&quot;, result);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-5: A definition of the <code>largest</code> function that uses generic type
-parameters but doesn't compile yet</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-5: A definition of the <code>largest</code> function that
+uses generic type parameters but doesn't compile yet</span></p>
 <p>如果现在就尝试编译这些代码，会出现如下错误：</p>
 <pre><code>error[E0369]: binary operation `&gt;` cannot be applied to type `T`
   |
@@ -4648,8 +4603,7 @@ not-yet-compiling example here, which I know isn't ideal either. Let us know
 what you think. /Carol -->
 <a class="header" href="#结构体定义中的泛型" name="结构体定义中的泛型"><h3>结构体定义中的泛型</h3></a>
 <p>同样也可以使用<code>&lt;&gt;</code>语法来定义拥有一个或多个泛型参数类型字段的结构体。列表 10-6 展示了如何定义和使用一个可以存放任何类型的<code>x</code>和<code>y</code>坐标值的结构体<code>Point</code>：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct Point&lt;T&gt; {
     x: T,
     y: T,
@@ -4660,14 +4614,11 @@ fn main() {
     let float = Point { x: 1.0, y: 4.0 };
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-6: A <code>Point</code> struct that holds <code>x</code> and <code>y</code> values of type <code>T</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-6: A <code>Point</code> struct that holds <code>x</code> and <code>y</code>
+values of type <code>T</code></span></p>
 <p>其语法类似于函数定义中的泛型应用。首先，必须在结构体名称后面的尖括号中声明泛型参数的名称。接着在结构体定义中可以指定具体数据类型的位置使用泛型类型。</p>
 <p>注意<code>Point</code>的定义中是使用了要给泛型类型，我们想要表达的是结构体<code>Point</code>对于一些类型<code>T</code>是泛型的，而且无论这个泛型是什么，字段<code>x</code>和<code>y</code><strong>都是</strong>相同类型的。如果尝试创建一个有不同类型值的<code>Point</code>的实例，像列表 10-7 中的代码就不能编译：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">struct Point&lt;T&gt; {
     x: T,
     y: T,
@@ -4677,11 +4628,8 @@ fn main() {
     let wont_work = Point { x: 5, y: 4.0 };
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-7: The fields <code>x</code> and <code>y</code> must be the same type because both have
-the same generic data type <code>T</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-7: The fields <code>x</code> and <code>y</code> must be the same
+type because both have the same generic data type <code>T</code></span></p>
 <p>尝试编译会得到如下错误：</p>
 <pre><code>error[E0308]: mismatched types
  --&gt;
@@ -4695,8 +4643,7 @@ the same generic data type <code>T</code></p>
 </code></pre>
 <p>当我们将 5 赋值给<code>x</code>，编译器就知道这个<code>Point</code>实例的泛型类型<code>T</code>是一个整型。接着我们将<code>y</code>指定为 4.0，而它被定义为与<code>x</code>有着相同的类型，所以出现了类型不匹配的错误。</p>
 <p>如果想要一个<code>x</code>和<code>y</code>可以有不同类型且仍然是泛型的<code>Point</code>结构体，我们可以使用多个泛型类型参数。在列表 10-8 中，我们修改<code>Point</code>的定义为拥有两个泛型类型<code>T</code>和<code>U</code>。其中字段<code>x</code>是<code>T</code>类型的，而字段<code>y</code>是<code>U</code>类型的：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct Point&lt;T, U&gt; {
     x: T,
     y: U,
@@ -4708,11 +4655,8 @@ fn main() {
     let integer_and_float = Point { x: 5, y: 4.0 };
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-8: A <code>Point</code> generic over two types so that <code>x</code> and <code>y</code> may be
-values of different types</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-8: A <code>Point</code> generic over two types so that
+<code>x</code> and <code>y</code> may be values of different types</span></p>
 <p>现在所有这些<code>Point</code>实例都是被允许的了！你可以在定义中使用任意多的泛型类型参数，不过太多的话代码将难以阅读和理解。如果你处于一个需要很多泛型类型的位置，这可能是一个需要重新组织代码并分隔成一些更小部分的信号。</p>
 <a class="header" href="#枚举定义中的泛型数据类型" name="枚举定义中的泛型数据类型"><h3>枚举定义中的泛型数据类型</h3></a>
 <p>类似于结构体，枚举也可以在其成员中存放泛型数据类型。第六章我们使用过了标准库提供的<code>Option&lt;T&gt;</code>枚举，现在这个定义看起来就更容易理解了。让我们再看看：</p>
@@ -4732,8 +4676,7 @@ values of different types</p>
 <p>当发现代码中有多个只有存放的值的类型有所不同的结构体或枚举定义时，你就应该像之前的函数定义中那样引入泛型类型来减少重复。</p>
 <a class="header" href="#方法定义中的枚举数据类型" name="方法定义中的枚举数据类型"><h3>方法定义中的枚举数据类型</h3></a>
 <p>可以像第五章介绍的那样来为其定义中带有泛型的结构体或枚举实现方法。列表 10-9 中展示了列表 10-6 中定义的结构体<code>Point&lt;T&gt;</code>。接着我们在<code>Point&lt;T&gt;</code>上定义了一个叫做<code>x</code>的方法来返回字段<code>x</code>中数据的引用：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct Point&lt;T&gt; {
     x: T,
     y: T,
@@ -4751,22 +4694,19 @@ fn main() {
     println!(&quot;p.x = {}&quot;, p.x());
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-9: Implementing a method named <code>x</code> on the <code>Point&lt;T&gt;</code> struct that
-will return a reference to the <code>x</code> field, which is of type <code>T</code>.</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-9: Implementing a method named <code>x</code> on the
+<code>Point&lt;T&gt;</code> struct that will return a reference to the <code>x</code> field, which is of
+type <code>T</code>.</span></p>
 <p>注意必须在<code>impl</code>后面声明<code>T</code>，这样就可以在<code>Point&lt;T&gt;</code>上实现的方法中使用它了。</p>
 <p>结构体定义中的泛型类型参数并不总是与结构体方法签名中使用的泛型是同一类型。列表 10-10 中在列表 10-8 中的结构体<code>Point&lt;T, U&gt;</code>上定义了一个方法<code>mixup</code>。这个方法获取另一个<code>Point</code>作为参数，而它可能与调用<code>mixup</code>的<code>self</code>是不同的<code>Point</code>类型。这个方法用<code>self</code>的<code>Point</code>类型的<code>x</code>值（类型<code>T</code>）和参数的<code>Point</code>类型的<code>y</code>值（类型<code>W</code>）来创建一个新<code>Point</code>类型的实例：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct Point&lt;T, U&gt; {
     x: T,
     y: U,
 }
 
 impl&lt;T, U&gt; Point&lt;T, U&gt; {
-    fn mixup&lt;V, W&gt;(&amp;self, other: &amp;Point&lt;V, W&gt;) -&gt; Point&lt;T, W&gt; {
+    fn mixup&lt;V, W&gt;(self, other: Point&lt;V, W&gt;) -&gt; Point&lt;T, W&gt; {
         Point {
             x: self.x,
             y: other.y,
@@ -4783,11 +4723,8 @@ fn main() {
     println!(&quot;p3.x = {}, p3.y = {}&quot;, p3.x, p3.y);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-10: Methods that use different generic types than their struct's
-definition</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-10: Methods that use different generic types
+than their struct's definition</span></p>
 <p>在<code>main</code>函数中，定义了一个有<code>i32</code>类型的<code>x</code>（其值为<code>5</code>）和<code>f64</code>的<code>y</code>（其值为<code>10.4</code>）的<code>Point</code>。<code>p2</code>则是一个有着字符串 slice 类型的<code>x</code>（其值为<code>&quot;Hello&quot;</code>）和<code>char</code>类型的<code>y</code>（其值为<code>c</code>）的<code>Point</code>。在<code>p1</code>上以<code>p2</code>调用<code>mixup</code>会返回一个<code>p3</code>，它会有一个<code>i32</code>类型的<code>x</code>，因为<code>x</code>来自<code>p1</code>，并拥有一个<code>char</code>类型的<code>y</code>，因为<code>y</code>来自<code>p2</code>。<code>println!</code>会打印出<code>p3.x = 5, p3.y = c</code>。</p>
 <p>注意泛型参数<code>T</code>和<code>U</code>声明于<code>impl</code>之后，因为他们于结构体定义相对应。而泛型参数<code>V</code>和<code>W</code>声明于<code>fn mixup</code>之后，因为他们只是相对于方法本身的。</p>
 <a class="header" href="#泛型代码的性能" name="泛型代码的性能"><h3>泛型代码的性能</h3></a>
@@ -4819,35 +4756,30 @@ fn main() {
 <p>我们可以使用泛型来编写不重复的代码，而 Rust 会将会为每一个实例编译其特定类型的代码。这意味着在使用泛型时没有运行时开销；当代码运行，它的执行效率就跟好像手写每个具体定义的重复代码一样。这个单态化过程正是 Rust 泛型在运行时极其高效的原因。</p>
 <a class="header" href="#trait定义共享的行为" name="trait定义共享的行为"><h2>trait：定义共享的行为</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch10-02-traits.md">ch10-02-traits.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-02-traits.md">ch10-02-traits.md</a>
 <br>
-commit 709eb1eaca48864fafd9263042f5f9d9d6ffe08d</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
 <p>trait 允许我们进行另一种抽象：他们让我们可以抽象类型所通用的行为。<em>trait</em> 告诉 Rust 编译器某个特定类型拥有可能与其他类型共享的功能。在使用泛型类型参数的场景中，可以使用 <em>trait bounds</em> 在编译时指定泛型可以是任何实现了某个 trait 的类型，并由此在这个场景下拥有我们希望的功能。</p>
 <blockquote>
 <p>注意：<em>trait</em> 类似于其他语言中的常被称为<strong>接口</strong>（<em>interfaces</em>）的功能，虽然有一些不同。</p>
 </blockquote>
 <a class="header" href="#定义-trait" name="定义-trait"><h3>定义 trait</h3></a>
-<p>一个类型的行为由其可供调用的方法构成。如果可以对不同类型调用相同的方法的话，这些类型就可以共享相同的行为了。trait 定义是一种将方法签名组合起来的方法，目的是定义一个实现某些目的所必须行为的集合。</p>
+<p>一个类型的行为由其可供调用的方法构成。如果可以对不同类型调用相同的方法的话，这些类型就可以共享相同的行为了。trait 定义是一种将方法签名组合起来的方法，目的是定义一个实现某些目的所必需的行为的集合。</p>
 <p>例如，这里有多个存放了不同类型和属性文本的结构体：结构体<code>NewsArticle</code>用于存放发生于世界各地的新闻故事，而结构体<code>Tweet</code>最多只能存放 140 个字符的内容，以及像是否转推或是否是对推友的回复这样的元数据。</p>
 <p>我们想要创建一个多媒体聚合库用来显示可能储存在<code>NewsArticle</code>或<code>Tweet</code>实例中的数据的总结。每一个结构体都需要的行为是他们是能够被总结的，这样的话就可以调用实例的<code>summary</code>方法来请求总结。列表 10-11 中展示了一个表现这个概念的<code>Summarizable</code> trait 的定义：</p>
-<figure>
-<span class="filename">Filename: lib.rs</span>
+<p><span class="filename">Filename: lib.rs</span></p>
 <pre><code class="language-rust">pub trait Summarizable {
     fn summary(&amp;self) -&gt; String;
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-11: Definition of a <code>Summarizable</code> trait that consists of the
-behavior provided by a <code>summary</code> method</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-11: Definition of a <code>Summarizable</code> trait that
+consists of the behavior provided by a <code>summary</code> method</span></p>
 <p>使用<code>trait</code>关键字来定义一个 trait，后面是 trait 的名字，在这个例子中是<code>Summarizable</code>。在大括号中声明描述实现这个 trait 的类型所需要的行为的方法签名，在这个例子中是是<code>fn summary(&amp;self) -&gt; String</code>。在方法签名后跟分号而不是在大括号中提供其实现。接着每一个实现这个 trait 的类型都需要提供其自定义行为的方法体，编译器也会确保任何实现<code>Summarizable</code> trait 的类型都拥有与这个签名的定义完全一致的<code>summary</code>方法。</p>
 <p>trait 体中可以有多个方法，一行一个方法签名且都以分号结尾。</p>
 <a class="header" href="#为类型实现-trait" name="为类型实现-trait"><h3>为类型实现 trait</h3></a>
 <p>现在我们定义了<code>Summarizable</code> trait，接着就可以在多媒体聚合库中需要拥有这个行为的类型上实现它了。列表 10-12 中展示了<code>NewsArticle</code>结构体上<code>Summarizable</code> trait 的一个实现，它使用标题、作者和创建的位置作为<code>summary</code>的返回值。对于<code>Tweet</code>结构体，我们选择将<code>summary</code>定义为用户名后跟推文的全部文本作为返回值，并假设推文内容已经被限制为 140 字符以内。</p>
-<figure>
-<span class="filename">Filename: lib.rs</span>
+<p><span class="filename">Filename: lib.rs</span></p>
 <pre><code class="language-rust"># pub trait Summarizable {
 #     fn summary(&amp;self) -&gt; String;
 # }
@@ -4878,11 +4810,8 @@ impl Summarizable for Tweet {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-12: Implementing the <code>Summarizable</code> trait on the <code>NewsArticle</code> and
-<code>Tweet</code> types</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-12: Implementing the <code>Summarizable</code> trait on
+the <code>NewsArticle</code> and <code>Tweet</code> types</span></p>
 <p>在类型上实现 trait 类似与实现与 trait 无关的方法。区别在于<code>impl</code>关键字之后，我们提供需要实现 trait 的名称，接着是<code>for</code>和需要实现 trait 的类型的名称。在<code>impl</code>块中，使用 trait 定义中的方法签名，不过不再后跟分号，而是需要在大括号中编写函数体来为特定类型实现 trait 方法所拥有的行为。</p>
 <p>一旦实现了 trait，我们就可以用与<code>NewsArticle</code>和<code>Tweet</code>实例的非 trait 方法一样的方式调用 trait 方法了：</p>
 <pre><code class="language-rust,ignore">let tweet = Tweet {
@@ -4896,8 +4825,7 @@ println!(&quot;1 new tweet: {}&quot;, tweet.summary());
 </code></pre>
 <p>这会打印出<code>1 new tweet: horse_ebooks: of course, as you probably already know, people</code>。</p>
 <p>注意因为列表 10-12 中我们在相同的<code>lib.rs</code>力定义了<code>Summarizable</code> trait 和<code>NewsArticle</code>与<code>Tweet</code>类型，所以他们是位于同一作用域的。如果这个<code>lib.rs</code>是对应<code>aggregator</code> crate 的，而别人想要利用我们 crate 的功能外加为其<code>WeatherForecast</code>结构体实现<code>Summarizable</code> trait，在实现<code>Summarizable</code> trait 之前他们首先就需要将其导入其作用域中，如列表 10-13 所示：</p>
-<figure>
-<span class="filename">Filename: lib.rs</span>
+<p><span class="filename">Filename: lib.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate aggregator;
 
 use aggregator::Summarizable;
@@ -4916,29 +4844,22 @@ impl Summarizable for WeatherForecast {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-13: Bringing the <code>Summarizable</code> trait from our <code>aggregator</code> crate
-into scope in another crate</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-13: Bringing the <code>Summarizable</code> trait from our
+<code>aggregator</code> crate into scope in another crate</span></p>
 <p>另外这段代码假设<code>Summarizable</code>是一个公有 trait，这是因为列表 10-11 中<code>trait</code>之前使用了<code>pub</code>关键字。</p>
 <p>trait 实现的一个需要注意的限制是：只能在 trait 或对应类型位于我们 crate 本地的时候为其实现 trait。换句话说，不允许对外部类型实现外部 trait。例如，不能<code>Vec</code>上实现<code>Display</code> trait，因为<code>Display</code>和<code>Vec</code>都定义于标准库中。允许在像<code>Tweet</code>这样作为我们<code>aggregator</code>crate 部分功能的自定义类型上实现标准库中的 trait <code>Display</code>。也允许在<code>aggregator</code>crate中为<code>Vec</code>实现<code>Summarizable</code>，因为<code>Summarizable</code>定义与此。这个限制是我们称为 <em>orphan rule</em> 的一部分，如果你感兴趣的可以在类型理论中找到它。简单来说，它被称为 orphan rule 是因为其父类型不存在。没有这条规则的话，两个 crate 可以分别对相同类型是实现相同的 trait，因而这两个实现会相互冲突：Rust 将无从得知应该使用哪一个。因为 Rust 强制执行 orphan rule，其他人编写的代码不会破坏你代码，反之亦是如此。</p>
 <a class="header" href="#默认实现" name="默认实现"><h3>默认实现</h3></a>
 <p>有时为 trait 中的某些或全部提供默认的行为，而不是在每个类型的每个实现中都定义自己的行为是很有用的。这样当为某个特定类型实现 trait 时，可以选择保留或重载每个方法的默认行为。</p>
 <p>列表 10-14 中展示了如何为<code>Summarize</code> trait 的<code>summary</code>方法指定一个默认的字符串值，而不是像列表 10-11 中那样只是定义方法签名：</p>
-<figure>
-<span class="filename">Filename: lib.rs</span>
+<p><span class="filename">Filename: lib.rs</span></p>
 <pre><code class="language-rust">pub trait Summarizable {
     fn summary(&amp;self) -&gt; String {
         String::from(&quot;(Read more...)&quot;)
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-14: Definition of a <code>Summarizable</code> trait with a default
-implementation of the <code>summary</code> method</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-14: Definition of a <code>Summarizable</code> trait with
+a default implementation of the <code>summary</code> method</span></p>
 <p>如果想要对<code>NewsArticle</code>实例使用这个默认实现，而不是像列表 10-12 中那样定义一个自己的实现，则可以指定一个空的<code>impl</code>块：</p>
 <pre><code class="language-rust,ignore">impl Summarizable for NewsArticle {}
 </code></pre>
@@ -5034,8 +4955,7 @@ error[E0507]: cannot move out of borrowed content
 </code></pre>
 <p>错误的核心是<code>cannot move out of type [T], a non-copy array</code>，对于非泛型版本的<code>largest</code>函数，我们只尝试了寻找最大的<code>i32</code>和<code>char</code>。正如第四章讨论过的，像<code>i32</code>和<code>char</code>这样的类型是已知大小的并可以储存在栈上，所以他们实现了<code>Copy</code> trait。当我们将<code>largest</code>函数改成使用泛型后，现在<code>list</code>参数的类型就有可能是没有实现<code>Copy</code> trait 的，这意味着我们可能不能将<code>list[0]</code>的值移动到<code>largest</code>变量中。</p>
 <p>如果只想对实现了<code>Copy</code>的类型调用这些带啊吗，可以在<code>T</code>的 trait bounds 中增加<code>Copy</code>！列表 10-15 中展示了一个可以编译的泛型版本的<code>largest</code>函数的完整代码，只要传递给<code>largest</code>的 slice 值的类型实现了<code>PartialOrd</code>和<code>Copy</code>这两个 trait，例如<code>i32</code>和<code>char</code>：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">use std::cmp::PartialOrd;
 
 fn largest&lt;T: PartialOrd + Copy&gt;(list: &amp;[T]) -&gt; T {
@@ -5062,26 +4982,23 @@ fn main() {
     println!(&quot;The largest char is {}&quot;, result);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-15: A working definition of the <code>largest</code> function that works on any
-generic type that implements the <code>PartialOrd</code> and <code>Copy</code> traits</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-15: A working definition of the <code>largest</code>
+function that works on any generic type that implements the <code>PartialOrd</code> and
+<code>Copy</code> traits</span></p>
 <p>如果并不希望限制<code>largest</code>函数只能用于实现了<code>Copy</code> trait 的类型，我们可以在<code>T</code>的 trait bounds 中指定<code>Clone</code>而不是<code>Copy</code>，并克隆 slice 的每一个值使得<code>largest</code>函数拥有其所有权。但是使用<code>clone</code>函数潜在意味着更多的堆分配，而且堆分配在涉及大量数据时可能会相当缓慢。另一种<code>largest</code>的实现方式是返回 slice 中一个<code>T</code>值的引用。如果我们将函数返回值从<code>T</code>改为<code>&amp;T</code>并改变函数体使其能够返回一个引用，我们将不需要任何<code>Clone</code>或<code>Copy</code>的 trait bounds 而且也不会有任何的堆分配。尝试自己实现这种替代解决方式吧！</p>
 <p>trait 和 trait bounds 让我们使用泛型类型参数来减少重复，并仍然能够向编译器明确指定泛型类型需要拥有哪些行为。因为我们向编译器提供了 trait bounds 信息，它就可以检查代码中所用到的具体类型是否提供了正确的行为。在动态类型语言中，如果我们尝试调用一个类型并没有实现的方法，会在运行时出现错误。Rust 将这些错误移动到了编译时，甚至在代码能够运行之前就强迫我们修复错误。另外，我们也无需编写运行时检查行为的代码，因为在编译时就已经检查过了，这样相比其他那些不愿放弃泛型灵活性的语言有更好的性能。</p>
 <p>这里还有一种泛型，我们一直在使用它甚至都没有察觉它的存在，这就是<strong>生命周期</strong>（<em>lifetimes</em>）。不同于其他泛型帮助我们确保类型拥有期望的行为，生命周期则有助于确保引用在我们需要他们的时候一直有效。让我们学习生命周期是如何做到这些的。</p>
 <a class="header" href="#生命周期与引用有效性" name="生命周期与引用有效性"><h2>生命周期与引用有效性</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch10-03-lifetime-syntax.md">ch10-03-lifetime-syntax.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-03-lifetime-syntax.md">ch10-03-lifetime-syntax.md</a>
 <br>
-commit d7a4e99554da53619dd71044273535ba0186f40a</p>
+commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894</p>
 </blockquote>
 <p>当在第四章讨论引用时，我们遗漏了一个重要的细节：Rust 中的每一个引用都有其<strong>生命周期</strong>，也就是引用保持有效的作用域。大部分时候生命周期是隐含并可以推断的，正如大部分时候类型也是可以推断的一样。类似于当因为有多种可能类型的时候必须注明类型，也会出现引用的生命周期以多种不同方式向关联的情况，所以 Rust 需要我们使用泛型生命周期参数来注明他们的关系，这样就能确保运行时实际使用的引用绝对是有效的。</p>
 <p>好吧，这有点不太寻常，而且也不同于其他语言中使用的工具。生命周期，从某种意义上说，是 Rust 最与众不同的功能。</p>
 <p>生命周期是一个很广泛的话题，本章不可能涉及到它全部的内容，所以这里我们会讲到一些通常你可能会遇到的生命周期语法以便你熟悉这个概念。第十九章会包含生命周期所有功能的更高级的内容。</p>
 <a class="header" href="#生命周期避免了悬垂引用" name="生命周期避免了悬垂引用"><h3>生命周期避免了悬垂引用</h3></a>
 <p>生命周期的主要目标是避免悬垂引用，它会导致程序引用了并非其期望引用的数据。考虑一下列表 10-16 中的程序，它有一个外部作用域和一个内部作用域，外部作用域声明了一个没有初值的变量<code>r</code>，而内部作用域声明了一个初值为 5 的变量<code>x</code>。在内部作用域中，我们尝试将<code>r</code>的值设置为一个<code>x</code>的引用。接着在内部作用域结束后，尝试打印出<code>r</code>的值：</p>
-<figure>
 <pre><code class="language-rust,ignore">{
     let r;
 
@@ -5093,10 +5010,8 @@ commit d7a4e99554da53619dd71044273535ba0186f40a</p>
     println!(&quot;r: {}&quot;, r);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-16: An attempt to use a reference whose value has gone out of scope</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-16: An attempt to use a reference whose value
+has gone out of scope</span></p>
 <blockquote>
 <a class="header" href="#未初始化变量不能被使用" name="未初始化变量不能被使用"><h3>未初始化变量不能被使用</h3></a>
 <p>接下来的一些例子中声明了没有初始值的变量，以便这些变量存在于外部作用域。这看起来好像和 Rust 不允许存在空值相冲突。然而这是可以的，如果我们尝试在给它一个值之前使用这个变量，会出现一个编译时错误。请自行尝试！</p>
@@ -5115,7 +5030,6 @@ commit d7a4e99554da53619dd71044273535ba0186f40a</p>
 <p>变量<code>x</code>并没有“存在的足够久”。为什么呢？好吧，<code>x</code>在到达第 7 行的大括号的结束时就离开了作用域，这也是内部作用域的结尾。不过<code>r</code>在外部作用域也是有效的；作用域越大我们就说它“存在的越久”。如果 Rust 允许这段代码工作，<code>r</code>将会引用在<code>x</code>离开作用域时被释放的内存，这时尝试对<code>r</code>做任何操作都会不能正常工作。那么 Rust 是如何决定这段代码是不被允许的呢？</p>
 <a class="header" href="#借用检查器" name="借用检查器"><h4>借用检查器</h4></a>
 <p>编译器的这一部分叫做<strong>借用检查器</strong>（<em>borrow checker</em>），它比较作用域来确保所有的借用都是有效的。列表 10-17 展示了与列表 10-16 相同的例子不过带有变量声明周期的注释：</p>
-<figure>
 <pre><code class="language-rust,ignore">{
     let r;         // -------+-- 'a
                    //        |
@@ -5129,11 +5043,8 @@ commit d7a4e99554da53619dd71044273535ba0186f40a</p>
                    // -------+
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-17: Annotations of the lifetimes of <code>x</code> and <code>r</code>, named <code>'a</code> and <code>'b</code>
-respectively</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-17: Annotations of the lifetimes of <code>r</code> and
+<code>x</code>, named <code>'a</code> and <code>'b</code> respectively</span></p>
 <!-- Just checking I'm reading this right: the inside block is the b lifetime,
 correct? I want to leave a note for production, make sure we can make that
 clear -->
@@ -5143,7 +5054,6 @@ the text art comments work or should we make an SVG diagram that has nicer
 looking arrows and labels? /Carol -->
 <p>我们将<code>r</code>的声明周期标记为<code>'a</code>而将<code>x</code>的生命周期标记为<code>'b</code>。如你所见，内部的<code>'b</code>块要比外部的生命周期<code>'a</code>小得多。在编译时，Rust 比较这两个生命周期的大小，并发现<code>r</code>拥有声明周期<code>'a</code>，不过它引用了一个拥有生命周期<code>'b</code>的对象。程序被拒绝编译，因为生命周期<code>'b</code>比生命周期<code>'a</code>要小：引用者没有比被引用者存在的更久。</p>
 <p>让我们看看列表 10-18 中这个并没有产生悬垂引用且可以正常编译的例子：</p>
-<figure>
 <pre><code class="language-rust">{
     let x = 5;            // -----+-- 'b
                           //      |
@@ -5153,18 +5063,14 @@ looking arrows and labels? /Carol -->
                           // --+  |
 }                         // -----+
 </code></pre>
-<figcaption>
-<p>Listing 10-18: A valid reference because the data has a longer lifetime than
-the reference</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-18: A valid reference because the data has a
+longer lifetime than the reference</span></p>
 <p><code>x</code>拥有生命周期 <code>'b</code>，在这里它比 <code>'a</code>要大。这就意味着<code>r</code>可以引用<code>x</code>：Rust 知道<code>r</code>中的引用在<code>x</code>有效的时候也会一直有效。</p>
 <p>现在我们已经在一个具体的例子中展示了引用的声明周期位于何处，并讨论了 Rust 如何分析生命周期来保证引用总是有效的，接下来让我们聊聊在函数的上下文中参数和返回值的泛型生命周期。</p>
 <a class="header" href="#函数中的泛型生命周期" name="函数中的泛型生命周期"><h3>函数中的泛型生命周期</h3></a>
 <p>让我们来编写一个返回两个字符串 slice 中最长的那一个的函数。我们希望能够通过传递两个字符串 slice 来调用这个函数，并希望返回一个字符串 slice。一旦我们实现了<code>longest</code>函数，列表 10-19 中的代码应该会打印出<code>The longest string is abcd</code>：</p>
-<figure>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><code class="language-rust,ignore">fn main() {
     let string1 = String::from(&quot;abcd&quot;);
     let string2 = &quot;xyz&quot;;
 
@@ -5172,11 +5078,8 @@ the reference</p>
     println!(&quot;The longest string is {}&quot;, result);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-19: A <code>main</code> function that calls the <code>longest</code> function to find the
-longest of two string slices</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-19: A <code>main</code> function that calls the <code>longest</code>
+function to find the longest of two string slices</span></p>
 <p>注意函数期望获取字符串 slice（如第四章所讲到的这是引用）因为我们并不希望<code>longest</code>函数获取其参数的引用。我们希望函数能够接受<code>String</code>的 slice（也就是变量<code>string1</code>的类型）和字符串字面值（也就是变量<code>string2</code>包含的值）。</p>
 <!-- why is `a` a slice and `b` a literal? You mean "a" from the string "abcd"? -->
 <!-- I've changed the variable names to remove ambiguity between the variable
@@ -5196,8 +5099,7 @@ interested to know if rereading Chapter 4 clears up that confusion.
 /Carol -->
 <p>参考之前第四章中的“字符串 slice 作为参数”部分中更多关于为什么上面例子中的参数正是我们想要的讨论。</p>
 <p>如果尝试像列表 10-20 中那样实现<code>longest</code>函数，它并不能编译：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn longest(x: &amp;str, y: &amp;str) -&gt; &amp;str {
     if x.len() &gt; y.len() {
         x
@@ -5206,11 +5108,9 @@ interested to know if rereading Chapter 4 clears up that confusion.
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-20: An implementation of the <code>longest</code> function that returns the
-longest of two string slices, but does not yet compile</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-20: An implementation of the <code>longest</code>
+function that returns the longest of two string slices, but does not yet
+compile</span></p>
 <p>将会出现如下有关生命周期的错误：</p>
 <pre><code>error[E0106]: missing lifetime specifier
    |
@@ -5233,8 +5133,7 @@ longest of two string slices, but does not yet compile</p>
 <p>生命周期注解本身没有多少意义：生命周期注解告诉 Rust 多个引用的泛型生命周期参数如何相互联系。如果函数有一个生命周期<code>'a</code>的<code>i32</code>的引用的参数<code>first</code>，还有另一个同样是生命周期<code>'a</code>的<code>i32</code>的引用的参数<code>second</code>，这两个生命周期注解有相同的名称意味着<code>first</code>和<code>second</code>必须与这相同的泛型生命周期存在得一样久。</p>
 <a class="header" href="#函数签名中的生命周期注解" name="函数签名中的生命周期注解"><h3>函数签名中的生命周期注解</h3></a>
 <p>来看看我们编写的<code>longest</code>函数的上下文中的生命周期。就像泛型类型参数，泛型生命周期参数需要声明在函数名和参数列表间的加括号中。这里我们想要告诉 Rust 关于参数中的引用和返回值之间的限制是他们都必须拥有相同的生命周期，就像列表 10-21 中在每个引用中都加上了<code>'a</code>那样：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
     if x.len() &gt; y.len() {
         x
@@ -5243,19 +5142,16 @@ longest of two string slices, but does not yet compile</p>
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-21: The <code>longest</code> function definition that specifies all the
-references in the signature must have the same lifetime, <code>'a</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-21: The <code>longest</code> function definition that
+specifies all the references in the signature must have the same lifetime,
+<code>'a</code></span></p>
 <p>这段代码能够编译并会产生我们想要使用列表 10-19 中的<code>main</code>函数得到的结果。</p>
 <p>现在函数签名表明对于某些生命周期<code>'a</code>，函数会获取两个参数，他们都是与生命周期<code>'a</code>存在的一样长的字符串 slice。函数会返回一个同样也与生命周期<code>'a</code>存在的一样长的字符串 slice。这就是我们告诉 Rust 需要其保证的协议。</p>
 <p>通过在函数签名中指定生命周期参数，我们不会改变任何参数或返回值的生命周期，不过我们说过任何不坚持这个协议的类型都将被借用检查器拒绝。这个函数并不知道（或需要知道）<code>x</code>和<code>y</code>具体会存在多久，不过只需要知道一些可以使用<code>'a</code>替代的作用域将会满足这个签名。</p>
 <p>当在函数中使用生命周期注解时，这些注解出现在函数签名中，而不存在于函数体中的任何代码中。这是因为 Rust 能够分析函数中代码而不需要任何协助，不过当函数引用或被函数之外的代码引用时，参数或返回值的生命周期可能在每次函数被调用时都不同。这可能会产生惊人的消耗并且对于 Rust 来说经常都是不可能分析的。在这种情况下，我们需要自己标注生命周期。</p>
 <p>当具体的引用被传递给<code>longest</code>时，具体被<code>'a</code>所替代的生命周期是<code>x</code>的作用域与<code>y</code>的作用域相重叠的那一部分。因为作用域总是嵌套的，所以换一种说法就是泛型生命周期<code>'a</code>的具体生命周期等同于<code>x</code>和<code>y</code>的生命周期中较小的那一个。因为我们用相同的生命周期参数标注了返回的引用值，所以返回的引用值就能保证在<code>x</code>和<code>y</code>中较短的那个生命周期结束之前保持有效。</p>
 <p>让我们如何通过传递拥有不同具体生命周期的引用来观察他们是如何限制<code>longest</code>函数的使用的。列表 10-22 是一个应该在任何编程语言中都很直观的例子：<code>string1</code>直到外部作用域结束都是有效的，<code>string2</code>则在内部作用域中是有效的，而<code>result</code>则引用了一些直到外部作用域结束都是有效的值。借用检查器赞同这些代码；它能够编译和运行，并打印出<code>The longest string is long string is long</code>：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
 #     if x.len() &gt; y.len() {
 #         x
@@ -5274,23 +5170,11 @@ fn main() {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-22: Using the <code>longest</code> function with references to <code>String</code> values
-that have different concrete lifetimes</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-22: Using the <code>longest</code> function with
+references to <code>String</code> values that have different concrete lifetimes</span></p>
 <p>接下来，让我们尝试一个<code>result</code>的引用的生命周期必须比两个参数的要短的例子。将<code>result</code>变量的声明从内部作用域中移动出来，不过将<code>result</code>和<code>string2</code>变量的赋值语句一同放在内部作用域里。接下来，我们将使用<code>result</code>的<code>println!</code>移动到内部作用域之外，就在其结束之后。注意列表 10-23 中的代码不能编译：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust"># fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
-#     if x.len() &gt; y.len() {
-#         x
-#     } else {
-#         y
-#     }
-# }
-#
-fn main() {
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">fn main() {
     let string1 = String::from(&quot;long string is long&quot;);
     let result;
     {
@@ -5300,11 +5184,8 @@ fn main() {
     println!(&quot;The longest string is {}&quot;, result);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-23: Attempting to use <code>result</code> after <code>string2</code> has gone out of scope
-won't compile</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-23: Attempting to use <code>result</code> after <code>string2</code>
+has gone out of scope won't compile</span></p>
 <p>如果尝试编译会出现如下错误：</p>
 <pre><code>error: `string2` does not live long enough
    |
@@ -5352,8 +5233,7 @@ at 1:44...
 <p>从结果上看，生命周期语法是关于如何联系函数不同参数和返回值的生命周期的。一旦他们形成了某种联系，Rust 就有了足够的信息来允许内存安全的操作并阻止会产生悬垂指针亦或是违反内存安全的行为。</p>
 <a class="header" href="#结构体定义中的生命周期注解" name="结构体定义中的生命周期注解"><h3>结构体定义中的生命周期注解</h3></a>
 <p>目前为止，我们只定义过有所有权类型的结构体。也可以定义存放引用的结构体，不过需要为结构体定义中的每一个引用添加生命周期注解。列表 10-24 中有一个存放了一个字符串 slice 的结构体<code>ImportantExcerpt</code>：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct ImportantExcerpt&lt;'a&gt; {
     part: &amp;'a str,
 }
@@ -5366,17 +5246,13 @@ fn main() {
     let i = ImportantExcerpt { part: first_sentence };
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-24: A struct that holds a reference, so its definition needs a
-lifetime annotation</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-24: A struct that holds a reference, so its
+definition needs a lifetime annotation</span></p>
 <p>这个结构体有一个字段，<code>part</code>，它存放了一个字符串 slice，这是一个引用。类似于泛型参数类型，必须在结构体名称后面的尖括号中声明泛型生命周期参数，以便在结构体定义中使用生命周期参数。</p>
 <p>这里的<code>main</code>函数创建了一个<code>ImportantExcerpt</code>的实例，它存放了变量<code>novel</code>所拥有的<code>String</code>的第一个句子的引用。</p>
 <a class="header" href="#生命周期省略" name="生命周期省略"><h3>生命周期省略</h3></a>
 <p>在这一部分，我们知道了每一个引用都有一个生命周期，而且需要为使用了引用的函数或结构体指定生命周期。然而，第四章的“字符串 slice”部分有一个函数，我们在列表 10-25 中再次展示它，没有生命周期注解却能成功编译：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">fn first_word(s: &amp;str) -&gt; &amp;str {
     let bytes = s.as_bytes();
 
@@ -5389,11 +5265,9 @@ lifetime annotation</p>
     &amp;s[..]
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-25: A function we defined in Chapter 4 that compiled without
-lifetime annotations, even though the parameter and return type are references</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-25: A function we defined in Chapter 4 that
+compiled without lifetime annotations, even though the parameter and return
+type are references</span></p>
 <p>这个函数没有生命周期注解却能编译是由于一些历史原因：在早期 1.0 之前的版本的 Rust 中，这的确是不能编译的。每一个引用都必须有明确的生命周期。那时的函数签名将会写成这样：</p>
 <pre><code class="language-rust,ignore">fn first_word&lt;'a&gt;(s: &amp;'a str) -&gt; &amp;'a str {
 </code></pre>
@@ -5497,9 +5371,9 @@ fn longest_with_an_announcement&lt;'a, T&gt;(x: &amp;'a str, y: &amp;'a str, ann
 <p>你可能不会相信，这个领域还有更多需要学习的内容：第十七章会讨论 trait 对象，这是另一种使用 trait 的方式。第十九章会涉及到生命周期注解更复杂的场景。第二十章讲解一些高级的类型系统功能。不过接下来，让我们聊聊如何在 Rust 中编写测试，来确保代码的所有功能能像我们希望的那样工作！</p>
 <a class="header" href="#测试" name="测试"><h1>测试</h1></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch11-00-testing.md">ch11-00-testing.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch11-00-testing.md">ch11-00-testing.md</a>
 <br>
-commit c9fd8eb1da7a79deee97020e8ad49af8ded78f9c</p>
+commit b7ab6668bbcb73b93c6464d8354c94a8e6c90395</p>
 </blockquote>
 <blockquote>
 <p>Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing their absence.</p>
@@ -5507,23 +5381,35 @@ commit c9fd8eb1da7a79deee97020e8ad49af8ded78f9c</p>
 <p>软件测试是证明 bug 存在的有效方法，而证明它们不存在时则显得令人绝望的不足。</p>
 <p>Edsger W. Dijkstra，【谦卑的程序员】（1972）</p>
 </blockquote>
-<p>Rust 是一个非常注重正确性的编程语言，不过正确性是一个难以证明的复杂主题。Rust 在其类型系统上下了很大的功夫，来确保程序像我们希望的那样运行，不过它并不有助于所有情况。为此，Rust 也包含为语言自身编写软件测试的支持。</p>
-<p>例如，我们可以编写一个叫做<code>add_two</code>的函数，它的签名有一个整型参数并返回一个整型值。我们可以实现并编译这个函数，而 Rust 也会进行所有的类型检查和借用检查，正如我们之前见识过的那样。Rust 所<strong>不能</strong>检查的是，我们实现的这个函数是否返回了参数值加二后的值，而不是加 10 或者减 50！这也就是测试出场的地方。例如可以编写传递<code>3</code>给<code>add_two</code>函数并检查我们是否得到了<code>5</code>。任何时候修改了代码我们都可以运行测试来确保没有改变任何现有测试所指定的行为。</p>
-<p>测试是一项技能，而且我们也不能期望在一本书的一个章节中就涉及到编写好的测试的所有内容。然而我们可以讨论的是 Rust 测试功能的机制。我们会讲到编写测试时会用到的注解和宏，Rust 提供用来运行测试的默认行为和选项，以及如何将测试组织成单元测试和集成测试。</p>
+<p>程序的正确性意味着代码如我们期望的那样运行。Rust 是一个非常注重正确性的编程语言，不过正确性是一个难以证明的复杂主题。Rust 的类型系统在此问题上下了很大的功夫，不过它不可能捕获所有类型的错误。为此，Rust 也包含为语言自身编写软件测试的支持。</p>
+<p>例如，我们可以编写一个叫做<code>add_two</code>的将传递给它的值加二的函数。它的签名有一个整型参数并返回一个整型值。当实现和编译这个函数时，Rust 会进行所有目前我们已经见过的的类型检查和借用检查。例如，这些检查会确保我们不会传递<code>String</code>或无效的引用给这个函数。Rust 所<strong>不能</strong>检查的是这个函数是否会准确的完成我们期望的工作：返回参数加二后的值，而不是比如说参数加 10 或减 50 的值！这也就是测试出场的地方。</p>
+<p>我们可以编写测试断言，比如说，当传递<code>3</code>给<code>add_two</code>函数时，应该得到<code>5</code>。当对代码进行修改时可以运行测试来确保任何现存的正确行为没有被改变。</p>
+<p>测试是一项复杂的技能，而且我们也不能期望在一本书的一个章节中就涉及到编写好的测试的所有内容，所以这里仅仅讨论 Rust 测试功能的机制。我们会讲到编写测试时会用到的注解和宏，Rust 提供用来运行测试的默认行为和选项，以及如何将测试组织成单元测试和集成测试。</p>
 <a class="header" href="#编写测试" name="编写测试"><h2>编写测试</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch11-01-writing-tests.md">ch11-01-writing-tests.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch11-01-writing-tests.md">ch11-01-writing-tests.md</a>
 <br>
-commit 77370c073661548dd56bbcb43cc64713585acbba</p>
+commit 55b294f20fc846a13a9be623bf322d8b364cee77</p>
 </blockquote>
-<p>测试是一种使用特定功能的 Rust 函数，它用来验证非测试的代码按照期望的方式运行。我们讨论过的任何 Rust 代码规则都适用于测试！让我们看看 Rust 提供的具体用来编写测试的功能：<code>test</code>属性、一些宏和<code>should_panic</code>属性。</p>
-<a class="header" href="#test属性" name="test属性"><h3><code>test</code>属性</h3></a>
-<p>作为最简单例子，Rust 中的测试就是一个带有<code>test</code>属性注解的函数。让我们使用 Cargo 来创建一个新的库项目<code>adder</code>：</p>
+<p>测试用来验证非测试的代码按照期望的方式运行的 Rust 函数。测试函数体通常包括一些设置，运行需要测试的代码，接着断言其结果是我们所期望的。让我们看看 Rust 提供的具体用来编写测试的功能：<code>test</code>属性、一些宏和<code>should_panic</code>属性。</p>
+<a class="header" href="#测试函数剖析" name="测试函数剖析"><h3>测试函数剖析</h3></a>
+<p>作为最简单例子，Rust 中的测试就是一个带有<code>test</code>属性注解的函数。属性（attribute）是关于 Rust 代码片段的元数据：第五章中结构体中用到的<code>derive</code>属性就是一个例子。为了将一个函数变成测试函数，需要在<code>fn</code>行之前加上<code>#[test]</code>。当使用<code>cargo test</code>命令运行测试函数时，Rust 会构建一个测试执行者二进制文件用来运行标记了<code>test</code>属性的函数并报告每一个测试是通过还是失败。</p>
+<!-- is it annotated with `test` by the user, or only automatically? I think
+it's the latter, and has edited with a more active tone to make that clear, but
+please change if I'm wrong -->
+<!-- What do you mean by "only automatically"? The reader should be typing in
+`#[test] on their own when they add new test functions; there's nothing special
+about that text. I'm not sure what part of this chapter implied "only
+automatically", can you point out where that's happening if we haven't taken
+care of it? /Carol -->
+<p>第七章当使用 Cargo 新建一个库项目时，它会自动为我们生成一个测试模块和一个测试函数。这有助于我们开始编写测试，因为这样每次开始新项目时不必去查找测试函数的具体结构和语法了。同时可以额外增加任意多的测试函数以及测试模块！</p>
+<p>我们将先通过对自动生成的测试模板做一些试验来探索测试如何工作的一些方面内容，而不实际测试任何代码。接着会写一些真实的测试来调用我们编写的代码并断言他们的行为是正确的。</p>
+<p>让我们创建一个新的库项目<code>adder</code>：</p>
 <pre><code>$ cargo new adder
      Created library `adder` project
 $ cd adder
 </code></pre>
-<p>Cargo 在创建新的库项目时自动生成一个简单的测试。这是<code>src/lib.rs</code>中的内容：</p>
+<p>adder 库中<code>src/lib.rs</code>的内容应该看起来像这样：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
@@ -5532,14 +5418,18 @@ mod tests {
     }
 }
 </code></pre>
-<p>现在让我们暂时忽略<code>tests</code>模块和<code>#[cfg(test)]</code>注解并只关注函数。注意它之前的<code>#[test]</code>：这个属性表明这是一个测试函数。这个函数目前没有任何内容，所以绝对是可以通过的！使用<code>cargo test</code>来运行测试：</p>
+<p><span class="caption">Listing 11-1: The test module and function generated
+automatically for us by <code>cargo new</code> </span></p>
+<p>现在让我们暂时忽略<code>tests</code>模块和<code>#[cfg(test)]</code>注解并只关注函数。注意<code>fn</code>行之前的<code>#[test]</code>：这个属性表明这是一个测试函数，这样测试执行者就知道将其作为测试处理。也可以在<code>tests</code>模块中拥有非测试的函数来帮助我们建立通用场景或进行常见操作，所以需要使用<code>#[test]</code>属性标明哪些函数是测试。</p>
+<p>这个函数目前没有任何内容，这意味着没有代码会使测试失败；一个空的测试是可以通过的！让我们运行一下看看它是否通过了。</p>
+<p><code>cargo test</code>命令会运行项目中所有的测试，如列表 11-2 所示：</p>
 <pre><code>$ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
-     Running target/debug/deps/adder-abcabcabc
+     Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 1 test
-test it_works ... ok
+test tests::it_works ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 
@@ -5548,6 +5438,149 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p><span class="caption">Listing 11-2: The output from running the one
+automatically generated test </span></p>
+<p>Cargo 编译并运行了测试。在<code>Compiling</code>、<code>Finished</code>和<code>Running</code>这几行之后，可以看到<code>running 1 test</code>这一行。下一行显示了生成的测试函数的名称，它是<code>it_works</code>，以及测试的运行结果，<code>ok</code>。接着可以看到全体测试运行结果的总结：<code>test result: ok.</code>意味着所有测试都通过了。<code>1 passed; 0 failed</code>表示通过或失败的测试数量。</p>
+<p>这里并没有任何被标记为忽略的测试，所以总结表明<code>0 ignored</code>。在下一部分关于运行测试的不同方式中会讨论忽略测试。<code>0 measured</code>统计是针对测试性能的性能测试的。性能测试（benchmark tests）在编写本书时，仍只属于开发版 Rust（nightly Rust）。请查看附录 D 来了解更多开发版 Rust 的信息。</p>
+<p>测试输出中以<code>Doc-tests adder</code>开头的下一部分是所有文档测试的结果。现在并没有任何文档测试，不过 Rust 会编译任何出现在 API 文档中的代码示例。这个功能帮助我们使文档和代码保持同步！在第十四章的“文档注释”部分会讲到如何编写文档测试。现在我们将忽略<code>Doc-tests</code>部分的输出。</p>
+<!-- I might suggest changing the name of the function, could be misconstrued
+as part of the test output! -->
+<!-- `it_works` is always the name that `cargo new` generates for the first
+test function, though. We wanted to show the reader what happens when you run
+the tests immediately after generating a new project; they pass without you
+needing to change anything. I've added a bit to walk through changing the
+function name and seeing how the output changes; I hope that's sufficient.
+/Carol -->
+<p>让我们改变测试的名称并看看这如何改变测试的输出。给<code>it_works</code>函数起个不同的名字，比如<code>exploration</code>，像这样：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    #[test]
+    fn exploration() {
+    }
+}
+</code></pre>
+<p>并再次运行<code>cargo test</code>。现在输出中将出现<code>exploration</code>而不是<code>it_works</code>：</p>
+<pre><code>running 1 test
+test tests::exploration ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>让我们增加另一个测试，不过这一次是一个会失败的测试！当测试函数中出现 panic 时测试就失败了。第九章讲到了最简单的造成 panic 的方法：调用<code>panic!</code>宏！写入新函数后 <code>src/lib.rs</code> 现在看起来如列表 11-3 所示：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    #[test]
+    fn exploration() {
+    }
+
+    #[test]
+    fn another() {
+        panic!(&quot;Make this test fail&quot;);
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 11-3: Adding a second test; one that will fail
+since we call the <code>panic!</code> macro </span></p>
+<p>再次<code>cargo test</code>运行测试。输出应该看起来像列表 11-4，它表明<code>exploration</code>测试通过了而<code>another</code>失败了：</p>
+<pre><code class="language-text">running 2 tests
+test tests::exploration ... ok
+test tests::another ... FAILED
+
+failures:
+
+---- tests::another stdout ----
+    thread 'tests::another' panicked at 'Make this test fail', src/lib.rs:9
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+failures:
+    tests::another
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+
+error: test failed
+</code></pre>
+<p><span class="caption">Listing 11-4: Test results when one test passes and one
+test fails </span></p>
+<p><code>test tests::another</code>这一行是<code>FAILED</code>而不是<code>ok</code>了。在单独测试结果和总结之间多了两个新的部分：第一个部分显示了测试失败的详细原因。在这个例子中，<code>another</code>因为<code>panicked at 'Make this test fail'</code>而失败，这位于 <em>src/lib.rs</em> 的第 9 行。下一部分仅仅列出了所有失败的测试，这在很有多测试和很多失败测试的详细输出时很有帮助。可以使用失败测试的名称来只运行这个测试，这样比较方便调试；下一部分会讲到更多运行测试的方法。</p>
+<p>最后是总结行：总体上讲，一个测试结果是<code>FAILED</code>的。有一个测试通过和一个测试失败。</p>
+<p>现在我们见过不同场景中测试结果是什么样子的了，再来看看除了<code>panic!</code>之外一些在测试中有帮助的宏吧。</p>
+<a class="header" href="#使用assert宏来检查结果" name="使用assert宏来检查结果"><h3>使用<code>assert!</code>宏来检查结果</h3></a>
+<p><code>assert!</code>宏由标准库提供，在希望确保测试中一些条件为<code>true</code>时非常有用。需要向<code>assert!</code>宏提供一个计算为布尔值的参数。如果值是<code>true</code>，<code>assert!</code>什么也不做同时测试会通过。如果值为<code>false</code>，<code>assert!</code>调用<code>panic!</code>宏，这会导致测试失败。这是一个帮助我们检查代码是否以期望的方式运行的宏。</p>
+<!-- what kind of thing can be passed as an argument? Presumably when we use it
+for real we won't pass it `true` or `false` as an argument, but some condition
+that will evaluate to true or false? In which case, should below be phrased "If
+the argument evaluates to true" and an explanation of that? Or maybe even a
+working example would be better, this could be misleading -->
+<!-- We were trying to really break it down, to show just how the `assert!`
+macro works and what it looks like for it to pass or fail, before we got into
+calling actual code. We've changed this section to move a bit faster and just
+write actual tests instead. /Carol -->
+<p>回忆一下第五章中，列表 5-9 中有一个<code>Rectangle</code>结构体和一个<code>can_hold</code>方法，在列表 11-5 中再次使用他们。将他们放进 <em>src/lib.rs</em> 而不是 <em>src/main.rs</em> 并使用<code>assert!</code>宏编写一些测试。</p>
+<!-- Listing 5-9 wasn't marked as such; I'll fix it the next time I get Chapter
+5 for editing. /Carol -->
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[derive(Debug)]
+pub struct Rectangle {
+    length: u32,
+    width: u32,
+}
+
+impl Rectangle {
+    pub fn can_hold(&amp;self, other: &amp;Rectangle) -&gt; bool {
+        self.length &gt; other.length &amp;&amp; self.width &gt; other.width
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 11-5: The <code>Rectangle</code> struct and its <code>can_hold</code>
+method from Chapter 5 </span></p>
+<p><code>can_hold</code>方法返回一个布尔值，这意味着它完美符合<code>assert!</code>宏的使用场景。在列表 11-6 中，让我们编写一个<code>can_hold</code>方法的测试来作为练习，这里创建一个长为 8 宽为 7 的<code>Rectangle</code>实例，并假设它可以放得下另一个长为5 宽为 1 的<code>Rectangle</code>实例：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn larger_can_hold_smaller() {
+        let larger = Rectangle { length: 8, width: 7 };
+        let smaller = Rectangle { length: 5, width: 1 };
+
+        assert!(larger.can_hold(&amp;smaller));
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 11-6: A test for <code>can_hold</code> that checks that a
+larger rectangle indeed holds a smaller rectangle </span></p>
+<p>注意在<code>tests</code>模块中新增加了一行：<code>use super::*;</code>。<code>tests</code>是一个普通的模块，它遵循第七章介绍的通常的可见性规则。因为这是一个内部模块，需要将外部模块中被测试的代码引入到内部模块的作用域中。这里选择使用全局导入使得外部模块定义的所有内容在<code>tests</code>模块中都是可用的。</p>
+<p>我们将测试命名为<code>larger_can_hold_smaller</code>，并创建所需的两个<code>Rectangle</code>实例。接着调用<code>assert!</code>宏并传递<code>larger.can_hold(&amp;smaller)</code>调用的结果作为参数。这个表达式预期会返回<code>true</code>，所以测试应该通过。让我们拭目以待！</p>
+<pre><code>running 1 test
+test tests::larger_can_hold_smaller ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>它确实通过了！再来增加另一个测试，这一回断言一个更小的矩形不能放下一个更大的矩形：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn larger_can_hold_smaller() {
+        let larger = Rectangle { length: 8, width: 7 };
+        let smaller = Rectangle { length: 5, width: 1 };
+
+        assert!(larger.can_hold(&amp;smaller));
+    }
+
+    #[test]
+    fn smaller_can_hold_larger() {
+        let larger = Rectangle { length: 8, width: 7 };
+        let smaller = Rectangle { length: 5, width: 1 };
+
+        assert!(!smaller.can_hold(&amp;larger));
+    }
+}
 </code></pre>
 <p>Cargo 编译并运行了测试。这里有两部分输出：本章我们将关注第一部分。第二部分是文档测试的输出，第十四章会介绍他们。现在注意看这一行：</p>
 <pre><code class="language-text">test it_works ... ok

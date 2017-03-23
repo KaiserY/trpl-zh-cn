@@ -1,8 +1,8 @@
 ## 使用`pub`控制可见性
 
-> [ch07-02-controlling-visibility-with-pub.md](https://github.com/rust-lang/book/blob/master/src/ch07-02-controlling-visibility-with-pub.md)
+> [ch07-02-controlling-visibility-with-pub.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-02-controlling-visibility-with-pub.md)
 > <br>
-> commit e2a129961ae346f726f8b342455ec2255cdfed68
+> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
 
 我们通过将`network`和`network::server`的代码分别移动到 *src/network/mod.rs* 和 *src/network/server.rs* 文件中解决了列表 7-4 中出现的错误信息。现在，`cargo build`能够构建我们的项目，不过仍然有一些警告信息，表示`client::connect`、`network::connect`和`network::server::connect`函数没有被使用：
 
@@ -26,7 +26,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-那么为什么会出现这些错误信息呢？我们构建的是一个库，它的函数的目的是被**用户**使用，而不一定要被项目自身使用，所以不应该担心这些函数是未被使用的。创建他们的意义就在于被另一个项目而不是被自己使用。
+那么为什么会出现这些错误信息呢？我们构建的是一个库，它的函数的目的是被**用户**使用，而不一定要被项目自身使用，所以不应该担心这些`connect`函数是未使用的。创建他们的意义就在于被另一个项目而不是被自己使用。
 
 为了理解为什么这个程序出现了这些警告，尝试作为另一个项目来使用这个`connect`库，从外部调用他们。为此，通过创建一个包含这些代码的 *src/main.rs* 文件，在与库 crate 相同的目录创建一个二进制 crate：
 
@@ -58,7 +58,7 @@ error: module `client` is private
 
 啊哈！这告诉了我们`client`模块是私有的，这也正是那些警告的症结所在。这也是我们第一次在 Rust 上下文中涉及到**公有**和**私有**的概念。Rust 所有代码的默认状态是私有的：除了自己之外别人不允许使用这些代码。如果不在自己的项目中使用一个私有函数，因为程序自身是唯一允许使用这个函数的代码，Rust 会警告说函数未被使用。
 
-一旦我们指定一个像`client::connect`的函数为公有，不光二进制 crate 中的函数调用会被允许，函数未被使用的警告也会消失。将其标记为公有让 Rust 知道了我们意在使函数在我们程序的外部被使用。现在这个可能的理论上的外部可用性使 Rust 认为这个函数“已经被使用”。因此。当某项被标记为公有，Rust 不再要求它在程序自身被使用并停止警告某项未被使用。
+一旦我们指定一个像`client::connect`的函数为公有，不光二进制 crate 中的函数调用是允许的，函数未被使用的警告也会消失。将其标记为公有让 Rust 知道了我们意在使函数在我们程序的外部被使用。现在这个可能的理论上的外部可用性使得 Rust 认为这个函数“已经被使用”。因此。当某项被标记为公有，Rust 不再要求它在程序自身被使用并停止警告某项未被使用。
 
 ### 标记函数为公有
 
@@ -173,7 +173,6 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 
 让我们看看更多例子作为练习。创建一个新的库项目并在新项目的 *src/lib.rs* 输入列表 7-5 中的代码：
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
@@ -197,13 +196,8 @@ fn try_me() {
 }
 ```
 
-<figcaption>
-
-Listing 7-5: Examples of private and public functions, some of which are
-incorrect
-
-</figcaption>
-</figure>
+<span class="caption">Listing 7-5: Examples of private and public functions,
+some of which are incorrect</span>
 
 在尝试编译这些代码之前，猜测一下`try_me`函数的哪一行会出错。接着编译项目来看看是否猜对了，然后继续阅读后面关于错误的讨论！
 

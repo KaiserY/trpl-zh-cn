@@ -69,11 +69,11 @@
                 <div id="content" class="content">
                     <a class="header" href="#错误处理" name="错误处理"><h1>错误处理</h1></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch09-00-error-handling.md">ch09-00-error-handling.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch09-00-error-handling.md">ch09-00-error-handling.md</a>
 <br>
-commit fc825966fabaa408067eb2df3aa45e4fa6644fb6</p>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
-<p>Rust 对可靠性的执着也扩展到了错误处理。错误对于软件来说是不可避免的，所以 Rust 有很多功能来处理当现错误的情况。在很多情况下，Rust 要求你承认出错的可能性可能性并在编译代码之前就采取行动。通过确保不会只有在将代码部署到生产环境之后才会发现错误来使得程序更可靠。</p>
+<p>Rust 对可靠性的执着也扩展到了错误处理。错误对于软件来说是不可避免的，所以 Rust 有很多功能来处理当现错误的情况。在很多情况下，Rust 要求你承认出错的可能性并在编译代码之前就采取行动。通过确保不会只有在将代码部署到生产环境之后才会发现错误来使得程序更可靠。</p>
 <p>Rust 将错误组合成两个主要类别：<strong>可恢复错误</strong>（<em>recoverable</em>）和<strong>不可恢复错误</strong>（<em>unrecoverable</em>）。可恢复错误通常代表向用户报告错误和重试操作是合理的情况，比如未找到文件。不可恢复错误通常是 bug 的同义词，比如尝试访问超过数组结尾的位置。</p>
 <p>大部分语言并不区分这两类错误，并采用类似异常这样方式统一处理他们。Rust 并没有异常。相反，对于可恢复错误有<code>Result&lt;T, E&gt;</code>值和<code>panic!</code>，它在遇到不可恢复错误时停止程序执行。这一章会首先介绍<code>panic!</code>调用，接着会讲到如何返回<code>Result&lt;T, E&gt;</code>。最后，我们会讨论当决定是尝试从错误中恢复还是停止执行时需要顾及的权衡考虑。</p>
 

@@ -69,11 +69,11 @@
                 <div id="content" class="content">
                     <a class="header" href="#vector" name="vector"><h2>vector</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch08-01-vectors.md">ch08-01-vectors.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch08-01-vectors.md">ch08-01-vectors.md</a>
 <br>
-commit 0d229cc5a3da341196e15a6761735b2952281569</p>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
-<p>我们要讲到的第一个类型是<code>Vec&lt;T&gt;</code>，也被称为 <em>vector</em>。vector 允许我们在一个单独的数据结构中储存多于一个值，它在内存中彼此相邻的排列所有的值。vector 只能储存相同类型的值。他们在拥有一系列的场景下非常实用，例如文件中的文本行或是购物车中商品的价格。</p>
+<p>我们要讲到的第一个类型是<code>Vec&lt;T&gt;</code>，也被称为 <em>vector</em>。vector 允许我们在一个单独的数据结构中储存多于一个值，它在内存中彼此相邻的排列所有的值。vector 只能储存相同类型的值。他们在拥有一系列项的场景下非常实用，例如文件中的文本行或是购物车中商品的价格。</p>
 <a class="header" href="#新建-vector" name="新建-vector"><h3>新建 vector</h3></a>
 <p>为了创建一个新的，空的 vector，可以调用<code>Vec::new</code>函数：</p>
 <pre><code class="language-rust">let v: Vec&lt;i32&gt; = Vec::new();

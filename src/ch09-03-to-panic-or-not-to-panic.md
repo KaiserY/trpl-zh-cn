@@ -1,10 +1,10 @@
 ## `panic!`还是不`panic!`
 
-> [ch09-03-to-panic-or-not-to-panic.md](https://github.com/rust-lang/book/blob/master/src/ch09-03-to-panic-or-not-to-panic.md)
+> [ch09-03-to-panic-or-not-to-panic.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch09-03-to-panic-or-not-to-panic.md)
 > <br>
-> commit 0c1d55ef48e5f6cf6a3b221f5b6dd4c922130bb1
+> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
 
-那么，该如何决定何时应该`panic!`以及何时应该返回`Result`呢？如果代码 panic，就没有恢复的可能。你可以选择对任何错误场景都调用`panic!`，不管是否有可能恢复，不过这样就你代替调用者决定了这是不可恢复的。选择返回`Result`值的话，就将选择权交给了调用者，而不是代替他们做出决定。调用者可能会选择以符合他们场景的方式尝试恢复，或者也可能干脆就认为`Err`是不可恢复的，所以他们也可能会调用`panic!`并将可恢复的错误变成了不可恢复的错误。因此返回`Result`是定义可能会失败的函数的一个好的默认选择。
+那么，该如何决定何时应该`panic!`以及何时应该返回`Result`呢？如果代码 panic，就没有恢复的可能。你可以选择对任何错误场景都调用`panic!`，不管是否有可能恢复，不过这样就是你代替调用者决定了这是不可恢复的。选择返回`Result`值的话，就将选择权交给了调用者，而不是代替他们做出决定。调用者可能会选择以符合他们场景的方式尝试恢复，或者也可能干脆就认为`Err`是不可恢复的，所以他们也可能会调用`panic!`并将可恢复的错误变成了不可恢复的错误。因此返回`Result`是定义可能会失败的函数的一个好的默认选择。
 
 有一些情况 panic 比返回`Result`更为合适，不过他们并不常见。让我们讨论一下为何在示例、代码原型和测试中，以及那些人们认为不会失败而编译器不这么看的情况下， panic 是合适的，最后会总结一些在库代码中如何决定是否要 panic 的通用指导原则。
 
@@ -30,7 +30,7 @@ let home = "127.0.0.1".parse::<IpAddr>().unwrap();
 
 ### 错误处理指导原则
 
-在当有可能会导致有害状态的情况下建议使用`panic!`————在这里，有害状态是指当一些假设、保证、协议或不可变形被打破的状态，例如无效的值、自相矛盾的值或者被传递了不存在的值————外加如下几种情况：
+在当有可能会导致有害状态的情况下建议使用`panic!`——在这里，有害状态是指当一些假设、保证、协议或不可变性被打破的状态，例如无效的值、自相矛盾的值或者被传递了不存在的值——外加如下几种情况：
 
 * 有害状态并不包含**预期**会偶尔发生的错误
 * 之后的代码的运行依赖于不再处于这种有害状态
@@ -75,8 +75,6 @@ loop {
 
 相反我们可以创建一个新类型来将验证放入创建其实例的函数中，而不是到处重复这些检查。这样就可以安全的在函数签名中使用新类型并相信他们接收到的值。列表 9-8 中展示了一个定义`Guess`类型的方法，只有在`new`函数接收到 1 到 100 之间的值时才会创建`Guess`的实例：
 
-<figure>
-
 ```rust
 struct Guess {
     value: u32,
@@ -99,13 +97,8 @@ impl Guess {
 }
 ```
 
-<figcaption>
-
-Listing 9-8: A `Guess` type that will only continue with values between 1 and
-100
-
-</figcaption>
-</figure>
+<span class="caption">Listing 9-8: A `Guess` type that will only continue with
+values between 1 and 100</span>
 
 首先，我们定义了一个包含`u32`类型字段`value`的结构体`Guess`。这里是储存猜测值的地方。
 

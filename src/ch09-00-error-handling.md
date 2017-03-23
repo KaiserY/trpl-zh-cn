@@ -1,10 +1,10 @@
 # 错误处理
 
-> [ch09-00-error-handling.md](https://github.com/rust-lang/book/blob/master/src/ch09-00-error-handling.md)
+> [ch09-00-error-handling.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch09-00-error-handling.md)
 > <br>
-> commit fc825966fabaa408067eb2df3aa45e4fa6644fb6
+> commit 4f2dc564851dc04b271a2260c834643dfd86c724
 
-Rust 对可靠性的执着也扩展到了错误处理。错误对于软件来说是不可避免的，所以 Rust 有很多功能来处理当现错误的情况。在很多情况下，Rust 要求你承认出错的可能性可能性并在编译代码之前就采取行动。通过确保不会只有在将代码部署到生产环境之后才会发现错误来使得程序更可靠。
+Rust 对可靠性的执着也扩展到了错误处理。错误对于软件来说是不可避免的，所以 Rust 有很多功能来处理当现错误的情况。在很多情况下，Rust 要求你承认出错的可能性并在编译代码之前就采取行动。通过确保不会只有在将代码部署到生产环境之后才会发现错误来使得程序更可靠。
 
 Rust 将错误组合成两个主要类别：**可恢复错误**（*recoverable*）和**不可恢复错误**（*unrecoverable*）。可恢复错误通常代表向用户报告错误和重试操作是合理的情况，比如未找到文件。不可恢复错误通常是 bug 的同义词，比如尝试访问超过数组结尾的位置。
 

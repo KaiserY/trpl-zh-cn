@@ -69,9 +69,9 @@
                 <div id="content" class="content">
                     <a class="header" href="#哈希-map" name="哈希-map"><h2>哈希 map</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch08-03-hash-maps.md">ch08-03-hash-maps.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch08-03-hash-maps.md">ch08-03-hash-maps.md</a>
 <br>
-commit 0d229cc5a3da341196e15a6761735b2952281569</p>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
 <p>最后要介绍的常用集合类型是<strong>哈希 map</strong>（<em>hash map</em>）。<code>HashMap&lt;K, V&gt;</code>类型储存了一个键类型<code>K</code>对应一个值类型<code>V</code>的映射。它通过一个<strong>哈希函数</strong>（<em>hashing function</em>）来实现映射，它决定了如何将键和值放入内存中。很多编程语言支持这种数据结构，不过通常有不同的名字：哈希、map、对象、哈希表或者关联数组，仅举几例。</p>
 <p>哈希 map 可以用于需要任何类型作为键来寻找数据的情况，而不是像 vector 那样通过索引。例如，在一个游戏中，你可以将每个团队的分数记录到哈希 map 中，其中键是队伍的名字而值是每个队伍的分数。给出一个队名，就能得到他们的得分。</p>
@@ -192,7 +192,7 @@ println!(&quot;{:?}&quot;, map);
 <li>使用哈希 map 和 vector，创建一个文本接口来允许用户向公司的部门中增加员工的名字。例如，“Add Sally to Engineering”或“Add Amir to Sales”。接着让用户获取一个部门的所有员工的列表，或者公司每个部门的所有员工按照字母顺排序的列表。</li>
 </ul>
 <p>标准库 API 文档中描述的这些类型的方法将有助于你进行这些练习！</p>
-<p>我们已经开始解除可能会有失败操作的复杂程序了，这也意味着接下来是一个了解错误处理的绝佳时机！</p>
+<p>我们已经开始接触可能会有失败操作的复杂程序了，这也意味着接下来是一个了解错误处理的绝佳时机！</p>
 
                 </div>
 

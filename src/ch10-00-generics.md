@@ -1,12 +1,12 @@
 # 泛型、trait 和生命周期
 
-> [ch10-00-generics.md](https://github.com/rust-lang/book/blob/master/src/ch10-00-generics.md)
+> [ch10-00-generics.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-00-generics.md)
 > <br>
-> commit b335da755592f286fd97a64d98f0ca3be6a59327
+> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
 
 每一个编程语言都有高效的处理重复概念的工具；在 Rust 中工具之一就是**泛型**（*generics*）。泛型是具体类型或其他属性的抽象替代。我们可以表达泛型的属性，比如他们的行为或如何与其他泛型相关联，而不需要在编写和编译代码时知道他们在这里实际上代表什么。
 
-同理为了编写一份可以用于多种具体值的代码，函数并不知道其参数为何值，这时就可以让函数获取泛型而不是像`i32`或`String`这样的具体值。我们已经使用过第六章的`Option<T>`，第八章的`Vec<T>`和`HashMap<K, V>`，以及第九章的`Result<T, E>`这些泛型了。本章会探索如何使用泛型定义我们自己自己的类型、函数和方法。
+同理为了编写一份可以用于多种具体值的代码，函数并不知道其参数为何值，这时就可以让函数获取泛型而不是像`i32`或`String`这样的具体值。我们已经使用过第六章的`Option<T>`，第八章的`Vec<T>`和`HashMap<K, V>`，以及第九章的`Result<T, E>`这些泛型了。本章会探索如何使用泛型定义我们自己自己的类型、函数和方法！
 
 首先，我们将回顾一下提取函数以减少代码重复的机制。接着使用一个只在参数类型上不同的泛型函数来实现相同的功能。我们也会讲到结构体和枚举定义中的泛型。
 
@@ -20,7 +20,6 @@
 
 考虑一下这个寻找列表中最大值的小程序，如列表 10-1 所示：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -40,18 +39,13 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-1: Code to find the largest number in a list of numbers
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-1: Code to find the largest number in a list
+of numbers</span>
 
 这段代码获取一个整型列表，存放在变量`numbers`中。它将列表的第一项放入了变量`largest`中。接着遍历了列表中的所有数字，如果当前值大于`largest`中储存的值，将`largest`替换为这个值。如果当前值小于目前为止的最大值，`largest`保持不变。当列表中所有值都被考虑到之后，`largest`将会是最大值，在这里也就是 100。
 
 如果需要在两个不同的列表中寻找最大值，我们可以重复列表 10-1 中的代码这样程序中就会存在两段相同逻辑的代码，如列表 10-2 所示：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -82,12 +76,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-2: Code to find the largest number in *two* lists of numbers
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-2: Code to find the largest number in *two*
+lists of numbers</span>
 
 虽然代码能够执行，但是重复的代码是冗余且已于出错的，并且意味着当更新逻辑时需要修改多处地方的代码。
 
@@ -100,7 +90,6 @@ Listing 10-2: Code to find the largest number in *two* lists of numbers
 
 在列表 10-3 的程序中将寻找最大值的代码提取到了一个叫做`largest`的函数中。这个程序可以找出两个不同数字列表的最大值，不过列表 10-1 中的代码只存在于一个位置：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -131,12 +120,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-3: Abstracted code to find the largest number in two lists
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-3: Abstracted code to find the largest number
+in two lists</span>
 
 这个函数有一个参数`list`，它代表会传递给函数的任何具体`i32`值的 slice。函数定义中的`list`代表任何`&[i32]`。当调用`largest`函数时，其代码实际上运行于我们传递的特定值上。
 

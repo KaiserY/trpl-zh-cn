@@ -1,12 +1,14 @@
 ## `Result`与可恢复的错误
 
-> [ch09-01-unrecoverable-errors-with-panic.md](https://github.com/rust-lang/book/blob/master/src/ch09-02-recoverable-errors-with-result.md)
+> [ch09-01-unrecoverable-errors-with-panic.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch09-02-recoverable-errors-with-result.md)
 > <br>
-> commit 0c1d55ef48e5f6cf6a3b221f5b6dd4c922130bb1
+> commit e6d6caab41471f7115a621029bd428a812c5260e
 
-大部分错误并没有严重到需要程序完全停止执行。有时，一个函数会因为一个容易理解并回应的原因失败。例如，如果尝试打开一个文件不过由于文件并不存在而操作就失败，这是我们可能想要创建这个文件而不是终止进程。
+大部分错误并没有严重到需要程序完全停止执行。有时，一个函数会因为一个容易理解并做出反映的原因失败。例如，如果尝试打开一个文件不过由于文件并不存在而操作就失败，这是我们可能想要创建这个文件而不是终止进程。
 
-回忆一下第二章“使用`Result`类型来处理潜在的错误”部分中的那个`Result`枚举，它定义有如下连个成员，`Ok`和`Err`：
+回忆一下第二章“使用`Result`类型来处理潜在的错误”部分中的那个`Result`枚举，它定义有如下两个成员，`Ok`和`Err`：
+
+[handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-the-result-type
 
 ```rust
 enum Result<T, E> {
@@ -19,7 +21,6 @@ enum Result<T, E> {
 
 让我们调用一个返回`Result`的函数，因为它可能会失败：如列表 9-2 所示打开一个文件：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -30,12 +31,7 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 9-2: Opening a file
-
-</figcaption>
-</figure>
+<span class="caption">Listing 9-2: Opening a file</span>
 
 如何知道`File::open`返回一个`Result`呢？我们可以查看标准库 API 文档，或者可以直接问编译器！如果给`f`某个我们知道**不是**函数返回值类型的类型注解，接着尝试编译代码，编译器会告诉我们类型不匹配。然后错误信息会告诉我们`f`的类型**应该**是什么，为此我们将`let f`语句改为：
 
@@ -65,7 +61,6 @@ error[E0308]: mismatched types
 
 我们需要在列表 9-2 的代码中增加根据`File::open`返回值进行不同处理的逻辑。列表 9-3 展示了一个处理`Result`的基本工具：第六章学习过的`match`表达式。
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
@@ -83,13 +78,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 9-3: Using a `match` expression to handle the `Result` variants we
-might have
-
-</figcaption>
-</figure>
+<span class="caption">Listing 9-3: Using a `match` expression to handle the
+`Result` variants we might have</span>
 
 注意与`Option`枚举一样，`Result`枚举和其成员也被导入到了 prelude 中，所以就不需要在`match`分支中的`Ok`和`Err`之前指定`Result::`。
 
@@ -106,7 +96,6 @@ Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
 
 列表 9-3 中的代码不管`File::open`是因为什么原因失败都会`panic!`。我们真正希望的是对不同的错误原因采取不同的行为：如果`File::open`因为文件不存在而失败，我们希望创建这个文件并返回新文件的句柄。如果`File::open`因为任何其他原因失败，例如没有打开文件的权限，我们仍然希望像列表 9-3 那样`panic!`。让我们看看列表 9-4，其中`match`增加了另一个分支：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -139,16 +128,12 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 9-4: Handling different kinds of errors in different ways
-
-</figcaption>
-</figure>
+<span class="caption">Listing 9-4: Handling different kinds of errors in
+different ways</span>
 
 `File::open`返回的`Err`成员中的值类型`io::Error`，它是一个标准库中提供的结构体。这个结构体有一个返回`io::ErrorKind`值的`kind`方法可供调用。`io::ErrorKind`是一个标准库提供的枚举，它的成员对应`io`操作可能导致的不同错误类型。我们感兴趣的成员是`ErrorKind::NotFound`，它代表尝试打开的文件并不存在。
 
-`if error.kind() == ErrorKind::NotFound`条件被称作 *match guard*：它是一个进一步完善`match`分支模式的额外的条件。这个条件必须为真才能使分支的代码被执行；否则，模式匹配会继续并考虑`match`中的下一个分支。模式中的`ref`是必须的，这样`error`就不会被移动到 guard 条件中而只是仅仅引用它。第十八章会详细解释为什么在模式中使用`ref`而不是`&`来获取一个引用。简而言之，在模式的上下文中，`&`匹配一个引用并返回它的值，而`ref`匹配一个值并返回一个引用。
+条件`if error.kind() == ErrorKind::NotFound`被称作 *match guard*：它是一个进一步完善`match`分支模式的额外的条件。这个条件必须为真才能使分支的代码被执行；否则，模式匹配会继续并考虑`match`中的下一个分支。模式中的`ref`是必须的，这样`error`就不会被移动到 guard 条件中而只是仅仅引用它。第十八章会详细解释为什么在模式中使用`ref`而不是`&`来获取一个引用。简而言之，在模式的上下文中，`&`匹配一个引用并返回它的值，而`ref`匹配一个值并返回一个引用。
 
 在 match guard 中我们想要检查的条件是`error.kind()`是否是`ErrorKind`枚举的`NotFound`成员。如果是，尝试用`File::create`创建文件。然而`File::create`也可能会失败，我们还需要增加一个内部`match`语句。当文件不能被打开，会打印出一个不同的错误信息。外部`match`的最后一个分支保持不变这样对任何除了文件不存在的错误会使程序 panic。
 
@@ -196,8 +181,6 @@ thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
 
 例如，列表 9-5 展示了一个从文件中读取用户名的函数。如果文件不存在或不能读取，这个函数会将这些错误返回给调用它的代码：
 
-<figure>
-
 ```rust
 use std::io;
 use std::io::Read;
@@ -220,12 +203,8 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<figcaption>
-
-Listing 9-5: A function that returns errors to the calling code using `match`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 9-5: A function that returns errors to the
+calling code using `match`</span>
 
 首先让我们看看函数的返回值：`Result<String, io::Error>`。这意味着函数返回一个`Result<T, E>`类型的值，其中泛型参数`T`的具体类型是`String`，而`E`的具体类型是`io::Error`。如果这个函数没有出任何错误成功返回，函数的调用者会收到一个包含`String`的`Ok`值————函数从文件中读取到的用户名。如果函数遇到任何错误，函数的调用者会收到一个`Err`值，它储存了一个包含更多这个问题相关信息的`io::Error`实例。我们选择`io::Error`作为函数的返回值是因为它正好是函数体中那两个可能会失败的操作的错误返回值：`File::open`函数和`read_to_string`方法。
 
@@ -239,12 +218,11 @@ Listing 9-5: A function that returns errors to the calling code using `match`
 
 ### 传播错误的捷径：`?`
 
-列表 9-6 展示了一个`read_username_from_file`的实现，它实现了与列表 9-5 中的代码相同的功能，不过这个实现是使用了问号运算符：
-
-<figure>
+列表 9-6 展示了一个`read_username_from_file`的实现，它实现了与列表 9-5 中的代码相同的功能，不过这个实现是使用了问号运算符的：
 
 ```rust
 use std::io;
+use std::io::Read;
 use std::fs::File;
 
 fn read_username_from_file() -> Result<String, io::Error> {
@@ -255,12 +233,8 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<figcaption>
-
-Listing 9-6: A function that returns errors to the calling code using `?`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 9-6: A function that returns errors to the
+calling code using `?`</span>
 
 `Result`值之后的`?`被定义为与列表 9-5 中定义的处理`Result`值的`match`表达式有着完全相同的工作方式。如果`Result`的值是`Ok`，这个表达式将会返回`Ok`中的值而程序将继续执行。如果值是`Err`，`Err`中的值将作为整个函数的返回值，就好像使用了`return`关键字一样，这样错误值就被传播给了调用者。
 

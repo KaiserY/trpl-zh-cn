@@ -1,8 +1,8 @@
 ## 哈希 map
 
-> [ch08-03-hash-maps.md](https://github.com/rust-lang/book/blob/master/src/ch08-03-hash-maps.md)
+> [ch08-03-hash-maps.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch08-03-hash-maps.md)
 > <br>
-> commit 0d229cc5a3da341196e15a6761735b2952281569
+> commit 4f2dc564851dc04b271a2260c834643dfd86c724
 
 最后要介绍的常用集合类型是**哈希 map**（*hash map*）。`HashMap<K, V>`类型储存了一个键类型`K`对应一个值类型`V`的映射。它通过一个**哈希函数**（*hashing function*）来实现映射，它决定了如何将键和值放入内存中。很多编程语言支持这种数据结构，不过通常有不同的名字：哈希、map、对象、哈希表或者关联数组，仅举几例。
 
@@ -176,4 +176,4 @@ vector、字符串和哈希 map 会在你的程序需要储存、访问和修改
 
 标准库 API 文档中描述的这些类型的方法将有助于你进行这些练习！
 
-我们已经开始解除可能会有失败操作的复杂程序了，这也意味着接下来是一个了解错误处理的绝佳时机！
+我们已经开始接触可能会有失败操作的复杂程序了，这也意味着接下来是一个了解错误处理的绝佳时机！

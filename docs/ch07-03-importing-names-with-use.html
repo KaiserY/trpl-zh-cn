@@ -69,13 +69,12 @@
                 <div id="content" class="content">
                     <a class="header" href="#导入命名" name="导入命名"><h2>导入命名</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch07-03-importing-names-with-use.md">ch07-03-importing-names-with-use.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-03-importing-names-with-use.md">ch07-03-importing-names-with-use.md</a>
 <br>
-commit e2a129961ae346f726f8b342455ec2255cdfed68</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
 <p>我们已经讲到了如何使用模块名称作为调用的一部分，来调用模块中的函数，如列表 7-6 中所示的<code>nested_modules</code>函数调用。</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
@@ -88,11 +87,8 @@ fn main() {
     a::series::of::nested_modules();
 }
 </code></pre>
-<figcaption>
-<p>Listing 7-6: Calling a function by fully specifying its enclosing module’s
-namespaces</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 7-6: Calling a function by fully specifying its
+enclosing module’s namespaces</span></p>
 <p>如你所见，指定函数的完全限定名称可能会非常冗长。所幸 Rust 有一个关键字使得这些调用显得更简洁。</p>
 <a class="header" href="#使用use的简单导入" name="使用use的简单导入"><h3>使用<code>use</code>的简单导入</h3></a>
 <p>Rust 的<code>use</code>关键字的工作是缩短冗长的函数调用，通过将想要调用的函数所在的模块引入到作用域中。这是一个将<code>a::series::of</code>模块导入一个二进制 crate 的根作用域的例子：</p>
@@ -175,7 +171,7 @@ mod tests {
     }
 }
 </code></pre>
-<p>第十二章会更详细的解释测试，不过其部分内容现在应该可以理解了：有一个叫做<code>tests</code>的模块紧邻其他模块，同时包含一个叫做<code>it_works</code>的函数。即便存在一些特殊注解，<code>tests</code>也不过是另外一个模块！所以我们的模块层次结构看起来像这样：</p>
+<p>第十一章会更详细的解释测试，不过其部分内容现在应该可以理解了：有一个叫做<code>tests</code>的模块紧邻其他模块，同时包含一个叫做<code>it_works</code>的函数。即便存在一些特殊注解，<code>tests</code>也不过是另外一个模块！所以我们的模块层次结构看起来像这样：</p>
 <pre><code>communicator
  ├── client
  ├── network

@@ -69,18 +69,29 @@
                 <div id="content" class="content">
                     <a class="header" href="#编写测试" name="编写测试"><h2>编写测试</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch11-01-writing-tests.md">ch11-01-writing-tests.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch11-01-writing-tests.md">ch11-01-writing-tests.md</a>
 <br>
-commit 77370c073661548dd56bbcb43cc64713585acbba</p>
+commit 55b294f20fc846a13a9be623bf322d8b364cee77</p>
 </blockquote>
-<p>测试是一种使用特定功能的 Rust 函数，它用来验证非测试的代码按照期望的方式运行。我们讨论过的任何 Rust 代码规则都适用于测试！让我们看看 Rust 提供的具体用来编写测试的功能：<code>test</code>属性、一些宏和<code>should_panic</code>属性。</p>
-<a class="header" href="#test属性" name="test属性"><h3><code>test</code>属性</h3></a>
-<p>作为最简单例子，Rust 中的测试就是一个带有<code>test</code>属性注解的函数。让我们使用 Cargo 来创建一个新的库项目<code>adder</code>：</p>
+<p>测试用来验证非测试的代码按照期望的方式运行的 Rust 函数。测试函数体通常包括一些设置，运行需要测试的代码，接着断言其结果是我们所期望的。让我们看看 Rust 提供的具体用来编写测试的功能：<code>test</code>属性、一些宏和<code>should_panic</code>属性。</p>
+<a class="header" href="#测试函数剖析" name="测试函数剖析"><h3>测试函数剖析</h3></a>
+<p>作为最简单例子，Rust 中的测试就是一个带有<code>test</code>属性注解的函数。属性（attribute）是关于 Rust 代码片段的元数据：第五章中结构体中用到的<code>derive</code>属性就是一个例子。为了将一个函数变成测试函数，需要在<code>fn</code>行之前加上<code>#[test]</code>。当使用<code>cargo test</code>命令运行测试函数时，Rust 会构建一个测试执行者二进制文件用来运行标记了<code>test</code>属性的函数并报告每一个测试是通过还是失败。</p>
+<!-- is it annotated with `test` by the user, or only automatically? I think
+it's the latter, and has edited with a more active tone to make that clear, but
+please change if I'm wrong -->
+<!-- What do you mean by "only automatically"? The reader should be typing in
+`#[test] on their own when they add new test functions; there's nothing special
+about that text. I'm not sure what part of this chapter implied "only
+automatically", can you point out where that's happening if we haven't taken
+care of it? /Carol -->
+<p>第七章当使用 Cargo 新建一个库项目时，它会自动为我们生成一个测试模块和一个测试函数。这有助于我们开始编写测试，因为这样每次开始新项目时不必去查找测试函数的具体结构和语法了。同时可以额外增加任意多的测试函数以及测试模块！</p>
+<p>我们将先通过对自动生成的测试模板做一些试验来探索测试如何工作的一些方面内容，而不实际测试任何代码。接着会写一些真实的测试来调用我们编写的代码并断言他们的行为是正确的。</p>
+<p>让我们创建一个新的库项目<code>adder</code>：</p>
 <pre><code>$ cargo new adder
      Created library `adder` project
 $ cd adder
 </code></pre>
-<p>Cargo 在创建新的库项目时自动生成一个简单的测试。这是<code>src/lib.rs</code>中的内容：</p>
+<p>adder 库中<code>src/lib.rs</code>的内容应该看起来像这样：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
@@ -89,14 +100,18 @@ mod tests {
     }
 }
 </code></pre>
-<p>现在让我们暂时忽略<code>tests</code>模块和<code>#[cfg(test)]</code>注解并只关注函数。注意它之前的<code>#[test]</code>：这个属性表明这是一个测试函数。这个函数目前没有任何内容，所以绝对是可以通过的！使用<code>cargo test</code>来运行测试：</p>
+<p><span class="caption">Listing 11-1: The test module and function generated
+automatically for us by <code>cargo new</code> </span></p>
+<p>现在让我们暂时忽略<code>tests</code>模块和<code>#[cfg(test)]</code>注解并只关注函数。注意<code>fn</code>行之前的<code>#[test]</code>：这个属性表明这是一个测试函数，这样测试执行者就知道将其作为测试处理。也可以在<code>tests</code>模块中拥有非测试的函数来帮助我们建立通用场景或进行常见操作，所以需要使用<code>#[test]</code>属性标明哪些函数是测试。</p>
+<p>这个函数目前没有任何内容，这意味着没有代码会使测试失败；一个空的测试是可以通过的！让我们运行一下看看它是否通过了。</p>
+<p><code>cargo test</code>命令会运行项目中所有的测试，如列表 11-2 所示：</p>
 <pre><code>$ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
-     Running target/debug/deps/adder-abcabcabc
+     Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 1 test
-test it_works ... ok
+test tests::it_works ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 
@@ -105,6 +120,149 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p><span class="caption">Listing 11-2: The output from running the one
+automatically generated test </span></p>
+<p>Cargo 编译并运行了测试。在<code>Compiling</code>、<code>Finished</code>和<code>Running</code>这几行之后，可以看到<code>running 1 test</code>这一行。下一行显示了生成的测试函数的名称，它是<code>it_works</code>，以及测试的运行结果，<code>ok</code>。接着可以看到全体测试运行结果的总结：<code>test result: ok.</code>意味着所有测试都通过了。<code>1 passed; 0 failed</code>表示通过或失败的测试数量。</p>
+<p>这里并没有任何被标记为忽略的测试，所以总结表明<code>0 ignored</code>。在下一部分关于运行测试的不同方式中会讨论忽略测试。<code>0 measured</code>统计是针对测试性能的性能测试的。性能测试（benchmark tests）在编写本书时，仍只属于开发版 Rust（nightly Rust）。请查看附录 D 来了解更多开发版 Rust 的信息。</p>
+<p>测试输出中以<code>Doc-tests adder</code>开头的下一部分是所有文档测试的结果。现在并没有任何文档测试，不过 Rust 会编译任何出现在 API 文档中的代码示例。这个功能帮助我们使文档和代码保持同步！在第十四章的“文档注释”部分会讲到如何编写文档测试。现在我们将忽略<code>Doc-tests</code>部分的输出。</p>
+<!-- I might suggest changing the name of the function, could be misconstrued
+as part of the test output! -->
+<!-- `it_works` is always the name that `cargo new` generates for the first
+test function, though. We wanted to show the reader what happens when you run
+the tests immediately after generating a new project; they pass without you
+needing to change anything. I've added a bit to walk through changing the
+function name and seeing how the output changes; I hope that's sufficient.
+/Carol -->
+<p>让我们改变测试的名称并看看这如何改变测试的输出。给<code>it_works</code>函数起个不同的名字，比如<code>exploration</code>，像这样：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    #[test]
+    fn exploration() {
+    }
+}
+</code></pre>
+<p>并再次运行<code>cargo test</code>。现在输出中将出现<code>exploration</code>而不是<code>it_works</code>：</p>
+<pre><code>running 1 test
+test tests::exploration ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>让我们增加另一个测试，不过这一次是一个会失败的测试！当测试函数中出现 panic 时测试就失败了。第九章讲到了最简单的造成 panic 的方法：调用<code>panic!</code>宏！写入新函数后 <code>src/lib.rs</code> 现在看起来如列表 11-3 所示：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    #[test]
+    fn exploration() {
+    }
+
+    #[test]
+    fn another() {
+        panic!(&quot;Make this test fail&quot;);
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 11-3: Adding a second test; one that will fail
+since we call the <code>panic!</code> macro </span></p>
+<p>再次<code>cargo test</code>运行测试。输出应该看起来像列表 11-4，它表明<code>exploration</code>测试通过了而<code>another</code>失败了：</p>
+<pre><code class="language-text">running 2 tests
+test tests::exploration ... ok
+test tests::another ... FAILED
+
+failures:
+
+---- tests::another stdout ----
+    thread 'tests::another' panicked at 'Make this test fail', src/lib.rs:9
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+failures:
+    tests::another
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+
+error: test failed
+</code></pre>
+<p><span class="caption">Listing 11-4: Test results when one test passes and one
+test fails </span></p>
+<p><code>test tests::another</code>这一行是<code>FAILED</code>而不是<code>ok</code>了。在单独测试结果和总结之间多了两个新的部分：第一个部分显示了测试失败的详细原因。在这个例子中，<code>another</code>因为<code>panicked at 'Make this test fail'</code>而失败，这位于 <em>src/lib.rs</em> 的第 9 行。下一部分仅仅列出了所有失败的测试，这在很有多测试和很多失败测试的详细输出时很有帮助。可以使用失败测试的名称来只运行这个测试，这样比较方便调试；下一部分会讲到更多运行测试的方法。</p>
+<p>最后是总结行：总体上讲，一个测试结果是<code>FAILED</code>的。有一个测试通过和一个测试失败。</p>
+<p>现在我们见过不同场景中测试结果是什么样子的了，再来看看除了<code>panic!</code>之外一些在测试中有帮助的宏吧。</p>
+<a class="header" href="#使用assert宏来检查结果" name="使用assert宏来检查结果"><h3>使用<code>assert!</code>宏来检查结果</h3></a>
+<p><code>assert!</code>宏由标准库提供，在希望确保测试中一些条件为<code>true</code>时非常有用。需要向<code>assert!</code>宏提供一个计算为布尔值的参数。如果值是<code>true</code>，<code>assert!</code>什么也不做同时测试会通过。如果值为<code>false</code>，<code>assert!</code>调用<code>panic!</code>宏，这会导致测试失败。这是一个帮助我们检查代码是否以期望的方式运行的宏。</p>
+<!-- what kind of thing can be passed as an argument? Presumably when we use it
+for real we won't pass it `true` or `false` as an argument, but some condition
+that will evaluate to true or false? In which case, should below be phrased "If
+the argument evaluates to true" and an explanation of that? Or maybe even a
+working example would be better, this could be misleading -->
+<!-- We were trying to really break it down, to show just how the `assert!`
+macro works and what it looks like for it to pass or fail, before we got into
+calling actual code. We've changed this section to move a bit faster and just
+write actual tests instead. /Carol -->
+<p>回忆一下第五章中，列表 5-9 中有一个<code>Rectangle</code>结构体和一个<code>can_hold</code>方法，在列表 11-5 中再次使用他们。将他们放进 <em>src/lib.rs</em> 而不是 <em>src/main.rs</em> 并使用<code>assert!</code>宏编写一些测试。</p>
+<!-- Listing 5-9 wasn't marked as such; I'll fix it the next time I get Chapter
+5 for editing. /Carol -->
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[derive(Debug)]
+pub struct Rectangle {
+    length: u32,
+    width: u32,
+}
+
+impl Rectangle {
+    pub fn can_hold(&amp;self, other: &amp;Rectangle) -&gt; bool {
+        self.length &gt; other.length &amp;&amp; self.width &gt; other.width
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 11-5: The <code>Rectangle</code> struct and its <code>can_hold</code>
+method from Chapter 5 </span></p>
+<p><code>can_hold</code>方法返回一个布尔值，这意味着它完美符合<code>assert!</code>宏的使用场景。在列表 11-6 中，让我们编写一个<code>can_hold</code>方法的测试来作为练习，这里创建一个长为 8 宽为 7 的<code>Rectangle</code>实例，并假设它可以放得下另一个长为5 宽为 1 的<code>Rectangle</code>实例：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn larger_can_hold_smaller() {
+        let larger = Rectangle { length: 8, width: 7 };
+        let smaller = Rectangle { length: 5, width: 1 };
+
+        assert!(larger.can_hold(&amp;smaller));
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 11-6: A test for <code>can_hold</code> that checks that a
+larger rectangle indeed holds a smaller rectangle </span></p>
+<p>注意在<code>tests</code>模块中新增加了一行：<code>use super::*;</code>。<code>tests</code>是一个普通的模块，它遵循第七章介绍的通常的可见性规则。因为这是一个内部模块，需要将外部模块中被测试的代码引入到内部模块的作用域中。这里选择使用全局导入使得外部模块定义的所有内容在<code>tests</code>模块中都是可用的。</p>
+<p>我们将测试命名为<code>larger_can_hold_smaller</code>，并创建所需的两个<code>Rectangle</code>实例。接着调用<code>assert!</code>宏并传递<code>larger.can_hold(&amp;smaller)</code>调用的结果作为参数。这个表达式预期会返回<code>true</code>，所以测试应该通过。让我们拭目以待！</p>
+<pre><code>running 1 test
+test tests::larger_can_hold_smaller ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>它确实通过了！再来增加另一个测试，这一回断言一个更小的矩形不能放下一个更大的矩形：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn larger_can_hold_smaller() {
+        let larger = Rectangle { length: 8, width: 7 };
+        let smaller = Rectangle { length: 5, width: 1 };
+
+        assert!(larger.can_hold(&amp;smaller));
+    }
+
+    #[test]
+    fn smaller_can_hold_larger() {
+        let larger = Rectangle { length: 8, width: 7 };
+        let smaller = Rectangle { length: 5, width: 1 };
+
+        assert!(!smaller.can_hold(&amp;larger));
+    }
+}
 </code></pre>
 <p>Cargo 编译并运行了测试。这里有两部分输出：本章我们将关注第一部分。第二部分是文档测试的输出，第十四章会介绍他们。现在注意看这一行：</p>
 <pre><code class="language-text">test it_works ... ok

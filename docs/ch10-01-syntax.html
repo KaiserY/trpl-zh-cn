@@ -69,7 +69,7 @@
                 <div id="content" class="content">
                     <a class="header" href="#泛型数据类型" name="泛型数据类型"><h2>泛型数据类型</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch10-01-syntax.md">ch10-01-syntax.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-01-syntax.md">ch10-01-syntax.md</a>
 <br>
 commit 55d9e75ffec92e922273c997026bb10613a76578</p>
 </blockquote>
@@ -77,8 +77,7 @@ commit 55d9e75ffec92e922273c997026bb10613a76578</p>
 <a class="header" href="#在函数定义中使用泛型" name="在函数定义中使用泛型"><h3>在函数定义中使用泛型</h3></a>
 <p>定义函数时可以在函数签名的参数数据类型和返回值中使用泛型。以这种方式编写的代码将更灵活并能向函数调用者提供更多功能，同时不引入重复代码。</p>
 <p>回到<code>largest</code>函数上，列表 10-4 中展示了两个提供了相同的寻找 slice 中最大值功能的函数。第一个是从列表 10-3 中提取的寻找 slice 中<code>i32</code>最大值的函数。第二个函数寻找 slice 中<code>char</code>的最大值：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn largest_i32(list: &amp;[i32]) -&gt; i32 {
     let mut largest = list[0];
 
@@ -117,21 +116,17 @@ fn main() {
 #    assert_eq!(result, 'y');
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-4: Two functions that differ only in their names and the types in
-their signatures</p>
-</figcaption>
-</figure>
-<p>这里<code>largest_i32</code>和<code>largest_char</code>有着完全相同的函数体，所以能够将这两个函数变成一个来减少重复就太好了。所幸通过引入一个泛型参数就能实现。</p>
-<p>为了参数化要定义的函数的签名中的类型，我们需要像给函数的值参数起名那样为这类型参数起一个名字。这里选择了名称<code>T</code>。任何标识符抖可以作为类型参数名，选择<code>T</code>是因为 Rust 的类型命名规范是骆驼命名法（CamelCase）。另外泛型类型参数的规范也倾向于简短，经常仅仅是一个字母。<code>T</code>作为“type”是大部分 Rust 程序员的首选。</p>
+<p><span class="caption">Listing 10-4: Two functions that differ only in their
+names and the types in their signatures</span></p>
+<p>这里<code>largest_i32</code>和<code>largest_char</code>有着完全相同的函数体，所以能够将这两个函数变成一个来减少重复就太好了。所幸通过引入一个泛型参数就能实现！</p>
+<p>为了参数化要定义的函数的签名中的类型，我们需要像给函数的值参数起名那样为这类型参数起一个名字。这里选择了名称<code>T</code>。任何标识符抖可以作为类型参数名，选择<code>T</code>是因为 Rust 的类型命名规范是骆驼命名法（CamelCase）。另外泛型类型参数的规范也倾向于简短，经常仅仅是一个字母。<code>T</code>作为“type”的缩写是大部分 Rust 程序员的首选。</p>
 <p>当需要再函数体中使用一个参数时，必须再函数签名中声明这个参数以便编译器能知道函数体中这个名称的意义。同理，当在函数签名中使用一个类型参数时，必须在使用它之前就声明它。类型参数声明位于函数名称与参数列表中间的尖括号中。</p>
 <p>我们将要定义的泛型版本的<code>largest</code>函数的签名看起来像这样：</p>
 <pre><code class="language-rust,ignore">fn largest&lt;T&gt;(list: &amp;[T]) -&gt; T {
 </code></pre>
 <p>这可以理解为：函数<code>largest</code>有泛型类型<code>T</code>。它有一个参数<code>list</code>，它的类型是一个<code>T</code>值的 slice。<code>largest</code>函数将会返回一个与<code>T</code>相同类型的值。</p>
 <p>列表 10-5 展示一个在签名中使用了泛型的统一的<code>largest</code>函数定义，并向我们展示了如何对<code>i32</code>值的 slice 或<code>char</code>值的 slice 调用<code>largest</code>函数。注意这些代码还不能编译！</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn largest&lt;T&gt;(list: &amp;[T]) -&gt; T {
     let mut largest = list[0];
 
@@ -156,11 +151,8 @@ fn main() {
     println!(&quot;The largest char is {}&quot;, result);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-5: A definition of the <code>largest</code> function that uses generic type
-parameters but doesn't compile yet</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-5: A definition of the <code>largest</code> function that
+uses generic type parameters but doesn't compile yet</span></p>
 <p>如果现在就尝试编译这些代码，会出现如下错误：</p>
 <pre><code>error[E0369]: binary operation `&gt;` cannot be applied to type `T`
   |
@@ -179,8 +171,7 @@ not-yet-compiling example here, which I know isn't ideal either. Let us know
 what you think. /Carol -->
 <a class="header" href="#结构体定义中的泛型" name="结构体定义中的泛型"><h3>结构体定义中的泛型</h3></a>
 <p>同样也可以使用<code>&lt;&gt;</code>语法来定义拥有一个或多个泛型参数类型字段的结构体。列表 10-6 展示了如何定义和使用一个可以存放任何类型的<code>x</code>和<code>y</code>坐标值的结构体<code>Point</code>：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct Point&lt;T&gt; {
     x: T,
     y: T,
@@ -191,14 +182,11 @@ fn main() {
     let float = Point { x: 1.0, y: 4.0 };
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-6: A <code>Point</code> struct that holds <code>x</code> and <code>y</code> values of type <code>T</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-6: A <code>Point</code> struct that holds <code>x</code> and <code>y</code>
+values of type <code>T</code></span></p>
 <p>其语法类似于函数定义中的泛型应用。首先，必须在结构体名称后面的尖括号中声明泛型参数的名称。接着在结构体定义中可以指定具体数据类型的位置使用泛型类型。</p>
 <p>注意<code>Point</code>的定义中是使用了要给泛型类型，我们想要表达的是结构体<code>Point</code>对于一些类型<code>T</code>是泛型的，而且无论这个泛型是什么，字段<code>x</code>和<code>y</code><strong>都是</strong>相同类型的。如果尝试创建一个有不同类型值的<code>Point</code>的实例，像列表 10-7 中的代码就不能编译：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">struct Point&lt;T&gt; {
     x: T,
     y: T,
@@ -208,11 +196,8 @@ fn main() {
     let wont_work = Point { x: 5, y: 4.0 };
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-7: The fields <code>x</code> and <code>y</code> must be the same type because both have
-the same generic data type <code>T</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-7: The fields <code>x</code> and <code>y</code> must be the same
+type because both have the same generic data type <code>T</code></span></p>
 <p>尝试编译会得到如下错误：</p>
 <pre><code>error[E0308]: mismatched types
  --&gt;
@@ -226,8 +211,7 @@ the same generic data type <code>T</code></p>
 </code></pre>
 <p>当我们将 5 赋值给<code>x</code>，编译器就知道这个<code>Point</code>实例的泛型类型<code>T</code>是一个整型。接着我们将<code>y</code>指定为 4.0，而它被定义为与<code>x</code>有着相同的类型，所以出现了类型不匹配的错误。</p>
 <p>如果想要一个<code>x</code>和<code>y</code>可以有不同类型且仍然是泛型的<code>Point</code>结构体，我们可以使用多个泛型类型参数。在列表 10-8 中，我们修改<code>Point</code>的定义为拥有两个泛型类型<code>T</code>和<code>U</code>。其中字段<code>x</code>是<code>T</code>类型的，而字段<code>y</code>是<code>U</code>类型的：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct Point&lt;T, U&gt; {
     x: T,
     y: U,
@@ -239,11 +223,8 @@ fn main() {
     let integer_and_float = Point { x: 5, y: 4.0 };
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-8: A <code>Point</code> generic over two types so that <code>x</code> and <code>y</code> may be
-values of different types</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-8: A <code>Point</code> generic over two types so that
+<code>x</code> and <code>y</code> may be values of different types</span></p>
 <p>现在所有这些<code>Point</code>实例都是被允许的了！你可以在定义中使用任意多的泛型类型参数，不过太多的话代码将难以阅读和理解。如果你处于一个需要很多泛型类型的位置，这可能是一个需要重新组织代码并分隔成一些更小部分的信号。</p>
 <a class="header" href="#枚举定义中的泛型数据类型" name="枚举定义中的泛型数据类型"><h3>枚举定义中的泛型数据类型</h3></a>
 <p>类似于结构体，枚举也可以在其成员中存放泛型数据类型。第六章我们使用过了标准库提供的<code>Option&lt;T&gt;</code>枚举，现在这个定义看起来就更容易理解了。让我们再看看：</p>
@@ -263,8 +244,7 @@ values of different types</p>
 <p>当发现代码中有多个只有存放的值的类型有所不同的结构体或枚举定义时，你就应该像之前的函数定义中那样引入泛型类型来减少重复。</p>
 <a class="header" href="#方法定义中的枚举数据类型" name="方法定义中的枚举数据类型"><h3>方法定义中的枚举数据类型</h3></a>
 <p>可以像第五章介绍的那样来为其定义中带有泛型的结构体或枚举实现方法。列表 10-9 中展示了列表 10-6 中定义的结构体<code>Point&lt;T&gt;</code>。接着我们在<code>Point&lt;T&gt;</code>上定义了一个叫做<code>x</code>的方法来返回字段<code>x</code>中数据的引用：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct Point&lt;T&gt; {
     x: T,
     y: T,
@@ -282,22 +262,19 @@ fn main() {
     println!(&quot;p.x = {}&quot;, p.x());
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-9: Implementing a method named <code>x</code> on the <code>Point&lt;T&gt;</code> struct that
-will return a reference to the <code>x</code> field, which is of type <code>T</code>.</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-9: Implementing a method named <code>x</code> on the
+<code>Point&lt;T&gt;</code> struct that will return a reference to the <code>x</code> field, which is of
+type <code>T</code>.</span></p>
 <p>注意必须在<code>impl</code>后面声明<code>T</code>，这样就可以在<code>Point&lt;T&gt;</code>上实现的方法中使用它了。</p>
 <p>结构体定义中的泛型类型参数并不总是与结构体方法签名中使用的泛型是同一类型。列表 10-10 中在列表 10-8 中的结构体<code>Point&lt;T, U&gt;</code>上定义了一个方法<code>mixup</code>。这个方法获取另一个<code>Point</code>作为参数，而它可能与调用<code>mixup</code>的<code>self</code>是不同的<code>Point</code>类型。这个方法用<code>self</code>的<code>Point</code>类型的<code>x</code>值（类型<code>T</code>）和参数的<code>Point</code>类型的<code>y</code>值（类型<code>W</code>）来创建一个新<code>Point</code>类型的实例：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct Point&lt;T, U&gt; {
     x: T,
     y: U,
 }
 
 impl&lt;T, U&gt; Point&lt;T, U&gt; {
-    fn mixup&lt;V, W&gt;(&amp;self, other: &amp;Point&lt;V, W&gt;) -&gt; Point&lt;T, W&gt; {
+    fn mixup&lt;V, W&gt;(self, other: Point&lt;V, W&gt;) -&gt; Point&lt;T, W&gt; {
         Point {
             x: self.x,
             y: other.y,
@@ -314,11 +291,8 @@ fn main() {
     println!(&quot;p3.x = {}, p3.y = {}&quot;, p3.x, p3.y);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-10: Methods that use different generic types than their struct's
-definition</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-10: Methods that use different generic types
+than their struct's definition</span></p>
 <p>在<code>main</code>函数中，定义了一个有<code>i32</code>类型的<code>x</code>（其值为<code>5</code>）和<code>f64</code>的<code>y</code>（其值为<code>10.4</code>）的<code>Point</code>。<code>p2</code>则是一个有着字符串 slice 类型的<code>x</code>（其值为<code>&quot;Hello&quot;</code>）和<code>char</code>类型的<code>y</code>（其值为<code>c</code>）的<code>Point</code>。在<code>p1</code>上以<code>p2</code>调用<code>mixup</code>会返回一个<code>p3</code>，它会有一个<code>i32</code>类型的<code>x</code>，因为<code>x</code>来自<code>p1</code>，并拥有一个<code>char</code>类型的<code>y</code>，因为<code>y</code>来自<code>p2</code>。<code>println!</code>会打印出<code>p3.x = 5, p3.y = c</code>。</p>
 <p>注意泛型参数<code>T</code>和<code>U</code>声明于<code>impl</code>之后，因为他们于结构体定义相对应。而泛型参数<code>V</code>和<code>W</code>声明于<code>fn mixup</code>之后，因为他们只是相对于方法本身的。</p>
 <a class="header" href="#泛型代码的性能" name="泛型代码的性能"><h3>泛型代码的性能</h3></a>
