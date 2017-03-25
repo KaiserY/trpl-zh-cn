@@ -264,133 +264,285 @@ mod tests {
     }
 }
 </code></pre>
-<p>Cargo 编译并运行了测试。这里有两部分输出：本章我们将关注第一部分。第二部分是文档测试的输出，第十四章会介绍他们。现在注意看这一行：</p>
-<pre><code class="language-text">test it_works ... ok
+<p>因为这里<code>can_hold</code>函数的正确结果是<code>false</code>，我们需要将这个结果取反后传递给<code>assert!</code>宏。这样的话，测试就会通过而<code>can_hold</code>将返回<code>false</code>：</p>
+<pre><code>running 2 tests
+test tests::smaller_can_hold_larger ... ok
+test tests::larger_can_hold_smaller ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<p><code>it_works</code>文本来源于测试函数的名称。</p>
-<p>这里也有一行总结告诉我们所有测试的聚合结果：</p>
-<pre><code>test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
-</code></pre>
-<a class="header" href="#assert宏" name="assert宏"><h3><code>assert!</code>宏</h3></a>
-<p>空的测试函数之所以能通过是因为任何没有<code>panic!</code>的测试都是通过的，而任何<code>panic!</code>的测试都算是失败。让我们使用`assert!宏来使测试失败：</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[test]
-fn it_works() {
-    assert!(false);
+<p>这个通过的测试！现在让我们看看如果引入一个 bug 的话测试结果会发生什么。将<code>can_hold</code>方法中比较长度时本应使用大于号的地方改成小于号：</p>
+<pre><code class="language-rust">#[derive(Debug)]
+pub struct Rectangle {
+    length: u32,
+    width: u32,
+}
+
+impl Rectangle {
+    pub fn can_hold(&amp;self, other: &amp;Rectangle) -&gt; bool {
+        self.length &lt; other.length &amp;&amp; self.width &gt; other.width
+    }
 }
 </code></pre>
-<p><code>assert!</code>宏由标准库提供，它获取一个参数，如果参数是<code>true</code>，什么也不会发生。如果参数是<code>false</code>，这个宏会<code>panic!</code>。再次运行测试：</p>
-<pre><code>$ cargo test
-   Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
-     Running target/debug/deps/adder-abcabcabc
-
-running 1 test
-test it_works ... FAILED
+<p>现在运行测试会产生：</p>
+<pre><code>running 2 tests
+test tests::smaller_can_hold_larger ... ok
+test tests::larger_can_hold_smaller ... FAILED
 
 failures:
 
----- it_works stdout ----
-    thread 'it_works' panicked at 'assertion failed: false', src/lib.rs:5
+---- tests::larger_can_hold_smaller stdout ----
+    thread 'tests::larger_can_hold_smaller' panicked at 'assertion failed:
+    larger.can_hold(&amp;smaller)', src/lib.rs:22
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
+failures:
+    tests::larger_can_hold_smaller
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+</code></pre>
+<p>我们的测试捕获了 bug！因为<code>larger.length</code>是 8 而<code>smaller.length</code> 是 5，<code>can_hold</code>中的长度比较现在返回<code>false</code>因为 8 不小于 5。</p>
+<a class="header" href="#使用assert_eq和assert_ne宏来测试相等" name="使用assert_eq和assert_ne宏来测试相等"><h3>使用<code>assert_eq!</code>和<code>assert_ne!</code>宏来测试相等</h3></a>
+<p>测试功能的一个常用方法是将需要测试代码的值与期望值做比较，并检查是否相等。可以通过向<code>assert!</code>宏传递一个使用<code>==</code>宏的表达式来做到。不过这个操作实在是太常见了，以至于标注库提供了一对宏来方便处理这些操作：<code>assert_eq!</code>和<code>assert_ne!</code>。这两个宏分别比较两个值是相等还是不相等。当断言失败时他们也会打印出这两个值具体是什么，以便于观察测试<strong>为什么</strong>失败，而<code>assert!</code>只会打印出它从<code>==</code>表达式中得到了<code>false</code>值，而不是导致<code>false</code>值的原因。</p>
+<p>列表 11-7 中，让我们编写一个对其参数加二并返回结果的函数<code>add_two</code>。接着使用<code>assert_eq!</code>宏测试这个函数：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
+    a + 2
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_adds_two() {
+        assert_eq!(4, add_two(2));
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 11-7: Testing the function <code>add_two</code> using the
+<code>assert_eq!</code> macro </span></p>
+<p>测试通过了！</p>
+<pre><code>running 1 test
+test tests::it_adds_two ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>传递给<code>assert_eq!</code>宏的第一个参数，4，等于调用<code>add_two(2)</code>的结果。我们将会看到这个测试的那一行说<code>test tests::it_adds_two ... ok</code>，<code>ok</code>表明测试通过了！</p>
+<p>在代码中引入一个 bug 来看看使用<code>assert_eq!</code>的测试失败是什么样的。修改<code>add_two</code>函数的实现使其加 3：</p>
+<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
+    a + 3
+}
+</code></pre>
+<p>再次运行测试：</p>
+<pre><code>running 1 test
+test tests::it_adds_two ... FAILED
 
 failures:
-    it_works
+
+---- tests::it_adds_two stdout ----
+    thread 'tests::it_adds_two' panicked at 'assertion failed: `(left ==
+    right)` (left: `4`, right: `5`)', src/lib.rs:11
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+failures:
+    tests::it_adds_two
 
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
-
-error: test failed
 </code></pre>
-<p>Rust 表明测试失败了：</p>
-<pre><code>test it_works ... FAILED
-</code></pre>
-<p>并展示了测试是因为src/lib.rs<code>的第 5 行</code>assert!<code>宏得到了一个</code>false`值而失败的：</p>
-<pre><code>thread 'it_works' panicked at 'assertion failed: false', src/lib.rs:5
-</code></pre>
-<p>失败的测试也体现在了总结行中：</p>
-<pre><code>test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
-</code></pre>
-<a class="header" href="#使用assert_eq和assert_ne宏来测试相等" name="使用assert_eq和assert_ne宏来测试相等"><h3>使用<code>assert_eq!</code>和<code>assert_ne!</code>宏来测试相等</h3></a>
-<p>测试功能的一个常用方法是将需要测试代码的值与期望值做比较，并检查是否相等。可以通过向<code>assert!</code>宏传递一个使用<code>==</code>宏的表达式来做到。不过这个操作实在是太常见了，以至于标注库提供了一对宏来编译处理这些操作：<code>assert_eq!</code>和<code>assert_ne!</code>。这两个宏分别比较两个值是相等还是不相等。使用这些宏的另一个优势是当断言失败时他们会打印出这两个值具体是什么，以便于观察测试<strong>为什么</strong>失败，而<code>assert!</code>只会打印出它从<code>==</code>表达式中得到了<code>false</code>值。</p>
-<p>下面是分别使用这两个宏其会测试通过的例子：</p>
+<p>测试捕获到了 bug！<code>it_adds_two</code>测试失败并显示信息<code>assertion failed: `(left == right)` (left: `4`, right: `5`)</code>。这个信息有助于我们开始调试：它说<code>assert_eq!</code>的<code>left</code>参数是 4，而<code>right</code>参数，也就是<code>add_two(2)</code>的结果，是 5。</p>
+<p>注意在一些语言和测试框架中，断言两个值相等的函数的参数叫做<code>expected</code>和<code>actual</code>，而且指定参数的顺序是需要注意的。然而在 Rust 中，他们则叫做<code>left</code>和<code>right</code>，同时指定期望的值和被测试代码产生的值的顺序并不重要。这个测试中的断言也可以写成<code>assert_eq!(add_two(2), 4)</code>，这时错误信息会变成<code>assertion failed: `(left == right)` (left: `5`, right: `4`)</code>。</p>
+<p><code>assert_ne!</code>宏在传递给它的两个值不相等时通过而在相等时失败。这个宏在代码按照我们期望运行时不确定值<strong>应该</strong>是什么，不过知道他们绝对<strong>不应该</strong>是什么的时候最有用处。例如，如果一个函数确定会以某种方式改变其输出，不过这种方式由运行测试是星期几来决定，这时最好的断言可能就是函数的输出不等于其输入。</p>
+<p><code>assert_eq!</code>和<code>assert_ne!</code>宏在底层分别使用了<code>==</code>和<code>!=</code>。当断言失败时，这些宏会使用调试格式打印出其参数，这意味着被比较的值必需实现了<code>PartialEq</code>和<code>Debug</code> trait。所有的基本类型和大部分标准库类型都实现了这些 trait。对于自定义的结构体和枚举，需要实现 <code>PartialEq</code>才能断言他们的值是否相等。需要实现 <code>Debug</code>才能在断言失败时打印他们的值。因为这两个 trait 都是可推导 trait，如第五章所提到的，通常可以直接在结构体或枚举上添加<code>#[derive(PartialEq, Debug)]</code>注解。附录 C 中有更多关于这些和其他可推导 trait 的详细信息。</p>
+<a class="header" href="#自定义错误信息" name="自定义错误信息"><h3>自定义错误信息</h3></a>
+<p>也可以向<code>assert!</code>、<code>assert_eq!</code>和<code>assert_ne!</code>宏传递一个可选的参数来增加用于打印的自定义错误信息。任何在<code>assert!</code>必需的一个参数和<code>assert_eq!</code>和<code>assert_ne!</code>必需的两个参数之后指定的参数都会传递给第八章讲到的<code>format!</code>宏，所以可以传递一个包含<code>{}</code>占位符的格式字符串和放入占位符的值。自定义信息有助于记录断言的意义，这样到测试失败时，就能更好的例子代码出了什么问题。</p>
+<p>例如，比如说有一个根据人名进行问候的函数，而我们希望测试将传递给函数的人名显示在输出中：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code>#[test]
-fn it_works() {
-    assert_eq!(&quot;Hello&quot;, &quot;Hello&quot;);
-
-    assert_ne!(&quot;Hello&quot;, &quot;world&quot;);
-}
-</code></pre>
-<p>也可以对这些宏指定可选的第三个参数，它是一个会加入错误信息的自定义文本。这两个宏展开后的逻辑看起来像这样：</p>
-<pre><code class="language-rust,ignore">// assert_eq! - panic if the values aren't equal
-if left_val != right_val {
-    panic!(
-        &quot;assertion failed: `(left == right)` (left: `{:?}`, right: `{:?}`): {}&quot;
-        left_val,
-        right_val,
-        optional_custom_message
-    )
+<pre><code class="language-rust">pub fn greeting(name: &amp;str) -&gt; String {
+    format!(&quot;Hello {}!&quot;, name)
 }
 
-// assert_ne! - panic if the values are equal
-if left_val == right_val {
-    panic!(
-        &quot;assertion failed: `(left != right)` (left: `{:?}`, right: `{:?}`): {}&quot;
-        left_val,
-        right_val,
-        optional_custom_message
-    )
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn greeting_contains_name() {
+        let result = greeting(&quot;Carol&quot;);
+        assert!(result.contains(&quot;Carol&quot;));
+    }
 }
 </code></pre>
-<p>看看这个因为<code>hello</code>不等于<code>world</code>而失败的测试。我们还增加了一个自定义的错误信息，<code>greeting operation failed</code>：</p>
+<p>这个程序的需求还没有被确定，而我们非常确定问候开始的<code>Hello</code>文本不会改变。我们决定并不想在人名改变时
+不得不更新测试，所以相比检查<code>greeting</code>函数返回的确切的值，我们将仅仅断言输出的文本中包含输入参数。</p>
+<p>让我们通过改变<code>greeting</code>不包含<code>name</code>来在代码中引入一个 bug 来测试失败时是怎样的，</p>
+<pre><code class="language-rust">pub fn greeting(name: &amp;str) -&gt; String {
+    String::from(&quot;Hello!&quot;)
+}
+</code></pre>
+<p>运行测试会产生：</p>
+<pre><code class="language-text">running 1 test
+test tests::greeting_contains_name ... FAILED
+
+failures:
+
+---- tests::greeting_contains_name stdout ----
+    thread 'tests::greeting_contains_name' panicked at 'assertion failed:
+    result.contains(&quot;Carol&quot;)', src/lib.rs:12
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+failures:
+    tests::greeting_contains_name
+</code></pre>
+<p>这仅仅告诉了我们断言失败了和失败的行号。一个更有用的错误信息应该打印出从<code>greeting</code>函数得到的值。让我们改变测试函数来使用一个由包含占位符的格式字符串和从<code>greeting</code>函数取得的值组成的自定义错误信息：</p>
+<pre><code class="language-rust,ignore">#[test]
+fn greeting_contains_name() {
+    let result = greeting(&quot;Carol&quot;);
+    assert!(
+        result.contains(&quot;Carol&quot;),
+        &quot;Greeting did not contain name, value was `{}`&quot;, result
+    );
+}
+</code></pre>
+<p>现在如果再次运行测试，将会看到更有价值的错误信息：</p>
+<pre><code>---- tests::greeting_contains_name stdout ----
+    thread 'tests::greeting_contains_name' panicked at 'Result did not contain
+    name, value was `Hello`', src/lib.rs:12
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+</code></pre>
+<p>可以在测试输出中看到所取得的确切的值，这会帮助我们理解发生了什么而不是期望发生什么。</p>
+<a class="header" href="#使用should_panic检查-panic" name="使用should_panic检查-panic"><h3>使用<code>should_panic</code>检查 panic</h3></a>
+<p>除了检查代码是否返回期望的正确的值之外，检查代码是否按照期望处理错误情况也是很重要的。例如，考虑第九章列表 9-8 创建的<code>Guess</code>类型。其他使用<code>Guess</code>的代码依赖于<code>Guess</code>实例只会包含 1 到 100 的值的保证。可以编写一个测试来确保创建一个超出范围的值的<code>Guess</code>实例会 panic。</p>
+<p>可以通过对函数增加另一个属性<code>should_panic</code>来实现这些。这个属性在函数中的代码 panic 时会通过，而在其中的代码没有 panic 时失败。</p>
+<p>列表 11-8 展示了如何编写一个测试来检查<code>Guess::new</code>按照我们的期望出现的错误情况：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[test]
-fn a_simple_case() {
-    let result = &quot;hello&quot;; // this value would come from running your code
-    assert_eq!(result, &quot;world&quot;, &quot;greeting operation failed&quot;);
+<pre><code class="language-rust">struct Guess {
+    value: u32,
+}
+
+impl Guess {
+    pub fn new(value: u32) -&gt; Guess {
+        if value &lt; 1 || value &gt; 100 {
+            panic!(&quot;Guess value must be between 1 and 100, got {}.&quot;, value);
+        }
+
+        Guess {
+            value: value,
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[should_panic]
+    fn greater_than_100() {
+        Guess::new(200);
+    }
 }
 </code></pre>
-<p>毫无疑问运行这个测试会失败，而错误信息解释了为什么测试失败了并且带有我们的指定的自定义错误信息：</p>
-<pre><code class="language-text">---- a_simple_case stdout ----
-    thread 'a_simple_case' panicked at 'assertion failed: `(left == right)`
-    (left: `&quot;hello&quot;`, right: `&quot;world&quot;`): greeting operation failed',
-    src/main.rs:4
+<p><span class="caption">Listing 11-8: Testing that a condition will cause a
+<code>panic!</code> </span></p>
+<p><code>#[should_panic]</code>属性位于<code>#[test]</code>之后和对应的测试函数之前。让我们看看测试通过时它时什么样子：</p>
+<pre><code>running 1 test
+test tests::greater_than_100 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<p><code>assert_eq!</code>的两个参数被称为 &quot;left&quot; 和 &quot;right&quot; ，而不是 &quot;expected&quot; 和 &quot;actual&quot; ；值的顺序和硬编码的值并没有什么影响。</p>
-<p>因为这些宏使用了<code>==</code>和<code>!=</code>运算符并使用调试格式打印这些值，进行比较的值必须实现<code>PartialEq</code>和<code>Debug</code> trait。Rust 提供的类型实现了这些 trait，不过自定义的结构体和枚举则需要自己实现<code>PartialEq</code>以便能够断言这些值是否相等，和实现<code>Debug</code>以便在断言失败时打印出这些值。因为第五章提到过这两个 trait 都是 derivable trait，所以通常可以直接在结构体或枚举上加上<code>#[derive(PartialEq, Debug)]</code>注解。查看附录 C 来寻找更多关于这些和其他 derivable trait 的信息。</p>
-<a class="header" href="#使用should_panic测试期望的失败" name="使用should_panic测试期望的失败"><h2>使用<code>should_panic</code>测试期望的失败</h2></a>
-<p>可以使用另一个属性来反转测试中的失败：<code>should_panic</code>。这在测试调用特定的函数会产生错误的函数时很有帮助。例如，让我们测试第八章中的一些我们知道会 panic 的代码：尝试使用 range 语法和并不组成完整字母的字节索引来创建一个字符串 slice。在有<code>#[test]</code>属性的函数之前增加<code>#[should_panic]</code>属性，如列表 11-1 所示：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">#[test]
-#[should_panic]
-fn slice_not_on_char_boundaries() {
-    let s = &quot;Здравствуйте&quot;;
-    &amp;s[0..1];
+<p>看起来不错！现在在代码中引入 bug，通过移除<code>new</code>函数在值大于 100 时会 panic 的条件：</p>
+<pre><code class="language-rust"># struct Guess {
+#     value: u32,
+# }
+#
+impl Guess {
+    pub fn new(value: u32) -&gt; Guess {
+        if value &lt; 1  {
+            panic!(&quot;Guess value must be between 1 and 100, got {}.&quot;, value);
+        }
+
+        Guess {
+            value: value,
+        }
+    }
 }
 </code></pre>
-<figcaption>
-<p>Listing 11-1: A test expecting a <code>panic!</code></p>
-</figcaption>
-</figure>
-<p>这个测试是成功的，因为我们表示代码应该会 panic。相反如果代码因为某种原因没有产生<code>panic!</code>则测试会失败。</p>
-<p>使用<code>should_panic</code>的测试是脆弱的，因为难以保证测试不会因为一个不同于我们期望的原因失败。为了帮助解决这个问题，<code>should_panic</code>属性可以增加一个可选的<code>expected</code>参数。测试工具会确保错误信息里包含我们提供的文本。一个比列表 11-1 更健壮的版本如列表 11-2 所示：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">#[test]
-#[should_panic(expected = &quot;do not lie on character boundary&quot;)]
-fn slice_not_on_char_boundaries() {
-    let s = &quot;Здравствуйте&quot;;
-    &amp;s[0..1];
+<p>如果运行列表 11-8 的测试，它会失败：</p>
+<pre><code>running 1 test
+test tests::greater_than_100 ... FAILED
+
+failures:
+
+failures:
+    tests::greater_than_100
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+</code></pre>
+<p>这回并没有得到非常有用的信息，不过一旦我们观察测试函数，会发现它标注了<code>#[should_panic]</code>。这个错误意味着代码中函数<code>Guess::new(200)</code>并没有产生 panic。</p>
+<p>然而<code>should_panic</code>测试可能是非常含糊不清的，因为他们只是告诉我们代码并没有产生 panic。<code>should_panic</code>甚至在测试因为其他不同的原因而不是我们期望发生的那个而 panic 时也会通过。为了使<code>should_panic</code>测试更精确，可以给<code>should_panic</code>属性增加一个可选的<code>expected</code>参数。测试工具会确保错误信息中包含其提供的文本。例如，考虑列表 11-9 中修改过的<code>Guess</code>，这里<code>new</code>函数更具其值是过大还或者过小而提供不同的 panic 信息：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">struct Guess {
+    value: u32,
+}
+
+impl Guess {
+    pub fn new(value: u32) -&gt; Guess {
+        if value &lt; 1 {
+            panic!(&quot;Guess value must be greater than or equal to 1, got {}.&quot;,
+                   value);
+        } else if value &gt; 100 {
+            panic!(&quot;Guess value must be less than or equal to 100, got {}.&quot;,
+                   value);
+        }
+
+        Guess {
+            value: value,
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[should_panic(expected = &quot;Guess value must be less than or equal to 100&quot;)]
+    fn greater_than_100() {
+        Guess::new(200);
+    }
 }
 </code></pre>
-<!-- I will add ghosting in libreoffice /Carol -->
-<figcaption>
-<p>Listing 11-2: A test expecting a <code>panic!</code> with a particular message</p>
-</figcaption>
-</figure>
-<p>请自行尝试当<code>should_panic</code>的测试出现 panic 但并不符合期望的信息时会发生什么：在测试中因为不同原因造成<code>panic!</code>，或者将期望的 panic 信息改为并不与字母字节边界 panic 信息相匹配。</p>
+<p><span class="caption">Listing 11-9: Testing that a condition will cause a
+<code>panic!</code> with a particular panic message </span></p>
+<p>这个测试会通过，因为<code>should_panic</code>属性中<code>expected</code>参数提供的值是<code>Guess::new</code>函数 panic 信息的子字符串。我们可以指定期望的整个 panic 信息，在这个例子中是<code>Guess value must be less than or equal to 100, got 200.</code>。这依赖于 panic 有多独特或动态和你希望测试有多准确。在这个例子中，错误信息的子字符串足以确保函数在<code>else if value &gt; 100</code>的情况下运行。</p>
+<p>为了观察带有<code>expected</code>信息的<code>should_panic</code>测试失败时会发生什么，让我们再次引入一个 bug 来将<code>if value &lt; 1</code>和<code>else if value &gt; 100</code>的代码块对换：</p>
+<pre><code class="language-rust,ignore">if value &lt; 1 {
+    panic!(&quot;Guess value must be less than or equal to 100, got {}.&quot;, value);
+} else if value &gt; 100 {
+    panic!(&quot;Guess value must be greater than or equal to 1, got {}.&quot;, value);
+}
+</code></pre>
+<p>这一次运行<code>should_panic</code>测试，它会失败：</p>
+<pre><code>running 1 test
+test tests::greater_than_100 ... FAILED
+
+failures:
+
+---- tests::greater_than_100 stdout ----
+    thread 'tests::greater_than_100' panicked at 'Guess value must be greater
+    than or equal to 1, got 200.', src/lib.rs:10
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+note: Panic did not include expected string 'Guess value must be less than or
+equal to 100'
+
+failures:
+    tests::greater_than_100
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+</code></pre>
+<p>错误信息表明测试确实如期望 panic 了，不过 panic 信息<code>did not include expected string 'Guess value must be less than or equal to 100'</code>。可以看到我们的到的 panic 信息，在这个例子中是<code>Guess value must be greater than or equal to 1, got 200.</code>。这样就可以开始寻找 bug 在哪了！</p>
+<p>现在我们讲完了编写测试的方法，让我们看看运行测试时会发生什么并讨论可以用于<code>cargo test</code>的不同选项。</p>
 
                 </div>
 

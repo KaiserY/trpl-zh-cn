@@ -230,7 +230,7 @@ mod server {
 
 注意这个模块文件中我们也使用了一个`mod`声明；这是因为我们希望`server`成为`network`的一个子模块。
 
-现在再次运行`cargo build`。成功！不过我们还需要再提取出另一个模块：`server`。因为这是一个子模块————也就是模块中的模块————目前的将模块提取到对应名字的文件中的策略就不管用了。如果我们仍这么尝试则会出现错误。对 *src/network.rs* 的第一个修改是用`mod server;`替换`server`模块的内容：
+现在再次运行`cargo build`。成功！不过我们还需要再提取出另一个模块：`server`。因为这是一个子模块——也就是模块中的模块——目前的将模块提取到对应名字的文件中的策略就不管用了。如果我们仍这么尝试则会出现错误。对 *src/network.rs* 的第一个修改是用`mod server;`替换`server`模块的内容：
 
 <span class="filename">Filename: src/network.rs</span>
 

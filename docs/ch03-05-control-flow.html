@@ -284,8 +284,7 @@ the value is: 50
 <p>所有数组中的五个元素都如期被打印出来。尽管<code>index</code>在某一时刻会到达值<code>5</code>，不过循环在其尝试从数组获取第六个值（会越界）之前就停止了。</p>
 <p>不过这个过程是容易出错的；如果索引长度不正确会导致程序 panic。这也使程序更慢，因为编译器增加了运行时代码来对每次循环的每个元素进行条件检查。</p>
 <p>可以使用<code>for</code>循环来对一个集合的每个元素执行一些代码，来作为一个更有效率替代。<code>for</code>循环看起来像这样：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let a = [10, 20, 30, 40, 50];
 
@@ -294,10 +293,8 @@ the value is: 50
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 3-6: Looping through each element of a collection using a <code>for</code> loop</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 3-6: Looping through each element of a collection
+using a <code>for</code> loop</span></p>
 <p>当运行这段代码，将看到与列表 3-5 一样的输出。更为重要的是，我们增强了代码安全性并消除了出现可能会导致超出数组的结尾或遍历长度不够而缺少一些元素这类 bug 机会。</p>
 <p>例如，在列表 3-5 的代码中，如果从数组<code>a</code>中移除一个元素但忘记更新条件为<code>while index &lt; 4</code>，代码将会 panic。使用<code>for</code>循环的话，就不需要惦记着在更新数组元素数量时修改其他的代码了。</p>
 <p><code>for</code>循环的安全性和简洁性使得它在成为 Rust 中使用最多的循环结构。即使是在想要循环执行代码特定次数时，例如列表 3-5 中使用<code>while</code>循环的倒计时例子，大部分 Rustacean 也会使用<code>for</code>循环。这么做的方式是使用<code>Range</code>，它是标准库提供的用来生成从一个数字开始到另一个数字结束的所有数字序列的类型。</p>
