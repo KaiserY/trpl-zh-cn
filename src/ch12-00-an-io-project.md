@@ -1,8 +1,8 @@
 # 一个 I/O 项目
 
-> [ch12-00-an-io-project.md](https://github.com/rust-lang/book/blob/master/src/ch12-00-an-io-project.md)
+> [ch12-00-an-io-project.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-00-an-io-project.md)
 > <br>
-> commit efd59dd0fe8e3658563fb5fd289af9d862e07a03
+> commit 4f2dc564851dc04b271a2260c834643dfd86c724
 
 之前几个章节我们学习了很多知识。让我们一起运用这些新知识来构建一个项目。在这个过程中，我们还将学习到更多 Rust 标准库的内容。
 
@@ -15,7 +15,7 @@
 
 另外，我们还将添加一个额外的功能：一个环境变量允许我们大小写不敏感的搜索字符串参数。
 
-还有另一个很好的理由使用`grep`作为示例项目：Rust 社区的成员，Andrew Gallant，已经使用 Rust 创建了一个功能非常完整的`grep`版本。它叫做`ripgrep`，并且它非常非常快。这样虽然我们的`grep`将会非常简单，你也会掌握阅读现实生活中项目的基础知识。
+还有另一个很好的理由使用`grep`作为示例项目：Rust 社区的成员，Andrew Gallant，已经使用 Rust 创建了一个功能非常完整的`grep`版本。它叫做`ripgrep`，并且它非常非常快。这样虽然我们的`grep`将会非常简单，你也会掌握阅读现真实项目的基础知识。
 
 这个项目将会结合之前所学的一些内容：
 

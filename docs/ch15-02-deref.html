@@ -71,9 +71,9 @@
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch15-02-deref.md">ch15-02-deref.md</a>
 <br>
-commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
+commit ecc3adfe0cfa0a4a15a178dc002702fd0ea74b3f</p>
 </blockquote>
-<p>第一个智能指针相关的重要 trait 是<code>Deref</code>，它允许我们重载<code>*</code>，解引用运算符（不同于乘法运算符和全局引用运算符）。重载智能指针的<code>*</code>方便访问其后的数据，在这个部分的稍后介绍解引用强制多态时我们会讨论方便的意义。</p>
+<p>第一个智能指针相关的重要 trait 是<code>Deref</code>，它允许我们重载<code>*</code>，解引用运算符（不同于乘法运算符和全局引用运算符）。重载智能指针的<code>*</code>能使访问其后的数据更为方便，在这个部分的稍后介绍解引用强制多态时我们会讨论方便的意义。</p>
 <p>第八章的哈希 map 的“根据旧值更新一个值”部分简要的提到了解引用运算符。当时有一个可变引用，而我们希望改变这个引用所指向的值。为此，首先我们必须解引用。这是另一个使用<code>i32</code>值引用的例子：</p>
 <pre><code class="language-rust">let mut x = 5;
 {
@@ -119,14 +119,14 @@ fn main() {
 struct that holds mp3 file data and metadata</span></p>
 <p>大部分代码看起来都比较熟悉：一个结构体、一个 trait 实现、和一个创建了结构体示例的 main 函数。其中有一部分我们还未全面的讲解：类似于第十三章学习迭代器 trait 时出现的<code>type Item</code>，<code>type Target = T;</code>语法用于定义关联类型，第十九章会更详细的介绍。不必过分担心例子中的这一部分；它只是一个稍显不同的定义泛型参数的方式。</p>
 <p>在<code>assert_eq!</code>中，我们验证<code>vec![1, 2, 3]</code>是否为<code>Mp3</code>实例<code>*my_favorite_song</code>解引用的值，结果正是如此因为我们实现了<code>deref</code>方法来返回音频数据。如果没有为<code>Mp3</code>实现<code>Deref</code> trait，Rust 将不会编译<code>*my_favorite_song</code>：会出现错误说<code>Mp3</code>类型不能被解引用。</p>
-<p>代码能够工作的原因在于调用<code>*my_favorite_song</code>时<code>*</code>在背后所做的操作：</p>
+<p>没有<code>Deref</code> trait 的话，编译器只能解引用<code>&amp;</code>引用，而<code>my_favorite_song</code>并不是（它是一个<code>Mp3</code>结构体）。通过<code>Deref</code> trait，编译器知道实现了<code>Deref</code> trait 的类型有一个返回引用的<code>deref</code>方法（在这个例子中，是<code>&amp;self.audio</code>因为列表 15-7 中的<code>deref</code>的定义）。所以为了得到一个<code>*</code>可以解引用的<code>&amp;</code>引用，编译器将<code>*my_favorite_song</code>展开为如下：</p>
 <pre><code class="language-rust,ignore">*(my_favorite_song.deref())
 </code></pre>
-<p>这对<code>my_favorite_song</code>调用了<code>deref</code>方法，它借用了<code>my_favorite_song</code>并返回指向<code>my_favorite_song.audio</code>的引用，这正是列表 15-5 中<code>deref</code>所定义的。引用的<code>*</code>被定义为仅仅从引用中返回其数据，所以上面<code>*</code>的展开形式对于外部<code>*</code>来说并不是递归的。最终的数据类型是<code>Vec&lt;u8&gt;</code>，它与列表 15-5 中<code>assert_eq!</code>的<code>vec![1, 2, 3]</code>相匹配。</p>
-<p><code>deref</code>方法的返回值类型仍然是引用和为何必须解引用方法的结果的原因是如果<code>deref</code>方法就返回值，使用<code>*</code>总是会获取其所有权。</p>
+<p>这个就是<code>self.audio</code>中的结果值。<code>deref</code>返回一个引用并接下来必需解引用而不是直接返回值的原因是所有权：如果<code>deref</code>方法直接返回值而不是引用，其值将被移动出<code>self</code>。这里和大部分使用解引用运算符的地方并不想获取<code>my_favorite_song.audio</code>的所有权。</p>
+<p>注意将<code>*</code>替换为<code>deref</code>调用和<code>*</code>调用的过程在每次使用<code>*</code>的时候都会发生一次。<code>*</code>的替换并不会无限递归进行。最终的数据类型是<code>Vec&lt;u8&gt;</code>，它与列表 15-7 中<code>assert_eq!</code>的<code>vec![1, 2, 3]</code>相匹配。</p>
 <a class="header" href="#函数和方法的隐式解引用强制多态" name="函数和方法的隐式解引用强制多态"><h3>函数和方法的隐式解引用强制多态</h3></a>
-<p>Rust 倾向于偏爱明确而不是隐晦，不过一个情况下这并不成立，就是函数和方法的参数的<strong>解引用强制多态</strong>（<em>deref coercions</em>）。解引用强制多态会自动的将指针或智能指针的引用转换为指针内容的引用。解引用强制多态发生于一个值被传递给函数或方法，并只发生于需要将传递的值类型与签名中参数类型相匹配的时候。解引用强制多态的加入使得 Rust 调用函数或方法时无需很多使用<code>&amp;</code>和<code>*</code>的引用和解引用。</p>
-<p>使用列表 15-5 中的<code>Mp3</code>结构体，如下是一个获取<code>u8</code> slice 并压缩 mp3 音频数据的函数签名：</p>
+<p>Rust 倾向于偏爱明确而不是隐晦，不过一个情况下这并不成立，就是函数和方法的参数的<strong>解引用强制多态</strong>（<em>deref coercions</em>）。解引用强制多态会自动的将指针或智能指针的引用转换为指针内容的引用。解引用强制多态发生于当传递给函数的参数类型不同于函数签名中定义参数类型的时候。解引用强制多态的加入使得 Rust 调用函数或方法时无需很多使用<code>&amp;</code>和<code>*</code>的引用和解引用。</p>
+<p>使用列表 15-7 中的<code>Mp3</code>结构体，如下是一个获取<code>u8</code> slice 并压缩 mp3 音频数据的函数签名：</p>
 <pre><code class="language-rust,ignore">fn compress_mp3(audio: &amp;[u8]) -&gt; Vec&lt;u8&gt; {
     // the actual implementation would go here
 }
@@ -138,8 +138,8 @@ struct that holds mp3 file data and metadata</span></p>
 <p>然而，因为解引用强制多态和<code>Mp3</code>的<code>Deref</code> trait 实现，我们可以使用如下代码使用<code>my_favorite_song</code>中的数据调用这个函数：</p>
 <pre><code class="language-rust,ignore">let result = compress_mp3(&amp;my_favorite_song);
 </code></pre>
-<p>只有<code>&amp;</code>和实例，好的！我们可以把智能指针当成普通的引用。也就是说解引用强制多态意味着 Rust 利用了<code>Deref</code>实现的优势：Rust 知道<code>Mp3</code>实现了<code>Deref</code> trait 并从<code>deref</code>方法返回<code>&amp;Vec&lt;u8&gt;</code>。它也知道标准库实现了<code>Vec&lt;T&gt;</code>的<code>Deref</code> trait，其<code>deref</code>方法返回<code>&amp;[T]</code>（我们也可以通过查阅<code>Vec&lt;T&gt;</code>的 API 文档来发现这一点）。所以，在编译时，Rust 会发现它可以调用两次<code>Deref::deref</code>来将<code>&amp;Mp3</code>变成<code>&amp;Vec&lt;u8&gt;</code>再变成<code>&amp;[T]</code>来满足<code>compress_mp3</code>的签名。这意味着我们可以少写一些代码！Rust 会多次分析<code>Deref::deref</code>的返回值类型直到它满足参数的类型，只要相关类型实现了<code>Deref</code> trait。这些间接转换在编译时进行，所以利用解引用强制多态并没有运行时惩罚。</p>
-<p>这里还有一个重载了<code>&amp;mut T</code>的<code>*</code>的<code>DerefMut</code> trait，它以与<code>Deref</code>重载<code>&amp;T</code>的<code>*</code>相同的方式用于参数中。</p>
+<p>只有<code>&amp;</code>和实例，好的！我们可以把智能指针当成普通的引用。也就是说解引用强制多态意味着 Rust 利用了<code>Deref</code>实现的优势：Rust 知道<code>Mp3</code>实现了<code>Deref</code> trait 并从<code>deref</code>方法返回<code>&amp;Vec&lt;u8&gt;</code>。它也知道标准库实现了<code>Vec&lt;T&gt;</code>的<code>Deref</code> trait，其<code>deref</code>方法返回<code>&amp;[T]</code>（我们也可以通过查阅<code>Vec&lt;T&gt;</code>的 API 文档来发现这一点）。所以，在编译时，Rust 会发现它可以调用两次<code>Deref::deref</code>来将<code>&amp;Mp3</code>变成<code>&amp;Vec&lt;u8&gt;</code>再变成<code>&amp;[T]</code>来满足<code>compress_mp3</code>的签名。这意味着我们可以少写一些代码！Rust 会多次分析<code>Deref::deref</code>的返回值类型直到它满足参数的类型，只要相关类型实现了<code>Deref</code> trait。这些间接转换在编译时进行，所以利用解引用强制多态并没有运行时惩罚！</p>
+<p>类似于如何使用<code>Deref</code> trait 重载<code>&amp;T</code>的<code>*</code>运算符，<code>DerefMut</code> trait用于重载<code>&amp;mut T</code>的<code>*</code>运算符。</p>
 <p>Rust 在发现类型和 trait 实现满足三种情况时会进行解引用强制多态：</p>
 <ul>
 <li>从<code>&amp;T</code>到<code>&amp;U</code>当<code>T: Deref&lt;Target=U&gt;</code>。</li>

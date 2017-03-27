@@ -5860,134 +5860,161 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 <p>现在我们讲完了编写测试的方法，让我们看看运行测试时会发生什么并讨论可以用于<code>cargo test</code>的不同选项。</p>
 <a class="header" href="#运行测试" name="运行测试"><h2>运行测试</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch11-02-running-tests.md">ch11-02-running-tests.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch11-02-running-tests.md">ch11-02-running-tests.md</a>
 <br>
-commit cf52d81371e24e14ce31a5582bfcb8c5b80d26cc</p>
+commit 55b294f20fc846a13a9be623bf322d8b364cee77</p>
 </blockquote>
-<p>类似于<code>cargo run</code>会编译代码并运行生成的二进制文件，<code>cargo test</code>在测试模式下编译代码并运行生成的测试二进制文件。<code>cargo test</code>生成的二进制文件默认会并行的运行所有测试并在测试过程中捕获生成的输出，这样就更容易阅读测试结果的输出。</p>
-<p>可以通过指定命令行选项来改变这些运行测试的默认行为。这些选项的一部分可以传递给<code>cargo test</code>，而另一些则需要传递给生成的测试二进制文件。分隔这些参数的方法是<code>--</code>：<code>cargo test</code>之后列出了传递给<code>cargo test</code>的参数，接着是分隔符<code>--</code>，之后是传递给测试二进制文件的参数。</p>
-<a class="header" href="#并行运行测试" name="并行运行测试"><h3>并行运行测试</h3></a>
-<p>测试使用线程来并行运行。为此，编写测试时需要注意测试之间不要相互依赖或者存在任何共享状态。共享状态也可能包含在运行环境中，比如当前工作目录或者环境变量。</p>
-<p>如果你不希望它这样运行，或者想要更加精确的控制使用线程的数量，可以传递<code>--test-threads</code>参数和线程的数量给测试二进制文件。将线程数设置为 1 意味着没有任何并行操作：</p>
+<p>就像<code>cargo run</code>会编译代码并运行生成的二进制文件，<code>cargo test</code>在测试模式下编译代码并运行生成的测试二进制文件。这里有一些选项可以用来改变<code>cargo test</code>的默认行为。例如，<code>cargo test</code>生成的二进制文件的默认行为是并行的运行所有测试，并捕获测试运行过程中产生的输出避免他们被显示出来使得阅读测试结果相关的内容变得更容易。可以指定命令行参数来改变这些默认行为。</p>
+<p>这些选项的一部分可以传递给<code>cargo test</code>，而另一些则需要传递给生成的测试二进制文件。为了分隔两种类型的参数，首先列出传递给<code>cargo test</code>的参数，接着是分隔符<code>--</code>，再之后是传递给测试二进制文件的参数。运行<code>cargo test --help</code>会告诉你<code>cargo test</code>的相关参数，而运行<code>cargo test -- --help</code>则会告诉你位于分隔符<code>--</code>之后的相关参数。</p>
+<a class="header" href="#并行或连续的运行测试" name="并行或连续的运行测试"><h3>并行或连续的运行测试</h3></a>
+<!-- Are we safe assuming the reader will know enough about threads in this
+context? -->
+<!-- Yes /Carol -->
+<p>当运行多个测试时，他们默认使用线程来并行的运行。这意味着测试会更快的运行完毕，所以可以更快的得到代码能否工作的反馈。因为测试是在同时运行的，你应该小心测试不能相互依赖或任何共享状态，包括类似于当前工作目录或者环境变量这样的共享环境。</p>
+<p>例如，每一个测试都运行一些代码在硬盘上创建一个<code>test-output.txt</code>文件并写入一些数据。接着每一个测试都读取文件中的数据并断言这个文件包含特定的值，而这个值在每个测试中都是不同的。因为所有测试都是同时运行的，一个测试可能会在另一个测试读写文件过程中覆盖了文件。那么第二个测试就会失败，并不是因为代码不正确，而是因为测试并行运行时相互干涉。一个解决方案是使每一个测试读写不同的文件；另一个是一次运行一个测试。</p>
+<p>如果你不希望测试并行运行，或者想要更加精确的控制使用线程的数量，可以传递<code>--test-threads</code>参数和希望使用线程的数量给测试二进制文件。例如：</p>
 <pre><code>$ cargo test -- --test-threads=1
 </code></pre>
-<a class="header" href="#捕获测试输出" name="捕获测试输出"><h3>捕获测试输出</h3></a>
-<p>Rust 的测试库默认捕获并丢弃标准输出和标准错误中的输出，除非测试失败了。例如，如果在测试中调用了<code>println!</code>而测试通过了，你将不会在终端看到<code>println!</code>的输出。这个行为可以通过向测试二进制文件传递<code>--nocapture</code>参数来禁用：</p>
+<p>这里将测试线程设置为 1，告诉程序不要使用任何并行机制。这也会比并行运行花费更多时间，不过测试就不会在存在共享状态时潜在的相互干涉了。</p>
+<a class="header" href="#显示测试输出" name="显示测试输出"><h3>显示测试输出</h3></a>
+<p>如果测试通过了，Rust 的测试库默认会捕获打印到标准输出的任何内容。例如，如果在测试中调用<code>println!</code>而测试通过了，我们将不会在终端看到<code>println!</code>的输出：只会看到说明测试通过的行。如果测试失败了，就会看到任何标准输出和其他错误信息。</p>
+<p>例如，列表 11-20 有一个无意义的函数它打印出其参数的值并接着返回 10。接着还有一个会通过的测试和一个会失败的测试：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">fn prints_and_returns_10(a: i32) -&gt; i32 {
+    println!(&quot;I got the value {}&quot;, a);
+    10
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn this_test_will_pass() {
+        let value = prints_and_returns_10(4);
+        assert_eq!(10, value);
+    }
+
+    #[test]
+    fn this_test_will_fail() {
+        let value = prints_and_returns_10(8);
+        assert_eq!(5, value);
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 11-10: Tests for a function that calls <code>println!</code>
+</span></p>
+<p>运行<code>cargo test</code>将会看到这些测试的输出：</p>
+<pre><code>running 2 tests
+test tests::this_test_will_pass ... ok
+test tests::this_test_will_fail ... FAILED
+
+failures:
+
+---- tests::this_test_will_fail stdout ----
+    I got the value 8
+thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left ==
+right)` (left: `5`, right: `10`)', src/lib.rs:19
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+failures:
+    tests::this_test_will_fail
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+</code></pre>
+<p>注意输出中哪里也不会出现<code>I got the value 4</code>，这是当测试通过时打印的内容。这些输出被捕获。失败测试的输出，<code>I got the value 8</code>，则出现在输出的测试总结部分，它也显示了测试失败的原因。</p>
+<p>如果你希望也能看到通过的测试中打印的值，捕获输出的行为可以通过<code>--nocapture</code>参数来禁用：</p>
 <pre><code>$ cargo test -- --nocapture
 </code></pre>
+<p>使用<code>--nocapture</code>参数再次运行列表 11-10 中的测试会显示：</p>
+<pre><code>running 2 tests
+I got the value 4
+I got the value 8
+test tests::this_test_will_pass ... ok
+thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left ==
+right)` (left: `5`, right: `10`)', src/lib.rs:19
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+test tests::this_test_will_fail ... FAILED
+
+failures:
+
+failures:
+    tests::this_test_will_fail
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+</code></pre>
+<p>注意测试的输出和测试结果的输出是相互交叉的；这是由于上一部分讲到的测试是并行运行的。尝试一同使用<code>--test-threads=1</code>和<code>--nocapture</code>功能来看看输出是什么样子！</p>
 <a class="header" href="#通过名称来运行测试的子集" name="通过名称来运行测试的子集"><h3>通过名称来运行测试的子集</h3></a>
-<p>有时运行整个测试集会耗费很多时间。如果你负责特定位置的代码，你可能会希望只与这些代码相关的测试。<code>cargo test</code>有一个参数允许你通过指定名称来运行特定的测试。</p>
-<p>列表 11-3 中创建了三个如下名称的测试：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">#[test]
-fn add_two_and_two() {
-    assert_eq!(4, 2 + 2);
+<p>有时运行整个测试集会耗费很多时间。如果你负责特定位置的代码，你可能会希望只与这些代码相关的测试。可以向<code>cargo test</code>传递希望运行的测试的（部分）名称作为参数来选择运行哪些测试。</p>
+<p>为了展示如何运行测试的子集，列表 11-11 使用<code>add_two</code>函数创建了三个测试来供我们选择运行哪一个：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
+    a + 2
 }
 
-#[test]
-fn add_three_and_two() {
-    assert_eq!(5, 3 + 2);
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[test]
-fn one_hundred() {
-    assert_eq!(102, 100 + 2);
-}
-</code></pre>
-<figcaption>
-<p>Listing 11-3: Three tests with a variety of names</p>
-</figcaption>
-</figure>
-<p>使用不同的参数会运行不同的测试子集。没有参数的话，如你所见会运行所有的测试：</p>
-<pre><code>$ cargo test
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-abcabcabc
-
-running 3 tests
-test add_three_and_two ... ok
-test one_hundred ... ok
-test add_two_and_two ... ok
-
-test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
-</code></pre>
-<p>可以传递任意测试的名称来只运行那个测试：</p>
-<pre><code>$ cargo test one_hundred
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-abcabcabc
-
-running 1 test
-test one_hundred ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
-</code></pre>
-<p>也可以传递名称的一部分，<code>cargo test</code>会运行所有匹配的测试：</p>
-<pre><code>$ cargo test add
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-abcabcabc
-
-running 2 tests
-test add_three_and_two ... ok
-test add_two_and_two ... ok
-
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
-</code></pre>
-<p>模块名也作为测试名的一部分，所以类似的模块名也可以用来指定测试特定模块。例如，如果将我们的代码组织成一个叫<code>adding</code>的模块和一个叫<code>subtracting</code>的模块并分别带有测试，如列表 11-4 所示：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">mod adding {
     #[test]
     fn add_two_and_two() {
-        assert_eq!(4, 2 + 2);
+        assert_eq!(4, add_two(2));
     }
 
     #[test]
     fn add_three_and_two() {
-        assert_eq!(5, 3 + 2);
+        assert_eq!(5, add_two(3));
     }
 
     #[test]
     fn one_hundred() {
-        assert_eq!(102, 100 + 2);
-    }
-}
-
-mod subtracting {
-    #[test]
-    fn subtract_three_and_two() {
-        assert_eq!(1, 3 - 2);
+        assert_eq!(102, add_two(100));
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 11-4: Tests in two modules named <code>adding</code> and <code>subtracting</code></p>
-</figcaption>
-</figure>
-<p>执行<code>cargo test</code>会运行所有的测试，而模块名会出现在输出的测试名中：</p>
-<pre><code>$ cargo test
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-abcabcabc
-
-running 4 tests
-test adding::add_two_and_two ... ok
-test adding::add_three_and_two ... ok
-test subtracting::subtract_three_and_two ... ok
-test adding::one_hundred ... ok
-</code></pre>
-<p>运行<code>cargo test adding</code>将只会运行对应模块的测试而不会运行任何 subtracting 模块中的测试：</p>
-<pre><code>$ cargo test adding
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-abcabcabc
-
-running 3 tests
-test adding::add_three_and_two ... ok
-test adding::one_hundred ... ok
-test adding::add_two_and_two ... ok
+<p><span class="caption">Listing 11-11: Three tests with a variety of names</span></p>
+<p>如果没有传递任何参数就运行测试，如你所见，所有测试都会并行运行：</p>
+<pre><code>running 3 tests
+test tests::add_two_and_two ... ok
+test tests::add_three_and_two ... ok
+test tests::one_hundred ... ok
 
 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
+<a class="header" href="#运行单个测试" name="运行单个测试"><h4>运行单个测试</h4></a>
+<p>可以向<code>cargo test</code>传递任意测试的名称来只运行这个测试：</p>
+<pre><code>$ cargo test one_hundred
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-06a75b4a1f2515e9
+
+running 1 test
+test tests::one_hundred ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>不能像这样指定多个测试名称，只有传递给<code>cargo test</code>的第一个值才会被使用。</p>
+<a class="header" href="#过滤运行多个测试" name="过滤运行多个测试"><h4>过滤运行多个测试</h4></a>
+<p>然而，可以指定测试的部分名称，这样任何名称匹配这个值的测试会被运行。例如，因为头两个测试的名称包含<code>add</code>，可以通过<code>cargo test add</code>来运行这两个测试：</p>
+<pre><code>$ cargo test add
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-06a75b4a1f2515e9
+
+running 2 tests
+test tests::add_two_and_two ... ok
+test tests::add_three_and_two ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>这运行了所有名字中带有<code>add</code>的测试。同时注意测试所在的模块作为测试名称的一部分，所以可以通过模块名来过滤运行一个模块中的所有测试。</p>
+<!-- in what kind of situation might you need to run only some tests, when you
+have lots and lots in a program? -->
+<!-- We covered this in the first paragraph of the "Running a Subset of Tests
+by Name" section, do you think it should be repeated so soon? Most people who
+use tests have sufficient motivation for wanting to run a subset of the tests,
+they just need to know how to do it with Rust, so we don't think this is a
+point that needs to be emphasized multiple times. /Carol -->
 <a class="header" href="#除非指定否则忽略某些测试" name="除非指定否则忽略某些测试"><h3>除非指定否则忽略某些测试</h3></a>
-<p>有时一些特定的测试执行起来是非常耗费时间的，所以对于大多数<code>cargo test</code>命令，我们希望能排除它。无需为<code>cargo test</code>创建一个用来在运行所有测试时排除特定测试的参数并每次都要记得使用它，我们可以对这些测试使用<code>ignore</code>属性：</p>
+<p>有时一些特定的测试执行起来是非常耗费时间的，所以在运行大多数<code>cargo test</code>的时候希望能排除他们。与其通过参数列举出所有希望运行的测试，也可以使用<code>ignore</code>属性来标记耗时的测试来排除他们：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[test]
 fn it_works() {
@@ -6000,11 +6027,11 @@ fn expensive_test() {
     // code that takes an hour to run
 }
 </code></pre>
-<p>现在运行测试，将会发现<code>it_works</code>运行了，而<code>expensive_test</code>没有：</p>
+<p>我们对想要排除的测试的<code>#[test]</code>之后增加了<code>#[ignore]</code>行。现在如果运行测试，就会发现<code>it_works</code>运行了，而<code>expensive_test</code>没有运行：</p>
 <pre><code>$ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.24 secs
-     Running target/debug/deps/adder-abcabcabc
+     Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 2 tests
 test expensive_test ... ignored
@@ -6018,29 +6045,39 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<p>我们可以通过<code>cargo test -- --ignored</code>来明确请求只运行那些耗时的测试：</p>
-<pre><code>$ cargo test -- --ignored
+<p><code>expensive_test</code>被列为<code>ignored</code>，如果只希望运行被忽略的测试，可以使用<code>cargo test -- --ignored</code>来请求运行他们：</p>
+<!-- what does the double `-- --` mean? That seems interesting -->
+<!-- We covered that in the second paragraph after the "Controlling How Tests
+are Run" heading, and this section is beneath that heading, so I don't think a
+back reference is needed /Carol -->
+<!-- is that right, this way the program knows to run only the test with
+`ignore` if we add this, or it knows to run all tests? -->
+<!-- Is this unclear from the output that shows `expensive_test` was run and
+the `it_works` test does not appear? I'm not sure how to make this clearer.
+/Carol -->
+<pre><code class="language-text">$ cargo test -- --ignored
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-abcabcabc
+     Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 1 test
 test expensive_test ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<p>通过这种方式，大部分时间运行<code>cargo test</code>将是快速的。当需要检查<code>ignored</code>测试的结果而且你也有时间等待这个结果的话，可以选择执行<code>cargo test -- --ignored</code>。</p>
+<p>通过控制运行哪些测试，可以确保运行<code>cargo test</code>的结果是快速的。当某个时刻需要检查<code>ignored</code>测试的结果而且你也有时间等待这个结果的话，可以选择执行<code>cargo test -- --ignored</code>。</p>
 <a class="header" href="#测试的组织结构" name="测试的组织结构"><h2>测试的组织结构</h2></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch11-03-test-organization.md">ch11-03-test-organization.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch11-03-test-organization.md">ch11-03-test-organization.md</a>
 <br>
-commit cf52d81371e24e14ce31a5582bfcb8c5b80d26cc</p>
+commit 55b294f20fc846a13a9be623bf322d8b364cee77</p>
 </blockquote>
-<p>正如之前提到的，测试是一个很广泛的学科，而且不同的人有时也采用不同的技术和组织。Rust 社区倾向于根据测试的两个主要分类来考虑问题：<strong>单元测试</strong>（<em>unit tests</em>）与<strong>集成测试</strong>（<em>unit tests</em>）。单元测试倾向于更小而更专注，在隔离的环境中一次测试一个模块。他们也可以测试私有接口。集成测试对于你的库来说则完全是外部的。他们与其他用户使用相同的方式使用你得代码，他们只针对共有接口而且每个测试会测试多个模块。这两类测试对于从独立和整体的角度保证你的库符合期望是非常重要的。</p>
+<p>正如之前提到的，测试是一个很广泛的学科，而且不同的开发者也采用不同的技术和组织。Rust 社区倾向于根据测试的两个主要分类来考虑问题：<strong>单元测试</strong>（<em>unit tests</em>）与<strong>集成测试</strong>（<em>unit tests</em>）。单元测试倾向于更小而更专注，在隔离的环境中一次测试一个模块。他们也可以测试私有接口。集成测试对于你的库来说则完全是外部的。他们与其他用户使用相同的方式使用你的代码，他们只针对共有接口而且每个测试都会测试多个模块。</p>
+<p>这两类测试对于从独立和整体的角度保证你的库符合期望是非常重要的。</p>
 <a class="header" href="#单元测试" name="单元测试"><h3>单元测试</h3></a>
-<p>单元测试的目的是在隔离与其他部分的环境中测试每一个单元的代码，以便于快速而准确的定位何处的代码是否符合预期。单元测试位于 <em>src</em> 目录中，与他们要测试的代码存在于相同的文件中。他们被分离进每个文件中他们自有的<code>tests</code>模块中。</p>
+<p>单元测试的目的是在与其他部分隔离的环境中测试每一个单元的代码，以便于快速而准确的定位何处的代码是否符合预期。单元测试位于 <em>src</em> 目录中，与他们要测试的代码存在于相同的文件中。传统做法是在每个文件中创建包含测试函数的<code>tests</code>模块，并使用<code>cfg(test)</code>标注模块。</p>
 <a class="header" href="#测试模块和cfgtest" name="测试模块和cfgtest"><h4>测试模块和<code>cfg(test)</code></h4></a>
-<p>通过将测试放进他们自己的模块并对该模块使用<code>cfg</code>注解，我们可以告诉 Rust 只在执行<code>cargo test</code>时才编译和运行测试代码。这在当我们只希望用<code>cargo build</code>编译库代码时可以节省编译时间，并减少编译产物的大小因为并没有包含测试。</p>
-<p>还记得上一部分新建的<code>adder</code>项目吗？Cargo 为我们生成了如下代码：</p>
+<p>测试模块的<code>#[cfg(test)]</code>注解告诉 Rust 只在执行<code>cargo test</code>时才编译和运行测试代码，而在运行<code>cargo build</code>时不这么做。这在只希望构建库的时候可以节省编译时间，并能节省编译产物的空间因为他们并没有包含测试。我们将会看到因为集成测试位于另一个文件夹，他们并不需要<code>#[cfg(test)]</code>注解。但是因为单元测试位于与源码相同的文件中，所以使用<code>#[cfg(test)]</code>来指定他们不应该被包含进编译产物中。</p>
+<p>还记得本章第一部分新建的<code>adder</code>项目吗？Cargo 为我们生成了如下代码：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
@@ -6049,48 +6086,10 @@ mod tests {
     }
 }
 </code></pre>
-<p>我们忽略了模块相关的信息以便更关注模块中测试代码的机制，不过现在让我们看看测试周围的代码。</p>
-<p>首先，这里有一个属性<code>cfg</code>。<code>cfg</code>属性让我们声明一些内容只在给定特定的<strong>配置</strong>（<em>configuration</em>）时才被包含进来。Rust 提供了<code>test</code>配置用来编译和运行测试。通过这个属性，Cargo 只会在尝试运行测试时才编译测试代码。</p>
-<p>接下来，<code>tests</code>包含了所有测试函数，而我们的代码则位于<code>tests</code>模块之外。<code>tests</code>模块的名称是一个惯例，除此之外这是一个遵守第七章讲到的常见可见性规则的普通模块。因为这是一个内部模块，我们需要将要测试的代码引入作用域。这对于一个大的模块来说是很烦人的，所以这里经常使用全局导入。</p>
-<p>从本章到现在，我们一直在为<code>adder</code>项目编写并没有实际调用任何代码的测试。现在让我们做一些改变！在 <em>src/lib.rs</em> 中，放入<code>add_two</code>函数和带有一个检验代码的测试的<code>tests</code>模块，如列表 11-5 所示：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
-    a + 2
-}
-
-#[cfg(test)]
-mod tests {
-    use add_two;
-
-    #[test]
-    fn it_works() {
-        assert_eq!(4, add_two(2));
-    }
-}
-</code></pre>
-<figcaption>
-<p>Listing 11-5: Testing the function <code>add_two</code> in a child <code>tests</code> module</p>
-</figcaption>
-</figure>
-<p>注意除了测试函数之外，我们还在<code>tests</code>模块中添加了<code>use add_two;</code>。这将我们想要测试的代码引入到了内部的<code>tests</code>模块的作用域中，正如任何内部模块需要做的那样。如果现在使用<code>cargo test</code>运行测试，它会通过：</p>
-<pre><code>running 1 test
-test tests::it_works ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
-</code></pre>
-<p>如果我们忘记将<code>add_two</code>函数引入作用域，将会得到一个 unresolved name 错误，因为<code>tests</code>模块并不知道任何关于<code>add_two</code>函数的信息：</p>
-<pre><code>error[E0425]: unresolved name `add_two`
- --&gt; src/lib.rs:9:23
-  |
-9 |         assert_eq!(4, add_two(2));
-  |                       ^^^^^^^ unresolved name
-</code></pre>
-<p>如果这个模块包含很多希望测试的代码，在测试中列出每一个<code>use</code>语句将是很烦人的。相反在测试子模块中使用<code>use super::*;</code>来一次将所有内容导入作用域中是很常见的。</p>
+<p>这里自动生成了测试模块。<code>cfg</code>属性代表 <em>configuration</em> ，它告诉 Rust 其之后的项只被包含进特定配置中。在这个例子中，配置是<code>test</code>，Rust 所提供的用于编译和运行测试的配置。通过使用这个属性，Cargo 只会在我们主动使用<code>cargo test</code>运行测试时才编译测试代码。除了标注为<code>#[test]</code>的函数之外，这还包括测试模块中可能存在的帮助函数。</p>
 <a class="header" href="#测试私有函数" name="测试私有函数"><h4>测试私有函数</h4></a>
-<p>测试社区中一直存在关于是否应该对私有函数进行单元测试的论战。不过无论你坚持哪种测试意识形态，Rust 确实允许你测试私有函数，由于私有性规则。考虑列表 11-6 中带有私有函数<code>internal_adder</code>的代码：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p>测试社区中一直存在关于是否应该对私有函数进行单元测试的论战，而其他语言中难以甚至不可能测试私有函数。不过无论你坚持哪种测试意识形态，Rust 的私有性规则确实允许你测试私有函数，由于私有性规则。考虑列表 11-12 中带有私有函数<code>internal_adder</code>的代码：</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
     internal_adder(a, 2)
 }
@@ -6101,7 +6100,7 @@ fn internal_adder(a: i32, b: i32) -&gt; i32 {
 
 #[cfg(test)]
 mod tests {
-    use internal_adder;
+    use super::*;
 
     #[test]
     fn internal() {
@@ -6109,18 +6108,21 @@ mod tests {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 11-6: Testing a private function</p>
-</figcaption>
-</figure>
-<p>因为测试也不过是 Rust 代码而<code>tests</code>也只是另一个模块，我们完全可以在一个测试中导入并调用<code>internal_adder</code>。如果你并不认为私有函数应该被测试，Rust 也不会强迫你这么做。</p>
+<p><span class="caption">Listing 11-12: Testing a private function</span></p>
+<!-- I'm not clear on why we would assume this might not be fine, why are we
+highlighting this specifically? -->
+<!-- We're addressing experience that the reader might bring with them from
+other languages where this is not allowed; I added a sentence mentioning "other
+languages" at the beginning of this section. Also testing private functions
+from integration tests is not allowed, so if you did want to do this, you'd
+have to do it in unit tests. /Carol -->
+<p>注意<code>internal_adder</code>函数并没有标记为<code>pub</code>，不过因为测试也不过是 Rust 代码而<code>tests</code>也仅仅是另一个模块，我们完全可以在测试中导入和调用<code>internal_adder</code>。如果你并不认为私有函数应该被测试，Rust 也不会强迫你这么做。</p>
 <a class="header" href="#集成测试" name="集成测试"><h3>集成测试</h3></a>
-<p>在 Rust 中，集成测试对于需要测试的库来说是完全独立。他们同其他代码一样使用库文件。他们的目的是测试库的个个部分结合起来能否正常工作。每个能正确运行的代码单元集成在一起也可能会出现问题，所以集成测试的覆盖率也是很重要的。</p>
+<p>在 Rust 中，集成测试对于需要测试的库来说是完全独立。他们同其他代码一样使用库文件，这意味着他们只能调用作为库公有 API 的一部分的函数。他们的目的是测试库的多个部分能否一起正常工作。每个能单独正确运行的代码单元集成在一起也可能会出现问题，所以集成测试的覆盖率也是很重要的。为了创建集成测试，首先需要一个 <em>tests</em> 目录。</p>
 <a class="header" href="#tests-目录" name="tests-目录"><h4><em>tests</em> 目录</h4></a>
-<p>Cargo 支持位于 <em>tests</em> 目录中的集成测试。如果创建它并放入 Rust 源文件，Cargo 会将每一个文件当作单独的 crate 来编译。让我们试一试！</p>
-<p>首先，在项目根目录创建一个 <em>tests</em> 目录，挨着 <em>src</em> 目录。接着新建一个文件 <em>tests/integration_test.rs</em>，并写入列表 11-7 中的代码：</p>
-<figure>
-<span class="filename">Filename: tests/integration_test.rs</span>
+<p>为了编写集成测试，需要在项目根目录创建一个 <em>tests</em> 目录，与 <em>src</em> 同级。Cargo 知道如何去寻找这个目录中的集成测试文件。接着可以随意在这个文件夹中创建任意多的测试文件，Cargo 会将每一个文件当作单独的 crate 来编译。</p>
+<p>让我们试一试吧！保留列表 11-12 中 <em>src/lib.rs</em> 的代码。创建一个 <em>tests</em> 目录，新建一个文件 <em>tests/integration_test.rs</em>，并输入列表 11-13 中的代码。</p>
+<p><span class="filename">Filename: tests/integration_test.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate adder;
 
 #[test]
@@ -6128,23 +6130,21 @@ fn it_adds_two() {
     assert_eq!(4, adder::add_two(2));
 }
 </code></pre>
-<figcaption>
-<p>Listing 11-7: An integration test of a function in the <code>adder</code> crate</p>
-</figcaption>
-</figure>
-<p>在开头使用了<code>extern crate adder</code>，单元测试中并不需要它。<code>tests</code>目录中的每一个测试文件都是完全独立的 crate，所以需要在每个文件中导入我们的库。这也就是为何<code>tests</code>是编写集成测试的绝佳场所：他们像任何其他用户那样，需要将库导入 crate 并只能使用公有 API。</p>
-<p>这个文件中也不需要<code>tests</code>模块。除非运行测试否则整个文件夹都不会被编译，所以无需将任何部分标记为<code>#[cfg(test)]</code>。另外每个测试文件都被隔离进其自己的 crate 中，无需进一步隔离测试代码。</p>
-<p>让我们运行集成测试，同样使用<code>cargo test</code>来运行：</p>
-<pre><code>$ cargo test
+<p><span class="caption">Listing 11-13: An integration test of a function in the
+<code>adder</code> crate </span></p>
+<p>我们在顶部增加了<code>extern crate adder</code>，这在单元测试中是不需要的。这是因为每一个<code>tests</code>目录中的测试文件都是完全独立的 crate，所以需要在每一个文件中导入库。集成测试就像其他使用者那样通过导入 crate 并只使用公有 API 来使用库文件。</p>
+<p>并不需要将 <em>tests/integration_test.rs</em> 中的任何代码标注为<code>#[cfg(test)]</code>。Cargo 对<code>tests</code>文件夹特殊处理并只会在运行<code>cargo test</code>时编译这个目录中的文件。现在就试试运行<code>cargo test</code>：</p>
+<pre><code>cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.31 secs
      Running target/debug/deps/adder-abcabcabc
 
 running 1 test
-test tests::it_works ... ok
+test tests::internal ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 
-     Running target/debug/integration_test-952a27e0126bb565
+     Running target/debug/deps/integration_test-ce99bcc2479f4607
 
 running 1 test
 test it_adds_two ... ok
@@ -6157,8 +6157,14 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<p>现在有了三个部分的输出：单元测试、集成测试和文档测试。注意当在任何 <em>src</em> 目录的文件中增加单元测试时，单元测试部分的对应输出也会增加。增加集成测试文件中的测试函数也会对应增加输出。如果在 <em>tests</em> 目录中增加集成测试<strong>文件</strong>，则会增加更多集成测试部分：一个文件对应一个部分。</p>
-<p>为<code>cargo test</code>指定测试函数名称参数也会匹配集成测试文件中的函数。为了只运行某个特定集成测试文件中的所有测试，可以使用<code>cargo test</code>的<code>--test</code>参数：</p>
+<!-- what are the doc tests? How do we tell the difference between unit and
+integration tests here? -->
+<!-- We mentioned documentation tests in the beginning of this chapter /Carol
+-->
+<p>现在有了三个部分的输出：单元测试、集成测试和文档测试。第一部分单元测试与我们之前见过的一样：每一个单元测试一行（列表 11-12 中有一个叫做<code>internal</code>的测试），接着是一个单元测试的总结行。</p>
+<p>集成测试部分以行<code>Running target/debug/deps/integration-test-ce99bcc2479f4607</code>（输出最后的哈希值可能不同）开头。接着是每一个集成测试中的测试函数一行，以及一个就在<code>Doc-tests adder</code>部分开始之前的集成测试的总结行。</p>
+<p>注意在任意 <em>src</em> 文件中增加更多单元测试函数会增加更多单元测试部分的测试结果行。在我们创建的集成测试文件中增加更多测试函数会增加更多集成测试部分的行。每一个集成测试文件有其自己的部分，所以如果在 <em>tests</em> 目录中增加更多文件，这里就会有更多集成测试部分。</p>
+<p>我们仍然可以通过指定测试函数的名称作为<code>cargo test</code>的参数来运行特定集成测试。为了运行某个特定集成测试文件中的所有测试，使用<code>cargo test</code>的<code>--test</code>后跟文件的名称：</p>
 <pre><code>$ cargo test --test integration_test
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/integration_test-952a27e0126bb565
@@ -6168,19 +6174,69 @@ test it_adds_two ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
+<p>这些只是 <em>tests</em> 目录中我们指定的文件中的测试。</p>
 <a class="header" href="#集成测试中的子模块" name="集成测试中的子模块"><h4>集成测试中的子模块</h4></a>
-<p>随着集成测试的增加，你可能希望在 <code>tests</code> 目录增加更多文件，例如根据测试的功能来将测试分组。正如我们之前提到的，这是可以的，Cargo 会将每一个文件当作一个独立的 crate。</p>
-<p>最终，可能会有一系列在所有集成测试中通用的帮助函数，例如建立通用场景的函数。如果你将这些函数提取到 <em>tests</em> 目录的一个文件中，比如说 <em>tests/common.rs</em>，则这个文件将会像这个目录中的其他包含测试的 Rust 文件一样被编译进一个单独的 crate 中。它也会作为一个独立的部分出现在测试输出中。因为这很可能不是你所希望的，所以建议在子目录中使用 <em>mod.rs</em> 文件，比如 <em>tests/common/mod.rs</em>，来放置帮助函数。<em>tests</em> 的子目录不会被作为单独的 crate 编译或者作为单独的部分出现在测试输出中。</p>
+<p>随着集成测试的增加，你可能希望在 <code>tests</code> 目录增加更多文件，例如根据测试的功能来将测试分组。正如我们之前提到的，每一个 <em>tests</em> 目录中的文件都被编译为单独的 crate。</p>
+<p>将每个集成测试文件当作其自己的 crate 来对待有助于创建更类似与终端用户使用 crate 那样的单独的作用域。然而，这意味着考虑到像第七章学习的如何将代码分隔进模块和文件那样，<em>tests</em> 目录中的文件不能像 <em>src</em> 中的文件那样共享相同的行为。</p>
+<p>对于 <em>tests</em> 目录中文件的不同行为，通常在如果有一系列有助于多个集成测试文件的帮助函数，而你尝试遵循第七章的步骤将他们提取到一个通用的模块中时显得很明显。例如，如果我们创建了 <em>tests/common.rs</em> 并将<code>setup</code>函数放入其中，这里将放入一些希望能够在多个测试文件的多个测试函数中调用的代码：</p>
+<p><span class="filename">Filename: tests/common.rs</span></p>
+<pre><code class="language-rust">pub fn setup() {
+    // setup code specific to your library's tests would go here
+}
+</code></pre>
+<p>如果再次运行测试，将会在测试结果中看到一个对应 <em>common.rs</em> 文件的新部分，即便这个文件并没有包含任何测试函数，或者没有任何地方调用了<code>setup</code>函数：</p>
+<pre><code>running 1 test
+test tests::internal ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+     Running target/debug/deps/common-b8b07b6f1be2db70
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+
+     Running target/debug/deps/integration_test-d993c68b431d39df
+
+running 1 test
+test it_adds_two ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<!-- The new section is lines 6-10, will ghost everything else in libreoffice
+/Carol -->
+<p><code>common</code>出现在测试结果中并显示<code>running 0 tests</code>，这不是我们想要的；我们只是希望能够在其他集成测试文件中分享一些代码罢了。</p>
+<p>为了使<code>common</code>不出现在测试输出中，需要使用第七章学习到的另一个将代码提取到文件的方式：不再创建<em>tests/common.rs</em>，而是创建 <em>tests/common/mod.rs</em>。当将<code>setup</code>代码移动到 <em>tests/common/mod.rs</em> 并去掉 <em>tests/common.rs</em> 文件之后，测试输出中将不会出现这一部分。<em>tests</em> 目录中的子目录不会被作为单独的 crate 编译或作为一部分出现在测试输出中。</p>
+<p>一旦拥有了 <em>tests/common/mod.rs</em>，就可以将其作为模块来在任何集成测试文件中使用。这里是一个 <em>tests/integration_test.rs</em> 中调用<code>setup</code>函数的<code>it_adds_two</code>测试的例子：</p>
+<p><span class="filename">Filename: tests/integration_test.rs</span></p>
+<pre><code class="language-rust,ignore">extern crate adder;
+
+mod common;
+
+#[test]
+fn it_adds_two() {
+    common::setup();
+    assert_eq!(4, adder::add_two(2));
+}
+</code></pre>
+<p>注意<code>mod common;</code>声明与第七章中的模块声明相同。接着在测试函数中就可以调用<code>common::setup()</code>了。</p>
 <a class="header" href="#二进制-crate-的集成测试" name="二进制-crate-的集成测试"><h4>二进制 crate 的集成测试</h4></a>
-<p>如果项目是二进制 crate 并且只包含 <em>src/main.rs</em> 而没有 <em>src/lib.rs</em>，这样就不可能在 <em>tests</em> 创建集成测试并使用 <code>extern crate</code> 导入 <em>src/main.rs</em> 中的函数了。这也是 Rust 二进制项目明确采用 <em>src/main.rs</em> 调用 <em>src/lib.rs</em> 中逻辑的结构的原因之一。通过这种结构，集成测试<strong>就可以</strong>使用<code>extern crate</code>测试库 crate 中的主要功能，而如果这些功能没有问题的话，<em>src/main.rs</em> 中的少量代码也就会正常工作且不需要测试。</p>
+<p>如果项目是二进制 crate 并且只包含 <em>src/main.rs</em> 而没有 <em>src/lib.rs</em>，这样就不可能在 <em>tests</em> 创建集成测试并使用 <code>extern crate</code> 导入 <em>src/main.rs</em> 中的函数了。只有库 crate 向其他 crate 暴露了可以调用和使用的函数；二进制 crate 只意在单独运行。</p>
+<p>这也是 Rust 二进制项目明确采用 <em>src/main.rs</em> 调用 <em>src/lib.rs</em> 中逻辑这样的结构的原因之一。通过这种结构，集成测试<strong>就可以</strong>使用<code>extern crate</code>测试库 crate 中的主要功能，而如果这些重要的功能没有问题的话，<em>src/main.rs</em> 中的少量代码也就会正常工作且不需要测试。</p>
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
-<p>Rust 的测试功能提供了一个确保即使改变代码函数也能继续以指定方式运行的途径。单元测试独立的验证库的每一部分并能够测试私有实现细节。集成测试则涉及多个部分结合起来时能否使用，并像其他代码那样测试库的公有 API。Rust 的类型系统和所有权规则可以帮助避免一些 bug，不过测试对于减少代码是否符合期望的逻辑 bug 是很重要的。</p>
+<p>Rust 的测试功能提供了一个确保即使做出改变函数也能继续以指定方式运行的途径。单元测试独立的验证库的不同部分并能够测试私有实现细节。集成测试则涉及多个部分结合起来工作时的用例，并像其他代码那样测试库的公有 API。即使 Rust 的类型系统和所有权规则可以帮助避免一些 bug，不过测试对于减少代码是否符合期望相关的逻辑 bug 是很重要的。</p>
 <p>接下来让我们结合本章所学和其他之前章节的知识，在下一章一起编写一个项目！</p>
 <a class="header" href="#一个-io-项目" name="一个-io-项目"><h1>一个 I/O 项目</h1></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch12-00-an-io-project.md">ch12-00-an-io-project.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-00-an-io-project.md">ch12-00-an-io-project.md</a>
 <br>
-commit efd59dd0fe8e3658563fb5fd289af9d862e07a03</p>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
 <p>之前几个章节我们学习了很多知识。让我们一起运用这些新知识来构建一个项目。在这个过程中，我们还将学习到更多 Rust 标准库的内容。</p>
 <p>那么我们应该写点什么呢？这得是一个利用 Rust 优势的项目。Rust 的一个强大的用途是命令行工具：Rust 的运行速度、安全性、“单二进制文件”输出和跨平台支持使得它称为这类工作的绝佳选择。所以我们将创建一个我们自己的经典命令行工具：<code>grep</code>。<code>grep</code>有着极为简单的应用场景，它完成如下工作：</p>
@@ -6191,7 +6247,7 @@ commit efd59dd0fe8e3658563fb5fd289af9d862e07a03</p>
 <li>打印出这些行</li>
 </ol>
 <p>另外，我们还将添加一个额外的功能：一个环境变量允许我们大小写不敏感的搜索字符串参数。</p>
-<p>还有另一个很好的理由使用<code>grep</code>作为示例项目：Rust 社区的成员，Andrew Gallant，已经使用 Rust 创建了一个功能非常完整的<code>grep</code>版本。它叫做<code>ripgrep</code>，并且它非常非常快。这样虽然我们的<code>grep</code>将会非常简单，你也会掌握阅读现实生活中项目的基础知识。</p>
+<p>还有另一个很好的理由使用<code>grep</code>作为示例项目：Rust 社区的成员，Andrew Gallant，已经使用 Rust 创建了一个功能非常完整的<code>grep</code>版本。它叫做<code>ripgrep</code>，并且它非常非常快。这样虽然我们的<code>grep</code>将会非常简单，你也会掌握阅读现真实项目的基础知识。</p>
 <p>这个项目将会结合之前所学的一些内容：</p>
 <ul>
 <li>代码组织（使用第七章学习的模块）</li>
@@ -6211,7 +6267,7 @@ $ cd greprs
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-01-accepting-command-line-arguments.md">ch12-01-accepting-command-line-arguments.md</a>
 <br>
-commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894</p>
 </blockquote>
 <p>第一个任务是让<code>greprs</code>接受两个命令行参数。crates.io 上有一些现存的库可以帮助我们，不过因为我们正在学习，我们将自己实现一个。</p>
 <p>我们需要调用一个 Rust 标准库提供的函数：<code>std::env::args</code>。这个函数返回一个传递给程序的命令行参数的<strong>迭代器</strong>（<em>iterator</em>）。我们还未讨论到迭代器，第十三章会全面的介绍他们。但是对于我们的目的来说，使用他们并不需要知道多少技术细节。我们只需要明白两点：</p>
@@ -6220,8 +6276,7 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 <li>在迭代器上调用<code>collect</code>方法可以将其生成的元素转换为一个 vector。</li>
 </ol>
 <p>让我们试试列表 12-1 中的代码：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">use std::env;
 
 fn main() {
@@ -6229,12 +6284,10 @@ fn main() {
     println!(&quot;{:?}&quot;, args);
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-1: Collect the command line arguments into a vector and print them out</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-1: Collect the command line arguments into a
+vector and print them out</span></p>
 <!-- Will add wingdings in libreoffice /Carol -->
-<p>首先使用<code>use</code>语句来将<code>std::env</code>模块引入作用域。当函数嵌套了多于一层模块时，比如说<code>std::env::args</code>，通常使用<code>use</code>将父模块引入作用域，而不是引入其本身。<code>env::args</code>比单独的<code>args</code>要明确一些。当然，如果使用了多余一个<code>std::env</code>中的函数，我们也只需要一个<code>use</code>语句。</p>
+<p>首先使用<code>use</code>语句来将<code>std::env</code>模块引入作用域。当函数嵌套了多于一层模块时，比如说<code>std::env::args</code>，通常使用<code>use</code>将父模块引入作用域，而不是引入其本身。<code>env::args</code>比单独的<code>args</code>要明确一些。当然，如果使用了多于一个<code>std::env</code>中的函数时，我们也只需要一个<code>use</code>语句。</p>
 <p>在<code>main</code>函数的第一行，我们调用了<code>env::args</code>，并立即使用<code>collect</code>来创建了一个 vector。这里我们也显式的注明了<code>args</code>的类型：<code>collect</code>可以被用来创建很多类型的集合。Rust 并不能推断出我们需要什么类型，所以类型注解是必须的。在 Rust 中我们很少会需要注明类型，不过<code>collect</code>是就一个通常需要这么做的函数。</p>
 <p>最后，我们使用调试格式<code>:?</code>打印出 vector。让我们尝试不用参数运行代码，接着用两个参数：</p>
 <pre><code>$ cargo run
@@ -6246,9 +6299,8 @@ $ cargo run needle haystack
 </code></pre>
 <p>你会注意一个有趣的事情：二进制文件的名字是第一个参数。其原因超出了本章介绍的范围，不过这是我们必须记住的。</p>
 <p>现在我们有了一个访问所有参数的方法，让我们如列表 12-2 中所示将需要的变量存放到变量中：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust">use std::env;
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">use std::env;
 
 fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
@@ -6260,10 +6312,8 @@ fn main() {
     println!(&quot;In file {}&quot;, filename);
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-2: Create variables to hold the search argument and filename argument</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-2: Create variables to hold the search
+argument and filename argument</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>记住，程序名称是是第一个参数，所以并不需要<code>args[0]</code>。我们决定从第一个参数将是需要搜索的字符串，所以将第一个参数的引用放入变量<code>search</code>中。第二个参数将是文件名，将其放入变量<code>filename</code>中。再次尝试运行程序：</p>
 <pre><code>$ cargo run test sample.txt
@@ -6285,7 +6335,7 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-02-reading-a-file.md">ch12-02-reading-a-file.md</a>
 <br>
-commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894</p>
 </blockquote>
 <p>现在有了一些包含我们需要的信息的变量了，让我们试着使用他们。下一步目标是打开需要搜索的文件。为此，我需要一个文件。在项目的根目录创建一个文件<code>poem.txt</code>，并写入一些艾米莉·狄金森（Emily Dickinson）的诗：</p>
 <p><span class="filename">Filename: poem.txt</span></p>
@@ -6304,9 +6354,8 @@ short, but that has multiple lines and some repetition. We could search through
 code; that gets a bit meta and possibly confusing... Changes to this are most
 welcome. /Carol -->
 <p>创建完这个文件后，让我们编辑 <em>src/main.rs</em> 并增加如列表 12-3 所示用来打开文件的代码：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust">use std::env;
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">use std::env;
 use std::fs::File;
 use std::io::prelude::*;
 
@@ -6327,10 +6376,8 @@ fn main() {
     println!(&quot;With text:\n{}&quot;, contents);
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-3: Read the contents of the file specified by the second argument</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-3: Read the contents of the file specified by
+the second argument</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>这里增加了一些新内容。首先，需要更多的<code>use</code>语句来引入标准库中的相关部分：我们需要<code>std::fs::File</code>来处理文件，而<code>std::io::prelude::*</code>则包含许多对于 I/O 包括文件 I/O 有帮助的 trait。类似于 Rust 有一个通用的 prelude 来自动引入特定内容，<code>std::io</code>也有其自己的 prelude 来引入处理 I/O 时需要的内容。不同于默认的 prelude，必须显式<code>use</code>位于<code>std::io</code>中的 prelude。</p>
 <p>在<code>main</code>中，我们增加了三点内容：第一，我们获取了文件的句柄并使用<code>File::open</code>函数与第二个参数中指定的文件名来打开这个文件。第二，我们在变量<code>contents</code>中创建了一个空的可变的<code>String</code>，接着对文件句柄调用<code>read_to_string</code>并以<code>contents</code>字符串作为参数，<code>contents</code>是<code>read_to_string</code>将会放置它读取到的数据地方。最后，我们打印出了整个文件的内容，这是一个确认目前为止的程序能够工作的方法。</p>
@@ -6356,13 +6403,13 @@ To an admiring bog!
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-03-improving-error-handling-and-modularity.md">ch12-03-improving-error-handling-and-modularity.md</a>
 <br>
-commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+commit bdab3f38da5b7bf7277bfe21ec59a7a81880e6b4</p>
 </blockquote>
 <p>为了完善我们程序有四个问题需要修复，而他们都与潜在的错误和程序结构有关。第一个问题是在哪打开文件：我们使用了<code>expect</code>来在打开文件失败时指定一个错误信息，不过这个错误信息只是说“文件不存在”。还有很多打开文件失败的方式，不过我们总是假设是由于缺少文件导致的。例如，文件存在但是没有打开它的权限：这时，我们就打印出了错误不符合事实的错误信息！</p>
 <p>第二，我们不停的使用<code>expect</code>，这就有点类似我们之前在不传递任何命令行参数时索引会<code>panic!</code>时注意到的问题：这虽然时_可以工作_的，不过这有点没有原则性，而且整个程序中都需要他们，将错误处理都置于一处则会显得好很多。</p>
 <p>第三个问题是<code>main</code>函数现在处理两个工作：解析参数，并打开文件。对于一个小的函数来说，这不是什么大问题。然而随着程序中的<code>main</code>函数不断增长，<code>main</code>函数中独立的任务也会越来越多。因为一个函数拥有很多职责，它将难以理解、难以测试并难以在不破坏其他部分的情况下做出修改。</p>
 <p>这也关系到我们的第四个问题：<code>search</code>和<code>filename</code>是程序中配置性的变量，而像<code>f</code>和<code>contents</code>则用来执行程序逻辑。随着<code>main</code>函数增长，将引入更多的变量到作用域中，而当作用域中有更多的变量，将更难以追踪哪个变量用于什么目的。如果能够将配置型变量组织进一个结构就能使他们的目的更明确了。</p>
-<p>让我们重新组成程序来解决这些问题。</p>
+<p>让我们重新组织程序来解决这些问题。</p>
 <a class="header" href="#二进制项目的关注分离" name="二进制项目的关注分离"><h3>二进制项目的关注分离</h3></a>
 <p>这类项目组织上的问题在很多相似类型的项目中很常见，所以 Rust 社区开发出一种关注分离的组织模式。这种模式可以用来组织任何用 Rust 构建的二进制项目，所以可以证明应该更早的开始这项重构，以为我们的项目符合这个模式。这个模式看起来像这样：</p>
 <ol>
@@ -6379,13 +6426,8 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </li>
 </ol>
 <p>好的！老实说这个模式好像还很复杂。这就是关注分离的所有内容：<em>main.rs</em> 负责实际的程序运行，而 <em>lib.rs</em> 处理所有真正的任务逻辑。让我们将程序重构成这种模式。首先，提取出一个目的只在于解析参数的函数。列表 12-4 中展示了一个新的开始，<code>main</code>函数调用了一个新函数<code>parse_config</code>，它仍然定义于 <em>src/main.rs</em> 中：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust"># use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-#
-fn main() {
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
 
     let (search, filename) = parse_config(&amp;args);
@@ -6394,13 +6436,6 @@ fn main() {
     println!(&quot;In file {}&quot;, filename);
 
     // ...snip...
-#
-#     let mut f = File::open(filename).expect(&quot;file not found&quot;);
-#
-#     let mut contents = String::new();
-#     f.read_to_string(&amp;mut contents).expect(&quot;something went wrong reading the file&quot;);
-#
-#     println!(&quot;With text:\n{}&quot;, contents);
 }
 
 fn parse_config(args: &amp;[String]) -&gt; (&amp;str, &amp;str) {
@@ -6410,10 +6445,8 @@ fn parse_config(args: &amp;[String]) -&gt; (&amp;str, &amp;str) {
     (search, filename)
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-4: Extract a <code>parse_config</code> function from <code>main</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-4: Extract a <code>parse_config</code> function from
+<code>main</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>这看起来好像有点复杂，不过我们将一点一点的开展重构。在做出这些改变之后，再次运行程序并验证参数解析是否仍然正常。经常验证你的进展是一个好习惯，这样在遇到问题时就能更好地理解什么修改造成了错误。</p>
 <a class="header" href="#组合配置值" name="组合配置值"><h3>组合配置值</h3></a>
@@ -6422,13 +6455,8 @@ fn parse_config(args: &amp;[String]) -&gt; (&amp;str, &amp;str) {
 <p>注意：一些同学将当使用符合类型更为合适的时候使用基本类型当作一种称为<strong>基本类型偏执</strong>（<em>primitive obsession</em>）的反模式。</p>
 </blockquote>
 <p>让我们引入一个结构体来存放所有的配置。列表 12-5 中展示了新增的<code>Config</code>结构体定义、重构后的<code>parse_config</code>和<code>main</code>函数中的相关更新：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust"># use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-#
-fn main() {
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
 
     let config = parse_config(&amp;args);
@@ -6439,10 +6467,6 @@ fn main() {
     let mut f = File::open(config.filename).expect(&quot;file not found&quot;);
 
     // ...snip...
-#     let mut contents = String::new();
-#     f.read_to_string(&amp;mut contents).expect(&quot;something went wrong reading the file&quot;);
-#
-#    println!(&quot;With text:\n{}&quot;, contents);
 }
 
 struct Config {
@@ -6460,30 +6484,22 @@ fn parse_config(args: &amp;[String]) -&gt; Config {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-5: Refactoring <code>parse_config</code> to return an instance of a <code>Config</code>
-struct</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-5: Refactoring <code>parse_config</code> to return an
+instance of a <code>Config</code> struct</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p><code>parse_config</code>的签名现在表明它返回一个<code>Config</code>值。在<code>parse_config</code>的函数体中，我们之前返回了<code>args</code>中<code>String</code>值引用的字符串 slice，不过<code>Config</code>定义为拥有两个有所有权的<code>String</code>值。因为<code>parse_config</code>的参数是一个<code>String</code>值的 slice，<code>Config</code>实例不能获取<code>String</code>值的所有权：这违反了 Rust 的借用规则，因为<code>main</code>函数中的<code>args</code>变量拥有这些<code>String</code>值并只允许<code>parse_config</code>函数借用他们。</p>
 <p>还有许多不同的方式可以处理<code>String</code>的数据；现在我们使用简单但低效率的方式，在字符串 slice 上调用<code>clone</code>方法。<code>clone</code>调用会生成一个字符串数据的完整拷贝，而且<code>Config</code>实例可以拥有它，不过这会消耗更多时间和内存来储存拷贝字符串数据的引用，不过拷贝数据让我们使我们的代码显得更加直白。</p>
 <!-- PROD: START BOX -->
 <blockquote>
 <a class="header" href="#使用clone权衡取舍" name="使用clone权衡取舍"><h4>使用<code>clone</code>权衡取舍</h4></a>
-<p>由于其运行时消耗，许多 Rustacean 之间有一个趋势是倾向于不使用<code>clone</code>来解决所有权问题。在关于迭代器的第XX章中，我们将会学习如何更有效率的处理这种情况。现在，为了编写我们的程序拷贝一些字符串是没有问题。我们只进行了一次拷贝，而且文件名和要搜索的字符串都比较短。随着你对 Rust 更加熟练，将更轻松的省略这个权衡的步骤，不过现在调用<code>clone</code>是完全可以接受的。</p>
+<p>由于其运行时消耗，许多 Rustacean 之间有一个趋势是倾向于不使用<code>clone</code>来解决所有权问题。在关于迭代器的第十三章中，我们将会学习如何更有效率的处理这种情况。现在，为了编写我们的程序拷贝一些字符串是没有问题。我们只进行了一次拷贝，而且文件名和要搜索的字符串都比较短。随着你对 Rust 更加熟练，将更轻松的省略这个权衡的步骤，不过现在调用<code>clone</code>是完全可以接受的。</p>
 </blockquote>
 <!-- PROD: END BOX -->
 <p><code>main</code>函数更新为将<code>parse_config</code>返回的<code>Config</code>实例放入变量<code>config</code>中，并将分别使用<code>search</code>和<code>filename</code>变量的代码更新为使用<code>Config</code>结构体的字段。</p>
 <a class="header" href="#创建一个config构造函数" name="创建一个config构造函数"><h3>创建一个<code>Config</code>构造函数</h3></a>
 <p>现在让我们考虑一下<code>parse_config</code>的目的：这是一个创建<code>Config</code>示例的函数。我们已经见过了一个创建实例函数的规范：像<code>String::new</code>这样的<code>new</code>函数。列表 12-6 中展示了将<code>parse_config</code>转换为一个<code>Config</code>结构体关联函数<code>new</code>的代码：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust"># use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-#
-fn main() {
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
 
     let config = Config::new(&amp;args);
@@ -6492,21 +6508,8 @@ fn main() {
     println!(&quot;In file {}&quot;, config.filename);
 
     // ...snip...
-
-#     let mut f = File::open(config.filename).expect(&quot;file not found&quot;);
-#
-#     let mut contents = String::new();
-#     f.read_to_string(&amp;mut contents).expect(&quot;something went wrong reading the file&quot;);
-#
-#    println!(&quot;With text:\n{}&quot;, contents);
-
 }
 
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
 // ...snip...
 
 impl Config {
@@ -6521,43 +6524,14 @@ impl Config {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-6: Changing <code>parse_config</code> into <code>Config::new</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-6: Changing <code>parse_config</code> into
+<code>Config::new</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>我们将<code>parse_config</code>的名字改为<code>new</code>并将其移动到<code>impl</code>块中。我们也更新了<code>main</code>中的调用代码。再次尝试编译并确保程序可以运行。</p>
 <a class="header" href="#从构造函数返回result" name="从构造函数返回result"><h3>从构造函数返回<code>Result</code></h3></a>
 <p>这是我们对这个方法最后的重构：还记得当 vector 含有少于三个项时访问索引 1 和 2 会 panic 并给出一个糟糕的错误信息的代码吗？让我们来修改它！列表 12-7 展示了如何在访问这些位置之前检查 slice 是否足够长，并使用一个更好的 panic 信息：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust"># use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-#
-# fn main() {
-#     let args: Vec&lt;String&gt; = env::args().collect();
-#
-#     let config = Config::new(&amp;args);
-#
-#     println!(&quot;Searching for {}&quot;, config.search);
-#     println!(&quot;In file {}&quot;, config.filename);
-#
-#     let mut f = File::open(config.filename).expect(&quot;file not found&quot;);
-#
-#     let mut contents = String::new();
-#     f.read_to_string(&amp;mut contents).expect(&quot;something went wrong reading the file&quot;);
-#
-#     println!(&quot;With text:\n{}&quot;, contents);
-# }
-#
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
-# impl Config {
-// ...snip...
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">// ...snip...
 fn new(args: &amp;[String]) -&gt; Config {
     if args.len() &lt; 3 {
         panic!(&quot;not enough arguments&quot;);
@@ -6565,19 +6539,10 @@ fn new(args: &amp;[String]) -&gt; Config {
 
     let search = args[1].clone();
     // ...snip...
-#     let filename = args[2].clone();
-#
-#     Config {
-#         search: search,
-#         filename: filename,
-#     }
 }
-# }
 </code></pre>
-<figcaption>
-<p>Listing 12-7: Adding a check for the number of arguments</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-7: Adding a check for the number of
+arguments</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>通过在<code>new</code>中添加这额外的几行代码，再次尝试不带参数运行程序：</p>
 <pre><code>$ cargo run
@@ -6587,37 +6552,8 @@ thread 'main' panicked at 'not enough arguments', src\main.rs:29
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 </code></pre>
 <p>这样就好多了！至少有个一个符合常理的错误信息。然而，还有一堆额外的信息我们并不希望提供给用户。可以通过改变<code>new</code>的签名来完善它。现在它只返回了一个<code>Config</code>，所有没有办法表示创建<code>Config</code>失败的情况。相反，可以如列表 12-8 所示返回一个<code>Result</code>：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust"># use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-# use std::process;
-#
-# fn main() {
-#     let args: Vec&lt;String&gt; = env::args().collect();
-#
-#     let config = Config::new(&amp;args).unwrap_or_else(|err| {
-#         println!(&quot;Problem parsing arguments: {}&quot;, err);
-#         process::exit(1);
-#     });
-#
-#     println!(&quot;Searching for {}&quot;, config.search);
-#     println!(&quot;In file {}&quot;, config.filename);
-#
-#     let mut f = File::open(config.filename).expect(&quot;file not found&quot;);
-#
-#     let mut contents = String::new();
-#     f.read_to_string(&amp;mut contents).expect(&quot;something went wrong reading the file&quot;);
-#
-#     println!(&quot;With text:\n{}&quot;, contents);
-# }
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
-impl Config {
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">impl Config {
     fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
         if args.len() &lt; 3 {
             return Err(&quot;not enough arguments&quot;);
@@ -6633,21 +6569,14 @@ impl Config {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-8: Return a <code>Result</code> from <code>Config::new</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-8: Return a <code>Result</code> from <code>Config::new</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>现在<code>new</code>函数返回一个<code>Result</code>，在成功时带有一个<code>Config</code>实例而在出现错误时带有一个<code>&amp;'static str</code>。回忆一下第十章“静态声明周期”中讲到<code>&amp;'static str</code>是一个字符串字面值，他也是现在我们的错误信息。</p>
 <p><code>new</code>函数体中有两处修改：当没有足够参数时不再调用<code>panic!</code>，而是返回<code>Err</code>值。同时我们将<code>Config</code>返回值包装进<code>Ok</code>成员中。这些修改使得函数符合其新的类型签名。</p>
 <a class="header" href="#confignew调用和错误处理" name="confignew调用和错误处理"><h3><code>Config::new</code>调用和错误处理</h3></a>
 <p>现在我们需要对<code>main</code>做一些修改，如列表 12-9 所示：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust"># use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-// ...snip...
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">// ...snip...
 use std::process;
 
 fn main() {
@@ -6662,45 +6591,14 @@ fn main() {
     println!(&quot;In file {}&quot;, config.filename);
 
     // ...snip...
-#
-#     let mut f = File::open(config.filename).expect(&quot;file not found&quot;);
-#
-#     let mut contents = String::new();
-#     f.read_to_string(&amp;mut contents).expect(&quot;something went wrong reading the file&quot;);
-#
-#     println!(&quot;With text:\n{}&quot;, contents);
-# }
-#
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
-# impl Config {
-#     fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
-#         if args.len() &lt; 3 {
-#             return Err(&quot;not enough arguments&quot;);
-#         }
-#
-#         let search = args[1].clone();
-#         let filename = args[2].clone();
-#
-#         Ok(Config {
-#             search: search,
-#             filename: filename,
-#         })
-#     }
-# }
 </code></pre>
-<figcaption>
-<p>Listing 12-9: Exiting with an error code if creating a new <code>Config</code> fails</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-9: Exiting with an error code if creating a
+new <code>Config</code> fails</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>新增了一个<code>use</code>行来从标准库中导入<code>process</code>。在<code>main</code>函数中我们将处理<code>new</code>函数返回的<code>Result</code>值，并在其返回<code>Config::new</code>时以一种更加清楚的方式结束进程。</p>
-<p>这里使用了一个之前没有讲到的标准库中定义的<code>Result&lt;T, E&gt;</code>的方法：<code>unwrap_or_else</code>。当<code>Result</code>是<code>Ok</code>时其行为类似于<code>unwrap</code>：它返回<code>Ok</code>内部封装的值。与<code>unwrap</code>不同的是，当<code>Result</code>是<code>Err</code>时，它调用一个<strong>闭包</strong>（<em>closure</em>），也就是一个我们定义的作为参数传递给<code>unwrap_or_else</code>的匿名函数。第XX章会更详细的介绍闭包；这里需要理解的重要部分是<code>unwrap_or_else</code>会将<code>Err</code>的内部值传递给闭包中位于两道竖线间的参数<code>err</code>。使用<code>unwrap_or_else</code>允许我们进行一些自定义的非<code>panic!</code>的错误处理。</p>
+<p>这里使用了一个之前没有讲到的标准库中定义的<code>Result&lt;T, E&gt;</code>的方法：<code>unwrap_or_else</code>。当<code>Result</code>是<code>Ok</code>时其行为类似于<code>unwrap</code>：它返回<code>Ok</code>内部封装的值。与<code>unwrap</code>不同的是，当<code>Result</code>是<code>Err</code>时，它调用一个<strong>闭包</strong>（<em>closure</em>），也就是一个我们定义的作为参数传递给<code>unwrap_or_else</code>的匿名函数。第十三章会更详细的介绍闭包；这里需要理解的重要部分是<code>unwrap_or_else</code>会将<code>Err</code>的内部值传递给闭包中位于两道竖线间的参数<code>err</code>。使用<code>unwrap_or_else</code>允许我们进行一些自定义的非<code>panic!</code>的错误处理。</p>
 <p>上述的错误处理其实只有两行：我们打印出了错误，接着调用了<code>std::process::exit</code>。这个函数立刻停止程序的执行并将传递给它的数组作为返回码。依照惯例，零代表成功而任何其他数字表示失败。就结果来说这依然类似于列表 12-7 中的基于<code>panic!</code>的错误处理，但是不再会有额外的输出了，让我们试一试：</p>
-<pre><code class="language-text">$ cargo run
+<pre><code>$ cargo run
    Compiling greprs v0.1.0 (file:///projects/greprs)
     Finished debug [unoptimized + debuginfo] target(s) in 0.48 secs
      Running `target\debug\greprs.exe`
@@ -6709,20 +6607,8 @@ Problem parsing arguments: not enough arguments
 <p>非常好！现在输出就友好多了。</p>
 <a class="header" href="#run函数中的错误处理" name="run函数中的错误处理"><h3><code>run</code>函数中的错误处理</h3></a>
 <p>现在重构完了参数解析部分，让我们再改进一下程序的逻辑。列表 12-10 中展示了在<code>main</code>函数中调用提取出函数<code>run</code>之后的代码。<code>run</code>函数包含之前位于<code>main</code>中的部分代码：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust"># use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-# use std::process;
-#
-fn main() {
-#     let args: Vec&lt;String&gt; = env::args().collect();
-#
-#     let config = Config::new(&amp;args).unwrap_or_else(|err| {
-#         println!(&quot;Problem parsing arguments: {}&quot;, err);
-#         process::exit(1);
-#     });
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">fn main() {
     // ...snip...
 
     println!(&quot;Searching for {}&quot;, config.search);
@@ -6741,57 +6627,15 @@ fn run(config: Config) {
 }
 
 // ...snip...
-#
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
-# impl Config {
-#     fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
-#         if args.len() &lt; 3 {
-#             return Err(&quot;not enough arguments&quot;);
-#         }
-#
-#         let search = args[1].clone();
-#         let filename = args[2].clone();
-#
-#         Ok(Config {
-#             search: search,
-#             filename: filename,
-#         })
-#     }
-# }
 </code></pre>
-<figcaption>
-<p>Listing 12-10: Extracting a <code>run</code> functionality for the rest of the program logic</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-10: Extracting a <code>run</code> functionality for the
+rest of the program logic</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p><code>run</code>函数的内容是之前位于<code>main</code>中的几行，而且<code>run</code>函数获取一个<code>Config</code>作为参数。现在有了一个单独的函数了，我们就可以像列表 12-8 中的<code>Config::new</code>那样进行类似的改进了。列表 12-11 展示了另一个<code>use</code>语句将<code>std::error::Error</code>结构引入了作用域，还有使<code>run</code>函数返回<code>Result</code>的修改：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust">use std::error::Error;
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-# use std::process;
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">use std::error::Error;
 
 // ...snip...
-# fn main() {
-#     let args: Vec&lt;String&gt; = env::args().collect();
-#
-#     let config = Config::new(&amp;args).unwrap_or_else(|err| {
-#         println!(&quot;Problem parsing arguments: {}&quot;, err);
-#         process::exit(1);
-#     });
-#
-#     println!(&quot;Searching for {}&quot;, config.search);
-#     println!(&quot;In file {}&quot;, config.filename);
-#
-#     run(config);
-#
-# }
 
 fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
     let mut f = File::open(config.filename)?;
@@ -6803,34 +6647,11 @@ fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
 
     Ok(())
 }
-#
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
-# impl Config {
-#     fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
-#         if args.len() &lt; 3 {
-#             return Err(&quot;not enough arguments&quot;);
-#         }
-#
-#         let search = args[1].clone();
-#         let filename = args[2].clone();
-#
-#         Ok(Config {
-#             search: search,
-#             filename: filename,
-#         })
-#     }
-# }
 </code></pre>
-<figcaption>
-<p>Listing 12-11: Changing the <code>run</code> function to return <code>Result</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-11: Changing the <code>run</code> function to return
+<code>Result</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>这里有三个大的修改。第一个是现在<code>run</code>函数的返回值是<code>Result&lt;(), Box&lt;Error&gt;&gt;</code>类型的。之前，函数返回 unit 类型<code>()</code>，现在它仍然是<code>Ok</code>时的返回值。对于错误类型，我们将使用<code>Box&lt;Error&gt;</code>。这是一个<strong>trait 对象</strong>（<em>trait object</em>），第XX章会讲到。现在可以这样理解它：<code>Box&lt;Error&gt;</code>意味着函数返回了某个实现了<code>Error</code> trait 的类型，不过并没有指定具体的返回值类型。这样就比较灵活，因为在不同的错误场景可能有不同类型的错误返回值。<code>Box</code>是一个堆数据的智能指针，第YY章将会详细介绍<code>Box</code>。</p>
+<p>这里有三个大的修改。第一个是现在<code>run</code>函数的返回值是<code>Result&lt;(), Box&lt;Error&gt;&gt;</code>类型的。之前，函数返回 unit 类型<code>()</code>，现在它仍然是<code>Ok</code>时的返回值。对于错误类型，我们将使用<code>Box&lt;Error&gt;</code>。这是一个<strong>trait 对象</strong>（<em>trait object</em>），第XX章会讲到。现在可以这样理解它：<code>Box&lt;Error&gt;</code>意味着函数返回了某个实现了<code>Error</code> trait 的类型，不过并没有指定具体的返回值类型。这样就比较灵活，因为在不同的错误场景可能有不同类型的错误返回值。<code>Box</code>是一个堆数据的智能指针，第十五章将会详细介绍<code>Box</code>。</p>
 <p>第二个改变是我们去掉了<code>expect</code>调用并替换为第9章讲到的<code>?</code>。不同于遇到错误就<code>panic!</code>，这会从函数中返回错误值并让调用者来处理它。</p>
 <p>第三个修改是现在成功时这个函数会返回一个<code>Ok</code>值。因为<code>run</code>函数签名中声明成功类型返回值是<code>()</code>，所以需要将 unit 类型值包装进<code>Ok</code>值中。<code>Ok(())</code>一开始看起来有点奇怪，不过这样使用<code>()</code>是表明我们调用<code>run</code>只是为了它的副作用的惯用方式；它并没有返回什么有意义的值。</p>
 <p>上述代码能够编译，不过会有一个警告：</p>
@@ -6876,9 +6697,8 @@ fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
 <p>虽然两种情况下<code>if let</code>和<code>unwrap_or_else</code>的内容都是一样的：打印出错误并退出。</p>
 <a class="header" href="#将代码拆分到库-crate" name="将代码拆分到库-crate"><h3>将代码拆分到库 crate</h3></a>
 <p>现在项目看起来好多了！还有一件我们尚未开始的工作：拆分 <em>src/main.rs</em> 并将一些代码放入 <em>src/lib.rs</em> 中。让我们现在就开始吧：将 <em>src/main.rs</em> 中的<code>run</code>函数移动到新建的 <em>src/lib.rs</em> 中。还需要移动相关的<code>use</code>语句和<code>Config</code>的定义，以及其<code>new</code>方法。现在 <em>src/lib.rs</em> 应该如列表 12-12 所示：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">use std::error::Error;
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust,ignore">use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 
@@ -6914,15 +6734,12 @@ pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt;{
     Ok(())
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-12: Moving <code>Config</code> and <code>run</code> into <em>src/lib.rs</em></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-12: Moving <code>Config</code> and <code>run</code> into
+<em>src/lib.rs</em></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>注意我们还需要使用公有的<code>pub</code>：在<code>Config</code>和其字段、它的<code>new</code>方法和<code>run</code>函数上。</p>
+注意我们还需要使用公有的`pub`：在`Config`和其字段、它的`new`方法和`run`函数上。
 <p>现在在 <em>src/main.rs</em> 中，我们需要通过<code>extern crate greprs</code>来引入现在位于 <em>src/lib.rs</em> 的代码。接着需要增加一行<code>use greprs::Config</code>来引入<code>Config</code>到作用域，并对<code>run</code>函数加上 crate 名称前缀，如列表 12-13 所示：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate greprs;
 
 use std::env;
@@ -6948,10 +6765,9 @@ fn main() {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-13: Bringing the <code>greprs</code> crate into the scope of <em>src/main.rs</em></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-13: Bringing the <code>greprs</code> crate into the scope
+of <em>src/main.rs</em></span></p>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>通过这些重构，所有代码应该都能运行了。运行几次<code>cargo run</code>来确保你没有破坏什么内容。好的！确实有很多的内容，不过已经为将来的成功奠定了基础。我们采用了一种更加优秀的方式来处理错误，并使得代码更模块化了一些。从现在开始几乎所有的工作都将在 <em>src/lib.rs</em> 中进行。</p>
 <p>让我们利用这新创建的模块的优势来进行一些在旧代码中难以开开展的工作，他们在新代码中却很简单：编写测试！</p>
@@ -6959,12 +6775,11 @@ fn main() {
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-04-testing-the-librarys-functionality.md">ch12-04-testing-the-librarys-functionality.md</a>
 <br>
-commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
 <p>现在为项目的核心功能编写测试将更加容易，因为我们将逻辑提取到了 <em>src/lib.rs</em> 中并将参数解析和错误处理都留在了 <em>src/main.rs</em> 里。现在我们可以直接使用多种参数调用代码并检查返回值而不用从命令行运行二进制文件了。</p>
 <p>我们将要编写的是一个叫做<code>grep</code>的函数，它获取要搜索的项以及文本并产生一个搜索结果列表。让我们从<code>run</code>中去掉那行<code>println!</code>（也去掉 <em>src/main.rs</em> 中的，因为再也不需要他们了），并使用之前收集的选项来调用新的<code>grep</code>函数。眼下我们只增加一个空的实现，和指定<code>grep</code>期望行为的测试。当然，这个测试对于空的实现来说是会失败的，不过可以确保代码是可以编译的并得到期望的错误信息。列表 12-14 展示了这些修改：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust"># use std::error::Error;
 # use std::fs::File;
 # use std::io::prelude::*;
@@ -7010,11 +6825,8 @@ Pick three.&quot;;
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-14: Creating a function where our logic will go and a failing test
-for that function</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-14: Creating a function where our logic will
+go and a failing test for that function</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>注意需要在<code>grep</code>的签名中显式声明声明周期<code>'a</code>并用于<code>contents</code>参数和返回值。记住，生命周期参数用于指定函数参数于返回值的生命周期的关系。在这个例子中，我们表明返回的 vector 将包含引用参数<code>contents</code>的字符串 slice，而不是引用参数<code>search</code>的字符串 slice。换一种说法就是我们告诉 Rust 函数<code>grep</code>返回的数据将和传递给它的参数<code>contents</code>的数据存活的同样久。这是非常重要的！考虑为了使引用有效则 slice 引用的数据也需要保持有效，如果编译器认为我们是在创建<code>search</code>而不是<code>contents</code>的 slice，那么安全检查将是不正确的。如果尝试不用生命周期编译的话，我们将得到如下错误：</p>
 <pre><code>error[E0106]: missing lifetime specifier
@@ -7085,8 +6897,7 @@ error: test failed
 </code></pre>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>最终，我们需要一个方法来存储包含要搜索字符串的行。为此可以在<code>for</code>循环之前创建一个可变的 vector 并调用<code>push</code>方法来存放一个<code>line</code>。在<code>for</code>循环之后，返回这个 vector。列表 12-15 中为完整的实现：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     let mut results = Vec::new();
 
@@ -7099,10 +6910,8 @@ error: test failed
     results
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-15: Fully functioning implementation of the <code>grep</code> function</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-15: Fully functioning implementation of the
+<code>grep</code> function</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>尝试运行一下：</p>
 <pre><code>$ cargo test
@@ -7164,7 +6973,7 @@ To an admiring bog!
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-05-working-with-environment-variables.md">ch12-05-working-with-environment-variables.md</a>
 <br>
-commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
 <p>让我们再增加一个功能：大小写不敏感搜索。另外，这个设定将不是一个命令行参数：相反它将是一个环境变量。当然可以选择创建一个大小写不敏感的命令行参数，不过用户要求提供一个环境变量这样设置一次之后在整个终端会话中所有的搜索都将是大小写不敏感的了。</p>
 <a class="header" href="#实现并测试一个大小写不敏感grep函数" name="实现并测试一个大小写不敏感grep函数"><h3>实现并测试一个大小写不敏感<code>grep</code>函数</h3></a>
@@ -7206,8 +7015,7 @@ Trust me.&quot;;
 </code></pre>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>我们将定义一个叫做<code>grep_case_insensitive</code>的新函数。它的实现与<code>grep</code>函数大体上相似，不过列表 12-16 展示了一些小的区别：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     let search = search.to_lowercase();
     let mut results = Vec::new();
@@ -7221,11 +7029,9 @@ Trust me.&quot;;
     results
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-16: Implementing a <code>grep_case_insensitive</code> function by changing the
-search string and the lines of the contents to lowercase before comparing them</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-16: Implementing a <code>grep_case_insensitive</code>
+function by changing the search string and the lines of the contents to
+lowercase before comparing them</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>首先，将<code>search</code>字符串转换为小写，并存放于一个同名的覆盖变量中。注意现在<code>search</code>是一个<code>String</code>而不是字符串 slice，所以在将<code>search</code>传递给<code>contains</code>时需要加上 &amp;，因为<code>contains</code>获取一个字符串 slice。</p>
 <p>接着在检查每个<code>line</code>是否包含<code>search</code>之前增加了一个<code>to_lowercase</code>调用。因为将<code>line</code>和<code>search</code>都转换为小写，我们就可以无视大小写的匹配文件和命令行参数了。看看测试是否通过了：</p>
@@ -7344,7 +7150,7 @@ To an admiring bog!
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-06-writing-to-stderr-instead-of-stdout.md">ch12-06-writing-to-stderr-instead-of-stdout.md</a>
 <br>
-commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
 <p>目前为止，我们将所有的输出都<code>println!</code>到了终端。这是可以的，不过大部分终端都提供了两种输出：“标准输出”对应大部分信息，而“标准错误”则用于错误信息。这使得处理类似于“将错误打印到终端而将其他信息输出到文件”的情况变得更容易。</p>
 <p>可以通过在命令行使用<code>&gt;</code>来将输出重定向到文件中，同时不使用任何参数运行来造成一个错误，就会发现我们的程序只能打印到<code>stdout</code>：</p>
@@ -7354,8 +7160,7 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 <pre><code>Problem parsing arguments: not enough arguments
 </code></pre>
 <p>我们希望这个信息被打印到屏幕上，而只有成功运行产生的输出写入到文件中。让我们如列表 12-17 中所示改变如何打印错误信息的方法：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate greprs;
 
 use std::env;
@@ -7390,10 +7195,8 @@ fn main() {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-17: Writing error messages to <code>stderr</code> instead of <code>stdout</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-17: Writing error messages to <code>stderr</code> instead
+of <code>stdout</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>Rust 并没有类似<code>println!</code>这样的方便写入标准错误的函数。相反，我们使用<code>writeln!</code>宏，它有点像<code>println!</code>，不过它获取一个额外的参数。第一个参数是希望写入内容的位置。可以通过<code>std::io::stderr</code>函数获取一个标准错误的句柄。我们将一个<code>stderr</code>的可变引用传递给<code>writeln!</code>；它需要是可变的因为这样才能写入信息！第二个和第三个参数就像<code>println!</code>的第一个和第二参数：一个格式化字符串和任何需要插入的变量。</p>
 <p>让我们再次用相同方式运行程序，不带任何参数并用 <code>&gt;</code>重定向<code>stdout</code>：</p>
@@ -7410,7 +7213,7 @@ How dreary to be somebody!
 </code></pre>
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>在这一章，我们涉及了如果在 Rust 中进行常规的 I/O 操作。通过使用命令行参数、文件、环境变量和写入<code>stderr</code>的功能。现在你已经准备好编写命令行程序了。结合前几章的知识，你的代码将会是组织良好的，并能有效的将数据存储到合适的数据结构中、更好的处理错误，并且还是经过良好测试的。我们也接触了一个真实情况下需要生命周期注解来保证引用一直有效的场景。</p>
-<p>接下来，让我们探索如何利用一些 Rust 中受函数式编程语言影响的功能”闭包和迭代器。</p>
+<p>接下来，让我们探索如何利用一些 Rust 中受函数式编程语言影响的功能：闭包和迭代器。</p>
 <a class="header" href="#rust-中的函数式语言功能--迭代器和闭包" name="rust-中的函数式语言功能--迭代器和闭包"><h1>Rust 中的函数式语言功能 —— 迭代器和闭包</h1></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch13-00-functional-features.md">ch13-00-functional-features.md</a>
@@ -7901,7 +7704,7 @@ opt-level = 1
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch14-02-publishing-to-crates-io.md">ch14-02-publishing-to-crates-io.md</a>
 <br>
-commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894</p>
+commit f2eef19b3a39ee68dd363db2fcba173491ba9dc4</p>
 </blockquote>
 <p>我们曾经在项目中增加 crates.io 上的 crate 作为依赖。也可以选择将代码分享给其他人。Crates.io 用来分发包的源代码，所以它主要用于分发开源代码。</p>
 <p>Rust 和 Cargo 有一些帮助人们找到和使用你发布的包的功能。我们将介绍这些功能，接着讲到如何发布一个包。</p>
@@ -7916,10 +7719,7 @@ commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894</p>
 /// ```
 /// let five = 5;
 ///
-/// assert_eq!(6, add_one(5));
-/// # fn add_one(x: i32) -&gt; i32 {
-/// #     x + 1
-/// # }
+/// assert_eq!(6, add_one(five));
 /// ```
 pub fn add_one(x: i32) -&gt; i32 {
     x + 1
@@ -7945,7 +7745,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
 <a class="header" href="#使用pub-use来导出合适的公有-api" name="使用pub-use来导出合适的公有-api"><h3>使用<code>pub use</code>来导出合适的公有 API</h3></a>
 <p>第七章介绍了如何使用<code>mod</code>关键字来将代码组织进模块中，如何使用<code>pub</code>关键字将项变为公有，和如何使用<code>use</code>关键字将项引入作用域。当发布 crate 给并不熟悉其使用的库的实现的人时，就值得花时间考虑 crate 的结构对于开发和对于依赖 crate 的人来说是否同样有用。如果结构对于供其他库使用来说并不方便，也无需重新安排内部组织：可以选择使用<code>pub use</code>来重新导出一个不同的公有结构。</p>
-<p>例如列表 14-2中，我们创建了一个库<code>art</code>，其包含一个<code>kinds</code>模块，模块中包含枚举<code>Color</code>和包含函数<code>mix</code>的模块<code>utils</code>：</p>
+<p>例如列表 14-2 中，我们创建了一个库<code>art</code>，其包含一个<code>kinds</code>模块，模块中包含枚举<code>Color</code>和包含函数<code>mix</code>的模块<code>utils</code>：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust,ignore">//! # Art
 //!
@@ -8355,9 +8155,9 @@ order to have a known size</span></p>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch15-02-deref.md">ch15-02-deref.md</a>
 <br>
-commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
+commit ecc3adfe0cfa0a4a15a178dc002702fd0ea74b3f</p>
 </blockquote>
-<p>第一个智能指针相关的重要 trait 是<code>Deref</code>，它允许我们重载<code>*</code>，解引用运算符（不同于乘法运算符和全局引用运算符）。重载智能指针的<code>*</code>方便访问其后的数据，在这个部分的稍后介绍解引用强制多态时我们会讨论方便的意义。</p>
+<p>第一个智能指针相关的重要 trait 是<code>Deref</code>，它允许我们重载<code>*</code>，解引用运算符（不同于乘法运算符和全局引用运算符）。重载智能指针的<code>*</code>能使访问其后的数据更为方便，在这个部分的稍后介绍解引用强制多态时我们会讨论方便的意义。</p>
 <p>第八章的哈希 map 的“根据旧值更新一个值”部分简要的提到了解引用运算符。当时有一个可变引用，而我们希望改变这个引用所指向的值。为此，首先我们必须解引用。这是另一个使用<code>i32</code>值引用的例子：</p>
 <pre><code class="language-rust">let mut x = 5;
 {
@@ -8403,14 +8203,14 @@ fn main() {
 struct that holds mp3 file data and metadata</span></p>
 <p>大部分代码看起来都比较熟悉：一个结构体、一个 trait 实现、和一个创建了结构体示例的 main 函数。其中有一部分我们还未全面的讲解：类似于第十三章学习迭代器 trait 时出现的<code>type Item</code>，<code>type Target = T;</code>语法用于定义关联类型，第十九章会更详细的介绍。不必过分担心例子中的这一部分；它只是一个稍显不同的定义泛型参数的方式。</p>
 <p>在<code>assert_eq!</code>中，我们验证<code>vec![1, 2, 3]</code>是否为<code>Mp3</code>实例<code>*my_favorite_song</code>解引用的值，结果正是如此因为我们实现了<code>deref</code>方法来返回音频数据。如果没有为<code>Mp3</code>实现<code>Deref</code> trait，Rust 将不会编译<code>*my_favorite_song</code>：会出现错误说<code>Mp3</code>类型不能被解引用。</p>
-<p>代码能够工作的原因在于调用<code>*my_favorite_song</code>时<code>*</code>在背后所做的操作：</p>
+<p>没有<code>Deref</code> trait 的话，编译器只能解引用<code>&amp;</code>引用，而<code>my_favorite_song</code>并不是（它是一个<code>Mp3</code>结构体）。通过<code>Deref</code> trait，编译器知道实现了<code>Deref</code> trait 的类型有一个返回引用的<code>deref</code>方法（在这个例子中，是<code>&amp;self.audio</code>因为列表 15-7 中的<code>deref</code>的定义）。所以为了得到一个<code>*</code>可以解引用的<code>&amp;</code>引用，编译器将<code>*my_favorite_song</code>展开为如下：</p>
 <pre><code class="language-rust,ignore">*(my_favorite_song.deref())
 </code></pre>
-<p>这对<code>my_favorite_song</code>调用了<code>deref</code>方法，它借用了<code>my_favorite_song</code>并返回指向<code>my_favorite_song.audio</code>的引用，这正是列表 15-5 中<code>deref</code>所定义的。引用的<code>*</code>被定义为仅仅从引用中返回其数据，所以上面<code>*</code>的展开形式对于外部<code>*</code>来说并不是递归的。最终的数据类型是<code>Vec&lt;u8&gt;</code>，它与列表 15-5 中<code>assert_eq!</code>的<code>vec![1, 2, 3]</code>相匹配。</p>
-<p><code>deref</code>方法的返回值类型仍然是引用和为何必须解引用方法的结果的原因是如果<code>deref</code>方法就返回值，使用<code>*</code>总是会获取其所有权。</p>
+<p>这个就是<code>self.audio</code>中的结果值。<code>deref</code>返回一个引用并接下来必需解引用而不是直接返回值的原因是所有权：如果<code>deref</code>方法直接返回值而不是引用，其值将被移动出<code>self</code>。这里和大部分使用解引用运算符的地方并不想获取<code>my_favorite_song.audio</code>的所有权。</p>
+<p>注意将<code>*</code>替换为<code>deref</code>调用和<code>*</code>调用的过程在每次使用<code>*</code>的时候都会发生一次。<code>*</code>的替换并不会无限递归进行。最终的数据类型是<code>Vec&lt;u8&gt;</code>，它与列表 15-7 中<code>assert_eq!</code>的<code>vec![1, 2, 3]</code>相匹配。</p>
 <a class="header" href="#函数和方法的隐式解引用强制多态" name="函数和方法的隐式解引用强制多态"><h3>函数和方法的隐式解引用强制多态</h3></a>
-<p>Rust 倾向于偏爱明确而不是隐晦，不过一个情况下这并不成立，就是函数和方法的参数的<strong>解引用强制多态</strong>（<em>deref coercions</em>）。解引用强制多态会自动的将指针或智能指针的引用转换为指针内容的引用。解引用强制多态发生于一个值被传递给函数或方法，并只发生于需要将传递的值类型与签名中参数类型相匹配的时候。解引用强制多态的加入使得 Rust 调用函数或方法时无需很多使用<code>&amp;</code>和<code>*</code>的引用和解引用。</p>
-<p>使用列表 15-5 中的<code>Mp3</code>结构体，如下是一个获取<code>u8</code> slice 并压缩 mp3 音频数据的函数签名：</p>
+<p>Rust 倾向于偏爱明确而不是隐晦，不过一个情况下这并不成立，就是函数和方法的参数的<strong>解引用强制多态</strong>（<em>deref coercions</em>）。解引用强制多态会自动的将指针或智能指针的引用转换为指针内容的引用。解引用强制多态发生于当传递给函数的参数类型不同于函数签名中定义参数类型的时候。解引用强制多态的加入使得 Rust 调用函数或方法时无需很多使用<code>&amp;</code>和<code>*</code>的引用和解引用。</p>
+<p>使用列表 15-7 中的<code>Mp3</code>结构体，如下是一个获取<code>u8</code> slice 并压缩 mp3 音频数据的函数签名：</p>
 <pre><code class="language-rust,ignore">fn compress_mp3(audio: &amp;[u8]) -&gt; Vec&lt;u8&gt; {
     // the actual implementation would go here
 }
@@ -8422,8 +8222,8 @@ struct that holds mp3 file data and metadata</span></p>
 <p>然而，因为解引用强制多态和<code>Mp3</code>的<code>Deref</code> trait 实现，我们可以使用如下代码使用<code>my_favorite_song</code>中的数据调用这个函数：</p>
 <pre><code class="language-rust,ignore">let result = compress_mp3(&amp;my_favorite_song);
 </code></pre>
-<p>只有<code>&amp;</code>和实例，好的！我们可以把智能指针当成普通的引用。也就是说解引用强制多态意味着 Rust 利用了<code>Deref</code>实现的优势：Rust 知道<code>Mp3</code>实现了<code>Deref</code> trait 并从<code>deref</code>方法返回<code>&amp;Vec&lt;u8&gt;</code>。它也知道标准库实现了<code>Vec&lt;T&gt;</code>的<code>Deref</code> trait，其<code>deref</code>方法返回<code>&amp;[T]</code>（我们也可以通过查阅<code>Vec&lt;T&gt;</code>的 API 文档来发现这一点）。所以，在编译时，Rust 会发现它可以调用两次<code>Deref::deref</code>来将<code>&amp;Mp3</code>变成<code>&amp;Vec&lt;u8&gt;</code>再变成<code>&amp;[T]</code>来满足<code>compress_mp3</code>的签名。这意味着我们可以少写一些代码！Rust 会多次分析<code>Deref::deref</code>的返回值类型直到它满足参数的类型，只要相关类型实现了<code>Deref</code> trait。这些间接转换在编译时进行，所以利用解引用强制多态并没有运行时惩罚。</p>
-<p>这里还有一个重载了<code>&amp;mut T</code>的<code>*</code>的<code>DerefMut</code> trait，它以与<code>Deref</code>重载<code>&amp;T</code>的<code>*</code>相同的方式用于参数中。</p>
+<p>只有<code>&amp;</code>和实例，好的！我们可以把智能指针当成普通的引用。也就是说解引用强制多态意味着 Rust 利用了<code>Deref</code>实现的优势：Rust 知道<code>Mp3</code>实现了<code>Deref</code> trait 并从<code>deref</code>方法返回<code>&amp;Vec&lt;u8&gt;</code>。它也知道标准库实现了<code>Vec&lt;T&gt;</code>的<code>Deref</code> trait，其<code>deref</code>方法返回<code>&amp;[T]</code>（我们也可以通过查阅<code>Vec&lt;T&gt;</code>的 API 文档来发现这一点）。所以，在编译时，Rust 会发现它可以调用两次<code>Deref::deref</code>来将<code>&amp;Mp3</code>变成<code>&amp;Vec&lt;u8&gt;</code>再变成<code>&amp;[T]</code>来满足<code>compress_mp3</code>的签名。这意味着我们可以少写一些代码！Rust 会多次分析<code>Deref::deref</code>的返回值类型直到它满足参数的类型，只要相关类型实现了<code>Deref</code> trait。这些间接转换在编译时进行，所以利用解引用强制多态并没有运行时惩罚！</p>
+<p>类似于如何使用<code>Deref</code> trait 重载<code>&amp;T</code>的<code>*</code>运算符，<code>DerefMut</code> trait用于重载<code>&amp;mut T</code>的<code>*</code>运算符。</p>
 <p>Rust 在发现类型和 trait 实现满足三种情况时会进行解引用强制多态：</p>
 <ul>
 <li>从<code>&amp;T</code>到<code>&amp;U</code>当<code>T: Deref&lt;Target=U&gt;</code>。</li>

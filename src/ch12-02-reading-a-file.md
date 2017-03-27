@@ -2,7 +2,7 @@
 
 > [ch12-02-reading-a-file.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-02-reading-a-file.md)
 > <br>
-> commit 4f2dc564851dc04b271a2260c834643dfd86c724
+> commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894
 
 现在有了一些包含我们需要的信息的变量了，让我们试着使用他们。下一步目标是打开需要搜索的文件。为此，我需要一个文件。在项目的根目录创建一个文件`poem.txt`，并写入一些艾米莉·狄金森（Emily Dickinson）的诗：
 
@@ -27,10 +27,9 @@ welcome. /Carol -->
 
 创建完这个文件后，让我们编辑 *src/main.rs* 并增加如列表 12-3 所示用来打开文件的代码：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 use std::env;
 use std::fs::File;
 use std::io::prelude::*;
@@ -53,12 +52,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 12-3: Read the contents of the file specified by the second argument
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-3: Read the contents of the file specified by
+the second argument</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 

@@ -2,7 +2,7 @@
 
 > [ch12-05-working-with-environment-variables.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-05-working-with-environment-variables.md)
 > <br>
-> commit 4f2dc564851dc04b271a2260c834643dfd86c724
+> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
 
 让我们再增加一个功能：大小写不敏感搜索。另外，这个设定将不是一个命令行参数：相反它将是一个环境变量。当然可以选择创建一个大小写不敏感的命令行参数，不过用户要求提供一个环境变量这样设置一次之后在整个终端会话中所有的搜索都将是大小写不敏感的了。
 
@@ -51,7 +51,6 @@ Trust me.";
 
 我们将定义一个叫做`grep_case_insensitive`的新函数。它的实现与`grep`函数大体上相似，不过列表 12-16 展示了一些小的区别：
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -69,13 +68,9 @@ fn grep_case_insensitive<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-<figcaption>
-
-Listing 12-16: Implementing a `grep_case_insensitive` function by changing the
-search string and the lines of the contents to lowercase before comparing them
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-16: Implementing a `grep_case_insensitive`
+function by changing the search string and the lines of the contents to
+lowercase before comparing them</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 

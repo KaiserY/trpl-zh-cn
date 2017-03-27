@@ -71,7 +71,7 @@
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch14-02-publishing-to-crates-io.md">ch14-02-publishing-to-crates-io.md</a>
 <br>
-commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894</p>
+commit f2eef19b3a39ee68dd363db2fcba173491ba9dc4</p>
 </blockquote>
 <p>我们曾经在项目中增加 crates.io 上的 crate 作为依赖。也可以选择将代码分享给其他人。Crates.io 用来分发包的源代码，所以它主要用于分发开源代码。</p>
 <p>Rust 和 Cargo 有一些帮助人们找到和使用你发布的包的功能。我们将介绍这些功能，接着讲到如何发布一个包。</p>
@@ -86,10 +86,7 @@ commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894</p>
 /// ```
 /// let five = 5;
 ///
-/// assert_eq!(6, add_one(5));
-/// # fn add_one(x: i32) -&gt; i32 {
-/// #     x + 1
-/// # }
+/// assert_eq!(6, add_one(five));
 /// ```
 pub fn add_one(x: i32) -&gt; i32 {
     x + 1
@@ -115,7 +112,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
 <a class="header" href="#使用pub-use来导出合适的公有-api" name="使用pub-use来导出合适的公有-api"><h3>使用<code>pub use</code>来导出合适的公有 API</h3></a>
 <p>第七章介绍了如何使用<code>mod</code>关键字来将代码组织进模块中，如何使用<code>pub</code>关键字将项变为公有，和如何使用<code>use</code>关键字将项引入作用域。当发布 crate 给并不熟悉其使用的库的实现的人时，就值得花时间考虑 crate 的结构对于开发和对于依赖 crate 的人来说是否同样有用。如果结构对于供其他库使用来说并不方便，也无需重新安排内部组织：可以选择使用<code>pub use</code>来重新导出一个不同的公有结构。</p>
-<p>例如列表 14-2中，我们创建了一个库<code>art</code>，其包含一个<code>kinds</code>模块，模块中包含枚举<code>Color</code>和包含函数<code>mix</code>的模块<code>utils</code>：</p>
+<p>例如列表 14-2 中，我们创建了一个库<code>art</code>，其包含一个<code>kinds</code>模块，模块中包含枚举<code>Color</code>和包含函数<code>mix</code>的模块<code>utils</code>：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust,ignore">//! # Art
 //!

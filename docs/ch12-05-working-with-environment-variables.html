@@ -71,7 +71,7 @@
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-05-working-with-environment-variables.md">ch12-05-working-with-environment-variables.md</a>
 <br>
-commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
 <p>让我们再增加一个功能：大小写不敏感搜索。另外，这个设定将不是一个命令行参数：相反它将是一个环境变量。当然可以选择创建一个大小写不敏感的命令行参数，不过用户要求提供一个环境变量这样设置一次之后在整个终端会话中所有的搜索都将是大小写不敏感的了。</p>
 <a class="header" href="#实现并测试一个大小写不敏感grep函数" name="实现并测试一个大小写不敏感grep函数"><h3>实现并测试一个大小写不敏感<code>grep</code>函数</h3></a>
@@ -113,8 +113,7 @@ Trust me.&quot;;
 </code></pre>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>我们将定义一个叫做<code>grep_case_insensitive</code>的新函数。它的实现与<code>grep</code>函数大体上相似，不过列表 12-16 展示了一些小的区别：</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     let search = search.to_lowercase();
     let mut results = Vec::new();
@@ -128,11 +127,9 @@ Trust me.&quot;;
     results
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-16: Implementing a <code>grep_case_insensitive</code> function by changing the
-search string and the lines of the contents to lowercase before comparing them</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-16: Implementing a <code>grep_case_insensitive</code>
+function by changing the search string and the lines of the contents to
+lowercase before comparing them</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>首先，将<code>search</code>字符串转换为小写，并存放于一个同名的覆盖变量中。注意现在<code>search</code>是一个<code>String</code>而不是字符串 slice，所以在将<code>search</code>传递给<code>contains</code>时需要加上 &amp;，因为<code>contains</code>获取一个字符串 slice。</p>
 <p>接着在检查每个<code>line</code>是否包含<code>search</code>之前增加了一个<code>to_lowercase</code>调用。因为将<code>line</code>和<code>search</code>都转换为小写，我们就可以无视大小写的匹配文件和命令行参数了。看看测试是否通过了：</p>

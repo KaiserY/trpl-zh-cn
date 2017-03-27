@@ -71,7 +71,7 @@
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-06-writing-to-stderr-instead-of-stdout.md">ch12-06-writing-to-stderr-instead-of-stdout.md</a>
 <br>
-commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
 <p>目前为止，我们将所有的输出都<code>println!</code>到了终端。这是可以的，不过大部分终端都提供了两种输出：“标准输出”对应大部分信息，而“标准错误”则用于错误信息。这使得处理类似于“将错误打印到终端而将其他信息输出到文件”的情况变得更容易。</p>
 <p>可以通过在命令行使用<code>&gt;</code>来将输出重定向到文件中，同时不使用任何参数运行来造成一个错误，就会发现我们的程序只能打印到<code>stdout</code>：</p>
@@ -81,8 +81,7 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 <pre><code>Problem parsing arguments: not enough arguments
 </code></pre>
 <p>我们希望这个信息被打印到屏幕上，而只有成功运行产生的输出写入到文件中。让我们如列表 12-17 中所示改变如何打印错误信息的方法：</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate greprs;
 
 use std::env;
@@ -117,10 +116,8 @@ fn main() {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-17: Writing error messages to <code>stderr</code> instead of <code>stdout</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-17: Writing error messages to <code>stderr</code> instead
+of <code>stdout</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>Rust 并没有类似<code>println!</code>这样的方便写入标准错误的函数。相反，我们使用<code>writeln!</code>宏，它有点像<code>println!</code>，不过它获取一个额外的参数。第一个参数是希望写入内容的位置。可以通过<code>std::io::stderr</code>函数获取一个标准错误的句柄。我们将一个<code>stderr</code>的可变引用传递给<code>writeln!</code>；它需要是可变的因为这样才能写入信息！第二个和第三个参数就像<code>println!</code>的第一个和第二参数：一个格式化字符串和任何需要插入的变量。</p>
 <p>让我们再次用相同方式运行程序，不带任何参数并用 <code>&gt;</code>重定向<code>stdout</code>：</p>
@@ -137,7 +134,7 @@ How dreary to be somebody!
 </code></pre>
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>在这一章，我们涉及了如果在 Rust 中进行常规的 I/O 操作。通过使用命令行参数、文件、环境变量和写入<code>stderr</code>的功能。现在你已经准备好编写命令行程序了。结合前几章的知识，你的代码将会是组织良好的，并能有效的将数据存储到合适的数据结构中、更好的处理错误，并且还是经过良好测试的。我们也接触了一个真实情况下需要生命周期注解来保证引用一直有效的场景。</p>
-<p>接下来，让我们探索如何利用一些 Rust 中受函数式编程语言影响的功能”闭包和迭代器。</p>
+<p>接下来，让我们探索如何利用一些 Rust 中受函数式编程语言影响的功能：闭包和迭代器。</p>
 
                 </div>
 

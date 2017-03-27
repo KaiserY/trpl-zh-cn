@@ -2,7 +2,7 @@
 
 > [ch12-01-accepting-command-line-arguments.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-01-accepting-command-line-arguments.md)
 > <br>
-> commit 4f2dc564851dc04b271a2260c834643dfd86c724
+> commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894
 
 第一个任务是让`greprs`接受两个命令行参数。crates.io 上有一些现存的库可以帮助我们，不过因为我们正在学习，我们将自己实现一个。
 
@@ -13,7 +13,6 @@
 
 让我们试试列表 12-1 中的代码：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -25,16 +24,12 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 12-1: Collect the command line arguments into a vector and print them out
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-1: Collect the command line arguments into a
+vector and print them out</span>
 
 <!-- Will add wingdings in libreoffice /Carol -->
 
-首先使用`use`语句来将`std::env`模块引入作用域。当函数嵌套了多于一层模块时，比如说`std::env::args`，通常使用`use`将父模块引入作用域，而不是引入其本身。`env::args`比单独的`args`要明确一些。当然，如果使用了多余一个`std::env`中的函数，我们也只需要一个`use`语句。
+首先使用`use`语句来将`std::env`模块引入作用域。当函数嵌套了多于一层模块时，比如说`std::env::args`，通常使用`use`将父模块引入作用域，而不是引入其本身。`env::args`比单独的`args`要明确一些。当然，如果使用了多于一个`std::env`中的函数时，我们也只需要一个`use`语句。
 
 在`main`函数的第一行，我们调用了`env::args`，并立即使用`collect`来创建了一个 vector。这里我们也显式的注明了`args`的类型：`collect`可以被用来创建很多类型的集合。Rust 并不能推断出我们需要什么类型，所以类型注解是必须的。在 Rust 中我们很少会需要注明类型，不过`collect`是就一个通常需要这么做的函数。
 
@@ -53,10 +48,9 @@ $ cargo run needle haystack
 
 现在我们有了一个访问所有参数的方法，让我们如列表 12-2 中所示将需要的变量存放到变量中：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 use std::env;
 
 fn main() {
@@ -70,12 +64,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 12-2: Create variables to hold the search argument and filename argument
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-2: Create variables to hold the search
+argument and filename argument</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 

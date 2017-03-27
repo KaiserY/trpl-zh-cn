@@ -2,7 +2,7 @@
 
 > [ch12-06-writing-to-stderr-instead-of-stdout.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-06-writing-to-stderr-instead-of-stdout.md)
 > <br>
-> commit 4f2dc564851dc04b271a2260c834643dfd86c724
+> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
 
 目前为止，我们将所有的输出都`println!`到了终端。这是可以的，不过大部分终端都提供了两种输出：“标准输出”对应大部分信息，而“标准错误”则用于错误信息。这使得处理类似于“将错误打印到终端而将其他信息输出到文件”的情况变得更容易。
 
@@ -20,7 +20,6 @@ Problem parsing arguments: not enough arguments
 
 我们希望这个信息被打印到屏幕上，而只有成功运行产生的输出写入到文件中。让我们如列表 12-17 中所示改变如何打印错误信息的方法：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -59,12 +58,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 12-17: Writing error messages to `stderr` instead of `stdout`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-17: Writing error messages to `stderr` instead
+of `stdout`</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
@@ -96,4 +91,4 @@ How dreary to be somebody!
 
 在这一章，我们涉及了如果在 Rust 中进行常规的 I/O 操作。通过使用命令行参数、文件、环境变量和写入`stderr`的功能。现在你已经准备好编写命令行程序了。结合前几章的知识，你的代码将会是组织良好的，并能有效的将数据存储到合适的数据结构中、更好的处理错误，并且还是经过良好测试的。我们也接触了一个真实情况下需要生命周期注解来保证引用一直有效的场景。
 
-接下来，让我们探索如何利用一些 Rust 中受函数式编程语言影响的功能”闭包和迭代器。
+接下来，让我们探索如何利用一些 Rust 中受函数式编程语言影响的功能：闭包和迭代器。

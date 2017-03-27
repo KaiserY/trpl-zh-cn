@@ -69,9 +69,9 @@
                 <div id="content" class="content">
                     <a class="header" href="#一个-io-项目" name="一个-io-项目"><h1>一个 I/O 项目</h1></a>
 <blockquote>
-<p><a href="https://github.com/rust-lang/book/blob/master/src/ch12-00-an-io-project.md">ch12-00-an-io-project.md</a>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-00-an-io-project.md">ch12-00-an-io-project.md</a>
 <br>
-commit efd59dd0fe8e3658563fb5fd289af9d862e07a03</p>
+commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
 <p>之前几个章节我们学习了很多知识。让我们一起运用这些新知识来构建一个项目。在这个过程中，我们还将学习到更多 Rust 标准库的内容。</p>
 <p>那么我们应该写点什么呢？这得是一个利用 Rust 优势的项目。Rust 的一个强大的用途是命令行工具：Rust 的运行速度、安全性、“单二进制文件”输出和跨平台支持使得它称为这类工作的绝佳选择。所以我们将创建一个我们自己的经典命令行工具：<code>grep</code>。<code>grep</code>有着极为简单的应用场景，它完成如下工作：</p>
@@ -82,7 +82,7 @@ commit efd59dd0fe8e3658563fb5fd289af9d862e07a03</p>
 <li>打印出这些行</li>
 </ol>
 <p>另外，我们还将添加一个额外的功能：一个环境变量允许我们大小写不敏感的搜索字符串参数。</p>
-<p>还有另一个很好的理由使用<code>grep</code>作为示例项目：Rust 社区的成员，Andrew Gallant，已经使用 Rust 创建了一个功能非常完整的<code>grep</code>版本。它叫做<code>ripgrep</code>，并且它非常非常快。这样虽然我们的<code>grep</code>将会非常简单，你也会掌握阅读现实生活中项目的基础知识。</p>
+<p>还有另一个很好的理由使用<code>grep</code>作为示例项目：Rust 社区的成员，Andrew Gallant，已经使用 Rust 创建了一个功能非常完整的<code>grep</code>版本。它叫做<code>ripgrep</code>，并且它非常非常快。这样虽然我们的<code>grep</code>将会非常简单，你也会掌握阅读现真实项目的基础知识。</p>
 <p>这个项目将会结合之前所学的一些内容：</p>
 <ul>
 <li>代码组织（使用第七章学习的模块）</li>
