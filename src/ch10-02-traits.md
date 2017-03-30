@@ -277,7 +277,7 @@ error[E0507]: cannot move out of borrowed content
 
 错误的核心是`cannot move out of type [T], a non-copy array`，对于非泛型版本的`largest`函数，我们只尝试了寻找最大的`i32`和`char`。正如第四章讨论过的，像`i32`和`char`这样的类型是已知大小的并可以储存在栈上，所以他们实现了`Copy` trait。当我们将`largest`函数改成使用泛型后，现在`list`参数的类型就有可能是没有实现`Copy` trait 的，这意味着我们可能不能将`list[0]`的值移动到`largest`变量中。
 
-如果只想对实现了`Copy`的类型调用这些带啊吗，可以在`T`的 trait bounds 中增加`Copy`！列表 10-15 中展示了一个可以编译的泛型版本的`largest`函数的完整代码，只要传递给`largest`的 slice 值的类型实现了`PartialOrd`和`Copy`这两个 trait，例如`i32`和`char`：
+如果只想对实现了`Copy`的类型调用这些代码，可以在`T`的 trait bounds 中增加`Copy`！列表 10-15 中展示了一个可以编译的泛型版本的`largest`函数的完整代码，只要传递给`largest`的 slice 值的类型实现了`PartialOrd`和`Copy`这两个 trait，例如`i32`和`char`：
 
 <span class="filename">Filename: src/main.rs</span>
 
