@@ -2,7 +2,7 @@
 
 > [ch04-02-references-and-borrowing.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch04-02-references-and-borrowing.md)
 > <br>
-> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
+> commit 5e0546f53cce14b126527d9ba6d1b8eb212b4f3d
 
 在上一部分的结尾处的使用元组的代码是有问题的，我们需要将`String`返回给调用者函数这样就可以在调用`calculate_length`后仍然可以使用`String`了，因为`String`先被移动到了`calculate_length`。
 
@@ -243,7 +243,7 @@ fn dangle() -> &String { // dangle returns a reference to a String
 
 因为`s`是在`dangle`创建的，当`dangle`的代码执行完毕后，`s`将被释放。不过我们尝试返回一个它的引用。这意味着这个引用会指向一个无效的`String`！这可不好。Rust 不会允许我们这么做的。
 
-正确的代码是直接返回`String`：
+这里的解决方法是直接返回`String`：
 
 ```rust
 fn no_dangle() -> String {

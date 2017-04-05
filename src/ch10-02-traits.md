@@ -2,7 +2,7 @@
 
 > [ch10-02-traits.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-02-traits.md)
 > <br>
-> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
+> commit e5a987f5da3fba24e55f5c7102ec63f9dc3bc360
 
 trait 允许我们进行另一种抽象：他们让我们可以抽象类型所通用的行为。*trait* 告诉 Rust 编译器某个特定类型拥有可能与其他类型共享的功能。在使用泛型类型参数的场景中，可以使用 *trait bounds* 在编译时指定泛型可以是任何实现了某个 trait 的类型，并由此在这个场景下拥有我们希望的功能。
 
