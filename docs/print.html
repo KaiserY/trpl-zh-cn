@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>可扩展的并发：`Sync`和`Send` - Rust 程序设计语言 简体中文版</title>
+        <title>什么是面向对象 - Rust 程序设计语言 简体中文版</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="Rust 程序设计语言 简体中文版">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> 结构体</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> 方法语法</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> 枚举和模式匹配</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> 定义枚举</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> <code>match</code>控制流运算符</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code>简单控制流</a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> 模块</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code>和文件系统</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> 使用<code>pub</code>控制可见性</a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> 使用<code>use</code>导入命名</a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> 通用集合类型</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> vector</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> 字符串</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> 哈希 map</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> 错误处理</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> <code>panic!</code>与不可恢复的错误</a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> <code>Result</code>与可恢复的错误</a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> <code>panic!</code>还是不<code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> 泛型、trait 和生命周期</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> 泛型数据类型</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> trait：定义共享的行为</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> 生命周期与引用有效性</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> 测试</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> 编写测试</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> 运行测试</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> 测试的组织结构</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> 一个 I/O 项目</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> 接受命令行参数</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> 读取文件</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> 增强错误处理和模块化</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> 测试库的功能</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> 处理环境变量</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> 输出到<code>stderr</code>而不是<code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Rust 中的函数式语言功能</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> 闭包</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> 迭代器</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> 改进 I/O 项目</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> 性能</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> 更多关于 Cargo 和 Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> 发布配置</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> 将 crate 发布到 Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo 工作空间</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> 使用<code>cargo install</code>从 Crates.io 安装文件</a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Cargo 自定义扩展命令</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> 智能指针</a></li><li><ul class="section"><li><a href="ch15-01-box.html"><strong>15.1.</strong> <code>Box&lt;T&gt;</code>用于已知大小的堆上数据</a></li><li><a href="ch15-02-deref.html"><strong>15.2.</strong> <code>Deref</code> Trait 允许通过引用访问数据</a></li><li><a href="ch15-03-drop.html"><strong>15.3.</strong> <code>Drop</code> Trait 运行清理代码</a></li><li><a href="ch15-04-rc.html"><strong>15.4.</strong> <code>Rc&lt;T&gt;</code> 引用计数智能指针</a></li><li><a href="ch15-05-interior-mutability.html"><strong>15.5.</strong> <code>RefCell&lt;T&gt;</code>和内部可变性模式</a></li><li><a href="ch15-06-reference-cycles.html"><strong>15.6.</strong> 引用循环和内存泄漏是安全的</a></li></ul></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> 无畏并发</a></li><li><ul class="section"><li><a href="ch16-01-threads.html"><strong>16.1.</strong> 线程</a></li><li><a href="ch16-02-message-passing.html"><strong>16.2.</strong> 消息传递</a></li><li><a href="ch16-03-shared-state.html"><strong>16.3.</strong> 共享状态</a></li><li><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong>16.4.</strong> 可扩展的并发：<code>Sync</code>和<code>Send</code></a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> 介绍</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> 安装</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> 猜猜看教程</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> 通用编程概念</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> 变量和可变性</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> 数据类型</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> 函数如何工作</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> 注释</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> 控制流</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> 认识所有权</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> 什么是所有权</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> 引用 &amp; 借用</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> 结构体</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> 方法语法</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> 枚举和模式匹配</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> 定义枚举</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> <code>match</code>控制流运算符</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code>简单控制流</a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> 模块</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code>和文件系统</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> 使用<code>pub</code>控制可见性</a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> 使用<code>use</code>导入命名</a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> 通用集合类型</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> vector</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> 字符串</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> 哈希 map</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> 错误处理</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> <code>panic!</code>与不可恢复的错误</a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> <code>Result</code>与可恢复的错误</a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> <code>panic!</code>还是不<code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> 泛型、trait 和生命周期</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> 泛型数据类型</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> trait：定义共享的行为</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> 生命周期与引用有效性</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> 测试</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> 编写测试</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> 运行测试</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> 测试的组织结构</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> 一个 I/O 项目</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> 接受命令行参数</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> 读取文件</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> 增强错误处理和模块化</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> 测试库的功能</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> 处理环境变量</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> 输出到<code>stderr</code>而不是<code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Rust 中的函数式语言功能</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> 闭包</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> 迭代器</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> 改进 I/O 项目</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> 性能</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> 更多关于 Cargo 和 Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> 发布配置</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> 将 crate 发布到 Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo 工作空间</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> 使用<code>cargo install</code>从 Crates.io 安装文件</a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Cargo 自定义扩展命令</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> 智能指针</a></li><li><ul class="section"><li><a href="ch15-01-box.html"><strong>15.1.</strong> <code>Box&lt;T&gt;</code>用于已知大小的堆上数据</a></li><li><a href="ch15-02-deref.html"><strong>15.2.</strong> <code>Deref</code> Trait 允许通过引用访问数据</a></li><li><a href="ch15-03-drop.html"><strong>15.3.</strong> <code>Drop</code> Trait 运行清理代码</a></li><li><a href="ch15-04-rc.html"><strong>15.4.</strong> <code>Rc&lt;T&gt;</code> 引用计数智能指针</a></li><li><a href="ch15-05-interior-mutability.html"><strong>15.5.</strong> <code>RefCell&lt;T&gt;</code>和内部可变性模式</a></li><li><a href="ch15-06-reference-cycles.html"><strong>15.6.</strong> 引用循环和内存泄漏是安全的</a></li></ul></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> 无畏并发</a></li><li><ul class="section"><li><a href="ch16-01-threads.html"><strong>16.1.</strong> 线程</a></li><li><a href="ch16-02-message-passing.html"><strong>16.2.</strong> 消息传递</a></li><li><a href="ch16-03-shared-state.html"><strong>16.3.</strong> 共享状态</a></li><li><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong>16.4.</strong> 可扩展的并发：<code>Sync</code>和<code>Send</code></a></li></ul></li><li><a href="ch17-00-oop.html"><strong>17.</strong> 面向对象</a></li><li><ul class="section"><li><a href="ch17-01-what-is-oo.html"><strong>17.1.</strong> 什么是面向对象</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -71,14 +71,14 @@
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-00-introduction.md">ch01-00-introduction.md</a>
 <br>
-commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+commit 62f78bb3f7c222b574ff547d0161c2533691f9b4</p>
 </blockquote>
 <p>欢迎阅读“Rust 程序设计语言”，一本关于 Rust 的介绍性书籍。Rust 是一个着用于安全、速度和并发的编程语言。它的设计不仅可以使程序获得性能和对底层语言的控制，并且能够享受高级语言强大的抽象能力。这些特性使得 Rust 适合那些有类似 C 语言经验并正在寻找一个更安全的替代者的程序员，同时也适合那些来自类似 Python 语言背景，正在探索在不牺牲表现力的情况下编写更好性能代码的开发者。</p>
 <p>Rust 在编译时进行其绝大多数的安全检查和内存管理决策，因此程序的运行时性能没有受到影响。这让其在许多其他语言不擅长的应用场景中得以大显身手：存在可预测空间和时间要求的程序，嵌入到其他语言中，以及编写底层代码，如设备驱动和操作系统。Rust 也很擅长 web 程序：它驱动着 Rust 包注册网站（package
 registry site），<a href="https://crates.io/">crates.io</a>！我们期待看到<strong>你</strong>使用 Rust 进行创作。</p>
 <p>本书是为已经至少了解一门编程语言的读者而写的。读完本书之后，你应该能自如的编写 Rust 程序。我们将通过小而集中并且相互依赖的例子来学习 Rust，并向你展示如何使用 Rust 多样的功能，同时了解它们在幕后是如何执行的。</p>
 <a class="header" href="#为本书做出贡献" name="为本书做出贡献"><h2>为本书做出贡献</h2></a>
-<p>本书是开源的。如果你发现任何错误，请不要犹豫，<a href="https://github.com/rust-lang/book">在 GitHub 上</a>发起 issue 或提交 pull request。</p>
+<p>本书是开源的。如果你发现任何错误，请不要犹豫，<a href="https://github.com/rust-lang/book">在 GitHub 上</a>发起 issue 或提交 pull request。请查看<a href="https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a>获取更多信息。</p>
 <blockquote>
 <p>译者注：这是本译本的 <a href="https://github.com/KaiserY/trpl-zh-cn">GitHub 仓库</a>，同样欢迎 Issue 和 PR :)</p>
 </blockquote>
@@ -1836,7 +1836,7 @@ fn calculate_length(s: String) -&gt; (String, usize) {
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch04-02-references-and-borrowing.md">ch04-02-references-and-borrowing.md</a>
 <br>
-commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
+commit 5e0546f53cce14b126527d9ba6d1b8eb212b4f3d</p>
 </blockquote>
 <p>在上一部分的结尾处的使用元组的代码是有问题的，我们需要将<code>String</code>返回给调用者函数这样就可以在调用<code>calculate_length</code>后仍然可以使用<code>String</code>了，因为<code>String</code>先被移动到了<code>calculate_length</code>。</p>
 <p>下面是如何定义并使用一个（新的）<code>calculate_length</code>函数，它以一个对象的<strong>引用</strong>作为参数而不是获取值的所有权：</p>
@@ -2008,7 +2008,7 @@ for it to be borrowed from.
   // Danger!
 </code></pre>
 <p>因为<code>s</code>是在<code>dangle</code>创建的，当<code>dangle</code>的代码执行完毕后，<code>s</code>将被释放。不过我们尝试返回一个它的引用。这意味着这个引用会指向一个无效的<code>String</code>！这可不好。Rust 不会允许我们这么做的。</p>
-<p>正确的代码是直接返回<code>String</code>：</p>
+<p>这里的解决方法是直接返回<code>String</code>：</p>
 <pre><code class="language-rust">fn no_dangle() -&gt; String {
     let s = String::from(&quot;hello&quot;);
 
@@ -2775,9 +2775,9 @@ not satisfied
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch06-02-match.md">ch06-02-match.md</a>
 <br>
-commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
+commit 64090418c23d615facfe49a8d548ad9baea6b097</p>
 </blockquote>
-<p>Rust 有一个叫做<code>match</code>的极为强大的控制流运算符，它允许我们将一个值与一系列的模式相比较并根据匹配的模式执行代码。模式可由字面值、变量、通配符和许多其他内容构成；第十八章会讲到所有不同种类的模式以及他们的作用。<code>match</code>的力量来源于模式的表现力以及编译器检查，它确保了所有可能的情况都得到处理。</p>
+<p>Rust 有一个叫做<code>match</code>的极为强大的控制流运算符，它允许我们将一个值与一系列的模式相比较并根据匹配的模式执行代码。模式可由字面值、变量、通配符和许多其他内容构成；第十八章会涉及到所有不同种类的模式以及他们的作用。<code>match</code>的力量来源于模式的表现力以及编译器检查，它确保了所有可能的情况都得到处理。</p>
 <p>把<code>match</code>表达式想象成某种硬币分类器：硬币滑入有着不同大小孔洞的轨道，每一个硬币都会掉入符合它大小的孔洞。同样地，值也会检查<code>match</code>的每一个模式，并且在遇到第一个“符合”的模式时，值会进入相关联的代码块并在执行中被使用。</p>
 <p>因为刚刚提到了硬币，让我们用他们来作为一个使用<code>match</code>的例子！我们可以编写一个函数来获取一个未知的（美国）硬币，并以一种类似验钞机的方式，确定它是何种硬币并返回它的美分值，如列表 6-3 中所示：</p>
 <pre><code class="language-rust">enum Coin {
@@ -3608,7 +3608,7 @@ commit e6d6caab41471f7115a621029bd428a812c5260e</p>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch08-01-vectors.md">ch08-01-vectors.md</a>
 <br>
-commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+commit 6c24544ba718bce0755bdaf03423af86280051d5</p>
 </blockquote>
 <p>我们要讲到的第一个类型是<code>Vec&lt;T&gt;</code>，也被称为 <em>vector</em>。vector 允许我们在一个单独的数据结构中储存多于一个值，它在内存中彼此相邻的排列所有的值。vector 只能储存相同类型的值。他们在拥有一系列项的场景下非常实用，例如文件中的文本行或是购物车中商品的价格。</p>
 <a class="header" href="#新建-vector" name="新建-vector"><h3>新建 vector</h3></a>
@@ -3696,7 +3696,9 @@ let row = vec![
     SpreadsheetCell::Float(10.12),
 ];
 </code></pre>
-<p>Rust 在编译时就必须准确的知道 vector 中类型的原因是它需要知道储存每个元素到底需要多少内存。第二个优点是可以准确的知道这个 vector 中允许什么类型。如果 Rust 允许 vector 存放任意类型，那么当对 vector 元素执行操作时一个或多个类型的值就有可能会造成错误。使用枚举外加<code>match</code>意味着 Rust 能在编译时就保证总是会处理所有可能的情况，正如第六章讲到的那样。</p>
+<p><span class="caption">Listing 8-1: Defining an enum to be able to hold
+different types of data in a vector</span></p>
+<p>Rust 在编译时就必须准确的知道 vector 中类型的原因是它需要知道储存每个元素到底需要多少内存。第二个好处是可以准确的知道这个 vector 中允许什么类型。如果 Rust 允许 vector 存放任意类型，那么当对 vector 元素执行操作时一个或多个类型的值就有可能会造成错误。使用枚举外加<code>match</code>意味着 Rust 能在编译时就保证总是会处理所有可能的情况，正如第六章讲到的那样。</p>
 <p>如果在编写程序时不能确切无遗的知道运行时会储存进 vector 的所有类型，枚举技术就行不通了。相反，你可以使用 trait 对象，第十七章会讲到它。</p>
 <p>现在我们了解了一些使用 vector 的最常见的方式，请一定去看看标准库中<code>Vec</code>定义的很多其他实用方法的 API 文档。例如，除了<code>push</code>之外还有一个<code>pop</code>方法，它会移除并返回 vector 的最后一个元素。让我们继续下一个集合类型：<code>String</code>！</p>
 <a class="header" href="#字符串" name="字符串"><h2>字符串</h2></a>
@@ -4010,7 +4012,7 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch09-01-unrecoverable-errors-with-panic.md">ch09-01-unrecoverable-errors-with-panic.md</a>
 <br>
-commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
+commit e26bb338ab14b98a850c3464e821d54940a45672</p>
 </blockquote>
 <p>突然有一天，糟糕的事情发生了，而你对此束手无策。对于这种情况，Rust 有<code>panic!</code>宏。当执行这个宏时，程序会打印出一个错误信息，展开并清理栈数据，然后接着退出。出现这种情况的场景通常是检测到一些类型的 bug 而且程序员并不清楚该如何处理它。</p>
 <blockquote>
@@ -4063,28 +4065,40 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 <pre><code>$ RUST_BACKTRACE=1 cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/panic`
-thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
-100', /stable-dist-rustc/build/src/libcollections/vec.rs:1395
+thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 100', /stable-dist-rustc/build/src/libcollections/vec.rs:1392
 stack backtrace:
-   1:        0x10922522c -
-std::sys::imp::backtrace::tracing::imp::write::h1204ab053b688140
-   2:        0x10922649e -
-std::panicking::default_hook::{{closure}}::h1204ab053b688140
-   3:        0x109226140 - std::panicking::default_hook::h1204ab053b688140
-   4:        0x109226897 -
-std::panicking::rust_panic_with_hook::h1204ab053b688140
-   5:        0x1092266f4 - std::panicking::begin_panic::h1204ab053b688140
-   6:        0x109226662 - std::panicking::begin_panic_fmt::h1204ab053b688140
-   7:        0x1092265c7 - rust_begin_unwind
-   8:        0x1092486f0 - core::panicking::panic_fmt::h1204ab053b688140
-   9:        0x109248668 -
-core::panicking::panic_bounds_check::h1204ab053b688140
-  10:        0x1092205b5 - &lt;collections::vec::Vec&lt;T&gt; as
-core::ops::Index&lt;usize&gt;&gt;::index::h1204ab053b688140
-  11:        0x10922066a - panic::main::h1204ab053b688140
-  12:        0x1092282ba - __rust_maybe_catch_panic
-  13:        0x109226b16 - std::rt::lang_start::h1204ab053b688140
-  14:        0x1092206e9 - main
+   1:     0x560ed90ec04c - std::sys::imp::backtrace::tracing::imp::write::hf33ae72d0baa11ed
+                        at /stable-dist-rustc/build/src/libstd/sys/unix/backtrace/tracing/gcc_s.rs:42
+   2:     0x560ed90ee03e - std::panicking::default_hook::{{closure}}::h59672b733cc6a455
+                        at /stable-dist-rustc/build/src/libstd/panicking.rs:351
+   3:     0x560ed90edc44 - std::panicking::default_hook::h1670459d2f3f8843
+                        at /stable-dist-rustc/build/src/libstd/panicking.rs:367
+   4:     0x560ed90ee41b - std::panicking::rust_panic_with_hook::hcf0ddb069e7abcd7
+                        at /stable-dist-rustc/build/src/libstd/panicking.rs:555
+   5:     0x560ed90ee2b4 - std::panicking::begin_panic::hd6eb68e27bdf6140
+                        at /stable-dist-rustc/build/src/libstd/panicking.rs:517
+   6:     0x560ed90ee1d9 - std::panicking::begin_panic_fmt::abcd5965948b877f8
+                        at /stable-dist-rustc/build/src/libstd/panicking.rs:501
+   7:     0x560ed90ee167 - rust_begin_unwind
+                        at /stable-dist-rustc/build/src/libstd/panicking.rs:477
+   8:     0x560ed911401d - core::panicking::panic_fmt::hc0f6d7b2c300cdd9
+                        at /stable-dist-rustc/build/src/libcore/panicking.rs:69
+   9:     0x560ed9113fc8 - core::panicking::panic_bounds_check::h02a4af86d01b3e96
+                        at /stable-dist-rustc/build/src/libcore/panicking.rs:56
+  10:     0x560ed90e71c5 - &lt;collections::vec::Vec&lt;T&gt; as core::ops::Index&lt;usize&gt;&gt;::index::h98abcd4e2a74c41
+                        at /stable-dist-rustc/build/src/libcollections/vec.rs:1392
+  11:     0x560ed90e727a - panic::main::h5d6b77c20526bc35
+                        at /home/you/projects/panic/src/main.rs:4
+  12:     0x560ed90f5d6a - __rust_maybe_catch_panic
+                        at /stable-dist-rustc/build/src/libpanic_unwind/lib.rs:98
+  13:     0x560ed90ee926 - std::rt::lang_start::hd7c880a37a646e81
+                        at /stable-dist-rustc/build/src/libstd/panicking.rs:436
+                        at /stable-dist-rustc/build/src/libstd/panic.rs:361
+                        at /stable-dist-rustc/build/src/libstd/rt.rs:57
+  14:     0x560ed90e7302 - main
+  15:     0x7f0d53f16400 - __libc_start_main
+  16:     0x560ed90e6659 - _start
+  17:                0x0 - &lt;unknown&gt;
 </code></pre>
 <p><span class="caption">Listing 9-1: The backtrace generated by a call to
 <code>panic!</code> displayed when the environment variable <code>RUST_BACKTRACE</code> is set</span></p>
@@ -4755,7 +4769,7 @@ fn main() {
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-02-traits.md">ch10-02-traits.md</a>
 <br>
-commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
+commit e5a987f5da3fba24e55f5c7102ec63f9dc3bc360</p>
 </blockquote>
 <p>trait 允许我们进行另一种抽象：他们让我们可以抽象类型所通用的行为。<em>trait</em> 告诉 Rust 编译器某个特定类型拥有可能与其他类型共享的功能。在使用泛型类型参数的场景中，可以使用 <em>trait bounds</em> 在编译时指定泛型可以是任何实现了某个 trait 的类型，并由此在这个场景下拥有我们希望的功能。</p>
 <blockquote>
@@ -4951,7 +4965,7 @@ error[E0507]: cannot move out of borrowed content
   |         cannot move out of borrowed content
 </code></pre>
 <p>错误的核心是<code>cannot move out of type [T], a non-copy array</code>，对于非泛型版本的<code>largest</code>函数，我们只尝试了寻找最大的<code>i32</code>和<code>char</code>。正如第四章讨论过的，像<code>i32</code>和<code>char</code>这样的类型是已知大小的并可以储存在栈上，所以他们实现了<code>Copy</code> trait。当我们将<code>largest</code>函数改成使用泛型后，现在<code>list</code>参数的类型就有可能是没有实现<code>Copy</code> trait 的，这意味着我们可能不能将<code>list[0]</code>的值移动到<code>largest</code>变量中。</p>
-<p>如果只想对实现了<code>Copy</code>的类型调用这些带啊吗，可以在<code>T</code>的 trait bounds 中增加<code>Copy</code>！列表 10-15 中展示了一个可以编译的泛型版本的<code>largest</code>函数的完整代码，只要传递给<code>largest</code>的 slice 值的类型实现了<code>PartialOrd</code>和<code>Copy</code>这两个 trait，例如<code>i32</code>和<code>char</code>：</p>
+<p>如果只想对实现了<code>Copy</code>的类型调用这些代码，可以在<code>T</code>的 trait bounds 中增加<code>Copy</code>！列表 10-15 中展示了一个可以编译的泛型版本的<code>largest</code>函数的完整代码，只要传递给<code>largest</code>的 slice 值的类型实现了<code>PartialOrd</code>和<code>Copy</code>这两个 trait，例如<code>i32</code>和<code>char</code>：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">use std::cmp::PartialOrd;
 
@@ -6232,22 +6246,34 @@ fn it_adds_two() {
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>Rust 的测试功能提供了一个确保即使做出改变函数也能继续以指定方式运行的途径。单元测试独立的验证库的不同部分并能够测试私有实现细节。集成测试则涉及多个部分结合起来工作时的用例，并像其他代码那样测试库的公有 API。即使 Rust 的类型系统和所有权规则可以帮助避免一些 bug，不过测试对于减少代码是否符合期望相关的逻辑 bug 是很重要的。</p>
 <p>接下来让我们结合本章所学和其他之前章节的知识，在下一章一起编写一个项目！</p>
-<a class="header" href="#一个-io-项目" name="一个-io-项目"><h1>一个 I/O 项目</h1></a>
+<a class="header" href="#一个-io-项目构建一个小巧的-grep" name="一个-io-项目构建一个小巧的-grep"><h1>一个 I/O 项目：构建一个小巧的 grep</h1></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-00-an-io-project.md">ch12-00-an-io-project.md</a>
 <br>
-commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+commit 1f432fc231cfbc310433ab2a354d77058444288c</p>
 </blockquote>
-<p>之前几个章节我们学习了很多知识。让我们一起运用这些新知识来构建一个项目。在这个过程中，我们还将学习到更多 Rust 标准库的内容。</p>
-<p>那么我们应该写点什么呢？这得是一个利用 Rust 优势的项目。Rust 的一个强大的用途是命令行工具：Rust 的运行速度、安全性、“单二进制文件”输出和跨平台支持使得它称为这类工作的绝佳选择。所以我们将创建一个我们自己的经典命令行工具：<code>grep</code>。<code>grep</code>有着极为简单的应用场景，它完成如下工作：</p>
-<ol>
-<li>它获取一个文件和一个字符串作为参数。</li>
+<!-- We might need a more descriptive title, something that captures the new
+elements we're introducing -- are we going to cover things like environment
+variables more in later chapters, or is this the only place we explain how to
+use them? -->
+<!-- This is the only place we were planning on explaining both environment
+variables and printing to standard error. These are things that people commonly
+want to know how to do in Rust, but there's not much more than what we've said
+here about them, people just want to know how to do them in Rust. We realize
+that those sections make this chapter long, but think it's worth it to include
+information that people want. We've gotten really positive feedback from people
+who have read this chapter online; people who like learning through projects
+have really enjoyed this chapter. /Carol-->
+<p>本章既是一个目前所学的很多技能的概括，也是一个更多标准库功能的探索。我们将构建一个与文件和命令行输入/输出交互的命令行工具来练习现在一些你已经掌握的 Rust 技能。</p>
+<p>Rust 的运行速度、安全性、“单二进制文件”输出和跨平台支持使其成为创建命令行程序的绝佳选择，所以我们的项目将创建一个我们自己版本的经典命令行工具：<code>grep</code>。grep 是“Globally search a Regular Expression and Print.”的首字母缩写。<code>grep</code>最简单的使用场景是使用如下步骤在特定文件中搜索指定字符串：</p>
+<ul>
+<li>获取一个文件和一个字符串作为参数。</li>
 <li>读取文件</li>
 <li>寻找文件中包含字符串参数的行</li>
 <li>打印出这些行</li>
-</ol>
-<p>另外，我们还将添加一个额外的功能：一个环境变量允许我们大小写不敏感的搜索字符串参数。</p>
-<p>还有另一个很好的理由使用<code>grep</code>作为示例项目：Rust 社区的成员，Andrew Gallant，已经使用 Rust 创建了一个功能非常完整的<code>grep</code>版本。它叫做<code>ripgrep</code>，并且它非常非常快。这样虽然我们的<code>grep</code>将会非常简单，你也会掌握阅读现真实项目的基础知识。</p>
+</ul>
+<p>我们还会展示如何使用环境变量和打印到标准错误而不是标准输出；这些功能在命令行工具中是很常用的。</p>
+<p>一位 Rust 社区的成员，Andrew Gallant，已经创建了一个功能完整且非常快速的<code>grep</code>版本，叫做<code>ripgrep</code>。相比之下，我们的<code>grep</code>将非常简单，本章将交给你一些帮助你理解像<code>ripgrep</code>这样真实项目的背景知识。</p>
 <p>这个项目将会结合之前所学的一些内容：</p>
 <ul>
 <li>代码组织（使用第七章学习的模块）</li>
@@ -6256,26 +6282,41 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 <li>合理的使用 trait 和生命周期（第十章）</li>
 <li>测试（第十一章）</li>
 </ul>
-<p>另外，我还会简要的讲到闭包、迭代器和 trait 对象，他们分别会在第XX、YY和ZZ章详细介绍。</p>
-<p>让我们一如既往的使用<code>cargo new</code>创建一个新项目：</p>
-<pre><code class="language-text">$ cargo new --bin greprs
+<p>另外，我还会简要的讲到闭包、迭代器和 trait 对象，他们分别会在第十三章和第十七章中详细介绍。</p>
+<p>让我们一如既往的使用<code>cargo new</code>创建一个新项目。我们称之为<code>greprs</code>以便与可能已经安装在系统上的<code>grep</code>工具相区别：</p>
+<pre><code>$ cargo new --bin greprs
      Created binary (application) `greprs` project
 $ cd greprs
 </code></pre>
-<p>我们版本的<code>grep</code>的叫做“greprs”，这样就不会迷惑用户让他们以为这就是可能已经在系统上安装了功能更完整的<code>grep</code>。</p>
 <a class="header" href="#接受命令行参数" name="接受命令行参数"><h2>接受命令行参数</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-01-accepting-command-line-arguments.md">ch12-01-accepting-command-line-arguments.md</a>
 <br>
-commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894</p>
+commit b8e4fcbf289b82c12121b282747ce05180afb1fb</p>
 </blockquote>
-<p>第一个任务是让<code>greprs</code>接受两个命令行参数。crates.io 上有一些现存的库可以帮助我们，不过因为我们正在学习，我们将自己实现一个。</p>
-<p>我们需要调用一个 Rust 标准库提供的函数：<code>std::env::args</code>。这个函数返回一个传递给程序的命令行参数的<strong>迭代器</strong>（<em>iterator</em>）。我们还未讨论到迭代器，第十三章会全面的介绍他们。但是对于我们的目的来说，使用他们并不需要知道多少技术细节。我们只需要明白两点：</p>
+<p>第一个任务是让<code>greprs</code>能够接受两个命令行参数：文件名和要搜索的字符串。也就是说希望能够使用<code>cargo run</code>，要搜索的字符串和被搜索的文件的路径来运行程序，像这样：</p>
+<pre><code>$ cargo run searchstring example-filename.txt
+</code></pre>
+<p>现在<code>cargo new</code>生成的程序忽略任何传递给它的参数。crates.io 上有一些现存的可以帮助我们接受命令行参数的库，不过因为我们正在学习，让我们实现一个。</p>
+<!--Below -- I'm not clear what we need the args function for, yet, can you set
+it out more concretely? Otherwise, will it make more sense in context of the
+code later? Is this function needed to allow our function to accept arguments,
+is that was "args" is for? -->
+<!-- We mentioned in the intro to this chapter that grep takes as arguments a
+filename and a string. I've added an example of how we want to run our
+resulting tool and what we want the behavior to be, please let me know if this
+doesn't clear it up. /Carol-->
+<a class="header" href="#读取参数值" name="读取参数值"><h3>读取参数值</h3></a>
+<p>为了能够获取传递给程序的命令行参数的值，我们需要调用一个 Rust 标准库提供的函数：<code>std::env::args</code>。这个函数返回一个传递给程序的命令行参数的<strong>迭代器</strong>（<em>iterator</em>）。我们还未讨论到迭代器，第十三章会全面的介绍他们。但是对于我们现在的目的来说只需要明白两点：</p>
 <ol>
 <li>迭代器生成一系列的值。</li>
 <li>在迭代器上调用<code>collect</code>方法可以将其生成的元素转换为一个 vector。</li>
 </ol>
-<p>让我们试试列表 12-1 中的代码：</p>
+<p>让我们尝试一下：使用列表 12-1 中的代码来读取任何传递给<code>greprs</code>的命令行参数并将其收集到一个 vector 中。</p>
+<!-- Give what a try, here, what are we making? Can you lay that out? I've
+tried above but I'm not sure it's complete -->
+<!-- We're not creating anything, we're just reading. I'm not sure if I've made
+this clearer. /Carol -->
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">use std::env;
 
@@ -6284,11 +6325,20 @@ fn main() {
     println!(&quot;{:?}&quot;, args);
 }
 </code></pre>
-<p><span class="caption">Listing 12-1: Collect the command line arguments into a
-vector and print them out</span></p>
+<p>Listing 12-1: Collect the command line arguments into a vector and print them
+out</p>
 <!-- Will add wingdings in libreoffice /Carol -->
-<p>首先使用<code>use</code>语句来将<code>std::env</code>模块引入作用域。当函数嵌套了多于一层模块时，比如说<code>std::env::args</code>，通常使用<code>use</code>将父模块引入作用域，而不是引入其本身。<code>env::args</code>比单独的<code>args</code>要明确一些。当然，如果使用了多于一个<code>std::env</code>中的函数时，我们也只需要一个<code>use</code>语句。</p>
-<p>在<code>main</code>函数的第一行，我们调用了<code>env::args</code>，并立即使用<code>collect</code>来创建了一个 vector。这里我们也显式的注明了<code>args</code>的类型：<code>collect</code>可以被用来创建很多类型的集合。Rust 并不能推断出我们需要什么类型，所以类型注解是必须的。在 Rust 中我们很少会需要注明类型，不过<code>collect</code>是就一个通常需要这么做的函数。</p>
+<p>首先使用<code>use</code>语句来将<code>std::env</code>模块引入作用域以便可以使用它的<code>args</code>函数。注意<code>std::env::args</code>函数嵌套进了两层模块中。如第七章讲到的，当所需函数嵌套了多于一层模块时，通常将父模块引入作用域，而不是其自身。这便于我们利用<code>std::env</code>中的其他函数。这比增加了<code>use std::env::args;</code>后仅仅使用<code>args</code>调用函数要更明确一些；这样看起来好像一个定义于当前模块的函数。</p>
+<!-- We realized that we need to add the following caveat to fully specify
+the behavior of `std::env::args` /Carol -->
+<!-- PROD: START BOX -->
+<blockquote>
+<p>注意：<code>std::env::args</code>在其任何参数包含无效 Unicode 字符时会 panic。如果你需要接受包含无效 Unicode 字符的参数，使用<code>std::env::args_os</code>代替。这个函数返回<code>OsString</code>值而不是<code>String</code>值。出于简单考虑这里使用<code>std::env::args</code>，因为<code>OsString</code>值每个平台都不一样而且比<code>String</code>值处理起来更复杂。</p>
+</blockquote>
+<!-- PROD: END BOX -->
+<!--what is it we're making into a vector here, the arguments we pass?-->
+<!-- The iterator of the arguments. /Carol -->
+<p>在<code>main</code>函数的第一行，我们调用了<code>env::args</code>，并立即使用<code>collect</code>来创建了一个包含迭代器所有值的 vector。<code>collect</code>可以被用来创建很多类型的集合，所以这里显式注明的<code>args</code>类型来指定我们需要一个字符串 vector。虽然在 Rust 中我们很少会需要注明类型，<code>collect</code>就是一个经常需要注明类型的函数，因为 Rust 不能推断出你想要什么类型的集合。</p>
 <p>最后，我们使用调试格式<code>:?</code>打印出 vector。让我们尝试不用参数运行代码，接着用两个参数：</p>
 <pre><code>$ cargo run
 [&quot;target/debug/greprs&quot;]
@@ -6297,49 +6347,56 @@ $ cargo run needle haystack
 ...snip...
 [&quot;target/debug/greprs&quot;, &quot;needle&quot;, &quot;haystack&quot;]
 </code></pre>
-<p>你会注意一个有趣的事情：二进制文件的名字是第一个参数。其原因超出了本章介绍的范围，不过这是我们必须记住的。</p>
-<p>现在我们有了一个访问所有参数的方法，让我们如列表 12-2 中所示将需要的变量存放到变量中：</p>
+<!--Below --- This initially confused me, do you mean that the argument at
+index 0 is taken up by the name of the binary, so we start arguments at 1 when
+setting them? It seems like it's something like that, reading on, and I've
+edited as such, can you check? -->
+<!-- Mentioning the indexes here seemed repetitive with the text after Listing
+12-2. We're not "setting" arguments here, we're saving the value in variables.
+I've hopefully cleared this up without needing to introduce repetition.
+/Carol-->
+<p>你可能注意到了 vector 的第一个值是&quot;target/debug/greprs&quot;，它是二进制我呢见的名称。其原因超出了本章介绍的范围，不过需要记住的是我们保存了所需的两个参数。</p>
+<a class="header" href="#将参数值保存进变量" name="将参数值保存进变量"><h3>将参数值保存进变量</h3></a>
+<p>打印出参数 vector 中的值仅仅展示了可以访问程序中指定为命令行参数的值。但是这并不是我们想要做的，我们希望将这两个参数的值保存进变量这样就可以在程序使用这些值。让我们如列表 12-2 这样做：</p>
+<!-- By 'find the ones we care about' did you mean set particular arguments so
+the user knows what to enter? I'm a little confused about what we are doing,
+I've tried to clarify above -->
+<!-- We're incrementally adding features and adding some code that helps the
+reader be able to see and experience what the code is doing rather than just
+taking our word for it. I've hopefully clarified below. /Carol -->
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">use std::env;
+<pre><code class="language-rust,should_panic">use std::env;
 
 fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
 
-    let search = &amp;args[1];
+    let query = &amp;args[1];
     let filename = &amp;args[2];
 
-    println!(&quot;Searching for {}&quot;, search);
+    println!(&quot;Searching for {}&quot;, query);
     println!(&quot;In file {}&quot;, filename);
 }
 </code></pre>
-<p><span class="caption">Listing 12-2: Create variables to hold the search
-argument and filename argument</span></p>
+<p>Listing 12-2: Create variables to hold the query argument and filename argument</p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>记住，程序名称是是第一个参数，所以并不需要<code>args[0]</code>。我们决定从第一个参数将是需要搜索的字符串，所以将第一个参数的引用放入变量<code>search</code>中。第二个参数将是文件名，将其放入变量<code>filename</code>中。再次尝试运行程序：</p>
+<p>正如我们在打印出 vector 时所看到的，程序的名称占据了 vector 的第一个值<code>args[0]</code>，所以我们从索引<code>1</code>开始。第一个参数<code>greprs</code>是需要搜索的字符串，所以将其将第一个参数的引用存放在变量<code>query</code>中。第二个参数将是文件名，所以将第二个参数的引用放入变量<code>filename</code>中。</p>
+<p>我们将临时打印出出这些变量的值，再一次证明代码如我们期望的那样工作。让我们使用参数<code>test</code>和<code>sample.txt</code>再次运行这个程序：</p>
 <pre><code>$ cargo run test sample.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe test sample.txt`
+     Running `target/debug/greprs test sample.txt`
 Searching for test
 In file sample.txt
 </code></pre>
-<p>很棒！不过有一个问题。让我们不带参数运行：</p>
-<pre><code>$ cargo run
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe`
-thread 'main' panicked at 'index out of bounds: the len is 1
-but the index is 1', ../src/libcollections\vec.rs:1307
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
-</code></pre>
-<p>因为 vector 中只有一个元素，就是程序名称，不过我们尝试访问第二元素，程序 panic 并提示越界访问。虽然这个错误信息是_准确的_，不过它对程序的用户来说就没有意义了。现在就可以修复这个问题，不过我先继续学习别的内容：在程序结束前我们会改善这个情况。</p>
+<p>好的，它可以工作！我们将所需的参数值保存进了对应的变量中。之后会增加一些错误处理来应对类似用户没有提供参数的情况，不过现在我们将忽略他们并开始增加读取文件功能。</p>
 <a class="header" href="#读取文件" name="读取文件"><h2>读取文件</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-02-reading-a-file.md">ch12-02-reading-a-file.md</a>
 <br>
-commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894</p>
+commit b8e4fcbf289b82c12121b282747ce05180afb1fb</p>
 </blockquote>
-<p>现在有了一些包含我们需要的信息的变量了，让我们试着使用他们。下一步目标是打开需要搜索的文件。为此，我需要一个文件。在项目的根目录创建一个文件<code>poem.txt</code>，并写入一些艾米莉·狄金森（Emily Dickinson）的诗：</p>
+<p>接下来我们将读取由命令行文件名参数指定的文件。首先，需要一个用来测试的示例文件——用来确保<code>greprs</code>正常工作的最好的文件是拥有少量文本和多个行且有一些重复单词的文件。列表 12-3 是一首艾米莉·狄金森（Emily Dickinson）的诗，它正适合这个工作！在项目根目录创建一个文件<code>poem.txt</code>，并输入诗 &quot;I'm nobody! Who are you?&quot;：</p>
 <p><span class="filename">Filename: poem.txt</span></p>
-<pre><code>I'm nobody! Who are you?
+<pre><code class="language-text">I'm nobody! Who are you?
 Are you nobody, too?
 Then there's a pair of us — don't tell!
 They'd banish us, you know.
@@ -6349,23 +6406,27 @@ How public, like a frog
 To tell your name the livelong day
 To an admiring bog!
 </code></pre>
+<p><span class="caption">Listing 12-3: The poem &quot;I'm nobody! Who are you?&quot; by
+Emily Dickinson that will make a good test case</span></p>
 <!-- Public domain Emily Dickinson poem. This will work best with something
 short, but that has multiple lines and some repetition. We could search through
 code; that gets a bit meta and possibly confusing... Changes to this are most
 welcome. /Carol -->
-<p>创建完这个文件后，让我们编辑 <em>src/main.rs</em> 并增加如列表 12-3 所示用来打开文件的代码：</p>
+<!-- :D I like it! I'm all for keeping -->
+<!-- Great! /Carol -->
+<p>创建完这个文件之后，修改 <em>src/main.rs</em> 并增加如列表 12-4 所示的打开文件的代码：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">use std::env;
+<pre><code class="language-rust,should_panic">use std::env;
 use std::fs::File;
 use std::io::prelude::*;
 
 fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
 
-    let search = &amp;args[1];
+    let query = &amp;args[1];
     let filename = &amp;args[2];
 
-    println!(&quot;Searching for {}&quot;, search);
+    println!(&quot;Searching for {}&quot;, query);
     println!(&quot;In file {}&quot;, filename);
 
     let mut f = File::open(filename).expect(&quot;file not found&quot;);
@@ -6376,15 +6437,15 @@ fn main() {
     println!(&quot;With text:\n{}&quot;, contents);
 }
 </code></pre>
-<p><span class="caption">Listing 12-3: Read the contents of the file specified by
-the second argument</span></p>
+<p>Listing 12-4: Reading the contents of the file specified by the second argument</p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>这里增加了一些新内容。首先，需要更多的<code>use</code>语句来引入标准库中的相关部分：我们需要<code>std::fs::File</code>来处理文件，而<code>std::io::prelude::*</code>则包含许多对于 I/O 包括文件 I/O 有帮助的 trait。类似于 Rust 有一个通用的 prelude 来自动引入特定内容，<code>std::io</code>也有其自己的 prelude 来引入处理 I/O 时需要的内容。不同于默认的 prelude，必须显式<code>use</code>位于<code>std::io</code>中的 prelude。</p>
-<p>在<code>main</code>中，我们增加了三点内容：第一，我们获取了文件的句柄并使用<code>File::open</code>函数与第二个参数中指定的文件名来打开这个文件。第二，我们在变量<code>contents</code>中创建了一个空的可变的<code>String</code>，接着对文件句柄调用<code>read_to_string</code>并以<code>contents</code>字符串作为参数，<code>contents</code>是<code>read_to_string</code>将会放置它读取到的数据地方。最后，我们打印出了整个文件的内容，这是一个确认目前为止的程序能够工作的方法。</p>
-<p>尝试运行这些代码，随意指定第一个参数（因为还未实现搜索功能的部分）而将 <em>poem.txt</em> 文件将作为第二个参数：</p>
+<p>首先，增加了更多的<code>use</code>语句来引入标准库中的相关部分：需要<code>std::fs::File</code>来处理文件，而<code>std::io::prelude::*</code>则包含许多对于 I/O 包括文件 I/O 有帮助的 trait。类似于 Rust 有一个通用的 prelude 来自动引入特定内容，<code>std::io</code>也有其自己的 prelude 来引入处理 I/O 时所需的通用内容。不同于默认的 prelude，必须显式<code>use</code>位于<code>std::io</code>中的 prelude。</p>
+<p>在<code>main</code>中，我们增加了三点内容：第一，通过传递变量<code>filename</code>的值调用<code>File::open</code>函数的值来获取文件的可变句柄。创建了叫做<code>contents</code>的变量并将其设置为一个可变的，空的<code>String</code>。它将会存放之后读取的文件的内容。第三，对文件句柄调用<code>read_to_string</code>并传递<code>contents</code>的可变引用作为参数。</p>
+<p>在这些代码之后，我们再次增加了临时的<code>println!</code>打印出读取文件后<code>contents</code>的值，这样就可以检查目前为止的程序能否工作。</p>
+<p>尝试运行这些代码，随意指定一个字符串作为第一个命令行参数（因为还未实现搜索功能的部分）而将 <em>poem.txt</em> 文件将作为第二个参数：</p>
 <pre><code>$ cargo run the poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe the poem.txt`
+     Running `target/debug/greprs the poem.txt`
 Searching for the
 In file poem.txt
 With text:
@@ -6398,18 +6459,19 @@ How public, like a frog
 To tell your name the livelong day
 To an admiring bog!
 </code></pre>
-<p>好的！我们的代码可以工作了！然而，它还有一些瑕疵。因为程序还很小，这些瑕疵并不是什么大问题，不过随着程序功能的丰富，将会越来越难以用简单的方法修复他们。现在就让我们开始重构而不是等待之后处理。重构在只有少量代码时会显得容易得多。</p>
+<p>好的！代码读取并打印出了文件的内容。虽然它还有一些瑕疵：<code>main</code>函数有着多个功能，同时也没有处理可能出现的错误。虽然我们的程序还很小，这些瑕疵并不是什么大问题。不过随着程序功能的丰富，将会越来越难以用简单的方法修复他们。在开发程序时，及早开始重构是一个最佳实践，因为重构少量代码时要容易的多，所以让我们现在就开始吧。</p>
 <a class="header" href="#读取文件" name="读取文件"><h2>读取文件</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-03-improving-error-handling-and-modularity.md">ch12-03-improving-error-handling-and-modularity.md</a>
 <br>
-commit bdab3f38da5b7bf7277bfe21ec59a7a81880e6b4</p>
+commit b8e4fcbf289b82c12121b282747ce05180afb1fb</p>
 </blockquote>
-<p>为了完善我们程序有四个问题需要修复，而他们都与潜在的错误和程序结构有关。第一个问题是在哪打开文件：我们使用了<code>expect</code>来在打开文件失败时指定一个错误信息，不过这个错误信息只是说“文件不存在”。还有很多打开文件失败的方式，不过我们总是假设是由于缺少文件导致的。例如，文件存在但是没有打开它的权限：这时，我们就打印出了错误不符合事实的错误信息！</p>
-<p>第二，我们不停的使用<code>expect</code>，这就有点类似我们之前在不传递任何命令行参数时索引会<code>panic!</code>时注意到的问题：这虽然时_可以工作_的，不过这有点没有原则性，而且整个程序中都需要他们，将错误处理都置于一处则会显得好很多。</p>
-<p>第三个问题是<code>main</code>函数现在处理两个工作：解析参数，并打开文件。对于一个小的函数来说，这不是什么大问题。然而随着程序中的<code>main</code>函数不断增长，<code>main</code>函数中独立的任务也会越来越多。因为一个函数拥有很多职责，它将难以理解、难以测试并难以在不破坏其他部分的情况下做出修改。</p>
-<p>这也关系到我们的第四个问题：<code>search</code>和<code>filename</code>是程序中配置性的变量，而像<code>f</code>和<code>contents</code>则用来执行程序逻辑。随着<code>main</code>函数增长，将引入更多的变量到作用域中，而当作用域中有更多的变量，将更难以追踪哪个变量用于什么目的。如果能够将配置型变量组织进一个结构就能使他们的目的更明确了。</p>
-<p>让我们重新组织程序来解决这些问题。</p>
+<p>为了改善我们的程序这里有四个问题需要修复，而且他们都与程序的组织方式和如何处理潜在错误有关。</p>
+<p>第一，<code>main</code>现在进行了两个任务：它解析了参数并打开了文件。对于一个这样的小函数，这并不是一个大问题。然而如果<code>main</code>中的功能持续增加，<code>main</code>函数处理的单独的任务也会增加。当函数承担了更多责任，它就更难以推导，更难以测试，并且更难以在不破坏其他部分的情况下做出修改。最好能分离出功能这样每个函数就负责一个任务。</p>
+<p>这同时也关系到第二个问题：<code>search</code>和<code>filename</code>是程序中的配置变量，而像<code>f</code>和<code>contents</code>则用来执行程序逻辑。随着<code>main</code>函数的增长，就需要引入更多的变量到作用域中，而当作用域中有更多的变量时，将更难以追踪每个变量的目的。最好能将将配置变量组织进一个结构这样就能使他们的目的更明确了。</p>
+<p>第三个问题是如果打开文件失败我们使用<code>expect</code>来打印出错误信息，不过这个错误信息只是说<code>file not found</code>。除了缺少文件之外还有很多打开文件可能失败的方式：例如，文件可能存在，不过可能没有打开它的权限。如果我们现在就出于这种情况，打印出的<code>file not found</code>错误信息就给了用户一个不符合事实的建议！</p>
+<p>第四，我们不停的使用<code>expect</code>来处理不同的错误，如果用户没有指定足够的参数来运行程序，他们会从 Rust 得到 &quot;index out of bounds&quot; 错误而这并不能明确的解释问题。如果所有的错误处理都位于一处这样将来的维护者在需要修改错误处理逻辑时就只需要咨询一处代码。将所有的错误处理都放在一处也有助于确保我们打印的错误信息对终端用户来说是有意义的。</p>
+<p>让我们通过重构项目来解决这些问题。</p>
 <a class="header" href="#二进制项目的关注分离" name="二进制项目的关注分离"><h3>二进制项目的关注分离</h3></a>
 <p>这类项目组织上的问题在很多相似类型的项目中很常见，所以 Rust 社区开发出一种关注分离的组织模式。这种模式可以用来组织任何用 Rust 构建的二进制项目，所以可以证明应该更早的开始这项重构，以为我们的项目符合这个模式。这个模式看起来像这样：</p>
 <ol>
@@ -9446,6 +9508,70 @@ commit 55b294f20fc846a13a9be623bf322d8b364cee77</p>
 <p>正如我们提到的，因为 Rust 本身很少有处理并发的部分内容，有很多的并发方案都由 crate 实现。他们比标准库要发展的更快；请在网上搜索当前最新的用于多线程场景的 crate。</p>
 <p>Rust 提供了用于消息传递的通道，和像<code>Mutex&lt;T&gt;</code>和<code>Arc&lt;T&gt;</code>这样可以安全的用于并发上下文的智能指针。类型系统和借用检查器会确保这些场景中的代码不会出现数据竞争和无效的引用。一旦代码可以编译了，我们就可以坚信这些代码可以正确的运行于多线程环境，而不会出现其他语言中经常出现的那些难以追踪的 bug。并发编程不再是什么可怕的概念：无所畏惧的使你的程序使用并发吧！</p>
 <p>接下来，让我们讨论一下当 Rust 程序变得更大时那些符合习惯的模拟问题和结构的解决方案，以及 Rust 风格如何与面向对象编程（Object Oriented Programming）中那些你所熟悉的概念相联系。</p>
+<a class="header" href="#rust-是一个面向对象的编程语言吗" name="rust-是一个面向对象的编程语言吗"><h2>Rust 是一个面向对象的编程语言吗？</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch17-00-oop.md">ch17-00-oop.md</a>
+<br>
+commit 759801361bde74b47e81755fff545c66020e6e63</p>
+</blockquote>
+<p>面向对象编程是一种起源于20世纪60年代Simula的模式化编程的方式，然后在90年代在C++语言开始流行。为了描述OOP有很多种复杂的定义：在一些定义下，Rust是面向对象的；在其他定义下，Rust不是。在本章节中，我们会探索一些被普遍认为是面向对象的特性和这些特性是如何转换为Rust的方言的。</p>
+<a class="header" href="#什么是面向对象" name="什么是面向对象"><h2>什么是面向对象？</h2></a>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch17-01-what-is-oo.md">ch17-01-what-is-oo.md</a>
+<br>
+commit 46334522e22d6217b392451cff8b4feca2d69d79</p>
+</blockquote>
+<p>关于一门语言是否需要是面向对象，在编程社区内并达成一致意见。Rust被很多不同的编程模式影响，我们探索了13章提到的函数式编程的特性。面向对象编程语言的一些特性往往是对象、封装和继承。我们看一下每个的含义和Rust是否支持它们。</p>
+<a class="header" href="#对象包含数据和行为" name="对象包含数据和行为"><h2>对象包含数据和行为</h2></a>
+<p><code>Design Patterns: Elements of Reusable Object-Oriented Software</code>这本书被俗称为<code>The Gang of Four book</code>，是面向对象编程模式的目录。它这样定义面向对象编程：</p>
+<blockquote>
+<p>面向对象的程序是由对象组成的。一个对象包数据和操作这些数据的程序。程序通常被称为方法或操作。</p>
+</blockquote>
+<p>在这个定一下，Rust是面向对象的：结构体和枚举包含数据和impl块提供了在结构体和枚举上的方法。虽然带有方法的结构体和枚举不称为对象，但是他们提供了和对象相同的功能，使用了<code>Gang of Four</code>定义的对象。</p>
+<a class="header" href="#隐藏了实现细节的封装" name="隐藏了实现细节的封装"><h2>隐藏了实现细节的封装</h2></a>
+<p>通常与面向对象编程相关的另一个方面是封装的思想：对象的实现细节不能被使用对象的代码获取到。唯一与对象交互的方式是通过对象提供的public API，使用对象的代码无法深入到对象内部并直接改变数据或者行为。封装使得改变和重构对象的内部，无需改变使用对象的代码。</p>
+<p>就像我们在第7张讨论的那样，我们可以使用pub关键字来决定模块、类型函数和方法是public的（默认情况下一切都是private）。比如，我们可以定义一个结构体<code>AveragedCollection</code>包含一个<code>i32</code>类型的vector。结构体也可以有一个字段，该字段保存了vector中所有值的平均值。这样，希望知道结构体中的vector的平均值的人可以随着获取到，而无需自己计算。<code>AveragedCollection</code> 会为我们缓存平均值结果。 Listing 17-1有<code>AveragedCollection</code> 结构体的定义。</p>
+<p>Filename: src/lib.rs</p>
+<pre><code>pub struct AveragedCollection {
+    list: Vec&lt;i32&gt;,
+    average: f64,
+}
+</code></pre>
+<p><code>AveragedCollection</code>结构体维护了一个Integer列表和集合中所有元素的平均值。</p>
+<p>注意，结构体本身被标记为pub，这样其他代码可以使用这个结构体，但是在结构体内部的字段仍然是private。这是非常重要的，因为我们希望保证变量被增加到列表或者被从列表删除时，也会同时更新平均值。我们通过在结构体上实现add、remove和average方法来做到这一点（ Listing 17-2:）：</p>
+<p>Filename: src/lib.rs</p>
+<pre><code># pub struct AveragedCollection {
+#     list: Vec&lt;i32&gt;,
+#     average: f64,
+# }
+impl AveragedCollection {
+    pub fn add(&amp;mut self, value: i32) {
+        self.list.push(value);
+        self.update_average();
+    }
+
+    pub fn remove(&amp;mut self) -&gt; Option&lt;i32&gt; {
+        let result = self.list.pop();
+        match result {
+            Some(value) =&gt; {
+                self.update_average();
+                Some(value)
+            },
+            None =&gt; None,
+        }
+    }
+
+    pub fn average(&amp;self) -&gt; f64 {
+        self.average
+    }
+
+    fn update_average(&amp;mut self) {
+        let total: i32 = self.list.iter().sum();
+        self.average = total as f64 / self.list.len() as f64;
+    }
+}
+</code></pre>
+<p>Listing 17-2:在<code>AveragedCollection</code>结构体上实现了add、remove和average  public方法</p>
 
                 </div>
 
