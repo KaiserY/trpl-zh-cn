@@ -2,7 +2,7 @@
 
 > [ch01-00-introduction.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-00-introduction.md)
 > <br>
-> commit 4f2dc564851dc04b271a2260c834643dfd86c724
+> commit 62f78bb3f7c222b574ff547d0161c2533691f9b4
 
 欢迎阅读“Rust 程序设计语言”，一本关于 Rust 的介绍性书籍。Rust 是一个着用于安全、速度和并发的编程语言。它的设计不仅可以使程序获得性能和对底层语言的控制，并且能够享受高级语言强大的抽象能力。这些特性使得 Rust 适合那些有类似 C 语言经验并正在寻找一个更安全的替代者的程序员，同时也适合那些来自类似 Python 语言背景，正在探索在不牺牲表现力的情况下编写更好性能代码的开发者。
 
@@ -15,9 +15,10 @@ registry site），[crates.io]！我们期待看到**你**使用 Rust 进行创�
 
 ## 为本书做出贡献
 
-本书是开源的。如果你发现任何错误，请不要犹豫，[在 GitHub 上][on GitHub]发起 issue 或提交 pull request。
+本书是开源的。如果你发现任何错误，请不要犹豫，[在 GitHub 上][on GitHub]发起 issue 或提交 pull request。请查看[CONTRIBUTING.md]获取更多信息。
 
 [on GitHub]: https://github.com/rust-lang/book
+[CONTRIBUTING.md]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
 
 > 译者注：这是本译本的 [GitHub 仓库][trpl-zh-cn]，同样欢迎 Issue 和 PR :)
 

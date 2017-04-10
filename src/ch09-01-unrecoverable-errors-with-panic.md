@@ -1,10 +1,10 @@
 ## `panic!`与不可恢复的错误
 
-> [ch09-01-unrecoverable-errors-with-panic.md](https://github.com/rust-lang/book/blob/master/src/ch09-01-unrecoverable-errors-with-panic.md)
+> [ch09-01-unrecoverable-errors-with-panic.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch09-01-unrecoverable-errors-with-panic.md)
 > <br>
-> commit 380e6ee57c251f5ffa8df4c58b3949405448d914
+> commit e26bb338ab14b98a850c3464e821d54940a45672
 
-突然有一天，糟糕的事情发生了，而你对此束手无策。对于这种情况，Rust 有`panic!宏。当执行这个宏时，程序会打印出一个错误信息，展开并清理栈数据，并接着退出。出现这种情况的场景通常是检测到一些类型的 bug 而且程序员并不清楚该如何处理它。
+突然有一天，糟糕的事情发生了，而你对此束手无策。对于这种情况，Rust 有`panic!`宏。当执行这个宏时，程序会打印出一个错误信息，展开并清理栈数据，然后接着退出。出现这种情况的场景通常是检测到一些类型的 bug 而且程序员并不清楚该如何处理它。
 
 > ### Panic 中的栈展开与终止
 > 
@@ -41,7 +41,7 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 
 在这个例子中，被指明的那一行是我们代码的一部分，而且查看这一行的话就会发现`panic!`宏的调用。换句话说，`panic!`可能会出现在我们的代码调用的代码中。错误信息报告的文件名和行号可能指向别人代码中的`panic!`宏调用，而不是我们代码中最终导致`panic!`的那一行。可以使用`panic!`被调用的函数的 backtrace 来寻找（我们代码中出问题的地方）。
 
-### 使用`panic!`backtrace
+### 使用`panic!`的 backtrace
 
 让我们来看看另一个因为我们代码中的 bug 引起的别的库中`panic!`的例子，而不是直接的宏调用：
 
@@ -76,43 +76,48 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 
 接下来的几行提醒我们可以设置`RUST_BACKTRACE`环境变量来得到一个 backtrace 来调查究竟是什么导致了错误。让我们来试试看。列表 9-1 显示了其输出：
 
-<figure>
-
 ```
 $ RUST_BACKTRACE=1 cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/panic`
-thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
-100', /stable-dist-rustc/build/src/libcollections/vec.rs:1395
+thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 100', /stable-dist-rustc/build/src/libcollections/vec.rs:1392
 stack backtrace:
-   1:        0x10922522c -
-std::sys::imp::backtrace::tracing::imp::write::h1204ab053b688140
-   2:        0x10922649e -
-std::panicking::default_hook::{{closure}}::h1204ab053b688140
-   3:        0x109226140 - std::panicking::default_hook::h1204ab053b688140
-   4:        0x109226897 -
-std::panicking::rust_panic_with_hook::h1204ab053b688140
-   5:        0x1092266f4 - std::panicking::begin_panic::h1204ab053b688140
-   6:        0x109226662 - std::panicking::begin_panic_fmt::h1204ab053b688140
-   7:        0x1092265c7 - rust_begin_unwind
-   8:        0x1092486f0 - core::panicking::panic_fmt::h1204ab053b688140
-   9:        0x109248668 -
-core::panicking::panic_bounds_check::h1204ab053b688140
-  10:        0x1092205b5 - <collections::vec::Vec<T> as
-core::ops::Index<usize>>::index::h1204ab053b688140
-  11:        0x10922066a - panic::main::h1204ab053b688140
-  12:        0x1092282ba - __rust_maybe_catch_panic
-  13:        0x109226b16 - std::rt::lang_start::h1204ab053b688140
-  14:        0x1092206e9 - main
+   1:     0x560ed90ec04c - std::sys::imp::backtrace::tracing::imp::write::hf33ae72d0baa11ed
+                        at /stable-dist-rustc/build/src/libstd/sys/unix/backtrace/tracing/gcc_s.rs:42
+   2:     0x560ed90ee03e - std::panicking::default_hook::{{closure}}::h59672b733cc6a455
+                        at /stable-dist-rustc/build/src/libstd/panicking.rs:351
+   3:     0x560ed90edc44 - std::panicking::default_hook::h1670459d2f3f8843
+                        at /stable-dist-rustc/build/src/libstd/panicking.rs:367
+   4:     0x560ed90ee41b - std::panicking::rust_panic_with_hook::hcf0ddb069e7abcd7
+                        at /stable-dist-rustc/build/src/libstd/panicking.rs:555
+   5:     0x560ed90ee2b4 - std::panicking::begin_panic::hd6eb68e27bdf6140
+                        at /stable-dist-rustc/build/src/libstd/panicking.rs:517
+   6:     0x560ed90ee1d9 - std::panicking::begin_panic_fmt::abcd5965948b877f8
+                        at /stable-dist-rustc/build/src/libstd/panicking.rs:501
+   7:     0x560ed90ee167 - rust_begin_unwind
+                        at /stable-dist-rustc/build/src/libstd/panicking.rs:477
+   8:     0x560ed911401d - core::panicking::panic_fmt::hc0f6d7b2c300cdd9
+                        at /stable-dist-rustc/build/src/libcore/panicking.rs:69
+   9:     0x560ed9113fc8 - core::panicking::panic_bounds_check::h02a4af86d01b3e96
+                        at /stable-dist-rustc/build/src/libcore/panicking.rs:56
+  10:     0x560ed90e71c5 - <collections::vec::Vec<T> as core::ops::Index<usize>>::index::h98abcd4e2a74c41
+                        at /stable-dist-rustc/build/src/libcollections/vec.rs:1392
+  11:     0x560ed90e727a - panic::main::h5d6b77c20526bc35
+                        at /home/you/projects/panic/src/main.rs:4
+  12:     0x560ed90f5d6a - __rust_maybe_catch_panic
+                        at /stable-dist-rustc/build/src/libpanic_unwind/lib.rs:98
+  13:     0x560ed90ee926 - std::rt::lang_start::hd7c880a37a646e81
+                        at /stable-dist-rustc/build/src/libstd/panicking.rs:436
+                        at /stable-dist-rustc/build/src/libstd/panic.rs:361
+                        at /stable-dist-rustc/build/src/libstd/rt.rs:57
+  14:     0x560ed90e7302 - main
+  15:     0x7f0d53f16400 - __libc_start_main
+  16:     0x560ed90e6659 - _start
+  17:                0x0 - <unknown>
 ```
 
-<figcaption>
-
-Listing 9-1: The backtrace generated by a call to `panic!` displayed when the
-environment variable `RUST_BACKTRACE` is set
-
-</figcaption>
-</figure>
+<span class="caption">Listing 9-1: The backtrace generated by a call to
+`panic!` displayed when the environment variable `RUST_BACKTRACE` is set</span>
 
 这里有大量的输出！backtrace 第 11 行指向了我们程序中引起错误的行：*src/main.rs* 的第四行。backtrace 是一个执行到目前位置所有被调用的函数的列表。Rust 的 backtrace 跟其他语言中的一样：阅读 backtrace 的关键是从头开始读直到发现你编写的文件。这就是问题的发源地。这一行往上是你的代码调用的代码；往下则是调用你的代码的代码。这些行可能包含核心 Rust 代码，标准库代码或用到的 crate 代码。
 

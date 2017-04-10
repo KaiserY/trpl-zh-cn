@@ -1,8 +1,8 @@
 ## trait：定义共享的行为
 
-> [ch10-02-traits.md](https://github.com/rust-lang/book/blob/master/src/ch10-02-traits.md)
+> [ch10-02-traits.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-02-traits.md)
 > <br>
-> commit 709eb1eaca48864fafd9263042f5f9d9d6ffe08d
+> commit e5a987f5da3fba24e55f5c7102ec63f9dc3bc360
 
 trait 允许我们进行另一种抽象：他们让我们可以抽象类型所通用的行为。*trait* 告诉 Rust 编译器某个特定类型拥有可能与其他类型共享的功能。在使用泛型类型参数的场景中，可以使用 *trait bounds* 在编译时指定泛型可以是任何实现了某个 trait 的类型，并由此在这个场景下拥有我们希望的功能。
 
@@ -10,13 +10,12 @@ trait 允许我们进行另一种抽象：他们让我们可以抽象类型所�
 
 ### 定义 trait
 
-一个类型的行为由其可供调用的方法构成。如果可以对不同类型调用相同的方法的话，这些类型就可以共享相同的行为了。trait 定义是一种将方法签名组合起来的方法，目的是定义一个实现某些目的所必须行为的集合。
+一个类型的行为由其可供调用的方法构成。如果可以对不同类型调用相同的方法的话，这些类型就可以共享相同的行为了。trait 定义是一种将方法签名组合起来的方法，目的是定义一个实现某些目的所必需的行为的集合。
 
 例如，这里有多个存放了不同类型和属性文本的结构体：结构体`NewsArticle`用于存放发生于世界各地的新闻故事，而结构体`Tweet`最多只能存放 140 个字符的内容，以及像是否转推或是否是对推友的回复这样的元数据。
 
 我们想要创建一个多媒体聚合库用来显示可能储存在`NewsArticle`或`Tweet`实例中的数据的总结。每一个结构体都需要的行为是他们是能够被总结的，这样的话就可以调用实例的`summary`方法来请求总结。列表 10-11 中展示了一个表现这个概念的`Summarizable` trait 的定义：
 
-<figure>
 <span class="filename">Filename: lib.rs</span>
 
 ```rust
@@ -25,13 +24,8 @@ pub trait Summarizable {
 }
 ```
 
-<figcaption>
-
-Listing 10-11: Definition of a `Summarizable` trait that consists of the
-behavior provided by a `summary` method
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-11: Definition of a `Summarizable` trait that
+consists of the behavior provided by a `summary` method</span>
 
 使用`trait`关键字来定义一个 trait，后面是 trait 的名字，在这个例子中是`Summarizable`。在大括号中声明描述实现这个 trait 的类型所需要的行为的方法签名，在这个例子中是是`fn summary(&self) -> String`。在方法签名后跟分号而不是在大括号中提供其实现。接着每一个实现这个 trait 的类型都需要提供其自定义行为的方法体，编译器也会确保任何实现`Summarizable` trait 的类型都拥有与这个签名的定义完全一致的`summary`方法。
 
@@ -41,7 +35,6 @@ trait 体中可以有多个方法，一行一个方法签名且都以分号结�
 
 现在我们定义了`Summarizable` trait，接着就可以在多媒体聚合库中需要拥有这个行为的类型上实现它了。列表 10-12 中展示了`NewsArticle`结构体上`Summarizable` trait 的一个实现，它使用标题、作者和创建的位置作为`summary`的返回值。对于`Tweet`结构体，我们选择将`summary`定义为用户名后跟推文的全部文本作为返回值，并假设推文内容已经被限制为 140 字符以内。
 
-<figure>
 <span class="filename">Filename: lib.rs</span>
 
 ```rust
@@ -76,13 +69,8 @@ impl Summarizable for Tweet {
 }
 ```
 
-<figcaption>
-
-Listing 10-12: Implementing the `Summarizable` trait on the `NewsArticle` and
-`Tweet` types
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-12: Implementing the `Summarizable` trait on
+the `NewsArticle` and `Tweet` types</span>
 
 在类型上实现 trait 类似与实现与 trait 无关的方法。区别在于`impl`关键字之后，我们提供需要实现 trait 的名称，接着是`for`和需要实现 trait 的类型的名称。在`impl`块中，使用 trait 定义中的方法签名，不过不再后跟分号，而是需要在大括号中编写函数体来为特定类型实现 trait 方法所拥有的行为。
 
@@ -103,7 +91,6 @@ println!("1 new tweet: {}", tweet.summary());
 
 注意因为列表 10-12 中我们在相同的`lib.rs`力定义了`Summarizable` trait 和`NewsArticle`与`Tweet`类型，所以他们是位于同一作用域的。如果这个`lib.rs`是对应`aggregator` crate 的，而别人想要利用我们 crate 的功能外加为其`WeatherForecast`结构体实现`Summarizable` trait，在实现`Summarizable` trait 之前他们首先就需要将其导入其作用域中，如列表 10-13 所示：
 
-<figure>
 <span class="filename">Filename: lib.rs</span>
 
 ```rust,ignore
@@ -126,13 +113,8 @@ impl Summarizable for WeatherForecast {
 }
 ```
 
-<figcaption>
-
-Listing 10-13: Bringing the `Summarizable` trait from our `aggregator` crate
-into scope in another crate
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-13: Bringing the `Summarizable` trait from our
+`aggregator` crate into scope in another crate</span>
 
 另外这段代码假设`Summarizable`是一个公有 trait，这是因为列表 10-11 中`trait`之前使用了`pub`关键字。
 
@@ -144,7 +126,6 @@ trait 实现的一个需要注意的限制是：只能在 trait 或对应类型�
 
 列表 10-14 中展示了如何为`Summarize` trait 的`summary`方法指定一个默认的字符串值，而不是像列表 10-11 中那样只是定义方法签名：
 
-<figure>
 <span class="filename">Filename: lib.rs</span>
 
 ```rust
@@ -155,13 +136,8 @@ pub trait Summarizable {
 }
 ```
 
-<figcaption>
-
-Listing 10-14: Definition of a `Summarizable` trait with a default
-implementation of the `summary` method
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-14: Definition of a `Summarizable` trait with
+a default implementation of the `summary` method</span>
 
 如果想要对`NewsArticle`实例使用这个默认实现，而不是像列表 10-12 中那样定义一个自己的实现，则可以指定一个空的`impl`块：
 
@@ -200,7 +176,6 @@ pub trait Summarizable {
 ```
 
 为了使用这个版本的`Summarizable`，只需在实现 trait 时定义`author_summary`即可：
-
 
 ```rust,ignore
 impl Summarizable for Tweet {
@@ -302,9 +277,8 @@ error[E0507]: cannot move out of borrowed content
 
 错误的核心是`cannot move out of type [T], a non-copy array`，对于非泛型版本的`largest`函数，我们只尝试了寻找最大的`i32`和`char`。正如第四章讨论过的，像`i32`和`char`这样的类型是已知大小的并可以储存在栈上，所以他们实现了`Copy` trait。当我们将`largest`函数改成使用泛型后，现在`list`参数的类型就有可能是没有实现`Copy` trait 的，这意味着我们可能不能将`list[0]`的值移动到`largest`变量中。
 
-如果只想对实现了`Copy`的类型调用这些带啊吗，可以在`T`的 trait bounds 中增加`Copy`！列表 10-15 中展示了一个可以编译的泛型版本的`largest`函数的完整代码，只要传递给`largest`的 slice 值的类型实现了`PartialOrd`和`Copy`这两个 trait，例如`i32`和`char`：
+如果只想对实现了`Copy`的类型调用这些代码，可以在`T`的 trait bounds 中增加`Copy`！列表 10-15 中展示了一个可以编译的泛型版本的`largest`函数的完整代码，只要传递给`largest`的 slice 值的类型实现了`PartialOrd`和`Copy`这两个 trait，例如`i32`和`char`：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -335,13 +309,9 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-15: A working definition of the `largest` function that works on any
-generic type that implements the `PartialOrd` and `Copy` traits
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-15: A working definition of the `largest`
+function that works on any generic type that implements the `PartialOrd` and
+`Copy` traits</span>
 
 如果并不希望限制`largest`函数只能用于实现了`Copy` trait 的类型，我们可以在`T`的 trait bounds 中指定`Clone`而不是`Copy`，并克隆 slice 的每一个值使得`largest`函数拥有其所有权。但是使用`clone`函数潜在意味着更多的堆分配，而且堆分配在涉及大量数据时可能会相当缓慢。另一种`largest`的实现方式是返回 slice 中一个`T`值的引用。如果我们将函数返回值从`T`改为`&T`并改变函数体使其能够返回一个引用，我们将不需要任何`Clone`或`Copy`的 trait bounds 而且也不会有任何的堆分配。尝试自己实现这种替代解决方式吧！
 

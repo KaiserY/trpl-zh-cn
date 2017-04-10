@@ -1,6 +1,6 @@
 ## 方法语法
 
-> [ch05-01-method-syntax.md](https://github.com/rust-lang/book/blob/master/src/ch05-01-method-syntax.md)
+> [ch05-01-method-syntax.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch05-01-method-syntax.md)
 > <br>
 > commit 8c1c1a55d5c0f9bc3c866ee79b267df9dc5c04e2
 

@@ -305,7 +305,6 @@ the value is: 50
 
 可以使用`for`循环来对一个集合的每个元素执行一些代码，来作为一个更有效率替代。`for`循环看起来像这样：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -318,12 +317,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 3-6: Looping through each element of a collection using a `for` loop
-
-</figcaption>
-</figure>
+<span class="caption">Listing 3-6: Looping through each element of a collection
+using a `for` loop</span>
 
 当运行这段代码，将看到与列表 3-5 一样的输出。更为重要的是，我们增强了代码安全性并消除了出现可能会导致超出数组的结尾或遍历长度不够而缺少一些元素这类 bug 机会。
 

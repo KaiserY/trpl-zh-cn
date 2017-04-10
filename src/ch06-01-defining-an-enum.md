@@ -1,12 +1,12 @@
 # 定义枚举
 
-> [ch06-01-defining-an-enum.md](https://github.com/rust-lang/book/blob/master/src/ch06-01-defining-an-enum.md)
+> [ch06-01-defining-an-enum.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch06-01-defining-an-enum.md)
 > <br>
 > commit e6d6caab41471f7115a621029bd428a812c5260e
 
-让我们通过一用代码来表现的场景，来看看为什么这里枚举是有用的而且比结构体更合适。比如我们要处理 IP 地。目前被广泛使用的两个主要 IP 标准：IPv4（version four）和 IPv6（version six）。这是我们的程序只可能会遇到两种 IP 地址：我们可以**枚举**出所有可能的值，这也正是它名字的由来。
+让我们通过一用代码来表现的场景，来看看为什么这里枚举是有用的而且比结构体更合适。比如我们要处理 IP 地。目前被广泛使用的两个主要 IP 标准：IPv4（version four）和 IPv6（version six）。这是我们的程序只可能会遇到两种 IP 地址：所以可以**枚举**出所有可能的值，这也正是它名字的由来。
 
-任何一个 IP 地址要么是 IPv4 的要么是 IPv6 的而不能两者都是。IP 地址的这个特性使得枚举数据结构非常适合这个场景，因为枚举值尽可能是其一个成员。IPv4 和 IPv6 从根本上讲都是 IP 地址，所以当代码在处理申请任何类型的 IP 地址的场景时应该把他们当作相同的类型。
+任何一个 IP 地址要么是 IPv4 的要么是 IPv6 的而不能两者都是。IP 地址的这个特性使得枚举数据结构非常适合这个场景，因为枚举值只可能是其中一个成员。IPv4 和 IPv6 从根本上讲仍是 IP 地址，所以当代码在处理申请任何类型的 IP 地址的场景时应该把他们当作相同的类型。
 
 可以通过在代码中定义一个`IpAddrKind`枚举来表现这个概念并列出可能的 IP 地址类型，`V4`和`V6`。这被称为枚举的**成员**（*variants*）：
 
@@ -58,9 +58,7 @@ route(IpAddrKind::V4);
 route(IpAddrKind::V6);
 ```
 
-使用枚举甚至还有更多优势。进一步考虑一下我们的 IP 地址类型，目前没有一个储存实际 IP 地址**数据**的方法；只知道它是什么**类型**的。考虑到已经在第五章学习过结构体了，你可以想如列表 6-1 那样修改这个问题：
-
-<figure>
+使用枚举甚至还有更多优势。进一步考虑一下我们的 IP 地址类型，目前没有一个储存实际 IP 地址**数据**的方法；只知道它是什么**类型**的。考虑到已经在第五章学习过结构体了，你可以像列表 6-1 那样修改这个问题：
 
 ```rust
 enum IpAddrKind {
@@ -84,13 +82,8 @@ let loopback = IpAddr {
 };
 ```
 
-<figcaption>
-
-Listing 6-1: Storing the data and `IpAddrKind` variant of an IP address using a
-`struct`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 6-1: Storing the data and `IpAddrKind` variant of
+an IP address using a `struct`</span>
 
 这里我们定义了一个有两个字段的结构体`IpAddr`：`kind`字段是`IpAddrKind`（之前定义的枚举）类型的而`address`字段是`String`类型的。这里有两个结构体的实例。第一个，`home`，它的`kind`的值是`IpAddrKind::V4`与之相关联的地址数据是`127.0.0.1`。第二个实例，`loopback`，`kind`的值是`IpAddrKind`的另一个成员，`V6`，关联的地址是`::1`。我们使用了要给结构体来将`kind`和`address`打包在一起，现在枚举成员就与值相关联了。
 
@@ -124,7 +117,7 @@ let loopback = IpAddr::V6(String::from("::1"));
 
 这些代码展示了使用枚举来储存两种不同 IP 地址的几种可能的选择。然而，事实证明储存和编码 IP 地址实在是太常见了[以致标准库提供了一个可供使用的定义！][IpAddr]<!-- ignore -->让我们看看标准库如何定义`IpAddr`的：它正有着跟我们定义和使用的一样的枚举和成员，不过它将成员中的地址数据嵌入到了两个不同形式的结构体中，他们对不同的成员的定义是不同的：
 
-[IpAddr]: ../std/net/enum.IpAddr.html
+[IpAddr]: https://doc.rust-lang.org/std/net/enum.IpAddr.html
 
 ```rust
 struct Ipv4Addr {
@@ -141,13 +134,11 @@ enum IpAddr {
 }
 ```
 
-这些代码展示了可以将任意类型的数据放入枚举成员中：例如字符串、数字类型或者结构体。甚至可以包含另一个枚举！另外，标准库中的类型通常并不比你可能设想出来的要复杂多少。
+这些代码展示了可以将任意类型的数据放入枚举成员中：例如字符串、数字类型或者结构体。甚至可以包含另一个枚举！另外，标准库中的类型通常并不比你设想出来的要复杂多少。
 
 注意虽然标准库中包含一个`IpAddr`的定义，仍然可以创建和使用我们自己的定义而不会有冲突，因为我们并没有将标准库中的定义引入作用域。第七章会讲到如何导入类型。
 
 来看看列表 6-2 中的另一个枚举的例子：它的成员中内嵌了多种多样的类型：
-
-<figure>
 
 ```rust
 enum Message {
@@ -158,13 +149,8 @@ enum Message {
 }
 ```
 
-<figcaption>
-
-Listing 6-2: A `Message` enum whose variants each store different amounts and
-types of values
-
-</figcaption>
-</figure>
+<span class="caption">Listing 6-2: A `Message` enum whose variants each store
+different amounts and types of values</span>
 
 这个枚举有四个含有不同类型的成员：
 
@@ -173,7 +159,7 @@ types of values
 * `Write`包含单独一个`String`。
 * `ChangeColor`包含三个`i32`。
 
-定义一个像列表 6-2 中的枚举类似于定义不同类型的结构体，除了枚举不使用`struct`关键字而且所有成员都被组合在一起位于`Message`下。如下这些结构体可以包含与之前枚举成员中相同的数据：
+定义一个像列表 6-2 中的枚举类似于定义不同类型的结构体，除了枚举不使用`struct`关键字而且所有成员都被组合在一起位于`Message`下之外。如下这些结构体可以包含与之前枚举成员中相同的数据：
 
 
 ```rust
@@ -216,19 +202,28 @@ m.call();
 
 在之前的部分，我们看到了`IpAddr`枚举如何利用 Rust 的类型系统编码更多信息而不单单是程序中的数据。这一部分探索一个`Option`的案例分析，它是标准库定义的另一个枚举。`Option`类型应用广泛因为它编码了一个非常普遍的场景，就是一个值可能是某个值或者什么都不是。从类型系统的角度来表达这个概念就意味着编译器需要检查是否处理了所有应该处理的情况，这样就可以避免在其他编程语言中非常常见的 bug。
 
-编程语言的设计经常从其包含功能的角度考虑问题，但是从不包含的功能的角度思考也很重要。Rust 并没有很多其他语言中有的空值功能。**空值**（*Null* ）是一个值它代表没有值。在有空值的语言中，变量总是这两种状态之一：空值和非空值。
+编程语言的设计经常从其包含功能的角度考虑问题，但是从其所没有的功能的角度思考也很重要。Rust 并没有很多其他语言中有的空值功能。**空值**（*Null* ）是一个值，它代表没有值。在有空值的语言中，变量总是这两种状态之一：空值和非空值。
 
 在“Null References: The Billion Dollar Mistake”中，Tony Hoare，null 的发明者，曾经说到：
 
+> I call it my billion-dollar mistake. At that time, I was designing the first
+> comprehensive type system for references in an object-oriented language. My
+> goal was to ensure that all use of references should be absolutely safe, with
+> checking performed automatically by the compiler. But I couldn't resist the
+> temptation to put in a null reference, simply because it was so easy to
+> implement. This has led to innumerable errors, vulnerabilities, and system
+> crashes, which have probably caused a billion dollars of pain and damage in
+> the last forty years.
+>
 > 我称之为我万亿美元的错误。当时，我在在一个面向对象语言设计第一个综合性的面向引用的类型系统。我的目标是通过编译器的自动检查来保证所有引用的应有都应该是绝对安全的。不过我未能抗拒引入一个空引用的诱惑，仅仅是因为它是这么的容易实现。这引发了无数错误、漏洞和系统崩溃，在之后的四十多年中造成了数以万计美元的苦痛和伤害。
 
 空值的问题在于当你尝试像一个非空值那样使用一个空值，会出现某种形式的错误。因为空和非空的属性是无处不在的，非常容易出现这类错误。
 
 然而，空值尝试表达的概念仍然是有意义的：空值是一个因为某种原因目前无效或缺失的值。
 
-问题不在于实际的概念而在于具体的实现。为此，Rust 并没有空值，不过它确实拥有一个可以编码存在或不存在概念的枚举。这个枚举是`Option<T>`，而且它[定义于标准库中][option]<!-- ignore -->，如下:
+问题不在于具体的概念而在于特定的实现。为此，Rust 并没有空值，不过它确实拥有一个可以编码存在或不存在概念的枚举。这个枚举是`Option<T>`，而且它[定义于标准库中][option]<!-- ignore -->，如下:
 
-[option]: ../std/option/enum.Option.html
+[option]: https://doc.rust-lang.org/std/option/enum.Option.html
 
 ```rust
 enum Option<T> {
@@ -276,12 +271,12 @@ not satisfied
 
 哇哦！事实上，错误信息意味着 Rust 不知道该如何将`Option<i8>`与`i8`相加。当在 Rust 中拥有一个像`i8`这样类型的值时，编译器确保它总是有一个有效的值。我们可以自信使用而无需判空。只有当使用`Option<i8>`（或者任何用到的类型）是需要担心可能没有一个值，而编译器会确保我们在使用值之前处理为空的情况。
 
-换句话说，在对`Option<T>`进行`T`的运算之前必须转为`T`。通常这能帮助我们捕获空值最常见的问题之一：假设某值不为空但实际上为空。
+换句话说，在对`Option<T>`进行`T`的运算之前必须转为`T`。通常这能帮助我们捕获空值最常见的问题之一：假设某值不为空但实际上为空的情况。
 
-无需担心错过非空值的假设（和处理）让我们对代码更加有信心，为了拥有一个可能为空的值，必须显式的将其放入对应类型的`Option<T>`中。接着，当使用这个值时，必须明确的处理值为空的情况。任何地方一个值不是`Option<T>`类型的话，**可以**安全的假设它的值不为空。这是 Rust 的一个有意为之的设计选择，来限制空值的泛滥和增加 Rust 代码的安全性。
+无需担心错过存在非空值的假设让我们对代码更加有信心，为了拥有一个可能为空的值，必须显式的将其放入对应类型的`Option<T>`中。接着，当使用这个值时，必须明确的处理值为空的情况。任何地方一个值不是`Option<T>`类型的话，**可以**安全的假设它的值不为空。这是 Rust 的一个有意为之的设计选择，来限制空值的泛滥和增加 Rust 代码的安全性。
 
 那么当有一个`Option<T>`的值时，如何从`Some`成员中取出`T`的值来使用它呢？`Option<T>`枚举拥有大量用于各种情况的方法：你可以查看[相关代码][docs]<!-- ignore -->。熟悉`Option<T>`的方法将对你的 Rust 之旅提供巨大的帮助。
 
-[docs]: ../std/option/enum.Option.html
+[docs]: https://doc.rust-lang.org/std/option/enum.Option.html
 
 总的来说，为了使用`Option<T>`值，需要编写处理每个成员的代码。我们想要一些代码只当拥有`Some(T)`值时运行，这些代码允许使用其中的`T`。也希望一些代码当在`None`值时运行，这些代码并没有一个可用的`T`值。`match`表达式就是这么一个处理枚举的控制流结构：它会根据枚举的成员运行不同的代码，这些代码可以使用匹配到的值中的数据。

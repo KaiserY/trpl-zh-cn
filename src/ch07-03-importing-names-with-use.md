@@ -1,12 +1,11 @@
 ## 导入命名
 
-> [ch07-03-importing-names-with-use.md](https://github.com/rust-lang/book/blob/master/src/ch07-03-importing-names-with-use.md)
+> [ch07-03-importing-names-with-use.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-03-importing-names-with-use.md)
 > <br>
-> commit e2a129961ae346f726f8b342455ec2255cdfed68
+> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
 
 我们已经讲到了如何使用模块名称作为调用的一部分，来调用模块中的函数，如列表 7-6 中所示的`nested_modules`函数调用。
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -23,13 +22,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 7-6: Calling a function by fully specifying its enclosing module’s
-namespaces
-
-</figcaption>
-</figure>
+<span class="caption">Listing 7-6: Calling a function by fully specifying its
+enclosing module’s namespaces</span>
 
 如你所见，指定函数的完全限定名称可能会非常冗长。所幸 Rust 有一个关键字使得这些调用显得更简洁。
 
@@ -138,7 +132,7 @@ mod tests {
 }
 ```
 
-第十二章会更详细的解释测试，不过其部分内容现在应该可以理解了：有一个叫做`tests`的模块紧邻其他模块，同时包含一个叫做`it_works`的函数。即便存在一些特殊注解，`tests`也不过是另外一个模块！所以我们的模块层次结构看起来像这样：
+第十一章会更详细的解释测试，不过其部分内容现在应该可以理解了：有一个叫做`tests`的模块紧邻其他模块，同时包含一个叫做`it_works`的函数。即便存在一些特殊注解，`tests`也不过是另外一个模块！所以我们的模块层次结构看起来像这样：
 
 ```
 communicator

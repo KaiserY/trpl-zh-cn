@@ -2,7 +2,7 @@
 
 > [ch01-01-installation.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-01-installation.md)
 > <br>
-> commit 4f2dc564851dc04b271a2260c834643dfd86c724
+> commit c1b95a18dbcbb06aadf07c03759f27d88ccf62cf
 
 使用 Rust 的第一步是安装。你需要网络连接来执行本章的命令，因为我们要从网上下载 Rust。
 
@@ -33,6 +33,15 @@ Rust is installed now. Great!
 ### 自定义安装
 
 如果有理由倾向于不使用 rustup.rs，请查看[Rust 安装页面](https://www.rust-lang.org/install.html)获取其他选择。
+
+
+### 更新
+
+一旦安装完 Rust，更新到最新版本是简单的。在 shell 中运行更新脚本：
+
+```
+$ rustup update
+```
 
 ### 卸载
 

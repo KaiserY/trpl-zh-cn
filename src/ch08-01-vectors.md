@@ -1,10 +1,10 @@
 ## vector
 
-> [ch08-01-vectors.md](https://github.com/rust-lang/book/blob/master/src/ch08-01-vectors.md)
+> [ch08-01-vectors.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch08-01-vectors.md)
 > <br>
-> commit 0d229cc5a3da341196e15a6761735b2952281569
+> commit 6c24544ba718bce0755bdaf03423af86280051d5
 
-我们要讲到的第一个类型是`Vec<T>`，也被称为 *vector*。vector 允许我们在一个单独的数据结构中储存多于一个值，它在内存中彼此相邻的排列所有的值。vector 只能储存相同类型的值。他们在拥有一系列的场景下非常实用，例如文件中的文本行或是购物车中商品的价格。
+我们要讲到的第一个类型是`Vec<T>`，也被称为 *vector*。vector 允许我们在一个单独的数据结构中储存多于一个值，它在内存中彼此相邻的排列所有的值。vector 只能储存相同类型的值。他们在拥有一系列项的场景下非常实用，例如文件中的文本行或是购物车中商品的价格。
 
 ### 新建 vector
 
@@ -133,7 +133,10 @@ let row = vec![
 ];
 ```
 
-Rust 在编译时就必须准确的知道 vector 中类型的原因是它需要知道储存每个元素到底需要多少内存。第二个优点是可以准确的知道这个 vector 中允许什么类型。如果 Rust 允许 vector 存放任意类型，那么当对 vector 元素执行操作时一个或多个类型的值就有可能会造成错误。使用枚举外加`match`意味着 Rust 能在编译时就保证总是会处理所有可能的情况，正如第六章讲到的那样。
+<span class="caption">Listing 8-1: Defining an enum to be able to hold
+different types of data in a vector</span>
+
+Rust 在编译时就必须准确的知道 vector 中类型的原因是它需要知道储存每个元素到底需要多少内存。第二个好处是可以准确的知道这个 vector 中允许什么类型。如果 Rust 允许 vector 存放任意类型，那么当对 vector 元素执行操作时一个或多个类型的值就有可能会造成错误。使用枚举外加`match`意味着 Rust 能在编译时就保证总是会处理所有可能的情况，正如第六章讲到的那样。
 
 如果在编写程序时不能确切无遗的知道运行时会储存进 vector 的所有类型，枚举技术就行不通了。相反，你可以使用 trait 对象，第十七章会讲到它。
 

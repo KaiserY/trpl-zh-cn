@@ -1,6 +1,6 @@
 ## 泛型数据类型
 
-> [ch10-01-syntax.md](https://github.com/rust-lang/book/blob/master/src/ch10-01-syntax.md)
+> [ch10-01-syntax.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-01-syntax.md)
 > <br>
 > commit 55d9e75ffec92e922273c997026bb10613a76578
 
@@ -12,7 +12,6 @@
 
 回到`largest`函数上，列表 10-4 中展示了两个提供了相同的寻找 slice 中最大值功能的函数。第一个是从列表 10-3 中提取的寻找 slice 中`i32`最大值的函数。第二个函数寻找 slice 中`char`的最大值：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -55,17 +54,12 @@ fn main() {
 }
 ```
 
-<figcaption>
+<span class="caption">Listing 10-4: Two functions that differ only in their
+names and the types in their signatures</span>
 
-Listing 10-4: Two functions that differ only in their names and the types in
-their signatures
+这里`largest_i32`和`largest_char`有着完全相同的函数体，所以能够将这两个函数变成一个来减少重复就太好了。所幸通过引入一个泛型参数就能实现！
 
-</figcaption>
-</figure>
-
-这里`largest_i32`和`largest_char`有着完全相同的函数体，所以能够将这两个函数变成一个来减少重复就太好了。所幸通过引入一个泛型参数就能实现。
-
-为了参数化要定义的函数的签名中的类型，我们需要像给函数的值参数起名那样为这类型参数起一个名字。这里选择了名称`T`。任何标识符抖可以作为类型参数名，选择`T`是因为 Rust 的类型命名规范是骆驼命名法（CamelCase）。另外泛型类型参数的规范也倾向于简短，经常仅仅是一个字母。`T`作为“type”是大部分 Rust 程序员的首选。
+为了参数化要定义的函数的签名中的类型，我们需要像给函数的值参数起名那样为这类型参数起一个名字。这里选择了名称`T`。任何标识符抖可以作为类型参数名，选择`T`是因为 Rust 的类型命名规范是骆驼命名法（CamelCase）。另外泛型类型参数的规范也倾向于简短，经常仅仅是一个字母。`T`作为“type”的缩写是大部分 Rust 程序员的首选。
 
 当需要再函数体中使用一个参数时，必须再函数签名中声明这个参数以便编译器能知道函数体中这个名称的意义。同理，当在函数签名中使用一个类型参数时，必须在使用它之前就声明它。类型参数声明位于函数名称与参数列表中间的尖括号中。
 
@@ -79,8 +73,6 @@ fn largest<T>(list: &[T]) -> T {
 
 列表 10-5 展示一个在签名中使用了泛型的统一的`largest`函数定义，并向我们展示了如何对`i32`值的 slice 或`char`值的 slice 调用`largest`函数。注意这些代码还不能编译！
 
-
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -109,13 +101,9 @@ fn main() {
 }
 ```
 
-<figcaption>
+<span class="caption">Listing 10-5: A definition of the `largest` function that
+uses generic type parameters but doesn't compile yet</span>
 
-Listing 10-5: A definition of the `largest` function that uses generic type
-parameters but doesn't compile yet
-
-</figcaption>
-</figure>
 
 如果现在就尝试编译这些代码，会出现如下错误：
 
@@ -142,7 +130,6 @@ what you think. /Carol -->
 
 同样也可以使用`<>`语法来定义拥有一个或多个泛型参数类型字段的结构体。列表 10-6 展示了如何定义和使用一个可以存放任何类型的`x`和`y`坐标值的结构体`Point`：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -157,19 +144,13 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-6: A `Point` struct that holds `x` and `y` values of type `T`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-6: A `Point` struct that holds `x` and `y`
+values of type `T`</span>
 
 其语法类似于函数定义中的泛型应用。首先，必须在结构体名称后面的尖括号中声明泛型参数的名称。接着在结构体定义中可以指定具体数据类型的位置使用泛型类型。
 
 注意`Point`的定义中是使用了要给泛型类型，我们想要表达的是结构体`Point`对于一些类型`T`是泛型的，而且无论这个泛型是什么，字段`x`和`y`**都是**相同类型的。如果尝试创建一个有不同类型值的`Point`的实例，像列表 10-7 中的代码就不能编译：
 
-
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -183,13 +164,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-7: The fields `x` and `y` must be the same type because both have
-the same generic data type `T`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-7: The fields `x` and `y` must be the same
+type because both have the same generic data type `T`</span>
 
 尝试编译会得到如下错误：
 
@@ -209,7 +185,6 @@ error[E0308]: mismatched types
 
 如果想要一个`x`和`y`可以有不同类型且仍然是泛型的`Point`结构体，我们可以使用多个泛型类型参数。在列表 10-8 中，我们修改`Point`的定义为拥有两个泛型类型`T`和`U`。其中字段`x`是`T`类型的，而字段`y`是`U`类型的：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -225,13 +200,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-8: A `Point` generic over two types so that `x` and `y` may be
-values of different types
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-8: A `Point` generic over two types so that
+`x` and `y` may be values of different types</span>
 
 现在所有这些`Point`实例都是被允许的了！你可以在定义中使用任意多的泛型类型参数，不过太多的话代码将难以阅读和理解。如果你处于一个需要很多泛型类型的位置，这可能是一个需要重新组织代码并分隔成一些更小部分的信号。
 
@@ -265,7 +235,6 @@ enum Result<T, E> {
 
 可以像第五章介绍的那样来为其定义中带有泛型的结构体或枚举实现方法。列表 10-9 中展示了列表 10-6 中定义的结构体`Point<T>`。接着我们在`Point<T>`上定义了一个叫做`x`的方法来返回字段`x`中数据的引用：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -287,19 +256,14 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-9: Implementing a method named `x` on the `Point<T>` struct that
-will return a reference to the `x` field, which is of type `T`.
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-9: Implementing a method named `x` on the
+`Point<T>` struct that will return a reference to the `x` field, which is of
+type `T`.</span>
 
 注意必须在`impl`后面声明`T`，这样就可以在`Point<T>`上实现的方法中使用它了。
 
 结构体定义中的泛型类型参数并不总是与结构体方法签名中使用的泛型是同一类型。列表 10-10 中在列表 10-8 中的结构体`Point<T, U>`上定义了一个方法`mixup`。这个方法获取另一个`Point`作为参数，而它可能与调用`mixup`的`self`是不同的`Point`类型。这个方法用`self`的`Point`类型的`x`值（类型`T`）和参数的`Point`类型的`y`值（类型`W`）来创建一个新`Point`类型的实例：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -309,7 +273,7 @@ struct Point<T, U> {
 }
 
 impl<T, U> Point<T, U> {
-    fn mixup<V, W>(&self, other: &Point<V, W>) -> Point<T, W> {
+    fn mixup<V, W>(self, other: Point<V, W>) -> Point<T, W> {
         Point {
             x: self.x,
             y: other.y,
@@ -327,13 +291,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-10: Methods that use different generic types than their struct's
-definition
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-10: Methods that use different generic types
+than their struct's definition</span>
 
 在`main`函数中，定义了一个有`i32`类型的`x`（其值为`5`）和`f64`的`y`（其值为`10.4`）的`Point`。`p2`则是一个有着字符串 slice 类型的`x`（其值为`"Hello"`）和`char`类型的`y`（其值为`c`）的`Point`。在`p1`上以`p2`调用`mixup`会返回一个`p3`，它会有一个`i32`类型的`x`，因为`x`来自`p1`，并拥有一个`char`类型的`y`，因为`y`来自`p2`。`println!`会打印出`p3.x = 5, p3.y = c`。
 
@@ -357,7 +316,6 @@ let float = Some(5.0);
 当 Rust 编译这些代码的时候，它会进行单态化。编译器会读取传递给`Option`的值并发现有两种`Option<T>`：一个对应`i32`另一个对应`f64`。为此，它会将泛型定义`Option<T>`展开为`Option_i32`和`Option_f64`，接着将泛型定义替换为这两个具体的定义。
 
 编译器生成的单态化版本的代码看起来像这样，并包含将泛型`Option`替换为编译器创建的具体定义后的用例代码：
-
 
 <span class="filename">Filename: src/main.rs</span>
 

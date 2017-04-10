@@ -1,8 +1,8 @@
 ## 生命周期与引用有效性
 
-> [ch10-03-lifetime-syntax.md](https://github.com/rust-lang/book/blob/master/src/ch10-03-lifetime-syntax.md)
+> [ch10-03-lifetime-syntax.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-03-lifetime-syntax.md)
 > <br>
-> commit d7a4e99554da53619dd71044273535ba0186f40a
+> commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894
 
 当在第四章讨论引用时，我们遗漏了一个重要的细节：Rust 中的每一个引用都有其**生命周期**，也就是引用保持有效的作用域。大部分时候生命周期是隐含并可以推断的，正如大部分时候类型也是可以推断的一样。类似于当因为有多种可能类型的时候必须注明类型，也会出现引用的生命周期以多种不同方式向关联的情况，所以 Rust 需要我们使用泛型生命周期参数来注明他们的关系，这样就能确保运行时实际使用的引用绝对是有效的。
 
@@ -13,8 +13,6 @@
 ### 生命周期避免了悬垂引用
 
 生命周期的主要目标是避免悬垂引用，它会导致程序引用了并非其期望引用的数据。考虑一下列表 10-16 中的程序，它有一个外部作用域和一个内部作用域，外部作用域声明了一个没有初值的变量`r`，而内部作用域声明了一个初值为 5 的变量`x`。在内部作用域中，我们尝试将`r`的值设置为一个`x`的引用。接着在内部作用域结束后，尝试打印出`r`的值：
-
-<figure>
 
 ```rust,ignore
 {
@@ -29,12 +27,8 @@
 }
 ```
 
-<figcaption>
-
-Listing 10-16: An attempt to use a reference whose value has gone out of scope
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-16: An attempt to use a reference whose value
+has gone out of scope</span>
 
 > ### 未初始化变量不能被使用
 >
@@ -60,8 +54,6 @@ error: `x` does not live long enough
 
 编译器的这一部分叫做**借用检查器**（*borrow checker*），它比较作用域来确保所有的借用都是有效的。列表 10-17 展示了与列表 10-16 相同的例子不过带有变量声明周期的注释：
 
-<figure>
-
 ```rust,ignore
 {
     let r;         // -------+-- 'a
@@ -77,13 +69,9 @@ error: `x` does not live long enough
 }
 ```
 
-<figcaption>
+<span class="caption">Listing 10-17: Annotations of the lifetimes of `r` and
+`x`, named `'a` and `'b` respectively</span>
 
-Listing 10-17: Annotations of the lifetimes of `x` and `r`, named `'a` and `'b`
-respectively
-
-</figcaption>
-</figure>
 
 <!-- Just checking I'm reading this right: the inside block is the b lifetime,
 correct? I want to leave a note for production, make sure we can make that
@@ -97,8 +85,6 @@ looking arrows and labels? /Carol -->
 
 让我们看看列表 10-18 中这个并没有产生悬垂引用且可以正常编译的例子：
 
-<figure>
-
 ```rust
 {
     let x = 5;            // -----+-- 'b
@@ -110,13 +96,8 @@ looking arrows and labels? /Carol -->
 }                         // -----+
 ```
 
-<figcaption>
-
-Listing 10-18: A valid reference because the data has a longer lifetime than
-the reference
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-18: A valid reference because the data has a
+longer lifetime than the reference</span>
 
 `x`拥有生命周期 `'b`，在这里它比 `'a`要大。这就意味着`r`可以引用`x`：Rust 知道`r`中的引用在`x`有效的时候也会一直有效。
 
@@ -126,11 +107,9 @@ the reference
 
 让我们来编写一个返回两个字符串 slice 中最长的那一个的函数。我们希望能够通过传递两个字符串 slice 来调用这个函数，并希望返回一个字符串 slice。一旦我们实现了`longest`函数，列表 10-19 中的代码应该会打印出`The longest string is abcd`：
 
-<figure>
-
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 fn main() {
     let string1 = String::from("abcd");
     let string2 = "xyz";
@@ -140,13 +119,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-19: A `main` function that calls the `longest` function to find the
-longest of two string slices
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-19: A `main` function that calls the `longest`
+function to find the longest of two string slices</span>
 
 注意函数期望获取字符串 slice（如第四章所讲到的这是引用）因为我们并不希望`longest`函数获取其参数的引用。我们希望函数能够接受`String`的 slice（也就是变量`string1`的类型）和字符串字面值（也就是变量`string2`包含的值）。
 
@@ -171,7 +145,6 @@ interested to know if rereading Chapter 4 clears up that confusion.
 
 如果尝试像列表 10-20 中那样实现`longest`函数，它并不能编译：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -184,13 +157,9 @@ fn longest(x: &str, y: &str) -> &str {
 }
 ```
 
-<figcaption>
-
-Listing 10-20: An implementation of the `longest` function that returns the
-longest of two string slices, but does not yet compile
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-20: An implementation of the `longest`
+function that returns the longest of two string slices, but does not yet
+compile</span>
 
 将会出现如下有关生命周期的错误：
 
@@ -228,7 +197,6 @@ error[E0106]: missing lifetime specifier
 
 来看看我们编写的`longest`函数的上下文中的生命周期。就像泛型类型参数，泛型生命周期参数需要声明在函数名和参数列表间的加括号中。这里我们想要告诉 Rust 关于参数中的引用和返回值之间的限制是他们都必须拥有相同的生命周期，就像列表 10-21 中在每个引用中都加上了`'a`那样：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -241,13 +209,9 @@ fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 }
 ```
 
-<figcaption>
-
-Listing 10-21: The `longest` function definition that specifies all the
-references in the signature must have the same lifetime, `'a`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-21: The `longest` function definition that
+specifies all the references in the signature must have the same lifetime,
+`'a`</span>
 
 这段代码能够编译并会产生我们想要使用列表 10-19 中的`main`函数得到的结果。
 
@@ -261,7 +225,6 @@ references in the signature must have the same lifetime, `'a`
 
 让我们如何通过传递拥有不同具体生命周期的引用来观察他们是如何限制`longest`函数的使用的。列表 10-22 是一个应该在任何编程语言中都很直观的例子：`string1`直到外部作用域结束都是有效的，`string2`则在内部作用域中是有效的，而`result`则引用了一些直到外部作用域结束都是有效的值。借用检查器赞同这些代码；它能够编译和运行，并打印出`The longest string is long string is long`：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -284,28 +247,14 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-22: Using the `longest` function with references to `String` values
-that have different concrete lifetimes
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-22: Using the `longest` function with
+references to `String` values that have different concrete lifetimes</span>
 
 接下来，让我们尝试一个`result`的引用的生命周期必须比两个参数的要短的例子。将`result`变量的声明从内部作用域中移动出来，不过将`result`和`string2`变量的赋值语句一同放在内部作用域里。接下来，我们将使用`result`的`println!`移动到内部作用域之外，就在其结束之后。注意列表 10-23 中的代码不能编译：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-#     if x.len() > y.len() {
-#         x
-#     } else {
-#         y
-#     }
-# }
-#
+```rust,ignore
 fn main() {
     let string1 = String::from("long string is long");
     let result;
@@ -317,13 +266,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-23: Attempting to use `result` after `string2` has gone out of scope
-won't compile
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-23: Attempting to use `result` after `string2`
+has gone out of scope won't compile</span>
 
 如果尝试编译会出现如下错误：
 
@@ -395,7 +339,6 @@ at 1:44...
 
 目前为止，我们只定义过有所有权类型的结构体。也可以定义存放引用的结构体，不过需要为结构体定义中的每一个引用添加生命周期注解。列表 10-24 中有一个存放了一个字符串 slice 的结构体`ImportantExcerpt`：
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -412,13 +355,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-24: A struct that holds a reference, so its definition needs a
-lifetime annotation
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-24: A struct that holds a reference, so its
+definition needs a lifetime annotation</span>
 
 这个结构体有一个字段，`part`，它存放了一个字符串 slice，这是一个引用。类似于泛型参数类型，必须在结构体名称后面的尖括号中声明泛型生命周期参数，以便在结构体定义中使用生命周期参数。
 
@@ -428,7 +366,6 @@ lifetime annotation
 
 在这一部分，我们知道了每一个引用都有一个生命周期，而且需要为使用了引用的函数或结构体指定生命周期。然而，第四章的“字符串 slice”部分有一个函数，我们在列表 10-25 中再次展示它，没有生命周期注解却能成功编译：
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -445,13 +382,9 @@ fn first_word(s: &str) -> &str {
 }
 ```
 
-<figcaption>
-
-Listing 10-25: A function we defined in Chapter 4 that compiled without
-lifetime annotations, even though the parameter and return type are references
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-25: A function we defined in Chapter 4 that
+compiled without lifetime annotations, even though the parameter and return
+type are references</span>
 
 这个函数没有生命周期注解却能编译是由于一些历史原因：在早期 1.0 之前的版本的 Rust 中，这的确是不能编译的。每一个引用都必须有明确的生命周期。那时的函数签名将会写成这样：
 

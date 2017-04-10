@@ -2,7 +2,7 @@
 
 > [ch14-02-publishing-to-crates-io.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch14-02-publishing-to-crates-io.md)
 > <br>
-> commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894
+> commit f2eef19b3a39ee68dd363db2fcba173491ba9dc4
 
 我们曾经在项目中增加 crates.io 上的 crate 作为依赖。也可以选择将代码分享给其他人。Crates.io 用来分发包的源代码，所以它主要用于分发开源代码。
 
@@ -24,10 +24,7 @@ Rust 和 Cargo 有一些帮助人们找到和使用你发布的包的功能。�
 /// ```
 /// let five = 5;
 ///
-/// assert_eq!(6, add_one(5));
-/// # fn add_one(x: i32) -> i32 {
-/// #     x + 1
-/// # }
+/// assert_eq!(6, add_one(five));
 /// ```
 pub fn add_one(x: i32) -> i32 {
     x + 1
@@ -65,7 +62,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 
 第七章介绍了如何使用`mod`关键字来将代码组织进模块中，如何使用`pub`关键字将项变为公有，和如何使用`use`关键字将项引入作用域。当发布 crate 给并不熟悉其使用的库的实现的人时，就值得花时间考虑 crate 的结构对于开发和对于依赖 crate 的人来说是否同样有用。如果结构对于供其他库使用来说并不方便，也无需重新安排内部组织：可以选择使用`pub use`来重新导出一个不同的公有结构。
 
-例如列表 14-2中，我们创建了一个库`art`，其包含一个`kinds`模块，模块中包含枚举`Color`和包含函数`mix`的模块`utils`：
+例如列表 14-2 中，我们创建了一个库`art`，其包含一个`kinds`模块，模块中包含枚举`Color`和包含函数`mix`的模块`utils`：
 
 <span class="filename">Filename: src/lib.rs</span>
 

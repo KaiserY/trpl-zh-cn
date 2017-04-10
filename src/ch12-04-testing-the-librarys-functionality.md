@@ -2,13 +2,12 @@
 
 > [ch12-04-testing-the-librarys-functionality.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-04-testing-the-librarys-functionality.md)
 > <br>
-> commit 4f2dc564851dc04b271a2260c834643dfd86c724
+> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
 
 现在为项目的核心功能编写测试将更加容易，因为我们将逻辑提取到了 *src/lib.rs* 中并将参数解析和错误处理都留在了 *src/main.rs* 里。现在我们可以直接使用多种参数调用代码并检查返回值而不用从命令行运行二进制文件了。
 
 我们将要编写的是一个叫做`grep`的函数，它获取要搜索的项以及文本并产生一个搜索结果列表。让我们从`run`中去掉那行`println!`（也去掉 *src/main.rs* 中的，因为再也不需要他们了），并使用之前收集的选项来调用新的`grep`函数。眼下我们只增加一个空的实现，和指定`grep`期望行为的测试。当然，这个测试对于空的实现来说是会失败的，不过可以确保代码是可以编译的并得到期望的错误信息。列表 12-14 展示了这些修改：
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -58,13 +57,8 @@ Pick three.";
 }
 ```
 
-<figcaption>
-
-Listing 12-14: Creating a function where our logic will go and a failing test
-for that function
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-14: Creating a function where our logic will
+go and a failing test for that function</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
@@ -153,7 +147,6 @@ fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
 
 最终，我们需要一个方法来存储包含要搜索字符串的行。为此可以在`for`循环之前创建一个可变的 vector 并调用`push`方法来存放一个`line`。在`for`循环之后，返回这个 vector。列表 12-15 中为完整的实现：
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -170,17 +163,12 @@ fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-<figcaption>
-
-Listing 12-15: Fully functioning implementation of the `grep` function
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-15: Fully functioning implementation of the
+`grep` function</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 尝试运行一下：
-
 
 ```
 $ cargo test
