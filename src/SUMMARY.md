@@ -94,6 +94,6 @@
 
 - [面向对象](ch17-00-oop.md)	
 	- [什么是面向对象](ch17-01-what-is-oo.md)
-	- [trait对象](ch17-02-trait-objects)
+	- [trait对象](ch17-02-trait-objects.md)
     
 	
