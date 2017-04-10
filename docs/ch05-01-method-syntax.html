@@ -103,7 +103,7 @@ struct</span></p>
 <!-- Will add ghosting and wingdings here in libreoffice /Carol -->
 <p>为了使函数定义于<code>Rectangle</code>的上下文中，我们开始了一个<code>impl</code>块（<code>impl</code>是 <em>implementation</em> 的缩写）。接着将函数移动到<code>impl</code>大括号中，并将签名中的第一个（在这里也是唯一一个）参数和函数体中其他地方的对应参数改成<code>self</code>。然后在<code>main</code>中将我们调用<code>area</code>方法并传递<code>rect1</code>作为参数的地方，改成使用<strong>方法语法</strong>在<code>Rectangle</code>实例上调用<code>area</code>方法。方法语法获取一个实例并加上一个点号后跟方法名、括号以及任何参数。</p>
 <p>在<code>area</code>的签名中，开始使用<code>&amp;self</code>来替代<code>rectangle: &amp;Rectangle</code>，因为该方法位于<code>impl Rectangle</code> 上下文中所以 Rust 知道<code>self</code>的类型是<code>Rectangle</code>。注意仍然需要在<code>self</code>前面加上<code>&amp;</code>，就像<code>&amp;Rectangle</code>一样。方法可以选择获取<code>self</code>的所有权，像我们这里一样不可变的借用<code>self</code>，或者可变的借用<code>self</code>，就跟其他别的参数一样。</p>
-<p>这里选择<code>&amp;self</code>跟在函数版本中使用<code>&amp;Rectangle</code>出于同样的理由：我们并不想获取所有权，只希望能够读取结构体中的数据，而不是写入。如果想要能够在方法中改变调用方法的实例的话，需要将抵押给参数改为<code>&amp;mut self</code>。通过仅仅使用<code>self</code>作为第一个参数来使方法获取实例的所有权，不过这是很少见的；这通常用在当方法将<code>self</code>转换成别的实例的时候，同时我们想要防止调用者在转换之后使用原始的实例。</p>
+<p>这里选择<code>&amp;self</code>跟在函数版本中使用<code>&amp;Rectangle</code>出于同样的理由：我们并不想获取所有权，只希望能够读取结构体中的数据，而不是写入。如果想要能够在方法中改变调用方法的实例的话，需要将第一个参数改为<code>&amp;mut self</code>。通过仅仅使用<code>self</code>作为第一个参数来使方法获取实例的所有权，不过这是很少见的；这通常用在当方法将<code>self</code>转换成别的实例的时候，同时我们想要防止调用者在转换之后使用原始的实例。</p>
 <p>使用方法而不是函数，除了使用了方法语法和不需要在每个函数签名中重复<code>self</code>类型外，其主要好处在于组织性。我将某个类型实例能做的所有事情都一起放入<code>impl</code>块中，而不是让将来的用户在我们的代码中到处寻找<code>Rectangle</code>的功能。</p>
 <!-- PROD: START BOX -->
 <blockquote>
@@ -130,7 +130,7 @@ struct</span></p>
 p1.distance(&amp;p2);
 (&amp;p1).distance(&amp;p2);
 </code></pre>
-<p>第一行看起来简洁的多。这种自动引用的行为之所以能行得通是因为方法有一个明确的接收者————<code>self</code>的类型。在给出接收者和方法名的前提下，Rust 可以明确的计算出方法是仅仅读取（所以需要<code>&amp;self</code>），做出修改（所以是<code>&amp;mut self</code>）或者是获取所有权（所以是<code>self</code>）。Rust 这种使得借用对方法接收者来说是隐式的做法是其所有权系统人体工程学实践的一大部分。</p>
+<p>第一行看起来简洁的多。这种自动引用的行为之所以能行得通是因为方法有一个明确的接收者————<code>self</code>的类型。在给出接收者和方法名的前提下，Rust 可以明确的计算出方法是仅仅读取（所以需要<code>&amp;self</code>），做出修改（所以是<code>&amp;mut self</code>）或者是获取所有权（所以是<code>self</code>）。Rust 这种使得借用对方法接收者来说是隐式的做法是其所有权系统程序员友好性实现的一大部分。</p>
 </blockquote>
 <!-- PROD: END BOX -->
 <a class="header" href="#带有更多参数的方法" name="带有更多参数的方法"><h3>带有更多参数的方法</h3></a>

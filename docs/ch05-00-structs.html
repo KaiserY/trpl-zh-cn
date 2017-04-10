@@ -212,7 +212,7 @@ fn area(rectangle: &amp;Rectangle) -&gt; u32 {
 <!-- Will add ghosting & wingdings once we're in libreoffice /Carol -->
 <p>这里我们定义了一个结构体并称其为<code>Rectangle</code>。在<code>{}</code>中定义了字段<code>length</code>和<code>width</code>，都是<code>u32</code>类型的。接着在<code>main</code>中，我们创建了一个长度为 50 和宽度为 30 的<code>Rectangle</code>的具体实例。</p>
 <p>函数<code>area</code>现在被定义为接收一个名叫<code>rectangle</code>的参数，它的类型是一个结构体<code>Rectangle</code>实例的不可变借用。第四章讲到过，我们希望借用结构体而不是获取它的所有权这样<code>main</code>函数就可以保持<code>rect1</code>的所有权并继续使用它，所以这就是为什么在函数签名和调用的地方会有<code>&amp;</code>。</p>
-<p><code>area</code>函数访问<code>Rectangle</code>的<code>length</code>和<code>width</code>字段。<code>area</code>的签名现在明确的表明了我们的意图：通过其<code>length</code>和<code>width</code>字段，计算一个<code>Rectangle</code>的面积，。这表明了长度和宽度是相互联系的，并为这些值提供了描述性的名称而不是使用元组的索引值<code>0</code>和<code>1</code>。这是明确性的胜利。</p>
+<p><code>area</code>函数访问<code>Rectangle</code>的<code>length</code>和<code>width</code>字段。<code>area</code>的签名现在明确的表明了我们的意图：通过其<code>length</code>和<code>width</code>字段，计算一个<code>Rectangle</code>的面积，。这表明了长度和宽度是相互联系的，并为这些值提供了描述性的名称而不是使用元组的索引值<code>0</code>和<code>1</code>。结构体胜在更清晰明了。</p>
 <a class="header" href="#通过衍生-trait-增加实用功能" name="通过衍生-trait-增加实用功能"><h3>通过衍生 trait 增加实用功能</h3></a>
 <p>如果能够在调试程序时打印出<code>Rectangle</code>实例来查看其所有字段的值就更好了。列表 5-5 尝试像往常一样使用<code>println!</code>宏：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
