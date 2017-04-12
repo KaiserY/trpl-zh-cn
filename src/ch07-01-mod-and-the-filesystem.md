@@ -318,7 +318,7 @@ communicator
 │       └── server.rs
 ```
 
-那么，当我们想要提取`network::server`模块时，为什么也必须将 *src/network.rs* 文件改名成 *src/network/mod.rs* 文件呢，还有为什么要将`network::server`的代码放入 *network* 目录的 *src/network/server.rs* 文件中，而不能将`network::server`模块提取到 *src/server.rs* 中呢？原因是如果 *server.rs* 文件在 *src* 目录中那么 Rust 就不能知道`server`应当是`network`的子模块。为了更清除的说明为什么 Rust 不知道，让我们考虑一下有着如下层级的另一个例子，它的所有定义都位于 *src/lib.rs* 中：
+那么，当我们想要提取`network::server`模块时，为什么也必须将 *src/network.rs* 文件改名成 *src/network/mod.rs* 文件呢，还有为什么要将`network::server`的代码放入 *network* 目录的 *src/network/server.rs* 文件中，而不能将`network::server`模块提取到 *src/server.rs* 中呢？原因是如果 *server.rs* 文件在 *src* 目录中那么 Rust 就不能知道`server`应当是`network`的子模块。为了更清楚得说明为什么 Rust 不知道，让我们考虑一下有着如下层级的另一个例子，它的所有定义都位于 *src/lib.rs* 中：
 
 ```
 communicator
