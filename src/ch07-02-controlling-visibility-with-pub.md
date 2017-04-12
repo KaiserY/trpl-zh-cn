@@ -209,7 +209,7 @@ some of which are incorrect</span>
 
 `outermost::middle_secret_function`的调用会造成一个编译错误。`middle_secret_function`是私有的，所以第二条（私有性）规则生效了。根模块既不是`middle_secret_function`的当前模块（`outermost`是），也不是`middle_secret_function`当前模块的子模块。
 
-叫做`inside`的模块是私有的且没有子模块，所以它只能被当前模块访问，`outermost`。这意味着`try_me`函数不允许调用`outermost::inside::inner_function`或`outermost::inside::secret_function`任何一个。
+叫做`inside`的模块是私有的且没有子模块，所以它只能被当前模块`outermost`访问。这意味着`try_me`函数不允许调用`outermost::inside::inner_function`或`outermost::inside::secret_function`任何一个。
 
 #### 修改错误
 
@@ -221,4 +221,4 @@ some of which are incorrect</span>
 
 请随意设计更多的实验并尝试理解他们！
 
-接下来，让我们讨论一下使用`use`关键字来将项引入作用域。
+接下来，让我们讨论一下使用`use`关键字将模块项目引入作用域。
