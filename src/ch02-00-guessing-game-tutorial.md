@@ -169,7 +169,7 @@ io::stdin().read_line(&mut guess)
 .expect("Failed to read line");
 ```
 
-当使用`.foo()`语法调用方法时，明智的选择是换行并留出空白（缩进）来把长的代码行拆开。我们可以把代码写成这样：
+当使用`.expect()`语法调用方法时，明智的选择是换行并留出空白（缩进）来把长的代码行拆开。我们可以把代码写成这样：
 
 ```rust,ignore
 io::stdin().read_line(&mut guess).expect("Failed to read line");
