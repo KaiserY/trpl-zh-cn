@@ -158,7 +158,7 @@ $ cd hello_cargo
 
 我们向`cargo new`传递了`--bin`因为我们的目标是生成一个可执行程序，而不是一个库。可执行文件是二进制可执行文件，通常就叫做 **二进制文件**（*binaries*）。项目的名称被定为`hello_cargo`，同时 Cargo 在一个同名目录中创建它的文件，接着我们可以进入查看。
 
-如果列出 *hello_cargo* 目录中的文件，将会看到 Cargo 生成了两个文件和一个目录：一个 *Cargo.toml* 文件和一个 *src* 目录，*main.rs* 文件位于目录中。它也在 *hello_cargo* 目录初始化了一个 git 仓库，以及一个 *.gitignore* 文件；你可以改为使用不同的版本控制系统（VCS），或者不使用 VCS，通过`--vcs`参数。
+如果列出 *hello_cargo* 目录中的文件，将会看到 Cargo 生成了一个文件和一个目录：一个 *Cargo.toml* 文件和一个 *src* 目录，*main.rs* 文件位于目录中。它也在 *hello_cargo* 目录初始化了一个 git 仓库，以及一个 *.gitignore* 文件；你可以改为使用不同的版本控制系统（VCS），或者不使用 VCS，通过`--vcs`参数。
 
 使用你选择的文本编辑器（IDE）打开 *Cargo.toml* 文件。它应该看起来像这样：
 
