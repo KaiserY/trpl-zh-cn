@@ -89,7 +89,7 @@ println!("1 new tweet: {}", tweet.summary());
 
 这会打印出`1 new tweet: horse_ebooks: of course, as you probably already know, people`。
 
-注意因为列表 10-12 中我们在相同的`lib.rs`力定义了`Summarizable` trait 和`NewsArticle`与`Tweet`类型，所以他们是位于同一作用域的。如果这个`lib.rs`是对应`aggregator` crate 的，而别人想要利用我们 crate 的功能外加为其`WeatherForecast`结构体实现`Summarizable` trait，在实现`Summarizable` trait 之前他们首先就需要将其导入其作用域中，如列表 10-13 所示：
+注意因为列表 10-12 中我们在相同的`lib.rs`里定义了`Summarizable` trait 和`NewsArticle`与`Tweet`类型，所以他们是位于同一作用域的。如果这个`lib.rs`是对应`aggregator` crate 的，而别人想要利用我们 crate 的功能外加为其`WeatherForecast`结构体实现`Summarizable` trait，在实现`Summarizable` trait 之前他们首先就需要将其导入其作用域中，如列表 10-13 所示：
 
 <span class="filename">Filename: lib.rs</span>
 
@@ -204,7 +204,7 @@ println!("1 new tweet: {}", tweet.summary());
 
 ### trait bounds
 
-现在我们定义了 trait 并在类型上实现了这些 trait，也可以对泛型类型参数使用 trait。我们可以限制泛型不再适用于任何类型，编译器会确保其被限制为那么实现了特定 trait 的类型，由此泛型就会拥有我们希望其类型所拥有的功能。这被称为指定泛型的 *trait bounds*。
+现在我们定义了 trait 并在类型上实现了这些 trait，也可以对泛型类型参数使用 trait。我们可以限制泛型不再适用于任何类型，编译器会确保其被限制为那些实现了特定 trait 的类型，由此泛型就会拥有我们希望其类型所拥有的功能。这被称为指定泛型的 *trait bounds*。
 
 例如在列表 10-12 中为`NewsArticle`和`Tweet`类型实现了`Summarizable` trait。我们可以定义一个函数`notify`来调用`summary`方法，它拥有一个泛型类型`T`的参数`item`。为了能够在`item`上调用`summary`而不出现错误，我们可以在`T`上使用 trait bounds 来指定`item`必须是实现了`Summarizable` trait 的类型：
 
@@ -216,7 +216,7 @@ pub fn notify<T: Summarizable>(item: T) {
 
 trait bounds 连同泛型类型参数声明一同出现，位于尖括号中的冒号后面。由于`T`上的 trait bounds，我们可以传递任何`NewsArticle`或`Tweet`的实例来调用`notify`函数。列表 10-13 中使用我们`aggregator` crate 的外部代码也可以传递一个`WeatherForecast`的实例来调用`notify`函数，因为`WeatherForecast`同样也实现了`Summarizable`。使用任何其他类型，比如`String`或`i32`，来调用`notify`的代码将不能编译，因为这些类型没有实现`Summarizable`。
 
-可以通过`+`来为泛型指定多个 trait bounds。如果我们需要能够在函数中使用`T`类型的显示格式的同时也能使用`summary`方法，则可以使用 trait bounds `T: Summarizable + Display`。这意味着`T`可以是任何是实现了`Summarizable`和`Display`的类型。
+可以通过`+`来为泛型指定多个 trait bounds。如果我们需要能够在函数中使用`T`类型的显示格式的同时也能使用`summary`方法，则可以使用 trait bounds `T: Summarizable + Display`。这意味着`T`可以是任何实现了`Summarizable`和`Display`的类型。
 
 对于拥有多个泛型类型参数的函数，每一个泛型都可以有其自己的 trait bounds。在函数名和参数列表之间的尖括号中指定很多的 trait bound 信息将是难以阅读的，所以有另外一个指定 trait bounds 的语法，它将其移动到函数签名后的`where`从句中。所以相比这样写：
 
