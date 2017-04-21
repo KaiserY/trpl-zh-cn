@@ -79,14 +79,13 @@ fn main() {
 <span class="caption">Listing 10-2: Code to find the largest number in *two*
 lists of numbers</span>
 
-虽然代码能够执行，但是重复的代码是冗余且已于出错的，并且意味着当更新逻辑时需要修改多处地方的代码。
+虽然代码能够执行，但是重复的代码是冗余且容易出错的，并且意味着当更新逻辑时需要修改多处地方的代码。
 
 <!-- Are we safe assuming the reader will be familiar with the term
 "abstraction" in this context, or do we want to give a brief definition? -->
 <!-- Yes, our audience will be familiar with this term. /Carol -->
 
-为了消除重复，我们可以创建一层抽象，在这个例子中将表现为一个获取任意整型列表作为参数并对其进行处理的函数。这将增加代码的简洁性并让我们将表达和推导寻找列表中最大值的这个概念与使用这个概念的特定位置相互独。
-立。
+为了消除重复，我们可以创建一层抽象，在这个例子中将表现为一个获取任意整型列表作为参数并对其进行处理的函数。这将增加代码的简洁性并让我们将表达和推导寻找列表中最大值的这个概念与使用这个概念的特定位置相互独立。
 
 在列表 10-3 的程序中将寻找最大值的代码提取到了一个叫做`largest`的函数中。这个程序可以找出两个不同数字列表的最大值，不过列表 10-1 中的代码只存在于一个位置：
 
