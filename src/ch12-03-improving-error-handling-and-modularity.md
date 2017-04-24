@@ -79,7 +79,7 @@ currently bound together? And why does it imply that -->
 
 
 
-> 注意：一些同学将这种当使用符合类型更为合适的时候使用基本类型的反模式称为**基本类型偏执**（*primitive obsession*）。
+> 注意：一些同学将这种拒绝使用相对而言更为合适的复合类型而使用基本类型的模式称为**基本类型偏执**（*primitive obsession*）。
 
 <!-- Ah, I see, so the problems here stem from using simple types to do tasks
 inefficiently, when a more complex task could handle it in ways that improve...
@@ -219,7 +219,7 @@ but the index is 1',  /stable-dist-rustc/build/src/libcollections/vec.rs:1307
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-`index out of bounds: the len is 1 but the index is 1`是一个针对程序员的错误信息，这并不能真正帮助终端用户理解发生了什么和相反他们应该做什么。现在就让我们修复它吧。
+`index out of bounds: the len is 1 but the index is 1`是一个针对程序员的错误信息，然而这并不能真正帮助终端用户理解发生了什么和他们应该做什么。现在就让我们修复它吧。
 
 ### 改善错误信息
 

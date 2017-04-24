@@ -150,7 +150,7 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-等等，零个测试？我们不是刚增加了一个吗？如果我们观察输出，就不难发现在工作空间中的`cargo test`只运行顶层 crate 的测试。为了运行其他 crate 的测试，需要使用`-p`参数来表明我们希望与逆行测试包的测试：
+等等，零个测试？我们不是刚增加了一个吗？如果我们观察输出，就不难发现在工作空间中的`cargo test`只运行顶层 crate 的测试。为了运行其他 crate 的测试，需要使用`-p`参数来表明我们希望运行指定包的测试：
 
 ```
 $ cargo test -p add-one

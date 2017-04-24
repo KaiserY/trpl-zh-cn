@@ -132,7 +132,7 @@ error: test failed
 
 #### 使用`lines`方法遍历每一行
 
-Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被成为`lines`，它如列表 12-17 这样工作：
+Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被命名为`lines`，它如列表 12-17 这样工作：
 
 <span class="filename">Filename: src/lib.rs</span>
 
