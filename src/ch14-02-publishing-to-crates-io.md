@@ -122,7 +122,7 @@ fn main() {
 <span class="caption">Listing 14-3: A program using the `art` crate's items
 with its internal structure exported</span>
 
-使用并不需要知道`PrimaryColor`和`SecondaryColor`位于`kinds`模块中和`mix`位于`utils`模块中；这些结构对于内部组织是有帮助的，不过对于外部的观点来说没有什么意义。
+库的用户并不需要知道`PrimaryColor`和`SecondaryColor`位于`kinds`模块中和`mix`位于`utils`模块中；这些结构对于内部组织是有帮助的，不过对于外部的观点来说没有什么意义。
 
 为此，可以选择在列表 14-2 中增加如下`pub use`语句来将这些类型重新导出到顶级结构，如列表 14-4 所示：
 
@@ -200,7 +200,7 @@ upload metadata
 
 我们可以在包的 *Cargo.toml* 文件中包含更多的信息。其中一些字段是可选的，不过描述和 license 是发布所必须的，因为这样人们才能知道 crate 是干什么的已经在什么样的条款下可以使用他们。
 
-描述连同 crate 一起出现在搜索结果和 crate 页面中。描述通常是一两句话。`license`字段获取一个 license 标识符值，其可能的值由 Linux 基金会的[Software Package Data Exchange (SPDX)][spdx]指定。如果你想要使用一个并存在于此的 license，则不使用`license`值，使用`license-file`来指定项目中包含你想要使用的 license 的文本的文件名。
+描述连同 crate 一起出现在搜索结果和 crate 页面中。描述通常是一两句话。`license`字段获取一个 license 标识符值，其可能的值由 Linux 基金会的[Software Package Data Exchange (SPDX)][spdx]指定。如果你想要使用一个不存在于SPDX的 license，则不使用`license`值，使用`license-file`来指定项目中包含你想要使用的 license 的文本的文件名。
 
 关于项目所适用的 license 的指导超出了本书的范畴。很多 Rust 社区成员选择与 Rust 自身相同的 license，它是一个双许可的`MIT/Apache-2.0`，这表明可以通过斜杠来分隔指定多个 license。所以一个准备好发布的项目的 *Cargo.toml* 文件看起来像这样：
 
