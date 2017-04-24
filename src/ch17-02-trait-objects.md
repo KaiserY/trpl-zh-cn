@@ -1,16 +1,14 @@
-## 为使用不同类型的值而设计的Trait对象
+## 为使用不同类型的值而设计的 trait 对象
 
 > [ch17-02-trait-objects.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch17-02-trait-objects.md)
 > <br>
-> commit 872dc793f7017f815fb1e5389200fd208e12792d
+> commit 67876e3ef5323ce9d394f3ea6b08cb3d173d9ba9
 
- 在第8章，我们谈到了vector的局限是vectors只能存储同种类型的元素。我们在Listing 8-1有一个例子，其中定义了一个`SpreadsheetCell` 枚举类型，可以存储整形、浮点型和text，这样我们就可以在每个cell存储不同的数据类型了，同时还有一个代表一行cell的vector。当我们的代码编译的时候，如果交换地处理的各种东西是固定的类型是已知的，那么这是可行的。 
+ 在第八章，我们谈到了 vector 的局限是 vector 只能存储同种类型的元素。在列表 8-1 中有一个例子，其中定义了一个有存放整型、浮点型和文本的成员的枚举类型`SpreadsheetCell`，这样就可以在每一个单元格储存不同类型的数据并使得 vector 仍让代表一行单元格。这在那类代码被编译时就知晓需要可交换处理的数据的类型是一个固定集合的情况下是可行的。
 
-```
 <!-- The code example I want to reference did not have a listing number; it's
 the one with SpreadsheetCell. I will go back and add Listing 8-1 next time I
 get Chapter 8 for editing. /Carol -->
-```
 
 有时，我们想我们使用的类型集合是可扩展的，可以被使用我们的库的程序员扩展。比如很多图形化接口工具有一个条目列表，从这个列表迭代和调用draw方法在每个条目上。我们将要创建一个库crate，包含称为`rust_gui`的CUI库的结构体。我们的GUI库可以包含一些给开发者使用的类型，比如`Button`或者`TextField`。使用`rust_gui`的程序员会创建更多可以在屏幕绘图的类型：一个程序员可能会增加`Image`，另外一个可能会增加`SelectBox`。我们不会在本章节实现一个完善的GUI库，但是我们会展示如何把各部分组合在一起。
 

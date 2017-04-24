@@ -131,7 +131,7 @@ clear -->
 line and ends with the first closing curly brace on the 7th line. Do you think
 the text art comments work or should we make an SVG diagram that has nicer
 looking arrows and labels? /Carol -->
-<p>我们将<code>r</code>的声明周期标记为<code>'a</code>而将<code>x</code>的生命周期标记为<code>'b</code>。如你所见，内部的<code>'b</code>块要比外部的生命周期<code>'a</code>小得多。在编译时，Rust 比较这两个生命周期的大小，并发现<code>r</code>拥有声明周期<code>'a</code>，不过它引用了一个拥有生命周期<code>'b</code>的对象。程序被拒绝编译，因为生命周期<code>'b</code>比生命周期<code>'a</code>要小：引用者没有比被引用者存在的更久。</p>
+<p>我们将<code>r</code>的声明周期标记为<code>'a</code>而将<code>x</code>的生命周期标记为<code>'b</code>。如你所见，内部的<code>'b</code>块要比外部的生命周期<code>'a</code>小得多。在编译时，Rust 比较这两个生命周期的大小，并发现<code>r</code>拥有声明周期<code>'a</code>，不过它引用了一个拥有生命周期<code>'b</code>的对象。程序被拒绝编译，因为生命周期<code>'b</code>比生命周期<code>'a</code>要小：被引用的对象比它的引用者存活的时间更短。</p>
 <p>让我们看看列表 10-18 中这个并没有产生悬垂引用且可以正常编译的例子：</p>
 <pre><code class="language-rust">{
     let x = 5;            // -----+-- 'b
@@ -211,7 +211,7 @@ compile</span></p>
 </code></pre>
 <p>生命周期注解本身没有多少意义：生命周期注解告诉 Rust 多个引用的泛型生命周期参数如何相互联系。如果函数有一个生命周期<code>'a</code>的<code>i32</code>的引用的参数<code>first</code>，还有另一个同样是生命周期<code>'a</code>的<code>i32</code>的引用的参数<code>second</code>，这两个生命周期注解有相同的名称意味着<code>first</code>和<code>second</code>必须与这相同的泛型生命周期存在得一样久。</p>
 <a class="header" href="#函数签名中的生命周期注解" name="函数签名中的生命周期注解"><h3>函数签名中的生命周期注解</h3></a>
-<p>来看看我们编写的<code>longest</code>函数的上下文中的生命周期。就像泛型类型参数，泛型生命周期参数需要声明在函数名和参数列表间的加括号中。这里我们想要告诉 Rust 关于参数中的引用和返回值之间的限制是他们都必须拥有相同的生命周期，就像列表 10-21 中在每个引用中都加上了<code>'a</code>那样：</p>
+<p>来看看我们编写的<code>longest</code>函数的上下文中的生命周期。就像泛型类型参数，泛型生命周期参数需要声明在函数名和参数列表间的尖括号中。这里我们想要告诉 Rust 关于参数中的引用和返回值之间的限制是他们都必须拥有相同的生命周期，就像列表 10-21 中在每个引用中都加上了<code>'a</code>那样：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
     if x.len() &gt; y.len() {
@@ -354,17 +354,17 @@ type are references</span></p>
 <p>这里我们提到一些 Rust 的历史是因为更多的明确的模式将被合并和添加到编译器中是完全可能的。未来将会需要越来越少的生命周期注解。</p>
 <p>被编码进 Rust 引用分析的模式被称为<strong>生命周期省略规则</strong>（<em>lifetime elision rules</em>）。这并不是需要程序员遵守的规则；这些规则是一系列特定的场景，此时编译器会会考虑，如果代码符合这些场景，就不需要明确指定生命周期。</p>
 <p>这些规则并不提供完整的推断：如果 Rust 在明确遵守这些规则的前提下变量的生命周期仍然是模棱两可的话，它不会猜测剩余引用的生命周期应该是什么。在这种情况，编译器会给出一个错误，这可以通过增加对应引用之间相联系的生命周期注解来解决。</p>
-<p>首先，介绍一些定义定义：函数或方法的参数的生命周期被称为<strong>输入生命周期</strong>（<em>input lifetimes</em>），而返回值的生命周期被称为<strong>输出生命周期</strong>（<em>output lifetimes</em>）。</p>
-<p>现在介绍编译器用于判断引用何时不需要明确生命周期注解的规则。第一条规则适用于输入生命周期，而两条规则则适用于输出生命周期。如果编译器检查完这三条规则并仍然存在没有计算出生命周期的引用，编译器将会停止并生成错误。</p>
+<p>首先，介绍一些定义：函数或方法的参数的生命周期被称为<strong>输入生命周期</strong>（<em>input lifetimes</em>），而返回值的生命周期被称为<strong>输出生命周期</strong>（<em>output lifetimes</em>）。</p>
+<p>现在介绍编译器用于判断引用何时不需要明确生命周期注解的规则。第一条规则适用于输入生命周期，而后两条规则则适用于输出生命周期。如果编译器检查完这三条规则并仍然存在没有计算出生命周期的引用，编译器将会停止并生成错误。</p>
 <ol>
 <li>
-<p>每一个是引用的参数都有它自己的生命周期参数。话句话说就是，有一个引用参数的有一个生命周期参数：<code>fn foo&lt;'a&gt;(x: &amp;'a i32)</code>，有两个引用参数的函数有两个不同的生命周期参数，<code>fn foo&lt;'a, 'b&gt;(x: &amp;'a i32, y: &amp;'b i32)</code>，依此类推。</p>
+<p>每一个是引用的参数都有它自己的生命周期参数。话句话说就是，有一个引用参数的函数有一个生命周期参数：<code>fn foo&lt;'a&gt;(x: &amp;'a i32)</code>，有两个引用参数的函数有两个不同的生命周期参数，<code>fn foo&lt;'a, 'b&gt;(x: &amp;'a i32, y: &amp;'b i32)</code>，依此类推。</p>
 </li>
 <li>
-<p>如果只有一个输入生命周期参数，而且它被赋予所有输出生命周期参数：<code>fn foo&lt;'a&gt;(x: &amp;'a i32) -&gt; &amp;'a i32</code>。</p>
+<p>如果只有一个输入生命周期参数，那么它被赋给所有输出生命周期参数：<code>fn foo&lt;'a&gt;(x: &amp;'a i32) -&gt; &amp;'a i32</code>。</p>
 </li>
 <li>
-<p>如果方法有多个输入生命周期参数，不过其中之一是<code>&amp;self</code>或<code>&amp;mut self</code>，那么<code>self</code>的生命周期被赋予所有输出生命周期参数。这使得方法看起来更简洁。</p>
+<p>如果方法有多个输入生命周期参数，不过其中之一因为方法的缘故是<code>&amp;self</code>或<code>&amp;mut self</code>，那么<code>self</code>的生命周期被赋给所有输出生命周期参数。这使得方法写起来更简洁。</p>
 </li>
 </ol>
 <p>假设我们自己就是编译器并来计算列表 10-25 <code>first_word</code>函数的签名中的引用的生命周期。开始时签名中的引用并没有关联任何生命周期：</p>
@@ -393,7 +393,7 @@ the 3rd lifetime elision rule kicks in. It can also be confusing where lifetime
 parameters need to be declared and used since the lifetime parameters could go
 with the struct's fields or with references passed into or returned from
 methods. /Carol -->
-<p>当为带有生命周期的结构体实现方法时，其语法依然类似列表 10-10 中展示的泛型类型参数的语法：包括声明生命周期参数的位置和以及生命周期参数是否与结构体字段或方法的参数与返回值相关联。</p>
+<p>当为带有生命周期的结构体实现方法时，其语法依然类似列表 10-10 中展示的泛型类型参数的语法：包括声明生命周期参数的位置和生命周期参数是否与结构体字段或方法的参数与返回值相关联。</p>
 <p>（实现方法时）结构体字段的生命周期必须总是在<code>impl</code>关键字之后声明并在结构体名称之后被适用，因为这些生命周期是结构体类型的一部分。</p>
 <p><code>impl</code>块里的方法签名中，引用可能与结构体字段中的引用相关联，也可能是独立的。另外，生命周期省略规则也经常让我们无需在方法签名中使用生命周期注解。让我们看看一些使用列表 10-24 中定义的结构体<code>ImportantExcerpt</code>的例子。</p>
 <p>首先，这里有一个方法<code>level</code>。其唯一的参数是<code>self</code>的引用，而且返回值只是一个<code>i32</code>，并不引用任何值：</p>
@@ -446,7 +446,7 @@ fn longest_with_an_announcement&lt;'a, T&gt;(x: &amp;'a str, y: &amp;'a str, ann
 </code></pre>
 <p>这个是列表 10-21 中那个返回两个字符串 slice 中最长者的<code>longest</code>函数，不过带有一个额外的参数<code>ann</code>。<code>ann</code>的类型是泛型<code>T</code>，它可以被放入任何实现了<code>where</code>从句中指定的<code>Display</code> trait 的类型。这个额外的参数会在函数比较字符串 slice 的长度之前被打印出来，这也就是为什么<code>Display</code> trait bound 是必须的。因为生命周期也是泛型，生命周期参数<code>'a</code>和泛型类型参数<code>T</code>都位于函数名后的同一尖括号列表中。</p>
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
-<p>这一章介绍了很多的内容！现在你知道了泛型类型参数、trait 和 trait bounds 以及 泛型生命周期类型，你已经准备编写既不重复又能适用于多种场景的代码了。泛型类型参数意味着代码可以适用于不同的类型。trait 和 trait bounds 保证了即使类型是泛型的，这些类型也会拥有所需要的行为。由生命周期注解所指定的引用生命周期之间的关系保证了这些灵活多变的代码不会出现悬垂引用。而所有的这一切，发生在运行时所以不会影响运行时效率！</p>
+<p>这一章介绍了很多的内容！现在你知道了泛型类型参数、trait 和 trait bounds 以及 泛型生命周期类型，你已经准备编写既不重复又能适用于多种场景的代码了。泛型类型参数意味着代码可以适用于不同的类型。trait 和 trait bounds 保证了即使类型是泛型的，这些类型也会拥有所需要的行为。由生命周期注解所指定的引用生命周期之间的关系保证了这些灵活多变的代码不会出现悬垂引用。而所有的这一切发生在编译时所以不会影响运行时效率！</p>
 <p>你可能不会相信，这个领域还有更多需要学习的内容：第十七章会讨论 trait 对象，这是另一种使用 trait 的方式。第十九章会涉及到生命周期注解更复杂的场景。第二十章讲解一些高级的类型系统功能。不过接下来，让我们聊聊如何在 Rust 中编写测试，来确保代码的所有功能能像我们希望的那样工作！</p>
 
                 </div>

@@ -96,7 +96,7 @@ let s = &quot;initial contents&quot;.to_string();
 <p>也可以使用<code>String::from</code>函数来从字符串字面值创建<code>String</code>。如下等同于使用<code>to_string</code>：</p>
 <pre><code class="language-rust">let s = String::from(&quot;initial contents&quot;);
 </code></pre>
-<p>因为字符串使用广泛，这里有很多不同的用于字符串的通用 API 可供选择。他们有些可能显得有些多于，不过都有其用武之地！在这个例子中，<code>String::from</code>和<code>.to_string</code>最终做了完全相同的工作，所以如何选择就是风格问题了。</p>
+<p>因为字符串使用广泛，这里有很多不同的用于字符串的通用 API 可供选择。他们有些可能显得有些多余，不过都有其用武之地！在这个例子中，<code>String::from</code>和<code>.to_string</code>最终做了完全相同的工作，所以如何选择就是风格问题了。</p>
 <p>记住字符串是 UTF-8 编码的，所以可以包含任何可以正确编码的数据：</p>
 <pre><code class="language-rust">let hello = &quot;السلام عليكم&quot;;
 let hello = &quot;Dobrý den&quot;;
@@ -137,7 +137,7 @@ let s3 = s1 + &amp;s2; // Note that s1 has been moved here and can no longer be 
 <pre><code class="language-rust,ignore">fn add(self, s: &amp;str) -&gt; String {
 </code></pre>
 <p>这并不是标准库中实际的签名；那个<code>add</code>使用泛型定义。这里的签名使用具体类型代替了泛型，这也正是当使用<code>String</code>值调用这个方法会发生的。第十章会讨论泛型。这个签名提供了理解<code>+</code>运算那奇怪的部分的线索。</p>
-<p>首先，<code>s2</code>使用了<code>&amp;</code>，意味着我们使用第二个字符串的<strong>引用</strong>与第一个字符串相加。这是因为<code>add</code>函数的<code>s</code>参数：只能将<code>&amp;str</code>和<code>String</code>相加，不能将两个<code>String</code>值相加。不过等一下——正如<code>add</code>的第二个参数所指定的，<code>&amp;s2</code>的类型是<code>&amp;String</code>而不是<code>&amp;str</code>。那么为什么代码还能编译呢？之所以能够在<code>add</code>调用中使用<code>&amp;s2</code>是因为<code>&amp;String</code>可以被<strong>强转</strong>（<em>coerced</em>）成 <code>&amp;str</code>——当<code>add</code>函数被调用时，Rust 使用了一个被成为<strong>解引用强制多态</strong>（<em>deref coercion</em>）的技术，你可以将其理解为它把<code>&amp;s2</code>变成了<code>&amp;s2[..]</code>以供<code>add</code>函数使用。第十五章会更深入的讨论解引用强制多态。因为<code>add</code>没有获取参数的所有权，所以<code>s2</code>在这个操作后仍然是有效的<code>String</code>。</p>
+<p>首先，<code>s2</code>使用了<code>&amp;</code>，意味着我们使用第二个字符串的<strong>引用</strong>与第一个字符串相加。这是因为<code>add</code>函数的<code>s</code>参数：只能将<code>&amp;str</code>和<code>String</code>相加，不能将两个<code>String</code>值相加。不过等一下——正如<code>add</code>的第二个参数所指定的，<code>&amp;s2</code>的类型是<code>&amp;String</code>而不是<code>&amp;str</code>。那么为什么代码还能编译呢？之所以能够在<code>add</code>调用中使用<code>&amp;s2</code>是因为<code>&amp;String</code>可以被<strong>强转</strong>（<em>coerced</em>）成 <code>&amp;str</code>——当<code>add</code>函数被调用时，Rust 使用了一个被称为<strong>解引用强制多态</strong>（<em>deref coercion</em>）的技术，你可以将其理解为它把<code>&amp;s2</code>变成了<code>&amp;s2[..]</code>以供<code>add</code>函数使用。第十五章会更深入的讨论解引用强制多态。因为<code>add</code>没有获取参数的所有权，所以<code>s2</code>在这个操作后仍然是有效的<code>String</code>。</p>
 <p>其次，可以发现签名中<code>add</code>获取了<code>self</code>的所有权，因为<code>self</code><strong>没有</strong>使用<code>&amp;</code>。这意味着上面例子中的<code>s1</code>的所有权将被移动到<code>add</code>调用中，之后就不再有效。所以虽然<code>let s3 = s1 + &amp;s2;</code>看起来就像它会复制两个字符串并创建一个新的字符串，而实际上这个语句会获取<code>s1</code>的所有权，附加上从<code>s2</code>中拷贝的内容，并返回结果的所有权。换句话说，它看起来好像生成了很多拷贝不过实际上并没有：这个实现比拷贝要更高效。</p>
 <p>如果想要级联多个字符串，<code>+</code>的行为就显得笨重了：</p>
 <pre><code class="language-rust">let s1 = String::from(&quot;tic&quot;);

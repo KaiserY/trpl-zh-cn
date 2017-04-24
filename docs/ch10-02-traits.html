@@ -137,7 +137,7 @@ the <code>NewsArticle</code> and <code>Tweet</code> types</span></p>
 println!(&quot;1 new tweet: {}&quot;, tweet.summary());
 </code></pre>
 <p>这会打印出<code>1 new tweet: horse_ebooks: of course, as you probably already know, people</code>。</p>
-<p>注意因为列表 10-12 中我们在相同的<code>lib.rs</code>力定义了<code>Summarizable</code> trait 和<code>NewsArticle</code>与<code>Tweet</code>类型，所以他们是位于同一作用域的。如果这个<code>lib.rs</code>是对应<code>aggregator</code> crate 的，而别人想要利用我们 crate 的功能外加为其<code>WeatherForecast</code>结构体实现<code>Summarizable</code> trait，在实现<code>Summarizable</code> trait 之前他们首先就需要将其导入其作用域中，如列表 10-13 所示：</p>
+<p>注意因为列表 10-12 中我们在相同的<code>lib.rs</code>里定义了<code>Summarizable</code> trait 和<code>NewsArticle</code>与<code>Tweet</code>类型，所以他们是位于同一作用域的。如果这个<code>lib.rs</code>是对应<code>aggregator</code> crate 的，而别人想要利用我们 crate 的功能外加为其<code>WeatherForecast</code>结构体实现<code>Summarizable</code> trait，在实现<code>Summarizable</code> trait 之前他们首先就需要将其导入其作用域中，如列表 10-13 所示：</p>
 <p><span class="filename">Filename: lib.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate aggregator;
 
@@ -218,14 +218,14 @@ println!(&quot;1 new tweet: {}&quot;, tweet.summary());
 <p>这会打印出<code>1 new tweet: (Read more from @horse_ebooks...)</code>。</p>
 <p>注意在重载过的实现中调用默认实现是不可能的。</p>
 <a class="header" href="#trait-bounds" name="trait-bounds"><h3>trait bounds</h3></a>
-<p>现在我们定义了 trait 并在类型上实现了这些 trait，也可以对泛型类型参数使用 trait。我们可以限制泛型不再适用于任何类型，编译器会确保其被限制为那么实现了特定 trait 的类型，由此泛型就会拥有我们希望其类型所拥有的功能。这被称为指定泛型的 <em>trait bounds</em>。</p>
+<p>现在我们定义了 trait 并在类型上实现了这些 trait，也可以对泛型类型参数使用 trait。我们可以限制泛型不再适用于任何类型，编译器会确保其被限制为那些实现了特定 trait 的类型，由此泛型就会拥有我们希望其类型所拥有的功能。这被称为指定泛型的 <em>trait bounds</em>。</p>
 <p>例如在列表 10-12 中为<code>NewsArticle</code>和<code>Tweet</code>类型实现了<code>Summarizable</code> trait。我们可以定义一个函数<code>notify</code>来调用<code>summary</code>方法，它拥有一个泛型类型<code>T</code>的参数<code>item</code>。为了能够在<code>item</code>上调用<code>summary</code>而不出现错误，我们可以在<code>T</code>上使用 trait bounds 来指定<code>item</code>必须是实现了<code>Summarizable</code> trait 的类型：</p>
 <pre><code class="language-rust,ignore">pub fn notify&lt;T: Summarizable&gt;(item: T) {
     println!(&quot;Breaking news! {}&quot;, item.summary());
 }
 </code></pre>
 <p>trait bounds 连同泛型类型参数声明一同出现，位于尖括号中的冒号后面。由于<code>T</code>上的 trait bounds，我们可以传递任何<code>NewsArticle</code>或<code>Tweet</code>的实例来调用<code>notify</code>函数。列表 10-13 中使用我们<code>aggregator</code> crate 的外部代码也可以传递一个<code>WeatherForecast</code>的实例来调用<code>notify</code>函数，因为<code>WeatherForecast</code>同样也实现了<code>Summarizable</code>。使用任何其他类型，比如<code>String</code>或<code>i32</code>，来调用<code>notify</code>的代码将不能编译，因为这些类型没有实现<code>Summarizable</code>。</p>
-<p>可以通过<code>+</code>来为泛型指定多个 trait bounds。如果我们需要能够在函数中使用<code>T</code>类型的显示格式的同时也能使用<code>summary</code>方法，则可以使用 trait bounds <code>T: Summarizable + Display</code>。这意味着<code>T</code>可以是任何是实现了<code>Summarizable</code>和<code>Display</code>的类型。</p>
+<p>可以通过<code>+</code>来为泛型指定多个 trait bounds。如果我们需要能够在函数中使用<code>T</code>类型的显示格式的同时也能使用<code>summary</code>方法，则可以使用 trait bounds <code>T: Summarizable + Display</code>。这意味着<code>T</code>可以是任何实现了<code>Summarizable</code>和<code>Display</code>的类型。</p>
 <p>对于拥有多个泛型类型参数的函数，每一个泛型都可以有其自己的 trait bounds。在函数名和参数列表之间的尖括号中指定很多的 trait bound 信息将是难以阅读的，所以有另外一个指定 trait bounds 的语法，它将其移动到函数签名后的<code>where</code>从句中。所以相比这样写：</p>
 <pre><code class="language-rust,ignore">fn some_function&lt;T: Display + Clone, U: Clone + Debug&gt;(t: T, u: U) -&gt; i32 {
 </code></pre>

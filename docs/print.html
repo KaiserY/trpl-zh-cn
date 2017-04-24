@@ -3239,7 +3239,7 @@ $ mv src/server.rs src/network
 │       ├── mod.rs
 │       └── server.rs
 </code></pre>
-<p>那么，当我们想要提取<code>network::server</code>模块时，为什么也必须将 <em>src/network.rs</em> 文件改名成 <em>src/network/mod.rs</em> 文件呢，还有为什么要将<code>network::server</code>的代码放入 <em>network</em> 目录的 <em>src/network/server.rs</em> 文件中，而不能将<code>network::server</code>模块提取到 <em>src/server.rs</em> 中呢？原因是如果 <em>server.rs</em> 文件在 <em>src</em> 目录中那么 Rust 就不能知道<code>server</code>应当是<code>network</code>的子模块。为了更清除的说明为什么 Rust 不知道，让我们考虑一下有着如下层级的另一个例子，它的所有定义都位于 <em>src/lib.rs</em> 中：</p>
+<p>那么，当我们想要提取<code>network::server</code>模块时，为什么也必须将 <em>src/network.rs</em> 文件改名成 <em>src/network/mod.rs</em> 文件呢，还有为什么要将<code>network::server</code>的代码放入 <em>network</em> 目录的 <em>src/network/server.rs</em> 文件中，而不能将<code>network::server</code>模块提取到 <em>src/server.rs</em> 中呢？原因是如果 <em>server.rs</em> 文件在 <em>src</em> 目录中那么 Rust 就不能知道<code>server</code>应当是<code>network</code>的子模块。为了更清楚得说明为什么 Rust 不知道，让我们考虑一下有着如下层级的另一个例子，它的所有定义都位于 <em>src/lib.rs</em> 中：</p>
 <pre><code>communicator
  ├── client
  └── network
@@ -3410,7 +3410,7 @@ some of which are incorrect</span></p>
 <p><code>try_me</code>函数位于项目的根模块。叫做<code>outermost</code>的模块是私有的，不过第二条私有性规则说明<code>try_me</code>函数允许访问<code>outermost</code>模块，因为<code>outermost</code>位于当前（根）模块，<code>try_me</code>也是。</p>
 <p><code>outermost::middle_function</code>的调用是正确的。因为<code>middle_function</code>是公有的，而<code>try_me</code>通过其父模块访问<code>middle_function</code>，<code>outermost</code>。根据上一段的规则我们可以确定这个模块是可访问的。</p>
 <p><code>outermost::middle_secret_function</code>的调用会造成一个编译错误。<code>middle_secret_function</code>是私有的，所以第二条（私有性）规则生效了。根模块既不是<code>middle_secret_function</code>的当前模块（<code>outermost</code>是），也不是<code>middle_secret_function</code>当前模块的子模块。</p>
-<p>叫做<code>inside</code>的模块是私有的且没有子模块，所以它只能被当前模块访问，<code>outermost</code>。这意味着<code>try_me</code>函数不允许调用<code>outermost::inside::inner_function</code>或<code>outermost::inside::secret_function</code>任何一个。</p>
+<p>叫做<code>inside</code>的模块是私有的且没有子模块，所以它只能被当前模块<code>outermost</code>访问。这意味着<code>try_me</code>函数不允许调用<code>outermost::inside::inner_function</code>或<code>outermost::inside::secret_function</code>任何一个。</p>
 <a class="header" href="#修改错误" name="修改错误"><h4>修改错误</h4></a>
 <p>这里有一些尝试修复错误的代码修改意见。在你尝试他们之前，猜测一下他们哪个能修复错误，接着编译查看你是否猜对了，并结合私有性规则理解为什么。</p>
 <ul>
@@ -3419,7 +3419,7 @@ some of which are incorrect</span></p>
 <li>如果在<code>inner_function</code>函数体中调用<code>::outermost::middle_secret_function()</code>？（开头的两个冒号意味着从根模块开始引用模块。）</li>
 </ul>
 <p>请随意设计更多的实验并尝试理解他们！</p>
-<p>接下来，让我们讨论一下使用<code>use</code>关键字来将项引入作用域。</p>
+<p>接下来，让我们讨论一下使用<code>use</code>关键字将模块项目引入作用域。</p>
 <a class="header" href="#导入命名" name="导入命名"><h2>导入命名</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-03-importing-names-with-use.md">ch07-03-importing-names-with-use.md</a>
@@ -3730,7 +3730,7 @@ let s = &quot;initial contents&quot;.to_string();
 <p>也可以使用<code>String::from</code>函数来从字符串字面值创建<code>String</code>。如下等同于使用<code>to_string</code>：</p>
 <pre><code class="language-rust">let s = String::from(&quot;initial contents&quot;);
 </code></pre>
-<p>因为字符串使用广泛，这里有很多不同的用于字符串的通用 API 可供选择。他们有些可能显得有些多于，不过都有其用武之地！在这个例子中，<code>String::from</code>和<code>.to_string</code>最终做了完全相同的工作，所以如何选择就是风格问题了。</p>
+<p>因为字符串使用广泛，这里有很多不同的用于字符串的通用 API 可供选择。他们有些可能显得有些多余，不过都有其用武之地！在这个例子中，<code>String::from</code>和<code>.to_string</code>最终做了完全相同的工作，所以如何选择就是风格问题了。</p>
 <p>记住字符串是 UTF-8 编码的，所以可以包含任何可以正确编码的数据：</p>
 <pre><code class="language-rust">let hello = &quot;السلام عليكم&quot;;
 let hello = &quot;Dobrý den&quot;;
@@ -3771,7 +3771,7 @@ let s3 = s1 + &amp;s2; // Note that s1 has been moved here and can no longer be 
 <pre><code class="language-rust,ignore">fn add(self, s: &amp;str) -&gt; String {
 </code></pre>
 <p>这并不是标准库中实际的签名；那个<code>add</code>使用泛型定义。这里的签名使用具体类型代替了泛型，这也正是当使用<code>String</code>值调用这个方法会发生的。第十章会讨论泛型。这个签名提供了理解<code>+</code>运算那奇怪的部分的线索。</p>
-<p>首先，<code>s2</code>使用了<code>&amp;</code>，意味着我们使用第二个字符串的<strong>引用</strong>与第一个字符串相加。这是因为<code>add</code>函数的<code>s</code>参数：只能将<code>&amp;str</code>和<code>String</code>相加，不能将两个<code>String</code>值相加。不过等一下——正如<code>add</code>的第二个参数所指定的，<code>&amp;s2</code>的类型是<code>&amp;String</code>而不是<code>&amp;str</code>。那么为什么代码还能编译呢？之所以能够在<code>add</code>调用中使用<code>&amp;s2</code>是因为<code>&amp;String</code>可以被<strong>强转</strong>（<em>coerced</em>）成 <code>&amp;str</code>——当<code>add</code>函数被调用时，Rust 使用了一个被成为<strong>解引用强制多态</strong>（<em>deref coercion</em>）的技术，你可以将其理解为它把<code>&amp;s2</code>变成了<code>&amp;s2[..]</code>以供<code>add</code>函数使用。第十五章会更深入的讨论解引用强制多态。因为<code>add</code>没有获取参数的所有权，所以<code>s2</code>在这个操作后仍然是有效的<code>String</code>。</p>
+<p>首先，<code>s2</code>使用了<code>&amp;</code>，意味着我们使用第二个字符串的<strong>引用</strong>与第一个字符串相加。这是因为<code>add</code>函数的<code>s</code>参数：只能将<code>&amp;str</code>和<code>String</code>相加，不能将两个<code>String</code>值相加。不过等一下——正如<code>add</code>的第二个参数所指定的，<code>&amp;s2</code>的类型是<code>&amp;String</code>而不是<code>&amp;str</code>。那么为什么代码还能编译呢？之所以能够在<code>add</code>调用中使用<code>&amp;s2</code>是因为<code>&amp;String</code>可以被<strong>强转</strong>（<em>coerced</em>）成 <code>&amp;str</code>——当<code>add</code>函数被调用时，Rust 使用了一个被称为<strong>解引用强制多态</strong>（<em>deref coercion</em>）的技术，你可以将其理解为它把<code>&amp;s2</code>变成了<code>&amp;s2[..]</code>以供<code>add</code>函数使用。第十五章会更深入的讨论解引用强制多态。因为<code>add</code>没有获取参数的所有权，所以<code>s2</code>在这个操作后仍然是有效的<code>String</code>。</p>
 <p>其次，可以发现签名中<code>add</code>获取了<code>self</code>的所有权，因为<code>self</code><strong>没有</strong>使用<code>&amp;</code>。这意味着上面例子中的<code>s1</code>的所有权将被移动到<code>add</code>调用中，之后就不再有效。所以虽然<code>let s3 = s1 + &amp;s2;</code>看起来就像它会复制两个字符串并创建一个新的字符串，而实际上这个语句会获取<code>s1</code>的所有权，附加上从<code>s2</code>中拷贝的内容，并返回结果的所有权。换句话说，它看起来好像生成了很多拷贝不过实际上并没有：这个实现比拷贝要更高效。</p>
 <p>如果想要级联多个字符串，<code>+</code>的行为就显得笨重了：</p>
 <pre><code class="language-rust">let s1 = String::from(&quot;tic&quot;);
@@ -4465,12 +4465,11 @@ of numbers</span></p>
 </code></pre>
 <p><span class="caption">Listing 10-2: Code to find the largest number in <em>two</em>
 lists of numbers</span></p>
-<p>虽然代码能够执行，但是重复的代码是冗余且已于出错的，并且意味着当更新逻辑时需要修改多处地方的代码。</p>
+<p>虽然代码能够执行，但是重复的代码是冗余且容易出错的，并且意味着当更新逻辑时需要修改多处地方的代码。</p>
 <!-- Are we safe assuming the reader will be familiar with the term
 "abstraction" in this context, or do we want to give a brief definition? -->
 <!-- Yes, our audience will be familiar with this term. /Carol -->
-<p>为了消除重复，我们可以创建一层抽象，在这个例子中将表现为一个获取任意整型列表作为参数并对其进行处理的函数。这将增加代码的简洁性并让我们将表达和推导寻找列表中最大值的这个概念与使用这个概念的特定位置相互独。
-立。</p>
+<p>为了消除重复，我们可以创建一层抽象，在这个例子中将表现为一个获取任意整型列表作为参数并对其进行处理的函数。这将增加代码的简洁性并让我们将表达和推导寻找列表中最大值的这个概念与使用这个概念的特定位置相互独立。</p>
 <p>在列表 10-3 的程序中将寻找最大值的代码提取到了一个叫做<code>largest</code>的函数中。这个程序可以找出两个不同数字列表的最大值，不过列表 10-1 中的代码只存在于一个位置：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn largest(list: &amp;[i32]) -&gt; i32 {
@@ -4562,8 +4561,8 @@ fn main() {
 <p><span class="caption">Listing 10-4: Two functions that differ only in their
 names and the types in their signatures</span></p>
 <p>这里<code>largest_i32</code>和<code>largest_char</code>有着完全相同的函数体，所以能够将这两个函数变成一个来减少重复就太好了。所幸通过引入一个泛型参数就能实现！</p>
-<p>为了参数化要定义的函数的签名中的类型，我们需要像给函数的值参数起名那样为这类型参数起一个名字。这里选择了名称<code>T</code>。任何标识符抖可以作为类型参数名，选择<code>T</code>是因为 Rust 的类型命名规范是骆驼命名法（CamelCase）。另外泛型类型参数的规范也倾向于简短，经常仅仅是一个字母。<code>T</code>作为“type”的缩写是大部分 Rust 程序员的首选。</p>
-<p>当需要再函数体中使用一个参数时，必须再函数签名中声明这个参数以便编译器能知道函数体中这个名称的意义。同理，当在函数签名中使用一个类型参数时，必须在使用它之前就声明它。类型参数声明位于函数名称与参数列表中间的尖括号中。</p>
+<p>为了参数化要定义的函数的签名中的类型，我们需要像给函数的值参数起名那样为这类型参数起一个名字。这里选择了名称<code>T</code>。任何标识符都可以作为类型参数名，选择<code>T</code>是因为 Rust 的类型命名规范是骆驼命名法（CamelCase）。另外泛型类型参数的规范也倾向于简短，经常仅仅是一个字母。<code>T</code>作为“type”的缩写是大部分 Rust 程序员的首选。</p>
+<p>当需要再函数体中使用一个参数时，必须在函数签名中声明这个参数以便编译器能知道函数体中这个名称的意义。同理，当在函数签名中使用一个类型参数时，必须在使用它之前就声明它。类型参数声明位于函数名称与参数列表中间的尖括号中。</p>
 <p>我们将要定义的泛型版本的<code>largest</code>函数的签名看起来像这样：</p>
 <pre><code class="language-rust,ignore">fn largest&lt;T&gt;(list: &amp;[T]) -&gt; T {
 </code></pre>
@@ -4628,7 +4627,7 @@ fn main() {
 <p><span class="caption">Listing 10-6: A <code>Point</code> struct that holds <code>x</code> and <code>y</code>
 values of type <code>T</code></span></p>
 <p>其语法类似于函数定义中的泛型应用。首先，必须在结构体名称后面的尖括号中声明泛型参数的名称。接着在结构体定义中可以指定具体数据类型的位置使用泛型类型。</p>
-<p>注意<code>Point</code>的定义中是使用了要给泛型类型，我们想要表达的是结构体<code>Point</code>对于一些类型<code>T</code>是泛型的，而且无论这个泛型是什么，字段<code>x</code>和<code>y</code><strong>都是</strong>相同类型的。如果尝试创建一个有不同类型值的<code>Point</code>的实例，像列表 10-7 中的代码就不能编译：</p>
+<p>注意<code>Point</code>的定义中是使用了要给泛型类型，我们想要表达的是结构体<code>Point</code>对于一些类型<code>T</code>是泛型的，而且字段<code>x</code>和<code>y</code><strong>都是</strong>相同类型的，无论它具体是何类型。如果尝试创建一个有不同类型值的<code>Point</code>的实例，像列表 10-7 中的代码就不能编译：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">struct Point&lt;T&gt; {
     x: T,
@@ -4676,7 +4675,7 @@ fn main() {
     None,
 }
 </code></pre>
-<p>换句话说<code>Option&lt;T&gt;</code>是一个拥有泛型<code>T</code>的枚举。它有两个成员：<code>Some</code>，它存放了一个类型<code>T</code>的值，和不存在任何值的<code>None</code>。标准库中只有这一个定义来支持创建任何具体类型的枚举值。“一个可能的值”是一个比具体类型的值更抽象的概念，而 Rust 允许我们不引入重复就能表现抽象的概念。</p>
+<p>换句话说<code>Option&lt;T&gt;</code>是一个拥有泛型<code>T</code>的枚举。它有两个成员：<code>Some</code>，它存放了一个类型<code>T</code>的值，和不存在任何值的<code>None</code>。标准库中只有这一个定义来支持创建任何具体类型的枚举值。“一个可能的值”是一个比具体类型的值更抽象的概念，而 Rust 允许我们不引入重复代码就能表现抽象的概念。</p>
 <p>枚举也可以拥有多个泛型类型。第九章使用过的<code>Result</code>枚举定义就是一个这样的例子：</p>
 <pre><code class="language-rust">enum Result&lt;T, E&gt; {
     Ok(T),
@@ -4684,7 +4683,7 @@ fn main() {
 }
 </code></pre>
 <p><code>Result</code>枚举有两个泛型类型，<code>T</code>和<code>E</code>。<code>Result</code>有两个成员：<code>Ok</code>，它存放一个类型<code>T</code>的值，而<code>Err</code>则存放一个类型<code>E</code>的值。这个定义使得<code>Result</code>枚举能很方便的表达任何可能成功（返回<code>T</code>类型的值）也可能失败（返回<code>E</code>类型的值）的操作。回忆一下列表 9-2 中打开一个文件的场景，当文件被成功打开<code>T</code>被放入了<code>std::fs::File</code>类型而当打开文件出现问题时<code>E</code>被放入了<code>std::io::Error</code>类型。</p>
-<p>当发现代码中有多个只有存放的值的类型有所不同的结构体或枚举定义时，你就应该像之前的函数定义中那样引入泛型类型来减少重复。</p>
+<p>当发现代码中有多个只有存放的值的类型有所不同的结构体或枚举定义时，你就应该像之前的函数定义中那样引入泛型类型来减少重复代码。</p>
 <a class="header" href="#方法定义中的枚举数据类型" name="方法定义中的枚举数据类型"><h3>方法定义中的枚举数据类型</h3></a>
 <p>可以像第五章介绍的那样来为其定义中带有泛型的结构体或枚举实现方法。列表 10-9 中展示了列表 10-6 中定义的结构体<code>Point&lt;T&gt;</code>。接着我们在<code>Point&lt;T&gt;</code>上定义了一个叫做<code>x</code>的方法来返回字段<code>x</code>中数据的引用：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -4835,7 +4834,7 @@ the <code>NewsArticle</code> and <code>Tweet</code> types</span></p>
 println!(&quot;1 new tweet: {}&quot;, tweet.summary());
 </code></pre>
 <p>这会打印出<code>1 new tweet: horse_ebooks: of course, as you probably already know, people</code>。</p>
-<p>注意因为列表 10-12 中我们在相同的<code>lib.rs</code>力定义了<code>Summarizable</code> trait 和<code>NewsArticle</code>与<code>Tweet</code>类型，所以他们是位于同一作用域的。如果这个<code>lib.rs</code>是对应<code>aggregator</code> crate 的，而别人想要利用我们 crate 的功能外加为其<code>WeatherForecast</code>结构体实现<code>Summarizable</code> trait，在实现<code>Summarizable</code> trait 之前他们首先就需要将其导入其作用域中，如列表 10-13 所示：</p>
+<p>注意因为列表 10-12 中我们在相同的<code>lib.rs</code>里定义了<code>Summarizable</code> trait 和<code>NewsArticle</code>与<code>Tweet</code>类型，所以他们是位于同一作用域的。如果这个<code>lib.rs</code>是对应<code>aggregator</code> crate 的，而别人想要利用我们 crate 的功能外加为其<code>WeatherForecast</code>结构体实现<code>Summarizable</code> trait，在实现<code>Summarizable</code> trait 之前他们首先就需要将其导入其作用域中，如列表 10-13 所示：</p>
 <p><span class="filename">Filename: lib.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate aggregator;
 
@@ -4916,14 +4915,14 @@ println!(&quot;1 new tweet: {}&quot;, tweet.summary());
 <p>这会打印出<code>1 new tweet: (Read more from @horse_ebooks...)</code>。</p>
 <p>注意在重载过的实现中调用默认实现是不可能的。</p>
 <a class="header" href="#trait-bounds" name="trait-bounds"><h3>trait bounds</h3></a>
-<p>现在我们定义了 trait 并在类型上实现了这些 trait，也可以对泛型类型参数使用 trait。我们可以限制泛型不再适用于任何类型，编译器会确保其被限制为那么实现了特定 trait 的类型，由此泛型就会拥有我们希望其类型所拥有的功能。这被称为指定泛型的 <em>trait bounds</em>。</p>
+<p>现在我们定义了 trait 并在类型上实现了这些 trait，也可以对泛型类型参数使用 trait。我们可以限制泛型不再适用于任何类型，编译器会确保其被限制为那些实现了特定 trait 的类型，由此泛型就会拥有我们希望其类型所拥有的功能。这被称为指定泛型的 <em>trait bounds</em>。</p>
 <p>例如在列表 10-12 中为<code>NewsArticle</code>和<code>Tweet</code>类型实现了<code>Summarizable</code> trait。我们可以定义一个函数<code>notify</code>来调用<code>summary</code>方法，它拥有一个泛型类型<code>T</code>的参数<code>item</code>。为了能够在<code>item</code>上调用<code>summary</code>而不出现错误，我们可以在<code>T</code>上使用 trait bounds 来指定<code>item</code>必须是实现了<code>Summarizable</code> trait 的类型：</p>
 <pre><code class="language-rust,ignore">pub fn notify&lt;T: Summarizable&gt;(item: T) {
     println!(&quot;Breaking news! {}&quot;, item.summary());
 }
 </code></pre>
 <p>trait bounds 连同泛型类型参数声明一同出现，位于尖括号中的冒号后面。由于<code>T</code>上的 trait bounds，我们可以传递任何<code>NewsArticle</code>或<code>Tweet</code>的实例来调用<code>notify</code>函数。列表 10-13 中使用我们<code>aggregator</code> crate 的外部代码也可以传递一个<code>WeatherForecast</code>的实例来调用<code>notify</code>函数，因为<code>WeatherForecast</code>同样也实现了<code>Summarizable</code>。使用任何其他类型，比如<code>String</code>或<code>i32</code>，来调用<code>notify</code>的代码将不能编译，因为这些类型没有实现<code>Summarizable</code>。</p>
-<p>可以通过<code>+</code>来为泛型指定多个 trait bounds。如果我们需要能够在函数中使用<code>T</code>类型的显示格式的同时也能使用<code>summary</code>方法，则可以使用 trait bounds <code>T: Summarizable + Display</code>。这意味着<code>T</code>可以是任何是实现了<code>Summarizable</code>和<code>Display</code>的类型。</p>
+<p>可以通过<code>+</code>来为泛型指定多个 trait bounds。如果我们需要能够在函数中使用<code>T</code>类型的显示格式的同时也能使用<code>summary</code>方法，则可以使用 trait bounds <code>T: Summarizable + Display</code>。这意味着<code>T</code>可以是任何实现了<code>Summarizable</code>和<code>Display</code>的类型。</p>
 <p>对于拥有多个泛型类型参数的函数，每一个泛型都可以有其自己的 trait bounds。在函数名和参数列表之间的尖括号中指定很多的 trait bound 信息将是难以阅读的，所以有另外一个指定 trait bounds 的语法，它将其移动到函数签名后的<code>where</code>从句中。所以相比这样写：</p>
 <pre><code class="language-rust,ignore">fn some_function&lt;T: Display + Clone, U: Clone + Debug&gt;(t: T, u: U) -&gt; i32 {
 </code></pre>
@@ -5063,7 +5062,7 @@ clear -->
 line and ends with the first closing curly brace on the 7th line. Do you think
 the text art comments work or should we make an SVG diagram that has nicer
 looking arrows and labels? /Carol -->
-<p>我们将<code>r</code>的声明周期标记为<code>'a</code>而将<code>x</code>的生命周期标记为<code>'b</code>。如你所见，内部的<code>'b</code>块要比外部的生命周期<code>'a</code>小得多。在编译时，Rust 比较这两个生命周期的大小，并发现<code>r</code>拥有声明周期<code>'a</code>，不过它引用了一个拥有生命周期<code>'b</code>的对象。程序被拒绝编译，因为生命周期<code>'b</code>比生命周期<code>'a</code>要小：引用者没有比被引用者存在的更久。</p>
+<p>我们将<code>r</code>的声明周期标记为<code>'a</code>而将<code>x</code>的生命周期标记为<code>'b</code>。如你所见，内部的<code>'b</code>块要比外部的生命周期<code>'a</code>小得多。在编译时，Rust 比较这两个生命周期的大小，并发现<code>r</code>拥有声明周期<code>'a</code>，不过它引用了一个拥有生命周期<code>'b</code>的对象。程序被拒绝编译，因为生命周期<code>'b</code>比生命周期<code>'a</code>要小：被引用的对象比它的引用者存活的时间更短。</p>
 <p>让我们看看列表 10-18 中这个并没有产生悬垂引用且可以正常编译的例子：</p>
 <pre><code class="language-rust">{
     let x = 5;            // -----+-- 'b
@@ -5143,7 +5142,7 @@ compile</span></p>
 </code></pre>
 <p>生命周期注解本身没有多少意义：生命周期注解告诉 Rust 多个引用的泛型生命周期参数如何相互联系。如果函数有一个生命周期<code>'a</code>的<code>i32</code>的引用的参数<code>first</code>，还有另一个同样是生命周期<code>'a</code>的<code>i32</code>的引用的参数<code>second</code>，这两个生命周期注解有相同的名称意味着<code>first</code>和<code>second</code>必须与这相同的泛型生命周期存在得一样久。</p>
 <a class="header" href="#函数签名中的生命周期注解" name="函数签名中的生命周期注解"><h3>函数签名中的生命周期注解</h3></a>
-<p>来看看我们编写的<code>longest</code>函数的上下文中的生命周期。就像泛型类型参数，泛型生命周期参数需要声明在函数名和参数列表间的加括号中。这里我们想要告诉 Rust 关于参数中的引用和返回值之间的限制是他们都必须拥有相同的生命周期，就像列表 10-21 中在每个引用中都加上了<code>'a</code>那样：</p>
+<p>来看看我们编写的<code>longest</code>函数的上下文中的生命周期。就像泛型类型参数，泛型生命周期参数需要声明在函数名和参数列表间的尖括号中。这里我们想要告诉 Rust 关于参数中的引用和返回值之间的限制是他们都必须拥有相同的生命周期，就像列表 10-21 中在每个引用中都加上了<code>'a</code>那样：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
     if x.len() &gt; y.len() {
@@ -5286,17 +5285,17 @@ type are references</span></p>
 <p>这里我们提到一些 Rust 的历史是因为更多的明确的模式将被合并和添加到编译器中是完全可能的。未来将会需要越来越少的生命周期注解。</p>
 <p>被编码进 Rust 引用分析的模式被称为<strong>生命周期省略规则</strong>（<em>lifetime elision rules</em>）。这并不是需要程序员遵守的规则；这些规则是一系列特定的场景，此时编译器会会考虑，如果代码符合这些场景，就不需要明确指定生命周期。</p>
 <p>这些规则并不提供完整的推断：如果 Rust 在明确遵守这些规则的前提下变量的生命周期仍然是模棱两可的话，它不会猜测剩余引用的生命周期应该是什么。在这种情况，编译器会给出一个错误，这可以通过增加对应引用之间相联系的生命周期注解来解决。</p>
-<p>首先，介绍一些定义定义：函数或方法的参数的生命周期被称为<strong>输入生命周期</strong>（<em>input lifetimes</em>），而返回值的生命周期被称为<strong>输出生命周期</strong>（<em>output lifetimes</em>）。</p>
-<p>现在介绍编译器用于判断引用何时不需要明确生命周期注解的规则。第一条规则适用于输入生命周期，而两条规则则适用于输出生命周期。如果编译器检查完这三条规则并仍然存在没有计算出生命周期的引用，编译器将会停止并生成错误。</p>
+<p>首先，介绍一些定义：函数或方法的参数的生命周期被称为<strong>输入生命周期</strong>（<em>input lifetimes</em>），而返回值的生命周期被称为<strong>输出生命周期</strong>（<em>output lifetimes</em>）。</p>
+<p>现在介绍编译器用于判断引用何时不需要明确生命周期注解的规则。第一条规则适用于输入生命周期，而后两条规则则适用于输出生命周期。如果编译器检查完这三条规则并仍然存在没有计算出生命周期的引用，编译器将会停止并生成错误。</p>
 <ol>
 <li>
-<p>每一个是引用的参数都有它自己的生命周期参数。话句话说就是，有一个引用参数的有一个生命周期参数：<code>fn foo&lt;'a&gt;(x: &amp;'a i32)</code>，有两个引用参数的函数有两个不同的生命周期参数，<code>fn foo&lt;'a, 'b&gt;(x: &amp;'a i32, y: &amp;'b i32)</code>，依此类推。</p>
+<p>每一个是引用的参数都有它自己的生命周期参数。话句话说就是，有一个引用参数的函数有一个生命周期参数：<code>fn foo&lt;'a&gt;(x: &amp;'a i32)</code>，有两个引用参数的函数有两个不同的生命周期参数，<code>fn foo&lt;'a, 'b&gt;(x: &amp;'a i32, y: &amp;'b i32)</code>，依此类推。</p>
 </li>
 <li>
-<p>如果只有一个输入生命周期参数，而且它被赋予所有输出生命周期参数：<code>fn foo&lt;'a&gt;(x: &amp;'a i32) -&gt; &amp;'a i32</code>。</p>
+<p>如果只有一个输入生命周期参数，那么它被赋给所有输出生命周期参数：<code>fn foo&lt;'a&gt;(x: &amp;'a i32) -&gt; &amp;'a i32</code>。</p>
 </li>
 <li>
-<p>如果方法有多个输入生命周期参数，不过其中之一是<code>&amp;self</code>或<code>&amp;mut self</code>，那么<code>self</code>的生命周期被赋予所有输出生命周期参数。这使得方法看起来更简洁。</p>
+<p>如果方法有多个输入生命周期参数，不过其中之一因为方法的缘故是<code>&amp;self</code>或<code>&amp;mut self</code>，那么<code>self</code>的生命周期被赋给所有输出生命周期参数。这使得方法写起来更简洁。</p>
 </li>
 </ol>
 <p>假设我们自己就是编译器并来计算列表 10-25 <code>first_word</code>函数的签名中的引用的生命周期。开始时签名中的引用并没有关联任何生命周期：</p>
@@ -5325,7 +5324,7 @@ the 3rd lifetime elision rule kicks in. It can also be confusing where lifetime
 parameters need to be declared and used since the lifetime parameters could go
 with the struct's fields or with references passed into or returned from
 methods. /Carol -->
-<p>当为带有生命周期的结构体实现方法时，其语法依然类似列表 10-10 中展示的泛型类型参数的语法：包括声明生命周期参数的位置和以及生命周期参数是否与结构体字段或方法的参数与返回值相关联。</p>
+<p>当为带有生命周期的结构体实现方法时，其语法依然类似列表 10-10 中展示的泛型类型参数的语法：包括声明生命周期参数的位置和生命周期参数是否与结构体字段或方法的参数与返回值相关联。</p>
 <p>（实现方法时）结构体字段的生命周期必须总是在<code>impl</code>关键字之后声明并在结构体名称之后被适用，因为这些生命周期是结构体类型的一部分。</p>
 <p><code>impl</code>块里的方法签名中，引用可能与结构体字段中的引用相关联，也可能是独立的。另外，生命周期省略规则也经常让我们无需在方法签名中使用生命周期注解。让我们看看一些使用列表 10-24 中定义的结构体<code>ImportantExcerpt</code>的例子。</p>
 <p>首先，这里有一个方法<code>level</code>。其唯一的参数是<code>self</code>的引用，而且返回值只是一个<code>i32</code>，并不引用任何值：</p>
@@ -5378,7 +5377,7 @@ fn longest_with_an_announcement&lt;'a, T&gt;(x: &amp;'a str, y: &amp;'a str, ann
 </code></pre>
 <p>这个是列表 10-21 中那个返回两个字符串 slice 中最长者的<code>longest</code>函数，不过带有一个额外的参数<code>ann</code>。<code>ann</code>的类型是泛型<code>T</code>，它可以被放入任何实现了<code>where</code>从句中指定的<code>Display</code> trait 的类型。这个额外的参数会在函数比较字符串 slice 的长度之前被打印出来，这也就是为什么<code>Display</code> trait bound 是必须的。因为生命周期也是泛型，生命周期参数<code>'a</code>和泛型类型参数<code>T</code>都位于函数名后的同一尖括号列表中。</p>
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
-<p>这一章介绍了很多的内容！现在你知道了泛型类型参数、trait 和 trait bounds 以及 泛型生命周期类型，你已经准备编写既不重复又能适用于多种场景的代码了。泛型类型参数意味着代码可以适用于不同的类型。trait 和 trait bounds 保证了即使类型是泛型的，这些类型也会拥有所需要的行为。由生命周期注解所指定的引用生命周期之间的关系保证了这些灵活多变的代码不会出现悬垂引用。而所有的这一切，发生在运行时所以不会影响运行时效率！</p>
+<p>这一章介绍了很多的内容！现在你知道了泛型类型参数、trait 和 trait bounds 以及 泛型生命周期类型，你已经准备编写既不重复又能适用于多种场景的代码了。泛型类型参数意味着代码可以适用于不同的类型。trait 和 trait bounds 保证了即使类型是泛型的，这些类型也会拥有所需要的行为。由生命周期注解所指定的引用生命周期之间的关系保证了这些灵活多变的代码不会出现悬垂引用。而所有的这一切发生在编译时所以不会影响运行时效率！</p>
 <p>你可能不会相信，这个领域还有更多需要学习的内容：第十七章会讨论 trait 对象，这是另一种使用 trait 的方式。第十九章会涉及到生命周期注解更复杂的场景。第二十章讲解一些高级的类型系统功能。不过接下来，让我们聊聊如何在 Rust 中编写测试，来确保代码的所有功能能像我们希望的那样工作！</p>
 <a class="header" href="#测试" name="测试"><h1>测试</h1></a>
 <blockquote>
@@ -6085,7 +6084,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 <br>
 commit 55b294f20fc846a13a9be623bf322d8b364cee77</p>
 </blockquote>
-<p>正如之前提到的，测试是一个很广泛的学科，而且不同的开发者也采用不同的技术和组织。Rust 社区倾向于根据测试的两个主要分类来考虑问题：<strong>单元测试</strong>（<em>unit tests</em>）与<strong>集成测试</strong>（<em>unit tests</em>）。单元测试倾向于更小而更专注，在隔离的环境中一次测试一个模块。他们也可以测试私有接口。集成测试对于你的库来说则完全是外部的。他们与其他用户使用相同的方式使用你的代码，他们只针对共有接口而且每个测试都会测试多个模块。</p>
+<p>正如之前提到的，测试是一个很广泛的学科，而且不同的开发者也采用不同的技术和组织。Rust 社区倾向于根据测试的两个主要分类来考虑问题：<strong>单元测试</strong>（<em>unit tests</em>）与<strong>集成测试</strong>（<em>integration tests</em>）。单元测试倾向于更小而更专注，在隔离的环境中一次测试一个模块。他们也可以测试私有接口。集成测试对于你的库来说则完全是外部的。他们与其他用户使用相同的方式使用你的代码，他们只针对公有接口而且每个测试都会测试多个模块。</p>
 <p>这两类测试对于从独立和整体的角度保证你的库符合期望是非常重要的。</p>
 <a class="header" href="#单元测试" name="单元测试"><h3>单元测试</h3></a>
 <p>单元测试的目的是在与其他部分隔离的环境中测试每一个单元的代码，以便于快速而准确的定位何处的代码是否符合预期。单元测试位于 <em>src</em> 目录中，与他们要测试的代码存在于相同的文件中。传统做法是在每个文件中创建包含测试函数的<code>tests</code>模块，并使用<code>cfg(test)</code>标注模块。</p>
@@ -6355,7 +6354,7 @@ edited as such, can you check? -->
 12-2. We're not "setting" arguments here, we're saving the value in variables.
 I've hopefully cleared this up without needing to introduce repetition.
 /Carol-->
-<p>你可能注意到了 vector 的第一个值是&quot;target/debug/greprs&quot;，它是二进制我呢见的名称。其原因超出了本章介绍的范围，不过需要记住的是我们保存了所需的两个参数。</p>
+<p>你可能注意到了 vector 的第一个值是&quot;target/debug/greprs&quot;，它是我们二进制文件的名称。其原因超出了本章介绍的范围，不过需要记住的是我们保存了所需的两个参数。</p>
 <a class="header" href="#将参数值保存进变量" name="将参数值保存进变量"><h3>将参数值保存进变量</h3></a>
 <p>打印出参数 vector 中的值仅仅展示了可以访问程序中指定为命令行参数的值。但是这并不是我们想要做的，我们希望将这两个参数的值保存进变量这样就可以在程序使用这些值。让我们如列表 12-2 这样做：</p>
 <!-- By 'find the ones we care about' did you mean set particular arguments so
@@ -6520,7 +6519,7 @@ fn parse_config(args: &amp;[String]) -&gt; (&amp;str, &amp;str) {
 <!-- above -- I'm not sure why this is a problem --- because they aren't
 currently bound together? And why does it imply that -->
 <blockquote>
-<p>注意：一些同学将这种当使用符合类型更为合适的时候使用基本类型的反模式称为<strong>基本类型偏执</strong>（<em>primitive obsession</em>）。</p>
+<p>注意：一些同学将这种拒绝使用相对而言更为合适的复合类型而使用基本类型的模式称为<strong>基本类型偏执</strong>（<em>primitive obsession</em>）。</p>
 </blockquote>
 <!-- Ah, I see, so the problems here stem from using simple types to do tasks
 inefficiently, when a more complex task could handle it in ways that improve...
@@ -6633,7 +6632,7 @@ thread 'main' panicked at 'index out of bounds: the len is 1
 but the index is 1',  /stable-dist-rustc/build/src/libcollections/vec.rs:1307
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 </code></pre>
-<p><code>index out of bounds: the len is 1 but the index is 1</code>是一个针对程序员的错误信息，这并不能真正帮助终端用户理解发生了什么和相反他们应该做什么。现在就让我们修复它吧。</p>
+<p><code>index out of bounds: the len is 1 but the index is 1</code>是一个针对程序员的错误信息，然而这并不能真正帮助终端用户理解发生了什么和他们应该做什么。现在就让我们修复它吧。</p>
 <a class="header" href="#改善错误信息" name="改善错误信息"><h3>改善错误信息</h3></a>
 <p>在列表 12-8 中，在<code>new</code>函数中增加了一个检查在访问索引 1 和 2 之前检查 slice 是否足够长。如果 slice 不够长，我们使用一个更好的错误信息 panic 而不是<code>index out of bounds</code>信息：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -7013,7 +7012,7 @@ error: test failed
 </ol>
 <p>让我们一步一步的来，从遍历每行开始。</p>
 <a class="header" href="#使用lines方法遍历每一行" name="使用lines方法遍历每一行"><h4>使用<code>lines</code>方法遍历每一行</h4></a>
-<p>Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被成为<code>lines</code>，它如列表 12-17 这样工作：</p>
+<p>Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被命名为<code>lines</code>，它如列表 12-17 这样工作：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust,ignore">fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     for line in contents.lines() {
@@ -7139,7 +7138,7 @@ To tell your name the livelong day
 <br>
 commit 0db6a0a34886bf02feabcab8b430b5d332a8bdf5</p>
 </blockquote>
-<p>我们将用一个额外的功能来改进我们的工具：一个通过环境变量启用的大小写不敏感搜索的选项。我们将其设计为一个命令行参数并要求用户每次需要时都加上它，不过相反我们将使用环境变量。这允许用户设置环境变脸一次之后在整个终端会话中所有的搜索都将是大小写不敏感的了。</p>
+<p>我们将用一个额外的功能来改进我们的工具：一个通过环境变量启用的大小写不敏感搜索的选项。我们将其设计为一个命令行参数并要求用户每次需要时都加上它，不过相反我们将使用环境变量。这允许用户设置环境变量一次之后在整个终端会话中所有的搜索都将是大小写不敏感的了。</p>
 <a class="header" href="#编写一个大小写不敏感search函数的失败测试" name="编写一个大小写不敏感search函数的失败测试"><h3>编写一个大小写不敏感<code>search</code>函数的失败测试</h3></a>
 <p>首先，增加一个新函数，当设置了环境变量时会调用它。</p>
 <!-- You mean, to turn the environment variable on? I'm not sure what we're
@@ -7428,7 +7427,7 @@ How dreary to be somebody!
 </code></pre>
 <p>这一部分展示了现在我们使用的成功时产生的标准输出和错误时产生的标准错误是恰当的。</p>
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
-<p>在这一章中，我们回顾了目前为止的一些主要章节并涉及了如何在 Rust 中进行常规的 I/O 操作。通过使用命令行参数、文件、环境变量和<code>writeln!</code>宏与<code>writeln!</code>，现在你已经准备好编写命令行程序了。结合前几章的知识，你的代码将会是组织良好的，并能有效的将数据存储到合适的数据结构中、更好的处理错误，并且还是经过良好测试的。</p>
+<p>在这一章中，我们回顾了目前为止的一些主要章节并涉及了如何在 Rust 中进行常规的 I/O 操作。通过使用命令行参数、文件、环境变量和<code>writeln!</code>宏与<code>stderr</code>，现在你已经准备好编写命令行程序了。结合前几章的知识，你的代码将会是组织良好的，并能有效的将数据存储到合适的数据结构中、更好的处理错误，并且还是经过良好测试的。</p>
 <p>接下来，让我们探索如何利用一些 Rust 中受函数式编程语言影响的功能：闭包和迭代器。</p>
 <a class="header" href="#rust-中的函数式语言功能--迭代器和闭包" name="rust-中的函数式语言功能--迭代器和闭包"><h1>Rust 中的函数式语言功能 —— 迭代器和闭包</h1></a>
 <blockquote>
@@ -7498,7 +7497,7 @@ let add_one_v2 = |x: i32| -&gt; i32 { x + 1 }; // the full syntax for a closure
 let add_one_v3 = |x|             { x + 1 }; // a closure eliding types
 let add_one_v4 = |x|               x + 1  ; // without braces
 </code></pre>
-<p>定义闭包时并要求类型注解而在定义函数是要求的原因在于函数是显式暴露给用户的接口的一部分，所以为了严格的定义接口确保所有人都同意函数使用和返回的值类型是很重要的。但是闭包并不像函数那样用于暴露接口：他们存在于绑定中并直接被调用。强制标注类型就等于为了很小的优点而显著的降低了工程性（本末倒置）。</p>
+<p>定义闭包时不要求类型注解而在定义函数时要求的原因在于函数是显式暴露给用户的接口的一部分，所以为了严格的定义接口确保所有人都同意函数使用和返回的值类型是很重要的。但是闭包并不像函数那样用于暴露接口：他们存在于绑定中并直接被调用。强制标注类型就等于为了很小的优点而显著的降低了工程性（本末倒置）。</p>
 <p>不过闭包的定义确实会推断每一个参数和返回值的类型。例如，如果用<code>i8</code>调用列表 13-1 中没有类型注解的闭包，如果接着用<code>i32</code>调用同一闭包则会得到一个错误：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">let add_one = |x| x + 1;
@@ -7591,7 +7590,7 @@ add one to each number in a vector</span></p>
 <ol>
 <li>从 vector 中创建了一个迭代器。</li>
 <li>使用<code>map</code>适配器和一个闭包参数对每一个元素加一。</li>
-<li>使用<code>collect</code>适配器来消费迭代去并生成了一个新的 vector。</li>
+<li>使用<code>collect</code>适配器来消费迭代器并生成了一个新的 vector。</li>
 </ol>
 <p>这就是如何产生结果<code>[2, 3, 4]</code>的。如你所见，闭包是使用迭代器的很重要的一部分：他们提供了一个自定义类似<code>map</code>这样的迭代器适配器的行为的方法。</p>
 <a class="header" href="#迭代器是惰性的" name="迭代器是惰性的"><h3>迭代器是惰性的</h3></a>
@@ -7608,7 +7607,7 @@ nothing unless consumed, #[warn(unused_must_use)] on by default
 4 | v1.iter().map(|x| x + 1); // without collect
   | ^^^^^^^^^^^^^^^^^^^^^^^^^
 </code></pre>
-<p>这个警告是因为迭代器适配器实际上并不自己进行处理。他们需要一些其他方法来触发迭代器链的计算。我们称之为<strong>消费迭代器</strong>（<em>consuming adaptors</em>），而<code>collect</code>就是其中之一。</p>
+<p>这个警告是因为迭代器适配器实际上并不自己进行处理。他们需要一些其他方法来触发迭代器链的计算。我们称之为<strong>消费适配器</strong>（<em>consuming adaptors</em>），而<code>collect</code>就是其中之一。</p>
 <p>那么如何知道迭代器方法是否消费了迭代器呢？还有哪些适配器是可用的呢？为此，让我们看看<code>Iterator</code> trait。</p>
 <a class="header" href="#iterator-trait" name="iterator-trait"><h3><code>Iterator</code> trait</h3></a>
 <p>迭代器都实现了一个标准库中叫做<code>Iterator</code>的 trait。其定义看起来像这样：</p>
@@ -7618,7 +7617,7 @@ nothing unless consumed, #[warn(unused_must_use)] on by default
     fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;;
 }
 </code></pre>
-<p>这里有一些还未讲到的新语法：<code>type Item</code>和<code>Self::Item</code>定义了这个 trait 的<strong>关联类型</strong>（<em>associated type</em>），第XX章会讲到关联类型。现在所有你需要知道就是这些代码表示<code>Iterator</code> trait 要求你也定义一个<code>Item</code>类型，而这个<code>Item</code>类型用作<code>next</code>方法的返回值。换句话说，<code>Item</code>类型将是迭代器返回的元素的类型。</p>
+<p>这里有一些还未讲到的新语法：<code>type Item</code>和<code>Self::Item</code>定义了这个 trait 的<strong>关联类型</strong>（<em>associated type</em>），第19章会讲到关联类型。现在所有你需要知道就是这些代码表示<code>Iterator</code> trait 要求你也定义一个<code>Item</code>类型，而这个<code>Item</code>类型用作<code>next</code>方法的返回值。换句话说，<code>Item</code>类型将是迭代器返回的元素的类型。</p>
 <p>让我们使用<code>Iterator</code> trait 来创建一个从一数到五的迭代器<code>Counter</code>。首先，需要创建一个结构体来存放迭代器的当前状态，它有一个<code>u32</code>的字段<code>count</code>。我们也定义了一个<code>new</code>方法，当然这并不是必须的。因为我们希望<code>Counter</code>能从一数到五，所以它总是从零开始：</p>
 <pre><code class="language-rust">struct Counter {
     count: u32,
@@ -7837,7 +7836,7 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 <pre><code>test bench_grep_for  ... bench:  19,620,300 ns/iter (+/- 915,700)
 test bench_grep_iter ... bench:  19,234,900 ns/iter (+/- 657,200)
 </code></pre>
-<p>结果迭代器版本还要稍微快一点！这里我们将不会查看性能测试的代码，光是这一点并不是为了证明他们是完全等同的，而是提供了一个大体上比较这两种实现的方向。对于<strong>真正</strong>的性能测试，将会检查不同长度的文本、不同的搜索单词、不同长度的单词和所有其他的可变情况。这里所要表达的是：迭代器，作为一个高级的抽象，被编译成了与手写的底层代码大体一致性能代码。迭代器是 Rust 的<strong>零成本抽象</strong>（<em>zero-cost abstractions</em>）之一，它意味着抽象并不会强加运行时开销，它与本贾尼·斯特劳斯特卢普，C++ 的设计和实现者所定义的<strong>零开销</strong>（<em>zero-overhead</em>）如出一辙：</p>
+<p>结果迭代器版本还要稍微快一点！这里我们将不会查看性能测试的代码，我们的目的并不是为了证明他们是完全等同的，而是得出一个怎样比较这两种实现方式的基本思路。对于<strong>真正</strong>的性能测试，将会检查不同长度的文本、不同的搜索单词、不同长度的单词和所有其他的可变情况。这里所要表达的是：迭代器，作为一个高级的抽象，被编译成了与手写的底层代码大体一致性能代码。迭代器是 Rust 的<strong>零成本抽象</strong>（<em>zero-cost abstractions</em>）之一，它意味着抽象并不会强加运行时开销，它与本贾尼·斯特劳斯特卢普，C++ 的设计和实现者所定义的<strong>零开销</strong>（<em>zero-overhead</em>）如出一辙：</p>
 <blockquote>
 <p>In general, C++ implementations obey the zero-overhead principle: What you don’t use, you don’t pay for. And further: What you do use, you couldn’t hand code any better.</p>
 <ul>
@@ -7848,7 +7847,7 @@ test bench_grep_iter ... bench:  19,234,900 ns/iter (+/- 657,200)
 <li>本贾尼·斯特劳斯特卢普 &quot;Foundations of C++&quot;</li>
 </ul>
 </blockquote>
-<p>作为另一个例子，这里有一些来自于音频解码器的代码。这些代码使用迭代器链来对作用域中的三个变量进行了某种数学计算：一个叫<code>buffer</code>的数据 slice、一个 12 个系数列表的<code>coefficients</code>、和一个移位位数的<code>qlp_shift</code>。例子中声明了这些变量但并没有提供任何值；虽然这些代码在其上下文之外没有什么意义，不过仍是一个简洁的现实中的例子，来展示 Rust 如何将高级概念转换为底层代码：</p>
+<p>作为另一个例子，这里有一些来自于音频解码器的代码。这些代码使用迭代器链来对作用域中的三个变量进行了某种数学计算：一个叫<code>buffer</code>的数据 slice、一个有12个元素的数组<code>coefficients</code>、和一个代表移位位数的<code>qlp_shift</code>。例子中声明了这些变量但并没有提供任何值；虽然这些代码在其上下文之外没有什么意义，不过仍是一个简洁的现实中的例子，来展示 Rust 如何将高级概念转换为底层代码：</p>
 <pre><code class="language-rust,ignore">let buffer: &amp;mut [i32];
 let coefficients: [i64; 12];
 let qlp_shift: i16;
@@ -8011,7 +8010,7 @@ fn main() {
 </code></pre>
 <p><span class="caption">Listing 14-3: A program using the <code>art</code> crate's items
 with its internal structure exported</span></p>
-<p>使用并不需要知道<code>PrimaryColor</code>和<code>SecondaryColor</code>位于<code>kinds</code>模块中和<code>mix</code>位于<code>utils</code>模块中；这些结构对于内部组织是有帮助的，不过对于外部的观点来说没有什么意义。</p>
+<p>库的用户并不需要知道<code>PrimaryColor</code>和<code>SecondaryColor</code>位于<code>kinds</code>模块中和<code>mix</code>位于<code>utils</code>模块中；这些结构对于内部组织是有帮助的，不过对于外部的观点来说没有什么意义。</p>
 <p>为此，可以选择在列表 14-2 中增加如下<code>pub use</code>语句来将这些类型重新导出到顶级结构，如列表 14-4 所示：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust,ignore">//! # Art
@@ -8061,7 +8060,7 @@ Please see http://doc.crates.io/manifest.html#package-metadata for how to
 upload metadata
 </code></pre>
 <p>我们可以在包的 <em>Cargo.toml</em> 文件中包含更多的信息。其中一些字段是可选的，不过描述和 license 是发布所必须的，因为这样人们才能知道 crate 是干什么的已经在什么样的条款下可以使用他们。</p>
-<p>描述连同 crate 一起出现在搜索结果和 crate 页面中。描述通常是一两句话。<code>license</code>字段获取一个 license 标识符值，其可能的值由 Linux 基金会的<a href="http://spdx.org/licenses/">Software Package Data Exchange (SPDX)</a>指定。如果你想要使用一个并存在于此的 license，则不使用<code>license</code>值，使用<code>license-file</code>来指定项目中包含你想要使用的 license 的文本的文件名。</p>
+<p>描述连同 crate 一起出现在搜索结果和 crate 页面中。描述通常是一两句话。<code>license</code>字段获取一个 license 标识符值，其可能的值由 Linux 基金会的<a href="http://spdx.org/licenses/">Software Package Data Exchange (SPDX)</a>指定。如果你想要使用一个不存在于SPDX的 license，则不使用<code>license</code>值，使用<code>license-file</code>来指定项目中包含你想要使用的 license 的文本的文件名。</p>
 <p>关于项目所适用的 license 的指导超出了本书的范畴。很多 Rust 社区成员选择与 Rust 自身相同的 license，它是一个双许可的<code>MIT/Apache-2.0</code>，这表明可以通过斜杠来分隔指定多个 license。所以一个准备好发布的项目的 <em>Cargo.toml</em> 文件看起来像这样：</p>
 <pre><code class="language-toml">[package]
 name = &quot;guessing_game&quot;
@@ -8205,7 +8204,7 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<p>等等，零个测试？我们不是刚增加了一个吗？如果我们观察输出，就不难发现在工作空间中的<code>cargo test</code>只运行顶层 crate 的测试。为了运行其他 crate 的测试，需要使用<code>-p</code>参数来表明我们希望与逆行测试包的测试：</p>
+<p>等等，零个测试？我们不是刚增加了一个吗？如果我们观察输出，就不难发现在工作空间中的<code>cargo test</code>只运行顶层 crate 的测试。为了运行其他 crate 的测试，需要使用<code>-p</code>参数来表明我们希望运行指定包的测试：</p>
 <pre><code>$ cargo test -p add-one
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/add_one-abcabcabc
@@ -9668,33 +9667,36 @@ commit 55b294f20fc846a13a9be623bf322d8b364cee77</p>
 <br>
 commit 759801361bde74b47e81755fff545c66020e6e63</p>
 </blockquote>
-<p>面向对象编程是一种起源于20世纪60年代Simula的模式化编程的方式，然后在90年代在C++语言开始流行。为了描述OOP有很多种复杂的定义：在一些定义下，Rust是面向对象的；在其他定义下，Rust不是。在本章节中，我们会探索一些被普遍认为是面向对象的特性和这些特性是如何转换为Rust的方言的。</p>
+<p>面向对象编程（Object-Oriented Programming）是一种起源于 20 世纪 60 年代的 Simula 编程语言的模式化编程方式，然后在 90 年代随着 C++ 语言开始流行。为了描述 OOP 有很多种复杂的定义：在一些定义下，Rust 是面向对象的；在其他定义下，Rust 不是。在本章节中，我们会探索一些被普遍认为是面向对象的特性和这些特性是如何转换为 Rust 方言的。</p>
 <a class="header" href="#什么是面向对象" name="什么是面向对象"><h2>什么是面向对象？</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch17-01-what-is-oo.md">ch17-01-what-is-oo.md</a>
 <br>
-commit 46334522e22d6217b392451cff8b4feca2d69d79</p>
+commit 2a9b2a1b019ad6d4832ff3e56fbcba5be68b250e</p>
 </blockquote>
-<p>关于一门语言是否需要是面向对象，在编程社区内并达成一致意见。Rust被很多不同的编程模式影响，我们探索了13章提到的函数式编程的特性。面向对象编程语言的一些特性往往是对象、封装和继承。我们看一下每个的含义和Rust是否支持它们。</p>
+<p>关于一门语言是否需要是面向对象，在编程社区内并未达成一致意见。Rust 被很多不同的编程模式影响，我们探索了十三章提到的函数式编程的特性。面向对象编程语言的一些特性往往是对象、封装和继承。我们看一下这每一个概念的含义以及 Rust 是否支持他们。</p>
 <a class="header" href="#对象包含数据和行为" name="对象包含数据和行为"><h2>对象包含数据和行为</h2></a>
 <p><code>Design Patterns: Elements of Reusable Object-Oriented Software</code>这本书被俗称为<code>The Gang of Four book</code>，是面向对象编程模式的目录。它这样定义面向对象编程：</p>
 <blockquote>
-<p>面向对象的程序是由对象组成的。一个对象包数据和操作这些数据的程序。程序通常被称为方法或操作。</p>
+<p>Object-oriented programs are made up of objects. An <em>object</em> packages both
+data and the procedures that operate on that data. The procedures are
+typically called <em>methods</em> or <em>operations</em>.</p>
+<p>面向对象的程序是由对象组成的。一个<strong>对象</strong>包数据和操作这些数据的过程。这些过程通常被称为<strong>方法</strong>或<strong>操作</strong>。</p>
 </blockquote>
-<p>在这个定一下，Rust是面向对象的：结构体和枚举包含数据和impl块提供了在结构体和枚举上的方法。虽然带有方法的结构体和枚举不称为对象，但是他们提供了和对象相同的功能，使用了<code>Gang of Four</code>定义的对象。</p>
+<p>在这个定义下，Rust 是面向对象的：结构体和枚举包含数据而 impl 块提供了在结构体和枚举之上的方法。虽然带有方法的结构体和枚举并不被<strong>称为</strong>对象，但是他们提供了与对象相同的功能，参考 Gang of Four 所定义的对象。</p>
 <a class="header" href="#隐藏了实现细节的封装" name="隐藏了实现细节的封装"><h2>隐藏了实现细节的封装</h2></a>
-<p>通常与面向对象编程相关的另一个方面是封装的思想：对象的实现细节不能被使用对象的代码获取到。唯一与对象交互的方式是通过对象提供的public API，使用对象的代码无法深入到对象内部并直接改变数据或者行为。封装使得改变和重构对象的内部，无需改变使用对象的代码。</p>
-<p>就像我们在第7张讨论的那样，我们可以使用pub关键字来决定模块、类型函数和方法是public的（默认情况下一切都是private）。比如，我们可以定义一个结构体<code>AveragedCollection</code>包含一个<code>i32</code>类型的vector。结构体也可以有一个字段，该字段保存了vector中所有值的平均值。这样，希望知道结构体中的vector的平均值的人可以随着获取到，而无需自己计算。<code>AveragedCollection</code> 会为我们缓存平均值结果。 Listing 17-1有<code>AveragedCollection</code> 结构体的定义。</p>
-<p>Filename: src/lib.rs</p>
-<pre><code>pub struct AveragedCollection {
+<p>另一个通常与面向对象编程相关的方面是<strong>封装</strong>的思想：对象的实现细节不能被使用对象的代码获取到。唯一与对象交互的方式是通过对象提供的公有 API；使用对象的代码无法深入到对象内部并直接改变数据或者行为。封装使得改变和重构对象的内部时无需改变使用对象的代码。</p>
+<p>就像我们在第七章讨论的那样，可以使用<code>pub</code>关键字来决定模块、类型函数和方法是公有的，而默认情况下一切都是私有的。比如，我们可以定义一个包含一个<code>i32</code>类型的 vector 的结构体<code>AveragedCollection</code>。结构体也可以有一个字段，该字段保存了 vector 中所有值的平均值。这样，希望知道结构体中的 vector 的平均值的人可以随时获取它，而无需自己计算。<code>AveragedCollection</code>会为我们缓存平均值结果。列表 17-1 有<code>AveragedCollection</code>结构体的定义：</p>
+<p><span class="filename">文件名: src/lib.rs</span></p>
+<pre><code class="language-rust">pub struct AveragedCollection {
     list: Vec&lt;i32&gt;,
     average: f64,
 }
 </code></pre>
-<p><code>AveragedCollection</code>结构体维护了一个Integer列表和集合中所有元素的平均值。</p>
-<p>注意，结构体本身被标记为pub，这样其他代码可以使用这个结构体，但是在结构体内部的字段仍然是private。这是非常重要的，因为我们希望保证变量被增加到列表或者被从列表删除时，也会同时更新平均值。我们通过在结构体上实现add、remove和average方法来做到这一点（ Listing 17-2:）：</p>
-<p>Filename: src/lib.rs</p>
-<pre><code># pub struct AveragedCollection {
+<p><span class="caption">列表 17-1: <code>AveragedCollection</code>结构体维护了一个整型列表和集合中所有元素的平均值。</span></p>
+<p>注意，结构体自身被标记为<code>pub</code>，这样其他代码可以使用这个结构体，但是在结构体内部的字段仍然是私有的。这是非常重要的，因为我们希望保证变量被增加到列表或者被从列表删除时，也会同时更新平均值。我们通过在结构体上实现<code>add</code>、<code>remove</code>和<code>average</code>方法来做到这一点，如列表 17-2 所示：</p>
+<p><span class="filename">文件名: src/lib.rs</span></p>
+<pre><code class="language-rust"># pub struct AveragedCollection {
 #     list: Vec&lt;i32&gt;,
 #     average: f64,
 # }
@@ -9725,33 +9727,33 @@ impl AveragedCollection {
     }
 }
 </code></pre>
-<p>Listing 17-2:在<code>AveragedCollection</code>结构体上实现了add、remove和average  public方法</p>
-<p>public方法<code>add</code>、<code>remove</code>和<code>average</code>是修改<code>AveragedCollection</code>实例的唯一方式。当使用add方法把一个元素加入到<code>list</code>或者使用<code>remove</code>方法来删除它，这些方法的实现同时会调用私有的<code>update_average</code>方法来更新<code>average</code>成员变量。因为<code>list</code>和<code>average</code>是私有的，没有其他方式来使得外部的代码直接向<code>list</code>增加或者删除元素，直接操作<code>list</code>可能会引发<code>average</code>字段不同步。<code>average</code>方法返回<code>average</code>字段的值，这指的外部的代码只能读取<code>average</code>而不能修改它。</p>
-<p>因为我们已经封装好了<code>AveragedCollection</code>的实现细节，所以我们也可以像使用<code>list</code>一样使用的一个不同的数据结构，比如用<code>HashSet</code>代替<code>Vec</code>。只要签名<code>add</code>、<code>remove</code>和<code>average</code>公有函数保持相同，使用<code>AveragedCollection</code>的代码无需改变。如果我们暴露<code>List</code>给外部代码时，未必都是这样，因为<code>HashSet</code>和<code>Vec</code>使用不同的函数增加元素，所以如果要想直接修改<code>list</code>的话，外部的代码可能还得修改。</p>
-<p>如果封装是一个语言被认为是面向对象语言必要的方面的话，那么Rust满足要求。在代码中不同的部分使用或者不使用<code>pub</code>决定了实现细节的封装。</p>
+<p><span class="caption">列表 17-2: 在<code>AveragedCollection</code>结构体上实现了<code>add</code>、<code>remove</code>和<code>average</code>公有方法</span></p>
+<p>公有方法<code>add</code>、<code>remove</code>和<code>average</code>是修改<code>AveragedCollection</code>实例的唯一方式。当使用<code>add</code>方法把一个元素加入到<code>list</code>或者使用<code>remove</code>方法来删除它时，这些方法的实现同时会调用私有的<code>update_average</code>方法来更新<code>average</code>字段。因为<code>list</code>和<code>average</code>是私有的，没有其他方式来使得外部的代码直接向<code>list</code>增加或者删除元素，直接操作<code>list</code>可能会引发<code>average</code>字段不同步。<code>average</code>方法返回<code>average</code>字段的值，这使得外部的代码只能读取<code>average</code>而不能修改它。</p>
+<p>因为我们已经封装好了<code>AveragedCollection</code>的实现细节，将来可以轻松改变类似数据结构这些方面的内容。例如，可以使用<code>HashSet</code>代替<code>Vec</code>作为<code>list</code>字段的类型。只要<code>add</code>、<code>remove</code>和<code>average</code>公有函数的签名保持不变，使用<code>AveragedCollection</code>的代码就无需改变。如果将<code>List</code>暴露给外部代码时，未必都是这样，因为<code>HashSet</code>和<code>Vec</code>使用不同的方法增加或移除项，所以如果要想直接修改<code>list</code>的话，外部的代码可能不得不修改。</p>
+<p>如果封装是一个语言被认为是面向对象语言所必要的方面的话，那么 Rust 就满足这个要求。在代码中不同的部分使用或者不使用<code>pub</code>决定了实现细节的封装。</p>
 <a class="header" href="#作为类型系统的继承和作为代码共享的继承" name="作为类型系统的继承和作为代码共享的继承"><h2>作为类型系统的继承和作为代码共享的继承</h2></a>
-<p>继承是一个很多编程语言都提供的机制，一个对象可以从另外一个对象的定义继承，这使得可以获得父对象的数据和行为，而不用重新定义。很多人定义面向对象语言时，认为继承是一个特色。</p>
-<p>如果一个语言必须有继承才能被称为面向对象的语言，那么Rust就不是面向对象的。没有办法定义一个结构体继承自另外一个结构体，从而获得父结构体的成员和方法。然而，如果你过去常常在你的编程工具箱使用继承，依赖于你要使用继承的原因，在Rust中有其他的方式。</p>
-<p>使用继承有两个主要的原因。第一个是为了重用代码：一旦一个特殊的行为从一个类型继承，继承可以在另外一个类型实现代码重用。Rust代码可以被共享通过使用默认的trait方法实现，可以在Listing 10-14看到，我们增加一个<code>summary</code>方法到<code>Summarizable</code>trait。任何继承了<code>Summarizable</code>trait的类型上会有<code>summary</code>方法，而无需任何的父代码。这类似于父类有一个继承的方法，一个从父类继承的子类也因为继承有了继承的方法。当实现<code>Summarizable</code>trait时，我们也可以选择覆写默认的<code>summary</code>方法，这类似于子类覆写了从父类继承的实现方法。</p>
-<p>第二个使用继承的原因是，使用类型系统：子类型可以在父类型被使用的地方使用。这也称为多态，意味着如果多种对象有一个相同的shape，它们可以被其他替代。</p>
+<p><strong>继承</strong>（<em>Inheritance</em>）是一个很多编程语言都提供的机制，一个对象可以定义为继承另一个对象的定义，这使其可以获得父对象的数据和行为，而不用重新定义。一些人定义面向对象语言时，认为继承是一个特色。</p>
+<p>如果一个语言必须有继承才能被称为面向对象的语言的话，那么 Rust 就不是面向对象的。无法定义一个结构体继承自另外一个结构体，从而获得父结构体的成员和方法。然而，如果你过去常常在你的编程工具箱使用继承，根据你希望使用继承的原因，Rust 提供了其他的解决方案。</p>
+<p>使用继承有两个主要的原因。第一个是为了重用代码：一旦为一个类型实现了特定行为，继承可以对一个不同的类型重用这个实现。相反 Rust 代码可以使用默认 trait 方法实现来进行共享，在列表 10-14 中我们见过在<code>Summarizable</code> trait 上增加的<code>summary</code>方法的默认实现。任何实现了<code>Summarizable</code> trait 的类型都可以使用<code>summary</code>方法而无须进一步实现。这类似于父类有一个方法的实现，而通过继承子类也拥有这个方法的实现。当实现<code>Summarizable</code> trait 时也可以选择覆盖<code>summary</code>的默认实现，这类似于子类覆盖从父类继承的方法实现。</p>
+<p>第二个使用继承的原因与类型系统有关：用来表现子类型可以在父类型被使用的地方使用。这也被称为<strong>多态</strong>（<em>polymorphism</em>），意味着如果多种对象有一个相同的形态大小，它们可以替代使用。</p>
+<!-- PROD: START BOX -->
 <blockquote>
-<p>虽然很多人使用多态来描述继承，但是它实际上是一种特殊的多态，称为子类型多态。也有很多种其他形式，在Rust中带有通用的ttait绑定的一个参数
-也是多态——更特殊的类型多态。在多种类型的多态间的细节不是关键的，所以不要过于担心细节，只需要知道Rust有多种多态相关的特色就好，不像很多其他OOP语言。</p>
+<p>虽然很多人使用“多态”来描述继承，但是它实际上是一种特殊的多态，称为“子类型多态”。也有很多种其他形式的多态，在 Rust 中带有泛型参数的 trait bound 也是多态，更具体的说是“参数多态”。不同类型多态的确切细节在这里并不关键，所以不要过于担心细节，只需要知道 Rust 有多种多态相关的特色就好，不同于很多其他 OOP 语言。</p>
 </blockquote>
-<p>为了支持这种样式，Rust有trait对象，这样我们可以指定给任何类型的值，只要值实现了一种特定的trait。</p>
-<p>继承最近在很多编程语言的设计方案中失宠了。使用继承类实现代码重用需要共享比你需要共享的代码。子类不应该经常共享它们的父类的所有特色，但是继承意味着子类得到了它的父类的数据和行为。这使得一个程序的设计不灵活，创建了无意义的子类的方法被调用的可能性或者由于方法不适用于子类但是必须从父类继承，从而触发错误。另外，很多语言只允许从一个类继承，更加限制了程序设计的灵活性。</p>
-<p>因为这些原因，Rust选择了一个另外的途径，使用trait替代继承。让我们看一下在Rust中trait对象是如何实现多态的。</p>
-<a class="header" href="#为使用不同类型的值而设计的trait对象" name="为使用不同类型的值而设计的trait对象"><h2>为使用不同类型的值而设计的Trait对象</h2></a>
+<!-- PROD: END BOX -->
+<p>为了支持这种模式，Rust 有 <strong>trait 对象</strong>（<em>trait objects</em>），这样我们可以指定给任何类型的值，只要值实现了一种特定的 trait。</p>
+<p>继承最近在很多编程语言的设计方案中失宠了。使用继承来实现代码重用需要共享比你需要共享的代码。子类不应该总是共享它们的父类的所有特色，但是继承意味着子类得到了它父类所有的数据和行为。这使得程序的设计更加不灵活，并产生了无意义的方法调用或子类，或者由于方法并不适用于子类不过必需从父类继承而造成错误的可能性。另外，一些语言只允许子类继承一个父类，这进一步限制了程序设计的灵活性。</p>
+<p>因为这些原因，Rust 选择了一个另外的途径，使用 trait 对象替代继承。让我们看一下在 Rust 中 trait 对象是如何实现多态的。</p>
+<a class="header" href="#为使用不同类型的值而设计的-trait-对象" name="为使用不同类型的值而设计的-trait-对象"><h2>为使用不同类型的值而设计的 trait 对象</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch17-02-trait-objects.md">ch17-02-trait-objects.md</a>
 <br>
-commit 872dc793f7017f815fb1e5389200fd208e12792d</p>
+commit 67876e3ef5323ce9d394f3ea6b08cb3d173d9ba9</p>
 </blockquote>
-<p>在第8章，我们谈到了vector的局限是vectors只能存储同种类型的元素。我们在Listing 8-1有一个例子，其中定义了一个<code>SpreadsheetCell</code> 枚举类型，可以存储整形、浮点型和text，这样我们就可以在每个cell存储不同的数据类型了，同时还有一个代表一行cell的vector。当我们的代码编译的时候，如果交换地处理的各种东西是固定的类型是已知的，那么这是可行的。</p>
-<pre><code>&lt;!-- The code example I want to reference did not have a listing number; it's
+<p>在第八章，我们谈到了 vector 的局限是 vector 只能存储同种类型的元素。在列表 8-1 中有一个例子，其中定义了一个有存放整型、浮点型和文本的成员的枚举类型<code>SpreadsheetCell</code>，这样就可以在每一个单元格储存不同类型的数据并使得 vector 仍让代表一行单元格。这在那类代码被编译时就知晓需要可交换处理的数据的类型是一个固定集合的情况下是可行的。</p>
+<!-- The code example I want to reference did not have a listing number; it's
 the one with SpreadsheetCell. I will go back and add Listing 8-1 next time I
-get Chapter 8 for editing. /Carol --&gt;
-</code></pre>
+get Chapter 8 for editing. /Carol -->
 <p>有时，我们想我们使用的类型集合是可扩展的，可以被使用我们的库的程序员扩展。比如很多图形化接口工具有一个条目列表，从这个列表迭代和调用draw方法在每个条目上。我们将要创建一个库crate，包含称为<code>rust_gui</code>的CUI库的结构体。我们的GUI库可以包含一些给开发者使用的类型，比如<code>Button</code>或者<code>TextField</code>。使用<code>rust_gui</code>的程序员会创建更多可以在屏幕绘图的类型：一个程序员可能会增加<code>Image</code>，另外一个可能会增加<code>SelectBox</code>。我们不会在本章节实现一个完善的GUI库，但是我们会展示如何把各部分组合在一起。</p>
 <p>当要写一个<code>rust_gui</code>库时，我们不知道其他程序员要创建什么类型，所以我们无法定义一个<code>enum</code>来包含所有的类型。我们知道的是<code>rust_gui</code>需要有能力跟踪所有这些不同类型的大量的值，需要有能力在每个值上调用<code>draw</code>方法。我们的GUI库不需要确切地知道当调用<code>draw</code>方法时会发生什么，只要值有可用的方法供我们调用就可以。</p>
 <p>在有继承的语言里，我们可能会定义一个名为<code>Component</code>的类，该类上有一个<code>draw</code>方法。其他的类比如<code>Button</code>、<code>Image</code>和<code>SelectBox</code>会从<code>Component</code>继承并继承<code>draw</code>方法。它们会各自覆写<code>draw</code>方法来自定义行为，但是框架会把所有的类型当作是<code>Component</code>的实例，并在它们上调用<code>draw</code>。</p>

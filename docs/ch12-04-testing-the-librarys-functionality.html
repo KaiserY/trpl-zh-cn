@@ -174,7 +174,7 @@ error: test failed
 </ol>
 <p>让我们一步一步的来，从遍历每行开始。</p>
 <a class="header" href="#使用lines方法遍历每一行" name="使用lines方法遍历每一行"><h4>使用<code>lines</code>方法遍历每一行</h4></a>
-<p>Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被成为<code>lines</code>，它如列表 12-17 这样工作：</p>
+<p>Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被命名为<code>lines</code>，它如列表 12-17 这样工作：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust,ignore">fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     for line in contents.lines() {
