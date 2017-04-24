@@ -87,7 +87,7 @@ edited as such, can you check? -->
 I've hopefully cleared this up without needing to introduce repetition.
 /Carol-->
 
-你可能注意到了 vector 的第一个值是"target/debug/greprs"，它是二进制我呢见的名称。其原因超出了本章介绍的范围，不过需要记住的是我们保存了所需的两个参数。
+你可能注意到了 vector 的第一个值是"target/debug/greprs"，它是我们二进制文件的名称。其原因超出了本章介绍的范围，不过需要记住的是我们保存了所需的两个参数。
 
 ### 将参数值保存进变量
 
