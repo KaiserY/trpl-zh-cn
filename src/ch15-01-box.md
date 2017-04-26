@@ -34,7 +34,7 @@ enum List {
 <span class="caption">Listing 15-2: The first attempt of defining an enum to
 represent a cons list data structure of `i32` values</span>
 
-我们实现了一个只存放`i32`值的 cons list。也可以选择实用第十章介绍的泛型来实现一个类型无关的 cons list。
+我们实现了一个只存放`i32`值的 cons list。也可以选择使用第十章介绍的泛型来实现一个类型无关的 cons list。
 
 > #### cons list 的更多内容
 >
@@ -128,7 +128,7 @@ fn main() {
 <span class="caption">Listing 15-5: Definition of `List` that uses `Box<T>` in
 order to have a known size</span>
 
-这样编译器就能够计算出储存一个`List`值需要的大小了。Rust 将会检查`List`，同样的从`Cons`成员开始检查。`Cons`成员需要`i32`的大小加上一个`usize`的大小，因为 box 总是`usize`大小的，不管它指向的是什么。接着 Rust 检查`Nil`成员，它并储存一个值，所以`Nil`并不需要任何空间。我们通过 box 打破了这无限递归的连锁。图 15-6 展示了现在`Cons`成员看起来像什么：
+这样编译器就能够计算出储存一个`List`值需要的大小了。Rust 将会检查`List`，同样的从`Cons`成员开始检查。`Cons`成员需要`i32`的大小加上一个`usize`的大小，因为 box 总是`usize`大小的，不管它指向的是什么。接着 Rust 检查`Nil`成员，它并不储存一个值，所以`Nil`并不需要任何空间。我们通过 box 打破了这无限递归的连锁。图 15-6 展示了现在`Cons`成员看起来像什么：
 
 <img alt="A finite Cons list" src="img/trpl15-02.svg" class="center" />
 
