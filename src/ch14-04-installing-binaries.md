@@ -4,7 +4,7 @@
 > <br>
 > commit 4f2dc564851dc04b271a2260c834643dfd86c724
 
-`cargo install`命令用于在本地安装和使用二进制 crate。它并不打算替换系统中的包；它意在作为一个方便 Rust 开发者安装他人在 crates.io 共享的工具的手段。只有有二进制目标文件的包能够安装，而且所有二进制文件都被安装到 Rust 安装根目录的 *bin* 文件夹中。如果你使用 *rustup.rs* 安装的 Rust 且没有自定义任何配置，这将是`$HOME/.cargo/bin`。将这个目录添加到`$PATH`环境变量中就能够运行通过`cargo install`安装的程序了。
+`cargo install`命令用于在本地安装和使用二进制 crate。它并不打算替换系统中的包；它意在作为一个方便 Rust 开发者们安装其他人已经在 crates.io 上共享的工具的手段。只有有二进制目标文件的包能够安装，而且所有二进制文件都被安装到 Rust 安装根目录的 *bin* 文件夹中。如果你使用 *rustup.rs* 安装的 Rust 且没有自定义任何配置，这将是`$HOME/.cargo/bin`。将这个目录添加到`$PATH`环境变量中就能够运行通过`cargo install`安装的程序了。
 
 例如，第十二章提到的叫做`ripgrep`的用于搜索文件的`grep`的 Rust 实现。如果想要安装`ripgrep`，可以运行如下：
 
