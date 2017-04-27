@@ -20,9 +20,9 @@ get Chapter 8 for editing. /Carol -->
 
 不过，在Rust语言中，我们可以定义一个名为`Draw`的trait，其上有一个名为`draw`的方法。我们定义一个带有*trait对象*的vector，绑定了一种指针的trait，比如`&`引用或者一个`Box<T>`智能指针。
 
-我们提到，我们不会调用结构体和枚举的对象，从而区分于其他语言的对象。在结构体的数据或者枚举的字段和`impl`块中的行为是分开的，而其他语言则是数据和行为被组合到一个概念里。Trait对象更像其他语言的对象，在这种场景下，他们组合了由指针组成的数据到实体对象，该对象带有在trait中定义的方法行为。但是，trait对象是和其他语言是不同的，因为我们不能向一个trait对象增加数据。trait对象不像其他语言那样有用：它们的目的是允许从公有的行为上抽象。
+我们提到，我们不会称结构体和枚举为对象，这是为了区分于其他语言的结构体和枚举对象。结构体或者枚举成员中的数据和`impl`块中的行为是分开的，而其他语言则是数据和行为被组合到一个被称作对象的概念里。Trait对象更像其他语言的对象，之所以这样说是因为，他们把由其指针所指向的具体对象作为数据，把在trait中定义的方法作为行为，组合在了一起。但是，trait对象和其他语言是不同的，因为我们不能向一个trait对象增加数据。trait对象不像其他语言那样有用：它们的目的是允许从公有的行为上抽象。
 
-trait定义了在给定场景下我们所需要的行为。在我们会使用一个实体类型或者一个通用类型的地方，我们可以把trait当作trait对象使用。Rust的类型系统会保证我们为trait对象带入的任何值会实现trait的方法。我们不需要在编译阶段知道所有可能的类型，我们可以把所有的实例统一对待。Listing 17-03展示了如何定义一个名为`Draw`的带有`draw`方法的trait。
+trait定义了在给定情况下我们所需要的行为。在我们需要使用一个实体类型或者一个通用类型的地方，我们可以把trait当作trait对象使用。Rust的类型系统会保证我们为trait对象带入的任何值会实现trait的方法。我们不需要在编译阶段知道所有可能的类型，我们可以把所有的实例统一对待。Listing 17-03展示了如何定义一个名为`Draw`的带有`draw`方法的trait。
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -36,7 +36,7 @@ pub trait Draw {
 
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 
-因为我们已经在第10章讨论过如何定义trait，你可能比较熟悉。下面是新的定义：Listing 17-4有一个名为`Screen`的结构体，里面有一个名为`components`的vector，`components`的类型是Box<Draw>。`Box<Draw>`是一个trait对象：它是一个任何`Box`内部的实现了`Draw`trait的类型的替身。
+因为我们已经在第10章讨论过如何定义trait，你可能比较熟悉。下面是新的定义：Listing 17-4有一个名为`Screen`的结构体，里面有一个名为`components`的vector，`components`的类型是Box<Draw>。`Box<Draw>`是一个trait对象：它是`Box`内部任意一个实现了`Draw`trait的类型的替身。
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -79,7 +79,7 @@ impl Screen {
 <span class="caption">Listing 17-5:在`Screen`上实现一个`run`方法，该方法在每个组件上调用`draw`方法
 </span>
 
-这是区别于定义一个使用带有trait绑定的通用类型参数的结构体。通用类型参数一次只能被一个实体类型替代，而trait对象可以在运行时允许多种实体类型填充trait对象。比如，我们已经定义了`Screen`结构体使用通用类型和一个trait绑定，如Listing 17-6所示：
+这不同于定义一个使用带有trait限定的泛型参数的结构体。泛型参数一次只能被一个实体类型替代，而trait对象可以在运行时允许多种实体类型填充trait对象。比如，我们已经定义了`Screen`结构体使用泛型和一个trait限定，如Listing 17-6所示：
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -105,7 +105,7 @@ impl<T> Screen<T>
 <span class="caption">Listing 17-6: 一种`Screen`结构体的替代实现，它的`run`方法使用通用类型和trait绑定
 </span>
  
-这个例子只能使我们有一个`Screen`实例，这个实例有一个组件列表，所有的组件类型是`Button`或者`TextField`。如果你有同种的集合，那么可以优先使用通用和trait绑定，这是因为为了使用具体的类型，定义是在编译阶段是单一的。
+这个例子只能使我们的`Screen`实例的所有组件类型全是`Button`，或者全是`TextField`。如果你的组件集合是单一类型的，那么可以优先使用泛型和trait限定，这是因为其使用的具体类型在编译阶段可以被定意为是单一的。
 
 而如果使用内部有`Vec<Box<Draw>>` trait对象的列表的`Screen`结构体，`Screen`实例可以同时包含`Box<Button>`和`Box<TextField>`的`Vec`。我们看它是怎么工作的，然后讨论运行时性能的实现。
 
