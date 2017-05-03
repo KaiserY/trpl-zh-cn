@@ -33,7 +33,7 @@ let four = IpAddrKind::V4;
 let six = IpAddrKind::V6;
 ```
 
-注意枚举的成员位于其标识符的命名空间中，并使用两个冒号分开。这么设计的益处是现在`IpAddrKind::V4`和`IpAddrKind::V6`是相同类型的：`IpAddrKind`。例如，接着我们可以顶一个函数来获取`IpAddrKind`：
+注意枚举的成员位于其标识符的命名空间中，并使用两个冒号分开。这么设计的益处是现在`IpAddrKind::V4`和`IpAddrKind::V6`是相同类型的：`IpAddrKind`。例如，接着我们可以定义一个函数来获取`IpAddrKind`：
 
 ```rust
 # enum IpAddrKind {
