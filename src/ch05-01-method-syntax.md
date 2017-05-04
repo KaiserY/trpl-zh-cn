@@ -52,7 +52,7 @@ struct</span>
 
 > ### `->`运算符到哪去了？
 >
-> 像在 C++ 这样的语言中，又两个不同的运算符来调用方法：`.`直接在对象上调用方法，而`->`在一个对象的指针上调用方法，这时需要先解引用（dereference）指针。换句话说，如果`object`是一个指针，那么`object->something()`就像`(*object).something()`一样。
+> 像在 C++ 这样的语言中，有两个不同的运算符来调用方法：`.`直接在对象上调用方法，而`->`在一个对象的指针上调用方法，这时需要先解引用（dereference）指针。换句话说，如果`object`是一个指针，那么`object->something()`就像`(*object).something()`一样。
 >
 > Rust 并没有一个与`->`等效的运算符；相反，Rust 有一个叫**自动引用和解引用**（*automatic referencing and dereferencing*）的功能。方法调用是 Rust 中少数几个拥有这种行为的地方。
 >
