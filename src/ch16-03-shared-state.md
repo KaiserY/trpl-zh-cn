@@ -54,12 +54,12 @@ single threaded context for simplicity</span>
 
 一旦获取了锁，就可以将返回值（在这里是`num`）作为一个数据的可变引用使用了。观察 Rust 类型系统如何保证使用值之前必须获取锁：`Mutex<i32>`并不是一个`i32`，所以**必须**获取锁才能使用这个`i32`值。我们是不会忘记这么做的，因为类型系统不允许。
 
-与你可能怀疑的一样，`Mutex<T>`是一个智能指针。好吧，更准确的说，`lock`调用返回一个叫做`MutexGuard`的智能指针。类似我们在第十五章见过的智能指针，它实现了`Deref`来指向其内部数据。另外`MutexGuard`有一个用来释放锁的`Drop`实现。这样就不会忘记释放锁了。这在`MutexGuard`离开作用域时会自动发生，例如它发生于列表 16-12 中内部作用域的结尾。接着可以打印出互斥器的值并发现能够将其内部的`i32`改为 6。
+你也许会怀疑，`Mutex<T>`是一个智能指针？是的！更准确的说，`lock`调用返回一个叫做`MutexGuard`的智能指针。类似我们在第十五章见过的智能指针，它实现了`Deref`来指向其内部数据。另外`MutexGuard`有一个用来释放锁的`Drop`实现。这样就不会忘记释放锁了。这在`MutexGuard`离开作用域时会自动发生，例如它发生于列表 16-12 中内部作用域的结尾。接着可以打印出互斥器的值并发现能够将其内部的`i32`改为 6。
 
 #### 在线程间共享`Mutex<T>`
 
-现在让我们尝试使用`Mutex<T>`在多个线程间共享值。我们将启动十个线程，并在每一个线程中对一个计数器值加一，这样计数器将从 0 变为 10。注意接下来的几个例子会有编译错误，而我们将利用这些错误来学习如何使用
-`Mutex<T>`以及 Rust 又是怎样帮助我们正确使用它的。列表 16-13 是最开始的例子：
+现在让我们尝试使用`Mutex<T>`在多个线程间共享值。我们将启动十个线程，并在各个线程中对同一个计数器值加一，这样计数器将从 0 变为 10。注意，接下来的几个例子会出现编译错误，而我们将通过这些错误来学习如何使用
+`Mutex<T>`，以及 Rust 又是如何辅助我们以确保正确。列表 16-13 是最开始的例子：
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -91,9 +91,9 @@ fn main() {
 <span class="caption">Listing 16-13: The start of a program having 10 threads
 each increment a counter guarded by a `Mutex<T>`</span>
 
-这里创建了一个`counter`变量来存放内含`i32`的`Mutex<T>`，类似列表 16-12 那样。接下来使用 range 创建了 10 个线程。这里使用了`thread::spawn`并对所有线程使用了相同的闭包：他们每一个都将调用`lock`方法来获取`Mutex<T>`上的锁并对接着互斥器中的值加一。当一个线程结束执行其闭包，`num`会离开作用域并释放锁这样另一个线程就可以获取它了。
+这里创建了一个 `counter` 变量来存放内含 `i32` 的 `Mutex<T>`，类似列表 16-12 那样。接下来使用 range 创建了 10 个线程。使用了 `thread::spawn` 并对所有线程使用了相同的闭包：他们每一个都将调用 `lock` 方法来获取 `Mutex<T>` 上的锁，接着将互斥器中的值加一。当一个线程结束执行，`num` 会离开闭包作用域并释放锁，这样另一个线程就可以获取它了。
 
-在主线程中，我们像列表 16-2 那样收集了所有的 join 句柄，并接着每一个的`join`方法来确保所有线程都会结束。那时，主线程会获取锁并打印出程序的结果。
+在主线程中，我们像列表 16-2 那样收集了所有的 join 句柄，调用它们的 `join` 方法来确保所有线程都会结束。之后，主线程会获取锁并打印出程序的结果。
 
 之前提示过这个例子不能编译，让我们看看为什么！
 
@@ -112,13 +112,13 @@ referenced variables), use the `move` keyword, as shown:
    |         let handle = thread::spawn(move || {
 ```
 
-这类似于列表 16-5 中解决了的问题。考虑到启动了多个线程，Rust 无法知道这些线程会运行多久而`counter`是否在每一个线程尝试借用它时仍然保持有效。帮助信息提醒了我们如何解决它：可以使用`move`来给予每个线程其所有权。试试将这个修改用到闭包上：
+这类似于列表 16-5 中解决了的问题。考虑到启动了多个线程，Rust 无法知道这些线程会运行多久，而在每一个线程尝试借用 `counter` 时它是否仍然有效。帮助信息提醒了我们如何解决它：可以使用 `move` 来给予每个线程其所有权。尝试在闭包上做一点改动：
 
 ```rust,ignore
 thread::spawn(move || {
 ```
 
-再次尝试编译。这会出现了一个不同的错误！
+再次编译。这回出现了一个不同的错误！
 
 ```
 error[E0382]: capture of moved value: `counter`
@@ -147,9 +147,9 @@ error[E0382]: use of moved value: `counter`
 error: aborting due to 2 previous errors
 ```
 
-`move`并没有像列表 16-5 中那样解决这个程序中的问题。为什么没有呢？这个错误信息有些难以理解，因为它表明`counter`被移动进了闭包，接着它在调用`lock`时被捕获。这听起来像是我们希望的，不过这是不允许的。
+`move` 并没有像列表 16-5 中那样解决问题。为什么呢？错误信息有点难懂，因为它表明 `counter` 被移动进了闭包，接着它在调用 `lock` 时被捕获。这似乎是我们希望的，然而不被允许。
 
-让我们推理一下。现在不再使用`for`循环创建 10 个线程，让我们不用循环而只创建两个线程来看看会发生什么。将列表 16-13 中第一个`for`循环替换为如下代码：
+让我们推理一下。这次不再使用 `for` 循环创建 10 个线程，只创建两个线程，看看会发生什么。将列表 16-13 中第一个`for`循环替换为如下代码：
 
 ```rust,ignore
 let handle = thread::spawn(move || {
@@ -167,7 +167,7 @@ let handle2 = thread::spawn(move || {
 handles.push(handle2);
 ```
 
-这里创建了两个线程，并将用于第二个线程的变量名改为`handle2`和`num2`。现在我们简化了例子来看看是否能够理解错误信息。这一次编译给出如下信息：
+这里创建了两个线程，并将第二个线程所用的变量改名为 `handle2` 和 `num2`。我们简化了例子，看是否能理解错误信息。此次编译给出如下信息：
 
 ```text
 error[E0382]: capture of moved value: `counter`
@@ -176,8 +176,8 @@ error[E0382]: capture of moved value: `counter`
 8  |     let handle = thread::spawn(move || {
    |                                ------- value moved (into closure) here
 ...
-16 |         let mut num2 = counter.lock().unwrap();
-   |                        ^^^^^^^ value captured here after move
+16 |         let mut num = counter.lock().unwrap();
+   |                       ^^^^^^^ value captured here after move
    |
    = note: move occurs because `counter` has type `std::sync::Mutex<i32>`,
    which does not implement the `Copy` trait
@@ -197,11 +197,11 @@ error[E0382]: use of moved value: `counter`
 error: aborting due to 2 previous errors
 ```
 
-啊哈！在第一个错误信息中，Rust 表明了`counter`被移动进了`handle`所代表线程的闭包中。这个移动阻止我们在第二个线程中对其调用`lock`并将结果储存在`num2`中时捕获`counter`！所以 Rust 告诉我们不能将`counter`的所有权移动到多个线程中。这在之前很难看出是因为我们在循环中创建多个线程，而 Rust 无法在循环的迭代中指明不同的线程（没有临时变量`num2`）。
+啊哈！第一个错误信息中说，`counter` 被移动进了 `handle` 所代表线程的闭包中。因此我们无法在第二个线程中对其调用 `lock`，并将结果储存在 `num2` 中时捕获`counter`！所以 Rust 告诉我们不能将 `counter` 的所有权移动到多个线程中。这在之前很难看出，因为我们在循环中创建了多个线程，而 Rust 无法在每次迭代中指明不同的线程（没有临时变量 `num2`）。
 
 #### 多线程和多所有权
 
-在第十五章中，我们可以通过使用智能指针`Rc<T>`来创建引用计数的值来拥有多所有权。同时第十五章提到了`Rc<T>`只能用于单线程上下文，不过还是让我们在这里试用`Rc<T>`来观察会发生什么。列表 16-14 将`Mutex<T>`封装进了`Rc<T>`中，并在移动到线程中之前克隆了`Rc<T>`。切换回循环来创建线程，并保留闭包中的`move`关键字：
+在第十五章中，我们通过使用智能指针 `Rc<T>` 来创建引用计数的值，以便拥有多所有权。同时第十五章提到了 `Rc<T>` 只能在单线程环境中使用，不过还是在这里试用 `Rc<T>` 看看会发生什么。列表 16-14 将 `Mutex<T>` 装进了 `Rc<T>` 中，并在移入线程之前克隆了 `Rc<T>`。再用循环来创建线程，保留闭包中的 `move` 关键字：
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -235,7 +235,7 @@ fn main() {
 <span class="caption">Listing 16-14: Attempting to use `Rc<T>` to allow
 multiple threads to own the `Mutex<T>`</span>
 
-又一次，编译并...出现了不同的错误！编译器真是教会了我们很多东西！
+再一次编译并...出现了不同的错误！编译器真是教会了我们很多！
 
 ```
 error[E0277]: the trait bound `std::rc::Rc<std::sync::Mutex<i32>>:
@@ -254,11 +254,11 @@ std::marker::Send` is not satisfied
    = note: required by `std::thread::spawn`
 ```
 
-哇哦，太长不看！需要指出一些重要的部分：第一个提示表明`Rc<Mutex<i32>>`不能安全的在线程间传递。理由也在错误信息中，经过提取之后，表明“不满足`Send` trait bound”（`the trait bound Send is not satisfied`）。下一部分将会讨论`Send`，它是许多确保用在多线程中的类型能够适合并发环境的 trait 之一。
+哇哦，太长不看！说重点：第一个提示表明 `Rc<Mutex<i32>>` 不能安全的在线程间传递。理由也在错误信息中，“不满足 `Send` trait bound”（`the trait bound Send is not satisfied`）。下一部分将会讨论 `Send`，它是确保许多用在多线程中的类型，能够适合并发环境的 trait 之一。
 
-不幸的是，`Rc<T>`并不能安全的在线程间共享。当`Rc<T>`管理引用计数时，它必须在每一个`clone`调用时增加计数并在每一个克隆被丢弃时减少计数。`Rc<T>`并没有使用任何并发原语来确保改变计数的操作不会被其他线程打断。在计数出错时可能会导致诡异的 bug，比如可能会造成内存泄漏或在使用结束之前就丢弃一个值。那么如果有一个正好与`Rc<T>`类似，不过以一种线程安全的方式改变引用计数的类型会怎么样呢？
+不幸的是，`Rc<T>` 并不能安全的在线程间共享。当 `Rc<T>` 管理引用计数时，它必须在每一个 `clone` 调用时增加计数，并在每一个克隆被丢弃时减少计数。`Rc<T>` 并没有使用任何并发原语，来确保改变计数的操作不会被其他线程打断。在计数出错时可能会导致诡异的 bug，比如可能会造成内存泄漏，或在使用结束之前就丢弃一个值。那么如果有一个正好与 `Rc<T>` 类似，不过以一种线程安全的方式改变引用计数的类型会怎么样呢？
 
-#### 原子引用计数`Arc<T>`
+#### 原子引用计数 `Arc<T>`
 
 如果你思考过像之前那样的问题的话，你就是正确的。确实有一个类似`Rc<T>`并可以安全的用于并发环境的类型：`Arc<T>`。字母“a”代表**原子性**（*atomic*），所以这是一个**原子引用计数**（*atomically reference counted*）类型。原子性是另一类这里还未涉及到的并发原语；请查看标准库中`std::sync::atomic`的文档来获取更多细节。其中的要点就是：原子性类型工作起来类似原始类型，不过可以安全的在线程间共享。
 
