@@ -118,7 +118,7 @@ fn value_in_cents(coin: Coin) -> i32 {
 }
 ```
 
-如果调用`value_in_cents(Coin::Quarter(UsState::Alaska))`，`coin`将是`Coin::Quarter(UsState::Alaska)`。当将值与每个分支相比较时，没有分支会匹配知道遇到`Coin::Quarter(state)`。这时，`state`绑定的将会是值`UsState::Alaska`。接着就可以在`println!`表达式中使用这个绑定了，像这样就可以获取`Coin`枚举的`Quarter`成员中内部的州的值。
+如果调用`value_in_cents(Coin::Quarter(UsState::Alaska))`，`coin`将是`Coin::Quarter(UsState::Alaska)`。当将值与每个分支相比较时，没有分支会匹配直到遇到`Coin::Quarter(state)`。这时，`state`绑定的将会是值`UsState::Alaska`。接着就可以在`println!`表达式中使用这个绑定了，像这样就可以获取`Coin`枚举的`Quarter`成员中内部的州的值。
 
 ### 匹配`Option<T>`
 

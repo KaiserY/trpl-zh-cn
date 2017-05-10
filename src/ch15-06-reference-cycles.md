@@ -104,7 +104,7 @@ pointing to each other</span>
 
 Rust 标准库中提供了`Weak<T>`，一个用于存在引用循环但只有一个方向有所有权的智能指针。我们已经展示过如何克隆`Rc<T>`来增加引用的`strong_count`；`Weak<T>`是一种引用`Rc<T>`但不增加`strong_count`的方式：相反它增加`Rc`引用的`weak_count`。当`Rc`离开作用域，其内部值会在`strong_count`为 0 的时候被丢弃，即便`weak_count`不为 0 。为了能够从`Weak<T>`中获取值，首先需要使用`upgrade`方法将其升级为`Option<Rc<T>>`。升级`Weak<T>`的结果在`Rc`还未被丢弃时是`Some`，而在`Rc`被丢弃时是`None`。因为`upgrade`返回一个`Option`，我们知道 Rust 会确保`Some`和`None`的情况都被处理并不会尝试使用一个无效的指针。
 
-不同于列表 15-17 中每个项只知道它的下一项，加入我们需要一个树，它的项知道它的子项**和**父项。
+不同于列表 15-17 中每个项只知道它的下一项，假如我们需要一个树，它的项知道它的子项**和**父项。
 
 让我们从一个叫做`Node`的存放拥有所有权的`i32`值和其子`Node`值的引用的结构体开始：
 
@@ -276,4 +276,4 @@ examining strong and weak reference counts of `leaf` and `branch`</span>
 
 [The Nomicon]: https://doc.rust-lang.org/stable/nomicon/vec.html
 
-接下来，让我们谈谈 Rust 的并发。我们还会学习到一些新的堆并发有帮助的智能指针。
+接下来，让我们谈谈 Rust 的并发。我们还会学习到一些新的对并发有帮助的智能指针。
