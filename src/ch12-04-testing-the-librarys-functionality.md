@@ -149,7 +149,7 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 <!-- Will add wingdings in libreoffice /Carol -->
 
-`lines`方法返回一个迭代器。第十三张会深入了解迭代器，不过我们已经在列表 3-6 中见过使用迭代器的方法，在那里使用了一个`for`循环和迭代器在一个集合的每一项上运行一些代码。
+`lines`方法返回一个迭代器。第十三章会深入了解迭代器，不过我们已经在列表 3-6 中见过使用迭代器的方法，在那里使用了一个`for`循环和迭代器在一个集合的每一项上运行一些代码。
 
 <!-- so what does `lines` do on its own, if we need to use it in a for loop to
 work? -->
