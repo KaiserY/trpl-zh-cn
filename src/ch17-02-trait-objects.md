@@ -4,17 +4,17 @@
 > <br>
 > commit 67876e3ef5323ce9d394f3ea6b08cb3d173d9ba9
 
- 在第八章，我们谈到了 vector 的局限是 vector 只能存储同种类型的元素。在列表 8-1 中有一个例子，其中定义了一个有存放整型、浮点型和文本的成员的枚举类型`SpreadsheetCell`，这样就可以在每一个单元格储存不同类型的数据并使得 vector 仍让代表一行单元格。这在那类代码被编译时就知晓需要可交换处理的数据的类型是一个固定集合的情况下是可行的。
+ 在第八章，我们谈到了 vector 只能存储同种类型元素的局限。在列表 8-1 中有一个例子，其中定义了存放包含整型、浮点型和文本型成员的枚举类型`SpreadsheetCell`，这样就可以在每一个单元格储存不同类型的数据，并使得 vector 仍然代表一行单元格。当编译时就知道类型集合全部元素的情况下，这种方案是可行的。
 
 <!-- The code example I want to reference did not have a listing number; it's
 the one with SpreadsheetCell. I will go back and add Listing 8-1 next time I
 get Chapter 8 for editing. /Carol -->
 
-有时，我们想我们使用的类型集合是可扩展的，可以被使用我们的库的程序员扩展。比如很多图形化接口工具有一个条目列表，从这个列表迭代和调用draw方法在每个条目上。我们将要创建一个库crate，包含称为`rust_gui`的CUI库的结构体。我们的GUI库可以包含一些给开发者使用的类型，比如`Button`或者`TextField`。使用`rust_gui`的程序员会创建更多可以在屏幕绘图的类型：一个程序员可能会增加`Image`，另外一个可能会增加`SelectBox`。我们不会在本章节实现一个完善的GUI库，但是我们会展示如何把各部分组合在一起。
+有时，我们需要可扩展的类型集合，能够被库的用户扩展。比如很多图形化接口工具有一个条目列表，迭代该列表并调用每个条目的 draw 方法。我们将创建一个库 crate，包含称为 `rust_gui` 的 GUI 库。库中有一些为用户准备的类型，比如 `Button` 或 `TextField`，`rust_gui`的用户还会创建更多，有的用户会增加`Image`，有的用户会增加`SelectBox`，然后用它们在屏幕上绘图。我们不会在本章节实现一个完善的GUI库，只是展示如何把各部分组合起来。
 
-当要写一个`rust_gui`库时，我们不知道其他程序员要创建什么类型，所以我们无法定义一个`enum`来包含所有的类型。我们知道的是`rust_gui`需要有能力跟踪所有这些不同类型的大量的值，需要有能力在每个值上调用`draw`方法。我们的GUI库不需要确切地知道当调用`draw`方法时会发生什么，只要值有可用的方法供我们调用就可以。
+当写 `rust_gui` 库时，我们不知道其他程序员需要什么类型，所以无法定义一个 `enum` 来包含所有的类型。然而 `rust_gui` 需要跟踪所有这些不同类型的值，需要有在每个值上调用 `draw` 方法能力。我们的 GUI 库不需要确切地知道调用 `draw` 方法会发生什么，只需要有可用的方法供我们调用。
 
-在有继承的语言里，我们可能会定义一个名为`Component`的类，该类上有一个`draw`方法。其他的类比如`Button`、`Image`和`SelectBox`会从`Component`继承并继承`draw`方法。它们会各自覆写`draw`方法来自定义行为，但是框架会把所有的类型当作是`Component`的实例，并在它们上调用`draw`。
+在可以继承的语言里，我们会定义一个名为 `Component` 的类，该类上有一个`draw`方法。其他的类比如`Button`、`Image`和`SelectBox`会从`Component`继承并拥有`draw`方法。它们各自覆写`draw`方法以自定义行为，但是框架会把所有的类型当作是`Component`的实例，并在其上调用`draw`。
 
 ### 定义一个带有自定义行为的Trait
 
@@ -104,7 +104,7 @@ impl<T> Screen<T>
 
 <span class="caption">Listing 17-6: 一种`Screen`结构体的替代实现，它的`run`方法使用通用类型和trait绑定
 </span>
- 
+
 这个例子只能使我们的`Screen`实例的所有组件类型全是`Button`，或者全是`TextField`。如果你的组件集合是单一类型的，那么可以优先使用泛型和trait限定，这是因为其使用的具体类型在编译阶段可以被定意为是单一的。
 
 而如果使用内部有`Vec<Box<Draw>>` trait对象的列表的`Screen`结构体，`Screen`实例可以同时包含`Box<Button>`和`Box<TextField>`的`Vec`。我们看它是怎么工作的，然后讨论运行时性能的实现。
