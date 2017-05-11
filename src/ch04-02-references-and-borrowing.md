@@ -58,7 +58,7 @@ fn calculate_length(s: &String) -> usize { // s is a reference to a String
 
 我们将获取引用作为函数参数称为**借用**（*borrowing*）。正如现实生活中，如果一个人拥有某样东西，你可以从它哪里借来。当你使用完毕，必须还回去。
 
-那么如果我们尝试修改借用的变量呢？尝试列表 4-9 中的代码。剧透：这行不通！
+如果我们尝试修改借用的变量呢？尝试列表 4-9 中的代码。剧透：这行不通！
 
 <span class="filename">Filename: src/main.rs</span>
 
