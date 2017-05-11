@@ -74,7 +74,7 @@ let team_name = String::from("Blue");
 let score = scores.get(&team_name);
 ```
 
-这里，`score` 将会是与蓝队分数相关的值，应为 `Some(10)`。因为 `get` 返回 `Option<V>`，所以结果被装进 `Some`；如果某个键在哈希 map 中没有对应的值，`get` 会返回 `None`。这时就要用某种第六章提到的方法来处理 `Option`。
+这里，`score` 是与蓝队分数相关的值，应为 `Some(10)`。因为 `get` 返回 `Option<V>`，所以结果被装进 `Some`；如果某个键在哈希 map 中没有对应的值，`get` 会返回 `None`。这时就要用某种第六章提到的方法来处理 `Option`。
 
 可以使用与 vector 类似的方式来遍历哈希 map 中的每一个键值对，也就是`for`循环：
 
