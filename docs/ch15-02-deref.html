@@ -147,36 +147,36 @@ struct that holds mp3 file data and metadata</span></p>
 <li>从<code>&amp;mut T</code>到<code>&amp;U</code>当<code>T: Deref&lt;Target=U&gt;</code>。</li>
 </ul>
 <p>头两个情况除了可变性之外是相同的：如果有一个<code>&amp;T</code>，而<code>T</code>实现了返回<code>U</code>类型的<code>Deref</code>，可以直接得到<code>&amp;U</code>。对于可变引用也是一样。最后一个有些微妙：如果有一个可变引用，它也可以强转为一个不可变引用。反之则是_不可能_的：不可变引用永远也不能强转为可变引用。</p>
-<p><code>Deref</code> trait 对于只能指针模式十分重要的原因在于智能指针可以被看作普通引用并用于期望使用引用的地方。例如，无需重新编写方法和函数来直接获取智能指针。</p>
+<p><code>Deref</code> trait 对于智能指针模式十分重要的原因在于智能指针可以被看作普通引用并用于期望使用引用的地方。例如，无需重新编写方法和函数来直接获取智能指针。</p>
 
                 </div>
 
                 <!-- Mobile navigation buttons -->
-                
+
                     <a href="ch15-01-box.html" class="mobile-nav-chapters previous">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                
 
-                
+
+
                     <a href="ch15-03-drop.html" class="mobile-nav-chapters next">
                         <i class="fa fa-angle-right"></i>
                     </a>
-                
+
 
             </div>
 
-            
+
                 <a href="ch15-01-box.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-left"></i>
                 </a>
-            
 
-            
+
+
                 <a href="ch15-03-drop.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-right"></i>
                 </a>
-            
+
 
         </div>
 
@@ -189,7 +189,7 @@ struct that holds mp3 file data and metadata</span></p>
         </script>
 
         <!-- Livereload script (if served using the cli tool) -->
-        
+
 
         <script src="highlight.js"></script>
         <script src="book.js"></script>
