@@ -4,40 +4,40 @@
 > <br>
 > commit c1b95a18dbcbb06aadf07c03759f27d88ccf62cf
 
-使用 Rust 的第一步是安装。你需要网络连接来执行本章的命令，因为我们要从网上下载 Rust。
+第一步是安装 Rust。你需要网络连接来执行本章的命令，因为我们要从网上下载 Rust。
 
-我们将会展示很多使用终端的命令，并且这些代码都以`$`开头。并不需要真正输入`$`，它们在这里代表每行指令的开头。在网上会看到很多使用这个惯例的教程和例子：`$`代表以常规用户运行命令，`#`代表需要用管理员运行的命令。没有以`$`（或`#`）的行通常是之前命令的输出。
+我们将会展示很多在终端中输入的命令，这些命令均以 `$` 开头。你不需要真的输入`$`，在这里它代表每行命令的起始。网上有很多教程和例子遵循这种惯例：`$` 代表以常规用户身份运行命令，`#` 代表需要用管理员身份运行命令。没有以 `$`（或 `#`）起始的行通常是之前命令的输出。
 
 ### 在 Linux 或 Mac 上安装
 
-如果你使用 Linux 或 Mac，所有需要做的就是打开一个终端并输入：
+如果你使用 Linux 或 Mac，你需要做的全部，就是打开一个终端并输入：
 
 ```
 $ curl https://sh.rustup.rs -sSf | sh
 ```
 
-这会下载一个脚本并开始安装。你可能被提示要输入密码。如果一切顺利，将会出现如下内容：
+这会下载一个脚本并开始安装。可能会提示你输入密码，如果一切顺利，将会出现如下内容：
 
 ```
 Rust is installed now. Great!
 ```
 
-当然，如果你不赞成`curl | sh`这种模式，可以随意下载、检查和运行这个脚本。
+当然，如果你对于 `curl | sh` 心有疑虑，你可以随意下载、检查和运行这个脚本。
 
 ### 在 Windows 上安装
 
-在 Windows 上，前往[https://rustup.rs](https://rustup.rs/)<!-- ignore -->并按照说明下载 rustup-init.exe。运行并遵循其提供的其余指示操作。
+如果你使用 Windows，前往 [https://rustup.rs](https://rustup.rs/)<!-- ignore -->，按说明下载 rustup-init.exe，运行并照其指示操作。
 
-本书其余 Windows 相关的命令假设你使用`cmd`作为你的 shell。如果你使用不同的 shell，可能能够执行 Linux 和 Mac 用户相同的命令。如果都不行，请查看所使用的 shell 的文档。
+本书中其余 Windows 相关的命令，假设你使用 `cmd` 作为 shell。如果你使用其它 shell，也许可以执行与 Linux 和 Mac 用户相同的命令。如果不行，请查看该 shell 的文档。
 
 ### 自定义安装
 
-如果有理由倾向于不使用 rustup.rs，请查看[Rust 安装页面](https://www.rust-lang.org/install.html)获取其他选择。
+无论出于何种理由，如果不愿意使用 rustup.rs，请查看 [Rust 安装页面](https://www.rust-lang.org/install.html) 获取其他选择。
 
 
 ### 更新
 
-一旦安装完 Rust，更新到最新版本是简单的。在 shell 中运行更新脚本：
+一旦 Rust 安装完，更新到最新版本很简单。在 shell 中执行：
 
 ```
 $ rustup update
@@ -45,7 +45,7 @@ $ rustup update
 
 ### 卸载
 
-卸载 Rust 同安装一样简单。在 shell 中运行卸载脚本
+卸载 Rust 同样简单。在 shell 中执行:
 
 ```
 $ rustup self uninstall
@@ -53,25 +53,25 @@ $ rustup self uninstall
 
 ### 故障排除
 
-安装完 Rust 后，打开 shell，输入：
+安装完 Rust 后，在 shell 中执行：
 
 ```
 $ rustc --version
 ```
 
-应该能看到类似这样的版本号、提交 hash 和提交日期，对应你安装时的最新稳定版本：
+应该能看到类似这样的版本号、提交哈希和提交日期，对应安装时的最新稳定版：
 
 ```
 rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
-如果出现这些内容，Rust 就安装成功了！
+出现这些内容，Rust 就安装成功了！
 
 恭喜入坑！（此处应该有掌声！）
 
-如果有问题并且你在使用 Windows，检查 Rust（rustc，cargo 等）是否位于`%PATH%`系统变量中。
+如果在 Windows 中使用出现问题，检查 Rust（rustc，cargo 等）是否在 `%PATH%` 环境变量所包含的路径中。
 
-如果还是不能运行，有许多可以获取帮助的地方。最简单的是 [irc.mozilla.org 上的 #rust IRC 频道][irc]<!-- ignore --> ，可以使用 [Mibbit][mibbit] 来访问它。访问这些地址然后就可以和其他能提供帮助的 Rustacean（我们这些人自嘲的绰号）聊天了。其它给力的资源包括[用户论坛][users]和 [Stack Overflow][stackoverflow]。
+如果还是不能解决，有许多地方可以求助。最简单的是 [irc.mozilla.org 上的 #rust IRC 频道][irc]<!-- ignore --> ，可以使用 [Mibbit][mibbit] 来访问它。然后就能和其他 Rustacean（Rust 用户的称号，有自嘲意味）聊天并寻求帮助。其它给力的资源包括[用户论坛][users]和 [Stack Overflow][stackoverflow]。
 
 [irc]: irc://irc.mozilla.org/#rust
 [mibbit]: http://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust
@@ -80,6 +80,6 @@ rustc x.y.z (abcabcabc yyyy-mm-dd)
 
 ### 本地文档
 
-安装程序也包含一份本地文档的拷贝，你可以离线阅读它们。输入`rustup doc`将在浏览器中打开本地文档。
+安装程序自带本地文档，可以离线阅读。输入 `rustup doc` 可以在浏览器中查看。
 
-任何你不太确认标准库中提供的类型或函数是干什么的时候，请查看 API 文档！
+任何时候，如果你拿不准标准库中类型或函数，请查看 API 文档！
