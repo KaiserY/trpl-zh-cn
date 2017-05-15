@@ -2,7 +2,7 @@
 
 > [ch15-06-reference-cycles.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch15-06-reference-cycles.md)
 > <br>
-> commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894
+> commit 9430a3d28a2121a938d704ce48b15d21062f880e
 
 我们讨论过 Rust 做出的一些保证，例如永远也不会遇到一个空值，而且数据竞争也会在编译时被阻止。Rust 的内存安全保证也使其更难以制造从不被清理的内存，这被称为**内存泄露**。然而 Rust 并不是**不可能**出现内存泄漏，避免内存泄露**并**不是 Rust 的保证之一。换句话说，内存泄露是安全的。
 
@@ -274,6 +274,6 @@ examining strong and weak reference counts of `leaf` and `branch`</span>
 
 如果本章内容引起了你的兴趣并希望现在就实现你自己的智能指针的话，请阅读 [The Nomicon] 来获取更多有用的信息。
 
-[The Nomicon]: https://doc.rust-lang.org/stable/nomicon/vec.html
+[The Nomicon]: https://doc.rust-lang.org/stable/nomicon/
 
 接下来，让我们谈谈 Rust 的并发。我们还会学习到一些新的对并发有帮助的智能指针。

@@ -536,7 +536,7 @@ fn main() {
     Err(_) =&gt; continue,
 };
 </code></pre>
-<p>从<code>expect</code>调用切换到<code>expect</code>语句是如何从遇到错误就崩溃到真正处理错误的常用手段。记住<code>parse</code>返回一个<code>Result</code>类型，而<code>Result</code>是一个拥有<code>Ok</code>或<code>Err</code>两个成员的枚举。在这里使用<code>match</code>表达式，就像之前处理<code>cmp</code>方法返回的<code>Ordering</code>一样。</p>
+<p>从<code>expect</code>调用切换到<code>match</code>语句是如何从遇到错误就崩溃到真正处理错误的常用手段。记住<code>parse</code>返回一个<code>Result</code>类型，而<code>Result</code>是一个拥有<code>Ok</code>或<code>Err</code>两个成员的枚举。在这里使用<code>match</code>表达式，就像之前处理<code>cmp</code>方法返回的<code>Ordering</code>一样。</p>
 <p>如果<code>parse</code>能够成功的将字符串转换为一个数字，它会返回一个包含结果数字<code>Ok</code>值。这个<code>Ok</code>值会匹配第一个分支的模式，这时<code>match</code>表达式仅仅返回<code>parse</code>产生的<code>Ok</code>值之中的<code>num</code>值。这个数字会最终如期变成新创建的<code>guess</code>变量。</p>
 <p>如果<code>parse</code><em>不</em>能将字符串转换为一个数字，它会返回一个包含更多错误信息的<code>Err</code>值。<code>Err</code>值不能匹配第一个<code>match</code>分支的<code>Ok(num)</code>模式，但是会匹配第二个分支的<code>Err(_)</code>模式。<code>_</code>是一个包罗万象的值；在这个例子中，我们想要匹配所有<code>Err</code>值，不管其中有何种信息。所以程序会执行第二个分支的代码，<code>continue</code>，这意味着进入<code>loop</code>的下一次循环并请求另一个猜测。这样程序就有效地忽略了<code>parse</code>可能遇到的所有错误！</p>
 <p>现在万事俱备（只欠东风）了。运行<code>cargo run</code>来尝试一下：</p>

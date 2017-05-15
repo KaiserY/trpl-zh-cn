@@ -2,7 +2,7 @@
 
 > [ch04-01-what-is-ownership.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch04-01-what-is-ownership.md)
 > <br>
-> commit fae5fa82d728b5965ecbba84060689430345e509
+> commit 6d4ef020095a375483b2121d4fa2b1661062cc92
 
 Rust 的核心功能（之一）是**所有权**（*ownership*）。虽然这个功能理解起来很直观，不过它对语言的其余部分有着更深层的含义。
 
@@ -193,8 +193,8 @@ error[E0382]: use of moved value: `s1`
   |
 3 |     let s2 = s1;
   |         -- value moved here
-4 |     println!("{}, world!",s1);
-  |                           ^^ value used here after move
+4 |     println!("{}, world!", s1);
+  |                            ^^ value used here after move
   |
   = note: move occurs because `s1` has type `std::string::String`,
 which does not implement the `Copy` trait
@@ -326,7 +326,7 @@ fn takes_and_gives_back(a_string: String) -> String { // a_string comes into
 }
 ```
 
-变量的所有权总是遵循相同的模式：将值赋值给另一个变量时移动它，并且当持有堆中数据值的变量离开作用域时，如果数据的所有权没有被移动到另外一个变量时，其值将通过`drop`被清理掉。
+变量的所有权总是遵循相同的模式：将值赋值给另一个变量时移动它。当持有堆中数据值的变量离开作用域时，其值将通过`drop`被清理掉，除非数据被移动为另一个变量所有。
 
 在每一个函数中都获取并接着返回所有权是冗余乏味的。如果我们想要函数使用一个值但不获取所有权改怎么办呢？如果我们还要接着使用它的话，每次都传递出去再传回来就有点烦人了，另外我们也可能想要返回函数体产生的任何（不止一个）数据。
 

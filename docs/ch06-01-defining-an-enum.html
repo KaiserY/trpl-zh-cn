@@ -73,7 +73,7 @@
 <br>
 commit e6d6caab41471f7115a621029bd428a812c5260e</p>
 </blockquote>
-<p>让我们通过一用代码来表现的场景，来看看为什么这里枚举是有用的而且比结构体更合适。比如我们要处理 IP 地。目前被广泛使用的两个主要 IP 标准：IPv4（version four）和 IPv6（version six）。这是我们的程序只可能会遇到两种 IP 地址：所以可以<strong>枚举</strong>出所有可能的值，这也正是它名字的由来。</p>
+<p>让我们通过一用代码来表现的场景，来看看为什么这里枚举是有用的而且比结构体更合适。比如我们要处理 IP 地址。目前被广泛使用的两个主要 IP 标准：IPv4（version four）和 IPv6（version six）。这是我们的程序只可能会遇到两种 IP 地址：所以可以<strong>枚举</strong>出所有可能的值，这也正是它名字的由来。</p>
 <p>任何一个 IP 地址要么是 IPv4 的要么是 IPv6 的而不能两者都是。IP 地址的这个特性使得枚举数据结构非常适合这个场景，因为枚举值只可能是其中一个成员。IPv4 和 IPv6 从根本上讲仍是 IP 地址，所以当代码在处理申请任何类型的 IP 地址的场景时应该把他们当作相同的类型。</p>
 <p>可以通过在代码中定义一个<code>IpAddrKind</code>枚举来表现这个概念并列出可能的 IP 地址类型，<code>V4</code>和<code>V6</code>。这被称为枚举的<strong>成员</strong>（<em>variants</em>）：</p>
 <pre><code class="language-rust">enum IpAddrKind {
@@ -92,7 +92,7 @@ commit e6d6caab41471f7115a621029bd428a812c5260e</p>
 let four = IpAddrKind::V4;
 let six = IpAddrKind::V6;
 </code></pre>
-<p>注意枚举的成员位于其标识符的命名空间中，并使用两个冒号分开。这么设计的益处是现在<code>IpAddrKind::V4</code>和<code>IpAddrKind::V6</code>是相同类型的：<code>IpAddrKind</code>。例如，接着我们可以顶一个函数来获取<code>IpAddrKind</code>：</p>
+<p>注意枚举的成员位于其标识符的命名空间中，并使用两个冒号分开。这么设计的益处是现在<code>IpAddrKind::V4</code>和<code>IpAddrKind::V6</code>是相同类型的：<code>IpAddrKind</code>。例如，接着我们可以定义一个函数来获取<code>IpAddrKind</code>：</p>
 <pre><code class="language-rust"># enum IpAddrKind {
 #     V4,
 #     V6,

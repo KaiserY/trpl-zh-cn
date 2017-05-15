@@ -2,7 +2,7 @@
 
 > [ch16-04-extensible-concurrency-sync-and-send.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch16-04-extensible-concurrency-sync-and-send.md)
 > <br>
-> commit 55b294f20fc846a13a9be623bf322d8b364cee77
+> commit 9430a3d28a2121a938d704ce48b15d21062f880e
 
 Rust 的并发模型中一个有趣的方面是：语言本身对并发知之**甚少**。我们之前讨论的几乎所有内容，都属于标准库，而不是语言本身的内容。由于不需要语言提供并发相关的基础设施，并发方案不受标准库或语言所限：我们可以编写自己的或使用别人编写的。
 
@@ -28,7 +28,7 @@ Rust 的并发模型中一个有趣的方面是：语言本身对并发知之**�
 
 实现这些标记 trait 涉及到编写不安全的 Rust 代码，第十九章将会讲述具体的方法；当前重要的是，在创建新的由不是`Send`和`Sync`的部分构成的并发类型时需要多加小心，以确保维持其安全保证。[The Nomicon] 中有更多关于这些保证以及如何维持他们的信息。
 
-[The Nomicon]: https://doc.rust-lang.org/stable/nomicon/vec.html
+[The Nomicon]: https://doc.rust-lang.org/stable/nomicon/
 
 ## 总结
 

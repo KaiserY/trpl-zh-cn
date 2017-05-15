@@ -2,7 +2,7 @@
 
 > [ch03-02-data-types.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch03-02-data-types.md)
 > <br>
-> commit 04aa3a45eb72855b34213703718f50a12a3eeec8
+> commit fe4833a8ef2853c55424e7747a4ef8dd64c35b32
 
 Rust 中的任何值都有一个具体的**类型**（*type*），这告诉了 Rust 它被指定了何种数据，这样 Rust 就知道如何处理这些数据了。这一部分将讲到一些语言内建的类型。我们将这些类型分为两个子集：标量（scalar）和复合（compound）。
 
@@ -124,7 +124,7 @@ fn main() {
 }
 ```
 
-使用布尔值的主要场景是条件语句，例如`if`。在“控制流”（“Control Flow”）部分将讲到`if`语句在 Rust 中如何工作。
+使用布尔值的主要场景是条件表达式，例如`if`。在“控制流”（“Control Flow”）部分将讲到`if`表达式在 Rust 中如何工作。
 
 #### 字符类型
 

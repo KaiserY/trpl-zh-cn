@@ -685,7 +685,7 @@ let guess: u32 = match guess.trim().parse() {
 };
 ```
 
-从`expect`调用切换到`expect`语句是如何从遇到错误就崩溃到真正处理错误的常用手段。记住`parse`返回一个`Result`类型，而`Result`是一个拥有`Ok`或`Err`两个成员的枚举。在这里使用`match`表达式，就像之前处理`cmp`方法返回的`Ordering`一样。
+从`expect`调用切换到`match`语句是如何从遇到错误就崩溃到真正处理错误的常用手段。记住`parse`返回一个`Result`类型，而`Result`是一个拥有`Ok`或`Err`两个成员的枚举。在这里使用`match`表达式，就像之前处理`cmp`方法返回的`Ordering`一样。
 
 如果`parse`能够成功的将字符串转换为一个数字，它会返回一个包含结果数字`Ok`值。这个`Ok`值会匹配第一个分支的模式，这时`match`表达式仅仅返回`parse`产生的`Ok`值之中的`num`值。这个数字会最终如期变成新创建的`guess`变量。
 

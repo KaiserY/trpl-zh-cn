@@ -71,11 +71,11 @@
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch15-06-reference-cycles.md">ch15-06-reference-cycles.md</a>
 <br>
-commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894</p>
+commit 9430a3d28a2121a938d704ce48b15d21062f880e</p>
 </blockquote>
 <p>我们讨论过 Rust 做出的一些保证，例如永远也不会遇到一个空值，而且数据竞争也会在编译时被阻止。Rust 的内存安全保证也使其更难以制造从不被清理的内存，这被称为<strong>内存泄露</strong>。然而 Rust 并不是<strong>不可能</strong>出现内存泄漏，避免内存泄露<strong>并</strong>不是 Rust 的保证之一。换句话说，内存泄露是安全的。</p>
 <p>在使用<code>Rc&lt;T&gt;</code>和<code>RefCell&lt;T&gt;</code>时，有可能创建循环引用，这时各个项相互引用并形成环。这是不好的因为每一项的引用计数将永远也到不了 0，其值也永远也不会被丢弃。让我们看看这是如何发生的以及如何避免它。</p>
-<p>在列表 15-16 中，我们将使用列表 15-5 中<code>List</code>定义的另一个变体。我们将回到储存<code>i32</code>值作为<code>Cons</code>成员的第一个元素。现在<code>Cons</code>成员的第二个元素是<code>RefCell&lt;Rc&lt;List&gt;&gt;</code>：这时就不能修改<code>i32</code>值了，但是能够修改<code>Cons</code>成员指向的哪个<code>List</code>。还需要增加一个<code>tail</code>方法来方便我们在拥有一个<code>Cons</code>成员时访问第二个项：</p>
+<p>在列表 15-16 中，我们将使用列表 15-5 中<code>List</code>定义的另一个变体。我们将回到储存<code>i32</code>值作为<code>Cons</code>成员的第一个元素。现在<code>Cons</code>成员的第二个元素是<code>RefCell&lt;Rc&lt;List&gt;&gt;</code>：这时就不能修改<code>i32</code>值了，但是能够修改<code>Cons</code>成员指向的那个<code>List</code>。还需要增加一个<code>tail</code>方法来方便我们在拥有一个<code>Cons</code>成员时访问第二个项：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">#[derive(Debug)]
 enum List {
@@ -152,7 +152,7 @@ pointing to each other</span></p>
 <p>举例来说，对于像图这样的数据结构，为了创建父节点指向子节点的边和以相反方向从子节点指向父节点的边，有时需要创建这样的引用循环。如果一个方向拥有所有权而另一个方向没有，对于模拟这种数据关系的一种不会创建引用循环和内存泄露的方式是使用<code>Weak&lt;T&gt;</code>。接下来让我们探索一下！</p>
 <a class="header" href="#避免引用循环将rct变为weakt" name="避免引用循环将rct变为weakt"><h3>避免引用循环：将<code>Rc&lt;T&gt;</code>变为<code>Weak&lt;T&gt;</code></h3></a>
 <p>Rust 标准库中提供了<code>Weak&lt;T&gt;</code>，一个用于存在引用循环但只有一个方向有所有权的智能指针。我们已经展示过如何克隆<code>Rc&lt;T&gt;</code>来增加引用的<code>strong_count</code>；<code>Weak&lt;T&gt;</code>是一种引用<code>Rc&lt;T&gt;</code>但不增加<code>strong_count</code>的方式：相反它增加<code>Rc</code>引用的<code>weak_count</code>。当<code>Rc</code>离开作用域，其内部值会在<code>strong_count</code>为 0 的时候被丢弃，即便<code>weak_count</code>不为 0 。为了能够从<code>Weak&lt;T&gt;</code>中获取值，首先需要使用<code>upgrade</code>方法将其升级为<code>Option&lt;Rc&lt;T&gt;&gt;</code>。升级<code>Weak&lt;T&gt;</code>的结果在<code>Rc</code>还未被丢弃时是<code>Some</code>，而在<code>Rc</code>被丢弃时是<code>None</code>。因为<code>upgrade</code>返回一个<code>Option</code>，我们知道 Rust 会确保<code>Some</code>和<code>None</code>的情况都被处理并不会尝试使用一个无效的指针。</p>
-<p>不同于列表 15-17 中每个项只知道它的下一项，加入我们需要一个树，它的项知道它的子项<strong>和</strong>父项。</p>
+<p>不同于列表 15-17 中每个项只知道它的下一项，假如我们需要一个树，它的项知道它的子项<strong>和</strong>父项。</p>
 <p>让我们从一个叫做<code>Node</code>的存放拥有所有权的<code>i32</code>值和其子<code>Node</code>值的引用的结构体开始：</p>
 <pre><code class="language-rust">use std::rc::Rc;
 use std::cell::RefCell;
@@ -280,8 +280,8 @@ examining strong and weak reference counts of <code>leaf</code> and <code>branch
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>现在我们学习了如何选择不同类型的智能指针来选择不同的保证并与 Rust 的常规引用向取舍。<code>Box&lt;T&gt;</code>有一个已知的大小并指向分配在堆上的数据。<code>Rc&lt;T&gt;</code>记录了堆上数据的引用数量这样就可以拥有多个所有者。<code>RefCell&lt;T&gt;</code>和其内部可变性使其可以用于需要不可变类型，但希望在运行时而不是编译时检查借用规则的场景。</p>
 <p>我们还介绍了提供了很多智能指针功能的 trait <code>Deref</code>和<code>Drop</code>。同时探索了形成引用循环和造成内存泄漏的可能性，以及如何使用<code>Weak&lt;T&gt;</code>避免引用循环。</p>
-<p>如果本章内容引起了你的兴趣并希望现在就实现你自己的智能指针的话，请阅读 <a href="https://doc.rust-lang.org/stable/nomicon/vec.html">The Nomicon</a> 来获取更多有用的信息。</p>
-<p>接下来，让我们谈谈 Rust 的并发。我们还会学习到一些新的堆并发有帮助的智能指针。</p>
+<p>如果本章内容引起了你的兴趣并希望现在就实现你自己的智能指针的话，请阅读 <a href="https://doc.rust-lang.org/stable/nomicon/">The Nomicon</a> 来获取更多有用的信息。</p>
+<p>接下来，让我们谈谈 Rust 的并发。我们还会学习到一些新的对并发有帮助的智能指针。</p>
 
                 </div>
 

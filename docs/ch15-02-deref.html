@@ -73,7 +73,7 @@
 <br>
 commit ecc3adfe0cfa0a4a15a178dc002702fd0ea74b3f</p>
 </blockquote>
-<p>第一个智能指针相关的重要 trait 是<code>Deref</code>，它允许我们重载<code>*</code>，解引用运算符（不同于乘法运算符和全局引用运算符）。重载智能指针的<code>*</code>能使访问其后的数据更为方便，在这个部分的稍后介绍解引用强制多态时我们会讨论方便的意义。</p>
+<p>第一个智能指针相关的重要 trait 是<code>Deref</code>，它允许我们重载<code>*</code>，解引用运算符（不同于乘法运算符和全局引用运算符）。重载智能指针的<code>*</code>能使访问其持有的数据更为方便，在本章结束前谈到解引用强制多态时我们会说明方便的意义。</p>
 <p>第八章的哈希 map 的“根据旧值更新一个值”部分简要的提到了解引用运算符。当时有一个可变引用，而我们希望改变这个引用所指向的值。为此，首先我们必须解引用。这是另一个使用<code>i32</code>值引用的例子：</p>
 <pre><code class="language-rust">let mut x = 5;
 {
@@ -84,7 +84,7 @@ commit ecc3adfe0cfa0a4a15a178dc002702fd0ea74b3f</p>
 
 assert_eq!(6, x);
 </code></pre>
-<p>我们使用<code>*y</code>来访问可变引用<code>y</code>所指向的数据，而是可变引用本身。接着可以修改它的数据，在这里对其加一。</p>
+<p>我们使用<code>*y</code>来访问可变引用<code>y</code>所指向的数据，而不是可变引用本身。接着可以修改它的数据，在这里对其加一。</p>
 <p>引用并不是智能指针，他们只是引用指向的一个值，所以这个解引用操作是很直接的。智能指针还会储存指针或数据的元数据。当解引用一个智能指针时，我们只想要数据，而不需要元数据。我们希望能在使用常规引用的地方也能使用智能指针。为此，可以通过实现<code>Deref</code> trait 来重载<code>*</code>运算符的行为。</p>
 <p>列表 15-7 展示了一个定义为储存 mp3 数据和元数据的结构体通过<code>Deref</code> trait 来重载<code>*</code>的例子。<code>Mp3</code>，在某种意义上是一个智能指针：它拥有包含音频的<code>Vec&lt;u8&gt;</code>数据。另外，它储存了一些可选的元数据，在这个例子中是音频数据中艺术家和歌曲的名称。我们希望能够方便的访问音频数据而不是元数据，所以需要实现<code>Deref</code> trait 来返回音频数据。实现<code>Deref</code> trait 需要一个叫做<code>deref</code>的方法，它借用<code>self</code>并返回其内部数据：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -122,7 +122,7 @@ struct that holds mp3 file data and metadata</span></p>
 <p>没有<code>Deref</code> trait 的话，编译器只能解引用<code>&amp;</code>引用，而<code>my_favorite_song</code>并不是（它是一个<code>Mp3</code>结构体）。通过<code>Deref</code> trait，编译器知道实现了<code>Deref</code> trait 的类型有一个返回引用的<code>deref</code>方法（在这个例子中，是<code>&amp;self.audio</code>因为列表 15-7 中的<code>deref</code>的定义）。所以为了得到一个<code>*</code>可以解引用的<code>&amp;</code>引用，编译器将<code>*my_favorite_song</code>展开为如下：</p>
 <pre><code class="language-rust,ignore">*(my_favorite_song.deref())
 </code></pre>
-<p>这个就是<code>self.audio</code>中的结果值。<code>deref</code>返回一个引用并接下来必需解引用而不是直接返回值的原因是所有权：如果<code>deref</code>方法直接返回值而不是引用，其值将被移动出<code>self</code>。这里和大部分使用解引用运算符的地方并不想获取<code>my_favorite_song.audio</code>的所有权。</p>
+<p>这个就是<code>self.audio</code>中的结果值。<code>deref</code>返回一个引用并接下来必需解引用而不是直接返回值的原因是所有权：如果<code>deref</code>方法直接返回值而不是引用，其值将被移动出<code>self</code>。和大部分使用解引用运算符的地方相同，这里并不想获取<code>my_favorite_song.audio</code>的所有权。</p>
 <p>注意将<code>*</code>替换为<code>deref</code>调用和<code>*</code>调用的过程在每次使用<code>*</code>的时候都会发生一次。<code>*</code>的替换并不会无限递归进行。最终的数据类型是<code>Vec&lt;u8&gt;</code>，它与列表 15-7 中<code>assert_eq!</code>的<code>vec![1, 2, 3]</code>相匹配。</p>
 <a class="header" href="#函数和方法的隐式解引用强制多态" name="函数和方法的隐式解引用强制多态"><h3>函数和方法的隐式解引用强制多态</h3></a>
 <p>Rust 倾向于偏爱明确而不是隐晦，不过一个情况下这并不成立，就是函数和方法的参数的<strong>解引用强制多态</strong>（<em>deref coercions</em>）。解引用强制多态会自动的将指针或智能指针的引用转换为指针内容的引用。解引用强制多态发生于当传递给函数的参数类型不同于函数签名中定义参数类型的时候。解引用强制多态的加入使得 Rust 调用函数或方法时无需很多使用<code>&amp;</code>和<code>*</code>的引用和解引用。</p>
@@ -147,36 +147,36 @@ struct that holds mp3 file data and metadata</span></p>
 <li>从<code>&amp;mut T</code>到<code>&amp;U</code>当<code>T: Deref&lt;Target=U&gt;</code>。</li>
 </ul>
 <p>头两个情况除了可变性之外是相同的：如果有一个<code>&amp;T</code>，而<code>T</code>实现了返回<code>U</code>类型的<code>Deref</code>，可以直接得到<code>&amp;U</code>。对于可变引用也是一样。最后一个有些微妙：如果有一个可变引用，它也可以强转为一个不可变引用。反之则是_不可能_的：不可变引用永远也不能强转为可变引用。</p>
-<p><code>Deref</code> trait 对于智能指针模式十分重要的原因在于智能指针可以被看作普通引用并用于期望使用引用的地方。例如，无需重新编写方法和函数来直接获取智能指针。</p>
+<p><code>Deref</code> trait 对于智能指针模式十分重要的原因在于智能指针可以被看作普通引用并被用于期望使用普通引用的地方。例如，无需重新编写方法和函数来直接获取智能指针。</p>
 
                 </div>
 
                 <!-- Mobile navigation buttons -->
-
+                
                     <a href="ch15-01-box.html" class="mobile-nav-chapters previous">
                         <i class="fa fa-angle-left"></i>
                     </a>
+                
 
-
-
+                
                     <a href="ch15-03-drop.html" class="mobile-nav-chapters next">
                         <i class="fa fa-angle-right"></i>
                     </a>
-
+                
 
             </div>
 
-
+            
                 <a href="ch15-01-box.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-left"></i>
                 </a>
+            
 
-
-
+            
                 <a href="ch15-03-drop.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-right"></i>
                 </a>
-
+            
 
         </div>
 
@@ -189,7 +189,7 @@ struct that holds mp3 file data and metadata</span></p>
         </script>
 
         <!-- Livereload script (if served using the cli tool) -->
-
+        
 
         <script src="highlight.js"></script>
         <script src="book.js"></script>

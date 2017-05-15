@@ -71,7 +71,7 @@
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-01-mod-and-the-filesystem.md">ch07-01-mod-and-the-filesystem.md</a>
 <br>
-commit 6fc32eabcd09f7a130094767abadb691dfcdddf7</p>
+commit b0481ac44ff2594c6c240baa36357737739db445</p>
 </blockquote>
 <p>我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章我们见过的<code>rand</code>就是这样的 crate。</p>
 <p>我们将创建一个提供一些通用网络功能的项目的骨架结构；我们将专注于模块和函数的组织，而不担心函数体中的具体代码。这个项目叫做<code>communicator</code>。Cargo 默认会创建一个库 crate 除非指定其他项目类型，所以如果不像一直以来那样加入<code>--bin</code>参数则项目将会是一个库：</p>

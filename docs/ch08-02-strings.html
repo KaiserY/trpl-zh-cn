@@ -202,14 +202,14 @@ let answer = &amp;hello[0];
 let s = &amp;hello[0..4];
 </code></pre>
 <p>这里，<code>s</code>是一个<code>&amp;str</code>，它包含字符串的头四个字节。早些时候，我们提到了这些字母都是两个字节长的，所以这意味着<code>s</code>将会是“Зд”。</p>
-<p>那么如果获取<code>&amp;hello[0..1]</code>会发生什么呢？回答是：在运行时会 panic，就跟访问 vector 中的无效索引时一样：</p>
+<p>如果获取<code>&amp;hello[0..1]</code>会发生什么呢？答案是：在运行时会 panic，就跟访问 vector 中的无效索引时一样：</p>
 <pre><code class="language-text">thread 'main' panicked at 'index 0 and/or 1 in `Здравствуйте` do not lie on
 character boundary', ../src/libcore/str/mod.rs:1694
 </code></pre>
 <p>你应该小心谨慎的使用这个操作，因为它可能会使你的程序崩溃。</p>
 <a class="header" href="#遍历字符串的方法" name="遍历字符串的方法"><h3>遍历字符串的方法</h3></a>
 <p>幸运的是，这里还有其他获取字符串元素的方式。</p>
-<p>如果你需要操作单独的 Unicode 标量值，最好的选择是使用<code>chars</code>方法。堆“नमस्ते”调用<code>chars</code>方法会将其分开并返回六个<code>char</code>类型的值，接着就可以遍历结果来访问每一个元素了：</p>
+<p>如果你需要操作单独的 Unicode 标量值，最好的选择是使用<code>chars</code>方法。对“नमस्ते”调用<code>chars</code>方法会将其分开并返回六个<code>char</code>类型的值，接着就可以遍历结果来访问每一个元素了：</p>
 <pre><code class="language-rust">for c in &quot;नमस्ते&quot;.chars() {
     println!(&quot;{}&quot;, c);
 }
