@@ -4,7 +4,7 @@
 > <br>
 > commit 85b2c9ac704c9dc4bbedb97209d336afb9809dc1
 
-最简单直接的智能指针是 *box*，它的类型是`Box<T>`。 box 允许你将一个单独的值放在堆上（第四章介绍或栈与堆）。列表 15-1 展示了如何使用 box 在堆上储存一个`i32`：
+最简单直接的智能指针是 *box*，它的类型是`Box<T>`。 box 允许你将一个值放在堆上（第四章介绍过栈与堆）。列表 15-1 展示了如何使用 box 在堆上储存一个`i32`：
 
 <span class="filename">Filename: src/main.rs</span>
 
