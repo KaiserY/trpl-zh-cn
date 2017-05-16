@@ -83,7 +83,7 @@ fn main() {
 
 <span class="caption">Listing 2-1: Code to get a guess from the user and print it out</span>
 
-这些代码包含很多信息，我们一点一点地过一遍。为了获取用户输入并打印结果作为输出，我们需要将`io`（输入/输出）库引入作用域中。`io`库来自于标准库（也被称为`std`）：
+这些代码包含很多信息，我们一点一点地过一遍。为了获取用户输入并打印结果作为输出，我们需要将 `io`（输入/输出）库引入当前作用域。`io`库来自于标准库（也被称为`std`）：
 
 ```rust,ignore
 use std::io;
@@ -125,7 +125,7 @@ let mut guess = String::new();
 let foo = bar;
 ```
 
-这行代码会创建一个叫做`foo`的新变量并把它绑定到值`bar`上。在 Rust 中，变量默认是不可变的。下面的例子展示了如何在变量名前使用`mut`来使一个变量可变：
+这行代码会创建一个叫做 `foo` 的新变量并把它绑定到值 `bar` 上。在 Rust 中，变量默认是不可变的。下面的例子展示了如何在变量名前使用 `mut` 来使一个变量可变：
 
 ```rust
 let foo = 5; // immutable
@@ -134,67 +134,67 @@ let mut bar = 5; // mutable
 
 > 注意：`//` 开始一个注释，它持续到本行的结尾。Rust 忽略注释中的所有内容。
 
-现在我们知道了`let mut guess`会引入一个叫做`guess`的可变变量。等号（`=`）的另一边是`guess`所绑定的值，它是`String::new`的结果，这个函数会返回一个`String`的新实例。[`String`][string]<!-- ignore -->是一个标准库提供的字符串类型，它是可增长的、UTF-8 编码的文本块。
+现在我们知道了 `let mut guess` 会引入一个叫做 `guess` 的可变变量。等号（`=`）的右边是 `guess` 所绑定的值，它是 `String::new` 的结果，这个函数会返回一个 `String` 的新实例。[`String`][string]<!-- ignore --> 是一个标准库提供的字符串类型，它是 UTF-8 编码的可增长文本块。
 
 [string]: https://doc.rust-lang.org/std/string/struct.String.html
 
-`::new`那一行的`::`语法表明`new`是`String`类型的一个**关联函数**（*associated function*）。关联函数是针对类型实现的，在这个例子中是`String`，而不是`String`的某个特定实例。一些语言中把它称为**静态方法**（*static method*）。
+`::new` 那一行的 `::` 语法表明 `new` 是 `String` 类型的一个 **关联函数**（*associated function*）。关联函数是针对类型实现的，在这个例子中是 `String`，而不是 `String` 的某个特定实例。一些语言中把它称为**静态方法**（*static method*）。
 
-`new`函数创建了一个新的空的`String`，你会在很多类型上发现`new`函数，因为这是创建某个类型新值的常用函数名。
+`new` 函数创建了一个新的空 `String`，你会在很多类型上发现`new` 函数，这是创建类型实例的惯用函数名。
 
-总结一下，`let mut guess = String::new();`这一行创建了一个可变变量，目前它绑定到一个`String`新的、空的实例上。哟！
+总结一下，`let mut guess = String::new();` 这一行创建了一个可变变量，绑定到一个新的 `String` 空实例上。
 
-回忆一下我们在程序的第一行使用`use std::io;`从标准库中引用输入/输出功能。现在在`io`上调用一个关联函数，`stdin`：
+回忆一下，我们在程序的第一行使用 `use std::io;` 从标准库中引入“输入输出”。现在调用 `io` 的关联函数 `stdin`：
 
 ```rust,ignore
 io::stdin().read_line(&mut guess)
     .expect("Failed to read line");
 ```
 
-如果我们在程序的开头没有`use std::io`这一行，我们可以把函数调用写成`std::io::stdin`这样。`stdin`函数返回一个 [`std::io::Stdin`][iostdin]<!-- ignore -->的实例，这是一个代表终端标准输入句柄的类型。
+如果程序的开头没有 `use std::io` 这一行，我们可以把函数调用写成 `std::io::stdin`。`stdin` 函数返回一个  [`std::io::Stdin`][iostdin]<!-- ignore --> 的实例，这代表终端标准输入句柄的类型。
 
 [iostdin]: https://doc.rust-lang.org/std/io/struct.Stdin.html
 
-代码的下一部分，`.read_line(&mut guess)`，调用 [`read_line`][read_line]<!-- ignore --> 方法从标准输入句柄获取用户输入。我们还向`read_line()`传递了一个参数：`&mut guess`。
+代码的下一部分，`.read_line(&mut guess)`，调用 [`read_line`][read_line]<!-- ignore --> 方法从标准输入句柄获取用户输入。我们还向 `read_line()` 传递了一个参数：`&mut guess`。
 
 [read_line]: https://doc.rust-lang.org/std/io/struct.Stdin.html#method.read_line
 
-`read_line`的工作是把获取任何用户键入到标准输入的字符并放入一个字符串中，所以它获取字符串作为一个参数。这个字符串需要是可变的，这样这个方法就可以通过增加用户的输入来改变字符串的内容。
+`read_line` 的工作是，无论用户在标准输入中键入什么内容，都将其存入一个字符串中，因此它需要字符串作为参数。这个字符串参数应该是可变的，以便 `read_line` 将用户输入附加上去。
 
-`&`表明这个参数是一个**引用**（*reference*），它提供了一个允许多个不同部分的代码访问同一份数据而不需要在内存中多次拷贝的方法。引用是一个复杂的功能，而 Rust 的一大优势就是它是如何安全而优雅操纵引用的。完成这个程序并不需要知道这么多细节：第四章会更全面的解释引用。现在，我们只需知道它像变量一样，默认是不可变的。因此，需要写成`&mut guess`而不是`&guess`来使其可变。
+`&` 表示这个参数是一个**引用**（*reference*），它允许多处代码访问同一处数据，而无需在内存中多次拷贝。引用是一个复杂的特性，Rust 的一个主要优势就是安全而简单的操纵引用。完成当前程序并不需要了解如此多细节：第四章会更全面的解释引用。现在，我们只需知道它像变量一样，默认是不可变的，需要写成 `&mut guess` 而不是 `&guess` 来使其可变。
 
-我们还没有分析完这行代码。虽然这是单独一行代码，但它只是一个逻辑上代码行（虽然换行了但仍是一个语句）的第一部分。第二部分是这个方法：
+我们还没有分析完这行代码。虽然这是单独一行代码，但它是一个逻辑行（虽然换行了但仍是一个语句）的第一部分。第二部分是这个方法：
 
-```rust,ignore
+```rust
 .expect("Failed to read line");
 ```
 
-当使用`.expect()`语法调用方法时，明智的选择是换行并留出空白（缩进）来把长的代码行拆开。我们可以把代码写成这样：
+当使用 `.expect()` 语法调用方法时，通过‘换行并缩进’来把长行拆开，是明智的。我们完全可以这样写：
 
 ```rust,ignore
 io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```
 
-不过，过长的代码行难以阅读，所以最好拆开来写，两行代码两个方法调用。现在来看看这行代码干了什么。
+不过，过长的行难以阅读，所以最好拆开来写，两行代码两个方法调用。现在来看看这行代码干了什么。
 
-### 使用`Result`类型来处理潜在的错误
+### 使用 `Result` 类型来处理潜在的错误
 
-之前提到过，`read_line`将用户输入放入到传递给它字符串中，不过它也返回一个值——在这个例子中，一个[`io::Result`][ioresult]<!-- ignore -->。Rust 标准库中有很多叫做`Result`的类型。一个[`Result`][result]<!-- ignore -->泛型以及对应子模块的特定版本，比如`io::Result`。
+之前提到，`read_line` 将用户输入附加到传递给它字符串中，不过它也返回一个值——在这个例子中是 [`io::Result`][ioresult]<!-- ignore -->。Rust 标准库中有很多叫做 `Result` 的类型。一个 [`Result`][result]<!-- ignore --> 泛型以及对应子模块的特定版本，比如 `io::Result`。
 
 [ioresult]: https://doc.rust-lang.org/std/io/type.Result.html
 [result]: https://doc.rust-lang.org/std/result/enum.Result.html
 
-`Result`类型是 [*枚举*（*enumerations*）][enums]<!-- ignore -->，通常也写作 *enums*。枚举拥有固定值集合的类型，而这些值被称为枚举的**成员**（*variants*）。第六章会更详细的介绍枚举。
+`Result` 类型是 [*枚举*（*enumerations*）][enums]<!-- ignore -->，通常也写作 *enums*。枚举类型持有固定集合的值，这些值被称为枚举的**成员**（*variants*）。第六章将介绍枚举的更多细节。
 
 [enums]: ch06-00-enums.html
 
-对于`Result`，它的成员是`Ok`或`Err`，`Ok`表明操作成功了，同时`Ok`成员之中包含成功生成的值。`Err`意味着操作失败，`Err`之中包含操作是为什么或如何失败的信息。
+对于 `Result`，它的成员是 `Ok` 或 `Err`，`Ok` 表示操作成功，内部包含产生的值。`Err` 意味着操作失败，包含失败的前因后果。
 
-`Result`类型的作用是编码错误处理信息。`Result`类型的值，正如其他任何类型，拥有定义于其上的方法。`io::Result`的实例拥有[`expect`方法][expect]<!-- ignore -->可供调用。如果`io::Result`实例的值是`Err`，`expect`会导致程序崩溃并显示显示你作为参数传递给`expect`的信息。如果`io::Result`实例的值是`Ok`，`expect`会获取`Ok`中的值并原原本本的返回给你。在本例中，这个值是用户输入到标准输入中的字节的数量。
+`Result` 类型的作用是编码错误处理信息。`Result`类型的值，像其他类型一样，拥有定义于其上的方法。`io::Result` 的实例拥有[`expect`方法][expect]<!-- ignore -->，如果实例的值是 `Err`，`expect` 会导致程序崩溃，并显示当做参数传递给 `expect` 的信息;如果实例的值是 `Ok`，`expect` 会获取 `Ok` 中的值并原样返回。在本例中，这个值是用户输入到标准输入中的字节的数量。
 
 [expect]: https://doc.rust-lang.org/std/result/enum.Result.html#method.expect
 
-如果不使用`expect`，程序也能编译，不过会出现一个警告：
+如果不使用 `expect`，程序也能编译，不过会出现一个警告：
 
 ```
 $ cargo build
@@ -205,13 +205,13 @@ src/main.rs:10     io::stdin().read_line(&mut guess);
                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ```
 
-Rust 警告我们没有使用`read_line`返回的值`Result`，表明程序没有处理一个可能的错误。消除警告的正确方式是老实编写错误处理，不过因为我们仅仅希望程序出现问题就崩溃，可以直接使用`expect`。第九章会学习从错误中恢复的内容。
+Rust 警告我们没有使用 `read_line` 的返回值 `Result`，说明有一个可能的错误没处理。想消除警告，就老实的写错误处理，不过我们就是希望程序在出现问题时立即崩溃，所以直接使用 `expect`。第九章会学习如何从错误中恢复。
 
-### 使用`println!`占位符打印值
+### 使用 `println!` 占位符打印值
 
 除了位于结尾的大括号，目前为止编写的代码就只有一行代码值得讨论一下了，就是这一行：
 
-```rust,ignore
+```rust ,ignore
 println!("You guessed: {}", guess);
 ```
 
