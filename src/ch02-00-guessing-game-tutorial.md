@@ -209,13 +209,13 @@ Rust 警告我们没有使用 `read_line` 的返回值 `Result`，说明有一�
 
 ### 使用 `println!` 占位符打印值
 
-除了位于结尾的大括号，目前为止编写的代码就只有一行代码值得讨论一下了，就是这一行：
+除了位于结尾的大括号，目前为止就只有一行代码值得讨论一下了，就是这一行：
 
 ```rust ,ignore
 println!("You guessed: {}", guess);
 ```
 
-这行代码打印出存储了用户输入的字符串。这对`{}`是一个在特定位置预留值的占位符。可以使用`{}`打印多个值：第一个`{}`对应格式化字符串之后列出的第一个值，第二个对应第二个值，以此类推。用一个`println!`调用打印多个值应该看起来像这样：
+这行代码打印存储用户输入的字符串。第一个参数是格式化字符串，里面的 `{}` 是预留在特定位置的占位符。使用占位符也可以打印多个值：格式化字符串中第一个占位符对应第二个参数值，第二个占位符对应第三个参数值，以此类推（第一个参数是格式化字符串本身）。调用一次 `println!` 打印多个值看起来像这样：
 
 ```rust
 let x = 5;
@@ -224,7 +224,7 @@ let y = 10;
 println!("x = {} and y = {}", x, y);
 ```
 
-这行代码会打印出`x = 5 and y = 10`。
+这行代码会打印出 `x = 5 and y = 10`。
 
 ### 测试第一部分代码
 
@@ -240,19 +240,19 @@ Please input your guess.
 You guessed: 6
 ```
 
-至此为止，游戏的第一部分已经完成：我们从键盘获取了输入并打印了出来。
+至此为止，游戏的第一部分已经完成：我们从键盘获取输入并打印了出来。
 
 ## 生成一个秘密数字
 
-接下来，需要生成一个秘密数字，用户会尝试猜测它。秘密数字应该每次都不同，这样多玩几次才会有意思。生成一个 1 到 100 之间的随机数这样游戏也不会太难。Rust 标准库中还未包含随机数功能。然而，Rust 团队确实提供了一个[`rand` crate][randcrate]。
+接下来，需要生成一个秘密数字，好让用户来猜。秘密数字应该每次都不同，这样重复玩才不会乏味；范围应该在 1 到 100 之间，这样才不会太困难。Rust 标准库中尚未包含随机数功能。然而，Rust 团队还是提供了一个 [`rand` crate][randcrate]。
 
 [randcrate]: https://crates.io/crates/rand
 
 ### 使用 crate 来增加更多功能
 
-记住 *crate* 是一个 Rust 代码的包。我们正在构建的项目是一个**二进制 crate**，它生成一个可执行文件。 `rand` crate 是一个 **库 crate**，它包含意在被其他程序使用的代码。
+记住 *crate* 是一个 Rust 代码的包。我们正在构建的项目是一个**二进制 crate**，它生成一个可执行文件。 `rand` crate 是一个 **库 crate**，库 crate 可以包含任意能被其他程序使用的代码。
 
-Cargo 对外部 crate 的运用是其真正闪光的地方。在我们可以使用`rand`编写代码之前，需要编辑 *Cargo.toml* 来包含`rand`作为一个依赖。现在打开这个文件并在`[dependencies]`部分标题（Cargo 为你创建了它）的下面添加如下代码：
+Cargo 对外部 crate 的运用是亮点。在我们使用 `rand` 编写代码之前，需要编辑 *Cargo.toml* ，声明 `rand` 作为一个依赖。现在打开这个文件并在 `[dependencies]` 标题（Cargo 为你创建了它）之下添加：
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -262,11 +262,11 @@ Cargo 对外部 crate 的运用是其真正闪光的地方。在我们可以使�
 rand = "0.3.14"
 ```
 
-在 *Cargo.toml* 文件中，任何标题之后的内容都是属于这个部分的，一直持续到直到另一个部分开始。`[dependencies]`部分告诉 Cargo 项目依赖了哪个外部 crate 和需要的 crate 版本。在这个例子中，我们使用语义化版本符号`0.3.14`来指定`rand`crate。Cargo 理解[语义化版本（Semantic Versioning）][semver]<!-- ignore -->（有时也称为 *SemVer*），这是一个编写版本号的标准。版本号`0.3.14`事实上是`^0.3.14`的缩写，它的意思是“任何与 0.3.14 版本公有 API 相兼容的版本”。
+在 *Cargo.toml* 文件中，标题以及之后的内容属同一个段落，遇到下一个标题则开始新的段落。`[dependencies]` 部分告诉 Cargo 本项目依赖了哪些外部 crate 及其版本。本例中，我们使用语义化版本 `0.3.14` 来指定 `rand` crate。Cargo 理解[语义化版本（Semantic Versioning）][semver]<!-- ignore -->（有时也称为 *SemVer*），是一种定义版本号的标准。`0.3.14` 事实上是 `^0.3.14` 的简写，它表示“任何与 0.3.14 版本公有 API 相兼容的版本”。
 
 [semver]: http://semver.org
 
-现在，不用修改任何代码，构建项目，如列表 2-2 所示：
+现在，不修改任何代码，构建项目，如列表 2-2 所示：
 
 ```
 $ cargo build
@@ -281,37 +281,37 @@ $ cargo build
 <span class="caption">Listing 2-2: The output from running `cargo build` after
 adding the rand crate as a dependency</span>
 
-可能会出现不同的版本号（不过多亏了语义化版本，它们与代码是兼容的！），同时显示顺序也可能会有所不同。
+可能会出现不同的版本号（多亏了语义化版本，它们与代码是兼容的！），同时显示顺序也可能会有所不同。
 
-现在我们有了一个外部依赖，Cargo 从 *registry* （[Crates.io][cratesio]）上获取了一份（兼容的）最新版本代码的拷贝。Crates.io 是 Rust 生态环境中的开发者们向他人贡献他们的开源 Rust 项目的地方。
+现在我们有了一个外部依赖，Cargo 从 *registry* （[Crates.io][cratesio]）上获取了一份（兼容的）最新版本的代码。Crates.io 是 Rust 生态环境中的开发者们向他人贡献 Rust 开源项目的地方。
 
 [cratesio]: https://crates.io
 
-在更新完 registry （索引）后，Cargo 检查`[dependencies]`部分并下载还不存在的部分。在这个例子中，虽然只列出了`rand`一个依赖，Cargo 也获取了一份`libc`的拷贝，因为`rand`依赖`libc`来正常工作。在下载他们之后，Rust 编译他们并接着使用这些依赖编译项目。
+在更新完 registry （索引）后，Cargo 检查 `[dependencies]` 段落并下载缺失的部分。本例中，只声明了 `rand` 一个依赖，然而 Cargo 还是额外获取了 `libc`，因为 `rand` 依赖 `libc` 来正常工作。下载完成后，Rust 编译依赖，然后使用这些依赖编译项目。
 
-如果不做任何修改就立刻再次运行`cargo build`，则不会有任何输出。Cargo 知道它已经下载并编译了依赖，同时 *Cargo.toml* 文件中也没有任何相关修改。Cargo 也知道代码没有做任何修改，所以它也不会重新编译代码。因为无事可做，它简单的退出了。如果打开 *src/main.rs* 文件，并做一些普通的修改，保存并再次构建，只会出现一行输出：
+如果不做任何修改，立刻再次运行 `cargo build`，则不会有任何输出。Cargo 知道它已经下载并编译了依赖，同时 *Cargo.toml* 文件也没有变动，并且代码也没有任何修改，所以它不会重新编译代码。因为无事可做，它简单的退出了。如果打开 *src/main.rs* 文件，做一些普通的修改，保存并再次构建，只会出现一行输出：
 
 ```
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 
-这一行表明 Cargo 只构建了对 *src/main.rs* 文件做出的微小修改。依赖没有被修改，所以 Cargo 知道可以复用已经为此下载并编译的代码。它只是重新构建了部分（项目）代码。
+这一行表示 Cargo 只针对 *src/main.rs* 文件的微小修改而构建。依赖没有变化，所以 Cargo 会复用已经为此下载并编译的代码。它只是重新构建了部分（项目）代码。
 
 #### *Cargo.lock* 文件确保构建是可重现的
 
-Cargo 有一个机制来确保每次任何人重新构建代码都会生成相同的结果：Cargo 只会使用你指定的依赖的版本，除非你又手动指定了别的。例如，如果下周`rand` crate 的`v0.3.15`版本出来了，而它包含一个重要的 bug 修改并也含有一个会破坏代码运行的缺陷的时候会发生什么呢？
+Cargo 有一个机制来确保任何人在任何时候重新构建代码，都会产生相同的结果：Cargo 只会使用你指定的依赖的版本，除非你又手动指定了别的。例如，如果下周 `rand` crate 的 `v0.3.15` 版本出来了，它修复了一个重要的 bug，同时也含有一个缺陷，会破坏代码的运行，这时会发生什么呢？
 
-这个问题的答案是 *Cargo.lock* 文件，它在第一次运行`cargo build`时被创建并位于 *guessing_game* 目录。当第一次构建项目时，Cargo 计算出所有符合要求的依赖版本并接着写入 *Cargo.lock* 文件中。当将来构建项目时，Cargo 发现 *Cargo.lock* 存在就会使用这里指定的版本，而不是重新进行所有版本的计算。这使得你拥有了一个自动的可重现的构建。换句话说，项目会继续使用`0.3.14`直到你显式升级，多亏了 *Cargo.lock* 文件。我们将会在这个文件编写全部的代码。
+答案是 *Cargo.lock* 文件。它在第一次运行 `cargo build` 时创建，并放在 *guessing_game* 目录，Cargo 计算出所有符合要求的依赖版本并写入 *Cargo.lock* 文件。当将来构建项目时，如果 *Cargo.lock* 存在，Cargo 就使用里面指定的版本，不会重新计算。自动使你拥有了一个可重现的构建。换句话说，项目会继续使用 `0.3.14` 直到你显式升级，感谢 *Cargo.lock*。
 
 #### 更新 crate 到一个新版本
 
 当你**确实**需要升级 crate 时，Cargo 提供了另一个命令，`update`，他会：
 
-1. 忽略 *Cargo.lock* 文件并计算出所有符合 *Cargo.toml* 中规格的最新版本。
+1. 忽略 *Cargo.lock* 文件，并计算出所有符合 *Cargo.toml* 声明的最新版本。
 2. 如果成功了，Cargo 会把这些版本写入 *Cargo.lock* 文件。
 
-不过，Cargo 默认只会寻找大于`0.3.0`而小于`0.4.0`的版本。如果`rand` crate 发布了两个新版本，`0.3.15`和`0.4.0`，在运行`cargo update`时会出现如下内容：
+不过，Cargo 默认只会寻找大于 `0.3.0` 而小于 `0.4.0` 的版本。如果 `rand` crate 发布了两个新版本，`0.3.15` 和 `0.4.0`，在运行 `cargo update` 时会出现如下内容：
 
 ```
 $ cargo update
@@ -321,7 +321,7 @@ $ cargo update
 
 这时，值得注意的是 *Cargo.lock* 文件中的一个改变，`rand` crate 现在使用的版本是`0.3.15`。
 
-如果想要使用`0.4.0`版本的`rand`或是任何`0.4.x`系列的版本，必须像这样更新 *Cargo.toml* 文件：
+如果想要使用 `0.4.0` 版本的 `rand` 或是任何 `0.4.x` 系列的版本，必须像这样更新 *Cargo.toml* 文件：
 
 ```toml
 [dependencies]
@@ -329,20 +329,20 @@ $ cargo update
 rand = "0.4.0"
 ```
 
-下一次运行`cargo build`时，Cargo 会更新 registry 中可用的 crate 并根据你指定新版本重新计算`rand`的要求。
+下一次运行 `cargo build` 时，Cargo 会从 registry 更新，并根据你指定的新版本重新计算。
 
-第十四章会讲到[Cargo][doccargo]<!-- ignore --> 和[它的生态系统][doccratesio]<!-- ignore -->的更多内容，不过目前你只需要了解这么多。Cargo 使得复用库文件变得非常容易，所以 Rustacean 们能够通过组合很多包来编写出更轻巧的项目。
+第十四章会讲到 [Cargo][doccargo]<!-- ignore --> 及其[生态系统][doccratesio]<!-- ignore -->的更多内容，不过目前你只需要了解这么多。通过 Cargo 复用库文件非常容易，因此 Rustacean 能够编写出由很多包组装而成的更轻巧的项目。
 
 [doccargo]: http://doc.crates.io
 [doccratesio]: http://doc.crates.io/crates-io.html
 
 ### 生成一个随机数
 
-让我们开始**使用**`rand`。下一步是更新 *src/main.rs*，如列表 2-3 所示：
+让我们开始**使用** `rand`。下一步是更新 *src/main.rs*，如列表 2-3 所示：
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust ,ignore
 extern crate rand;
 
 use std::io;
@@ -369,9 +369,9 @@ fn main() {
 <span class="caption">Listing 2-3: Code changes needed in order to generate a
 random number</span>
 
-我们在顶部增加一行`extern crate rand;`来让 Rust 知道我们要使用外部依赖。这也会调用相应的`use rand`，所以现在可以使用`rand::`前缀来调用`rand`中的任何内容。
+我们在顶部增加一行 `extern crate rand;` 通知 Rust 我们要使用外部依赖。这也会调用相应的 `use rand`，所以现在可以使用 `rand::` 前缀来调用 `rand` 中的内容。
 
-接下来，我们增加了另一行`use`：`use rand::Rng`。`Rng`是一个定义了随机数生成器应实现方法的 trait，如果要使用这些方法的话这个 trait 必须在作用域中。第十章会详细介绍 trait。
+接下来，我们增加了一行 `use`：`use rand::Rng`。`Rng` 是一个 trait，它定义了随机数生成器应实现的方法 ，想使用这些方法的话此 trait 必须在作用域中。第十章会详细介绍 trait。
 
 另外，中间还新增加了两行。`rand::thread_rng`函数会提供具体会使用的随机数生成器：它位于当前执行线程本地并从操作系统获取 seed。接下来，调用随机数生成器的`gen_range`方法。这个方法由我们使用`use rand::Rng`语句引入到作用域的`Rng` trait 定义。`gen_range`方法获取两个数作为参数并生成一个两者之间的随机数。它包含下限但不包含上限，所以需要指定`1`和`101`来请求一个`1`和`100`之间的数。
 
