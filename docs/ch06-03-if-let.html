@@ -90,7 +90,7 @@ if let Some(3) = some_u8_value {
 }
 </code></pre>
 <p><code>if let</code>获取通过<code>=</code>分隔的一个模式和一个表达式。它的工作方式与<code>match</code>相同，这里的表达式对应<code>match</code>而模式则对应第一个分支。</p>
-<p>使用<code>if let</code>意味着编写更少代码，更少的缩进和更少的样板代码。然而，这样会失去<code>match</code>强制要求的穷进行检查。<code>match</code>和<code>if let</code>之间的选择依赖特定的环境以及增加简洁度和失去穷尽性检查的权衡取舍。</p>
+<p>使用<code>if let</code>意味着编写更少代码，更少的缩进和更少的样板代码。然而，这样会失去<code>match</code>强制要求的穷尽性检查。<code>match</code>和<code>if let</code>之间的选择依赖特定的环境以及增加简洁度和失去穷尽性检查的权衡取舍。</p>
 <p>换句话说，可以认为<code>if let</code>是<code>match</code>的一个语法糖，它当值匹配某一模式时执行代码而忽略所有其他值。</p>
 <p>可以在<code>if let</code>中包含一个<code>else</code>。<code>else</code>块中的代码与<code>match</code>表达式中的<code>_</code>分支块中的代码相同，这样的<code>match</code>表达式就等同于<code>if let</code>和<code>else</code>。回忆一下列表 6-4 中<code>Coin</code>枚举的定义，它的<code>Quarter</code>成员包含一个<code>UsState</code>值。如果想要计数所有不是 25 美分的硬币的同时也报告 25 美分硬币所属的州，可以使用这样一个<code>match</code>表达式：</p>
 <pre><code class="language-rust"># #[derive(Debug)]

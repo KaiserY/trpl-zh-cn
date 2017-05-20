@@ -71,7 +71,7 @@
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch04-01-what-is-ownership.md">ch04-01-what-is-ownership.md</a>
 <br>
-commit fae5fa82d728b5965ecbba84060689430345e509</p>
+commit 6d4ef020095a375483b2121d4fa2b1661062cc92</p>
 </blockquote>
 <p>Rust 的核心功能（之一）是<strong>所有权</strong>（<em>ownership</em>）。虽然这个功能理解起来很直观，不过它对语言的其余部分有着更深层的含义。</p>
 <p>所有程序都必须管理他们运行时使用计算机内存的方式。一些语言中使用垃圾回收在程序运行过程中来时刻寻找不再被使用的内存；在另一些语言中，程序员必须亲自分配和释放内存。Rust 则选择了第三种方式：内存被一个所有权系统管理，它拥有一系列的规则使编译器在编译时进行检查。任何所有权系统的功能都不会导致运行时开销。</p>
@@ -91,17 +91,17 @@ commit fae5fa82d728b5965ecbba84060689430345e509</p>
 </blockquote>
 <!-- PROD: END BOX -->
 <a class="header" href="#所有权规则" name="所有权规则"><h3>所有权规则</h3></a>
-<p>首先，让我们看一下所有权的规则。请记住这些规则因为我们将讲解一些说明这些规则的例子：</p>
+<p>首先，让我们看一下所有权的规则。请记住它们，我们将讲解一些它们的例子：</p>
 <blockquote>
 <ol>
-<li>Rust 中的每一个值都有一个叫做它的<strong>所有者</strong>（<em>owner</em>）的变量。</li>
-<li>同时一次只能有一个所有者</li>
-<li>当所有者变量离开作用域，这个值将被丢弃。</li>
+<li>每一个值都被它的<strong>所有者</strong>（<em>owner</em>）变量拥有。</li>
+<li>值在任意时刻只能被一个所有者拥有。</li>
+<li>当所有者离开作用域，这个值将被丢弃。</li>
 </ol>
 </blockquote>
 <a class="header" href="#变量作用域" name="变量作用域"><h3>变量作用域</h3></a>
-<p>我们在第二章已经完成过一个 Rust 程序的例子了。现在我们已经掌握了基本语法，所以不会在所有的例子中包含<code>fn main() {</code>代码了，所以如果你是一路跟过来的，必须手动将之后例子的代码放入一个<code>main</code>函数中。为此，例子将显得更加具体，使我们可以关注具体细节而不是样板代码。</p>
-<p>作为所有权的第一个例子，我们看看一些变量的<strong>作用域</strong>（<em>scope</em>）。作用域是一个项在程序中有效的范围。假如有一个这样的变量：</p>
+<p>我们已经在第二章完成过一个 Rust 程序的例子。现在我们已经掌握了基本语法，所以不会在所有的例子中包含<code>fn main() {</code>代码了，所以如果你是一路跟过来的，必须手动将之后例子的代码放入一个<code>main</code>函数中。为此，例子将显得更加具体，使我们可以关注具体细节而不是样板代码。</p>
+<p>作为所有权的第一个例子，我们看看一些变量的<strong>作用域</strong>（<em>scope</em>）。作用域是一个项(原文:item)在程序中有效的范围。假如有一个这样的变量：</p>
 <pre><code class="language-rust">let s = &quot;hello&quot;;
 </code></pre>
 <p>变量<code>s</code>绑定到了一个字符串字面值，这个字符串值是硬编码进我们程序代码中的。这个变量从声明的点开始直到当前<em>作用域</em>结束时都是有效的。列表 4-1 的注释标明了变量<code>s</code>在哪里是有效的：</p>
@@ -195,8 +195,8 @@ println!(&quot;{}&quot;, s1);
   |
 3 |     let s2 = s1;
   |         -- value moved here
-4 |     println!(&quot;{}, world!&quot;,s1);
-  |                           ^^ value used here after move
+4 |     println!(&quot;{}, world!&quot;, s1);
+  |                            ^^ value used here after move
   |
   = note: move occurs because `s1` has type `std::string::String`,
 which does not implement the `Copy` trait
@@ -296,7 +296,7 @@ fn takes_and_gives_back(a_string: String) -&gt; String { // a_string comes into
     a_string  // a_string is returned and moves out to the calling function.
 }
 </code></pre>
-<p>变量的所有权总是遵循相同的模式：将值赋值给另一个变量时移动它，并且当持有堆中数据值的变量离开作用域时，如果数据的所有权没有被移动到另外一个变量时，其值将通过<code>drop</code>被清理掉。</p>
+<p>变量的所有权总是遵循相同的模式：将值赋值给另一个变量时移动它。当持有堆中数据值的变量离开作用域时，其值将通过<code>drop</code>被清理掉，除非数据被移动为另一个变量所有。</p>
 <p>在每一个函数中都获取并接着返回所有权是冗余乏味的。如果我们想要函数使用一个值但不获取所有权改怎么办呢？如果我们还要接着使用它的话，每次都传递出去再传回来就有点烦人了，另外我们也可能想要返回函数体产生的任何（不止一个）数据。</p>
 <p>使用元组来返回多个值是可能的，像这样：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>

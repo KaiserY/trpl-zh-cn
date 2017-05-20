@@ -73,7 +73,7 @@
 <br>
 commit 85b2c9ac704c9dc4bbedb97209d336afb9809dc1</p>
 </blockquote>
-<p>最简单直接的智能指针是 <em>box</em>，它的类型是<code>Box&lt;T&gt;</code>。 box 允许你将一个单独的值放在堆上（第四章介绍或栈与堆）。列表 15-1 展示了如何使用 box 在堆上储存一个<code>i32</code>：</p>
+<p>最简单直接的智能指针是 <em>box</em>，它的类型是<code>Box&lt;T&gt;</code>。 box 允许你将一个值放在堆上（第四章介绍过栈与堆）。列表 15-1 展示了如何使用 box 在堆上储存一个<code>i32</code>：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let b = Box::new(5);
@@ -92,7 +92,7 @@ box</span></p>
 </code></pre>
 <p><span class="caption">Listing 15-2: The first attempt of defining an enum to
 represent a cons list data structure of <code>i32</code> values</span></p>
-<p>我们实现了一个只存放<code>i32</code>值的 cons list。也可以选择实用第十章介绍的泛型来实现一个类型无关的 cons list。</p>
+<p>我们实现了一个只存放<code>i32</code>值的 cons list。也可以选择使用第十章介绍的泛型来实现一个类型无关的 cons list。</p>
 <blockquote>
 <a class="header" href="#cons-list-的更多内容" name="cons-list-的更多内容"><h4>cons list 的更多内容</h4></a>
 <p><em>cons list</em> 是一个来源于 Lisp 编程语言及其方言的数据结构。在 Lisp 中，<code>cons</code>函数（&quot;construct function&quot;的缩写）利用两个参数来构造一个新的列表，他们通常是一个单独的值和另一个列表。</p>
@@ -159,7 +159,7 @@ fn main() {
 </code></pre>
 <p><span class="caption">Listing 15-5: Definition of <code>List</code> that uses <code>Box&lt;T&gt;</code> in
 order to have a known size</span></p>
-<p>这样编译器就能够计算出储存一个<code>List</code>值需要的大小了。Rust 将会检查<code>List</code>，同样的从<code>Cons</code>成员开始检查。<code>Cons</code>成员需要<code>i32</code>的大小加上一个<code>usize</code>的大小，因为 box 总是<code>usize</code>大小的，不管它指向的是什么。接着 Rust 检查<code>Nil</code>成员，它并储存一个值，所以<code>Nil</code>并不需要任何空间。我们通过 box 打破了这无限递归的连锁。图 15-6 展示了现在<code>Cons</code>成员看起来像什么：</p>
+<p>这样编译器就能够计算出储存一个<code>List</code>值需要的大小了。Rust 将会检查<code>List</code>，同样的从<code>Cons</code>成员开始检查。<code>Cons</code>成员需要<code>i32</code>的大小加上一个<code>usize</code>的大小，因为 box 总是<code>usize</code>大小的，不管它指向的是什么。接着 Rust 检查<code>Nil</code>成员，它并不储存一个值，所以<code>Nil</code>并不需要任何空间。我们通过 box 打破了这无限递归的连锁。图 15-6 展示了现在<code>Cons</code>成员看起来像什么：</p>
 <p><img alt="A finite Cons list" src="img/trpl15-02.svg" class="center" /></p>
 <p><span class="caption">Figure 15-6: A <code>List</code> that is not infinitely sized since
 <code>Cons</code> holds a <code>Box</code></span></p>

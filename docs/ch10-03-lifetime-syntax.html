@@ -71,9 +71,9 @@
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-03-lifetime-syntax.md">ch10-03-lifetime-syntax.md</a>
 <br>
-commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894</p>
+commit 9fbbfb23c2cd1686dbd3ce7950ae1eda300937f6</p>
 </blockquote>
-<p>当在第四章讨论引用时，我们遗漏了一个重要的细节：Rust 中的每一个引用都有其<strong>生命周期</strong>，也就是引用保持有效的作用域。大部分时候生命周期是隐含并可以推断的，正如大部分时候类型也是可以推断的一样。类似于当因为有多种可能类型的时候必须注明类型，也会出现引用的生命周期以多种不同方式向关联的情况，所以 Rust 需要我们使用泛型生命周期参数来注明他们的关系，这样就能确保运行时实际使用的引用绝对是有效的。</p>
+<p>当在第四章讨论引用时，我们遗漏了一个重要的细节：Rust 中的每一个引用都有其<strong>生命周期</strong>，也就是引用保持有效的作用域。大部分时候生命周期是隐含并可以推断的，正如大部分时候类型也是可以推断的一样。类似于当因为有多种可能类型的时候必须注明类型，也会出现引用的生命周期以多种不同方式相关联的情况，所以 Rust 需要我们使用泛型生命周期参数来注明他们的关系，这样就能确保运行时实际使用的引用绝对是有效的。</p>
 <p>好吧，这有点不太寻常，而且也不同于其他语言中使用的工具。生命周期，从某种意义上说，是 Rust 最与众不同的功能。</p>
 <p>生命周期是一个很广泛的话题，本章不可能涉及到它全部的内容，所以这里我们会讲到一些通常你可能会遇到的生命周期语法以便你熟悉这个概念。第十九章会包含生命周期所有功能的更高级的内容。</p>
 <a class="header" href="#生命周期避免了悬垂引用" name="生命周期避免了悬垂引用"><h3>生命周期避免了悬垂引用</h3></a>
@@ -229,7 +229,7 @@ specifies all the references in the signature must have the same lifetime,
 <p>通过在函数签名中指定生命周期参数，我们不会改变任何参数或返回值的生命周期，不过我们说过任何不坚持这个协议的类型都将被借用检查器拒绝。这个函数并不知道（或需要知道）<code>x</code>和<code>y</code>具体会存在多久，不过只需要知道一些可以使用<code>'a</code>替代的作用域将会满足这个签名。</p>
 <p>当在函数中使用生命周期注解时，这些注解出现在函数签名中，而不存在于函数体中的任何代码中。这是因为 Rust 能够分析函数中代码而不需要任何协助，不过当函数引用或被函数之外的代码引用时，参数或返回值的生命周期可能在每次函数被调用时都不同。这可能会产生惊人的消耗并且对于 Rust 来说经常都是不可能分析的。在这种情况下，我们需要自己标注生命周期。</p>
 <p>当具体的引用被传递给<code>longest</code>时，具体被<code>'a</code>所替代的生命周期是<code>x</code>的作用域与<code>y</code>的作用域相重叠的那一部分。因为作用域总是嵌套的，所以换一种说法就是泛型生命周期<code>'a</code>的具体生命周期等同于<code>x</code>和<code>y</code>的生命周期中较小的那一个。因为我们用相同的生命周期参数标注了返回的引用值，所以返回的引用值就能保证在<code>x</code>和<code>y</code>中较短的那个生命周期结束之前保持有效。</p>
-<p>让我们如何通过传递拥有不同具体生命周期的引用来观察他们是如何限制<code>longest</code>函数的使用的。列表 10-22 是一个应该在任何编程语言中都很直观的例子：<code>string1</code>直到外部作用域结束都是有效的，<code>string2</code>则在内部作用域中是有效的，而<code>result</code>则引用了一些直到外部作用域结束都是有效的值。借用检查器赞同这些代码；它能够编译和运行，并打印出<code>The longest string is long string is long</code>：</p>
+<p>让我们如何通过传递拥有不同具体生命周期的引用来观察他们是如何限制<code>longest</code>函数的使用的。列表 10-22 是一个应该在任何编程语言中都很直观的例子：<code>string1</code>直到外部作用域结束都是有效的，<code>string2</code>则在内部作用域中是有效的，而<code>result</code>则引用了一些直到内部作用域结束都是有效的值。借用检查器赞同这些代码；它能够编译和运行，并打印出<code>The longest string is long string is long</code>：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
 #     if x.len() &gt; y.len() {
@@ -352,7 +352,7 @@ type are references</span></p>
 </code></pre>
 <p>在编写了很多 Rust 代码后，Rust 团队发现在特定情况下 Rust 程序员们总是重复地编写一模一样的生命周期注解。这些场景是可预测的并且遵循几个明确的模式。接着 Rust 团队就把这些模式编码进了 Rust 编译器中，如此借用检查器在这些情况下就能推断出生命周期而不再强制程序员显式的增加注解。</p>
 <p>这里我们提到一些 Rust 的历史是因为更多的明确的模式将被合并和添加到编译器中是完全可能的。未来将会需要越来越少的生命周期注解。</p>
-<p>被编码进 Rust 引用分析的模式被称为<strong>生命周期省略规则</strong>（<em>lifetime elision rules</em>）。这并不是需要程序员遵守的规则；这些规则是一系列特定的场景，此时编译器会会考虑，如果代码符合这些场景，就不需要明确指定生命周期。</p>
+<p>被编码进 Rust 引用分析的模式被称为<strong>生命周期省略规则</strong>（<em>lifetime elision rules</em>）。这并不是需要程序员遵守的规则；这些规则是一系列特定的场景，此时编译器会考虑，如果代码符合这些场景，就不需要明确指定生命周期。</p>
 <p>这些规则并不提供完整的推断：如果 Rust 在明确遵守这些规则的前提下变量的生命周期仍然是模棱两可的话，它不会猜测剩余引用的生命周期应该是什么。在这种情况，编译器会给出一个错误，这可以通过增加对应引用之间相联系的生命周期注解来解决。</p>
 <p>首先，介绍一些定义：函数或方法的参数的生命周期被称为<strong>输入生命周期</strong>（<em>input lifetimes</em>），而返回值的生命周期被称为<strong>输出生命周期</strong>（<em>output lifetimes</em>）。</p>
 <p>现在介绍编译器用于判断引用何时不需要明确生命周期注解的规则。第一条规则适用于输入生命周期，而后两条规则则适用于输出生命周期。如果编译器检查完这三条规则并仍然存在没有计算出生命周期的引用，编译器将会停止并生成错误。</p>
@@ -394,7 +394,7 @@ parameters need to be declared and used since the lifetime parameters could go
 with the struct's fields or with references passed into or returned from
 methods. /Carol -->
 <p>当为带有生命周期的结构体实现方法时，其语法依然类似列表 10-10 中展示的泛型类型参数的语法：包括声明生命周期参数的位置和生命周期参数是否与结构体字段或方法的参数与返回值相关联。</p>
-<p>（实现方法时）结构体字段的生命周期必须总是在<code>impl</code>关键字之后声明并在结构体名称之后被适用，因为这些生命周期是结构体类型的一部分。</p>
+<p>（实现方法时）结构体字段的生命周期必须总是在<code>impl</code>关键字之后声明并在结构体名称之后被使用，因为这些生命周期是结构体类型的一部分。</p>
 <p><code>impl</code>块里的方法签名中，引用可能与结构体字段中的引用相关联，也可能是独立的。另外，生命周期省略规则也经常让我们无需在方法签名中使用生命周期注解。让我们看看一些使用列表 10-24 中定义的结构体<code>ImportantExcerpt</code>的例子。</p>
 <p>首先，这里有一个方法<code>level</code>。其唯一的参数是<code>self</code>的引用，而且返回值只是一个<code>i32</code>，并不引用任何值：</p>
 <pre><code class="language-rust"># struct ImportantExcerpt&lt;'a&gt; {

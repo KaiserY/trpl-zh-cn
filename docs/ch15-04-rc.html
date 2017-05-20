@@ -114,7 +114,7 @@ to share ownership of a third list won't work</span></p>
    implement the `Copy` trait
 </code></pre>
 <p><code>Cons</code>成员拥有其储存的数据，所以当创建<code>b</code>列表时将<code>a</code>的所有权移动到了<code>b</code>。接着当再次尝使用<code>a</code>创建<code>c</code>时，这不被允许因为<code>a</code>的所有权已经被移动。</p>
-<p>相反可以改变<code>Cons</code>的定义来存放一个引用，不过接着必须指定生命周期参数，而且也必须以使得列表的每一个元素都与列表本身存在的一样久那样构造列表的元素。否则借用检查器甚至都不会允许我们编译代码。</p>
+<p>相反可以改变<code>Cons</code>的定义来存放一个引用，不过接着必须指定生命周期参数，而且在构造列表时，也必须使列表中的每一个元素都至少与列表本身存在的一样久。否则借用检查器甚至都不会允许我们编译代码。</p>
 <p>如列表 15-12 所示，可以将<code>List</code>的定义从<code>Box&lt;T&gt;</code>改为<code>Rc&lt;T&gt;</code>：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">enum List {
@@ -135,7 +135,7 @@ fn main() {
 <code>Rc&lt;T&gt;</code></span></p>
 <p>注意必须为<code>Rc</code>增加<code>use</code>语句因为它不在 prelude 中。在<code>main</code>中创建了存放 5 和 10 的列表并将其存放在一个叫做<code>a</code>的新的<code>Rc</code>中。接着当创建<code>b</code>和<code>c</code>时，我们对<code>a</code>调用了<code>clone</code>方法。</p>
 <a class="header" href="#克隆rct会增加引用计数" name="克隆rct会增加引用计数"><h3>克隆<code>Rc&lt;T&gt;</code>会增加引用计数</h3></a>
-<p>之前我们见过<code>clone</code>方法，当时使用它来创建某些数据的完整拷贝。但是对于<code>Rc&lt;T&gt;</code>来说，它并不创建一个完整的拷贝。<code>Rc&lt;T&gt;</code>存放了<strong>引用计数</strong>，也就是说，一个存在多少个克隆的数量。让我们像列表 15-13 那样在创建<code>c</code>时增加一个内部作用域，并在不同的位置打印出关联函数<code>Rc::strong_count</code>的结果。<code>Rc::strong_count</code>返回传递给它的<code>Rc</code>值的引用计数，而在本章的稍后部分介绍避免引用循环时讲到它为什么叫做<code>strong_count</code>。</p>
+<p>之前我们见过<code>clone</code>方法，当时使用它来创建某些数据的完整拷贝。但是对于<code>Rc&lt;T&gt;</code>来说，它并不创建一个完整的拷贝。<code>Rc&lt;T&gt;</code>存放了<strong>引用计数</strong>，也就是说，一个存在多少个克隆的计数器。让我们像列表 15-13 那样在创建<code>c</code>时增加一个内部作用域，并在不同的位置打印出关联函数<code>Rc::strong_count</code>的结果。<code>Rc::strong_count</code>返回传递给它的<code>Rc</code>值的引用计数，而在本章的稍后部分介绍避免引用循环时讲到它为什么叫做<code>strong_count</code>。</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># enum List {
 #     Cons(i32, Rc&lt;List&gt;),

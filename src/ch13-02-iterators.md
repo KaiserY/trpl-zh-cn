@@ -2,7 +2,7 @@
 
 > [ch13-02-iterators.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch13-02-iterators.md)
 > <br>
-> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
+> commit 431116f5c696000b9fd6780e5fde90392cef6812
 
 迭代器是 Rust 中的一个模式，它允许你对一个项的序列进行某些处理。例如。列表 13-5 中对 vecctor 中的每一个数加一：
 
@@ -68,7 +68,7 @@ trait Iterator {
 }
 ```
 
-这里有一些还未讲到的新语法：`type Item`和`Self::Item`定义了这个 trait 的**关联类型**（*associated type*），第19章会讲到关联类型。现在所有你需要知道就是这些代码表示`Iterator` trait 要求你也定义一个`Item`类型，而这个`Item`类型用作`next`方法的返回值。换句话说，`Item`类型将是迭代器返回的元素的类型。
+这里有一些还未讲到的新语法：`type Item`和`Self::Item`定义了这个 trait 的**关联类型**（*associated type*），第十九章会讲到关联类型。现在所有你需要知道就是这些代码表示`Iterator` trait 要求你也定义一个`Item`类型，而这个`Item`类型用作`next`方法的返回值。换句话说，`Item`类型将是迭代器返回的元素的类型。
 
 让我们使用`Iterator` trait 来创建一个从一数到五的迭代器`Counter`。首先，需要创建一个结构体来存放迭代器的当前状态，它有一个`u32`的字段`count`。我们也定义了一个`new`方法，当然这并不是必须的。因为我们希望`Counter`能从一数到五，所以它总是从零开始：
 
@@ -152,7 +152,7 @@ println!("{:?}", x);
 
 好吧，当讲到`Iterator`的定义时，我们故意省略一个小的细节。`Iterator`定义了一系列默认实现，他们会调用`next`方法。因为`next`是唯一一个`Iterator` trait 没有默认实现的方法，一旦实现之后，`Iterator`的所有其他的适配器就都可用了。这些适配器可不少！
 
-例如，处于某种原因我们希望获取一个`Counter`实例产生的头五个值，与另一个`Counter`实例第一个之后的值相组合，将每组数相乘，并只保留能被三整除的相乘结果，最后将保留结果相加，我们可以这么做：
+例如，处于某种原因我们希望获取一个`Counter`实例产生的值，与另一个`Counter`实例忽略第一个值之后的值相组合，将每组数相乘，并只保留能被三整除的相乘结果，最后将所有保留的结果相加，我们可以这么做：
 
 
 ```rust
@@ -182,8 +182,7 @@ println!("{:?}", x);
 #         }
 #     }
 # }
-let sum: u32 = Counter::new().take(5)
-                             .zip(Counter::new().skip(1))
+let sum: u32 = Counter::new().zip(Counter::new().skip(1))
                              .map(|(a, b)| a * b)
                              .filter(|x| x % 3 == 0)
                              .sum();
