@@ -34,7 +34,7 @@ authors = ["Your Name <you@example.com>"]
 
 如果 Cargo 从环境中获取的开发者信息不正确，修改这个文件并再次保存。
 
-正如第一章那样，`cargo new`生成了一个“Hello, world!”程序。查看 *src/main.rs* 文件：
+正如第一章那样，`cargo new` 生成了一个“Hello, world!”程序。查看 *src/main.rs* 文件：
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -44,7 +44,7 @@ fn main() {
 }
 ```
 
-现在让我们使用`cargo run`在相同的步骤编译并运行这个“Hello, world!”程序：
+现在让我们使用 `cargo run`，编译运行一步到位：
 
 
 ```sh
@@ -54,13 +54,13 @@ $ cargo run
 Hello, world!
 ```
 
-`run`命令在需要快速迭代项目时就派上用场了，而这个游戏就正是这么一个项目：我们需要在进行下一步之前快速测试每次迭代。
+`run` 命令适合用在需要快速迭代的项目，而这个游戏就是：我们需要在下一步迭代之前快速测试。
 
-重新打开 *src/main.rs* 文件。我们将会在这个文件编写全部的代码。
+重新打开 *src/main.rs* 文件。我们将会在这个文件中编写全部代码。
 
 ## 处理一次猜测
 
-程序的第一部分会请求用户输入，处理输入，并检查输入是否符合预期。首先，允许玩家输入一个猜测。在 *src/main.rs* 中输入列表 2-1 中的代码。
+程序的第一部分请求和处理用户输入，并检查输入是否符合预期。首先，需要有一个让玩家输入猜测的地方。在 *src/main.rs* 中输入列表 2-1 中的代码。
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -89,19 +89,19 @@ fn main() {
 use std::io;
 ```
 
-Rust 默认只在每个程序的 [*prelude*][prelude]<!-- ignore --> 中引用很少的一些类型。如果想要使用的类型并不在 prelude 中，你必须使用一个`use`语句显式的将其引入到作用域中。`std::io`库提供很多`io`相关的功能，比如接受用户输入。
+Rust 默认只在每个程序的 [*prelude*][prelude]<!-- ignore --> 中引入少量类型。如果需要的类型不在 prelude 中，你必须使用一个 `use` 语句显式的将其引入作用域。`std::io` 库提供很多 `io` 相关的功能，比如接受用户输入。
 
 [prelude]: https://doc.rust-lang.org/std/prelude/index.html
 
-如第一章所提及，`main`函数是程序的入口点：
+如第一章所提及，`main` 函数是程序的入口点：
 
 ```rust,ignore
 fn main() {
 ```
 
-`fn`语法声明了一个新函数，`()`表明没有参数，`{`作为函数体的开始。
+`fn` 语法声明了一个新函数，`()` 表明没有参数，`{` 作为函数体的开始。
 
-第一章也提及，`println!`是一个在屏幕上打印字符串的宏：
+第一章也提及，`println!` 是一个在屏幕上打印字符串的宏：
 
 ```rust,ignore
 println!("Guess the number!");
@@ -115,13 +115,13 @@ println!("Please input your guess.");
 
 接下来，创建一个地方储存用户输入，像这样：
 
-```rust,ignore
+```rust
 let mut guess = String::new();
 ```
 
-现在程序开始变得有意思了！这一小行代码发生了很多事。注意这是一个`let`语句，用来创建**变量**。这里是另外一个例子：
+现在程序开始变得有意思了！这一小行代码发生了很多事。注意这是一个 `let` 语句，用来创建**变量**。这里是另外一个例子：
 
-```rust,ignore
+```rust
 let foo = bar;
 ```
 
@@ -171,7 +171,7 @@ io::stdin().read_line(&mut guess)
 
 当使用 `.expect()` 语法调用方法时，通过‘换行并缩进’来把长行拆开，是明智的。我们完全可以这样写：
 
-```rust,ignore
+```rust
 io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```
 
@@ -190,7 +190,7 @@ io::stdin().read_line(&mut guess).expect("Failed to read line");
 
 对于 `Result`，它的成员是 `Ok` 或 `Err`，`Ok` 表示操作成功，内部包含产生的值。`Err` 意味着操作失败，包含失败的前因后果。
 
-`Result` 类型的作用是编码错误处理信息。`Result`类型的值，像其他类型一样，拥有定义于其上的方法。`io::Result` 的实例拥有[`expect`方法][expect]<!-- ignore -->，如果实例的值是 `Err`，`expect` 会导致程序崩溃，并显示当做参数传递给 `expect` 的信息;如果实例的值是 `Ok`，`expect` 会获取 `Ok` 中的值并原样返回。在本例中，这个值是用户输入到标准输入中的字节的数量。
+`Result` 类型的作用是编码错误处理信息。`Result` 类型的值，像其他类型一样，拥有定义于其上的方法。`io::Result` 的实例拥有[`expect`方法][expect]<!-- ignore -->，如果实例的值是 `Err`，`expect` 会导致程序崩溃，并显示当做参数传递给 `expect` 的信息;如果实例的值是 `Ok`，`expect` 会获取 `Ok` 中的值并原样返回。在本例中，这个值是用户输入到标准输入中的字节的数量。
 
 [expect]: https://doc.rust-lang.org/std/result/enum.Result.html#method.expect
 
@@ -211,7 +211,7 @@ Rust 警告我们没有使用 `read_line` 的返回值 `Result`，说明有一�
 
 除了位于结尾的大括号，目前为止就只有一行代码值得讨论一下了，就是这一行：
 
-```rust ,ignore
+```rust
 println!("You guessed: {}", guess);
 ```
 
@@ -373,9 +373,9 @@ random number</span>
 
 接下来，我们增加了一行 `use`：`use rand::Rng`。`Rng` 是一个 trait，它定义了随机数生成器应实现的方法 ，想使用这些方法的话此 trait 必须在作用域中。第十章会详细介绍 trait。
 
-另外，中间还新增加了两行。`rand::thread_rng`函数会提供具体会使用的随机数生成器：它位于当前执行线程本地并从操作系统获取 seed。接下来，调用随机数生成器的`gen_range`方法。这个方法由我们使用`use rand::Rng`语句引入到作用域的`Rng` trait 定义。`gen_range`方法获取两个数作为参数并生成一个两者之间的随机数。它包含下限但不包含上限，所以需要指定`1`和`101`来请求一个`1`和`100`之间的数。
+另外，中间还新增加了两行。`rand::thread_rng` 函数提供实际使用的随机数生成器：它位于当前执行线程，并从操作系统获取 seed。接下来，调用随机数生成器的 `gen_range` 方法。这个方法由刚才引入到作用域的 `Rng` trait 定义。`gen_range` 方法获取两个数字作为参数，并生成一个范围在两者之间的随机数。它包含下限但不包含上限，所以需要指定`1`和`101`来请求一个`1`和`100`之间的数。
 
-并不是仅仅能够**知道**该 use 哪个 trait 和该从 crate 中调用哪个方法。如何使用 crate 的说明位于每个 crate 的文档中。Cargo 另一个很棒的功能是可以运行`cargo doc --open`命令来构建所有本地依赖提供的文档并在浏览器中打开。例如，如果你对`rand` crate 中的其他功能感兴趣，运行`cargo doc --open`并点击左侧导航栏中的`rand`。
+**知道** use 哪个 trait 和该从 crate 中调用哪个方法并不是全部，crate 的说明位于其文档中，Cargo 有一个很棒的功能是：运行 `cargo doc --open` 命令来构建所有本地依赖提供的文档，并在浏览器中打开。例如，假设你对 `rand` crate 中的其他功能感兴趣，`cargo doc --open` 并点击左侧导航栏中的 `rand`。
 
 新增加的第二行代码打印出了秘密数字。这在开发程序时很有用，因为我们可以去测试它，不过在最终版本我们会删掉它。游戏一开始就打印出结果就没什么可玩的了！
 
@@ -407,7 +407,7 @@ You guessed: 5
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust
 extern crate rand;
 
 use std::io;
@@ -441,11 +441,11 @@ fn main() {
 <span class="caption">Listing 2-4: Handling the possible return values of
 comparing two numbers</span>
 
-新代码的第一行是另一个`use`，从标准库引入了一个叫做`std::cmp::Ordering`的类型到作用域。`Ordering`是另一个枚举，像`Result`一样，不过`Ordering`的成员是`Less`、`Greater`和`Equal`。这是你比较两个值时可能出现三种结果。
+新代码的第一行是另一个 `use`，从标准库引入了一个叫做 `std::cmp::Ordering` 的类型。`Ordering` 是一个像 `Result` 一样的枚举，不过它的成员是 `Less`、`Greater` 和 `Equal`。这是你做比较时可能出现的三种结果。
 
-接着在底部的五行新代码使用了`Ordering`类型：
+接着，底部的五行新代码使用了 `Ordering` 类型：
 
-```rust,ignore
+```rust
 match guess.cmp(&secret_number) {
     Ordering::Less    => println!("Too small!"),
     Ordering::Greater => println!("Too big!"),
@@ -453,13 +453,13 @@ match guess.cmp(&secret_number) {
 }
 ```
 
-`cmp`方法比较两个值并可以在任何可比较的值上调用。它获取一个任何你想要比较的值的引用：这里是把`guess`与`secret_number`做比较。`cmp`返回一个使用`use`语句引入作用域的`Ordering`枚举的成员。我们使用一个[`match`][match]<!-- ignore -->表达式根据对`guess`和`secret_number`中的值调用`cmp`后返回的哪个`Ordering`枚举成员来决定接下来干什么。
+`cmp` 方法用来比较两个值。在任何可比较的值上调用，然后获取另一个被比较值的引用：这里是把 `guess` 与 `secret_number` 做比较，返回一个 `Ordering` 枚举的成员。再使用一个 [`match`][match]<!-- ignore --> 表达式，根据枚举成员来决定接下来干什么。
 
 [match]: ch06-02-match.html
 
-一个`match`表达式由 **分支（arms）** 构成。一个分支包含一个 **模式**（*pattern*）和代码，这些代码在`match`表达式开头给出的值符合分支的模式时将被执行。Rust 获取提供给`match`的值并挨个检查每个分支的模式。`match`结构和模式是 Rust 中非常强大的功能，它帮助你体现代码可能遇到的多种情形并帮助你处理全部的可能。这些功能将分别在第六章和第十八章详细介绍。
+一个 `match` 表达式由 **分支（arms）** 构成。一个分支包含一个 **模式**（*pattern*）和动作，表达式头的求值结果符合分支的模式时将执行对应的动作。Rust 获取提供给 `match` 的值并挨个检查每个分支的模式。`match` 结构和模式是 Rust 的强大功能，它体现了代码可能遇到的多种情形，并帮助你没有遗漏的处理。这些功能将分别在第六章和第十八章详细介绍。
 
-让我们看看一个使用这里的`match`表达式会发生什么的例子。假设用户猜了 50，这时随机生成的秘密数字是 38。当代码比较 50 与 38 时，`cmp`方法会返回`Ordering::Greater`，因为 50 比 38 要大。`Ordering::Greater`是`match`表达式得到的值。它检查第一个分支的模式，`Ordering::Less`，不过值`Ordering::Greater`并不匹配`Ordering::Less`。所以它忽略了这个分支的代码并移动到下一个分支。下一个分支的模式，`Ordering::Greater`，**正确**匹配了`Ordering::Greater`！这个分支关联的代码会被执行并在屏幕打印出`Too big!`。`match`表达式就此终止，因为在这个特定场景下没有检查最后一个分支的必要。
+让我们看看使用 `match` 表达式的例子。假设用户猜了 50，这时随机生成的秘密数字是 38。比较 50 与 38 时，因为 50 比 38 要大，`cmp` 方法会返回 `Ordering::Greater`。`match` 表达式得到该值，然后检查第一个分支的模式，`Ordering::Less` 与 `Ordering::Greater`并不匹配，所以它忽略了这个分支的动作并来到下一个分支。下一个分支的模式是 `Ordering::Greater`，**正确**匹配！这个分支关联的动作被执行，在屏幕打印出 `Too big!`。`match` 表达式就此终止，因为该场景下没有检查最后一个分支的必要。
 
 然而，列表 2-4 的代码并不能编译，可以尝试一下：
 
@@ -479,13 +479,13 @@ error: aborting due to previous error
 Could not compile `guessing_game`.
 ```
 
-错误的核心表明这里有**不匹配的类型**（*mismatched types*）。Rust 拥有一个静态强类型系统。不过，它也有类型推断。当我们写出`let guess = String::new()`时，Rust 能够推断出`guess`应该是一个`String`，并不需要我们写出类型。另一方面，`secret_number`，是一个数字类型。一些数字类型拥有 1 到 100 之间的值：`i32`，一个 32 位的数字；`u32`，一个 32 位无符号数字；`i64`，一个 64 位数字；等等。Rust 默认使用`i32`，所以`secret_number`的类型就是它，除非增加类型信息或任何能让 Rust 推断出不同数值类型的信息。这里错误的原因在于 Rust 不会比较字符串类型和数字类型。
+错误的核心表明这里有**不匹配的类型**（*mismatched types*）。Rust 有一个静态强类型系统，同时也有类型推断。当我们写出 `let guess = String::new()` 时，Rust 推断出 `guess` 应该是一个`String`，不需要我们写出类型。另一方面，`secret_number`，是一个数字类型。多种数字类型拥有 1 到 100 之间的值：32 位数字 `i32`；32 位无符号数字 `u32`；64 位数字 `i64` 等等。Rust 默认使用 `i32`，所以它是 `secret_number` 的类型，除非增加类型信息，或任何能让 Rust 推断出不同数值类型的信息。这里错误的原因在于 Rust 不会比较字符串类型和数字类型。
 
-最终我们想要把程序从输入中读取到的`String`转换为一个真正的数字类型，这样好与秘密数字向比较。可以通过在`main`函数体中增加如下两行代码来实现：
+所以我们必须把从输入中读取到的 `String` 转换为一个真正的数字类型，才好与秘密数字进行比较。可以通过在 `main` 函数体中增加如下两行代码来实现：
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust
 extern crate rand;
 
 use std::io;
@@ -521,20 +521,20 @@ fn main() {
 
 这两行代码是：
 
-```rust,ignore
+```rust
 let guess: u32 = guess.trim().parse()
     .expect("Please type a number!");
 ```
 
-这里创建了一个叫做`guess`的变量。不过等等，难道这个程序不是已经有了一个叫做`guess`的变量了吗？确实如此，不过 Rust 允许我们通过**覆盖**（*shadow*） 用一个新值来覆盖`guess`之前的值。这个功能经常用在类似需要把一个值从一种类型转换到另一种类型的场景。shadowing 允许我们复用`guess`变量的名字而不是强迫我们创建两个不同变量，比如`guess_str`和`guess`。（第三章会介绍 shadowing 的更多细节。）
+这里创建了一个叫做 `guess` 的变量。不过等等，不是已经有了一个叫做`guess`的变量了吗？确实如此，不过 Rust 允许**遮盖**（*shadow*），用一个新值来遮盖 `guess` 之前的值。这个功能常用在需要转换值类型之类的场景，它允许我们复用 `guess` 变量的名字，而不是被迫创建两个不同变量，诸如 `guess_str` 和 `guess` 之类。（第三章会介绍 shadowing 的更多细节。）
 
-`guess`被绑定到`guess.trim().parse()`表达式。表达式中的`guess`对应包含输入的`String`类型的原始`guess`。`String`实例的`trim`方法会消除字符串开头和结尾的空白。`u32`只能包含数字字符。不过用户必须输入回车键才能让`read_line`返回。当用户按下回车键时，会在字符串中增加一个换行（newline）字符。例如，如果用户输入 5 并回车，`guess`看起来像这样：`5\n`。`\n`代表“换行”，回车键。`trim`方法消除`\n`，只留下`5`。
+`guess` 被绑定到 `guess.trim().parse()` 表达式。表达式中的 `guess` 是包含输入的 `String` 类型。`String` 实例的 `trim` 方法会去除字符串开头和结尾的空白。`u32` 只能由数字字符转换，不过用户必须输入回车键才能让 `read_line` 返回，然而用户按下回车键时，会在字符串中增加一个换行（newline）符。例如，用户输入 5 并回车，`guess` 看起来像这样：`5\n`。`\n` 代表“换行”，回车键。`trim` 方法消除 `\n`，只留下`5`。
 
-[字符串的`parse`方法][parse]<!-- ignore -->解析一个字符串成某个数字。因为这个方法可以解析多种数字类型，需要告诉 Rust 我们需要的具体的数字类型，这里通过`let guess: u32`指定。`guess`后面的冒号（`:`）告诉 Rust 我们指明了变量的类型。Rust 有一些内建的数字类型；这里的`u32`是一个无符号的 32 位整型。它是一个好的较小正整数的默认类型。第三章会讲到其他数字类型。另外，例子程序中的`u32`注解和与`secret_number`的比较意味着 Rust 会推断`secret_number`应该是也是`u32`类型。现在可以使用相同类型比较两个值了！
+[字符串的`parse`方法][parse]<!-- ignore --> 将字符串解析成数字。这个方法可以解析多种数字类型，因此需要告诉 Rust 具体的数字类型，这里通过 `let guess: u32` 指定。`guess` 后面的冒号（`:`）告诉 Rust 我们指定了变量的类型。Rust 有一些内建的数字类型；`u32` 是一个无符号的 32 位整型。对于不大的正整数来说，它是不错的类型，第三章还会讲到其他数字类型。另外，程序中的 `u32` 注解以及与 `secret_number` 的比较，意味着 Rust 会推断出 `secret_number` 也是 `u32` 类型。现在可以使用相同类型比较两个值了！
 
 [parse]: https://doc.rust-lang.org/std/primitive.str.html#method.parse
 
-`parse`调用容易产生错误。例如，如果字符串包含`A👍%`，就无法将其转换为一个数字。因为它可能失败，`parse`方法返回一个`Result`类型，非常像之前在“使用`Result`类型来处理潜在的错误”部分讨论的`read_line`方法。这里再次类似的使用`expect`方法处理这个`Result`类型。如果`parse`因为不能从字符串生成一个数字而返回一个`Err`的`Result`成员时，`expect`会使游戏崩溃并打印提供给它的信息。如果`parse`能成功地将字符串转换为一个数字，它会返回`Result`的`Ok`成员，同时`expect`会返回`Ok`中我们需要的数字。
+`parse` 调用可能产生错误。例如，字符串中包含 `A👍%`，就无法将其转换为一个数字。因此，`parse` 方法返回一个 `Result` 类型。像之前讨论的 `read_line` 方法，按部就班的用 `expect` 方法处理即可。如果 `parse` 不能从字符串生成一个数字，返回一个 `Result::Err` 时，`expect` 会使游戏崩溃并打印附带的信息。如果 `parse` 成功地将字符串转换为一个数字，它会返回 `Result::Ok`，然后 `expect` 会返回 `Ok` 中的数字。
 
 现在让我们运行程序！
 
@@ -556,11 +556,11 @@ Too big!
 
 ## 使用循环来允许多次猜测
 
-`loop`关键字提供了一个无限循环。增加它后给了用户多次猜测的机会：
+`loop` 关键字提供了一个无限循环。将其加入后，用户可以反复猜测：
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust
 extern crate rand;
 
 use std::io;
@@ -596,9 +596,9 @@ fn main() {
 }
 ```
 
-如上所示，我们将提示用户猜测之后的所有内容放入了循环。确保这些代码多缩进了四个空格，并再次运行程序。注意这里有一个新问题，因为程序忠实地执行了我们要求它做的：永远地请求另一个猜测！看起来用户没法退出啊！
+如上所示，我们将提示用户猜测之后的所有内容放入了循环。确保这些代码额外缩进了一层，再次运行程序。注意这里有一个新问题，因为程序忠实地执行了我们的要求：永远地请求另一个猜测，用户没法退出！
 
-用户总是可以使用`Ctrl-C`快捷键来终止程序。不过这里还有另一个逃离这个贪得无厌的怪物的方法，就是在“比较猜测”部分提到的`parse`：如果用户输入一个非数字回答，程序会崩溃。用户可以利用这一点来退出，如下所示：
+用户总能使用 `Ctrl-C` 终止程序。不过还有另一个方法跳出无限循环，就是“比较猜测”部分提到的 `parse`：如果用户输入一个非数字答案，程序会崩溃。用户可以利用这一点来退出，如下所示：
 
 ```
 $ cargo run
@@ -625,15 +625,15 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/guess` (exit code: 101)
 ```
 
-输入`quit`确实退出了程序，同时其他任何非数字输入也一样。然而，毫不夸张的说这是不理想的。我们想要当猜测正确的数字时游戏能自动退出。
+输入 `quit` 确实退出了程序，同时其他任何非数字输入也一样。然而，这并不理想，我们想要当猜测正确的数字时游戏能自动退出。
 
 ### 猜测正确后退出
 
-让我们增加一个`break`来在用户胜利时退出游戏：
+让我们增加一个 `break`，在用户猜对时退出游戏：
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust ,ignore
 extern crate rand;
 
 use std::io;
@@ -672,26 +672,28 @@ fn main() {
 }
 ```
 
-通过在`You win!`之后增加一行`break`，程序在用户猜对了神秘数字后会退出循环。退出循环也就意味着退出程序，因为循环是`main`的最后一部分。
+通过在 `You win!` 之后增加一行 `break`，用户猜对了神秘数字后会退出循环。退出循环也意味着退出程序，因为循环是 `main` 的最后一部分。
 
 ### 处理无效输入
 
-为了进一步改善游戏性，而不是在用户输入非数字时崩溃，需要让游戏忽略非数字从而用户可以继续猜测。可以通过修改`guess`从`String`转化为`u32`那部分代码来实现：
+为了进一步改善游戏性，不要在用户输入非数字时崩溃，需要忽略非数字，让用户可以继续猜测。可以通过修改 `guess` 将 `String` 转化为 `u32` 那部分代码来实现：
 
-```rust,ignore
+```rust ,ignore
 let guess: u32 = match guess.trim().parse() {
     Ok(num) => num,
     Err(_) => continue,
 };
 ```
 
-从`expect`调用切换到`match`语句是如何从遇到错误就崩溃到真正处理错误的常用手段。记住`parse`返回一个`Result`类型，而`Result`是一个拥有`Ok`或`Err`两个成员的枚举。在这里使用`match`表达式，就像之前处理`cmp`方法返回的`Ordering`一样。
 
-如果`parse`能够成功的将字符串转换为一个数字，它会返回一个包含结果数字`Ok`值。这个`Ok`值会匹配第一个分支的模式，这时`match`表达式仅仅返回`parse`产生的`Ok`值之中的`num`值。这个数字会最终如期变成新创建的`guess`变量。
+将 `expect` 调用换成 `match` 语句,是从“立即崩溃”转到真正处理错误的惯用方法。须知 `parse` 返回一个 `Result` 类型，而 `Result` 是一个拥有 `Ok` 或 `Err` 成员的枚举。这里使用的 `match` 表达式，和之前处理 `cmp` 方法返回 `Ordering` 时用的一样。
 
-如果`parse`*不*能将字符串转换为一个数字，它会返回一个包含更多错误信息的`Err`值。`Err`值不能匹配第一个`match`分支的`Ok(num)`模式，但是会匹配第二个分支的`Err(_)`模式。`_`是一个包罗万象的值；在这个例子中，我们想要匹配所有`Err`值，不管其中有何种信息。所以程序会执行第二个分支的代码，`continue`，这意味着进入`loop`的下一次循环并请求另一个猜测。这样程序就有效地忽略了`parse`可能遇到的所有错误！
 
-现在万事俱备（只欠东风）了。运行`cargo run`来尝试一下：
+如果 `parse` 能够成功的将字符串转换为一个数字，它会返回一个包含结果数字的 `Ok`。这个 `Ok` 值与`match` 第一个分支的模式相匹配，该分支对应的动作返回 `Ok` 值中的数字 `num`，最后如愿变成新创建的 `guess` 变量。
+
+如果 `parse` *不*能将字符串转换为一个数字，它会返回一个包含更多错误信息的 `Err`。`Err` 值不能匹配第一个 `match` 分支的 `Ok(num)` 模式，但是会匹配第二个分支的 `Err(_)` 模式：`_` 是一个兜底值，用来匹配所有 `Err` 值，不管其中有何种信息。所以程序会执行第二个分支的动作，`continue` 意味着进入 `loop` 的下一次循环，请求另一个猜测。这样程序就忽略了 `parse` 可能遇到的所有错误！
+
+现在万事俱备，只需运行 `cargo run`：
 
 ```
 $ cargo run
@@ -715,11 +717,11 @@ You guessed: 61
 You win!
 ```
 
-太棒了！再有最后一个小的修改，就能完成猜猜看游戏了：还记得程序依然会打印出秘密数字。这在测试时还好，但会毁了游戏性。删掉打印秘密数字的`println!`。列表 2-5 为最终代码：
+太棒了！再有最后一个小的修改，就能完成猜猜看游戏了：还记得程序依然会打印出秘密数字。在测试时还好，但正式发布时会毁了游戏。删掉打印秘密数字的 `println!`。列表 2-5 为最终代码：
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust ,ignore
 extern crate rand;
 
 use std::io;
@@ -764,4 +766,4 @@ fn main() {
 
 此时此刻，你顺利完成了猜猜看游戏！恭喜！
 
-这是一个通过动手实践的方式想你介绍许多 Rust 新知识的项目：`let`、`match`、方法、关联函数，使用外部 crate，等等。接下来的几章，我们将会详细学习这些概念。第三章涉及到大部分编程语言都有的概念，比如变量、数据类型和函数，以及如何在 Rust 中使用他们。第四章探索所有权（ownership），这是一个 Rust 同其他语言都不相同的功能。第五章讨论结构体和方法的语法，而第六章侧重解释枚举。
+这是一个通过动手实践学习 Rust 新概念的项目：`let`、`match`、方法、关联函数、使用外部 crate 等等，接下来的几章，我们将会继续深入。第三章涉及到大部分编程语言都有的概念，比如变量、数据类型和函数，以及如何在 Rust 中使用他们。第四章探索所有权（ownership），这是一个 Rust 同其他语言都不相同的功能。第五章讨论结构体和方法的语法，而第六章侧重解释枚举。
