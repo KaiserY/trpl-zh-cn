@@ -71,7 +71,7 @@
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch03-02-data-types.md">ch03-02-data-types.md</a>
 <br>
-commit 04aa3a45eb72855b34213703718f50a12a3eeec8</p>
+commit fe4833a8ef2853c55424e7747a4ef8dd64c35b32</p>
 </blockquote>
 <p>Rust 中的任何值都有一个具体的<strong>类型</strong>（<em>type</em>），这告诉了 Rust 它被指定了何种数据，这样 Rust 就知道如何处理这些数据了。这一部分将讲到一些语言内建的类型。我们将这些类型分为两个子集：标量（scalar）和复合（compound）。</p>
 <p>贯穿整个部分，请记住 Rust 是一个<strong>静态类型</strong>（<em>statically typed</em>）语言，也就是说必须在编译时就知道所有变量的类型。编译器通常可以通过值以及如何使用他们来推断出我们想要用的类型。当多个类型都是可能的时候，比如第二章中<code>parse</code>将<code>String</code>转换为数字类型，必须增加类型注解，像这样：</p>
@@ -153,7 +153,7 @@ commit 04aa3a45eb72855b34213703718f50a12a3eeec8</p>
     let f: bool = false; // with explicit type annotation
 }
 </code></pre>
-<p>使用布尔值的主要场景是条件语句，例如<code>if</code>。在“控制流”（“Control Flow”）部分将讲到<code>if</code>语句在 Rust 中如何工作。</p>
+<p>使用布尔值的主要场景是条件表达式，例如<code>if</code>。在“控制流”（“Control Flow”）部分将讲到<code>if</code>表达式在 Rust 中如何工作。</p>
 <a class="header" href="#字符类型" name="字符类型"><h4>字符类型</h4></a>
 <p>目前为止只使用到了数字，不过 Rust 也支持字符。Rust 的<code>char</code>类型是大部分语言中基本字母字符类型，如下代码展示了如何使用它：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>

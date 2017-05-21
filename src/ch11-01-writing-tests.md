@@ -2,7 +2,7 @@
 
 > [ch11-01-writing-tests.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch11-01-writing-tests.md)
 > <br>
-> commit 55b294f20fc846a13a9be623bf322d8b364cee77
+> commit c6162d22288253b2f2a017cfe96cf1aa765c2955
 
 测试用来验证非测试的代码按照期望的方式运行的 Rust 函数。测试函数体通常包括一些设置，运行需要测试的代码，接着断言其结果是我们所期望的。让我们看看 Rust 提供的具体用来编写测试的功能：`test`属性、一些宏和`should_panic`属性。
 
@@ -454,7 +454,7 @@ fn greeting_contains_name() {
 
 ```
 ---- tests::greeting_contains_name stdout ----
-	thread 'tests::greeting_contains_name' panicked at 'Result did not contain
+	thread 'tests::greeting_contains_name' panicked at 'Greeting did not contain
     name, value was `Hello`', src/lib.rs:12
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```

@@ -120,7 +120,7 @@ fn main() {
 names and the types in their signatures</span></p>
 <p>这里<code>largest_i32</code>和<code>largest_char</code>有着完全相同的函数体，所以能够将这两个函数变成一个来减少重复就太好了。所幸通过引入一个泛型参数就能实现！</p>
 <p>为了参数化要定义的函数的签名中的类型，我们需要像给函数的值参数起名那样为这类型参数起一个名字。这里选择了名称<code>T</code>。任何标识符都可以作为类型参数名，选择<code>T</code>是因为 Rust 的类型命名规范是骆驼命名法（CamelCase）。另外泛型类型参数的规范也倾向于简短，经常仅仅是一个字母。<code>T</code>作为“type”的缩写是大部分 Rust 程序员的首选。</p>
-<p>当需要再函数体中使用一个参数时，必须在函数签名中声明这个参数以便编译器能知道函数体中这个名称的意义。同理，当在函数签名中使用一个类型参数时，必须在使用它之前就声明它。类型参数声明位于函数名称与参数列表中间的尖括号中。</p>
+<p>当需要在函数体中使用一个参数时，必须在函数签名中声明这个参数以便编译器能知道函数体中这个名称的意义。同理，当在函数签名中使用一个类型参数时，必须在使用它之前就声明它。类型参数声明位于函数名称与参数列表中间的尖括号中。</p>
 <p>我们将要定义的泛型版本的<code>largest</code>函数的签名看起来像这样：</p>
 <pre><code class="language-rust,ignore">fn largest&lt;T&gt;(list: &amp;[T]) -&gt; T {
 </code></pre>
@@ -161,7 +161,7 @@ uses generic type parameters but doesn't compile yet</span></p>
   |
 note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
 </code></pre>
-<p>注释中提到了<code>std::cmp::PartialOrd</code>，这是一个 <em>trait</em>。下一部分会讲到 trait，不过简单来说，这个错误表明<code>largest</code>的函数体对<code>T</code>的所有可能的类型都无法工作；因为在函数体需要比较<code>T</code>类型的值，不过它只能用于我们知道如何排序的类型。标准库中定义的<code>std::cmp::PartialOrd</code> trait 可以实现类型的排序功能。在下一部分会再次回到 trait 并讲解如何为泛型指定一个 trait，不过让我们先把这个例子放在一边并探索其他那些可以使用泛型类型参数的地方。</p>
+<p>注释中提到了<code>std::cmp::PartialOrd</code>，这是一个 <em>trait</em>。下一部分会讲到 trait，不过简单来说，这个错误表明<code>largest</code>的函数体不能适用于<code>T</code>的所有可能的类型；因为在函数体需要比较<code>T</code>类型的值，不过它只能用于我们知道如何排序的类型。标准库中定义的<code>std::cmp::PartialOrd</code> trait 可以实现类型的排序功能。在下一部分会再次回到 trait 并讲解如何为泛型指定一个 trait，不过让我们先把这个例子放在一边并探索其他那些可以使用泛型类型参数的地方。</p>
 <!-- Liz: this is the reason we had the topics in the order we did in the first
 draft of this chapter; it's hard to do anything interesting with generic types
 in functions unless you also know about traits and trait bounds. I think this
@@ -185,7 +185,7 @@ fn main() {
 <p><span class="caption">Listing 10-6: A <code>Point</code> struct that holds <code>x</code> and <code>y</code>
 values of type <code>T</code></span></p>
 <p>其语法类似于函数定义中的泛型应用。首先，必须在结构体名称后面的尖括号中声明泛型参数的名称。接着在结构体定义中可以指定具体数据类型的位置使用泛型类型。</p>
-<p>注意<code>Point</code>的定义中是使用了要给泛型类型，我们想要表达的是结构体<code>Point</code>对于一些类型<code>T</code>是泛型的，而且字段<code>x</code>和<code>y</code><strong>都是</strong>相同类型的，无论它具体是何类型。如果尝试创建一个有不同类型值的<code>Point</code>的实例，像列表 10-7 中的代码就不能编译：</p>
+<p>注意<code>Point</code>的定义中只使用了一个泛型类型，我们想要表达的是结构体<code>Point</code>对于一些类型<code>T</code>是泛型的，而且字段<code>x</code>和<code>y</code><strong>都是</strong>相同类型的，无论它具体是何类型。如果尝试创建一个有不同类型值的<code>Point</code>的实例，像列表 10-7 中的代码就不能编译：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">struct Point&lt;T&gt; {
     x: T,
@@ -321,7 +321,7 @@ fn main() {
     let float = Option_f64::Some(5.0);
 }
 </code></pre>
-<p>我们可以使用泛型来编写不重复的代码，而 Rust 会将会为每一个实例编译其特定类型的代码。这意味着在使用泛型时没有运行时开销；当代码运行，它的执行效率就跟好像手写每个具体定义的重复代码一样。这个单态化过程正是 Rust 泛型在运行时极其高效的原因。</p>
+<p>我们可以使用泛型来编写不重复的代码，而 Rust 将会为每一个实例编译其特定类型的代码。这意味着在使用泛型时没有运行时开销；当代码运行，它的执行效率就跟好像手写每个具体定义的重复代码一样。这个单态化过程正是 Rust 泛型在运行时极其高效的原因。</p>
 
                 </div>
 

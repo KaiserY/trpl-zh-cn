@@ -2,7 +2,7 @@
 
 > [ch10-03-lifetime-syntax.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-03-lifetime-syntax.md)
 > <br>
-> commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894
+> commit 9fbbfb23c2cd1686dbd3ce7950ae1eda300937f6
 
 当在第四章讨论引用时，我们遗漏了一个重要的细节：Rust 中的每一个引用都有其**生命周期**，也就是引用保持有效的作用域。大部分时候生命周期是隐含并可以推断的，正如大部分时候类型也是可以推断的一样。类似于当因为有多种可能类型的时候必须注明类型，也会出现引用的生命周期以多种不同方式相关联的情况，所以 Rust 需要我们使用泛型生命周期参数来注明他们的关系，这样就能确保运行时实际使用的引用绝对是有效的。
 
@@ -223,7 +223,7 @@ specifies all the references in the signature must have the same lifetime,
 
 当具体的引用被传递给`longest`时，具体被`'a`所替代的生命周期是`x`的作用域与`y`的作用域相重叠的那一部分。因为作用域总是嵌套的，所以换一种说法就是泛型生命周期`'a`的具体生命周期等同于`x`和`y`的生命周期中较小的那一个。因为我们用相同的生命周期参数标注了返回的引用值，所以返回的引用值就能保证在`x`和`y`中较短的那个生命周期结束之前保持有效。
 
-让我们如何通过传递拥有不同具体生命周期的引用来观察他们是如何限制`longest`函数的使用的。列表 10-22 是一个应该在任何编程语言中都很直观的例子：`string1`直到外部作用域结束都是有效的，`string2`则在内部作用域中是有效的，而`result`则引用了一些直到外部作用域结束都是有效的值。借用检查器赞同这些代码；它能够编译和运行，并打印出`The longest string is long string is long`：
+让我们如何通过传递拥有不同具体生命周期的引用来观察他们是如何限制`longest`函数的使用的。列表 10-22 是一个应该在任何编程语言中都很直观的例子：`string1`直到外部作用域结束都是有效的，`string2`则在内部作用域中是有效的，而`result`则引用了一些直到内部作用域结束都是有效的值。借用检查器赞同这些代码；它能够编译和运行，并打印出`The longest string is long string is long`：
 
 <span class="filename">Filename: src/main.rs</span>
 

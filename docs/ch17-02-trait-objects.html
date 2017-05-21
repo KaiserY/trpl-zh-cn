@@ -73,17 +73,17 @@
 <br>
 commit 67876e3ef5323ce9d394f3ea6b08cb3d173d9ba9</p>
 </blockquote>
-<p>在第八章，我们谈到了 vector 的局限是 vector 只能存储同种类型的元素。在列表 8-1 中有一个例子，其中定义了一个有存放整型、浮点型和文本的成员的枚举类型<code>SpreadsheetCell</code>，这样就可以在每一个单元格储存不同类型的数据并使得 vector 仍让代表一行单元格。这在那类代码被编译时就知晓需要可交换处理的数据的类型是一个固定集合的情况下是可行的。</p>
+<p>在第八章，我们谈到了 vector 只能存储同种类型元素的局限。在列表 8-1 中有一个例子，其中定义了存放包含整型、浮点型和文本型成员的枚举类型<code>SpreadsheetCell</code>，这样就可以在每一个单元格储存不同类型的数据，并使得 vector 仍然代表一行单元格。当编译时就知道类型集合全部元素的情况下，这种方案是可行的。</p>
 <!-- The code example I want to reference did not have a listing number; it's
 the one with SpreadsheetCell. I will go back and add Listing 8-1 next time I
 get Chapter 8 for editing. /Carol -->
-<p>有时，我们想我们使用的类型集合是可扩展的，可以被使用我们的库的程序员扩展。比如很多图形化接口工具有一个条目列表，从这个列表迭代和调用draw方法在每个条目上。我们将要创建一个库crate，包含称为<code>rust_gui</code>的CUI库的结构体。我们的GUI库可以包含一些给开发者使用的类型，比如<code>Button</code>或者<code>TextField</code>。使用<code>rust_gui</code>的程序员会创建更多可以在屏幕绘图的类型：一个程序员可能会增加<code>Image</code>，另外一个可能会增加<code>SelectBox</code>。我们不会在本章节实现一个完善的GUI库，但是我们会展示如何把各部分组合在一起。</p>
-<p>当要写一个<code>rust_gui</code>库时，我们不知道其他程序员要创建什么类型，所以我们无法定义一个<code>enum</code>来包含所有的类型。我们知道的是<code>rust_gui</code>需要有能力跟踪所有这些不同类型的大量的值，需要有能力在每个值上调用<code>draw</code>方法。我们的GUI库不需要确切地知道当调用<code>draw</code>方法时会发生什么，只要值有可用的方法供我们调用就可以。</p>
-<p>在有继承的语言里，我们可能会定义一个名为<code>Component</code>的类，该类上有一个<code>draw</code>方法。其他的类比如<code>Button</code>、<code>Image</code>和<code>SelectBox</code>会从<code>Component</code>继承并继承<code>draw</code>方法。它们会各自覆写<code>draw</code>方法来自定义行为，但是框架会把所有的类型当作是<code>Component</code>的实例，并在它们上调用<code>draw</code>。</p>
+<p>有时，我们希望使用的类型的集合对于使用库的程序员来说是可扩展的。例如，很多图形用户接口（GUI）工具有一个条目列表的概念，它通过遍历列表并对每一个条目调用<code>draw</code>方法来绘制在屏幕上。我们将要创建一个叫做<code>rust_gui</code>的包含一个 GUI 库结构的库 crate。GUI 库可以包含一些供开发者使用的类型，比如<code>Button</code>或<code>TextField</code>。使用<code>rust_gui</code>的程序员会想要创建更多可以绘制在屏幕上的类型：一个程序员可能会增加一个<code>Image</code>，而另一个可能会增加一个<code>SelectBox</code>。我们不会在本章节实现一个功能完善的 GUI 库，不过会展示各个部分是如何结合在一起的。</p>
+<p>当写 <code>rust_gui</code> 库时，我们不知道其他程序员需要什么类型，所以无法定义一个 <code>enum</code> 来包含所有的类型。然而 <code>rust_gui</code> 需要跟踪所有这些不同类型的值，需要有在每个值上调用 <code>draw</code> 方法能力。我们的 GUI 库不需要确切地知道调用 <code>draw</code> 方法会发生什么，只需要有可用的方法供我们调用。</p>
+<p>在可以继承的语言里，我们会定义一个名为 <code>Component</code> 的类，该类上有一个<code>draw</code>方法。其他的类比如<code>Button</code>、<code>Image</code>和<code>SelectBox</code>会从<code>Component</code>继承并拥有<code>draw</code>方法。它们各自覆写<code>draw</code>方法以自定义行为，但是框架会把所有的类型当作是<code>Component</code>的实例，并在其上调用<code>draw</code>。</p>
 <a class="header" href="#定义一个带有自定义行为的trait" name="定义一个带有自定义行为的trait"><h3>定义一个带有自定义行为的Trait</h3></a>
-<p>不过，在Rust语言中，我们可以定义一个名为<code>Draw</code>的trait，其上有一个名为<code>draw</code>的方法。我们定义一个带有<em>trait对象</em>的vector，绑定了一种指针的trait，比如<code>&amp;</code>引用或者一个<code>Box&lt;T&gt;</code>智能指针。</p>
-<p>我们提到，我们不会调用结构体和枚举的对象，从而区分于其他语言的对象。在结构体的数据或者枚举的字段和<code>impl</code>块中的行为是分开的，而其他语言则是数据和行为被组合到一个概念里。Trait对象更像其他语言的对象，在这种场景下，他们组合了由指针组成的数据到实体对象，该对象带有在trait中定义的方法行为。但是，trait对象是和其他语言是不同的，因为我们不能向一个trait对象增加数据。trait对象不像其他语言那样有用：它们的目的是允许从公有的行为上抽象。</p>
-<p>trait定义了在给定场景下我们所需要的行为。在我们会使用一个实体类型或者一个通用类型的地方，我们可以把trait当作trait对象使用。Rust的类型系统会保证我们为trait对象带入的任何值会实现trait的方法。我们不需要在编译阶段知道所有可能的类型，我们可以把所有的实例统一对待。Listing 17-03展示了如何定义一个名为<code>Draw</code>的带有<code>draw</code>方法的trait。</p>
+<p>不过，在Rust语言中，我们可以定义一个 <code>Draw</code> trait，包含名为 <code>draw</code> 的方法。我们定义一个由<em>trait对象</em>组成的vector，绑定了某种指针的trait，比如<code>&amp;</code>引用或者一个<code>Box&lt;T&gt;</code>智能指针。</p>
+<p>之前提到，我们不会称结构体和枚举为对象，以区分其他语言的结构体和枚举对象。结构体或者枚举成员中的数据和<code>impl</code>块中的行为是分开的，而其他语言则是数据和行为被组合到一个对象里。Trait 对象更像其他语言的对象，因为他们将其指针指向的具体对象作为数据，将在trait 中定义的方法作为行为，组合在了一起。但是，trait 对象和其他语言是不同的，我们不能向一个 trait 对象增加数据。trait 对象不像其他语言那样有用：它们的目的是允许从公有行为上抽象。</p>
+<p>trait 对象定义了给定情况下应有的行为。当需要具有某种特性的不确定具体类型时，我们可以把 trait 对象当作 trait 使用。Rust 的类型系统会保证我们为 trait 对象带入的任何值会实现 trait 的方法。我们不需要在编译阶段知道所有可能的类型，却可以把所有的实例统一对待。Listing 17-03展示了如何定义一个名为<code>Draw</code>的带有<code>draw</code>方法的trait。</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">pub trait Draw {
     fn draw(&amp;self);
@@ -91,7 +91,7 @@ get Chapter 8 for editing. /Carol -->
 </code></pre>
 <p><span class="caption">Listing 17-3:<code>Draw</code> trait的定义</span></p>
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
-<p>因为我们已经在第10章讨论过如何定义trait，你可能比较熟悉。下面是新的定义：Listing 17-4有一个名为<code>Screen</code>的结构体，里面有一个名为<code>components</code>的vector，<code>components</code>的类型是Box<Draw>。<code>Box&lt;Draw&gt;</code>是一个trait对象：它是一个任何<code>Box</code>内部的实现了<code>Draw</code>trait的类型的替身。</p>
+<p>因为我们已经在第10章讨论过如何定义 trait，你可能比较熟悉。下面是新的定义：Listing 17-4有一个名为 <code>Screen</code> 的结构体，里面有一个名为 <code>components</code> 的 vector，<code>components</code> 的类型是Box<Draw>。<code>Box&lt;Draw&gt;</code> 是一个 trait 对象：它是 <code>Box</code> 内部任意一个实现了 <code>Draw</code> trait 的类型的替身。</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust"># pub trait Draw {
 #     fn draw(&amp;self);
@@ -101,9 +101,9 @@ pub struct Screen {
     pub components: Vec&lt;Box&lt;Draw&gt;&gt;,
 }
 </code></pre>
-<p><span class="caption">Listing 17-4: 定义一个<code>Screen</code>结构体，带有一个含有实现了<code>Draw</code>trait的<code>components</code> vector成员</p>
+<p><span class="caption">Listing 17-4: 定义一个 <code>Screen</code> 结构体，带有一个含有实现了 <code>Draw</code> trait 的 <code>components</code> vector 成员</p>
 <p></span></p>
-<p>在<code>Screen</code>结构体上，我们将要定义一个<code>run</code>方法，该方法会在它的<code>components</code>上调用<code>draw</code>方法，如Listing 17-5所示：</p>
+<p>在 <code>Screen</code> 结构体上，我们将要定义一个 <code>run</code> 方法，该方法会在它的 <code>components</code> 上调用 <code>draw</code> 方法，如Listing 17-5所示：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust"># pub trait Draw {
 #     fn draw(&amp;self);
@@ -121,9 +121,9 @@ impl Screen {
     }
 }
 </code></pre>
-<p><span class="caption">Listing 17-5:在<code>Screen</code>上实现一个<code>run</code>方法，该方法在每个组件上调用<code>draw</code>方法
+<p><span class="caption">Listing 17-5:在 <code>Screen</code> 上实现一个 <code>run</code> 方法，该方法在每个组件上调用 <code>draw</code> 方法
 </span></p>
-<p>这是区别于定义一个使用带有trait绑定的通用类型参数的结构体。通用类型参数一次只能被一个实体类型替代，而trait对象可以在运行时允许多种实体类型填充trait对象。比如，我们已经定义了<code>Screen</code>结构体使用通用类型和一个trait绑定，如Listing 17-6所示：</p>
+<p>这与带 trait 约束的泛型结构体不同(trait 约束泛型参数)。泛型参数一次只能被一个具体类型替代，而 trait 对象可以在运行时允许多种具体类型填充 trait 对象。比如，我们已经定义了 <code>Screen</code> 结构体使用泛型和一个 trait 约束，如Listing 17-6所示：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust"># pub trait Draw {
 #     fn draw(&amp;self);
@@ -142,12 +142,12 @@ impl&lt;T&gt; Screen&lt;T&gt;
     }
 }
 </code></pre>
-<p><span class="caption">Listing 17-6: 一种<code>Screen</code>结构体的替代实现，它的<code>run</code>方法使用通用类型和trait绑定
+<p><span class="caption">Listing 17-6: 一种 <code>Screen</code> 结构体的替代实现，它的 <code>run</code> 方法使用通用类型和 trait 绑定
 </span></p>
-<p>这个例子只能使我们有一个<code>Screen</code>实例，这个实例有一个组件列表，所有的组件类型是<code>Button</code>或者<code>TextField</code>。如果你有同种的集合，那么可以优先使用通用和trait绑定，这是因为为了使用具体的类型，定义是在编译阶段是单一的。</p>
-<p>而如果使用内部有<code>Vec&lt;Box&lt;Draw&gt;&gt;</code> trait对象的列表的<code>Screen</code>结构体，<code>Screen</code>实例可以同时包含<code>Box&lt;Button&gt;</code>和<code>Box&lt;TextField&gt;</code>的<code>Vec</code>。我们看它是怎么工作的，然后讨论运行时性能的实现。</p>
+<p>这个例子中，<code>Screen</code> 实例所有组件类型必需全是 <code>Button</code>，或者全是 <code>TextField</code>。如果你的组件集合是单一类型的，那么可以优先使用泛型和 trait 约束，因为其使用的具体类型在编译阶段即可确定。</p>
+<p>而 <code>Screen</code> 结构体内部的 <code>Vec&lt;Box&lt;Draw&gt;&gt;</code> trait 对象列表，则可以同时包含 <code>Box&lt;Button&gt;</code> 和 <code>Box&lt;TextField&gt;</code>。我们看它是怎么工作的，然后讨论运行时性能。</p>
 <a class="header" href="#来自我们或者库使用者的实现" name="来自我们或者库使用者的实现"><h3>来自我们或者库使用者的实现</h3></a>
-<p>现在，我们增加一些实现了<code>Draw</code>trait的类型。我们会再次提供<code>Button</code>，实际上实现一个GUI库超出了本书的范围，所以<code>draw</code>方法的内部不会有任何有用的实现。为了想象一下实现可能的样子，<code>Button</code>结构体可能有 width<code>、</code>height<code>和</code>label`字段，如Listing 17-7所示：</p>
+<p>现在，我们增加一些实现了 <code>Draw</code> trait 的类型，再次提供 <code>Button</code>。实现一个 GUI 库实际上超出了本书的范围，因此 <code>draw</code> 方法留空。为了想象实现可能的样子，<code>Button</code> 结构体有 <code>width</code>、<code>height</code> 和 <code>label</code>字段，如Listing 17-7所示：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust"># pub trait Draw {
 #     fn draw(&amp;self);
@@ -166,11 +166,11 @@ impl Draw for Button {
 }
 </code></pre>
 <p><span class="caption">Listing 17-7: 实现了<code>Draw</code> trait的<code>Button</code> 结构体</span></p>
-<p>在<code>Button</code>上的 <code>width</code>、<code>height</code>和<code>label</code>会和其他组件不同，比如<code>TextField</code>可能有<code>width</code>、<code>height</code>,
-<code>label</code>和 <code>placeholder</code>字段。每个我们可以在屏幕上绘制的类型会实现<code>Draw</code>trait，在<code>draw</code>方法中使用不同的代码，定义了如何绘制<code>Button</code>（GUI代码的具体实现超出了本章节的范围）。除了<code>Draw</code> trait，<code>Button</code>可能也有另一个<code>impl</code>块，包含了当按钮被点击的时候的响应方法。这类方法不适用于<code>TextField</code>这样的类型。</p>
-<p>有时，使用我们的库决定了实现一个包含<code>width</code>、<code>height</code>和<code>options``SelectBox</code>结构体。它们在<code>SelectBox</code>类型上实现了<code>Draw</code>trait，如 Listing 17-8所示：</p>
+<p>在 <code>Button</code> 上的 <code>width</code>、<code>height</code> 和 <code>label</code> 会和其他组件不同，比如 <code>TextField</code> 可能有 <code>width</code>、<code>height</code>,
+<code>label</code> 以及 <code>placeholder</code> 字段。每个我们可以在屏幕上绘制的类型都会实现 <code>Draw</code> trait，在 <code>draw</code> 方法中使用不同的代码，定义了如何绘制 <code>Button</code>。除了 <code>Draw</code> trait，<code>Button</code> 也可能有一个 <code>impl</code> 块，包含按钮被点击时的响应方法。这类方法不适用于 <code>TextField</code> 这样的类型。</p>
+<p>假定我们的库的用户相要实现一个包含 <code>width</code>、<code>height</code> 和 <code>options</code> 的 <code>SelectBox</code> 结构体。同时也在 <code>SelectBox</code> 类型上实现了 <code>Draw</code> trait，如 Listing 17-8所示：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">extern crate rust_gui;
+<pre><code class="language-rust">extern crate rust_gui;
 use rust_gui::Draw;
 
 struct SelectBox {
@@ -185,11 +185,11 @@ impl Draw for SelectBox {
     }
 }
 </code></pre>
-<p><span class="caption">Listing 17-8: 另外一个crate中，在<code>SelectBox</code>结构体上使用<code>rust_gui</code>和实现了<code>Draw</code> trait
+<p><span class="caption">Listing 17-8: 另外一个 crate 中，在 <code>SelectBox</code> 结构体上使用 <code>rust_gui</code> 和实现了<code>Draw</code> trait
 </span></p>
-<p>我们的库的使用者现在可以写他们的<code>main</code>函数来创建一个<code>Screen</code>实例，然后通过把自身放入<code>Box&lt;T&gt;</code>变成trait对象，向screen增加<code>SelectBox</code> 和<code>Button</code>。它们可以在每个<code>Screen</code>实例上调用<code>run</code>方法，这会调用每个组件的<code>draw</code>方法。 Listing 17-9展示了实现：</p>
+<p>库的用户现在可以在他们的 <code>main</code> 函数中创建一个 <code>Screen</code> 实例，然后把自身放入 <code>Box&lt;T&gt;</code> 变成 trait 对象，向 screen 增加 <code>SelectBox</code> 和 <code>Button</code>。他们可以在这个 <code>Screen</code> 实例上调用 <code>run</code> 方法，这又会调用每个组件的 <code>draw</code> 方法。 Listing 17-9 展示了实现：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">use rust_gui::{Screen, Button};
+<pre><code class="language-rust">use rust_gui::{Screen, Button};
 
 fn main() {
     let screen = Screen {
@@ -214,14 +214,14 @@ fn main() {
     screen.run();
 }
 </code></pre>
-<p><span class="caption">Listing 17-9: 使用trait对象来存储实现了相同trait的不同类型
+<p><span class="caption">Listing 17-9: 使用 trait 对象来存储实现了相同 trait 的不同类型
 </span></p>
-<p>虽然我们不知道有些人可能有一天会增加<code>SelectBox</code>类型，但是我们的<code>Screen</code> 有能力操作<code>SelectBox</code>和绘制，因为<code>SelectBox</code>实现了<code>Draw</code>类型，这意味着它实现了<code>draw</code>方法。</p>
-<p>只关心值响应的消息，而不关心值的具体类型，这类似于动态类型语言中的<em>duck typing</em>：如果它像鸭子一样走路，像鸭子一样叫，那么它肯定是只鸭子！在Listing 17-5的<code>Screen</code>的<code>run</code>方法的实现中，<code>run</code>不需要知道每个组件的具体类型。它也不检查是否一个组件是<code>Button</code>或者<code>SelectBox</code>的实例，只是调用组件的<code>draw</code>方法即可。通过指定<code>Box&lt;Draw&gt;</code>作为<code>components</code>vector中的值类型，我们定义了：<code>Screen</code>需要可以被调用其<code>draw</code>方法的值。</p>
-<p>使用trait对象和支持duck typing的Rust类型系统的好处是，我们永远不需要在运行时检查一个值是否实现了一个特殊方法，或者担心因为调用了一个值没有实现方法而遇到错误。如果值没有实现trait对象需要的trait，Rust不会编译我们的代码。</p>
-<p>比如，Listing 17-10展示了当我们创建一个把<code>String</code>当做其成员的<code>Screen</code>时发生的情况：</p>
+<p>虽然我们不知道哪一天会有人增加 <code>SelectBox</code> 类型，但是我们的 <code>Screen</code> 能够操作 <code>SelectBox</code> 并绘制它，因为 <code>SelectBox</code> 实现了 <code>Draw</code> 类型，这意味着它实现了 <code>draw</code> 方法。</p>
+<p>只关心值的响应，而不关心其具体类型，这类似于动态类型语言中的 <em>duck typing</em>：如果它像鸭子一样走路，像鸭子一样叫，那么它就是只鸭子！在 Listing 17-5 <code>Screen</code> 的 <code>run</code> 方法实现中，<code>run</code> 不需要知道每个组件的具体类型。它也不检查组件是 <code>Button</code> 还是 <code>SelectBox</code> 的实例，只管调用组件的 <code>draw</code> 方法。通过指定 <code>Box&lt;Draw&gt;</code> 作为 <code>components</code> 列表中元素的类型，我们约束了 <code>Screen</code> 需要这些实现了 <code>draw</code> 方法的值。</p>
+<p>Rust 类型系统使用 trait 对象来支持 duck typing 的好处是，我们无需在运行时检查一个值是否实现了特定方法，或是担心调用了一个值没有实现的方法。如果值没有实现 trait 对象需要的 trait（方法），Rust 不会编译。</p>
+<p>比如，Listing 17-10 展示了当我们创建一个使用 <code>String</code> 做为其组件的 <code>Screen</code> 时发生的情况：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">extern crate rust_gui;
+<pre><code class="language-rust">extern crate rust_gui;
 use rust_gui::Draw;
 
 fn main() {
@@ -234,9 +234,9 @@ fn main() {
     screen.run();
 }
 </code></pre>
-<p><span class="caption">Listing 17-10: 尝试使用一种没有实现trait对象的trait的类型</p>
+<p><span class="caption">Listing 17-10: 尝试使用一种没有实现 trait 对象的类型</p>
 <p></span></p>
-<p>我们会遇到这个错误，因为<code>String</code>没有实现 <code>Draw</code>trait：</p>
+<p>我们会遇到这个错误，因为 <code>String</code> 没有实现 <code>Draw</code> trait：</p>
 <pre><code class="language-text">error[E0277]: the trait bound `std::string::String: Draw` is not satisfied
   --&gt;
    |
@@ -246,10 +246,10 @@ fn main() {
    |
    = note: required for the cast to the object type `Draw`
 </code></pre>
-<p>这个报错让我们知道，或者我们传入了本来不想传给<code>Screen</code>的东西，我们应该传入一个不同的类型，或者是我们应该在<code>String</code>上实现<code>Draw</code>，这样，<code>Screen</code>才能调用它的<code>draw</code>方法。</p>
-<a class="header" href="#trait对象执行动态分发" name="trait对象执行动态分发"><h3>Trait对象执行动态分发</h3></a>
-<p>回忆一下第10章，我们讨论过当我们使用通用类型的trait绑定时，编译器执行单类型的处理过程：在我们需要使用通用类型参数的地方，编译器为每个实体类型产生了非通用的函数实现和方法。由于非单类型而产生的代码是 <em>static dispatch</em>：当方法被调用，代码会执行在编译阶段就决定的方法，这样寻找那段代码是非常快速的。</p>
-<p>当我们使用trait对象，编译器不能执行单类型的，因为我们不知道可能被代码调用的类型。而，当方法被调用的时候，Rust跟踪可能被使用的代码，然后在运行时找出为了方法被调用时该使用哪些代码。这也是我们熟知的<em>dynamic dispatch</em>，当运行时的查找发生时是比较耗费资源的。动态分发也防止编译器选择内联函数的代码，这样防止了一些优化。虽然我们写代码时得到了额外的代码灵活性，不过，这是一个权衡考虑。</p>
+<p>这个错误告诉我们，要么传入 <code>Screen</code> 需要的类型，要么在 <code>String</code> 上实现 <code>Draw</code>，以便　<code>Screen</code> 调用它的 <code>draw</code> 方法。</p>
+<a class="header" href="#trait-对象执行动态分发" name="trait-对象执行动态分发"><h3>Trait 对象执行动态分发</h3></a>
+<p>回忆一下第10章我们讨论过的，当我们在泛型上使用 trait 约束时，编译器按单态类型处理：在需要使用范型参数的地方，编译器为每个具体类型生成非泛型的函数和方法实现。单态类型处理产生的代码实际就是做 <em>static dispatch</em>：方法的代码在编译阶段就已经决定了，当调用时，寻找那段代码非常快速。</p>
+<p>当我们使用 trait 对象，编译器不能按单态类型处理，因为无法知道使用代码的所有可能类型。而是调用方法的时候，Rust 跟踪可能被使用的代码，在运行时找出调用该方法时应使用的代码。这也是我们熟知的 <em>dynamic dispatch</em>，查找过程会产生运行时开销。动态分发也会阻止编译器内联函数，失去一些优化途径。尽管获得了额外的灵活性，但仍然需要权衡取舍。</p>
 <a class="header" href="#trait-对象需要对象安全" name="trait-对象需要对象安全"><h3>Trait 对象需要对象安全</h3></a>
 <!-- Liz: we're conflicted on including this section. Not being able to use a
 trait as a trait object because of object safety is something that

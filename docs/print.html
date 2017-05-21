@@ -175,7 +175,7 @@ Hello, world!
 <pre><code class="language-rust">    println!(&quot;Hello, world!&quot;);
 </code></pre>
 <p>这行代码做了这个小程序的所有工作：它在屏幕上打印文本。这里有很多需要注意的细节。第一个是 Rust 代码风格使用 4 个空格缩进，而不是 1 个制表符（tab）。</p>
-<p>第二个重要的部分是<code>println!()</code>。这叫做 Rust <strong>宏</strong>，是如何进行 Rust 元编程（metaprogramming）的关键所在。相反如果是调用一个函数的话，它应该看起来像这样：<code>println</code>（没有<code>!</code>）。我们将在 24 章更加详细的讨论 Rust 宏，不过现在你只需记住当看到符号<code>!</code>的时候，就代表在调用一个宏而不是一个普通的函数。</p>
+<p>第二个重要的部分是<code>println!()</code>。这叫做 Rust <strong>宏</strong>，是如何进行 Rust 元编程（metaprogramming）的关键所在。相反如果是调用一个函数的话，它应该看起来像这样：<code>println</code>（没有<code>!</code>）。我们将在 21 章 E 小节中更加详细的讨论 Rust 宏，不过现在你只需记住当看到符号<code>!</code>的时候，就代表在调用一个宏而不是一个普通的函数。</p>
 <p>接下来，<code>&quot;Hello, world!&quot;</code> 是一个 <strong>字符串</strong>。我们把这个字符串作为一个参数传递给<code>println!</code>，它负责在屏幕上打印这个字符串。轻松加愉快！(⊙o⊙)</p>
 <p>这一行以一个分号结尾（<code>;</code>）。<code>;</code>代表这个表达式的结束和下一个表达式的开始。大部分 Rust 代码行以<code>;</code>结尾。</p>
 <a class="header" href="#编译和运行是两个步骤" name="编译和运行是两个步骤"><h3>编译和运行是两个步骤</h3></a>
@@ -200,7 +200,7 @@ main.rs
 <p>仅仅使用<code>rustc</code>编译简单程序是没问题的，不过随着项目的增长，你将想要能够控制你项目拥有的所有选项，并使其易于分享你的代码给别人或别的项目。接下来，我们将介绍一个叫做 Cargo 的工具，它将帮助你编写现实生活中的 Rust 程序。</p>
 <a class="header" href="#hello-cargo" name="hello-cargo"><h2>Hello, Cargo!</h2></a>
 <p>Cargo 是 Rust 的构建系统和包管理工具，同时 Rustacean 们使用 Cargo 来管理他们的 Rust 项目，因为它使得很多任务变得更轻松。例如，Cargo 负责构建代码、下载代码依赖的库并编译这些库。我们把代码需要的库叫做 <strong>依赖</strong>（<em>dependencies</em>）。</p>
-<p>最简单的 Rust 程序，例如我们刚刚编写的，并没有任何依赖，所以目前我们只使用了 Cargo 负责构建代码的那一部分。随着编写更加复杂的 Rust 程序，你会想要添加依赖，那么如果你使用 Cargo 开始的话，这将会变得简单许多。</p>
+<p>最简单的 Rust 程序，例如我们刚刚编写的，并没有任何依赖，所以目前我们只使用了 Cargo 负责构建代码的那一部分。随着编写更加复杂的 Rust 程序，你会想要添加依赖，如果你使用 Cargo 开始的话，这将会变得简单许多。</p>
 <p>由于绝大部分 Rust 项目使用 Cargo，本书接下来的部分将假设你使用它。如果使用安装章节介绍的官方安装包的话，Rust 自带 Cargo。如果通过其他方式安装 Rust 的话，可以在终端输入如下命令检查是否安装了 Cargo：</p>
 <pre><code>$ cargo --version
 </code></pre>
@@ -758,7 +758,7 @@ fn main() {
     Err(_) =&gt; continue,
 };
 </code></pre>
-<p>从<code>expect</code>调用切换到<code>expect</code>语句是如何从遇到错误就崩溃到真正处理错误的常用手段。记住<code>parse</code>返回一个<code>Result</code>类型，而<code>Result</code>是一个拥有<code>Ok</code>或<code>Err</code>两个成员的枚举。在这里使用<code>match</code>表达式，就像之前处理<code>cmp</code>方法返回的<code>Ordering</code>一样。</p>
+<p>从<code>expect</code>调用切换到<code>match</code>语句是如何从遇到错误就崩溃到真正处理错误的常用手段。记住<code>parse</code>返回一个<code>Result</code>类型，而<code>Result</code>是一个拥有<code>Ok</code>或<code>Err</code>两个成员的枚举。在这里使用<code>match</code>表达式，就像之前处理<code>cmp</code>方法返回的<code>Ordering</code>一样。</p>
 <p>如果<code>parse</code>能够成功的将字符串转换为一个数字，它会返回一个包含结果数字<code>Ok</code>值。这个<code>Ok</code>值会匹配第一个分支的模式，这时<code>match</code>表达式仅仅返回<code>parse</code>产生的<code>Ok</code>值之中的<code>num</code>值。这个数字会最终如期变成新创建的<code>guess</code>变量。</p>
 <p>如果<code>parse</code><em>不</em>能将字符串转换为一个数字，它会返回一个包含更多错误信息的<code>Err</code>值。<code>Err</code>值不能匹配第一个<code>match</code>分支的<code>Ok(num)</code>模式，但是会匹配第二个分支的<code>Err(_)</code>模式。<code>_</code>是一个包罗万象的值；在这个例子中，我们想要匹配所有<code>Err</code>值，不管其中有何种信息。所以程序会执行第二个分支的代码，<code>continue</code>，这意味着进入<code>loop</code>的下一次循环并请求另一个猜测。这样程序就有效地忽略了<code>parse</code>可能遇到的所有错误！</p>
 <p>现在万事俱备（只欠东风）了。运行<code>cargo run</code>来尝试一下：</p>
@@ -942,7 +942,7 @@ spaces = spaces.len();
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch03-02-data-types.md">ch03-02-data-types.md</a>
 <br>
-commit 04aa3a45eb72855b34213703718f50a12a3eeec8</p>
+commit fe4833a8ef2853c55424e7747a4ef8dd64c35b32</p>
 </blockquote>
 <p>Rust 中的任何值都有一个具体的<strong>类型</strong>（<em>type</em>），这告诉了 Rust 它被指定了何种数据，这样 Rust 就知道如何处理这些数据了。这一部分将讲到一些语言内建的类型。我们将这些类型分为两个子集：标量（scalar）和复合（compound）。</p>
 <p>贯穿整个部分，请记住 Rust 是一个<strong>静态类型</strong>（<em>statically typed</em>）语言，也就是说必须在编译时就知道所有变量的类型。编译器通常可以通过值以及如何使用他们来推断出我们想要用的类型。当多个类型都是可能的时候，比如第二章中<code>parse</code>将<code>String</code>转换为数字类型，必须增加类型注解，像这样：</p>
@@ -1024,7 +1024,7 @@ commit 04aa3a45eb72855b34213703718f50a12a3eeec8</p>
     let f: bool = false; // with explicit type annotation
 }
 </code></pre>
-<p>使用布尔值的主要场景是条件语句，例如<code>if</code>。在“控制流”（“Control Flow”）部分将讲到<code>if</code>语句在 Rust 中如何工作。</p>
+<p>使用布尔值的主要场景是条件表达式，例如<code>if</code>。在“控制流”（“Control Flow”）部分将讲到<code>if</code>表达式在 Rust 中如何工作。</p>
 <a class="header" href="#字符类型" name="字符类型"><h4>字符类型</h4></a>
 <p>目前为止只使用到了数字，不过 Rust 也支持字符。Rust 的<code>char</code>类型是大部分语言中基本字母字符类型，如下代码展示了如何使用它：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -1588,7 +1588,7 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch04-01-what-is-ownership.md">ch04-01-what-is-ownership.md</a>
 <br>
-commit fae5fa82d728b5965ecbba84060689430345e509</p>
+commit 6d4ef020095a375483b2121d4fa2b1661062cc92</p>
 </blockquote>
 <p>Rust 的核心功能（之一）是<strong>所有权</strong>（<em>ownership</em>）。虽然这个功能理解起来很直观，不过它对语言的其余部分有着更深层的含义。</p>
 <p>所有程序都必须管理他们运行时使用计算机内存的方式。一些语言中使用垃圾回收在程序运行过程中来时刻寻找不再被使用的内存；在另一些语言中，程序员必须亲自分配和释放内存。Rust 则选择了第三种方式：内存被一个所有权系统管理，它拥有一系列的规则使编译器在编译时进行检查。任何所有权系统的功能都不会导致运行时开销。</p>
@@ -1608,17 +1608,17 @@ commit fae5fa82d728b5965ecbba84060689430345e509</p>
 </blockquote>
 <!-- PROD: END BOX -->
 <a class="header" href="#所有权规则" name="所有权规则"><h3>所有权规则</h3></a>
-<p>首先，让我们看一下所有权的规则。请记住这些规则因为我们将讲解一些说明这些规则的例子：</p>
+<p>首先，让我们看一下所有权的规则。请记住它们，我们将讲解一些它们的例子：</p>
 <blockquote>
 <ol>
-<li>Rust 中的每一个值都有一个叫做它的<strong>所有者</strong>（<em>owner</em>）的变量。</li>
-<li>同时一次只能有一个所有者</li>
-<li>当所有者变量离开作用域，这个值将被丢弃。</li>
+<li>每一个值都被它的<strong>所有者</strong>（<em>owner</em>）变量拥有。</li>
+<li>值在任意时刻只能被一个所有者拥有。</li>
+<li>当所有者离开作用域，这个值将被丢弃。</li>
 </ol>
 </blockquote>
 <a class="header" href="#变量作用域" name="变量作用域"><h3>变量作用域</h3></a>
-<p>我们在第二章已经完成过一个 Rust 程序的例子了。现在我们已经掌握了基本语法，所以不会在所有的例子中包含<code>fn main() {</code>代码了，所以如果你是一路跟过来的，必须手动将之后例子的代码放入一个<code>main</code>函数中。为此，例子将显得更加具体，使我们可以关注具体细节而不是样板代码。</p>
-<p>作为所有权的第一个例子，我们看看一些变量的<strong>作用域</strong>（<em>scope</em>）。作用域是一个项在程序中有效的范围。假如有一个这样的变量：</p>
+<p>我们已经在第二章完成过一个 Rust 程序的例子。现在我们已经掌握了基本语法，所以不会在所有的例子中包含<code>fn main() {</code>代码了，所以如果你是一路跟过来的，必须手动将之后例子的代码放入一个<code>main</code>函数中。为此，例子将显得更加具体，使我们可以关注具体细节而不是样板代码。</p>
+<p>作为所有权的第一个例子，我们看看一些变量的<strong>作用域</strong>（<em>scope</em>）。作用域是一个项(原文:item)在程序中有效的范围。假如有一个这样的变量：</p>
 <pre><code class="language-rust">let s = &quot;hello&quot;;
 </code></pre>
 <p>变量<code>s</code>绑定到了一个字符串字面值，这个字符串值是硬编码进我们程序代码中的。这个变量从声明的点开始直到当前<em>作用域</em>结束时都是有效的。列表 4-1 的注释标明了变量<code>s</code>在哪里是有效的：</p>
@@ -1712,8 +1712,8 @@ println!(&quot;{}&quot;, s1);
   |
 3 |     let s2 = s1;
   |         -- value moved here
-4 |     println!(&quot;{}, world!&quot;,s1);
-  |                           ^^ value used here after move
+4 |     println!(&quot;{}, world!&quot;, s1);
+  |                            ^^ value used here after move
   |
   = note: move occurs because `s1` has type `std::string::String`,
 which does not implement the `Copy` trait
@@ -1813,7 +1813,7 @@ fn takes_and_gives_back(a_string: String) -&gt; String { // a_string comes into
     a_string  // a_string is returned and moves out to the calling function.
 }
 </code></pre>
-<p>变量的所有权总是遵循相同的模式：将值赋值给另一个变量时移动它，并且当持有堆中数据值的变量离开作用域时，如果数据的所有权没有被移动到另外一个变量时，其值将通过<code>drop</code>被清理掉。</p>
+<p>变量的所有权总是遵循相同的模式：将值赋值给另一个变量时移动它。当持有堆中数据值的变量离开作用域时，其值将通过<code>drop</code>被清理掉，除非数据被移动为另一个变量所有。</p>
 <p>在每一个函数中都获取并接着返回所有权是冗余乏味的。如果我们想要函数使用一个值但不获取所有权改怎么办呢？如果我们还要接着使用它的话，每次都传递出去再传回来就有点烦人了，另外我们也可能想要返回函数体产生的任何（不止一个）数据。</p>
 <p>使用元组来返回多个值是可能的，像这样：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -1874,7 +1874,7 @@ let len = calculate_length(&amp;s1);
 </code></pre>
 <p>变量<code>s</code>有效的作用域与函数参数的作用域一样，不过当引用离开作用域后并不丢弃它指向的数据因为我们没有所有权。函数使用引用而不是实际值作为参数意味着无需返回值来交还所有权，因为就不曾拥有它。</p>
 <p>我们将获取引用作为函数参数称为<strong>借用</strong>（<em>borrowing</em>）。正如现实生活中，如果一个人拥有某样东西，你可以从它哪里借来。当你使用完毕，必须还回去。</p>
-<p>那么如果我们尝试修改借用的变量呢？尝试列表 4-9 中的代码。剧透：这行不通！</p>
+<p>如果我们尝试修改借用的变量呢？尝试列表 4-9 中的代码。剧透：这行不通！</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
     let s = String::from(&quot;hello&quot;);
@@ -1930,11 +1930,11 @@ let r2 = &amp;mut s;
 <p>这个限制允许可变性，不过是以一种受限制的方式。新 Rustacean 们经常与此作斗争，因为大部分语言任何时候都是可变的。这个限制的好处是 Rust 可以在编译时就避免数据竞争（data races）。</p>
 <p><strong>数据竞争</strong>是一种特定类型的竞争状态，它可由这三个行为造成：</p>
 <ol>
-<li>两个或更多指针同时访问相同的数据。</li>
-<li>至少有一个指针被用来写数据。</li>
-<li>没有被用来同步数据访问的机制。</li>
+<li>两个或更多指针同时访问同一数据。</li>
+<li>至少有一个指针被写入。</li>
+<li>没有同步数据访问的机制。</li>
 </ol>
-<p>数据竞争会导致未定义行为并且当在运行时尝试追踪时可能会变得难以诊断和修复；Rust 阻止了这种情况的发生，因为存在数据竞争的代码根本就不能编译！</p>
+<p>数据竞争会导致未定义行为，在运行时难以追踪，并且难以诊断和修复；Rust 避免了这种情况，它拒绝编译存在数据竞争的代码！</p>
 <p>一如既往，可以使用大括号来创建一个新的作用域来允许拥有多个可变引用，只是不能<strong>同时</strong>拥有：</p>
 <pre><code class="language-rust">let mut s = String::from(&quot;hello&quot;);
 
@@ -2296,7 +2296,7 @@ error[E0106]: missing lifetime specifier
 3 |     email: &amp;str,
   |            ^ expected lifetime parameter
 </code></pre>
-<p>第十章会讲到如何修复这个问题以便在结构体中储存引用，不过现在，通过通过从像<code>&amp;str</code>这样的引用切换到像<code>String</code>这类拥有所有权的类型来修改修改这个错误。</p>
+<p>第十章会讲到如何修复这个问题以便在结构体中储存引用，不过现在，通过从像<code>&amp;str</code>这样的引用切换到像<code>String</code>这类拥有所有权的类型来修改修改这个错误。</p>
 <a class="header" href="#一个示例程序" name="一个示例程序"><h2>一个示例程序</h2></a>
 <p>为了理解何时会需要使用结构体，让我们编写一个计算长方形面积的程序。我们会从单独的变量开始，接着重构程序直到使用结构体替代他们为止。</p>
 <p>使用 Cargo 来创建一个叫做 <em>rectangles</em> 的新二进制程序，它会获取一个长方形以像素为单位的长度和宽度并计算它的面积。列表 5-2 中是项目的 <em>src/main.rs</em> 文件中为此实现的一个小程序：</p>
@@ -2440,7 +2440,7 @@ trait and printing the <code>Rectangle</code> instance using debug formatting</s
 <br>
 commit 8c1c1a55d5c0f9bc3c866ee79b267df9dc5c04e2</p>
 </blockquote>
-<p><strong>方法</strong>与函数类似：他们使用<code>fn</code>关键和名字声明，他们可以拥有参数和返回值，同时包含一些代码会在某处被调用时执行。不过方法与方法是不同的，因为他们在结构体（或者枚举或者 trait 对象，将分别在第六章和第十七章讲解）的上下文中被定义，并且他们第一个参数总是<code>self</code>，它代表方法被调用的结构体的实例。</p>
+<p><strong>方法</strong>与函数类似：他们使用<code>fn</code>关键和名字声明，他们可以拥有参数和返回值，同时包含一些代码会在某处被调用时执行。不过方法与函数是不同的，因为他们在结构体（或者枚举或者 trait 对象，将分别在第六章和第十七章讲解）的上下文中被定义，并且他们第一个参数总是<code>self</code>，它代表方法被调用的结构体的实例。</p>
 <a class="header" href="#定义方法" name="定义方法"><h3>定义方法</h3></a>
 <p>让我们将获取一个<code>Rectangle</code>实例作为参数的<code>area</code>函数改写成一个定义于<code>Rectangle</code>结构体上的<code>area</code>方法，如列表 5-7 所示：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -2475,7 +2475,7 @@ struct</span></p>
 <!-- PROD: START BOX -->
 <blockquote>
 <a class="header" href="#-运算符到哪去了" name="-运算符到哪去了"><h3><code>-&gt;</code>运算符到哪去了？</h3></a>
-<p>像在 C++ 这样的语言中，又两个不同的运算符来调用方法：<code>.</code>直接在对象上调用方法，而<code>-&gt;</code>在一个对象的指针上调用方法，这时需要先解引用（dereference）指针。换句话说，如果<code>object</code>是一个指针，那么<code>object-&gt;something()</code>就像<code>(*object).something()</code>一样。</p>
+<p>像在 C++ 这样的语言中，有两个不同的运算符来调用方法：<code>.</code>直接在对象上调用方法，而<code>-&gt;</code>在一个对象的指针上调用方法，这时需要先解引用（dereference）指针。换句话说，如果<code>object</code>是一个指针，那么<code>object-&gt;something()</code>就像<code>(*object).something()</code>一样。</p>
 <p>Rust 并没有一个与<code>-&gt;</code>等效的运算符；相反，Rust 有一个叫<strong>自动引用和解引用</strong>（<em>automatic referencing and dereferencing</em>）的功能。方法调用是 Rust 中少数几个拥有这种行为的地方。</p>
 <p>这是它如何工作的：当使用<code>object.something()</code>调用方法时，Rust 会自动增加<code>&amp;</code>、<code>&amp;mut</code>或<code>*</code>以便使<code>object</code>符合方法的签名。也就是说，这些代码是等同的：</p>
 <pre><code class="language-rust"># #[derive(Debug,Copy,Clone)]
@@ -2574,7 +2574,7 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 <br>
 commit e6d6caab41471f7115a621029bd428a812c5260e</p>
 </blockquote>
-<p>让我们通过一用代码来表现的场景，来看看为什么这里枚举是有用的而且比结构体更合适。比如我们要处理 IP 地。目前被广泛使用的两个主要 IP 标准：IPv4（version four）和 IPv6（version six）。这是我们的程序只可能会遇到两种 IP 地址：所以可以<strong>枚举</strong>出所有可能的值，这也正是它名字的由来。</p>
+<p>让我们通过一用代码来表现的场景，来看看为什么这里枚举是有用的而且比结构体更合适。比如我们要处理 IP 地址。目前被广泛使用的两个主要 IP 标准：IPv4（version four）和 IPv6（version six）。这是我们的程序只可能会遇到两种 IP 地址：所以可以<strong>枚举</strong>出所有可能的值，这也正是它名字的由来。</p>
 <p>任何一个 IP 地址要么是 IPv4 的要么是 IPv6 的而不能两者都是。IP 地址的这个特性使得枚举数据结构非常适合这个场景，因为枚举值只可能是其中一个成员。IPv4 和 IPv6 从根本上讲仍是 IP 地址，所以当代码在处理申请任何类型的 IP 地址的场景时应该把他们当作相同的类型。</p>
 <p>可以通过在代码中定义一个<code>IpAddrKind</code>枚举来表现这个概念并列出可能的 IP 地址类型，<code>V4</code>和<code>V6</code>。这被称为枚举的<strong>成员</strong>（<em>variants</em>）：</p>
 <pre><code class="language-rust">enum IpAddrKind {
@@ -2593,7 +2593,7 @@ commit e6d6caab41471f7115a621029bd428a812c5260e</p>
 let four = IpAddrKind::V4;
 let six = IpAddrKind::V6;
 </code></pre>
-<p>注意枚举的成员位于其标识符的命名空间中，并使用两个冒号分开。这么设计的益处是现在<code>IpAddrKind::V4</code>和<code>IpAddrKind::V6</code>是相同类型的：<code>IpAddrKind</code>。例如，接着我们可以顶一个函数来获取<code>IpAddrKind</code>：</p>
+<p>注意枚举的成员位于其标识符的命名空间中，并使用两个冒号分开。这么设计的益处是现在<code>IpAddrKind::V4</code>和<code>IpAddrKind::V6</code>是相同类型的：<code>IpAddrKind</code>。例如，接着我们可以定义一个函数来获取<code>IpAddrKind</code>：</p>
 <pre><code class="language-rust"># enum IpAddrKind {
 #     V4,
 #     V6,
@@ -2868,7 +2868,7 @@ fn value_in_cents(coin: Coin) -&gt; i32 {
     }
 }
 </code></pre>
-<p>如果调用<code>value_in_cents(Coin::Quarter(UsState::Alaska))</code>，<code>coin</code>将是<code>Coin::Quarter(UsState::Alaska)</code>。当将值与每个分支相比较时，没有分支会匹配知道遇到<code>Coin::Quarter(state)</code>。这时，<code>state</code>绑定的将会是值<code>UsState::Alaska</code>。接着就可以在<code>println!</code>表达式中使用这个绑定了，像这样就可以获取<code>Coin</code>枚举的<code>Quarter</code>成员中内部的州的值。</p>
+<p>如果调用<code>value_in_cents(Coin::Quarter(UsState::Alaska))</code>，<code>coin</code>将是<code>Coin::Quarter(UsState::Alaska)</code>。当将值与每个分支相比较时，没有分支会匹配直到遇到<code>Coin::Quarter(state)</code>。这时，<code>state</code>绑定的将会是值<code>UsState::Alaska</code>。接着就可以在<code>println!</code>表达式中使用这个绑定了，像这样就可以获取<code>Coin</code>枚举的<code>Quarter</code>成员中内部的州的值。</p>
 <a class="header" href="#匹配optiont" name="匹配optiont"><h3>匹配<code>Option&lt;T&gt;</code></h3></a>
 <p>在之前的部分在使用<code>Option&lt;T&gt;</code>时我们想要从<code>Some</code>中取出其内部的<code>T</code>值；也可以像处理<code>Coin</code>枚举那样使用<code>match</code>处理<code>Option&lt;T&gt;</code>！与其直接比较硬币，我们将比较<code>Option&lt;T&gt;</code>的成员，不过<code>match</code>表达式的工作方式保持不变。</p>
 <p>比如我们想要编写一个函数，它获取一个<code>Option&lt;i32&gt;</code>并且如果其中有一个值，将其加一。如果其中没有值，函数应该返回<code>None</code>值并不尝试执行任何操作。</p>
@@ -2952,7 +2952,7 @@ if let Some(3) = some_u8_value {
 }
 </code></pre>
 <p><code>if let</code>获取通过<code>=</code>分隔的一个模式和一个表达式。它的工作方式与<code>match</code>相同，这里的表达式对应<code>match</code>而模式则对应第一个分支。</p>
-<p>使用<code>if let</code>意味着编写更少代码，更少的缩进和更少的样板代码。然而，这样会失去<code>match</code>强制要求的穷进行检查。<code>match</code>和<code>if let</code>之间的选择依赖特定的环境以及增加简洁度和失去穷尽性检查的权衡取舍。</p>
+<p>使用<code>if let</code>意味着编写更少代码，更少的缩进和更少的样板代码。然而，这样会失去<code>match</code>强制要求的穷尽性检查。<code>match</code>和<code>if let</code>之间的选择依赖特定的环境以及增加简洁度和失去穷尽性检查的权衡取舍。</p>
 <p>换句话说，可以认为<code>if let</code>是<code>match</code>的一个语法糖，它当值匹配某一模式时执行代码而忽略所有其他值。</p>
 <p>可以在<code>if let</code>中包含一个<code>else</code>。<code>else</code>块中的代码与<code>match</code>表达式中的<code>_</code>分支块中的代码相同，这样的<code>match</code>表达式就等同于<code>if let</code>和<code>else</code>。回忆一下列表 6-4 中<code>Coin</code>枚举的定义，它的<code>Quarter</code>成员包含一个<code>UsState</code>值。如果想要计数所有不是 25 美分的硬币的同时也报告 25 美分硬币所属的州，可以使用这样一个<code>match</code>表达式：</p>
 <pre><code class="language-rust"># #[derive(Debug)]
@@ -3018,7 +3018,7 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-01-mod-and-the-filesystem.md">ch07-01-mod-and-the-filesystem.md</a>
 <br>
-commit 6fc32eabcd09f7a130094767abadb691dfcdddf7</p>
+commit b0481ac44ff2594c6c240baa36357737739db445</p>
 </blockquote>
 <p>我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章我们见过的<code>rand</code>就是这样的 crate。</p>
 <p>我们将创建一个提供一些通用网络功能的项目的骨架结构；我们将专注于模块和函数的组织，而不担心函数体中的具体代码。这个项目叫做<code>communicator</code>。Cargo 默认会创建一个库 crate 除非指定其他项目类型，所以如果不像一直以来那样加入<code>--bin</code>参数则项目将会是一个库：</p>
@@ -3836,14 +3836,14 @@ let answer = &amp;hello[0];
 let s = &amp;hello[0..4];
 </code></pre>
 <p>这里，<code>s</code>是一个<code>&amp;str</code>，它包含字符串的头四个字节。早些时候，我们提到了这些字母都是两个字节长的，所以这意味着<code>s</code>将会是“Зд”。</p>
-<p>那么如果获取<code>&amp;hello[0..1]</code>会发生什么呢？回答是：在运行时会 panic，就跟访问 vector 中的无效索引时一样：</p>
+<p>如果获取<code>&amp;hello[0..1]</code>会发生什么呢？答案是：在运行时会 panic，就跟访问 vector 中的无效索引时一样：</p>
 <pre><code class="language-text">thread 'main' panicked at 'index 0 and/or 1 in `Здравствуйте` do not lie on
 character boundary', ../src/libcore/str/mod.rs:1694
 </code></pre>
 <p>你应该小心谨慎的使用这个操作，因为它可能会使你的程序崩溃。</p>
 <a class="header" href="#遍历字符串的方法" name="遍历字符串的方法"><h3>遍历字符串的方法</h3></a>
 <p>幸运的是，这里还有其他获取字符串元素的方式。</p>
-<p>如果你需要操作单独的 Unicode 标量值，最好的选择是使用<code>chars</code>方法。堆“नमस्ते”调用<code>chars</code>方法会将其分开并返回六个<code>char</code>类型的值，接着就可以遍历结果来访问每一个元素了：</p>
+<p>如果你需要操作单独的 Unicode 标量值，最好的选择是使用<code>chars</code>方法。对“नमस्ते”调用<code>chars</code>方法会将其分开并返回六个<code>char</code>类型的值，接着就可以遍历结果来访问每一个元素了：</p>
 <pre><code class="language-rust">for c in &quot;नमस्ते&quot;.chars() {
     println!(&quot;{}&quot;, c);
 }
@@ -3879,7 +3879,7 @@ character boundary', ../src/libcore/str/mod.rs:1694
 <br>
 commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
-<p>最后要介绍的常用集合类型是<strong>哈希 map</strong>（<em>hash map</em>）。<code>HashMap&lt;K, V&gt;</code>类型储存了一个键类型<code>K</code>对应一个值类型<code>V</code>的映射。它通过一个<strong>哈希函数</strong>（<em>hashing function</em>）来实现映射，它决定了如何将键和值放入内存中。很多编程语言支持这种数据结构，不过通常有不同的名字：哈希、map、对象、哈希表或者关联数组，仅举几例。</p>
+<p>最后介绍的常用集合类型是 <strong>哈希 map</strong>（<em>hash map</em>）。<code>HashMap&lt;K, V&gt;</code> 类型储存了一个键类型 <code>K</code> 对应一个值类型 <code>V</code> 的映射。它通过一个<strong>哈希函数</strong>（<em>hashing function</em>）来实现映射，决定如何将键和值放入内存中。很多编程语言支持这种数据结构，不过通常有不同的名字：哈希、map、对象、哈希表或者关联数组，仅举几例。</p>
 <p>哈希 map 可以用于需要任何类型作为键来寻找数据的情况，而不是像 vector 那样通过索引。例如，在一个游戏中，你可以将每个团队的分数记录到哈希 map 中，其中键是队伍的名字而值是每个队伍的分数。给出一个队名，就能得到他们的得分。</p>
 <p>本章我们会介绍哈希 map 的基本 API，不过还有更多吸引人的功能隐藏于标准库中的<code>HashMap</code>定义的函数中。请一如既往地查看标准库文档来了解更多信息。</p>
 <a class="header" href="#新建一个哈希-map" name="新建一个哈希-map"><h3>新建一个哈希 map</h3></a>
@@ -3891,9 +3891,9 @@ let mut scores = HashMap::new();
 scores.insert(String::from(&quot;Blue&quot;), 10);
 scores.insert(String::from(&quot;Yellow&quot;), 50);
 </code></pre>
-<p>注意必须首先<code>use</code>标准库中集合部分的<code>HashMap</code>。在这三个常用集合中，这个是最不常用的，所以并不包含在被 prelude 自动引用的功能中。标准库中对哈希 map 的支持也相对较少；例如，并没有内建的用于构建的宏。</p>
-<p>就像 vector 一样，哈希 map 将他们的数据储存在堆上。这个<code>HashMap</code>的键类型是<code>String</code>而值类型是<code>i32</code>。同样类似于 vector，哈希 map 是同质的：所有的键必须是相同类型，值也必须都是相同类型。</p>
-<p>另一个构建哈希 map 的方法是使用一个元组的 vector 的<code>collect</code>方法，其中每个元组包含一个键值对。<code>collect</code>方法可以将数据收集进一系列的集合类型，包括<code>HashMap</code>。例如，如果队伍的名字和初始分数分别在两个 vector 中，可以使用<code>zip</code>方法来创建一个元组的 vector，其中“Blue”与 10 是一对，依此类推。接着就可以使用<code>collect</code>方法将这个元组 vector 转换成一个<code>HashMap</code>：</p>
+<p>注意必须首先 <code>use</code> 标准库中集合部分的 <code>HashMap</code>。在这三个常用集合中，<code>HashMap</code> 是最不常用的，所以并没有被 prelude 自动引用。标准库中对 <code>HashMap</code> 的支持也相对较少，例如，并没有内建的构建宏。
+像 vector 一样，哈希 map 将他们的数据储存在堆上，这个 <code>HashMap</code> 的键类型是 <code>String</code> 而值类型是 <code>i32</code>。同样类似于 vector，哈希 map 是同质的：所有的键必须是相同类型，值也必须都是相同类型。</p>
+<p>另一个构建哈希 map 的方法是使用一个元组的 vector 的 <code>collect</code> 方法，其中每个元组包含一个键值对。<code>collect</code> 方法可以将数据收集进一系列的集合类型，包括 <code>HashMap</code>。例如，如果队伍的名字和初始分数分别在两个 vector 中，可以使用 <code>zip</code> 方法来创建一个元组的 vector，其中“Blue”与 10 是一对，依此类推。接着就可以使用 <code>collect</code> 方法将这个元组 vector 转换成一个 <code>HashMap</code>：</p>
 <pre><code class="language-rust">use std::collections::HashMap;
 
 let teams  = vec![String::from(&quot;Blue&quot;), String::from(&quot;Yellow&quot;)];
@@ -3901,7 +3901,7 @@ let initial_scores = vec![10, 50];
 
 let scores: HashMap&lt;_, _&gt; = teams.iter().zip(initial_scores.iter()).collect();
 </code></pre>
-<p>这里<code>HashMap&lt;_, _&gt;</code>类型注解是必要的，因为可能<code>collect</code>进很多不同的数据结构，而除非显式指定 Rust 无从得知你需要的类型。但是对于键和值的参数来说，可以使用下划线而 Rust 可以根据 vector 中数据的类型推断出哈希 map 所包含的类型。</p>
+<p>这里<code>HashMap&lt;_, _&gt;</code>类型注解是必要的，因为可能<code>collect</code>进很多不同的数据结构，而除非显式指定 Rust 无从得知你需要的类型。但是对于键和值的类型参数来说，可以使用下划线占位，而 Rust 能够根据 vector 中数据的类型推断出 <code>HashMap</code> 所包含的类型。</p>
 <a class="header" href="#哈希-map-和所有权" name="哈希-map-和所有权"><h3>哈希 map 和所有权</h3></a>
 <p>对于像<code>i32</code>这样的实现了<code>Copy</code> trait 的类型，其值可以拷贝进哈希 map。对于像<code>String</code>这样拥有所有权的值，其值将被移动而哈希 map 会成为这些值的所有者：</p>
 <pre><code class="language-rust">use std::collections::HashMap;
@@ -3927,7 +3927,7 @@ scores.insert(String::from(&quot;Yellow&quot;), 50);
 let team_name = String::from(&quot;Blue&quot;);
 let score = scores.get(&amp;team_name);
 </code></pre>
-<p>这里，<code>score</code>将会是与蓝队分数相关的值，而这个值将是<code>Some(10)</code>。因为<code>get</code>返回<code>Option&lt;V&gt;</code>所以结果被封装进<code>Some</code>；如果某个键在哈希 map 中没有对应的值，<code>get</code>会返回<code>None</code>。程序将需要采用第六章提到的方法中之一来处理<code>Option</code>。</p>
+<p>这里，<code>score</code> 是与蓝队分数相关的值，应为 <code>Some(10)</code>。因为 <code>get</code> 返回 <code>Option&lt;V&gt;</code>，所以结果被装进 <code>Some</code>；如果某个键在哈希 map 中没有对应的值，<code>get</code> 会返回 <code>None</code>。这时就要用某种第六章提到的方法来处理 <code>Option</code>。</p>
 <p>可以使用与 vector 类似的方式来遍历哈希 map 中的每一个键值对，也就是<code>for</code>循环：</p>
 <pre><code class="language-rust">use std::collections::HashMap;
 
@@ -3945,7 +3945,7 @@ for (key, value) in &amp;scores {
 Blue: 10
 </code></pre>
 <a class="header" href="#更新哈希-map" name="更新哈希-map"><h3>更新哈希 map</h3></a>
-<p>虽然键值对的数量是可以增长的，不过每个单独的键同时只能关联一个值。当你想要改变哈希 map 中的数据时，必须选择是用新值替代旧值，还是完全无视旧值。我们也可以选择保留旧值而忽略新值，并只在键<strong>没有</strong>对应一个值时增加新值。或者可以结合新值和旧值。让我们看看着每一种方式是如何工作的！</p>
+<p>尽管键值对的数量是可以增长的，不过任何时候，每个键只能关联一个值。当你想要改变哈希 map 中的数据时，根据目标键是否有值以及值的更新策略分成多种情况，下面我们了解一下：</p>
 <a class="header" href="#覆盖一个值" name="覆盖一个值"><h4>覆盖一个值</h4></a>
 <p>如果我们插入了一个键值对，接着用相同的键插入一个不同的值，与这个键相关联的旧值将被替换。即便下面的代码调用了两次<code>insert</code>，哈希 map 也只会包含一个键值对，因为两次都是对蓝队的键插入的值：</p>
 <pre><code class="language-rust">use std::collections::HashMap;
@@ -3987,9 +3987,9 @@ for word in text.split_whitespace() {
 
 println!(&quot;{:?}&quot;, map);
 </code></pre>
-<p>这会打印出<code>{&quot;world&quot;: 2, &quot;hello&quot;: 1, &quot;wonderful&quot;: 1}</code>，<code>or_insert</code>方法事实上会返回这个键的值的一个可变引用（<code>&amp;mut V</code>）。这里我们将这个可变引用储存在<code>count</code>变量中，所以为了赋值必须首先使用星号（<code>*</code>）解引用<code>count</code>。这个可变引用在<code>for</code>循环的结尾离开作用域，这样所有这些改变都是安全的并被借用规则所允许。</p>
+<p>这会打印出<code>{&quot;world&quot;: 2, &quot;hello&quot;: 1, &quot;wonderful&quot;: 1}</code>，<code>or_insert</code>方法事实上会返回这个键的值的一个可变引用（<code>&amp;mut V</code>）。这里我们将这个可变引用储存在<code>count</code>变量中，所以为了赋值必须首先使用星号（<code>*</code>）解引用<code>count</code>。这个可变引用在<code>for</code>循环的结尾离开作用域，这样所有这些改变都是安全的并符合借用规则。</p>
 <a class="header" href="#哈希函数" name="哈希函数"><h3>哈希函数</h3></a>
-<p><code>HashMap</code>默认使用一个密码学上是安全的哈希函数，它可以提供抵抗拒绝服务（Denial of Service, DoS）攻击的能力。这并不是现有最快的哈希函数，不过为了更好的安全性带来一些性能下降也是值得的。如果你监控你的代码并发现默认哈希函数对你来说非常慢，可以通过指定一个不同的 <em>hasher</em> 来切换为另一个函数。hasher 是一个实现了<code>BuildHasher</code> trait 的类型。第十章会讨论 trait 和如何实现他们。你并不需要从头开始实现你自己的 hasher；crates.io 有其他人分享的实现了许多常用哈希算法的 hasher 的库。</p>
+<p><code>HashMap</code>默认使用一种密码学安全的哈希函数，它可以抵抗拒绝服务（Denial of Service, DoS）攻击。然而并不是最快的，不过为了更高的安全性值得付出一些性能的代价。如果性能监测显示此哈希函数非常慢，以致于你无法接受，你可以指定一个不同的 <em>hasher</em> 来切换为其它函数。hasher 是一个实现了<code>BuildHasher</code> trait 的类型。第十章会讨论 trait 和如何实现他们。你并不需要从头开始实现你自己的 hasher；crates.io 有其他人分享的实现了许多常用哈希算法的 hasher 的库。</p>
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>vector、字符串和哈希 map 会在你的程序需要储存、访问和修改数据时帮助你。这里有一些你应该能够解决的练习问题：</p>
 <ul>
@@ -4401,7 +4401,7 @@ values between 1 and 100</span></p>
 <p>如此获取一个参数并只返回 1 到 100 之间数字的函数就可以声明为获取或返回一个<code>Guess</code>，而不是<code>u32</code>，同时其函数体中也无需进行任何额外的检查。</p>
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>Rust 的错误处理功能被设计为帮助你编写更加健壮的代码。<code>panic!</code>宏代表一个程序无法处理的状态，并停止执行而不是使用无效或不正确的值继续处理。Rust 类型系统的<code>Result</code>枚举代表操作可能会在一种可以恢复的情况下失败。可以使用<code>Result</code>来告诉代码调用者他需要处理潜在的成功或失败。在适当的场景使用<code>panic!</code>和<code>Result</code>将会使你的代码在面对无处不在的错误时显得更加可靠。</p>
-<p>现在我们已经见识过了标准库中<code>Option</code>和<code>Result</code>泛型枚举的能力了，让我们聊聊泛型是如何工作的，以及如果在你的代码中利用他们。</p>
+<p>现在我们已经见识过了标准库中<code>Option</code>和<code>Result</code>泛型枚举的能力了，让我们聊聊泛型是如何工作的，以及如何在你的代码中利用他们。</p>
 <a class="header" href="#泛型trait-和生命周期" name="泛型trait-和生命周期"><h1>泛型、trait 和生命周期</h1></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-00-generics.md">ch10-00-generics.md</a>
@@ -4562,7 +4562,7 @@ fn main() {
 names and the types in their signatures</span></p>
 <p>这里<code>largest_i32</code>和<code>largest_char</code>有着完全相同的函数体，所以能够将这两个函数变成一个来减少重复就太好了。所幸通过引入一个泛型参数就能实现！</p>
 <p>为了参数化要定义的函数的签名中的类型，我们需要像给函数的值参数起名那样为这类型参数起一个名字。这里选择了名称<code>T</code>。任何标识符都可以作为类型参数名，选择<code>T</code>是因为 Rust 的类型命名规范是骆驼命名法（CamelCase）。另外泛型类型参数的规范也倾向于简短，经常仅仅是一个字母。<code>T</code>作为“type”的缩写是大部分 Rust 程序员的首选。</p>
-<p>当需要再函数体中使用一个参数时，必须在函数签名中声明这个参数以便编译器能知道函数体中这个名称的意义。同理，当在函数签名中使用一个类型参数时，必须在使用它之前就声明它。类型参数声明位于函数名称与参数列表中间的尖括号中。</p>
+<p>当需要在函数体中使用一个参数时，必须在函数签名中声明这个参数以便编译器能知道函数体中这个名称的意义。同理，当在函数签名中使用一个类型参数时，必须在使用它之前就声明它。类型参数声明位于函数名称与参数列表中间的尖括号中。</p>
 <p>我们将要定义的泛型版本的<code>largest</code>函数的签名看起来像这样：</p>
 <pre><code class="language-rust,ignore">fn largest&lt;T&gt;(list: &amp;[T]) -&gt; T {
 </code></pre>
@@ -4603,7 +4603,7 @@ uses generic type parameters but doesn't compile yet</span></p>
   |
 note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
 </code></pre>
-<p>注释中提到了<code>std::cmp::PartialOrd</code>，这是一个 <em>trait</em>。下一部分会讲到 trait，不过简单来说，这个错误表明<code>largest</code>的函数体对<code>T</code>的所有可能的类型都无法工作；因为在函数体需要比较<code>T</code>类型的值，不过它只能用于我们知道如何排序的类型。标准库中定义的<code>std::cmp::PartialOrd</code> trait 可以实现类型的排序功能。在下一部分会再次回到 trait 并讲解如何为泛型指定一个 trait，不过让我们先把这个例子放在一边并探索其他那些可以使用泛型类型参数的地方。</p>
+<p>注释中提到了<code>std::cmp::PartialOrd</code>，这是一个 <em>trait</em>。下一部分会讲到 trait，不过简单来说，这个错误表明<code>largest</code>的函数体不能适用于<code>T</code>的所有可能的类型；因为在函数体需要比较<code>T</code>类型的值，不过它只能用于我们知道如何排序的类型。标准库中定义的<code>std::cmp::PartialOrd</code> trait 可以实现类型的排序功能。在下一部分会再次回到 trait 并讲解如何为泛型指定一个 trait，不过让我们先把这个例子放在一边并探索其他那些可以使用泛型类型参数的地方。</p>
 <!-- Liz: this is the reason we had the topics in the order we did in the first
 draft of this chapter; it's hard to do anything interesting with generic types
 in functions unless you also know about traits and trait bounds. I think this
@@ -4627,7 +4627,7 @@ fn main() {
 <p><span class="caption">Listing 10-6: A <code>Point</code> struct that holds <code>x</code> and <code>y</code>
 values of type <code>T</code></span></p>
 <p>其语法类似于函数定义中的泛型应用。首先，必须在结构体名称后面的尖括号中声明泛型参数的名称。接着在结构体定义中可以指定具体数据类型的位置使用泛型类型。</p>
-<p>注意<code>Point</code>的定义中是使用了要给泛型类型，我们想要表达的是结构体<code>Point</code>对于一些类型<code>T</code>是泛型的，而且字段<code>x</code>和<code>y</code><strong>都是</strong>相同类型的，无论它具体是何类型。如果尝试创建一个有不同类型值的<code>Point</code>的实例，像列表 10-7 中的代码就不能编译：</p>
+<p>注意<code>Point</code>的定义中只使用了一个泛型类型，我们想要表达的是结构体<code>Point</code>对于一些类型<code>T</code>是泛型的，而且字段<code>x</code>和<code>y</code><strong>都是</strong>相同类型的，无论它具体是何类型。如果尝试创建一个有不同类型值的<code>Point</code>的实例，像列表 10-7 中的代码就不能编译：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">struct Point&lt;T&gt; {
     x: T,
@@ -4763,7 +4763,7 @@ fn main() {
     let float = Option_f64::Some(5.0);
 }
 </code></pre>
-<p>我们可以使用泛型来编写不重复的代码，而 Rust 会将会为每一个实例编译其特定类型的代码。这意味着在使用泛型时没有运行时开销；当代码运行，它的执行效率就跟好像手写每个具体定义的重复代码一样。这个单态化过程正是 Rust 泛型在运行时极其高效的原因。</p>
+<p>我们可以使用泛型来编写不重复的代码，而 Rust 将会为每一个实例编译其特定类型的代码。这意味着在使用泛型时没有运行时开销；当代码运行，它的执行效率就跟好像手写每个具体定义的重复代码一样。这个单态化过程正是 Rust 泛型在运行时极其高效的原因。</p>
 <a class="header" href="#trait定义共享的行为" name="trait定义共享的行为"><h2>trait：定义共享的行为</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-02-traits.md">ch10-02-traits.md</a>
@@ -5002,9 +5002,9 @@ function that works on any generic type that implements the <code>PartialOrd</co
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-03-lifetime-syntax.md">ch10-03-lifetime-syntax.md</a>
 <br>
-commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894</p>
+commit 9fbbfb23c2cd1686dbd3ce7950ae1eda300937f6</p>
 </blockquote>
-<p>当在第四章讨论引用时，我们遗漏了一个重要的细节：Rust 中的每一个引用都有其<strong>生命周期</strong>，也就是引用保持有效的作用域。大部分时候生命周期是隐含并可以推断的，正如大部分时候类型也是可以推断的一样。类似于当因为有多种可能类型的时候必须注明类型，也会出现引用的生命周期以多种不同方式向关联的情况，所以 Rust 需要我们使用泛型生命周期参数来注明他们的关系，这样就能确保运行时实际使用的引用绝对是有效的。</p>
+<p>当在第四章讨论引用时，我们遗漏了一个重要的细节：Rust 中的每一个引用都有其<strong>生命周期</strong>，也就是引用保持有效的作用域。大部分时候生命周期是隐含并可以推断的，正如大部分时候类型也是可以推断的一样。类似于当因为有多种可能类型的时候必须注明类型，也会出现引用的生命周期以多种不同方式相关联的情况，所以 Rust 需要我们使用泛型生命周期参数来注明他们的关系，这样就能确保运行时实际使用的引用绝对是有效的。</p>
 <p>好吧，这有点不太寻常，而且也不同于其他语言中使用的工具。生命周期，从某种意义上说，是 Rust 最与众不同的功能。</p>
 <p>生命周期是一个很广泛的话题，本章不可能涉及到它全部的内容，所以这里我们会讲到一些通常你可能会遇到的生命周期语法以便你熟悉这个概念。第十九章会包含生命周期所有功能的更高级的内容。</p>
 <a class="header" href="#生命周期避免了悬垂引用" name="生命周期避免了悬垂引用"><h3>生命周期避免了悬垂引用</h3></a>
@@ -5160,7 +5160,7 @@ specifies all the references in the signature must have the same lifetime,
 <p>通过在函数签名中指定生命周期参数，我们不会改变任何参数或返回值的生命周期，不过我们说过任何不坚持这个协议的类型都将被借用检查器拒绝。这个函数并不知道（或需要知道）<code>x</code>和<code>y</code>具体会存在多久，不过只需要知道一些可以使用<code>'a</code>替代的作用域将会满足这个签名。</p>
 <p>当在函数中使用生命周期注解时，这些注解出现在函数签名中，而不存在于函数体中的任何代码中。这是因为 Rust 能够分析函数中代码而不需要任何协助，不过当函数引用或被函数之外的代码引用时，参数或返回值的生命周期可能在每次函数被调用时都不同。这可能会产生惊人的消耗并且对于 Rust 来说经常都是不可能分析的。在这种情况下，我们需要自己标注生命周期。</p>
 <p>当具体的引用被传递给<code>longest</code>时，具体被<code>'a</code>所替代的生命周期是<code>x</code>的作用域与<code>y</code>的作用域相重叠的那一部分。因为作用域总是嵌套的，所以换一种说法就是泛型生命周期<code>'a</code>的具体生命周期等同于<code>x</code>和<code>y</code>的生命周期中较小的那一个。因为我们用相同的生命周期参数标注了返回的引用值，所以返回的引用值就能保证在<code>x</code>和<code>y</code>中较短的那个生命周期结束之前保持有效。</p>
-<p>让我们如何通过传递拥有不同具体生命周期的引用来观察他们是如何限制<code>longest</code>函数的使用的。列表 10-22 是一个应该在任何编程语言中都很直观的例子：<code>string1</code>直到外部作用域结束都是有效的，<code>string2</code>则在内部作用域中是有效的，而<code>result</code>则引用了一些直到外部作用域结束都是有效的值。借用检查器赞同这些代码；它能够编译和运行，并打印出<code>The longest string is long string is long</code>：</p>
+<p>让我们如何通过传递拥有不同具体生命周期的引用来观察他们是如何限制<code>longest</code>函数的使用的。列表 10-22 是一个应该在任何编程语言中都很直观的例子：<code>string1</code>直到外部作用域结束都是有效的，<code>string2</code>则在内部作用域中是有效的，而<code>result</code>则引用了一些直到内部作用域结束都是有效的值。借用检查器赞同这些代码；它能够编译和运行，并打印出<code>The longest string is long string is long</code>：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
 #     if x.len() &gt; y.len() {
@@ -5283,7 +5283,7 @@ type are references</span></p>
 </code></pre>
 <p>在编写了很多 Rust 代码后，Rust 团队发现在特定情况下 Rust 程序员们总是重复地编写一模一样的生命周期注解。这些场景是可预测的并且遵循几个明确的模式。接着 Rust 团队就把这些模式编码进了 Rust 编译器中，如此借用检查器在这些情况下就能推断出生命周期而不再强制程序员显式的增加注解。</p>
 <p>这里我们提到一些 Rust 的历史是因为更多的明确的模式将被合并和添加到编译器中是完全可能的。未来将会需要越来越少的生命周期注解。</p>
-<p>被编码进 Rust 引用分析的模式被称为<strong>生命周期省略规则</strong>（<em>lifetime elision rules</em>）。这并不是需要程序员遵守的规则；这些规则是一系列特定的场景，此时编译器会会考虑，如果代码符合这些场景，就不需要明确指定生命周期。</p>
+<p>被编码进 Rust 引用分析的模式被称为<strong>生命周期省略规则</strong>（<em>lifetime elision rules</em>）。这并不是需要程序员遵守的规则；这些规则是一系列特定的场景，此时编译器会考虑，如果代码符合这些场景，就不需要明确指定生命周期。</p>
 <p>这些规则并不提供完整的推断：如果 Rust 在明确遵守这些规则的前提下变量的生命周期仍然是模棱两可的话，它不会猜测剩余引用的生命周期应该是什么。在这种情况，编译器会给出一个错误，这可以通过增加对应引用之间相联系的生命周期注解来解决。</p>
 <p>首先，介绍一些定义：函数或方法的参数的生命周期被称为<strong>输入生命周期</strong>（<em>input lifetimes</em>），而返回值的生命周期被称为<strong>输出生命周期</strong>（<em>output lifetimes</em>）。</p>
 <p>现在介绍编译器用于判断引用何时不需要明确生命周期注解的规则。第一条规则适用于输入生命周期，而后两条规则则适用于输出生命周期。如果编译器检查完这三条规则并仍然存在没有计算出生命周期的引用，编译器将会停止并生成错误。</p>
@@ -5325,7 +5325,7 @@ parameters need to be declared and used since the lifetime parameters could go
 with the struct's fields or with references passed into or returned from
 methods. /Carol -->
 <p>当为带有生命周期的结构体实现方法时，其语法依然类似列表 10-10 中展示的泛型类型参数的语法：包括声明生命周期参数的位置和生命周期参数是否与结构体字段或方法的参数与返回值相关联。</p>
-<p>（实现方法时）结构体字段的生命周期必须总是在<code>impl</code>关键字之后声明并在结构体名称之后被适用，因为这些生命周期是结构体类型的一部分。</p>
+<p>（实现方法时）结构体字段的生命周期必须总是在<code>impl</code>关键字之后声明并在结构体名称之后被使用，因为这些生命周期是结构体类型的一部分。</p>
 <p><code>impl</code>块里的方法签名中，引用可能与结构体字段中的引用相关联，也可能是独立的。另外，生命周期省略规则也经常让我们无需在方法签名中使用生命周期注解。让我们看看一些使用列表 10-24 中定义的结构体<code>ImportantExcerpt</code>的例子。</p>
 <p>首先，这里有一个方法<code>level</code>。其唯一的参数是<code>self</code>的引用，而且返回值只是一个<code>i32</code>，并不引用任何值：</p>
 <pre><code class="language-rust"># struct ImportantExcerpt&lt;'a&gt; {
@@ -5399,7 +5399,7 @@ commit b7ab6668bbcb73b93c6464d8354c94a8e6c90395</p>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch11-01-writing-tests.md">ch11-01-writing-tests.md</a>
 <br>
-commit 55b294f20fc846a13a9be623bf322d8b364cee77</p>
+commit c6162d22288253b2f2a017cfe96cf1aa765c2955</p>
 </blockquote>
 <p>测试用来验证非测试的代码按照期望的方式运行的 Rust 函数。测试函数体通常包括一些设置，运行需要测试的代码，接着断言其结果是我们所期望的。让我们看看 Rust 提供的具体用来编写测试的功能：<code>test</code>属性、一些宏和<code>should_panic</code>属性。</p>
 <a class="header" href="#测试函数剖析" name="测试函数剖析"><h3>测试函数剖析</h3></a>
@@ -5734,7 +5734,7 @@ fn greeting_contains_name() {
 </code></pre>
 <p>现在如果再次运行测试，将会看到更有价值的错误信息：</p>
 <pre><code>---- tests::greeting_contains_name stdout ----
-    thread 'tests::greeting_contains_name' panicked at 'Result did not contain
+    thread 'tests::greeting_contains_name' panicked at 'Greeting did not contain
     name, value was `Hello`', src/lib.rs:12
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 </code></pre>
@@ -7023,7 +7023,7 @@ error: test failed
 <p><span class="caption">Listing 12-17: Iterating through each line in
 <code>contents</code></span></p>
 <!-- Will add wingdings in libreoffice /Carol -->
-<p><code>lines</code>方法返回一个迭代器。第十三张会深入了解迭代器，不过我们已经在列表 3-6 中见过使用迭代器的方法，在那里使用了一个<code>for</code>循环和迭代器在一个集合的每一项上运行一些代码。</p>
+<p><code>lines</code>方法返回一个迭代器。第十三章会深入了解迭代器，不过我们已经在列表 3-6 中见过使用迭代器的方法，在那里使用了一个<code>for</code>循环和迭代器在一个集合的每一项上运行一些代码。</p>
 <!-- so what does `lines` do on its own, if we need to use it in a for loop to
 work? -->
 <!-- It does nothing on its own, it returns an iterator for you to do something
@@ -7572,7 +7572,7 @@ assert_eq!(3, answer);
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch13-02-iterators.md">ch13-02-iterators.md</a>
 <br>
-commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
+commit 431116f5c696000b9fd6780e5fde90392cef6812</p>
 </blockquote>
 <p>迭代器是 Rust 中的一个模式，它允许你对一个项的序列进行某些处理。例如。列表 13-5 中对 vecctor 中的每一个数加一：</p>
 <pre><code class="language-rust">let v1 = vec![1, 2, 3];
@@ -7617,7 +7617,7 @@ nothing unless consumed, #[warn(unused_must_use)] on by default
     fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;;
 }
 </code></pre>
-<p>这里有一些还未讲到的新语法：<code>type Item</code>和<code>Self::Item</code>定义了这个 trait 的<strong>关联类型</strong>（<em>associated type</em>），第19章会讲到关联类型。现在所有你需要知道就是这些代码表示<code>Iterator</code> trait 要求你也定义一个<code>Item</code>类型，而这个<code>Item</code>类型用作<code>next</code>方法的返回值。换句话说，<code>Item</code>类型将是迭代器返回的元素的类型。</p>
+<p>这里有一些还未讲到的新语法：<code>type Item</code>和<code>Self::Item</code>定义了这个 trait 的<strong>关联类型</strong>（<em>associated type</em>），第十九章会讲到关联类型。现在所有你需要知道就是这些代码表示<code>Iterator</code> trait 要求你也定义一个<code>Item</code>类型，而这个<code>Item</code>类型用作<code>next</code>方法的返回值。换句话说，<code>Item</code>类型将是迭代器返回的元素的类型。</p>
 <p>让我们使用<code>Iterator</code> trait 来创建一个从一数到五的迭代器<code>Counter</code>。首先，需要创建一个结构体来存放迭代器的当前状态，它有一个<code>u32</code>的字段<code>count</code>。我们也定义了一个<code>new</code>方法，当然这并不是必须的。因为我们希望<code>Counter</code>能从一数到五，所以它总是从零开始：</p>
 <pre><code class="language-rust">struct Counter {
     count: u32,
@@ -7682,7 +7682,7 @@ println!(&quot;{:?}&quot;, x);
 <a class="header" href="#各种iterator适配器" name="各种iterator适配器"><h3>各种<code>Iterator</code>适配器</h3></a>
 <p>在列表 13-5 中有一个迭代器并调用了其像<code>map</code>和<code>collect</code>这样的方法。然而在列表 13-6 中，只实现了<code>Counter</code>的<code>next</code>方法。<code>Counter</code>如何才能得到像<code>map</code>和<code>collect</code>这样的方法呢？</p>
 <p>好吧，当讲到<code>Iterator</code>的定义时，我们故意省略一个小的细节。<code>Iterator</code>定义了一系列默认实现，他们会调用<code>next</code>方法。因为<code>next</code>是唯一一个<code>Iterator</code> trait 没有默认实现的方法，一旦实现之后，<code>Iterator</code>的所有其他的适配器就都可用了。这些适配器可不少！</p>
-<p>例如，处于某种原因我们希望获取一个<code>Counter</code>实例产生的头五个值，与另一个<code>Counter</code>实例第一个之后的值相组合，将每组数相乘，并只保留能被三整除的相乘结果，最后将保留结果相加，我们可以这么做：</p>
+<p>例如，处于某种原因我们希望获取一个<code>Counter</code>实例产生的值，与另一个<code>Counter</code>实例忽略第一个值之后的值相组合，将每组数相乘，并只保留能被三整除的相乘结果，最后将所有保留的结果相加，我们可以这么做：</p>
 <pre><code class="language-rust"># struct Counter {
 #     count: u32,
 # }
@@ -7709,8 +7709,7 @@ println!(&quot;{:?}&quot;, x);
 #         }
 #     }
 # }
-let sum: u32 = Counter::new().take(5)
-                             .zip(Counter::new().skip(1))
+let sum: u32 = Counter::new().zip(Counter::new().skip(1))
                              .map(|(a, b)| a * b)
                              .filter(|x| x % 3 == 0)
                              .sum();
@@ -7722,9 +7721,9 @@ assert_eq!(18, sum);
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch13-03-improving-our-io-project.md">ch13-03-improving-our-io-project.md</a>
 <br>
-commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
+commit 0608e2d0743951d8e628b6e130c6b5744775a783</p>
 </blockquote>
-<p>在我们上一章实现的<code>grep</code> I/O 项目中，其中有一些地方的代码可以使用迭代器来变得更清楚简洁一些。让我们看看迭代器如何能够改进<code>Config::new</code>函数和<code>grep</code>函数的实现。</p>
+<p>在我们上一章实现的<code>grep</code> I/O 项目中，其中有一些地方的代码可以使用迭代器来变得更清楚简洁一些。让我们看看迭代器如何能够改进<code>Config::new</code>函数和<code>search</code>函数的实现。</p>
 <a class="header" href="#使用迭代器并去掉clone" name="使用迭代器并去掉clone"><h3>使用迭代器并去掉<code>clone</code></h3></a>
 <p>回到列表 12-8 中，这些代码获取一个<code>String</code> slice 并创建一个<code>Config</code>结构体的实例，它检查参数的数量、索引 slice 中的值、并克隆这些值以便<code>Config</code>可以拥有他们的所有权：</p>
 <pre><code class="language-rust,ignore">impl Config {
@@ -7733,17 +7732,17 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
             return Err(&quot;not enough arguments&quot;);
         }
 
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
         Ok(Config {
-            search: search,
+            query: query,
             filename: filename,
         })
     }
 }
 </code></pre>
-<p>当时我们说不必担心这里的<code>clone</code>调用，因为将来会移除他们。好吧，就是现在了！所以，为什么这里需要<code>clone</code>呢？这里的问题是参数<code>args</code>中有一个<code>String</code>元素的 slice，而<code>new</code>函数并不拥有<code>args</code>。为了能够返回<code>Config</code>实例的所有权，我们需要克隆<code>Config</code>中字段<code>search</code>和<code>filename</code>的值，这样<code>Config</code>就能拥有这些值了。</p>
+<p>当时我们说不必担心这里的<code>clone</code>调用，因为将来会移除他们。好吧，就是现在了！所以，为什么这里需要<code>clone</code>呢？这里的问题是参数<code>args</code>中有一个<code>String</code>元素的 slice，而<code>new</code>函数并不拥有<code>args</code>。为了能够返回<code>Config</code>实例的所有权，我们需要克隆<code>Config</code>中字段<code>query</code>和<code>filename</code>的值，这样<code>Config</code>就能拥有这些值了。</p>
 <p>现在在认识了迭代器之后，我们可以将<code>new</code>函数改为获取一个有所有权的迭代器作为参数。可以使用迭代器来代替之前必要的 slice 长度检查和特定位置的索引。因为我们获取了迭代器的所有权，就不再需要借用所有权的索引操作了，我们可以直接将迭代器中的<code>String</code>值移动到<code>Config</code>中，而不用调用<code>clone</code>来创建一个新的实例。</p>
 <p>首先，让我们看看列表 12-6 中的<code>main</code>函数，将<code>env::args</code>的返回值改为传递给<code>Config::new</code>，而不是调用<code>collect</code>并传递一个 slice：</p>
 <pre><code class="language-rust,ignore">fn main() {
@@ -7759,7 +7758,7 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 <!-- Will add ghosting in libreoffice /Carol -->
 <p>之后我们将修复<code>Config::new</code>的函数体。因为标准库文档也表明，<code>std::env::Args</code>实现了<code>Iterator</code> trait，所以我们知道可以调用其<code>next</code>方法！如下就是新的代码：</p>
 <pre><code class="language-rust"># struct Config {
-#     search: String,
+#     query: String,
 #     filename: String,
 # }
 #
@@ -7767,9 +7766,9 @@ impl Config {
     fn new(mut args: std::env::Args) -&gt; Result&lt;Config, &amp;'static str&gt; {
         args.next();
 
-        let search = match args.next() {
+        let query = match args.next() {
             Some(arg) =&gt; arg,
-            None =&gt; return Err(&quot;Didn't get a search string&quot;),
+            None =&gt; return Err(&quot;Didn't get a query string&quot;),
         };
 
         let filename = match args.next() {
@@ -7778,25 +7777,25 @@ impl Config {
         };
 
         Ok(Config {
-            search: search,
+            query: query,
             filename: filename,
         })
     }
 }
 </code></pre>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>还记得<code>env::args</code>返回值的第一个值是程序的名称吗。我们希望忽略它，所以首先调用<code>next</code>并不处理其返回值。第二次调用<code>next</code>的返回值应该是希望放入<code>Config</code>中<code>search</code>字段的值。使用<code>match</code>来在<code>next</code>返回<code>Some</code>时提取值，而在因为没有足够的参数（这会造成<code>next</code>调用返回<code>None</code>）而提早返回<code>Err</code>值。</p>
-<p>对<code>filename</code>值也进行相同处理。稍微有些可惜的是<code>search</code>和<code>filename</code>的<code>match</code>表达式是如此的相似。如果可以对<code>next</code>返回的<code>Option</code>使用<code>?</code>就好了，不过目前<code>?</code>只能用于<code>Result</code>值。即便我们可以像<code>Result</code>一样对<code>Option</code>使用<code>?</code>，得到的值也是借用的，而我们希望能够将迭代器中的<code>String</code>移动到<code>Config</code>中。</p>
+<p>还记得<code>env::args</code>返回值的第一个值是程序的名称吗。我们希望忽略它，所以首先调用<code>next</code>并不处理其返回值。第二次调用<code>next</code>的返回值应该是希望放入<code>Config</code>中<code>query</code>字段的值。使用<code>match</code>来在<code>next</code>返回<code>Some</code>时提取值，而在因为没有足够的参数（这会造成<code>next</code>调用返回<code>None</code>）而提早返回<code>Err</code>值。</p>
+<p>对<code>filename</code>值也进行相同处理。稍微有些可惜的是<code>query</code>和<code>filename</code>的<code>match</code>表达式是如此的相似。如果可以对<code>next</code>返回的<code>Option</code>使用<code>?</code>就好了，不过目前<code>?</code>只能用于<code>Result</code>值。即便我们可以像<code>Result</code>一样对<code>Option</code>使用<code>?</code>，得到的值也是借用的，而我们希望能够将迭代器中的<code>String</code>移动到<code>Config</code>中。</p>
 <a class="header" href="#使用迭代器适配器来使代码更简明" name="使用迭代器适配器来使代码更简明"><h3>使用迭代器适配器来使代码更简明</h3></a>
-<p>另一部分可以利用迭代器的代码位于列表 12-15 中实现的<code>grep</code>函数中：</p>
+<p>另一部分可以利用迭代器的代码位于列表 12-15 中实现的<code>search</code>函数中：</p>
 <!-- We hadn't had a listing number for this code sample when we submitted
 chapter 12; we'll fix the listing numbers in that chapter after you've
 reviewed it. /Carol -->
-<pre><code class="language-rust">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+<pre><code class="language-rust">fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     let mut results = Vec::new();
 
     for line in contents.lines() {
-        if line.contains(search) {
+        if line.contains(query) {
             results.push(line);
         }
     }
@@ -7805,22 +7804,22 @@ reviewed it. /Carol -->
 }
 </code></pre>
 <p>我们可以用一种更简短的方式来编写这些代码，并避免使用了一个作为可变中间值的<code>results</code> vector，像这样使用迭代器适配器方法来实现：</p>
-<pre><code class="language-rust">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+<pre><code class="language-rust">fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     contents.lines()
-        .filter(|line| line.contains(search))
+        .filter(|line| line.contains(query))
         .collect()
 }
 </code></pre>
-<p>这里使用了<code>filter</code>适配器来只保留<code>line.contains(search)</code>为真的那些行。接着使用<code>collect</code>将他们放入另一个 vector 中。这就简单多了！</p>
-<p>也可以对列表 12-16 中定义的<code>grep_case_insensitive</code>函数使用如下同样的技术：</p>
+<p>这里使用了<code>filter</code>适配器来只保留<code>line.contains(query)</code>为真的那些行。接着使用<code>collect</code>将他们放入另一个 vector 中。这就简单多了！</p>
+<p>也可以对列表 12-16 中定义的<code>search_case_insensitive</code>函数使用如下同样的技术：</p>
 <!-- Similarly, the code snippet that will be 12-16 didn't have a listing
 number when we sent you chapter 12, we will fix it. /Carol -->
-<pre><code class="language-rust">fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
-    let search = search.to_lowercase();
+<pre><code class="language-rust">fn search_case_insensitive&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    let query = query.to_lowercase();
 
     contents.lines()
         .filter(|line| {
-            line.to_lowercase().contains(&amp;search)
+            line.to_lowercase().contains(&amp;query)
         }).collect()
 }
 </code></pre>
@@ -8228,7 +8227,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 <br>
 commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
-<p><code>cargo install</code>命令用于在本地安装和使用二进制 crate。它并不打算替换系统中的包；它意在作为一个方便 Rust 开发者安装他人在 crates.io 共享的工具的手段。只有有二进制目标文件的包能够安装，而且所有二进制文件都被安装到 Rust 安装根目录的 <em>bin</em> 文件夹中。如果你使用 <em>rustup.rs</em> 安装的 Rust 且没有自定义任何配置，这将是<code>$HOME/.cargo/bin</code>。将这个目录添加到<code>$PATH</code>环境变量中就能够运行通过<code>cargo install</code>安装的程序了。</p>
+<p><code>cargo install</code>命令用于在本地安装和使用二进制 crate。它并不打算替换系统中的包；它意在作为一个方便 Rust 开发者们安装其他人已经在 crates.io 上共享的工具的手段。只有有二进制目标文件的包能够安装，而且所有二进制文件都被安装到 Rust 安装根目录的 <em>bin</em> 文件夹中。如果你使用 <em>rustup.rs</em> 安装的 Rust 且没有自定义任何配置，这将是<code>$HOME/.cargo/bin</code>。将这个目录添加到<code>$PATH</code>环境变量中就能够运行通过<code>cargo install</code>安装的程序了。</p>
 <p>例如，第十二章提到的叫做<code>ripgrep</code>的用于搜索文件的<code>grep</code>的 Rust 实现。如果想要安装<code>ripgrep</code>，可以运行如下：</p>
 <pre><code>$ cargo install ripgrep
 Updating registry `https://github.com/rust-lang/crates.io-index`
@@ -8274,7 +8273,7 @@ commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 <br>
 commit 85b2c9ac704c9dc4bbedb97209d336afb9809dc1</p>
 </blockquote>
-<p>最简单直接的智能指针是 <em>box</em>，它的类型是<code>Box&lt;T&gt;</code>。 box 允许你将一个单独的值放在堆上（第四章介绍或栈与堆）。列表 15-1 展示了如何使用 box 在堆上储存一个<code>i32</code>：</p>
+<p>最简单直接的智能指针是 <em>box</em>，它的类型是<code>Box&lt;T&gt;</code>。 box 允许你将一个值放在堆上（第四章介绍过栈与堆）。列表 15-1 展示了如何使用 box 在堆上储存一个<code>i32</code>：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let b = Box::new(5);
@@ -8293,7 +8292,7 @@ box</span></p>
 </code></pre>
 <p><span class="caption">Listing 15-2: The first attempt of defining an enum to
 represent a cons list data structure of <code>i32</code> values</span></p>
-<p>我们实现了一个只存放<code>i32</code>值的 cons list。也可以选择实用第十章介绍的泛型来实现一个类型无关的 cons list。</p>
+<p>我们实现了一个只存放<code>i32</code>值的 cons list。也可以选择使用第十章介绍的泛型来实现一个类型无关的 cons list。</p>
 <blockquote>
 <a class="header" href="#cons-list-的更多内容" name="cons-list-的更多内容"><h4>cons list 的更多内容</h4></a>
 <p><em>cons list</em> 是一个来源于 Lisp 编程语言及其方言的数据结构。在 Lisp 中，<code>cons</code>函数（&quot;construct function&quot;的缩写）利用两个参数来构造一个新的列表，他们通常是一个单独的值和另一个列表。</p>
@@ -8360,7 +8359,7 @@ fn main() {
 </code></pre>
 <p><span class="caption">Listing 15-5: Definition of <code>List</code> that uses <code>Box&lt;T&gt;</code> in
 order to have a known size</span></p>
-<p>这样编译器就能够计算出储存一个<code>List</code>值需要的大小了。Rust 将会检查<code>List</code>，同样的从<code>Cons</code>成员开始检查。<code>Cons</code>成员需要<code>i32</code>的大小加上一个<code>usize</code>的大小，因为 box 总是<code>usize</code>大小的，不管它指向的是什么。接着 Rust 检查<code>Nil</code>成员，它并储存一个值，所以<code>Nil</code>并不需要任何空间。我们通过 box 打破了这无限递归的连锁。图 15-6 展示了现在<code>Cons</code>成员看起来像什么：</p>
+<p>这样编译器就能够计算出储存一个<code>List</code>值需要的大小了。Rust 将会检查<code>List</code>，同样的从<code>Cons</code>成员开始检查。<code>Cons</code>成员需要<code>i32</code>的大小加上一个<code>usize</code>的大小，因为 box 总是<code>usize</code>大小的，不管它指向的是什么。接着 Rust 检查<code>Nil</code>成员，它并不储存一个值，所以<code>Nil</code>并不需要任何空间。我们通过 box 打破了这无限递归的连锁。图 15-6 展示了现在<code>Cons</code>成员看起来像什么：</p>
 <p><img alt="A finite Cons list" src="img/trpl15-02.svg" class="center" /></p>
 <p><span class="caption">Figure 15-6: A <code>List</code> that is not infinitely sized since
 <code>Cons</code> holds a <code>Box</code></span></p>
@@ -8372,7 +8371,7 @@ order to have a known size</span></p>
 <br>
 commit ecc3adfe0cfa0a4a15a178dc002702fd0ea74b3f</p>
 </blockquote>
-<p>第一个智能指针相关的重要 trait 是<code>Deref</code>，它允许我们重载<code>*</code>，解引用运算符（不同于乘法运算符和全局引用运算符）。重载智能指针的<code>*</code>能使访问其后的数据更为方便，在这个部分的稍后介绍解引用强制多态时我们会讨论方便的意义。</p>
+<p>第一个智能指针相关的重要 trait 是<code>Deref</code>，它允许我们重载<code>*</code>，解引用运算符（不同于乘法运算符和全局引用运算符）。重载智能指针的<code>*</code>能使访问其持有的数据更为方便，在本章结束前谈到解引用强制多态时我们会说明方便的意义。</p>
 <p>第八章的哈希 map 的“根据旧值更新一个值”部分简要的提到了解引用运算符。当时有一个可变引用，而我们希望改变这个引用所指向的值。为此，首先我们必须解引用。这是另一个使用<code>i32</code>值引用的例子：</p>
 <pre><code class="language-rust">let mut x = 5;
 {
@@ -8383,7 +8382,7 @@ commit ecc3adfe0cfa0a4a15a178dc002702fd0ea74b3f</p>
 
 assert_eq!(6, x);
 </code></pre>
-<p>我们使用<code>*y</code>来访问可变引用<code>y</code>所指向的数据，而是可变引用本身。接着可以修改它的数据，在这里对其加一。</p>
+<p>我们使用<code>*y</code>来访问可变引用<code>y</code>所指向的数据，而不是可变引用本身。接着可以修改它的数据，在这里对其加一。</p>
 <p>引用并不是智能指针，他们只是引用指向的一个值，所以这个解引用操作是很直接的。智能指针还会储存指针或数据的元数据。当解引用一个智能指针时，我们只想要数据，而不需要元数据。我们希望能在使用常规引用的地方也能使用智能指针。为此，可以通过实现<code>Deref</code> trait 来重载<code>*</code>运算符的行为。</p>
 <p>列表 15-7 展示了一个定义为储存 mp3 数据和元数据的结构体通过<code>Deref</code> trait 来重载<code>*</code>的例子。<code>Mp3</code>，在某种意义上是一个智能指针：它拥有包含音频的<code>Vec&lt;u8&gt;</code>数据。另外，它储存了一些可选的元数据，在这个例子中是音频数据中艺术家和歌曲的名称。我们希望能够方便的访问音频数据而不是元数据，所以需要实现<code>Deref</code> trait 来返回音频数据。实现<code>Deref</code> trait 需要一个叫做<code>deref</code>的方法，它借用<code>self</code>并返回其内部数据：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -8421,7 +8420,7 @@ struct that holds mp3 file data and metadata</span></p>
 <p>没有<code>Deref</code> trait 的话，编译器只能解引用<code>&amp;</code>引用，而<code>my_favorite_song</code>并不是（它是一个<code>Mp3</code>结构体）。通过<code>Deref</code> trait，编译器知道实现了<code>Deref</code> trait 的类型有一个返回引用的<code>deref</code>方法（在这个例子中，是<code>&amp;self.audio</code>因为列表 15-7 中的<code>deref</code>的定义）。所以为了得到一个<code>*</code>可以解引用的<code>&amp;</code>引用，编译器将<code>*my_favorite_song</code>展开为如下：</p>
 <pre><code class="language-rust,ignore">*(my_favorite_song.deref())
 </code></pre>
-<p>这个就是<code>self.audio</code>中的结果值。<code>deref</code>返回一个引用并接下来必需解引用而不是直接返回值的原因是所有权：如果<code>deref</code>方法直接返回值而不是引用，其值将被移动出<code>self</code>。这里和大部分使用解引用运算符的地方并不想获取<code>my_favorite_song.audio</code>的所有权。</p>
+<p>这个就是<code>self.audio</code>中的结果值。<code>deref</code>返回一个引用并接下来必需解引用而不是直接返回值的原因是所有权：如果<code>deref</code>方法直接返回值而不是引用，其值将被移动出<code>self</code>。和大部分使用解引用运算符的地方相同，这里并不想获取<code>my_favorite_song.audio</code>的所有权。</p>
 <p>注意将<code>*</code>替换为<code>deref</code>调用和<code>*</code>调用的过程在每次使用<code>*</code>的时候都会发生一次。<code>*</code>的替换并不会无限递归进行。最终的数据类型是<code>Vec&lt;u8&gt;</code>，它与列表 15-7 中<code>assert_eq!</code>的<code>vec![1, 2, 3]</code>相匹配。</p>
 <a class="header" href="#函数和方法的隐式解引用强制多态" name="函数和方法的隐式解引用强制多态"><h3>函数和方法的隐式解引用强制多态</h3></a>
 <p>Rust 倾向于偏爱明确而不是隐晦，不过一个情况下这并不成立，就是函数和方法的参数的<strong>解引用强制多态</strong>（<em>deref coercions</em>）。解引用强制多态会自动的将指针或智能指针的引用转换为指针内容的引用。解引用强制多态发生于当传递给函数的参数类型不同于函数签名中定义参数类型的时候。解引用强制多态的加入使得 Rust 调用函数或方法时无需很多使用<code>&amp;</code>和<code>*</code>的引用和解引用。</p>
@@ -8446,7 +8445,7 @@ struct that holds mp3 file data and metadata</span></p>
 <li>从<code>&amp;mut T</code>到<code>&amp;U</code>当<code>T: Deref&lt;Target=U&gt;</code>。</li>
 </ul>
 <p>头两个情况除了可变性之外是相同的：如果有一个<code>&amp;T</code>，而<code>T</code>实现了返回<code>U</code>类型的<code>Deref</code>，可以直接得到<code>&amp;U</code>。对于可变引用也是一样。最后一个有些微妙：如果有一个可变引用，它也可以强转为一个不可变引用。反之则是_不可能_的：不可变引用永远也不能强转为可变引用。</p>
-<p><code>Deref</code> trait 对于智能指针模式十分重要的原因在于智能指针可以被看作普通引用并用于期望使用引用的地方。例如，无需重新编写方法和函数来直接获取智能指针。</p>
+<p><code>Deref</code> trait 对于智能指针模式十分重要的原因在于智能指针可以被看作普通引用并被用于期望使用普通引用的地方。例如，无需重新编写方法和函数来直接获取智能指针。</p>
 <a class="header" href="#drop-trait-运行清理代码" name="drop-trait-运行清理代码"><h2><code>Drop</code> Trait 运行清理代码</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch15-03-drop.md">ch15-03-drop.md</a>
@@ -8454,9 +8453,9 @@ struct that holds mp3 file data and metadata</span></p>
 commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 </blockquote>
 <p>对于智能指针模式来说另一个重要的 trait 是<code>Drop</code>。<code>Drop</code>运行我们在值要离开作用域时执行一些代码。智能指针在被丢弃时会执行一些重要的清理工作，比如释放内存或减少引用计数。更一般的来讲，数据类型可以管理多于内存的资源，比如文件或网络连接，而使用<code>Drop</code>在代码处理完他们之后释放这些资源。我们在智能指针上下文中讨论<code>Drop</code>是因为其功能几乎总是用于实现智能指针。</p>
-<p>在其他一些语言中，必须每次总是必须记住在使用完智能指针实例后调用清理内存或资源的代码。如果忘记的话，运行代码的系统可能会因为负荷过重而崩溃。在 Rust 中，可以指定一些代码应该在值离开作用域时被执行，而编译器会自动插入这些代码。这意味着无需记住在所有处理完这些类型实例后调用清理代码，而仍然不会泄露资源！</p>
+<p>在其他一些语言中，我们不得不记住在每次使用完智能指针实例后调用清理内存或资源的代码。如果忘记的话，运行代码的系统可能会因为负荷过重而崩溃。在 Rust 中，可以指定一些代码应该在值离开作用域时被执行，而编译器会自动插入这些代码。这意味着无需记住在所有处理完这些类型实例后调用清理代码，而仍然不会泄露资源！</p>
 <p>指定在值离开作用域时应该执行的代码的方式是实现<code>Drop</code> trait。<code>Drop</code> trait 要求我们实现一个叫做<code>drop</code>的方法，它获取一个<code>self</code>的可变引用。</p>
-<p>列表 15-8 展示了并没有实际功能的结构体<code>CustomSmartPointer</code>，不过我们会在创建实例之后打印出<code>CustomSmartPointer created.</code>，而在实例离开作用域时打印出<code>Dropping CustomSmartPointer!</code>，这样就能看出哪些代码被执行了。不同于<code>println!</code>语句，我们在智能指针需要执行清理代码时使用<code>drop</code>：</p>
+<p>列表 15-8 展示了并没有实际功能的结构体<code>CustomSmartPointer</code>，不过我们会在创建实例之后打印出<code>CustomSmartPointer created.</code>，而在实例离开作用域时打印出<code>Dropping CustomSmartPointer!</code>，这样就能看出每一段代码是何时被执行的。实际的项目中，我们应该在<code>drop</code>中清理任何智能指针运行所需要的资源，而不是这个例子中的<code>println!</code>语句：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct CustomSmartPointer {
     data: String,
@@ -8477,7 +8476,7 @@ fn main() {
 <p><span class="caption">Listing 15-8: A <code>CustomSmartPointer</code> struct that
 implements the <code>Drop</code> trait, where we could put code that would clean up after
 the <code>CustomSmartPointer</code>.</span></p>
-<p><code>Drop</code> trait 位于 prelude 中，所以无需导入它。<code>drop</code>方法的实现调用了<code>println!</code>；这里是你需要实际需要放入关闭套接字代码的地方。在<code>main</code>函数中，我们创建一个<code>CustomSmartPointer</code>的新实例并打印出<code>CustomSmartPointer created.</code>以便在运行时知道代码运行到此出。在<code>main</code>的结尾，<code>CustomSmartPointer</code>的实例会离开作用域。注意我们没有显式调用<code>drop</code>方法：</p>
+<p><code>Drop</code> trait 位于 prelude 中，所以无需导入它。<code>drop</code>方法的实现调用了<code>println!</code>；这里是你需要放入实际关闭套接字代码的地方。在<code>main</code>函数中，我们创建一个<code>CustomSmartPointer</code>的新实例并打印出<code>CustomSmartPointer created.</code>以便在运行时知道代码运行到此处。在<code>main</code>的结尾，<code>CustomSmartPointer</code>的实例会离开作用域。注意我们没有显式调用<code>drop</code>方法：</p>
 <p>当运行这个程序，我们会看到：</p>
 <pre><code>CustomSmartPointer created.
 Wait for it...
@@ -8557,7 +8556,7 @@ to share ownership of a third list won't work</span></p>
    implement the `Copy` trait
 </code></pre>
 <p><code>Cons</code>成员拥有其储存的数据，所以当创建<code>b</code>列表时将<code>a</code>的所有权移动到了<code>b</code>。接着当再次尝使用<code>a</code>创建<code>c</code>时，这不被允许因为<code>a</code>的所有权已经被移动。</p>
-<p>相反可以改变<code>Cons</code>的定义来存放一个引用，不过接着必须指定生命周期参数，而且也必须以使得列表的每一个元素都与列表本身存在的一样久那样构造列表的元素。否则借用检查器甚至都不会允许我们编译代码。</p>
+<p>相反可以改变<code>Cons</code>的定义来存放一个引用，不过接着必须指定生命周期参数，而且在构造列表时，也必须使列表中的每一个元素都至少与列表本身存在的一样久。否则借用检查器甚至都不会允许我们编译代码。</p>
 <p>如列表 15-12 所示，可以将<code>List</code>的定义从<code>Box&lt;T&gt;</code>改为<code>Rc&lt;T&gt;</code>：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">enum List {
@@ -8578,7 +8577,7 @@ fn main() {
 <code>Rc&lt;T&gt;</code></span></p>
 <p>注意必须为<code>Rc</code>增加<code>use</code>语句因为它不在 prelude 中。在<code>main</code>中创建了存放 5 和 10 的列表并将其存放在一个叫做<code>a</code>的新的<code>Rc</code>中。接着当创建<code>b</code>和<code>c</code>时，我们对<code>a</code>调用了<code>clone</code>方法。</p>
 <a class="header" href="#克隆rct会增加引用计数" name="克隆rct会增加引用计数"><h3>克隆<code>Rc&lt;T&gt;</code>会增加引用计数</h3></a>
-<p>之前我们见过<code>clone</code>方法，当时使用它来创建某些数据的完整拷贝。但是对于<code>Rc&lt;T&gt;</code>来说，它并不创建一个完整的拷贝。<code>Rc&lt;T&gt;</code>存放了<strong>引用计数</strong>，也就是说，一个存在多少个克隆的数量。让我们像列表 15-13 那样在创建<code>c</code>时增加一个内部作用域，并在不同的位置打印出关联函数<code>Rc::strong_count</code>的结果。<code>Rc::strong_count</code>返回传递给它的<code>Rc</code>值的引用计数，而在本章的稍后部分介绍避免引用循环时讲到它为什么叫做<code>strong_count</code>。</p>
+<p>之前我们见过<code>clone</code>方法，当时使用它来创建某些数据的完整拷贝。但是对于<code>Rc&lt;T&gt;</code>来说，它并不创建一个完整的拷贝。<code>Rc&lt;T&gt;</code>存放了<strong>引用计数</strong>，也就是说，一个存在多少个克隆的计数器。让我们像列表 15-13 那样在创建<code>c</code>时增加一个内部作用域，并在不同的位置打印出关联函数<code>Rc::strong_count</code>的结果。<code>Rc::strong_count</code>返回传递给它的<code>Rc</code>值的引用计数，而在本章的稍后部分介绍避免引用循环时讲到它为什么叫做<code>strong_count</code>。</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># enum List {
 #     Cons(i32, Rc&lt;List&gt;),
@@ -8630,8 +8629,8 @@ commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 <li>引用必须总是有效的。</li>
 </ol>
 <p>对于引用和<code>Box&lt;T&gt;</code>，借用规则的不可变性作用于编译时。对于<code>RefCell&lt;T&gt;</code>，这些不可变性作用于<strong>运行时</strong>。对于引用，如果违反这些规则，会得到一个编译错误。而对于<code>RefCell&lt;T&gt;</code>，违反这些规则会<code>panic!</code>。</p>
-<p>Rust 编译器执行的静态分析时天生保守的。代码的一些属性则不可能通过分析代码发现：其中最著名的就是停机问题（停机问题），这超出了本书的范畴，不过如果你感兴趣的话这是一个值得研究的有趣主题。</p>
-<p>因为一些分析是不可能的，Rust 编译器在其不确定的时候甚至都不尝试猜测，所以说它是保守的而且有时会拒绝事实上不会违反 Rust 保证的正确的程序。换句话说，如果 Rust 接受不正确的程序，那么人们也就不会相信 Rust 所做的保证了。如果 Rust 拒绝正确的程序，会给程序员带来不变，但不会带来灾难。<code>RefCell&lt;T&gt;</code>正是用于当你知道代码遵守借用规则，而编译器不能理解的时候。</p>
+<p>Rust 编译器执行的静态分析天生是保守的。代码的一些属性则不可能通过分析代码发现：其中最著名的就是停机问题（停机问题），这超出了本书的范畴，不过如果你感兴趣的话这是一个值得研究的有趣主题。</p>
+<p>因为一些分析是不可能的，Rust 编译器在其不确定的时候甚至都不尝试猜测，所以说它是保守的而且有时会拒绝事实上不会违反 Rust 保证的正确的程序。换句话说，如果 Rust 接受不正确的程序，那么人们也就不会相信 Rust 所做的保证了。如果 Rust 拒绝正确的程序，会给程序员带来不便，但不会带来灾难。<code>RefCell&lt;T&gt;</code>正是用于当你知道代码遵守借用规则，而编译器不能理解的时候。</p>
 <p>类似于<code>Rc&lt;T&gt;</code>，<code>RefCell&lt;T&gt;</code>只能用于单线程场景。在并发章节会介绍如何在多线程程序中使用<code>RefCell&lt;T&gt;</code>的功能。现在所有你需要知道的就是如果尝试在多线程上下文中使用<code>RefCell&lt;T&gt;</code>，会得到一个编译错误。</p>
 <p>对于引用，可以使用<code>&amp;</code>和<code>&amp;mut</code>语法来分别创建不可变和可变的引用。不过对于<code>RefCell&lt;T&gt;</code>，我们使用<code>borrow</code>和<code>borrow_mut</code>方法，它是<code>RefCell&lt;T&gt;</code>拥有的安全 API 的一部分。<code>borrow</code>返回<code>Ref</code>类型的智能指针，而<code>borrow_mut</code>返回<code>RefMut</code>类型的智能指针。这两个类型实现了<code>Deref</code>所以可以被当作常规引用处理。<code>Ref</code>和<code>RefMut</code>动态的借用所有权，而他们的<code>Drop</code>实现也动态的释放借用。</p>
 <p>列表 15-14 展示了如何使用<code>RefCell&lt;T&gt;</code>来使函数不可变的和可变的借用它的参数。注意<code>data</code>变量使用<code>let data</code>而不是<code>let mut data</code>来声明为不可变的，而<code>a_fn_that_mutably_borrows</code>则允许可变的借用数据并修改它！</p>
@@ -8700,7 +8699,7 @@ thread 'main' panicked at 'already borrowed: BorrowMutError',
 /stable-dist-rustc/build/src/libcore/result.rs:868
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 </code></pre>
-<p>这个运行时<code>BorrowMutError</code>类似于编译错误：它表明已经可变的借用过<code>s</code>一次了，所以不允许再次借用它。我们并没有绕过借用规则，只是选择让 Rust 在运行时而不是编译时执行他们。你可以选择在任何时候任何地方使用<code>RefCell&lt;T&gt;</code>，不过除了不得不编写很多<code>RefCell</code>之外，最终还是可能会发现其中的问题（可能是在生产环境而不是开发环境）。另外，在运行时检查借用规则有性能惩罚。</p>
+<p>这个运行时<code>BorrowMutError</code>类似于编译错误：它表明我们已经可变得借用过一次<code>s</code>了，所以不允许再次借用它。我们并没有绕过借用规则，只是选择让 Rust 在运行时而不是编译时执行他们。你可以选择在任何时候任何地方使用<code>RefCell&lt;T&gt;</code>，不过除了不得不编写很多<code>RefCell</code>之外，最终还是可能会发现其中的问题（可能是在生产环境而不是开发环境）。另外，在运行时检查借用规则有性能惩罚。</p>
 <a class="header" href="#结合rct和refcellt来拥有多个可变数据所有者" name="结合rct和refcellt来拥有多个可变数据所有者"><h3>结合<code>Rc&lt;T&gt;</code>和<code>RefCell&lt;T&gt;</code>来拥有多个可变数据所有者</h3></a>
 <p>那么为什么要权衡考虑选择引入<code>RefCell&lt;T&gt;</code>呢？好吧，还记得我们说过<code>Rc&lt;T&gt;</code>只能拥有一个<code>T</code>的不可变引用吗？考虑到<code>RefCell&lt;T&gt;</code>是不可变的，但是拥有内部可变性，可以将<code>Rc&lt;T&gt;</code>与<code>RefCell&lt;T&gt;</code>结合来创造一个既有引用计数又可变的类型。列表 15-15 展示了一个这么做的例子，再次回到列表 15-5 中的 cons list。在这个例子中，不同于在 cons list 中储存<code>i32</code>值，我们储存一个<code>Rc&lt;RefCell&lt;i32&gt;&gt;</code>值。希望储存这个类型是因为其可以拥有不属于列表一部分的这个值的所有者（<code>Rc&lt;T&gt;</code>提供的多个所有者功能），而且还可以改变内部的<code>i32</code>值（<code>RefCell&lt;T&gt;</code>提供的内部可变性功能）：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -8745,11 +8744,11 @@ c after = Cons(RefCell { value: 10 }, Cons(RefCell { value: 15 }, Nil))
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch15-06-reference-cycles.md">ch15-06-reference-cycles.md</a>
 <br>
-commit c49e5ee8859f8eb8f8867cbeafbdf5b802aa5894</p>
+commit 9430a3d28a2121a938d704ce48b15d21062f880e</p>
 </blockquote>
 <p>我们讨论过 Rust 做出的一些保证，例如永远也不会遇到一个空值，而且数据竞争也会在编译时被阻止。Rust 的内存安全保证也使其更难以制造从不被清理的内存，这被称为<strong>内存泄露</strong>。然而 Rust 并不是<strong>不可能</strong>出现内存泄漏，避免内存泄露<strong>并</strong>不是 Rust 的保证之一。换句话说，内存泄露是安全的。</p>
 <p>在使用<code>Rc&lt;T&gt;</code>和<code>RefCell&lt;T&gt;</code>时，有可能创建循环引用，这时各个项相互引用并形成环。这是不好的因为每一项的引用计数将永远也到不了 0，其值也永远也不会被丢弃。让我们看看这是如何发生的以及如何避免它。</p>
-<p>在列表 15-16 中，我们将使用列表 15-5 中<code>List</code>定义的另一个变体。我们将回到储存<code>i32</code>值作为<code>Cons</code>成员的第一个元素。现在<code>Cons</code>成员的第二个元素是<code>RefCell&lt;Rc&lt;List&gt;&gt;</code>：这时就不能修改<code>i32</code>值了，但是能够修改<code>Cons</code>成员指向的哪个<code>List</code>。还需要增加一个<code>tail</code>方法来方便我们在拥有一个<code>Cons</code>成员时访问第二个项：</p>
+<p>在列表 15-16 中，我们将使用列表 15-5 中<code>List</code>定义的另一个变体。我们将回到储存<code>i32</code>值作为<code>Cons</code>成员的第一个元素。现在<code>Cons</code>成员的第二个元素是<code>RefCell&lt;Rc&lt;List&gt;&gt;</code>：这时就不能修改<code>i32</code>值了，但是能够修改<code>Cons</code>成员指向的那个<code>List</code>。还需要增加一个<code>tail</code>方法来方便我们在拥有一个<code>Cons</code>成员时访问第二个项：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">#[derive(Debug)]
 enum List {
@@ -8826,7 +8825,7 @@ pointing to each other</span></p>
 <p>举例来说，对于像图这样的数据结构，为了创建父节点指向子节点的边和以相反方向从子节点指向父节点的边，有时需要创建这样的引用循环。如果一个方向拥有所有权而另一个方向没有，对于模拟这种数据关系的一种不会创建引用循环和内存泄露的方式是使用<code>Weak&lt;T&gt;</code>。接下来让我们探索一下！</p>
 <a class="header" href="#避免引用循环将rct变为weakt" name="避免引用循环将rct变为weakt"><h3>避免引用循环：将<code>Rc&lt;T&gt;</code>变为<code>Weak&lt;T&gt;</code></h3></a>
 <p>Rust 标准库中提供了<code>Weak&lt;T&gt;</code>，一个用于存在引用循环但只有一个方向有所有权的智能指针。我们已经展示过如何克隆<code>Rc&lt;T&gt;</code>来增加引用的<code>strong_count</code>；<code>Weak&lt;T&gt;</code>是一种引用<code>Rc&lt;T&gt;</code>但不增加<code>strong_count</code>的方式：相反它增加<code>Rc</code>引用的<code>weak_count</code>。当<code>Rc</code>离开作用域，其内部值会在<code>strong_count</code>为 0 的时候被丢弃，即便<code>weak_count</code>不为 0 。为了能够从<code>Weak&lt;T&gt;</code>中获取值，首先需要使用<code>upgrade</code>方法将其升级为<code>Option&lt;Rc&lt;T&gt;&gt;</code>。升级<code>Weak&lt;T&gt;</code>的结果在<code>Rc</code>还未被丢弃时是<code>Some</code>，而在<code>Rc</code>被丢弃时是<code>None</code>。因为<code>upgrade</code>返回一个<code>Option</code>，我们知道 Rust 会确保<code>Some</code>和<code>None</code>的情况都被处理并不会尝试使用一个无效的指针。</p>
-<p>不同于列表 15-17 中每个项只知道它的下一项，加入我们需要一个树，它的项知道它的子项<strong>和</strong>父项。</p>
+<p>不同于列表 15-17 中每个项只知道它的下一项，假如我们需要一个树，它的项知道它的子项<strong>和</strong>父项。</p>
 <p>让我们从一个叫做<code>Node</code>的存放拥有所有权的<code>i32</code>值和其子<code>Node</code>值的引用的结构体开始：</p>
 <pre><code class="language-rust">use std::rc::Rc;
 use std::cell::RefCell;
@@ -8954,27 +8953,27 @@ examining strong and weak reference counts of <code>leaf</code> and <code>branch
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>现在我们学习了如何选择不同类型的智能指针来选择不同的保证并与 Rust 的常规引用向取舍。<code>Box&lt;T&gt;</code>有一个已知的大小并指向分配在堆上的数据。<code>Rc&lt;T&gt;</code>记录了堆上数据的引用数量这样就可以拥有多个所有者。<code>RefCell&lt;T&gt;</code>和其内部可变性使其可以用于需要不可变类型，但希望在运行时而不是编译时检查借用规则的场景。</p>
 <p>我们还介绍了提供了很多智能指针功能的 trait <code>Deref</code>和<code>Drop</code>。同时探索了形成引用循环和造成内存泄漏的可能性，以及如何使用<code>Weak&lt;T&gt;</code>避免引用循环。</p>
-<p>如果本章内容引起了你的兴趣并希望现在就实现你自己的智能指针的话，请阅读 <a href="https://doc.rust-lang.org/stable/nomicon/vec.html">The Nomicon</a> 来获取更多有用的信息。</p>
-<p>接下来，让我们谈谈 Rust 的并发。我们还会学习到一些新的堆并发有帮助的智能指针。</p>
+<p>如果本章内容引起了你的兴趣并希望现在就实现你自己的智能指针的话，请阅读 <a href="https://doc.rust-lang.org/stable/nomicon/">The Nomicon</a> 来获取更多有用的信息。</p>
+<p>接下来，让我们谈谈 Rust 的并发。我们还会学习到一些新的对并发有帮助的智能指针。</p>
 <a class="header" href="#无畏并发" name="无畏并发"><h1>无畏并发</h1></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch16-00-concurrency.md">ch16-00-concurrency.md</a>
 <br>
 commit da15de39eaabd50100d6fa662c653169254d9175</p>
 </blockquote>
-<p>确保内存安全并不是 Rust 的唯一目标：作为一个能更好的处理并发和并行编程一直是 Rust 的另一个主要目标。
+<p>确保内存安全并不是 Rust 的唯一目标：更好的处理并发和并行编程一直是 Rust 的另一个主要目标。
 <strong>并发编程</strong>（concurrent programming）代表程序的不同部分相互独立的执行，而<strong>并行编程</strong>代表程序不同部分同时执行，这两个概念在计算机拥有更多处理器可供程序利用时变得更加重要。由于历史的原因，在此类上下文中编程一直是困难且容易出错的：Rust 希望能改变这一点。</p>
 <p>最开始，我们认为内存安全和防止并发问题是需要通过两个不同的方法解决的两个相互独立的挑战。然而，随着时间的推移，我们发现所有权和类型系统是一系列解决内存安全<strong>和</strong>并发问题的强用力的工具！通过改进所有权和类型检查，很多并发错误在 Rust 中都是<strong>编译时</strong>错误，而不是运行时错误。我们给 Rust 的这一部分起了一个绰号<strong>无畏并发</strong>（<em>fearless concurrency</em>）。无畏并发意味着 Rust 不光允许你自信代码不会出现诡异的错误，也让你可以轻易重构这种代码而无需担心会引入新的 bug。</p>
 <blockquote>
-<p>注意：对于 Rust 的口号<strong>无畏并发</strong>，这里用<strong>并发</strong>指代很多问题而不是更精确的区分<strong>并发和（或）并行</strong>，是处于简化问题的原因。如果这是一本专注于并发和/或并行的书，我们肯定会更精确的。对于本章，请自行脑补任何<strong>并发</strong>为<strong>并发和（或）并行</strong>。</p>
+<p>注意：对于 Rust 的口号<strong>无畏并发</strong>，这里用<strong>并发</strong>指代很多问题而不是更精确的区分<strong>并发和（或）并行</strong>，是出于简化问题的原因。如果这是一本专注于并发和/或并行的书，我们肯定会更精确的。对于本章，当我们谈到<strong>并发</strong>时，请自行替换为<strong>并发和（或）并行</strong>。</p>
 </blockquote>
-<p>很多语言对于其所提供的处理并发并发问题的解决方法是非常固执己见的。这是一个非常合理的策略，尤其是对于更高级的语言来说，不过对于底层语言来说可没有奢侈的选择。底层语言被期望为能在任何给定的场景中启用提供最高性能的方法，同时他们对硬件有更少的抽象。因此，Rust 给了我们多种工具来以适合场景和要求的方式来为问题建模。</p>
+<p>很多语言所提供的处理并发问题的解决方法都非常有特色，尤其是对于更高级的语言，这是一个非常合理的策略。然而对于底层语言则没有奢侈的选择。在任何给定的情况下，我们都期望底层语言可以提供最高的性能，并且对硬件有更薄的抽象。因此，Rust 给了我们多种工具，并以适合实际情况和需求的方式来为问题建模。</p>
 <p>如下是本章将要涉及到的内容：</p>
 <ul>
-<li>如果创建线程来同时运行多段代码。</li>
+<li>如何创建线程来同时运行多段代码。</li>
 <li>并发<strong>消息传递</strong>（<em>Message passing</em>），其中通道（channel）被用来在线程间传递消息。</li>
 <li>并发<strong>共享状态</strong>（<em>Shared state</em>），其中多个线程可以访问同一片数据。</li>
-<li><code>Sync</code>和<code>Send</code> trait，他们允许 Rust 的并发保证能扩展到用户定义的和标准库中提供的类型中。</li>
+<li><code>Sync</code>和<code>Send</code> trait，他们允许 Rust 的并发保证能被扩展到用户定义的和标准库中提供的类型中。</li>
 </ul>
 <a class="header" href="#使用线程同时运行代码" name="使用线程同时运行代码"><h2>使用线程同时运行代码</h2></a>
 <blockquote>
@@ -8984,10 +8983,10 @@ commit 55b294f20fc846a13a9be623bf322d8b364cee77</p>
 </blockquote>
 <p>在今天使用的大部分操作系统中，当程序执行时，操作系统运行代码的上下文称为<strong>进程</strong>（<em>process</em>）。操作系统可以运行很多进程，而操作系统也管理这些进程使得多个程序可以在电脑上同时运行。</p>
 <p>我们可以将每个进程运行一个程序的概念再往下抽象一层：程序也可以在其上下文中同时运行独立的部分。这个功能叫做<strong>线程</strong>（<em>thread</em>）。</p>
-<p>将程序需要执行的计算拆分到多个线程中可以提高性能，因为程序可以在同时进行很多工作。不过使用线程会增加程序复杂性。因为线程是同时运行的，所以无法预先保证不同线程中的代码的执行顺序。这可能会由于线程以不一致的顺序访问数据或资源而导致竞争状态，或由于两个线程相互阻止对方继续运行而造成死锁，以及仅仅出现于特定场景并难以稳定重现的 bug。Rust 减少了这些或那些使用线程的负面影响，不过在多线程上下文中编程仍然需要以与只期望在单个线程中编程不同的方式思考和组织代码。</p>
+<p>将程序需要执行的计算拆分到多个线程中可以提高性能，因为程序可以在同时进行很多工作。不过使用线程会增加程序复杂性。因为线程是同时运行的，所以无法预先保证不同线程中的代码的执行顺序。这可能会由于线程以不一致的顺序访问数据或资源而导致竞争状态，或由于两个线程相互阻止对方继续运行而造成死锁，以及仅仅出现于特定场景并难以稳定重现的 bug。Rust 减少了这些或那些使用线程的负面影响，不过在多线程上下文中编程，相比只期望在单个线程中运行的程序，仍然要采用不同的思考方式和代码结构。</p>
 <p>编程语言有一些不同的方法来实现线程。很多操作系统提供了创建新线程的 API。另外，很多编程语言提供了自己的特殊的线程实现。编程语言提供的线程有时被称作<strong>轻量级</strong>（<em>lightweight</em>）或<strong>绿色</strong>（<em>green</em>）线程。这些语言将一系列绿色线程放入不同数量的操作系统线程中执行。因为这个原因，语言调用操作系统 API 创建线程的模型有时被称为 <em>1:1</em>，一个 OS 线程对应一个语言线程。绿色线程模型被称为 <em>M:N</em> 模型，<code>M</code>个绿色线程对应<code>N</code>个 OS 线程，这里<code>M</code>和<code>N</code>不必相同。</p>
-<p>每一个模型都有其自己的优势和取舍。对于 Rust 来说最重要的取舍是运行时支持。<strong>运行时</strong>是一个令人迷惑的概念；在不同上下文中它可能有不同的含义。这里其代表二进制文件中包含的语言自身的代码。对于一些语言，这些代码是庞大的，另一些则很小。通俗的说，“没有运行时”通常被人们用来指代“小运行时”，因为任何非汇编语言都存在一定数量的运行时。更小的运行时拥有更少的功能不过其优势在于更小的二进制输出。更小的二进制文件更容易在更多上下文中与其他语言结合。虽然很多语言觉得增加运行时来换取更多功能没有什么问题，但是 Rust 需要做到几乎没有运行时，同时不能在为了维持性能而能够在 C 语言中调用方面做出妥协。</p>
-<p>绿色线程模型功能要求更大的运行时来管理这些线程。为此，Rust 标准库只提供了 1:1 线程模型实现。因为 Rust 是这么一个底层语言，所以有相应的 crate 实现了 M:N 线程模型，如果你宁愿牺牲性能来换取例如更多的线程控制和更低的上下文切换消耗。</p>
+<p>每一个模型都有其自己的优势和取舍。对于 Rust 来说最重要的取舍是运行时支持。<strong>运行时</strong>是一个令人迷惑的概念；在不同上下文中它可能有不同的含义。这里其代表二进制文件中包含的语言自身的代码。对于一些语言，这些代码是庞大的，另一些则很小。通俗的说，“没有运行时”通常被人们用来指代“小运行时”，因为任何非汇编语言都存在一定数量的运行时。更小的运行时拥有更少的功能不过其优势在于更小的二进制输出。更小的二进制文件更容易在更多上下文中与其他语言结合。虽然很多语言觉得增加运行时来换取更多功能没有什么问题，但是 Rust 需要做到几乎没有运行时，同时为了保持高性能必需能够调用 C 语言，这点也是不能妥协的。</p>
+<p>绿色线程模型功能要求更大的运行时来管理这些线程。为此，Rust 标准库只提供了 1:1 线程模型实现。因为 Rust 是这么一个底层语言，所以有相应的 crate 实现了 M:N 线程模型，如果你宁愿牺牲性能来换取例如更好的线程运行控制和更低的上下文切换成本。</p>
 <p>现在我们明白了 Rust 中的线程是如何定义的，让我们开始探索如何使用标准库提供的线程相关的 API吧。</p>
 <a class="header" href="#使用spawn创建新线程" name="使用spawn创建新线程"><h3>使用<code>spawn</code>创建新线程</h3></a>
 <p>为了创建一个新线程，调用<code>thread::spawn</code>函数并传递一个闭包（第十三章学习了闭包），它包含希望在新线程运行的代码。列表 16-1 中的例子在新线程中打印了一些文本而其余的文本在主线程中打印：</p>
@@ -9147,7 +9146,7 @@ fn main() {
 </code></pre>
 <p><span class="caption">Listing 16-4: A thread with a closure that attempts to
 capture a reference to <code>v</code> from a main thread that drops <code>v</code></span></p>
-<p>这些代码可以运行，而新建线程则可能直接就出错了并完全没有机会运行。新建线程内部有一个<code>v</code>的引用，不过主线程仍在执行：它立刻丢弃了<code>v</code>，使用了第十五章提到的显式丢弃其参数的<code>drop</code>函数。接着，新建线程开始执行，现在<code>v</code>是无效的了，所以它的引用也就是无效得的。噢，这太糟了！</p>
+<p>这些代码可以运行，而新建线程则可能直接就出错了并完全没有机会运行。新建线程内部有一个<code>v</code>的引用，不过主线程仍在执行：它立刻丢弃了<code>v</code>，使用了第十五章提到的显式丢弃其参数的<code>drop</code>函数。接着，新建线程开始执行，现在<code>v</code>是无效的了，所以它的引用也就是无效的。噢，这太糟了！</p>
 <p>为了修复这个问题，我们可以听取错误信息的建议：</p>
 <pre><code>help: to force the closure to take ownership of `v` (and any other referenced
 variables), use the `move` keyword, as shown:
@@ -9290,7 +9289,7 @@ it down the channel</span></p>
 <p>我们的并发错误会造成一个编译时错误！<code>send</code>获取其参数的所有权并移动这个值归接收者所有。这个意味着不可能意外的在发送后再次使用这个值；所有权系统检查一切是否合乎规则。</p>
 <p>在这一点上，消息传递非常类似于 Rust 的单所有权系统。消息传递的拥护者出于相似的原因支持消息传递，就像 Rustacean 们欣赏 Rust 的所有权一样：单所有权意味着特定类型问题的消失。如果一次只有一个线程可以使用某些内存，就没有出现数据竞争的机会。</p>
 <a class="header" href="#发送多个值并观察接收者的等待" name="发送多个值并观察接收者的等待"><h3>发送多个值并观察接收者的等待</h3></a>
-<p>列表 16-8 中的代码可以编译和运行，不过这并不是很有趣：通过它难以看出两个独立的线程在一个通道上相互通讯。列表 16-10 则有一些改进会证明这些代码是并发执行的：新建线程现在会发送多个消息并在每个消息之间暂定一段时间。</p>
+<p>列表 16-8 中的代码可以编译和运行，不过这并不是很有趣：通过它难以看出两个独立的线程在一个通道上相互通讯。列表 16-10 则有一些改进会证明这些代码是并发执行的：新建线程现在会发送多个消息并在每个消息之间暂停一段时间。</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">use std::thread;
 use std::sync::mpsc;
@@ -9402,18 +9401,18 @@ commit 9df612e93e038b05fc959db393c15a5402033f47</p>
 communicating.</p>
 <p>不要共享内存来通讯；而是要通讯来共享内存。</p>
 </blockquote>
-<p>那么“共享内存来通讯”看起来是怎样的呢？共享内存并发有点像多所有权：多个线程可以同时访问相同的内存位置。正如第十五章中智能指针使得多所有权成为可能时我们所看到的，这会增加额外的复杂性，因为需要以某种方式管理这些不同的所有者。</p>
-<p>但是 Rust 的类型系统和所有权可以很好的帮助我们正确的进行管理。例如，让我们看看一个共享内存中更常见的并发原语：互斥器（mutexes）。</p>
+<p>那么“共享内存来通讯”是怎样的呢？共享内存并发有点像多所有权：多个线程可以同时访问相同的内存位置。第十五章介绍了智能指针如何使得多所有权成为可能，然而这会增加额外的复杂性，因为需要以某种方式管理这些不同的所有者。</p>
+<p>不过 Rust 的类型系统和所有权可以很好的帮助我们，正确的管理它们。以共享内存中更常见的并发原语：互斥器（mutexes）为例，让我们看看具体的情况。</p>
 <a class="header" href="#互斥器一次只允许一个线程访问数据" name="互斥器一次只允许一个线程访问数据"><h3>互斥器一次只允许一个线程访问数据</h3></a>
-<p><strong>互斥器</strong>（<em>mutex</em>）是一个用于共享内存的并发原语。它是“mutual exclusion”的缩写，也就是说，任何给定时间它只允许一个线程访问某些数据。互斥器以难以使用著称，因为你不得不记住：</p>
+<p><strong>互斥器</strong>（<em>mutex</em>）是一种用于共享内存的并发原语。它是“mutual exclusion”的缩写，也就是说，任意时间，它只允许一个线程访问某些数据。互斥器以难以使用著称，因为你不得不记住：</p>
 <ol>
-<li>必须记住在使用数据之前尝试获取锁。</li>
-<li>一旦处理完被互斥器所保护的数据之后，必须记得解锁数据这样其他线程才能够获取锁。</li>
+<li>在使用数据之前尝试获取锁。</li>
+<li>处理完被互斥器所保护的数据之后，必须解锁数据，这样其他线程才能够获取锁。</li>
 </ol>
-<p>对于一个现实中的互斥器的例子，想象一下在一个会议中的专门小组讨论会上，不过只有一个麦克风。在一个小组成员可能发言之前，他们必须请求或示意他们需要使用麦克风。一旦得到了麦克风，他们可以发言任意长的时间，接着将麦克风交给系一个希望讲话的小组成员。如果小组成员在没有麦克风的时候就开始叫喊或者在其他成员发言结束之前就取得麦克风将是很无理的。如果对这个共享的麦克风的管理因为任何这些原因出现问题，讨论会将无法如期进行。</p>
-<p>正确的管理互斥器是异常复杂的，这也就是为什么这么多人都热衷于通道。然而，在 Rust 中，得益于类型系统和所有权，我们不可能会在锁和解锁上出错。</p>
+<p>现实中也有互斥器的例子，想象一下在一个会议中，只有一个麦克风。如果一个成员要发言，他必须请求使用麦克风。一旦得到了麦克风，他可以畅所欲言，然后将麦克风交给下一个希望讲话的成员。如果成员在没有麦克风的时候就开始叫喊，或者在其他成员发言结束之前就拿走麦克风，是很不合适的。如果这个共享的麦克风因为此类原因而出现问题，会议将无法正常进行。</p>
+<p>正确的管理互斥器异常复杂，这也是许多人之所以热衷于通道的原因。然而，在 Rust 中，得益于类型系统和所有权，我们不会在锁和解锁上出错。</p>
 <a class="header" href="#mutext的-api" name="mutext的-api"><h3><code>Mutex&lt;T&gt;</code>的 API</h3></a>
-<p>让我们看看列表 16-12 中使用互斥器的例子，现在并不涉及到多线程：</p>
+<p>让我们看看列表 16-12 中使用互斥器的例子，现在不涉及多线程：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">use std::sync::Mutex;
 
@@ -9430,12 +9429,12 @@ fn main() {
 </code></pre>
 <p><span class="caption">Listing 16-12: Exploring the API of <code>Mutex&lt;T&gt;</code> in a
 single threaded context for simplicity</span></p>
-<p>与很多类型一样，我们通过叫做<code>new</code>的关联函数来创建一个<code>Mutex&lt;T&gt;</code>。为了访问互斥器中的数据，使用<code>lock</code>方法来获取锁。这个调用会阻塞到直到轮到我们拥有锁为止。如果另一个线程拥有锁接着那个线程 panic 了则这个调用会失败。类似于上一部分列表 16-6 那样，我们暂时使用<code>unwrap()</code>而不是更好的错误处理。请查看第九章中提供的更好的工具。</p>
-<p>一旦获取了锁，就可以将返回值（在这里是<code>num</code>）作为一个数据的可变引用使用了。类型系统是 Rust 如何保证使用值之前必须获取锁的：<code>Mutex&lt;i32&gt;</code>并不是一个<code>i32</code>，所以<strong>必须</strong>获取锁才能使用这个<code>i32</code>值。我们是不会忘记这么做的；类否则型系统是不会允许的。</p>
-<p>与你可能怀疑的一样，<code>Mutex&lt;T&gt;</code>是一个智能指针。好吧，更准确的说，<code>lock</code>调用返回一个叫做<code>MutexGuard</code>的智能指针。类似我们在第十五章见过的智能指针，它实现了<code>Deref</code>来指向其内部数据。另外<code>MutexGuard</code>有一个用来释放锁的<code>Drop</code>实现。这样就不会忘记释放锁了。这在<code>MutexGuard</code>离开作用域时会自动发生，例如它发生于列表 16-12 中内部作用域的结尾。接着可以打印出互斥器的值并发现能够将其内部的<code>i32</code>改为 6。</p>
+<p>像很多类型一样，我们使用关联函数 <code>new</code> 来创建一个 <code>Mutex&lt;T&gt;</code>。使用<code>lock</code>方法获取锁，以访问互斥器中的数据。这个调用会阻塞，直到我们拥有锁为止。如果另一个线程拥有锁，并且那个线程 panic 了，则这个调用会失败。类似于列表 16-6 那样，我们暂时使用 <code>unwrap()</code> 进行错误处理，或者使用第九章中提及的更好的工具。</p>
+<p>一旦获取了锁，就可以将返回值（在这里是<code>num</code>）作为一个数据的可变引用使用了。观察 Rust 类型系统如何保证使用值之前必须获取锁：<code>Mutex&lt;i32&gt;</code>并不是一个<code>i32</code>，所以<strong>必须</strong>获取锁才能使用这个<code>i32</code>值。我们是不会忘记这么做的，因为类型系统不允许。</p>
+<p>你也许会怀疑，<code>Mutex&lt;T&gt;</code>是一个智能指针？是的！更准确的说，<code>lock</code>调用返回一个叫做<code>MutexGuard</code>的智能指针。类似我们在第十五章见过的智能指针，它实现了<code>Deref</code>来指向其内部数据。另外<code>MutexGuard</code>有一个用来释放锁的<code>Drop</code>实现。这样就不会忘记释放锁了。这在<code>MutexGuard</code>离开作用域时会自动发生，例如它发生于列表 16-12 中内部作用域的结尾。接着可以打印出互斥器的值并发现能够将其内部的<code>i32</code>改为 6。</p>
 <a class="header" href="#在线程间共享mutext" name="在线程间共享mutext"><h4>在线程间共享<code>Mutex&lt;T&gt;</code></h4></a>
-<p>现在让我们尝试使用<code>Mutex&lt;T&gt;</code>在多个线程间共享值。我们将启动十个线程，并在每一个线程中对一个计数器值加一，这样计数器将从 0 变为 10。注意接下来的几个例子会有编译错误，而我们将利用这些错误来学习如何使用
-<code>Mutex&lt;T&gt;</code>以及 Rust 又是怎样帮助我们正确使用它的。列表 16-13 是最开始的例子：</p>
+<p>现在让我们尝试使用<code>Mutex&lt;T&gt;</code>在多个线程间共享值。我们将启动十个线程，并在各个线程中对同一个计数器值加一，这样计数器将从 0 变为 10。注意，接下来的几个例子会出现编译错误，而我们将通过这些错误来学习如何使用
+<code>Mutex&lt;T&gt;</code>，以及 Rust 又是如何辅助我们以确保正确。列表 16-13 是最开始的例子：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">use std::sync::Mutex;
 use std::thread;
@@ -9462,8 +9461,8 @@ fn main() {
 </code></pre>
 <p><span class="caption">Listing 16-13: The start of a program having 10 threads
 each increment a counter guarded by a <code>Mutex&lt;T&gt;</code></span></p>
-<p>这里创建了一个<code>counter</code>变量来存放内含<code>i32</code>的<code>Mutex&lt;T&gt;</code>，类似列表 16-12 那样。接下来使用 range 创建了 10 个线程。这里使用了<code>thread::spawn</code>并对所有线程使用了相同的闭包：他们每一个都将调用<code>lock</code>方法来获取<code>Mutex&lt;T&gt;</code>上的锁并对接着互斥器中的值加一。当一个线程结束执行其闭包，<code>num</code>会离开作用域并释放锁这样另一个线程就可以获取它了。</p>
-<p>在主线程中，我们像列表 16-2 那样收集了所有的 join 句柄，并接着每一个的<code>join</code>方法来确保所有线程都会结束。那时，主线程会获取锁并打印出程序的结果。</p>
+<p>这里创建了一个 <code>counter</code> 变量来存放内含 <code>i32</code> 的 <code>Mutex&lt;T&gt;</code>，类似列表 16-12 那样。接下来使用 range 创建了 10 个线程。使用了 <code>thread::spawn</code> 并对所有线程使用了相同的闭包：他们每一个都将调用 <code>lock</code> 方法来获取 <code>Mutex&lt;T&gt;</code> 上的锁，接着将互斥器中的值加一。当一个线程结束执行，<code>num</code> 会离开闭包作用域并释放锁，这样另一个线程就可以获取它了。</p>
+<p>在主线程中，我们像列表 16-2 那样收集了所有的 join 句柄，调用它们的 <code>join</code> 方法来确保所有线程都会结束。之后，主线程会获取锁并打印出程序的结果。</p>
 <p>之前提示过这个例子不能编译，让我们看看为什么！</p>
 <pre><code>error[E0373]: closure may outlive the current function, but it borrows
 `counter`, which is owned by the current function
@@ -9478,10 +9477,10 @@ help: to force the closure to take ownership of `counter` (and any other
 referenced variables), use the `move` keyword, as shown:
    |         let handle = thread::spawn(move || {
 </code></pre>
-<p>这类似于列表 16-5 中解决了的问题。考虑到启动了多个线程，Rust 无法知道这些线程会运行多久而<code>counter</code>是否在每一个线程尝试借用它时仍然保持有效。帮助信息提醒了我们如何解决它：可以使用<code>move</code>来给予每个线程其所有权。试试将这个修改用到闭包上：</p>
+<p>这类似于列表 16-5 中解决了的问题。考虑到启动了多个线程，Rust 无法知道这些线程会运行多久，而在每一个线程尝试借用 <code>counter</code> 时它是否仍然有效。帮助信息提醒了我们如何解决它：可以使用 <code>move</code> 来给予每个线程其所有权。尝试在闭包上做一点改动：</p>
 <pre><code class="language-rust,ignore">thread::spawn(move || {
 </code></pre>
-<p>再次尝试编译。这会出现了一个不同的错误！</p>
+<p>再次编译。这回出现了一个不同的错误！</p>
 <pre><code>error[E0382]: capture of moved value: `counter`
   --&gt;
    |
@@ -9507,8 +9506,8 @@ error[E0382]: use of moved value: `counter`
 
 error: aborting due to 2 previous errors
 </code></pre>
-<p><code>move</code>并没有像列表 16-5 中那样解决这个程序中的问题。为什么没有呢？这个错误信息有些难以理解，因为它表明<code>counter</code>被移动进了闭包，接着它在调用<code>lock</code>时被捕获。这听起来像是我们希望的，不过这是不允许的。</p>
-<p>让我们推理一下。现在不再使用<code>for</code>循环创建 10 个线程，让我们不用循环而只创建两个线程来看看会发生什么。将列表 16-13 中第一个<code>for</code>循环替换为如下代码：</p>
+<p><code>move</code> 并没有像列表 16-5 中那样解决问题。为什么呢？错误信息有点难懂，因为它表明 <code>counter</code> 被移动进了闭包，接着它在调用 <code>lock</code> 时被捕获。这似乎是我们希望的，然而不被允许。</p>
+<p>让我们推理一下。这次不再使用 <code>for</code> 循环创建 10 个线程，只创建两个线程，看看会发生什么。将列表 16-13 中第一个<code>for</code>循环替换为如下代码：</p>
 <pre><code class="language-rust,ignore">let handle = thread::spawn(move || {
     let mut num = counter.lock().unwrap();
 
@@ -9523,15 +9522,15 @@ let handle2 = thread::spawn(move || {
 });
 handles.push(handle2);
 </code></pre>
-<p>这里创建了两个线程，并将用于第二个线程的变量名改为<code>handle2</code>和<code>num2</code>。现在我们简化了例子来看看是否能够理解错误信息。这一次编译给出如下信息：</p>
+<p>这里创建了两个线程，并将第二个线程所用的变量改名为 <code>handle2</code> 和 <code>num2</code>。我们简化了例子，看是否能理解错误信息。此次编译给出如下信息：</p>
 <pre><code class="language-text">error[E0382]: capture of moved value: `counter`
   --&gt;
    |
 8  |     let handle = thread::spawn(move || {
    |                                ------- value moved (into closure) here
 ...
-16 |         let mut num2 = counter.lock().unwrap();
-   |                        ^^^^^^^ value captured here after move
+16 |         let mut num = counter.lock().unwrap();
+   |                       ^^^^^^^ value captured here after move
    |
    = note: move occurs because `counter` has type `std::sync::Mutex&lt;i32&gt;`,
    which does not implement the `Copy` trait
@@ -9550,11 +9549,11 @@ error[E0382]: use of moved value: `counter`
 
 error: aborting due to 2 previous errors
 </code></pre>
-<p>啊哈！在第一个错误信息中，Rust 表明了<code>counter</code>被移动进了<code>handle</code>所代表线程的闭包中。这个移动阻止我们在对其调用<code>lock</code>并将结果储存在<code>num2</code>中时捕获<code>counter</code>，这是已经在第二个线程中了！所以 Rust 告诉我们不能将<code>counter</code>的所有权移动到多个线程中。这在之前很难看出是因为我们在循环中创建多个线程，而 Rust 无法在循环的迭代中指明不同的线程（没有临时变量）。</p>
+<p>啊哈！第一个错误信息中说，<code>counter</code> 被移动进了 <code>handle</code> 所代表线程的闭包中。因此我们无法在第二个线程中对其调用 <code>lock</code>，并将结果储存在 <code>num2</code> 中时捕获<code>counter</code>！所以 Rust 告诉我们不能将 <code>counter</code> 的所有权移动到多个线程中。这在之前很难看出，因为我们在循环中创建了多个线程，而 Rust 无法在每次迭代中指明不同的线程（没有临时变量 <code>num2</code>）。</p>
 <a class="header" href="#多线程和多所有权" name="多线程和多所有权"><h4>多线程和多所有权</h4></a>
-<p>在第十五章中，我们可以通过使用智能指针<code>Rc&lt;T&gt;</code>来创建引用计数的值来拥有多所有权。同时第十五章提到了<code>Rc&lt;T&gt;</code>只能用于单线程上下文，不过还是让我们在这里试用<code>Rc&lt;T&gt;</code>来观察会发生什么。列表 16-14 将<code>Mutex&lt;T&gt;</code>封装进了<code>Rc&lt;T&gt;</code>中，并在移动到线程中之前克隆了<code>Rc&lt;T&gt;</code>。切换回循环来创建线程，并保留闭包中的<code>move</code>关键字：</p>
+<p>在第十五章中，我们通过使用智能指针 <code>Rc&lt;T&gt;</code> 来创建引用计数的值，以便拥有多所有权。同时第十五章提到了 <code>Rc&lt;T&gt;</code> 只能在单线程环境中使用，不过还是在这里试用 <code>Rc&lt;T&gt;</code> 看看会发生什么。列表 16-14 将 <code>Mutex&lt;T&gt;</code> 装进了 <code>Rc&lt;T&gt;</code> 中，并在移入线程之前克隆了 <code>Rc&lt;T&gt;</code>。再用循环来创建线程，保留闭包中的 <code>move</code> 关键字：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">use std::rc::Rc;
+<pre><code class="language-rust">use std::rc::Rc;
 use std::sync::Mutex;
 use std::thread;
 
@@ -9581,7 +9580,7 @@ fn main() {
 </code></pre>
 <p><span class="caption">Listing 16-14: Attempting to use <code>Rc&lt;T&gt;</code> to allow
 multiple threads to own the <code>Mutex&lt;T&gt;</code></span></p>
-<p>又一次，编译并...出现了不同的错误！编译器真是教会了我们很多东西！</p>
+<p>再一次编译并...出现了不同的错误！编译器真是教会了我们很多！</p>
 <pre><code>error[E0277]: the trait bound `std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;:
 std::marker::Send` is not satisfied
   --&gt;
@@ -9597,12 +9596,12 @@ std::marker::Send` is not satisfied
    counter:std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;]`
    = note: required by `std::thread::spawn`
 </code></pre>
-<p>哇哦，太长不看！需要指出一些重要的部分：第一个提示表明<code>Rc&lt;Mutex&lt;i32&gt;&gt;</code>不能安全的在线程间传递。理由也在错误信息中，经过提取之后，表明“不满足<code>Send</code> trait bound”（<code>the trait bound Send is not satisfied</code>）。下一部分将会讨论<code>Send</code>，它是一个确保确保用于线程的类型是适合并发环境的 trait。</p>
-<p>不幸的是，<code>Rc&lt;T&gt;</code>并不能安全的在线程间共享。当<code>Rc&lt;T&gt;</code>管理引用计数时，它必须在每一个<code>clone</code>调用时增加计数并在每一个克隆被丢弃时减少计数。<code>Rc&lt;T&gt;</code>并没有使用任何并发原语来确保改变计数的操作不会被其他线程打断。在计数出错时这可能会导致诡异的 bug，比如可能会造成内存泄漏或在使用结束之前就丢弃一个值。那么如果有一个正好与<code>Rc&lt;T&gt;</code>类似，不过以一种线程安全的方式改变引用计数的类型会怎么样呢？</p>
-<a class="header" href="#原子引用计数arct" name="原子引用计数arct"><h4>原子引用计数<code>Arc&lt;T&gt;</code></h4></a>
-<p>如果你思考过像之前那样的问题的话，你就是正确的。确实有一个类似<code>Rc&lt;T&gt;</code>并可以安全的用于并发环境的类型：<code>Arc&lt;T&gt;</code>。字母“a”代表<strong>原子性</strong>（<em>atomic</em>），所以这是一个<strong>原子引用计数</strong>（<em>atomically reference counted</em>）类型。原子性是另一类这里还未涉及到的并发原语；请查看标准库中<code>std::sync::atomic</code>的文档来获取更多细节。其中的要点就是：原子性类型工作起来类似原始类型，不过可以安全的在线程间共享。</p>
-<p>那为什么不是所有的原始类型都是原子性的呢，然后为什么不是所有标准库中的类型都默认使用<code>Arc&lt;T&gt;</code>实现呢？线程安全伴随一些性能惩罚，我们只希望在需要时才为此付出代价。如果只是在单线程中会值进行操作，因为并不需要原子性提供的保证代码可以运行的更快。</p>
-<p>回到之前的例子：<code>Arc&lt;T&gt;</code>和<code>Rc&lt;T&gt;</code>除了<code>Arc&lt;T&gt;</code>内部的原子性之外他们是等价的。其 API 也是一样的，所以可以修改<code>use</code>行和<code>new</code>调用。列表 16-15 中的代码最终可以编译和运行：</p>
+<p>哇哦，太长不看！说重点：第一个提示表明 <code>Rc&lt;Mutex&lt;i32&gt;&gt;</code> 不能安全的在线程间传递。理由也在错误信息中，“不满足 <code>Send</code> trait bound”（<code>the trait bound Send is not satisfied</code>）。下一部分将会讨论 <code>Send</code>，它是确保许多用在多线程中的类型，能够适合并发环境的 trait 之一。</p>
+<p>不幸的是，<code>Rc&lt;T&gt;</code> 并不能安全的在线程间共享。当 <code>Rc&lt;T&gt;</code> 管理引用计数时，它必须在每一个 <code>clone</code> 调用时增加计数，并在每一个克隆被丢弃时减少计数。<code>Rc&lt;T&gt;</code> 并没有使用任何并发原语，来确保改变计数的操作不会被其他线程打断。在计数出错时可能会导致诡异的 bug，比如可能会造成内存泄漏，或在使用结束之前就丢弃一个值。如果有一个类型与 <code>Rc&lt;T&gt;</code> 相似，又以一种线程安全的方式改变引用计数，会怎么样呢？</p>
+<a class="header" href="#原子引用计数-arct" name="原子引用计数-arct"><h4>原子引用计数 <code>Arc&lt;T&gt;</code></h4></a>
+<p>答案是肯定的，确实有一个类似<code>Rc&lt;T&gt;</code>并可以安全的用于并发环境的类型：<code>Arc&lt;T&gt;</code>。字母“a”代表<strong>原子性</strong>（<em>atomic</em>），所以这是一个<strong>原子引用计数</strong>（<em>atomically reference counted</em>）类型。原子性是另一类这里还未涉及到的并发原语；请查看标准库中<code>std::sync::atomic</code>的文档来获取更多细节。其中的要点就是：原子性类型工作起来类似原始类型，不过可以安全的在线程间共享。</p>
+<p>为什么不是所有的原始类型都是原子性的？为什么不是所有标准库中的类型都默认使用<code>Arc&lt;T&gt;</code>实现？线程安全带来性能惩罚，我们希望只在必要时才为此买单。如果只是在单线程中对值进行操作，原子性提供的保证并无必要，代码可以因此运行的更快。</p>
+<p>回到之前的例子：<code>Arc&lt;T&gt;</code>和<code>Rc&lt;T&gt;</code>除了<code>Arc&lt;T&gt;</code>内部的原子性之外没有区别。其 API 也相同，所以可以修改<code>use</code>行和<code>new</code>调用。列表 16-15 中的代码最终可以编译和运行：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">use std::sync::{Mutex, Arc};
 use std::thread;
@@ -9633,59 +9632,59 @@ to be able to share ownership across multiple threads</span></p>
 <p>这会打印出：</p>
 <pre><code>Result: 10
 </code></pre>
-<p>成功了！我们从 0 数到了 10，这可能并不是很显眼，不过一路上我们学习了很多关于<code>Mutex&lt;T&gt;</code>和线程安全的内容！这个例子中构建的结构可以用于比增加计数更为复杂的操作。可以被分解为独立部分的计算可以像这样被分散到多个线程中，并可以使用<code>Mutex&lt;T&gt;</code>来允许每个线程在他们自己的部分更新最终的结果。</p>
+<p>成功了！我们从 0 数到了 10，这可能并不是很显眼，不过一路上我们学习了很多关于<code>Mutex&lt;T&gt;</code>和线程安全的内容！这个例子中构建的结构可以用于比增加计数更为复杂的操作。能够被分解为独立部分的计算可以像这样被分散到多个线程中，并可以使用<code>Mutex&lt;T&gt;</code>来允许每个线程在他们自己的部分更新最终的结果。</p>
 <p>你可能注意到了，因为<code>counter</code>是不可变的，不过可以获取其内部值的可变引用，这意味着<code>Mutex&lt;T&gt;</code>提供了内部可变性，就像<code>Cell</code>系列类型那样。正如第十五章中使用<code>RefCell&lt;T&gt;</code>可以改变<code>Rc&lt;T&gt;</code>中的内容那样，同样的可以使用<code>Mutex&lt;T&gt;</code>来改变<code>Arc&lt;T&gt;</code>中的内容。</p>
-<p>回忆一下<code>Rc&lt;T&gt;</code>并没有避免所有可能的问题：我们也讨论了当两个<code>Rc&lt;T&gt;</code>相互引用时的引用循环的可能性，这可能造成内存泄露。<code>Mutex&lt;T&gt;</code>有一个类似的 Rust 同样也不能避免的问题：死锁。<strong>死锁</strong>（<em>deadlock</em>）是一个场景中操作需要锁定两个资源，而两个线程分别拥有一个锁并永远相互等待的问题。如果你对这个主题感兴趣，尝试编写一个带有死锁的 Rust 程序，接着研究任何其他语言中使用互斥器的死锁规避策略并尝试在 Rust 中实现他们。标准库中<code>Mutex&lt;T&gt;</code>和<code>MutexGuard</code>的 API 文档会提供拥有的信息。</p>
-<p>Rust 的类型系统和所有权确保了线程在更新共享值时拥有独占的访问权限，所以线程不会以一种不可预测的方式覆盖彼此的操作。为了和编译器一起使一切正确运行花了一些时间，不过我们节省了未来可能需要重现只在线程以特定顺序执行才会出现的诡异错误场景的时间。</p>
+<p>回忆一下<code>Rc&lt;T&gt;</code>并没有避免所有可能的问题：我们也讨论了当两个<code>Rc&lt;T&gt;</code>相互引用时的引用循环的可能性，这可能造成内存泄露。<code>Mutex&lt;T&gt;</code>有一个类似的 Rust 同样也不能避免的问题：死锁。<strong>死锁</strong>（<em>deadlock</em>）是一个场景中操作需要锁定两个资源，而两个线程分别拥有一个锁并永远相互等待的问题。如果你对这个主题感兴趣，尝试编写一个带有死锁的 Rust 程序，接着研究任何其他语言中使用互斥器的死锁规避策略并尝试在 Rust 中实现他们。标准库中<code>Mutex&lt;T&gt;</code>和<code>MutexGuard</code>的 API 文档会提供有用的信息。</p>
+<p>Rust 的类型系统和所有权规则，确保了线程在更新共享值时拥有独占的访问权限，所以线程不会以不可预测的方式覆盖彼此的操作。虽然为了使一切正确运行而在编译器上花了一些时间，但是我们节省了未来的时间，尤其是线程以特定顺序执行才会出现的诡异错误难以重现。</p>
 <p>接下来，为了丰富本章的内容，让我们讨论一下<code>Send</code>和<code>Sync</code> trait 以及如何对自定义类型使用他们。</p>
 <a class="header" href="#使用sync和send-trait-的可扩展并发" name="使用sync和send-trait-的可扩展并发"><h2>使用<code>Sync</code>和<code>Send</code> trait 的可扩展并发</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch16-04-extensible-concurrency-sync-and-send.md">ch16-04-extensible-concurrency-sync-and-send.md</a>
 <br>
-commit 55b294f20fc846a13a9be623bf322d8b364cee77</p>
+commit 9430a3d28a2121a938d704ce48b15d21062f880e</p>
 </blockquote>
-<p>Rust 的并发模型中一个有趣的方面是语言本身对并发知道的<strong>很少</strong>。我们讨论过的几乎所有内容都是标准库的一部分，而不是语言本身的内容。因为并不需要语言提供任何用于并发上下文中的内容，并发选择也不仅限于标准库或语言所提供的：我们可以编写自己的或使用别人编写的内容。</p>
-<p>我们说了<strong>几乎</strong>所有内容都不在语言本身，那么位于语言本身的是什么呢？这是两个 trait，都位于<code>std::marker</code>：<code>Sync</code>和<code>Send</code>。</p>
+<p>Rust 的并发模型中一个有趣的方面是：语言本身对并发知之<strong>甚少</strong>。我们之前讨论的几乎所有内容，都属于标准库，而不是语言本身的内容。由于不需要语言提供并发相关的基础设施，并发方案不受标准库或语言所限：我们可以编写自己的或使用别人编写的。</p>
+<p>我们说“<strong>几乎</strong>所有内容都不属于语言本身”，那么属于语言本身的是什么呢？是两个 trait，都位于<code>std::marker</code>： <code>Sync</code>和<code>Send</code>。</p>
 <a class="header" href="#send用于表明所有权可能被传送给其他线程" name="send用于表明所有权可能被传送给其他线程"><h3><code>Send</code>用于表明所有权可能被传送给其他线程</h3></a>
-<p><code>Send</code>标记 trait 表明类型的所有权可能被在线程间传递。几乎所有的 Rust 类型都是<code>Send</code>的，不过有一些例外。标准库中提供的一个不是<code>Send</code>的类型是<code>Rc&lt;T&gt;</code>：如果克隆<code>Rc&lt;T&gt;</code>值并尝试将克隆的所有权传递给另一个线程，这两个线程可能会同时更新引用计数。正如上一部分提到的，<code>Rc&lt;T&gt;</code>被实现为用于单线程场景，这时不需要为拥有线程安全的引用计数而付出性能代价。</p>
-<p>因为<code>Rc&lt;T&gt;</code>没有标记为<code>Send</code>，Rust 的类型系统和 trait bound 会确保我们永远也不会忘记或错误的把一个<code>Rc&lt;T&gt;</code>值不安全的在线程间传递。列表 16-14 曾尝试这么做，不过得到了一个错误说<code>the trait Send is not implemented for Rc&lt;Mutex&lt;i32&gt;&gt;</code>。当切换为标记为<code>Send</code>的<code>Arc&lt;T&gt;</code>时，代码就可以编译了。</p>
-<p>任何完全由<code>Send</code>的类型组成的类型也会自动被标记为<code>Send</code>。几乎所有基本类型都是<code>Send</code>的，除了第十九章将会讨论的裸指针（raw pointer）之外。大部分标准库类型是<code>Send</code>的，除了<code>Rc&lt;T&gt;</code>之外。</p>
+<p><code>Send</code>标记 trait 表明类型的所有权可能被在线程间传递。几乎所有的 Rust 类型都是<code>Send</code>的，不过有一些例外。比如标准库中提供的 <code>Rc&lt;T&gt;</code>：如果克隆<code>Rc&lt;T&gt;</code>值，并尝试将克隆的所有权传递给另一个线程，这两个线程可能会同时更新引用计数。正如上一部分提到的，<code>Rc&lt;T&gt;</code>被实现为用于单线程场景，这时不需要为拥有线程安全的引用计数而付出性能代价。</p>
+<p>因为<code>Rc&lt;T&gt;</code>没有标记为<code>Send</code>，Rust 的类型系统和 trait bound 会确保我们不会错误的把一个<code>Rc&lt;T&gt;</code>值不安全的在线程间传递。列表 16-14 曾尝试这么做，不过得到了一个错误，<code>the trait Send is not implemented for Rc&lt;Mutex&lt;i32&gt;&gt;</code>。当切换为标记为<code>Send</code>的<code>Arc&lt;T&gt;</code>时，就没有问题了。</p>
+<p>任何完全由<code>Send</code>的类型组成的类型也会自动被标记为<code>Send</code>。几乎所有基本类型都是<code>Send</code>的，大部分标准库类型是<code>Send</code>的，除了<code>Rc&lt;T&gt;</code>，以及第十九章将会讨论的裸指针（raw pointer）。</p>
 <a class="header" href="#sync表明多线程访问是安全的" name="sync表明多线程访问是安全的"><h3><code>Sync</code>表明多线程访问是安全的</h3></a>
-<p><code>Sync</code>标记 trait 表明一个类型可以安全的在多个线程中拥有其值的引用。换一种方式来说就是对于任意类型<code>T</code>，如果<code>&amp;T</code>（<code>T</code>的引用）是<code>Send</code>的话<code>T</code>就是<code>Sync</code>的，这样其引用就可以安全的发送到另一个线程。类似于<code>Send</code>的情况，基本类型是<code>Sync</code>的，完全由<code>Sync</code>的类型组成的类型也是<code>Sync</code>的。</p>
+<p><code>Sync</code>标记 trait 表明一个类型可以安全的在多个线程中拥有其值的引用。换一种方式来说就是，对于任意类型<code>T</code>，如果<code>&amp;T</code>（<code>T</code>的引用）是<code>Send</code>的话<code>T</code>就是<code>Sync</code>的，这样其引用就可以安全的发送到另一个线程。类似于<code>Send</code>的情况，基本类型是<code>Sync</code>的，完全由<code>Sync</code>的类型组成的类型也是<code>Sync</code>的。</p>
 <p><code>Rc&lt;T&gt;</code>也不是<code>Sync</code>的，出于其不是<code>Send</code>的相同的原因。<code>RefCell&lt;T&gt;</code>（第十五章讨论过）和<code>Cell&lt;T&gt;</code>系列类型不是<code>Sync</code>的。<code>RefCell&lt;T&gt;</code>在运行时所进行的借用检查也不是线程安全的。<code>Mutex&lt;T&gt;</code>是<code>Sync</code>的，正如上一部分所讲的它可以被用来在多线程中共享访问。</p>
 <a class="header" href="#手动实现send和sync是不安全的" name="手动实现send和sync是不安全的"><h3>手动实现<code>Send</code>和<code>Sync</code>是不安全的</h3></a>
-<p>通常并不需要实现<code>Send</code>和<code>Sync</code> trait，因为由是<code>Send</code>和<code>Sync</code>的类型组成的类型也自动就是<code>Send</code>和<code>Sync</code>的了。因为他们是标记 trait，甚至都不需要实现任何方法。他们只是用来加强并发相关的不可变行性的。</p>
-<p>实现这些标记 trait 涉及到实现不安全的 Rust 代码。第十九章将会讲到如何使用不安全 Rust 代码；现在，重要的是在创建新的由不是<code>Send</code>和<code>Sync</code>的部分构成的并发类型时需要多加小心，以确保维持其安全保证。<a href="https://doc.rust-lang.org/stable/nomicon/vec.html">The Nomicon</a> 中由更多关于这些保证和如何维持他们的信息。</p>
+<p>通常并不需要实现<code>Send</code>和<code>Sync</code> trait，由属于<code>Send</code>和<code>Sync</code>的类型组成的类型，自动就是<code>Send</code>和<code>Sync</code>的。因为他们是标记 trait，甚至都不需要实现任何方法。他们只是用来加强并发相关的不可变性的。</p>
+<p>实现这些标记 trait 涉及到编写不安全的 Rust 代码，第十九章将会讲述具体的方法；当前重要的是，在创建新的由不是<code>Send</code>和<code>Sync</code>的部分构成的并发类型时需要多加小心，以确保维持其安全保证。<a href="https://doc.rust-lang.org/stable/nomicon/">The Nomicon</a> 中有更多关于这些保证以及如何维持他们的信息。</p>
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>这不会是本书最后一个出现并发的章节；第二十章的项目会在更现实的场景中使用这些概念，而不像本章中讨论的这些小例子。</p>
 <p>正如我们提到的，因为 Rust 本身很少有处理并发的部分内容，有很多的并发方案都由 crate 实现。他们比标准库要发展的更快；请在网上搜索当前最新的用于多线程场景的 crate。</p>
-<p>Rust 提供了用于消息传递的通道，和像<code>Mutex&lt;T&gt;</code>和<code>Arc&lt;T&gt;</code>这样可以安全的用于并发上下文的智能指针。类型系统和借用检查器会确保这些场景中的代码不会出现数据竞争和无效的引用。一旦代码可以编译了，我们就可以坚信这些代码可以正确的运行于多线程环境，而不会出现其他语言中经常出现的那些难以追踪的 bug。并发编程不再是什么可怕的概念：无所畏惧的使你的程序使用并发吧！</p>
-<p>接下来，让我们讨论一下当 Rust 程序变得更大时那些符合习惯的模拟问题和结构的解决方案，以及 Rust 风格如何与面向对象编程（Object Oriented Programming）中那些你所熟悉的概念相联系。</p>
+<p>Rust 提供了用于消息传递的通道，和像<code>Mutex&lt;T&gt;</code>和<code>Arc&lt;T&gt;</code>这样可以安全的用于并发上下文的智能指针。类型系统和借用检查器会确保这些场景中的代码，不会出现数据竞争和无效的引用。一旦代码可以编译了，我们就可以坚信这些代码可以正确的运行于多线程环境，而不会出现其他语言中经常出现的那些难以追踪的 bug。并发编程不再是什么可怕的概念：无所畏惧地并发吧！</p>
+<p>接下来，让我们讨论一下当 Rust 程序变得更大时，有哪些符合语言习惯的问题建模方法和结构化解决方案，以及 Rust 的风格是如何与面向对象编程（Object Oriented Programming）中那些你所熟悉的概念相联系的。</p>
 <a class="header" href="#rust-是一个面向对象的编程语言吗" name="rust-是一个面向对象的编程语言吗"><h2>Rust 是一个面向对象的编程语言吗？</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch17-00-oop.md">ch17-00-oop.md</a>
 <br>
 commit 759801361bde74b47e81755fff545c66020e6e63</p>
 </blockquote>
-<p>面向对象编程（Object-Oriented Programming）是一种起源于 20 世纪 60 年代的 Simula 编程语言的模式化编程方式，然后在 90 年代随着 C++ 语言开始流行。为了描述 OOP 有很多种复杂的定义：在一些定义下，Rust 是面向对象的；在其他定义下，Rust 不是。在本章节中，我们会探索一些被普遍认为是面向对象的特性和这些特性是如何转换为 Rust 方言的。</p>
+<p>面向对象编程（Object-Oriented Programming）是一种起源于 20 世纪 60 年代的 Simula 编程语言的模式化编程方式，然后在 90 年代随着 C++ 语言开始流行。关于 OOP 是什么有很多相互矛盾的定义：在一些定义下，Rust 是面向对象的；在其他定义下，Rust 不是。在本章节中，我们会探索一些被普遍认为是面向对象的特性和这些特性是如何体现在 Rust 语言习惯中的。</p>
 <a class="header" href="#什么是面向对象" name="什么是面向对象"><h2>什么是面向对象？</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch17-01-what-is-oo.md">ch17-01-what-is-oo.md</a>
 <br>
 commit 2a9b2a1b019ad6d4832ff3e56fbcba5be68b250e</p>
 </blockquote>
-<p>关于一门语言是否需要是面向对象，在编程社区内并未达成一致意见。Rust 被很多不同的编程模式影响，我们探索了十三章提到的函数式编程的特性。面向对象编程语言的一些特性往往是对象、封装和继承。我们看一下这每一个概念的含义以及 Rust 是否支持他们。</p>
-<a class="header" href="#对象包含数据和行为" name="对象包含数据和行为"><h2>对象包含数据和行为</h2></a>
+<p>关于一个语言被称为面向对象所需的功能，在编程社区内并未达成一致意见。Rust 被很多不同的编程范式影响；我们探索了十三章提到的来自函数式编程的特性。面向对象编程语言所共享的一些特性往往是对象、封装和继承。让我们看一下这每一个概念的含义以及 Rust 是否支持他们。</p>
+<a class="header" href="#对象包含数据和行为" name="对象包含数据和行为"><h3>对象包含数据和行为</h3></a>
 <p><code>Design Patterns: Elements of Reusable Object-Oriented Software</code>这本书被俗称为<code>The Gang of Four book</code>，是面向对象编程模式的目录。它这样定义面向对象编程：</p>
 <blockquote>
 <p>Object-oriented programs are made up of objects. An <em>object</em> packages both
 data and the procedures that operate on that data. The procedures are
 typically called <em>methods</em> or <em>operations</em>.</p>
-<p>面向对象的程序是由对象组成的。一个<strong>对象</strong>包数据和操作这些数据的过程。这些过程通常被称为<strong>方法</strong>或<strong>操作</strong>。</p>
+<p>面向对象的程序是由对象组成的。一个<strong>对象</strong>包含数据和操作这些数据的过程。这些过程通常被称为<strong>方法</strong>或<strong>操作</strong>。</p>
 </blockquote>
-<p>在这个定义下，Rust 是面向对象的：结构体和枚举包含数据而 impl 块提供了在结构体和枚举之上的方法。虽然带有方法的结构体和枚举并不被<strong>称为</strong>对象，但是他们提供了与对象相同的功能，参考 Gang of Four 所定义的对象。</p>
-<a class="header" href="#隐藏了实现细节的封装" name="隐藏了实现细节的封装"><h2>隐藏了实现细节的封装</h2></a>
-<p>另一个通常与面向对象编程相关的方面是<strong>封装</strong>的思想：对象的实现细节不能被使用对象的代码获取到。唯一与对象交互的方式是通过对象提供的公有 API；使用对象的代码无法深入到对象内部并直接改变数据或者行为。封装使得改变和重构对象的内部时无需改变使用对象的代码。</p>
+<p>在这个定义下，Rust 是面向对象的：结构体和枚举包含数据而 impl 块提供了在结构体和枚举之上的方法。虽然带有方法的结构体和枚举并不被<strong>称为</strong>对象，但是他们提供了与对象相同的功能，参考 Gang of Four 中对象的定义。</p>
+<a class="header" href="#隐藏了实现细节的封装" name="隐藏了实现细节的封装"><h3>隐藏了实现细节的封装</h3></a>
+<p>另一个通常与面向对象编程相关的方面是<strong>封装</strong>（<em>encapsulation</em>）的思想：对象的实现细节不能被使用对象的代码获取到。唯一与对象交互的方式是通过对象提供的公有 API；使用对象的代码无法深入到对象内部并直接改变数据或者行为。封装使得改变和重构对象的内部时无需改变使用对象的代码。</p>
 <p>就像我们在第七章讨论的那样，可以使用<code>pub</code>关键字来决定模块、类型函数和方法是公有的，而默认情况下一切都是私有的。比如，我们可以定义一个包含一个<code>i32</code>类型的 vector 的结构体<code>AveragedCollection</code>。结构体也可以有一个字段，该字段保存了 vector 中所有值的平均值。这样，希望知道结构体中的 vector 的平均值的人可以随时获取它，而无需自己计算。<code>AveragedCollection</code>会为我们缓存平均值结果。列表 17-1 有<code>AveragedCollection</code>结构体的定义：</p>
 <p><span class="filename">文件名: src/lib.rs</span></p>
 <pre><code class="language-rust">pub struct AveragedCollection {
@@ -9694,7 +9693,7 @@ typically called <em>methods</em> or <em>operations</em>.</p>
 }
 </code></pre>
 <p><span class="caption">列表 17-1: <code>AveragedCollection</code>结构体维护了一个整型列表和集合中所有元素的平均值。</span></p>
-<p>注意，结构体自身被标记为<code>pub</code>，这样其他代码可以使用这个结构体，但是在结构体内部的字段仍然是私有的。这是非常重要的，因为我们希望保证变量被增加到列表或者被从列表删除时，也会同时更新平均值。我们通过在结构体上实现<code>add</code>、<code>remove</code>和<code>average</code>方法来做到这一点，如列表 17-2 所示：</p>
+<p>注意，结构体自身被标记为<code>pub</code>，这样其他代码可以使用这个结构体，但是在结构体内部的字段仍然是私有的。这是非常重要的，因为我们希望保证变量被增加到列表或者被从列表删除时，也会同时更新平均值。可以通过在结构体上实现<code>add</code>、<code>remove</code>和<code>average</code>方法来做到这一点，如列表 17-2 所示：</p>
 <p><span class="filename">文件名: src/lib.rs</span></p>
 <pre><code class="language-rust"># pub struct AveragedCollection {
 #     list: Vec&lt;i32&gt;,
@@ -9733,16 +9732,16 @@ impl AveragedCollection {
 <p>如果封装是一个语言被认为是面向对象语言所必要的方面的话，那么 Rust 就满足这个要求。在代码中不同的部分使用或者不使用<code>pub</code>决定了实现细节的封装。</p>
 <a class="header" href="#作为类型系统的继承和作为代码共享的继承" name="作为类型系统的继承和作为代码共享的继承"><h2>作为类型系统的继承和作为代码共享的继承</h2></a>
 <p><strong>继承</strong>（<em>Inheritance</em>）是一个很多编程语言都提供的机制，一个对象可以定义为继承另一个对象的定义，这使其可以获得父对象的数据和行为，而不用重新定义。一些人定义面向对象语言时，认为继承是一个特色。</p>
-<p>如果一个语言必须有继承才能被称为面向对象的语言的话，那么 Rust 就不是面向对象的。无法定义一个结构体继承自另外一个结构体，从而获得父结构体的成员和方法。然而，如果你过去常常在你的编程工具箱使用继承，根据你希望使用继承的原因，Rust 提供了其他的解决方案。</p>
+<p>如果一个语言必须有继承才能被称为面向对象语言的话，那么 Rust 就不是面向对象的。无法定义一个结构体继承自另外一个结构体，从而获得父结构体的成员和方法。然而，如果你过去常常在你的编程工具箱使用继承，根据你希望使用继承的原因，Rust 也提供了其他的解决方案。</p>
 <p>使用继承有两个主要的原因。第一个是为了重用代码：一旦为一个类型实现了特定行为，继承可以对一个不同的类型重用这个实现。相反 Rust 代码可以使用默认 trait 方法实现来进行共享，在列表 10-14 中我们见过在<code>Summarizable</code> trait 上增加的<code>summary</code>方法的默认实现。任何实现了<code>Summarizable</code> trait 的类型都可以使用<code>summary</code>方法而无须进一步实现。这类似于父类有一个方法的实现，而通过继承子类也拥有这个方法的实现。当实现<code>Summarizable</code> trait 时也可以选择覆盖<code>summary</code>的默认实现，这类似于子类覆盖从父类继承的方法实现。</p>
 <p>第二个使用继承的原因与类型系统有关：用来表现子类型可以在父类型被使用的地方使用。这也被称为<strong>多态</strong>（<em>polymorphism</em>），意味着如果多种对象有一个相同的形态大小，它们可以替代使用。</p>
 <!-- PROD: START BOX -->
 <blockquote>
-<p>虽然很多人使用“多态”来描述继承，但是它实际上是一种特殊的多态，称为“子类型多态”。也有很多种其他形式的多态，在 Rust 中带有泛型参数的 trait bound 也是多态，更具体的说是“参数多态”。不同类型多态的确切细节在这里并不关键，所以不要过于担心细节，只需要知道 Rust 有多种多态相关的特色就好，不同于很多其他 OOP 语言。</p>
+<p>虽然很多人使用“多态”（&quot;polymorphism&quot;）来描述继承，但是它实际上是一种特殊的多态，称为“子类型多态”（&quot;sub-type polymorphism&quot;）。也有很多种其他形式的多态，在 Rust 中带有泛型参数的 trait bound 也是多态，更具体的说是“参数多态”（&quot;parametric polymorphism&quot;）。不同类型多态的确切细节在这里并不关键，所以不要过于担心细节，只需要知道 Rust 有多种多态相关的特色就好，不同于很多其他 OOP 语言。</p>
 </blockquote>
 <!-- PROD: END BOX -->
-<p>为了支持这种模式，Rust 有 <strong>trait 对象</strong>（<em>trait objects</em>），这样我们可以指定给任何类型的值，只要值实现了一种特定的 trait。</p>
-<p>继承最近在很多编程语言的设计方案中失宠了。使用继承来实现代码重用需要共享比你需要共享的代码。子类不应该总是共享它们的父类的所有特色，但是继承意味着子类得到了它父类所有的数据和行为。这使得程序的设计更加不灵活，并产生了无意义的方法调用或子类，或者由于方法并不适用于子类不过必需从父类继承而造成错误的可能性。另外，一些语言只允许子类继承一个父类，这进一步限制了程序设计的灵活性。</p>
+<p>为了支持这种模式，Rust 有 <strong>trait 对象</strong>（<em>trait objects</em>），这样就可以使用任意类型的值，只要这个值实现了指定的 trait。</p>
+<p>继承最近在很多编程语言的设计方案中失宠了。使用继承来实现代码重用，会共享更多非必需的代码。子类不应该总是共享其父类的所有特性，然而继承意味着子类得到了其父类全部的数据和行为。这使得程序的设计更不灵活，并产生了无意义的方法调用或子类，以及由于方法并不适用于子类，却必需从父类继承而可能造成的错误。另外，某些语言只允许子类继承一个父类，进一步限制了程序设计的灵活性。</p>
 <p>因为这些原因，Rust 选择了一个另外的途径，使用 trait 对象替代继承。让我们看一下在 Rust 中 trait 对象是如何实现多态的。</p>
 <a class="header" href="#为使用不同类型的值而设计的-trait-对象" name="为使用不同类型的值而设计的-trait-对象"><h2>为使用不同类型的值而设计的 trait 对象</h2></a>
 <blockquote>
@@ -9750,17 +9749,17 @@ impl AveragedCollection {
 <br>
 commit 67876e3ef5323ce9d394f3ea6b08cb3d173d9ba9</p>
 </blockquote>
-<p>在第八章，我们谈到了 vector 的局限是 vector 只能存储同种类型的元素。在列表 8-1 中有一个例子，其中定义了一个有存放整型、浮点型和文本的成员的枚举类型<code>SpreadsheetCell</code>，这样就可以在每一个单元格储存不同类型的数据并使得 vector 仍让代表一行单元格。这在那类代码被编译时就知晓需要可交换处理的数据的类型是一个固定集合的情况下是可行的。</p>
+<p>在第八章，我们谈到了 vector 只能存储同种类型元素的局限。在列表 8-1 中有一个例子，其中定义了存放包含整型、浮点型和文本型成员的枚举类型<code>SpreadsheetCell</code>，这样就可以在每一个单元格储存不同类型的数据，并使得 vector 仍然代表一行单元格。当编译时就知道类型集合全部元素的情况下，这种方案是可行的。</p>
 <!-- The code example I want to reference did not have a listing number; it's
 the one with SpreadsheetCell. I will go back and add Listing 8-1 next time I
 get Chapter 8 for editing. /Carol -->
-<p>有时，我们想我们使用的类型集合是可扩展的，可以被使用我们的库的程序员扩展。比如很多图形化接口工具有一个条目列表，从这个列表迭代和调用draw方法在每个条目上。我们将要创建一个库crate，包含称为<code>rust_gui</code>的CUI库的结构体。我们的GUI库可以包含一些给开发者使用的类型，比如<code>Button</code>或者<code>TextField</code>。使用<code>rust_gui</code>的程序员会创建更多可以在屏幕绘图的类型：一个程序员可能会增加<code>Image</code>，另外一个可能会增加<code>SelectBox</code>。我们不会在本章节实现一个完善的GUI库，但是我们会展示如何把各部分组合在一起。</p>
-<p>当要写一个<code>rust_gui</code>库时，我们不知道其他程序员要创建什么类型，所以我们无法定义一个<code>enum</code>来包含所有的类型。我们知道的是<code>rust_gui</code>需要有能力跟踪所有这些不同类型的大量的值，需要有能力在每个值上调用<code>draw</code>方法。我们的GUI库不需要确切地知道当调用<code>draw</code>方法时会发生什么，只要值有可用的方法供我们调用就可以。</p>
-<p>在有继承的语言里，我们可能会定义一个名为<code>Component</code>的类，该类上有一个<code>draw</code>方法。其他的类比如<code>Button</code>、<code>Image</code>和<code>SelectBox</code>会从<code>Component</code>继承并继承<code>draw</code>方法。它们会各自覆写<code>draw</code>方法来自定义行为，但是框架会把所有的类型当作是<code>Component</code>的实例，并在它们上调用<code>draw</code>。</p>
+<p>有时，我们希望使用的类型的集合对于使用库的程序员来说是可扩展的。例如，很多图形用户接口（GUI）工具有一个条目列表的概念，它通过遍历列表并对每一个条目调用<code>draw</code>方法来绘制在屏幕上。我们将要创建一个叫做<code>rust_gui</code>的包含一个 GUI 库结构的库 crate。GUI 库可以包含一些供开发者使用的类型，比如<code>Button</code>或<code>TextField</code>。使用<code>rust_gui</code>的程序员会想要创建更多可以绘制在屏幕上的类型：一个程序员可能会增加一个<code>Image</code>，而另一个可能会增加一个<code>SelectBox</code>。我们不会在本章节实现一个功能完善的 GUI 库，不过会展示各个部分是如何结合在一起的。</p>
+<p>当写 <code>rust_gui</code> 库时，我们不知道其他程序员需要什么类型，所以无法定义一个 <code>enum</code> 来包含所有的类型。然而 <code>rust_gui</code> 需要跟踪所有这些不同类型的值，需要有在每个值上调用 <code>draw</code> 方法能力。我们的 GUI 库不需要确切地知道调用 <code>draw</code> 方法会发生什么，只需要有可用的方法供我们调用。</p>
+<p>在可以继承的语言里，我们会定义一个名为 <code>Component</code> 的类，该类上有一个<code>draw</code>方法。其他的类比如<code>Button</code>、<code>Image</code>和<code>SelectBox</code>会从<code>Component</code>继承并拥有<code>draw</code>方法。它们各自覆写<code>draw</code>方法以自定义行为，但是框架会把所有的类型当作是<code>Component</code>的实例，并在其上调用<code>draw</code>。</p>
 <a class="header" href="#定义一个带有自定义行为的trait" name="定义一个带有自定义行为的trait"><h3>定义一个带有自定义行为的Trait</h3></a>
-<p>不过，在Rust语言中，我们可以定义一个名为<code>Draw</code>的trait，其上有一个名为<code>draw</code>的方法。我们定义一个带有<em>trait对象</em>的vector，绑定了一种指针的trait，比如<code>&amp;</code>引用或者一个<code>Box&lt;T&gt;</code>智能指针。</p>
-<p>我们提到，我们不会调用结构体和枚举的对象，从而区分于其他语言的对象。在结构体的数据或者枚举的字段和<code>impl</code>块中的行为是分开的，而其他语言则是数据和行为被组合到一个概念里。Trait对象更像其他语言的对象，在这种场景下，他们组合了由指针组成的数据到实体对象，该对象带有在trait中定义的方法行为。但是，trait对象是和其他语言是不同的，因为我们不能向一个trait对象增加数据。trait对象不像其他语言那样有用：它们的目的是允许从公有的行为上抽象。</p>
-<p>trait定义了在给定场景下我们所需要的行为。在我们会使用一个实体类型或者一个通用类型的地方，我们可以把trait当作trait对象使用。Rust的类型系统会保证我们为trait对象带入的任何值会实现trait的方法。我们不需要在编译阶段知道所有可能的类型，我们可以把所有的实例统一对待。Listing 17-03展示了如何定义一个名为<code>Draw</code>的带有<code>draw</code>方法的trait。</p>
+<p>不过，在Rust语言中，我们可以定义一个 <code>Draw</code> trait，包含名为 <code>draw</code> 的方法。我们定义一个由<em>trait对象</em>组成的vector，绑定了某种指针的trait，比如<code>&amp;</code>引用或者一个<code>Box&lt;T&gt;</code>智能指针。</p>
+<p>之前提到，我们不会称结构体和枚举为对象，以区分其他语言的结构体和枚举对象。结构体或者枚举成员中的数据和<code>impl</code>块中的行为是分开的，而其他语言则是数据和行为被组合到一个对象里。Trait 对象更像其他语言的对象，因为他们将其指针指向的具体对象作为数据，将在trait 中定义的方法作为行为，组合在了一起。但是，trait 对象和其他语言是不同的，我们不能向一个 trait 对象增加数据。trait 对象不像其他语言那样有用：它们的目的是允许从公有行为上抽象。</p>
+<p>trait 对象定义了给定情况下应有的行为。当需要具有某种特性的不确定具体类型时，我们可以把 trait 对象当作 trait 使用。Rust 的类型系统会保证我们为 trait 对象带入的任何值会实现 trait 的方法。我们不需要在编译阶段知道所有可能的类型，却可以把所有的实例统一对待。Listing 17-03展示了如何定义一个名为<code>Draw</code>的带有<code>draw</code>方法的trait。</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">pub trait Draw {
     fn draw(&amp;self);
@@ -9768,7 +9767,7 @@ get Chapter 8 for editing. /Carol -->
 </code></pre>
 <p><span class="caption">Listing 17-3:<code>Draw</code> trait的定义</span></p>
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
-<p>因为我们已经在第10章讨论过如何定义trait，你可能比较熟悉。下面是新的定义：Listing 17-4有一个名为<code>Screen</code>的结构体，里面有一个名为<code>components</code>的vector，<code>components</code>的类型是Box<Draw>。<code>Box&lt;Draw&gt;</code>是一个trait对象：它是一个任何<code>Box</code>内部的实现了<code>Draw</code>trait的类型的替身。</p>
+<p>因为我们已经在第10章讨论过如何定义 trait，你可能比较熟悉。下面是新的定义：Listing 17-4有一个名为 <code>Screen</code> 的结构体，里面有一个名为 <code>components</code> 的 vector，<code>components</code> 的类型是Box<Draw>。<code>Box&lt;Draw&gt;</code> 是一个 trait 对象：它是 <code>Box</code> 内部任意一个实现了 <code>Draw</code> trait 的类型的替身。</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust"># pub trait Draw {
 #     fn draw(&amp;self);
@@ -9778,9 +9777,9 @@ pub struct Screen {
     pub components: Vec&lt;Box&lt;Draw&gt;&gt;,
 }
 </code></pre>
-<p><span class="caption">Listing 17-4: 定义一个<code>Screen</code>结构体，带有一个含有实现了<code>Draw</code>trait的<code>components</code> vector成员</p>
+<p><span class="caption">Listing 17-4: 定义一个 <code>Screen</code> 结构体，带有一个含有实现了 <code>Draw</code> trait 的 <code>components</code> vector 成员</p>
 <p></span></p>
-<p>在<code>Screen</code>结构体上，我们将要定义一个<code>run</code>方法，该方法会在它的<code>components</code>上调用<code>draw</code>方法，如Listing 17-5所示：</p>
+<p>在 <code>Screen</code> 结构体上，我们将要定义一个 <code>run</code> 方法，该方法会在它的 <code>components</code> 上调用 <code>draw</code> 方法，如Listing 17-5所示：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust"># pub trait Draw {
 #     fn draw(&amp;self);
@@ -9798,9 +9797,9 @@ impl Screen {
     }
 }
 </code></pre>
-<p><span class="caption">Listing 17-5:在<code>Screen</code>上实现一个<code>run</code>方法，该方法在每个组件上调用<code>draw</code>方法
+<p><span class="caption">Listing 17-5:在 <code>Screen</code> 上实现一个 <code>run</code> 方法，该方法在每个组件上调用 <code>draw</code> 方法
 </span></p>
-<p>这是区别于定义一个使用带有trait绑定的通用类型参数的结构体。通用类型参数一次只能被一个实体类型替代，而trait对象可以在运行时允许多种实体类型填充trait对象。比如，我们已经定义了<code>Screen</code>结构体使用通用类型和一个trait绑定，如Listing 17-6所示：</p>
+<p>这与带 trait 约束的泛型结构体不同(trait 约束泛型参数)。泛型参数一次只能被一个具体类型替代，而 trait 对象可以在运行时允许多种具体类型填充 trait 对象。比如，我们已经定义了 <code>Screen</code> 结构体使用泛型和一个 trait 约束，如Listing 17-6所示：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust"># pub trait Draw {
 #     fn draw(&amp;self);
@@ -9819,12 +9818,12 @@ impl&lt;T&gt; Screen&lt;T&gt;
     }
 }
 </code></pre>
-<p><span class="caption">Listing 17-6: 一种<code>Screen</code>结构体的替代实现，它的<code>run</code>方法使用通用类型和trait绑定
+<p><span class="caption">Listing 17-6: 一种 <code>Screen</code> 结构体的替代实现，它的 <code>run</code> 方法使用通用类型和 trait 绑定
 </span></p>
-<p>这个例子只能使我们有一个<code>Screen</code>实例，这个实例有一个组件列表，所有的组件类型是<code>Button</code>或者<code>TextField</code>。如果你有同种的集合，那么可以优先使用通用和trait绑定，这是因为为了使用具体的类型，定义是在编译阶段是单一的。</p>
-<p>而如果使用内部有<code>Vec&lt;Box&lt;Draw&gt;&gt;</code> trait对象的列表的<code>Screen</code>结构体，<code>Screen</code>实例可以同时包含<code>Box&lt;Button&gt;</code>和<code>Box&lt;TextField&gt;</code>的<code>Vec</code>。我们看它是怎么工作的，然后讨论运行时性能的实现。</p>
+<p>这个例子中，<code>Screen</code> 实例所有组件类型必需全是 <code>Button</code>，或者全是 <code>TextField</code>。如果你的组件集合是单一类型的，那么可以优先使用泛型和 trait 约束，因为其使用的具体类型在编译阶段即可确定。</p>
+<p>而 <code>Screen</code> 结构体内部的 <code>Vec&lt;Box&lt;Draw&gt;&gt;</code> trait 对象列表，则可以同时包含 <code>Box&lt;Button&gt;</code> 和 <code>Box&lt;TextField&gt;</code>。我们看它是怎么工作的，然后讨论运行时性能。</p>
 <a class="header" href="#来自我们或者库使用者的实现" name="来自我们或者库使用者的实现"><h3>来自我们或者库使用者的实现</h3></a>
-<p>现在，我们增加一些实现了<code>Draw</code>trait的类型。我们会再次提供<code>Button</code>，实际上实现一个GUI库超出了本书的范围，所以<code>draw</code>方法的内部不会有任何有用的实现。为了想象一下实现可能的样子，<code>Button</code>结构体可能有 width<code>、</code>height<code>和</code>label`字段，如Listing 17-7所示：</p>
+<p>现在，我们增加一些实现了 <code>Draw</code> trait 的类型，再次提供 <code>Button</code>。实现一个 GUI 库实际上超出了本书的范围，因此 <code>draw</code> 方法留空。为了想象实现可能的样子，<code>Button</code> 结构体有 <code>width</code>、<code>height</code> 和 <code>label</code>字段，如Listing 17-7所示：</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust"># pub trait Draw {
 #     fn draw(&amp;self);
@@ -9843,11 +9842,11 @@ impl Draw for Button {
 }
 </code></pre>
 <p><span class="caption">Listing 17-7: 实现了<code>Draw</code> trait的<code>Button</code> 结构体</span></p>
-<p>在<code>Button</code>上的 <code>width</code>、<code>height</code>和<code>label</code>会和其他组件不同，比如<code>TextField</code>可能有<code>width</code>、<code>height</code>,
-<code>label</code>和 <code>placeholder</code>字段。每个我们可以在屏幕上绘制的类型会实现<code>Draw</code>trait，在<code>draw</code>方法中使用不同的代码，定义了如何绘制<code>Button</code>（GUI代码的具体实现超出了本章节的范围）。除了<code>Draw</code> trait，<code>Button</code>可能也有另一个<code>impl</code>块，包含了当按钮被点击的时候的响应方法。这类方法不适用于<code>TextField</code>这样的类型。</p>
-<p>有时，使用我们的库决定了实现一个包含<code>width</code>、<code>height</code>和<code>options``SelectBox</code>结构体。它们在<code>SelectBox</code>类型上实现了<code>Draw</code>trait，如 Listing 17-8所示：</p>
+<p>在 <code>Button</code> 上的 <code>width</code>、<code>height</code> 和 <code>label</code> 会和其他组件不同，比如 <code>TextField</code> 可能有 <code>width</code>、<code>height</code>,
+<code>label</code> 以及 <code>placeholder</code> 字段。每个我们可以在屏幕上绘制的类型都会实现 <code>Draw</code> trait，在 <code>draw</code> 方法中使用不同的代码，定义了如何绘制 <code>Button</code>。除了 <code>Draw</code> trait，<code>Button</code> 也可能有一个 <code>impl</code> 块，包含按钮被点击时的响应方法。这类方法不适用于 <code>TextField</code> 这样的类型。</p>
+<p>假定我们的库的用户相要实现一个包含 <code>width</code>、<code>height</code> 和 <code>options</code> 的 <code>SelectBox</code> 结构体。同时也在 <code>SelectBox</code> 类型上实现了 <code>Draw</code> trait，如 Listing 17-8所示：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">extern crate rust_gui;
+<pre><code class="language-rust">extern crate rust_gui;
 use rust_gui::Draw;
 
 struct SelectBox {
@@ -9862,11 +9861,11 @@ impl Draw for SelectBox {
     }
 }
 </code></pre>
-<p><span class="caption">Listing 17-8: 另外一个crate中，在<code>SelectBox</code>结构体上使用<code>rust_gui</code>和实现了<code>Draw</code> trait
+<p><span class="caption">Listing 17-8: 另外一个 crate 中，在 <code>SelectBox</code> 结构体上使用 <code>rust_gui</code> 和实现了<code>Draw</code> trait
 </span></p>
-<p>我们的库的使用者现在可以写他们的<code>main</code>函数来创建一个<code>Screen</code>实例，然后通过把自身放入<code>Box&lt;T&gt;</code>变成trait对象，向screen增加<code>SelectBox</code> 和<code>Button</code>。它们可以在每个<code>Screen</code>实例上调用<code>run</code>方法，这会调用每个组件的<code>draw</code>方法。 Listing 17-9展示了实现：</p>
+<p>库的用户现在可以在他们的 <code>main</code> 函数中创建一个 <code>Screen</code> 实例，然后把自身放入 <code>Box&lt;T&gt;</code> 变成 trait 对象，向 screen 增加 <code>SelectBox</code> 和 <code>Button</code>。他们可以在这个 <code>Screen</code> 实例上调用 <code>run</code> 方法，这又会调用每个组件的 <code>draw</code> 方法。 Listing 17-9 展示了实现：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">use rust_gui::{Screen, Button};
+<pre><code class="language-rust">use rust_gui::{Screen, Button};
 
 fn main() {
     let screen = Screen {
@@ -9891,14 +9890,14 @@ fn main() {
     screen.run();
 }
 </code></pre>
-<p><span class="caption">Listing 17-9: 使用trait对象来存储实现了相同trait的不同类型
+<p><span class="caption">Listing 17-9: 使用 trait 对象来存储实现了相同 trait 的不同类型
 </span></p>
-<p>虽然我们不知道有些人可能有一天会增加<code>SelectBox</code>类型，但是我们的<code>Screen</code> 有能力操作<code>SelectBox</code>和绘制，因为<code>SelectBox</code>实现了<code>Draw</code>类型，这意味着它实现了<code>draw</code>方法。</p>
-<p>只关心值响应的消息，而不关心值的具体类型，这类似于动态类型语言中的<em>duck typing</em>：如果它像鸭子一样走路，像鸭子一样叫，那么它肯定是只鸭子！在Listing 17-5的<code>Screen</code>的<code>run</code>方法的实现中，<code>run</code>不需要知道每个组件的具体类型。它也不检查是否一个组件是<code>Button</code>或者<code>SelectBox</code>的实例，只是调用组件的<code>draw</code>方法即可。通过指定<code>Box&lt;Draw&gt;</code>作为<code>components</code>vector中的值类型，我们定义了：<code>Screen</code>需要可以被调用其<code>draw</code>方法的值。</p>
-<p>使用trait对象和支持duck typing的Rust类型系统的好处是，我们永远不需要在运行时检查一个值是否实现了一个特殊方法，或者担心因为调用了一个值没有实现方法而遇到错误。如果值没有实现trait对象需要的trait，Rust不会编译我们的代码。</p>
-<p>比如，Listing 17-10展示了当我们创建一个把<code>String</code>当做其成员的<code>Screen</code>时发生的情况：</p>
+<p>虽然我们不知道哪一天会有人增加 <code>SelectBox</code> 类型，但是我们的 <code>Screen</code> 能够操作 <code>SelectBox</code> 并绘制它，因为 <code>SelectBox</code> 实现了 <code>Draw</code> 类型，这意味着它实现了 <code>draw</code> 方法。</p>
+<p>只关心值的响应，而不关心其具体类型，这类似于动态类型语言中的 <em>duck typing</em>：如果它像鸭子一样走路，像鸭子一样叫，那么它就是只鸭子！在 Listing 17-5 <code>Screen</code> 的 <code>run</code> 方法实现中，<code>run</code> 不需要知道每个组件的具体类型。它也不检查组件是 <code>Button</code> 还是 <code>SelectBox</code> 的实例，只管调用组件的 <code>draw</code> 方法。通过指定 <code>Box&lt;Draw&gt;</code> 作为 <code>components</code> 列表中元素的类型，我们约束了 <code>Screen</code> 需要这些实现了 <code>draw</code> 方法的值。</p>
+<p>Rust 类型系统使用 trait 对象来支持 duck typing 的好处是，我们无需在运行时检查一个值是否实现了特定方法，或是担心调用了一个值没有实现的方法。如果值没有实现 trait 对象需要的 trait（方法），Rust 不会编译。</p>
+<p>比如，Listing 17-10 展示了当我们创建一个使用 <code>String</code> 做为其组件的 <code>Screen</code> 时发生的情况：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">extern crate rust_gui;
+<pre><code class="language-rust">extern crate rust_gui;
 use rust_gui::Draw;
 
 fn main() {
@@ -9911,9 +9910,9 @@ fn main() {
     screen.run();
 }
 </code></pre>
-<p><span class="caption">Listing 17-10: 尝试使用一种没有实现trait对象的trait的类型</p>
+<p><span class="caption">Listing 17-10: 尝试使用一种没有实现 trait 对象的类型</p>
 <p></span></p>
-<p>我们会遇到这个错误，因为<code>String</code>没有实现 <code>Draw</code>trait：</p>
+<p>我们会遇到这个错误，因为 <code>String</code> 没有实现 <code>Draw</code> trait：</p>
 <pre><code class="language-text">error[E0277]: the trait bound `std::string::String: Draw` is not satisfied
   --&gt;
    |
@@ -9923,10 +9922,10 @@ fn main() {
    |
    = note: required for the cast to the object type `Draw`
 </code></pre>
-<p>这个报错让我们知道，或者我们传入了本来不想传给<code>Screen</code>的东西，我们应该传入一个不同的类型，或者是我们应该在<code>String</code>上实现<code>Draw</code>，这样，<code>Screen</code>才能调用它的<code>draw</code>方法。</p>
-<a class="header" href="#trait对象执行动态分发" name="trait对象执行动态分发"><h3>Trait对象执行动态分发</h3></a>
-<p>回忆一下第10章，我们讨论过当我们使用通用类型的trait绑定时，编译器执行单类型的处理过程：在我们需要使用通用类型参数的地方，编译器为每个实体类型产生了非通用的函数实现和方法。由于非单类型而产生的代码是 <em>static dispatch</em>：当方法被调用，代码会执行在编译阶段就决定的方法，这样寻找那段代码是非常快速的。</p>
-<p>当我们使用trait对象，编译器不能执行单类型的，因为我们不知道可能被代码调用的类型。而，当方法被调用的时候，Rust跟踪可能被使用的代码，然后在运行时找出为了方法被调用时该使用哪些代码。这也是我们熟知的<em>dynamic dispatch</em>，当运行时的查找发生时是比较耗费资源的。动态分发也防止编译器选择内联函数的代码，这样防止了一些优化。虽然我们写代码时得到了额外的代码灵活性，不过，这是一个权衡考虑。</p>
+<p>这个错误告诉我们，要么传入 <code>Screen</code> 需要的类型，要么在 <code>String</code> 上实现 <code>Draw</code>，以便　<code>Screen</code> 调用它的 <code>draw</code> 方法。</p>
+<a class="header" href="#trait-对象执行动态分发" name="trait-对象执行动态分发"><h3>Trait 对象执行动态分发</h3></a>
+<p>回忆一下第10章我们讨论过的，当我们在泛型上使用 trait 约束时，编译器按单态类型处理：在需要使用范型参数的地方，编译器为每个具体类型生成非泛型的函数和方法实现。单态类型处理产生的代码实际就是做 <em>static dispatch</em>：方法的代码在编译阶段就已经决定了，当调用时，寻找那段代码非常快速。</p>
+<p>当我们使用 trait 对象，编译器不能按单态类型处理，因为无法知道使用代码的所有可能类型。而是调用方法的时候，Rust 跟踪可能被使用的代码，在运行时找出调用该方法时应使用的代码。这也是我们熟知的 <em>dynamic dispatch</em>，查找过程会产生运行时开销。动态分发也会阻止编译器内联函数，失去一些优化途径。尽管获得了额外的灵活性，但仍然需要权衡取舍。</p>
 <a class="header" href="#trait-对象需要对象安全" name="trait-对象需要对象安全"><h3>Trait 对象需要对象安全</h3></a>
 <!-- Liz: we're conflicted on including this section. Not being able to use a
 trait as a trait object because of object safety is something that
@@ -10035,15 +10034,15 @@ to know about. /Carol -->
                 </div>
 
                 <!-- Mobile navigation buttons -->
+                
 
-
-
+                
 
             </div>
 
+            
 
-
-
+            
 
         </div>
 
@@ -10056,7 +10055,7 @@ to know about. /Carol -->
         </script>
 
         <!-- Livereload script (if served using the cli tool) -->
-
+        
 
         <script src="highlight.js"></script>
         <script src="book.js"></script>

@@ -148,7 +148,7 @@ values between 1 and 100</span></p>
 <p>如此获取一个参数并只返回 1 到 100 之间数字的函数就可以声明为获取或返回一个<code>Guess</code>，而不是<code>u32</code>，同时其函数体中也无需进行任何额外的检查。</p>
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>Rust 的错误处理功能被设计为帮助你编写更加健壮的代码。<code>panic!</code>宏代表一个程序无法处理的状态，并停止执行而不是使用无效或不正确的值继续处理。Rust 类型系统的<code>Result</code>枚举代表操作可能会在一种可以恢复的情况下失败。可以使用<code>Result</code>来告诉代码调用者他需要处理潜在的成功或失败。在适当的场景使用<code>panic!</code>和<code>Result</code>将会使你的代码在面对无处不在的错误时显得更加可靠。</p>
-<p>现在我们已经见识过了标准库中<code>Option</code>和<code>Result</code>泛型枚举的能力了，让我们聊聊泛型是如何工作的，以及如果在你的代码中利用他们。</p>
+<p>现在我们已经见识过了标准库中<code>Option</code>和<code>Result</code>泛型枚举的能力了，让我们聊聊泛型是如何工作的，以及如何在你的代码中利用他们。</p>
 
                 </div>
 

@@ -88,8 +88,8 @@ commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56</p>
 <li>引用必须总是有效的。</li>
 </ol>
 <p>对于引用和<code>Box&lt;T&gt;</code>，借用规则的不可变性作用于编译时。对于<code>RefCell&lt;T&gt;</code>，这些不可变性作用于<strong>运行时</strong>。对于引用，如果违反这些规则，会得到一个编译错误。而对于<code>RefCell&lt;T&gt;</code>，违反这些规则会<code>panic!</code>。</p>
-<p>Rust 编译器执行的静态分析时天生保守的。代码的一些属性则不可能通过分析代码发现：其中最著名的就是停机问题（停机问题），这超出了本书的范畴，不过如果你感兴趣的话这是一个值得研究的有趣主题。</p>
-<p>因为一些分析是不可能的，Rust 编译器在其不确定的时候甚至都不尝试猜测，所以说它是保守的而且有时会拒绝事实上不会违反 Rust 保证的正确的程序。换句话说，如果 Rust 接受不正确的程序，那么人们也就不会相信 Rust 所做的保证了。如果 Rust 拒绝正确的程序，会给程序员带来不变，但不会带来灾难。<code>RefCell&lt;T&gt;</code>正是用于当你知道代码遵守借用规则，而编译器不能理解的时候。</p>
+<p>Rust 编译器执行的静态分析天生是保守的。代码的一些属性则不可能通过分析代码发现：其中最著名的就是停机问题（停机问题），这超出了本书的范畴，不过如果你感兴趣的话这是一个值得研究的有趣主题。</p>
+<p>因为一些分析是不可能的，Rust 编译器在其不确定的时候甚至都不尝试猜测，所以说它是保守的而且有时会拒绝事实上不会违反 Rust 保证的正确的程序。换句话说，如果 Rust 接受不正确的程序，那么人们也就不会相信 Rust 所做的保证了。如果 Rust 拒绝正确的程序，会给程序员带来不便，但不会带来灾难。<code>RefCell&lt;T&gt;</code>正是用于当你知道代码遵守借用规则，而编译器不能理解的时候。</p>
 <p>类似于<code>Rc&lt;T&gt;</code>，<code>RefCell&lt;T&gt;</code>只能用于单线程场景。在并发章节会介绍如何在多线程程序中使用<code>RefCell&lt;T&gt;</code>的功能。现在所有你需要知道的就是如果尝试在多线程上下文中使用<code>RefCell&lt;T&gt;</code>，会得到一个编译错误。</p>
 <p>对于引用，可以使用<code>&amp;</code>和<code>&amp;mut</code>语法来分别创建不可变和可变的引用。不过对于<code>RefCell&lt;T&gt;</code>，我们使用<code>borrow</code>和<code>borrow_mut</code>方法，它是<code>RefCell&lt;T&gt;</code>拥有的安全 API 的一部分。<code>borrow</code>返回<code>Ref</code>类型的智能指针，而<code>borrow_mut</code>返回<code>RefMut</code>类型的智能指针。这两个类型实现了<code>Deref</code>所以可以被当作常规引用处理。<code>Ref</code>和<code>RefMut</code>动态的借用所有权，而他们的<code>Drop</code>实现也动态的释放借用。</p>
 <p>列表 15-14 展示了如何使用<code>RefCell&lt;T&gt;</code>来使函数不可变的和可变的借用它的参数。注意<code>data</code>变量使用<code>let data</code>而不是<code>let mut data</code>来声明为不可变的，而<code>a_fn_that_mutably_borrows</code>则允许可变的借用数据并修改它！</p>
@@ -158,7 +158,7 @@ thread 'main' panicked at 'already borrowed: BorrowMutError',
 /stable-dist-rustc/build/src/libcore/result.rs:868
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 </code></pre>
-<p>这个运行时<code>BorrowMutError</code>类似于编译错误：它表明已经可变的借用过<code>s</code>一次了，所以不允许再次借用它。我们并没有绕过借用规则，只是选择让 Rust 在运行时而不是编译时执行他们。你可以选择在任何时候任何地方使用<code>RefCell&lt;T&gt;</code>，不过除了不得不编写很多<code>RefCell</code>之外，最终还是可能会发现其中的问题（可能是在生产环境而不是开发环境）。另外，在运行时检查借用规则有性能惩罚。</p>
+<p>这个运行时<code>BorrowMutError</code>类似于编译错误：它表明我们已经可变得借用过一次<code>s</code>了，所以不允许再次借用它。我们并没有绕过借用规则，只是选择让 Rust 在运行时而不是编译时执行他们。你可以选择在任何时候任何地方使用<code>RefCell&lt;T&gt;</code>，不过除了不得不编写很多<code>RefCell</code>之外，最终还是可能会发现其中的问题（可能是在生产环境而不是开发环境）。另外，在运行时检查借用规则有性能惩罚。</p>
 <a class="header" href="#结合rct和refcellt来拥有多个可变数据所有者" name="结合rct和refcellt来拥有多个可变数据所有者"><h3>结合<code>Rc&lt;T&gt;</code>和<code>RefCell&lt;T&gt;</code>来拥有多个可变数据所有者</h3></a>
 <p>那么为什么要权衡考虑选择引入<code>RefCell&lt;T&gt;</code>呢？好吧，还记得我们说过<code>Rc&lt;T&gt;</code>只能拥有一个<code>T</code>的不可变引用吗？考虑到<code>RefCell&lt;T&gt;</code>是不可变的，但是拥有内部可变性，可以将<code>Rc&lt;T&gt;</code>与<code>RefCell&lt;T&gt;</code>结合来创造一个既有引用计数又可变的类型。列表 15-15 展示了一个这么做的例子，再次回到列表 15-5 中的 cons list。在这个例子中，不同于在 cons list 中储存<code>i32</code>值，我们储存一个<code>Rc&lt;RefCell&lt;i32&gt;&gt;</code>值。希望储存这个类型是因为其可以拥有不属于列表一部分的这个值的所有者（<code>Rc&lt;T&gt;</code>提供的多个所有者功能），而且还可以改变内部的<code>i32</code>值（<code>RefCell&lt;T&gt;</code>提供的内部可变性功能）：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>

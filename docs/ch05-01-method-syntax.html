@@ -73,7 +73,7 @@
 <br>
 commit 8c1c1a55d5c0f9bc3c866ee79b267df9dc5c04e2</p>
 </blockquote>
-<p><strong>方法</strong>与函数类似：他们使用<code>fn</code>关键和名字声明，他们可以拥有参数和返回值，同时包含一些代码会在某处被调用时执行。不过方法与方法是不同的，因为他们在结构体（或者枚举或者 trait 对象，将分别在第六章和第十七章讲解）的上下文中被定义，并且他们第一个参数总是<code>self</code>，它代表方法被调用的结构体的实例。</p>
+<p><strong>方法</strong>与函数类似：他们使用<code>fn</code>关键和名字声明，他们可以拥有参数和返回值，同时包含一些代码会在某处被调用时执行。不过方法与函数是不同的，因为他们在结构体（或者枚举或者 trait 对象，将分别在第六章和第十七章讲解）的上下文中被定义，并且他们第一个参数总是<code>self</code>，它代表方法被调用的结构体的实例。</p>
 <a class="header" href="#定义方法" name="定义方法"><h3>定义方法</h3></a>
 <p>让我们将获取一个<code>Rectangle</code>实例作为参数的<code>area</code>函数改写成一个定义于<code>Rectangle</code>结构体上的<code>area</code>方法，如列表 5-7 所示：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -108,7 +108,7 @@ struct</span></p>
 <!-- PROD: START BOX -->
 <blockquote>
 <a class="header" href="#-运算符到哪去了" name="-运算符到哪去了"><h3><code>-&gt;</code>运算符到哪去了？</h3></a>
-<p>像在 C++ 这样的语言中，又两个不同的运算符来调用方法：<code>.</code>直接在对象上调用方法，而<code>-&gt;</code>在一个对象的指针上调用方法，这时需要先解引用（dereference）指针。换句话说，如果<code>object</code>是一个指针，那么<code>object-&gt;something()</code>就像<code>(*object).something()</code>一样。</p>
+<p>像在 C++ 这样的语言中，有两个不同的运算符来调用方法：<code>.</code>直接在对象上调用方法，而<code>-&gt;</code>在一个对象的指针上调用方法，这时需要先解引用（dereference）指针。换句话说，如果<code>object</code>是一个指针，那么<code>object-&gt;something()</code>就像<code>(*object).something()</code>一样。</p>
 <p>Rust 并没有一个与<code>-&gt;</code>等效的运算符；相反，Rust 有一个叫<strong>自动引用和解引用</strong>（<em>automatic referencing and dereferencing</em>）的功能。方法调用是 Rust 中少数几个拥有这种行为的地方。</p>
 <p>这是它如何工作的：当使用<code>object.something()</code>调用方法时，Rust 会自动增加<code>&amp;</code>、<code>&amp;mut</code>或<code>*</code>以便使<code>object</code>符合方法的签名。也就是说，这些代码是等同的：</p>
 <pre><code class="language-rust"># #[derive(Debug,Copy,Clone)]
