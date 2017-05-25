@@ -258,13 +258,12 @@ objects. Clone is an example of one. You'll get errors that will let you know
 if a trait can't be a trait object, look up object safety if you're interested
 in the details"? Thanks! /Carol -->
 
-Not all traits can be made into trait objects; only *object safe* traits can. A
-trait is object safe as long as both of the following are true:
+不是所有的trait都可以被放进trait对象中; 只有*对象安全的*trait可以这样做. 一个trait只有同时满足如下两点时才被认为是对象安全的:
 
-* The trait does not require `Self` to be `Sized`
-* All of the trait's methods are object safe.
+* 该trait要求`Self`不是`Sized`;
+* 该trait的所有方法都是对象安全的;
 
-`Self` is a keyword that is an alias for the type that we're implementing
+`Self`是一个类型的别名关键字，它表示当前正被实现的trait类型或者是方法所属的类型that is an alias for the type that we're implementing
 traits or methods on. `Sized` is a marker trait like the `Send` and `Sync`
 traits that we talked about in Chapter 16. `Sized` is automatically implemented
 on types that have a known size at compile time, such as `i32` and references.
