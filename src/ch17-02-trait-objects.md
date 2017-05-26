@@ -263,22 +263,11 @@ in the details"? Thanks! /Carol -->
 * 该trait要求`Self`不是`Sized`;
 * 该trait的所有方法都是对象安全的;
 
-`Self`是一个类型的别名关键字，它表示当前正被实现的trait类型或者是方法所属的类型that is an alias for the type that we're implementing
-traits or methods on. `Sized` is a marker trait like the `Send` and `Sync`
-traits that we talked about in Chapter 16. `Sized` is automatically implemented
-on types that have a known size at compile time, such as `i32` and references.
-Types that do not have a known size include slices (`[T]`) and trait objects.
+`Self`是一个类型的别名关键字，它表示当前正被实现的trait类型或者是方法所属的类型. `Sized`是一个像在第16章中介绍的`Send`和`Sync`一样的标记trait, 在编译时它会自动被放进大小确定的类型里，比如`i32`和引用. 大小不确定的类型包括切片(`[T]`)和trait对象.
 
-`Sized` is an implicit trait bound on all generic type parameters by default.
-Most useful operations in Rust require a type to be `Sized`, so making `Sized`
-a default requirement on trait bounds means we don't have to write `T: Sized`
-with most every use of generics. If we want to be able to use a trait on
-slices, however, we need to opt out of the `Sized` trait bound, and we can do
-that by specifying `T: ?Sized` as a trait bound.
+`Sized`是一个默认会被绑定到所有常规类型参数的内隐trait. Rust中要求一个类型是`Sized`的最具可用性的用法是让`Sized`成为一个默认的trait绑定，这样我们就可以在大多数的常规的使用中不去写`T: Sized`了. 如果我们想在切片(slice)中使用一个trait, 我们需要取消对`Sized`的trait绑定, 我们只需制定`T: ?Sized`作为trait绑定.
 
-Traits have a default bound of `Self: ?Sized`, which means that they can be
-implemented on types that may or may not be `Sized`. If we create a trait `Foo`
-that opts out of the `Self: ?Sized` bound, that would look like the following:
+默认绑定到`Self: ?Sized`的trait可以被实现到是`Sized`或非`Sized`的类型上. 如果我们创建一个不绑定`Self: ?Sized`的trait`Foo`，它看上去应该像这样: 
 
 ```rust
 trait Foo: Sized {
@@ -286,9 +275,7 @@ trait Foo: Sized {
 }
 ```
 
-The trait `Sized` is now a *super trait* of trait `Foo`, which means trait
-`Foo` requires types that implement `Foo` (that is, `Self`) to be `Sized`.
-We're going to talk about super traits in more detail in Chapter 19.
+Trait`Sized`现在就是trait`Foo`的一个*超级trait*, 也就是说trait`Foo`需要实现了`Foo`的类型(即`Self`)是`Sized`. 我们将在第19章中更详细的介绍超trait(supertrait).
 
 The reason a trait like `Foo` that requires `Self` to be `Sized` is not allowed
 to be a trait object is that it would be impossible to implement the trait
