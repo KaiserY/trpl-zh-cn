@@ -277,14 +277,9 @@ trait Foo: Sized {
 
 Trait`Sized`现在就是trait`Foo`的一个*超级trait*, 也就是说trait`Foo`需要实现了`Foo`的类型(即`Self`)是`Sized`. 我们将在第19章中更详细的介绍超trait(supertrait).
 
-The reason a trait like `Foo` that requires `Self` to be `Sized` is not allowed
-to be a trait object is that it would be impossible to implement the trait
-`Foo` for the trait object `Foo`: trait objects aren't sized, but `Foo`
-requires `Self` to be `Sized`. A type can't be both sized and unsized at the
-same time!
+像`Foo`那样要求`Self`是`Sized`的trait不允许成为trait对象的原因是不可能为trait对象`Foo`实现trait`Foo`: trait对象是无确定大小的，但是`Foo`要求`Self`是`Sized`. 一个类型不可能同时既是有大小的又是无确定大小的.
 
-For the second object safety requirement that says all of a trait's methods
-must be object safe, a method is object safe if either:
+第二点说对象安全要求一个trait的所有方法必须是对象安全的. 一个对象安全的方法满足下列条件:
 
 * It requires `Self` to be `Sized` or
 * It meets all three of the following:
