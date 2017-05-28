@@ -258,14 +258,14 @@ objects. Clone is an example of one. You'll get errors that will let you know
 if a trait can't be a trait object, look up object safety if you're interested
 in the details"? Thanks! /Carol -->
 
-不是所有的trait都可以被放进trait对象中; 只有*对象安全的*trait可以这样做. 一个trait只有同时满足如下两点时才被认为是对象安全的:
+不是所有的trait都可以被放进trait对象中; 只有*对象安全的*trait才可以这样做. 一个trait只有同时满足如下两点时才被认为是对象安全的:
 
 * 该trait要求`Self`不是`Sized`;
 * 该trait的所有方法都是对象安全的;
 
-`Self`是一个类型的别名关键字，它表示当前正被实现的trait类型或者是方法所属的类型. `Sized`是一个像在第16章中介绍的`Send`和`Sync`一样的标记trait, 在编译时它会自动被放进大小确定的类型里，比如`i32`和引用. 大小不确定的类型包括切片(`[T]`)和trait对象.
+`Self`是一个类型的别名关键字，它表示当前正被实现的trait类型或者是方法所属的类型. `Sized`是一个像在第16章中介绍的`Send`和`Sync`那样的标记trait, 在编译时它会自动被放进大小确定的类型里，比如`i32`和引用. 大小不确定的类型有切片(`[T]`)和trait对象.
 
-`Sized`是一个默认会被绑定到所有常规类型参数的内隐trait. Rust中要求一个类型是`Sized`的最具可用性的用法是让`Sized`成为一个默认的trait绑定，这样我们就可以在大多数的常规的使用中不去写`T: Sized`了. 如果我们想在切片(slice)中使用一个trait, 我们需要取消对`Sized`的trait绑定, 我们只需制定`T: ?Sized`作为trait绑定.
+`Sized`是一个默认会被绑定到所有常规类型参数的内隐trait. Rust中要求一个类型是`Sized`的最具可用性的用法是让`Sized`成为一个默认的trait绑定，这样我们就可以在大多数的常规的用法中不去写`T: Sized`了. 如果我们想在切片(slice)中使用一个trait, 我们需要取消对`Sized`的trait绑定, 我们只需制定`T: ?Sized`作为trait绑定.
 
 默认绑定到`Self: ?Sized`的trait可以被实现到是`Sized`或非`Sized`的类型上. 如果我们创建一个不绑定`Self: ?Sized`的trait`Foo`，它看上去应该像这样: 
 
@@ -281,27 +281,15 @@ Trait`Sized`现在就是trait`Foo`的一个*超级trait*, 也就是说trait`Foo`
 
 第二点说对象安全要求一个trait的所有方法必须是对象安全的. 一个对象安全的方法满足下列条件:
 
-* It requires `Self` to be `Sized` or
-* It meets all three of the following:
-    * It must not have any generic type parameters
-    * Its first argument must be of type `Self` or a type that dereferences to
-      the Self type (that is, it must be a method rather than an associated
-      function and have `self`, `&self`, or `&mut self` as the first argument)
-    * It must not use `Self` anywhere else in the signature except for the
-      first argument
+* 它要求`Self`是`Sized`或者
+* 它符合下面全部三点:
+    * 它不包含任意类型的常规参数
+    * 它的第一个参数必须是类型`Self`或一个引用到`Self`的类型(也就是说它必须是一个方法而非关联函数并且以`self`、`&self`或`&mut self`作为第一个参数)
+    * 除了第一个参数外它不能在其它地方用`Self`作为方法的参数签名
 
-Those rules are a bit formal, but think of it this way: if your method requires
-the concrete `Self` type somewhere in its signature, but an object forgets the
-exact type that it is, there's no way that the method can use the original
-concrete type that it's forgotten. Same with generic type parameters that are
-filled in with concrete type parameters when the trait is used: the concrete
-types become part of the type that implements the trait. When the type is
-erased by the use of a trait object, there's no way to know what types to fill
-in the generic type parameters with.
+虽然这些规则有一点形式化, 但是换个角度想一下: 如果你的方法在它的参数签名的其它地方也需要具体的`Self`类型参数, 但是一个对象又忘记了它的具体类型是什么, 这时该方法就无法使用被它忘记的原先的具体类型. 当该trait被使用时, 被具体类型参数填充的常规类型参数也是如此: 这个具体的类型就成了实现该trait的类型的某一部分, 如果使用一个trait对象时这个类型被抹掉了, 就没有办法知道该用什么类型来填充这个常规类型参数.
 
-An example of a trait whose methods are not object safe is the standard
-library's `Clone` trait. The signature for the `clone` method in the `Clone`
-trait looks like this:
+一个trait的方法不是对象安全的一个例子是标准库中的`Clone`trait. `Clone`trait的`clone`方法的参数签名是这样的:
 
 ```rust
 pub trait Clone {
@@ -309,21 +297,11 @@ pub trait Clone {
 }
 ```
 
-`String` implements the `Clone` trait, and when we call the `clone` method on
-an instance of `String` we get back an instance of `String`. Similarly, if we
-call `clone` on an instance of `Vec`, we get back an instance of `Vec`. The
-signature of `clone` needs to know what type will stand in for `Self`, since
-that's the return type.
+`String`实现了`Clone` trait, 当我们在一个`String实例上调用`clone`方法时, 我们会得到一个`String`实例. 同样地, 如果我们在一个`Vec`实例上调用`clone`方法, 我们会得到一个`Vec`实例. `clone`的参数签名需要知道`Self`是什么类型, 因为它需要返回这个类型.
 
-If we try to implement `Clone` on a trait like the `Draw` trait from Listing
-17-3, we wouldn't know whether `Self` would end up being a `Button`, a
-`SelectBox`, or some other type that will implement the `Draw` trait in the
-future.
+如果我们想在像17-3中列出的`Draw`trait那样的trait上实现`Clone`, 我们就不知道`Self`将会是一个`Button`, 一个`SelectBox`, 或者是其它的在将来要实现`Draw`trait的类型.
 
-The compiler will tell you if you're trying to do something that violates the
-rules of object safety in regards to trait objects. For example, if we had
-tried to implement the `Screen` struct in Listing 17-4 to hold types that
-implement the `Clone` trait instead of the `Draw` trait, like this:
+如果你做了违反trait对象的对象安全性规则的事情, 编译器将会告诉你. 比如, 如果你实现在17-4中列出的`Screen`结构, 你想让该结构像这样持有实现了`Clone`trait的类型而不是`Draw`trait:
 
 ```rust,ignore
 pub struct Screen {
@@ -331,7 +309,7 @@ pub struct Screen {
 }
 ```
 
-We'll get this error:
+我们将会得到下面的错误:
 
 ```text
 error[E0038]: the trait `std::clone::Clone` cannot be made into an object
