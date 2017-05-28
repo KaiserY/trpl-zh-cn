@@ -1,6 +1,6 @@
 ## 面向对象设计模式的实现
 
-让我们看一个状态设计模式和怎样在Rust中来使用它的例子. *状态模式*就是当一个值有多个内部状态时，值的行为改变基于内部状态. Let's look at an example of the state design pattern and how to use it in Rust.
+让我们看一下状态设计模式和怎样在Rust中来使用它的例子. *状态模式*就是当一个值有多个内部状态时，值的行为改变基于内部状态. Let's look at an example of the state design pattern and how to use it in Rust.
 The *state pattern* is when a value has some internal state, and the value's
 behavior changes based on the internal state. The internal state is represented
 by a set of objects that inherit shared functionality (we'll use structs and
