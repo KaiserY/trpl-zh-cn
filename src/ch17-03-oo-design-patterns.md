@@ -1,27 +1,13 @@
 ## 面向对象设计模式的实现
 
-让我们看一下状态设计模式和怎样在Rust中来使用它的例子. *状态模式*就是当一个值有多个内部状态时，值的行为改变基于内部状态. Let's look at an example of the state design pattern and how to use it in Rust.
-The *state pattern* is when a value has some internal state, and the value's
-behavior changes based on the internal state. The internal state is represented
-by a set of objects that inherit shared functionality (we'll use structs and
-traits since Rust doesn't have objects and inheritance). Each state object is
-responsible for its own behavior and the rules for when it should change into
-another state. The value that holds one of these state objects doesn't know
-anything about the different behavior of the states or when to transition
-between states. In the future when requirements change, we won't need to change
-the code of the value holding the state or the code that uses the value. We'll
-only need to update the code inside one of the state objects to change its
-rules, or perhaps add more state objects.
+让我们看一下状态设计模式和怎样在Rust中来使用它的例子. *状态模式*就是当一个值有多个内部状态时，值的行为改变基于内部状态. 内部状态被表示成一个对象集合, 集合中对象继承了一些共享功能(因为Rust中没有对象和继承, 所以我们将使用结构和trait). 每一个状态对象用于表征它自己的行为和当它应该改变成另一种状态时的状态改变规则. 模式中的值持有这些状态对象中的某个对象, 它并不了解这些状态的行为有什么不同, 它也不明白什么时候在状态间进行转换. 将来当需要改变的时候, 我们将不需要改变模式中的值持有状态的代码, 也不需要改变使用模式中的值的代码. 我们只需要更新状态对象中的某个对象内部的代码来改变它的规则, 或者也许还有添加更多的状态对象.
 
-In order to explore this idea, we're going to implement a blog post workflow in
-an incremental way. The workflow that we want our blog posts to follow, once
-we're done with the implementation, is:
+为了探究这个想法, 我们将通过一个增量方法来实现一个博客提交工作流. 一旦我们实现了这个工作流, 我们想我们的博客按如下方式进行提交:
 
-1. A blog post starts as an empty draft.
-2. Once the draft is done, we request a review of the post.
-3. Once the post is approved, it gets published.
-4. Only published blog posts return content to print so that we can't
-   accidentally print the text of a post that hasn't been approved.
+1. 一个博客提交始于一个空草稿.
+2. 一旦草稿被写完, 我们就提交并请求审查.
+3. 一旦提交被审核通过, 它就被发布.
+4. 在所有的博客中， 只有被发布的博客才返回它的内容, 所以我们不能显示未被审核的博客的内容.
 
 Any other changes attempted on a post should have no effect. For example, if we
 try to approve a draft blog post before we've requested a review, the post
