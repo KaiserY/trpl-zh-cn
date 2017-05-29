@@ -73,11 +73,11 @@
 <br>
 commit fe4833a8ef2853c55424e7747a4ef8dd64c35b32</p>
 </blockquote>
-<p>Rust 中的任何值都有一个具体的<strong>类型</strong>（<em>type</em>），这告诉了 Rust 它被指定了何种数据，这样 Rust 就知道如何处理这些数据了。这一部分将讲到一些语言内建的类型。我们将这些类型分为两个子集：标量（scalar）和复合（compound）。</p>
-<p>贯穿整个部分，请记住 Rust 是一个<strong>静态类型</strong>（<em>statically typed</em>）语言，也就是说必须在编译时就知道所有变量的类型。编译器通常可以通过值以及如何使用他们来推断出我们想要用的类型。当多个类型都是可能的时候，比如第二章中<code>parse</code>将<code>String</code>转换为数字类型，必须增加类型注解，像这样：</p>
+<p>在 Rust 中，任何值都属于一种明确的<strong>类型</strong>（<em>type</em>），声明它被指定了何种数据，以便明确其处理方式。我们将分两部分探讨一些内建类型：标量（scalar）和复合（compound）。</p>
+<p>Rust 是<strong>静态类型</strong>（<em>statically typed</em>）语言，也就是说在编译时就需要知道所有变量的类型，这一认知将贯穿整个章节，请在头脑中明确。通过值的形式及其使用方式，编译器通常可以推断出我们想要用的类型。多种类型均有可能时，比如第二章中使用 <code>parse</code> 将 <code>String</code> 转换为数字，必须增加类型注解，像这样：</p>
 <pre><code class="language-rust">let guess: u32 = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
 </code></pre>
-<p>如果这里不添加类型注解，Rust 会显示如下错误，它意味着编译器需要我们提供更多我们想要使用哪个可能的类型的信息：</p>
+<p>如果不添加类型注解，Rust 会显示如下错误。这说明编译器需要更多信息，来了解我们想要的类型：</p>
 <pre><code>error[E0282]: unable to infer enough type information about `_`
  --&gt; src/main.rs:2:9
   |
@@ -86,11 +86,11 @@ commit fe4833a8ef2853c55424e7747a4ef8dd64c35b32</p>
   |
   = note: type annotations or generic parameter binding required
 </code></pre>
-<p>在我们讨论各种数据类型时会看到不同的类型注解。</p>
+<p>在我们讨论各种数据类型时，你会看到多样的类型注解。</p>
 <a class="header" href="#标量类型" name="标量类型"><h3>标量类型</h3></a>
 <p><strong>标量</strong>类型代表一个单独的值。Rust 有四种基本的标量类型：整型、浮点型、布尔类型和字符类型。你可能在其他语言中见过他们，不过让我们深入了解他们在 Rust 中时如何工作的。</p>
 <a class="header" href="#整型" name="整型"><h4>整型</h4></a>
-<p><strong>整数</strong>是一个没有小数部分的数字。我们在这一章的前面使用过一个整型，<code>i32</code>类型。这个类型声明表明在 32 位系统上它关联的值应该是一个有符号整数（因为这个<code>i</code>，与<code>u</code>代表的无符号相对）。表格 3-1 展示了 Rust 内建的整数类型。每一个变体的有符号和无符号列（例如，<em>i32</em>）可以用来声明对应的整数值。</p>
+<p><strong>整数</strong>是一个没有小数部分的数字。我们在这一章的前面使用过 <code>i32</code> 类型。该类型声明指示，i32 关联的值应该是一个占据32比特位的有符号整数（因为这个<code>i</code>，与<code>u</code>代表的无符号相对）。表格 3-1 展示了 Rust 内建的整数类型。每一种变体的有符号和无符号列（例如，<em>i32</em>）可以用来声明对应的整数值。</p>
 <p><span class="caption">Table 3-1: Integer Types in Rust</span></p>
 <table><thead><tr><td> Length </td><td> Signed </td><td> Unsigned </td></tr></thead>
 <tr><td> 8-bit  </td><td> i8     </td><td> u8       </td></tr>
@@ -99,10 +99,10 @@ commit fe4833a8ef2853c55424e7747a4ef8dd64c35b32</p>
 <tr><td> 64-bit </td><td> i64    </td><td> u64      </td></tr>
 <tr><td> arch   </td><td> isize  </td><td> usize    </td></tr>
 </table>
-<p>每一种变体都可以是有符号或无符号的并有一个显式的大小。有符号和无符号代表数字是否能够是正数或负数；换句话说，数字是否需要有一个符号（有符号数）或者永远只需要是正的这样就可以不用符号（无符号数）。这有点像在纸上书写数字：当需要考虑符号的时候，数字前面会加上一个加号或减号；然而，当可以安全地假设为正数时，可以不带符号（加号）。有符号数以二进制补码形式（two’s complement representation）存储（如果你不清楚这是什么，可以在网上搜索；对其的解释超出了本书的范畴）。</p>
-<p>每一个有符号的变体可以储存包含从 -(2<sup>n - 1</sup>) 到 2<sup>n - 1</sup> - 1 在内的数字，这里<code>n</code>是变体使用的位数。所以<code>i8</code>可以储存从 -(2<sup>7</sup>) 到 2<sup>7</sup> - 1 在内的数字，也就是从 -128 到 127。无符号的变体可以储存从 0 到 2<sup>n</sup> - 1 的数字，所以<code>u8</code>可以储存从 0 到 2<sup>8</sup> - 1 的数字，也就是从 0 到 255。</p>
-<p>另外，<code>isize</code>和<code>usize</code>类型依赖运行程序的计算机类型（构架）：64 位构架他们是 64 位的而 32 位构架他们就是 32 位的。</p>
-<p>可以使用表格 3-2 中的任何一种形式编写数字字面值。注意除了字节字面值以外的数字字面值允许使用类型后缀，例如<code>57u8</code>，而<code>_</code>是可视化分隔符（visual separator），例如<code>1_000</code>位的。</p>
+<p>每一种变体都可以是有符号或无符号的，并有一个明确的大小。有符号和无符号代表数字能否为负值；换句话说，数字是否需要有一个符号（有符号数），或者永远为正而不需要符号（无符号数）。这有点像在纸上书写数字：当需要考虑符号的时候，数字以加号或减号作为前缀；然而，可以安全地假设为正数时，加号前缀通常省略。有符号数以二进制补码形式（two’s complement representation）存储（如果你不清楚这是什么，可以在网上搜索；对其的解释超出了本书的范畴）。</p>
+<p>每一个有符号的变体可以储存包含从 -(2<sup>n - 1</sup>) 到 2<sup>n - 1</sup> - 1 在内的数字，这里 <code>n</code> 是变体使用的位数。所以 <code>i8</code> 可以储存从 -(2<sup>7</sup>) 到 2<sup>7</sup> - 1 在内的数字，也就是从 -128 到 127。无符号的变体可以储存从 0 到 2<sup>n</sup> - 1 的数字，所以 <code>u8</code> 可以储存从 0 到 2<sup>8</sup> - 1 的数字，也就是从 0 到 255。</p>
+<p>另外，<code>isize</code> 和 <code>usize</code> 类型依赖运行程序的计算机架构：64 位架构上他们是 64 位的， 32 位架构上他们是 32 位的。</p>
+<p>可以使用表格 3-2 中的任何一种形式编写数字字面值。除字节以外的其它字面值允许使用类型后缀，例如 <code>57u8</code>，允许使用 <code>_</code> 做为分隔符以方便读数，例如 <code>1_000</code> (分隔符的数量与位置并不影响实际的数字)。</p>
 <p><span class="caption">Table 3-2: Integer Literals in Rust</span></p>
 <table><thead><tr><td> Number literals  </td><td> Example       </td></tr></thead>
 <tr><td> Decimal          </td><td> <code>98_222</code>      </td></tr>
@@ -111,9 +111,9 @@ commit fe4833a8ef2853c55424e7747a4ef8dd64c35b32</p>
 <tr><td> Binary           </td><td> <code>0b1111_0000</code> </td></tr>
 <tr><td> Byte (<code>u8</code> only) </td><td> <code>b'A'</code>        </td></tr>
 </table>
-<p>那么如何知晓该使用哪种类型的数字呢？如果对此拿不定主意，Rust 的默认类型通常就是一个很好的选择，这个默认数字类型是<code>i32</code>：它通常是最快的，甚至是在 64 位系统上。使用<code>isize</code>或<code>usize</code>的主要场景是索引一些集合。</p>
+<p>那么该使用哪种类型的数字呢？如果拿不定主意，Rust 的默认类型通常就很好，数字类型默认是 <code>i32</code>：它通常是最快的，甚至在 64 位系统上也是。<code>isize</code> 或 <code>usize</code> 的主要作为集合的索引。</p>
 <a class="header" href="#浮点型" name="浮点型"><h4>浮点型</h4></a>
-<p>Rust 也有两个主要的<strong>浮点数</strong>（<em>floating-point numbers</em>）类型，他们是有小数点的数字。Rust 的浮点数类型是<code>f32</code>和<code>f64</code>，分别是 32 位 和 64 位大小。默认类型是<code>f64</code>，因为它基本上与<code>f32</code>一样快不过精度更高。在 32 位系统上使用<code>f64</code>是可能的，不过会比<code>f32</code>要慢。大部分情况，牺牲潜在可能的更低性能来换取更高的精度是一个合理的初始选择，同时如果怀疑浮点数的大小有问题的时候应该先对代码进行性能测试。</p>
+<p>Rust 同样有两个主要的<strong>浮点数</strong>类型，<code>f32</code> 和 <code>f64</code>，它们是带小数点的数字，分别占 32 位和 64 位比特。默认类型是 <code>f64</code>，因为它与 <code>f32</code> 速度差不多，然而精度更高。在 32 位系统上也能够使用 <code>f64</code>，不过比使用 <code>f32</code> 要慢。多数情况下，以潜在的性能损耗换取更高的精度是合理的；如果觉得浮点数的大小是个麻烦，你应该以性能测试作为决策依据。</p>
 <p>这是一个展示浮点数的实例：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -168,7 +168,7 @@ commit fe4833a8ef2853c55424e7747a4ef8dd64c35b32</p>
 <p><strong>复合类型</strong>可以将多个其他类型的值组合成一个类型。Rust 有两个原生的复合类型：元组（tuple）和数组（array）。</p>
 <a class="header" href="#将值组合进元组" name="将值组合进元组"><h4>将值组合进元组</h4></a>
 <p>元组是一个将多个其他类型的值组合进一个复合类型的主要方式。</p>
-<p>我们使用一个括号中的逗号分隔的值列表来创建一个元组。元组中的每一个位置都有一个类型，而且这写不同值的类型也不必是相同的。这个例子中使用了额外的可选类型注解：</p>
+<p>我们使用一个括号中的逗号分隔的值列表来创建一个元组。元组中的每一个位置都有一个类型，而且这些不同值的类型也不必是相同的。这个例子中使用了额外的可选类型注解：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let tup: (i32, f64, u8) = (500, 6.4, 1);

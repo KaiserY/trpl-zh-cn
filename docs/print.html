@@ -73,14 +73,14 @@
 <br>
 commit 62f78bb3f7c222b574ff547d0161c2533691f9b4</p>
 </blockquote>
-<p>欢迎阅读“Rust 程序设计语言”，一本关于 Rust 的介绍性书籍。Rust 是一个着用于安全、速度和并发的编程语言。它的设计不仅可以使程序获得性能和对底层语言的控制，并且能够享受高级语言强大的抽象能力。这些特性使得 Rust 适合那些有类似 C 语言经验并正在寻找一个更安全的替代者的程序员，同时也适合那些来自类似 Python 语言背景，正在探索在不牺牲表现力的情况下编写更好性能代码的开发者。</p>
-<p>Rust 在编译时进行其绝大多数的安全检查和内存管理决策，因此程序的运行时性能没有受到影响。这让其在许多其他语言不擅长的应用场景中得以大显身手：存在可预测空间和时间要求的程序，嵌入到其他语言中，以及编写底层代码，如设备驱动和操作系统。Rust 也很擅长 web 程序：它驱动着 Rust 包注册网站（package
-registry site），<a href="https://crates.io/">crates.io</a>！我们期待看到<strong>你</strong>使用 Rust 进行创作。</p>
-<p>本书是为已经至少了解一门编程语言的读者而写的。读完本书之后，你应该能自如的编写 Rust 程序。我们将通过小而集中并且相互依赖的例子来学习 Rust，并向你展示如何使用 Rust 多样的功能，同时了解它们在幕后是如何执行的。</p>
+<p>欢迎阅读“Rust 程序设计语言”，一本介绍 Rust 的书。Rust 是一门着眼于安全、速度和并发的编程语言。它的设计兼顾性能与底层控制，以及高级语言强大的抽象能力。适合那些有类 C 语言经验，正在寻找更安全的替代品的开发者；以及有着类 Python 语言背景，寻求在不牺牲表现力的前提下，编写性能更好的代码的开发者。</p>
+<p>Rust 主要在编译时执行安全检查和内存管理决策，对运行时性能的影响微不足道。这使其在许多语言不擅长的应用场景中得以大显身手：空间和时间需求可预测的程序，嵌入到其他语言中，以及编写底层代码，如设备驱动和操作系统。Rust 也很擅长 web 程序：它驱动着 Rust 包注册网站（package
+registry site），<a href="https://crates.io/">crates.io</a>！我们期待<strong>你</strong>使用 Rust 进行创作。</p>
+<p>本书的目标读者至少应了解一门其它编程语言。读完本书之后，你应该能自如的编写 Rust 程序。我们将通过短小精干、前后呼应的例子来学习 Rust，并展示其多样功能的使用方法，同时了解幕后如何运行。</p>
 <a class="header" href="#为本书做出贡献" name="为本书做出贡献"><h2>为本书做出贡献</h2></a>
-<p>本书是开源的。如果你发现任何错误，请不要犹豫，<a href="https://github.com/rust-lang/book">在 GitHub 上</a>发起 issue 或提交 pull request。请查看<a href="https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a>获取更多信息。</p>
+<p>本书是开源的。如果你发现任何错误，不要犹豫，<a href="https://github.com/rust-lang/book">在 GitHub 上</a>发起 issue 或提交 pull request。请查看 <a href="https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a> 获取更多信息。</p>
 <blockquote>
-<p>译者注：这是本译本的 <a href="https://github.com/KaiserY/trpl-zh-cn">GitHub 仓库</a>，同样欢迎 Issue 和 PR :)</p>
+<p>译者注：译本的 <a href="https://github.com/KaiserY/trpl-zh-cn">GitHub 仓库</a>，同样欢迎 Issue 和 PR :)</p>
 </blockquote>
 <a class="header" href="#安装" name="安装"><h2>安装</h2></a>
 <blockquote>
@@ -88,55 +88,55 @@ registry site），<a href="https://crates.io/">crates.io</a>！我们期待看�
 <br>
 commit c1b95a18dbcbb06aadf07c03759f27d88ccf62cf</p>
 </blockquote>
-<p>使用 Rust 的第一步是安装。你需要网络连接来执行本章的命令，因为我们要从网上下载 Rust。</p>
-<p>我们将会展示很多使用终端的命令，并且这些代码都以<code>$</code>开头。并不需要真正输入<code>$</code>，它们在这里代表每行指令的开头。在网上会看到很多使用这个惯例的教程和例子：<code>$</code>代表以常规用户运行命令，<code>#</code>代表需要用管理员运行的命令。没有以<code>$</code>（或<code>#</code>）的行通常是之前命令的输出。</p>
+<p>第一步是安装 Rust。你需要网络连接来执行本章的命令，因为我们要从网上下载 Rust。</p>
+<p>我们将会展示很多在终端中输入的命令，这些命令均以 <code>$</code> 开头。你不需要真的输入<code>$</code>，在这里它代表每行命令的起始。网上有很多教程和例子遵循这种惯例：<code>$</code> 代表以常规用户身份运行命令，<code>#</code> 代表需要用管理员身份运行命令。没有以 <code>$</code>（或 <code>#</code>）起始的行通常是之前命令的输出。</p>
 <a class="header" href="#在-linux-或-mac-上安装" name="在-linux-或-mac-上安装"><h3>在 Linux 或 Mac 上安装</h3></a>
-<p>如果你使用 Linux 或 Mac，所有需要做的就是打开一个终端并输入：</p>
+<p>如果你使用 Linux 或 Mac，你需要做的全部，就是打开一个终端并输入：</p>
 <pre><code>$ curl https://sh.rustup.rs -sSf | sh
 </code></pre>
-<p>这会下载一个脚本并开始安装。你可能被提示要输入密码。如果一切顺利，将会出现如下内容：</p>
+<p>这会下载一个脚本并开始安装。可能会提示你输入密码，如果一切顺利，将会出现如下内容：</p>
 <pre><code>Rust is installed now. Great!
 </code></pre>
-<p>当然，如果你不赞成<code>curl | sh</code>这种模式，可以随意下载、检查和运行这个脚本。</p>
+<p>当然，如果你对于 <code>curl | sh</code> 心有疑虑，你可以随意下载、检查和运行这个脚本。</p>
 <a class="header" href="#在-windows-上安装" name="在-windows-上安装"><h3>在 Windows 上安装</h3></a>
-<p>在 Windows 上，前往<a href="https://rustup.rs/">https://rustup.rs</a><!-- ignore -->并按照说明下载 rustup-init.exe。运行并遵循其提供的其余指示操作。</p>
-<p>本书其余 Windows 相关的命令假设你使用<code>cmd</code>作为你的 shell。如果你使用不同的 shell，可能能够执行 Linux 和 Mac 用户相同的命令。如果都不行，请查看所使用的 shell 的文档。</p>
+<p>如果你使用 Windows，前往 <a href="https://rustup.rs/">https://rustup.rs</a><!-- ignore -->，按说明下载 rustup-init.exe，运行并照其指示操作。</p>
+<p>本书中其余 Windows 相关的命令，假设你使用 <code>cmd</code> 作为 shell。如果你使用其它 shell，也许可以执行与 Linux 和 Mac 用户相同的命令。如果不行，请查看该 shell 的文档。</p>
 <a class="header" href="#自定义安装" name="自定义安装"><h3>自定义安装</h3></a>
-<p>如果有理由倾向于不使用 rustup.rs，请查看<a href="https://www.rust-lang.org/install.html">Rust 安装页面</a>获取其他选择。</p>
+<p>无论出于何种理由，如果不愿意使用 rustup.rs，请查看 <a href="https://www.rust-lang.org/install.html">Rust 安装页面</a> 获取其他选择。</p>
 <a class="header" href="#更新" name="更新"><h3>更新</h3></a>
-<p>一旦安装完 Rust，更新到最新版本是简单的。在 shell 中运行更新脚本：</p>
+<p>一旦 Rust 安装完，更新到最新版本很简单。在 shell 中执行：</p>
 <pre><code>$ rustup update
 </code></pre>
 <a class="header" href="#卸载" name="卸载"><h3>卸载</h3></a>
-<p>卸载 Rust 同安装一样简单。在 shell 中运行卸载脚本</p>
+<p>卸载 Rust 同样简单。在 shell 中执行:</p>
 <pre><code>$ rustup self uninstall
 </code></pre>
 <a class="header" href="#故障排除" name="故障排除"><h3>故障排除</h3></a>
-<p>安装完 Rust 后，打开 shell，输入：</p>
+<p>安装完 Rust 后，在 shell 中执行：</p>
 <pre><code>$ rustc --version
 </code></pre>
-<p>应该能看到类似这样的版本号、提交 hash 和提交日期，对应你安装时的最新稳定版本：</p>
+<p>应该能看到类似这样的版本号、提交哈希和提交日期，对应安装时的最新稳定版：</p>
 <pre><code>rustc x.y.z (abcabcabc yyyy-mm-dd)
 </code></pre>
-<p>如果出现这些内容，Rust 就安装成功了！</p>
+<p>出现这些内容，Rust 就安装成功了！</p>
 <p>恭喜入坑！（此处应该有掌声！）</p>
-<p>如果有问题并且你在使用 Windows，检查 Rust（rustc，cargo 等）是否位于<code>%PATH%</code>系统变量中。</p>
-<p>如果还是不能运行，有许多可以获取帮助的地方。最简单的是 <a href="irc://irc.mozilla.org/#rust">irc.mozilla.org 上的 #rust IRC 频道</a><!-- ignore --> ，可以使用 <a href="http://chat.mibbit.com/?server=irc.mozilla.org&amp;channel=%23rust">Mibbit</a> 来访问它。访问这些地址然后就可以和其他能提供帮助的 Rustacean（我们这些人自嘲的绰号）聊天了。其它给力的资源包括<a href="https://users.rust-lang.org/">用户论坛</a>和 <a href="http://stackoverflow.com/questions/tagged/rust">Stack Overflow</a>。</p>
+<p>如果在 Windows 中使用出现问题，检查 Rust（rustc，cargo 等）是否在 <code>%PATH%</code> 环境变量所包含的路径中。</p>
+<p>如果还是不能解决，有许多地方可以求助。最简单的是 <a href="irc://irc.mozilla.org/#rust">irc.mozilla.org 上的 #rust IRC 频道</a><!-- ignore --> ，可以使用 <a href="http://chat.mibbit.com/?server=irc.mozilla.org&amp;channel=%23rust">Mibbit</a> 来访问它。然后就能和其他 Rustacean（Rust 用户的称号，有自嘲意味）聊天并寻求帮助。其它给力的资源包括<a href="https://users.rust-lang.org/">用户论坛</a>和 <a href="http://stackoverflow.com/questions/tagged/rust">Stack Overflow</a>。</p>
 <a class="header" href="#本地文档" name="本地文档"><h3>本地文档</h3></a>
-<p>安装程序也包含一份本地文档的拷贝，你可以离线阅读它们。输入<code>rustup doc</code>将在浏览器中打开本地文档。</p>
-<p>任何你不太确认标准库中提供的类型或函数是干什么的时候，请查看 API 文档！</p>
+<p>安装程序自带本地文档，可以离线阅读。输入 <code>rustup doc</code> 可以在浏览器中查看。</p>
+<p>任何时候，如果你拿不准标准库中类型或函数，请查看 API 文档！</p>
 <a class="header" href="#hello-world" name="hello-world"><h2>Hello, World!</h2></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-02-hello-world.md">ch01-02-hello-world.md</a>
 <br>
 commit 4f2dc564851dc04b271a2260c834643dfd86c724</p>
 </blockquote>
-<p>现在已经安装好了 Rust，让我们来编写第一个 Rust 程序。当学习一门新语言的时候，编写一个在屏幕上打印 “Hello, world!” 文本的小程序是一个传统，而在这一部分将遵循这个传统。</p>
+<p>Rust 已安好，让我们来编写第一个程序。当学习一门新语言的时候，使用该语言在屏幕上打印 “Hello, world!” 是一项传统，我们将遵循这个传统。</p>
 <blockquote>
-<p>注意：本书假设你熟悉基本的命令行操作。Rust 本身并不对你的编辑器，工具和你的代码存放在何处有什么特定的要求，所以如果你比起命令行更喜欢 IDE，请随意选择你喜欢的 IDE。</p>
+<p>注意：本书假设你熟悉基本的命令行操作。对于你的编辑器、工具，以及你的代码存在何处，Rust 并没有特殊要求，如果你更喜欢 IDE，请随意。</p>
 </blockquote>
 <a class="header" href="#创建项目文件夹" name="创建项目文件夹"><h3>创建项目文件夹</h3></a>
-<p>首先，创建一个文件夹来存放 Rust 代码。Rust 并不关心你的代码存放在哪里，不过在本书中，我们建议在你的 home 目录创建一个 <em>projects</em> 目录，并把你的所有项目放在这。打开一个终端并输入如下命令来为这个项目创建一个文件夹：</p>
+<p>首先，创建一个存放代码的文件夹。Rust 并不关心它的位置，不过在本书中，我们建议你在 home 目录中创建一个 <em>projects</em> 目录，并把你的所有项目放在这。打开一个终端，输入如下命令来创建一个文件夹：</p>
 <p>Linux 和 Mac:</p>
 <pre><code>$ mkdir ~/projects
 $ cd ~/projects
@@ -150,8 +150,8 @@ $ cd hello_world
 &gt; cd hello_world
 </code></pre>
 <a class="header" href="#编写并运行-rust-程序" name="编写并运行-rust-程序"><h3>编写并运行 Rust 程序</h3></a>
-<p>接下来，新建一个叫做 <em>main.rs</em> 的源文件。Rust 文件总是以 <em>.rs</em> 后缀结尾。如果文件名多于一个单词，使用下划线分隔它们。例如，使用 <em>my_program.rs</em> 而不是 <em>myprogram.rs</em>。</p>
-<p>现在打开刚创建的 <em>main.rs</em> 文件，并输入如下代码：</p>
+<p>接下来，新建一个叫做 <em>main.rs</em> 的文件。Rust 源代码总是以 <em>.rs</em> 后缀结尾。如果文件名包含多个单词，使用下划线分隔它们。例如 <em>my_program.rs</em>，而不是 <em>myprogram.rs</em>。</p>
+<p>现在打开刚创建的 <em>main.rs</em> 文件，输入如下代码：</p>
 <p><span class="filename">Filename: main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
@@ -162,28 +162,28 @@ $ cd hello_world
 $ ./main
 Hello, world!
 </code></pre>
-<p>在 Windows 上，运行<code>.\main.exe</code>而不是<code>./main</code>。不管使用何种系统，你应该在终端看到<code>Hello, world!</code>字符串。如果你做到了，那么恭喜你！你已经正式编写了一个 Rust 程序。你是一名 Rust 程序员了！欢迎入坑。</p>
+<p>在 Windows 上，运行 <code>.\main.exe</code>，而不是<code>./main</code>。不管使用何种系统，你应该在终端看到 <code>Hello, world!</code> 字样。如果你做到了，恭喜你！你已经正式编写了一个 Rust 程序，成为一名 Rust 程序员！</p>
 <a class="header" href="#分析-rust-程序" name="分析-rust-程序"><h3>分析 Rust 程序</h3></a>
-<p>现在，让我们回过头来仔细看看“Hello, world!”程序到底发生了什么。这里是谜题的第一片：</p>
+<p>现在，让我们回过头来，仔细看看“Hello, world!”程序到底发生了什么。这是拼图的第一片：</p>
 <pre><code class="language-rust">fn main() {
 
 }
 </code></pre>
-<p>这几行定义了一个 Rust <strong>函数</strong>。<code>main</code>函数是特殊的：这是每一个可执行的 Rust 程序首先运行的函数（译者注：入口点）。第一行表示“定义一个叫 <code>main</code> 的函数，没有参数也没有返回值。”如果有参数的话，它们应该出现在括号中，<code>(</code>和<code>)</code>。</p>
-<p>同时注意函数体被包裹在大括号中，<code>{</code>和<code>}</code>。Rust 要求所有函数体都位于大括号中（译者注：对比有些语言特定情况可以省略大括号）。将前一个大括号与函数声明置于一行，并留有一个空格被认为是一个好的代码风格。</p>
-<p>在<code>main()</code>函数中：</p>
+<p>这几行定义了一个 Rust <strong>函数</strong>。一个叫 <code>main</code> 的函数，没有参数也没有返回值。如果有参数的话，它们应该出现在括弧中，<code>(</code>和<code>)</code>之间。<code>main</code> 函数是特殊的：它是每一个可执行的 Rust 程序的入口点。</p>
+<p>还须注意函数体被包裹在花括号中，<code>{</code>和<code>}</code> 之间。所有函数体都要用花括号包裹起来（译者注：有些语言，当函数体只有一行时可以省略花括号，但 Rust 中是不行的）。一般来说，将左花括号与函数声明置于一行，并以空格分隔，是良好的代码风格。</p>
+<p>在 <code>main()</code> 函数中：</p>
 <pre><code class="language-rust">    println!(&quot;Hello, world!&quot;);
 </code></pre>
-<p>这行代码做了这个小程序的所有工作：它在屏幕上打印文本。这里有很多需要注意的细节。第一个是 Rust 代码风格使用 4 个空格缩进，而不是 1 个制表符（tab）。</p>
-<p>第二个重要的部分是<code>println!()</code>。这叫做 Rust <strong>宏</strong>，是如何进行 Rust 元编程（metaprogramming）的关键所在。相反如果是调用一个函数的话，它应该看起来像这样：<code>println</code>（没有<code>!</code>）。我们将在 21 章 E 小节中更加详细的讨论 Rust 宏，不过现在你只需记住当看到符号<code>!</code>的时候，就代表在调用一个宏而不是一个普通的函数。</p>
+<p>一行代码完成这个小程序的所有工作：在屏幕上打印文本。这里有很多细节需要注意。首先 Rust 使用 4 个空格的缩进风格，而不是 1 个制表符（tab）。</p>
+<p>第二个重要的部分是<code>println!()</code>。这是 <strong>宏</strong>，Rust 元编程（metaprogramming）的关键所在。而调用一个函数，则要像这样：<code>println</code>（没有<code>!</code>）。我们将在 21 章 E 小节中更加详细的讨论宏，现在你只需记住，当看到符号 <code>!</code> 的时候，调用的是宏而不是普通函数。</p>
 <p>接下来，<code>&quot;Hello, world!&quot;</code> 是一个 <strong>字符串</strong>。我们把这个字符串作为一个参数传递给<code>println!</code>，它负责在屏幕上打印这个字符串。轻松加愉快！(⊙o⊙)</p>
-<p>这一行以一个分号结尾（<code>;</code>）。<code>;</code>代表这个表达式的结束和下一个表达式的开始。大部分 Rust 代码行以<code>;</code>结尾。</p>
+<p>该行以分号结尾（<code>;</code>）。<code>;</code> 代表一个表达式的结束和下一个表达式的开始。大部分 Rust 代码行以 <code>;</code> 结尾。</p>
 <a class="header" href="#编译和运行是两个步骤" name="编译和运行是两个步骤"><h3>编译和运行是两个步骤</h3></a>
-<p>在“编写并运行 Rust 程序”部分，展示了如何运行一个新创建的程序。现在我们将拆分并检查每一步操作。</p>
-<p>在运行一个 Rust 程序之前，必须先编译它。可以输入<code>rustc</code>命令来使用 Rust 编译器并像这样传递源文件的名字：</p>
+<p>“编写并运行 Rust 程序”部分，展示了如何创建运行程序。现在我们将拆分并检查每一步操作。</p>
+<p>运行一个 Rust 程序之前，必须先编译它。可以通过 <code>rustc</code> 命令来使用 Rust 编译器，并传递源文件的名字给它，如下：</p>
 <pre><code>$ rustc main.rs
 </code></pre>
-<p>如果你来自 C 或 C++ 背景，就会发现这与<code>gcc</code>和<code>clang</code>类似。编译成功后，Rust 应该会输出一个二进制可执行文件，在 Linux 或 OSX 上在 shell 中你可以通过<code>ls</code>命令看到如下：</p>
+<p>如果你有 C 或 C++ 背景，就会发现这与 <code>gcc</code> 和 <code>clang</code> 类似。编译成功后，Rust 应该会输出一个二进制可执行文件，在 Linux 或 OSX 上在 shell 中你可以通过<code>ls</code>命令看到如下：</p>
 <pre><code>$ ls
 main  main.rs
 </code></pre>
@@ -192,21 +192,21 @@ main  main.rs
 main.exe
 main.rs
 </code></pre>
-<p>这表示我们有两个文件：<em>.rs</em> 后缀的源文件，和可执行文件（在 Windows下是 <em>main.exe</em>，其它平台是 <em>main</em>）。这里剩下的操作就只有运行 <em>main</em> 或 <em>main.exe</em> 文件了，像这样：</p>
+<p>这表示我们有两个文件：<em>.rs</em> 后缀的源文件，和可执行文件（在 Windows下是 <em>main.exe</em>，其它平台是 <em>main</em>）。然后运行 <em>main</em> 或 <em>main.exe</em> 文件，像这样：</p>
 <pre><code>$ ./main  # or .\main.exe on Windows
 </code></pre>
 <p>如果 <em>main.rs</em> 是我们的“Hello, world!”程序，它将会在终端上打印<code>Hello, world!</code>。</p>
-<p>来自 Ruby、Python 或 JavaScript 这样的动态类型语言背景的同学，可能不太习惯在分开的步骤编译和执行程序。Rust 是一种 <strong>静态提前编译语言</strong>（<em>ahead-of-time compiled language</em>），这意味着可以编译好程序后，把它给任何人，他们都不需要安装 Rust 就可运行。如果你给他们一个 <code>.rb</code> ， <code>.py</code> 或 <code>.js</code> 文件，他们需要先分别安装 Ruby，Python，JavaScript 实现（运行时环境，VM），不过你只需要一句命令就可以编译和执行程序。这一切都是语言设计的权衡取舍。</p>
-<p>仅仅使用<code>rustc</code>编译简单程序是没问题的，不过随着项目的增长，你将想要能够控制你项目拥有的所有选项，并使其易于分享你的代码给别人或别的项目。接下来，我们将介绍一个叫做 Cargo 的工具，它将帮助你编写现实生活中的 Rust 程序。</p>
+<p>来自 Ruby、Python 或 JavaScript 这样的动态类型语言背景的同学，可能不太习惯将编译和执行分为两个步骤。Rust 是一种 <strong>预编译静态类型语言</strong>（<em>ahead-of-time compiled language</em>），这意味着编译好程序后，把它给任何人，他们不需要安装 Rust 就可运行。如果你给他们一个 <code>.rb</code> ， <code>.py</code> 或 <code>.js</code> 文件，他们需要先分别安装 Ruby，Python，JavaScript 实现（运行时环境，VM），不过你只需要一句命令就可以编译和执行程序。这一切都是语言设计上的权衡取舍。</p>
+<p>使用 <code>rustc</code> 编译简单程序是没问题的，不过随着项目的增长，你可能需要控制你项目的方方面面，并且更容易地将代码分享给其它人或项目。所以接下来，我们要介绍一个叫做 Cargo 的工具，它会帮助你编写真实世界中的 Rust 程序。</p>
 <a class="header" href="#hello-cargo" name="hello-cargo"><h2>Hello, Cargo!</h2></a>
-<p>Cargo 是 Rust 的构建系统和包管理工具，同时 Rustacean 们使用 Cargo 来管理他们的 Rust 项目，因为它使得很多任务变得更轻松。例如，Cargo 负责构建代码、下载代码依赖的库并编译这些库。我们把代码需要的库叫做 <strong>依赖</strong>（<em>dependencies</em>）。</p>
-<p>最简单的 Rust 程序，例如我们刚刚编写的，并没有任何依赖，所以目前我们只使用了 Cargo 负责构建代码的那一部分。随着编写更加复杂的 Rust 程序，你会想要添加依赖，如果你使用 Cargo 开始的话，这将会变得简单许多。</p>
-<p>由于绝大部分 Rust 项目使用 Cargo，本书接下来的部分将假设你使用它。如果使用安装章节介绍的官方安装包的话，Rust 自带 Cargo。如果通过其他方式安装 Rust 的话，可以在终端输入如下命令检查是否安装了 Cargo：</p>
+<p>Cargo 是 Rust 的构建系统和包管理工具，同时 Rustacean 们使用 Cargo 来管理他们的 Rust 项目，它使得很多任务变得更轻松。例如，Cargo 负责构建代码、下载依赖库并编译。我们把代码需要的库叫做 <strong>依赖</strong>（<em>dependencies</em>）。</p>
+<p>最简单的 Rust 程序，比如我们刚刚编写的，并没有任何依赖，所以我们只使用了 Cargo 构建代码的功能。随着更复杂程序的编写，你会想要添加依赖，如果你使用 Cargo 开始的话，这将会变得简单许多。</p>
+<p>由于绝大部分 Rust 项目使用 Cargo，本书接下来的部分将假设你使用它。如果使用之前介绍的官方安装包的话，它自带 Cargo。如果通过其他方式安装的话，可以在终端输入如下命令，检查是否安装了 Cargo：</p>
 <pre><code>$ cargo --version
 </code></pre>
-<p>如果出现了版本号，一切 OK！如果出现一个类似“<code>command not found</code>”的错误，那么你应该查看安装方式的文档来确定如何单独安装 Cargo。</p>
+<p>如果出现了版本号，一切 OK！如果出现类似“<code>command not found</code>”的错误，你应该查看安装文档以确定如何单独安装 Cargo。</p>
 <a class="header" href="#使用-cargo-创建项目" name="使用-cargo-创建项目"><h3>使用 Cargo 创建项目</h3></a>
-<p>让我们使用 Cargo 来创建一个新项目并看看与上面的<code>hello_world</code>项目有什么不同。回到 projects 目录（或者任何你决定放置代码的目录）：</p>
+<p>让我们使用 Cargo 来创建一个新项目，然后看看与上面的<code>hello_world</code>项目有什么不同。回到 projects 目录（或者任何你放置代码的目录）：</p>
 <p>Linux 和 Mac:</p>
 <pre><code>$ cd ~/projects
 </code></pre>
@@ -217,9 +217,9 @@ main.rs
 <pre><code>$ cargo new hello_cargo --bin
 $ cd hello_cargo
 </code></pre>
-<p>我们向<code>cargo new</code>传递了<code>--bin</code>因为我们的目标是生成一个可执行程序，而不是一个库。可执行文件是二进制可执行文件，通常就叫做 <strong>二进制文件</strong>（<em>binaries</em>）。项目的名称被定为<code>hello_cargo</code>，同时 Cargo 在一个同名目录中创建它的文件，接着我们可以进入查看。</p>
-<p>如果列出 <em>hello_cargo</em> 目录中的文件，将会看到 Cargo 生成了一个文件和一个目录：一个 <em>Cargo.toml</em> 文件和一个 <em>src</em> 目录，<em>main.rs</em> 文件位于目录中。它也在 <em>hello_cargo</em> 目录初始化了一个 git 仓库，以及一个 <em>.gitignore</em> 文件；你可以改为使用不同的版本控制系统（VCS），或者不使用 VCS，通过<code>--vcs</code>参数。</p>
-<p>使用你选择的文本编辑器（IDE）打开 <em>Cargo.toml</em> 文件。它应该看起来像这样：</p>
+<p>我们向 <code>cargo new</code> 传递了 <code>--bin</code>，因为我们的目标是生成一个可执行程序，而不是一个库。可执行程序是二进制可执行文件，通常就叫做 <strong>二进制文件</strong>（<em>binaries</em>）。项目的名称被定为<code>hello_cargo</code>，同时 Cargo 在一个同名目录中创建它的文件，接着我们可以进入查看。</p>
+<p>如果列出 <em>hello_cargo</em> 目录中的文件，将会看到 Cargo 生成了一个文件和一个目录：一个 <em>Cargo.toml</em> 文件和一个 <em>src</em> 目录，<em>main.rs</em> 文件位于目录中。它也在 <em>hello_cargo</em> 目录初始化了一个 git 仓库，以及一个 <em>.gitignore</em> 文件；你可以通过<code>--vcs</code>参数，切换到其它版本控制系统（VCS），或者不使用 VCS。</p>
+<p>使用文本编辑器（IDE）打开 <em>Cargo.toml</em> 文件。它应该看起来像这样：</p>
 <p><span class="filename">Filename: Cargo.toml</span></p>
 <pre><code class="language-toml">[package]
 name = &quot;hello_cargo&quot;
@@ -228,22 +228,22 @@ authors = [&quot;Your Name &lt;you@example.com&gt;&quot;]
 
 [dependencies]
 </code></pre>
-<p>这个文件使用<a href="https://github.com/toml-lang/toml"><em>TOML</em></a><!-- ignore --> (Tom's Obvious, Minimal Language) 格式。TOML 类似于 INI，不过有一些额外的改进之处，并且被用作 Cargo 的配置文件的格式。</p>
-<p>第一行，<code>[package]</code>，是一个部分标题表明下面的语句用来配置一个包。随着我们在这个文件增加更多的信息，还将增加其他部分。</p>
-<p>最后一行，<code>[dependencies]</code>，是列出项目依赖的 <em>crates</em>（我们这么称呼 Rust 代码包）的部分的开始，这样 Cargo 也就知道去下载和编译它们了。这个项目并不需要任何其他的 crate，不过在下一章猜猜看教程会需要。</p>
+<p>这个文件使用 <a href="https://github.com/toml-lang/toml"><em>TOML</em></a><!-- ignore --> (Tom's Obvious, Minimal Language) 格式。TOML 类似于 INI，不过有一些额外的改进之处，并且被用作 Cargo 的配置文件的格式。</p>
+<p>第一行，<code>[package]</code>，是一个段落标题，表明下面的语句用来配置一个包。随着我们在这个文件增加更多的信息，还将增加其他段落。</p>
+<p>最后一行，<code>[dependencies]</code>，是项目依赖的 <em>crates</em>（Rust 代码包）的段落的开始，这样 Cargo 就知道下载和编译它们了。这个项目并不需要任何其他的 crate，不过在下一章猜猜看教程会需要。</p>
 <p>现在看看 <em>src/main.rs</em>：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
 </code></pre>
-<p>Cargo 为你生成了一个“Hello World!”，正如我们之前编写的那个！目前为止我们所见过的之前项目与 Cargo 生成的项目区别有：</p>
+<p>Cargo 为你生成了一个“Hello World!”，正如我们之前编写的那个！目前为止，之前项目与 Cargo 生成项目区别有：</p>
 <ul>
 <li>代码位于 <em>src</em> 目录</li>
 <li>项目根目录包含一个 <em>Cargo.toml</em> 配置文件</li>
 </ul>
-<p>Cargo 期望源文件位于 <em>src</em> 目录，这样将项目根目录留给 README、license 信息、配置文件和其他跟代码无关的文件。这样，Cargo 帮助你保持项目干净整洁。一切井井有条。</p>
-<p>如果没有使用 Cargo 开始项目，正如在 <em>hello_world</em> 目录中的项目，可以把它转化为一个使用 Cargo 的项目，通过将代码放入 <em>src</em> 目录并创建一个合适的 <em>Cargo.toml</em>。</p>
+<p>Cargo 期望源文件位于 <em>src</em> 目录，将项目根目录留给 README、license 信息、配置文件和其他跟代码无关的文件。这样，Cargo 帮助你保持项目干净整洁，一切井井有条。</p>
+<p>如果没有用 Cargo 创建项目，比如 <em>hello_world</em> 目录中的项目，可以通过将代码放入 <em>src</em> 目录，并创建一个合适的 <em>Cargo.toml</em>，将其转化为一个 Cargo 项目。</p>
 <a class="header" href="#构建并运行-cargo-项目" name="构建并运行-cargo-项目"><h3>构建并运行 Cargo 项目</h3></a>
 <p>现在让我们看看通过 Cargo 构建和运行 Hello World 程序有什么不同。为此，输入如下命令：</p>
 <pre><code>$ cargo build
@@ -254,40 +254,40 @@ authors = [&quot;Your Name &lt;you@example.com&gt;&quot;]
 Hello, world!
 </code></pre>
 <p>好的！如果一切顺利，<code>Hello, world!</code>应该再次打印在终端上。</p>
-<p>第一次运行<code>cargo build</code>的时候也会使 Cargo 在项目根目录创建一个叫做 <em>Cargo.lock</em> 的新文件，它看起来像这样：</p>
+<p>首次运行 <code>cargo build</code> 的时候，Cargo 会在项目根目录创建一个新文件，<em>Cargo.lock</em>，它看起来像这样：</p>
 <p><span class="filename">Filename: Cargo.lock</span></p>
 <pre><code class="language-toml">[root]
 name = &quot;hello_cargo&quot;
 version = &quot;0.1.0&quot;
 </code></pre>
-<p>Cargo 使用 <em>Cargo.lock</em> 来记录程序的依赖。这个项目并没有依赖，所以内容有一点稀少。事实上，你自己永远也不需要碰这个文件；仅仅让 Cargo 处理它就行了。</p>
-<p>我们刚刚使用<code>cargo build</code>构建了项目并使用<code>./target/debug/hello_cargo</code>运行了它，不过也可以使用<code>cargo run</code>编译并运行：</p>
+<p>Cargo 使用 <em>Cargo.lock</em> 来记录程序的依赖。这个项目并没有依赖，所以内容比较少。事实上，你自己永远也不需要碰这个文件，让 Cargo 处理它就行了。</p>
+<p>我们刚刚使用 <code>cargo build</code> 构建了项目并使用 <code>./target/debug/hello_cargo</code> 运行了它，也可以使用 <code>cargo run</code> 编译并运行：</p>
 <pre><code>$ cargo run
      Running `target/debug/hello_cargo`
 Hello, world!
 </code></pre>
-<p>注意这一次，并没有出现告诉我们 Cargo 正在编译 <code>hello_cargo</code> 的输出。Cargo 发现文件并没有被改变，所以只是运行了二进制文件。如果修改了源文件的话，将会出现像这样的输出：</p>
+<p>注意这一次并没有出现“正在编译 <code>hello_cargo</code>”的输出。Cargo 发现文件并没有被改变，直接运行了二进制文件。如果修改了源文件的话，将会出现像这样的输出：</p>
 <pre><code>$ cargo run
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
      Running `target/debug/hello_cargo`
 Hello, world!
 </code></pre>
-<p>所以现在又出现一些更多的不同：</p>
+<p>所以现在又出现更多的不同：</p>
 <ul>
-<li>使用<code>cargo build</code>构建项目（或使用<code>cargo run</code>一步构建并运行），而不是使用<code>rustc</code></li>
-<li>不同于将构建结果放在源码相同目录，Cargo 会将它放到 <em>target/debug</em> 目录中的文件。</li>
+<li>使用 <code>cargo build</code> 构建项目（或使用 <code>cargo run</code> 一步构建并运行），而不是使用<code>rustc</code></li>
+<li>有别于将构建结果放在源码目录，Cargo 将它放到 <em>target/debug</em> 目录。</li>
 </ul>
-<p>Cargo 的另一个优点是不管你使用什么操作系统它的命令都是一样的，所以之后我们将不再为 Linux 和 Mac 以及 Windows 提供特定的命令。</p>
+<p>Cargo 的另一个优点是，不管你使用什么操作系统，它的命令都是一样的，所以之后我们将不再为 Linux 和 Mac 以及 Windows 提供相应的命令。</p>
 <a class="header" href="#发布构建" name="发布构建"><h3>发布构建</h3></a>
-<p>当项目最终准备好发布了，可以使用<code>cargo build --release</code>来优化编译项目。这会在 <em>target/release</em> 下生成可执行文件，而不是 <em>target/debug</em>。这些优化可以让 Rust 代码运行的更快，不过启用他们会让程序花更长的时间编译。这也是为何这是两种不同的配置：一个为了开发，这时你经常想要快速重新构建；另一个构建提供给用户的最终程序，这时并不会重新构建并希望程序能运行得越快越好。如果你在测试代码的运行时间，请确保运行<code>cargo build --release</code>并使用 <em>target/release</em> 下的可执行文件进行测试。</p>
+<p>当项目最终准备好发布了，可以使用 <code>cargo build --release</code> 来优化编译项目。这会在 <em>target/release</em> 下生成可执行文件，而不是  <em>target/debug</em>。优化可以让 Rust 代码运行的更快，然而也需要更长的编译时间。因此产生了两种不同的配置：一种为了开发，你需要快速重新构建；另一种构建给用户的最终程序，不会重新构建，并且程序运行得越快越好。如果你在测试代码的运行时间，请确保运行 <code>cargo build --release</code> 并使用 <em>target/release</em> 下的可执行文件。</p>
 <a class="header" href="#把-cargo-当作习惯" name="把-cargo-当作习惯"><h3>把 Cargo 当作习惯</h3></a>
-<p>对于简单项目， Cargo 并不能比<code>rustc</code>提供更多的价值，不过随着开发的进行终将体现它的价值。对于拥有多个 crate 的复杂项目，让 Cargo 来协调构建将更简单。有了 Cargo，只需运行<code>cargo build</code>，然后一切将有序运行。即便这个项目很简单，现在也它使用了很多之后你的 Rust 程序生涯将会用得上的实用工具。事实上，无形中你可以使用下面的命令开始所有你想要从事的项目：</p>
+<p>对于简单项目， Cargo 并不比 <code>rustc</code> 更有价值，不过随着开发的进行终将体现它的价值。对于拥有多个 crate 的复杂项目，让 Cargo 来协调构建将更简单。有了 Cargo，只需运行<code>cargo build</code>，然后一切将有序运行。即便这个项目很简单，也它使用了很多你之后的 Rust 生涯将会用得上的实用工具。其实你可以开始任何你想要从事的项目，使用下面的命令：</p>
 <pre><code>$ git clone someurl.com/someproject
 $ cd someproject
 $ cargo build
 </code></pre>
 <blockquote>
-<p>注意：如果你想要查看 Cargo 的更多细节，请阅读官方的 <a href="http://doc.crates.io/guide.html">Cargo guide</a>，它覆盖了其所有的功能。</p>
+<p>注意：如果想要了解 Cargo 更多的细节，请阅读官方的 <a href="http://doc.crates.io/guide.html">Cargo guide</a>，它覆盖了所有的功能。</p>
 </blockquote>
 <a class="header" href="#猜猜看" name="猜猜看"><h1>猜猜看</h1></a>
 <blockquote>
@@ -295,10 +295,10 @@ $ cargo build
 <br>
 commit e6d6caab41471f7115a621029bd428a812c5260e</p>
 </blockquote>
-<p>让我们通过自己动手的方式一起完成一个项目来快速上手 Rust！本章将介绍一些常用的 Rust 概念，并通过真实的程序来展示如何运用他们。你将会学到<code>let</code>、<code>match</code>、方法、关联函数、使用外部 crate 等更多的知识！接下来的章节会探索这些概念的细节。在这一章，我们将练习基础。</p>
-<p>我们会实现一个经典的新手编程问题：猜猜看游戏。它是这么工作的：程序将会随机生成一个 1 到 100 之间的随机整数。接着它会提示玩家输入一个猜测。当输入了一个猜测后，它会提示猜测是太大了还是太小了。如果猜对了，它会打印出祝贺并退出。</p>
+<p>让我们亲自动手，快速熟悉 Rust！本章将介绍 Rust 中常用的一些概念，并通过真实的程序来展示如何运用。你将会学到更多诸如 <code>let</code>、<code>match</code>、方法、关联函数、外部 crate 等知识！后继章节会深入探索这些概念的细节。在这一章，我们将练习基础。</p>
+<p>我们会实现一个经典的新手编程问题：猜猜看游戏。它是这么工作的：程序将会随机生成一个 1 到 100 之间的随机整数。接着它会请玩家猜一个数并输入，然后提示猜测是大了还是小了。如果猜对了，它会在退出前祝贺你。</p>
 <a class="header" href="#准备一个新项目" name="准备一个新项目"><h2>准备一个新项目</h2></a>
-<p>要创建一个新项目，进入在第一章创建的<strong>项目</strong>目录，像这样使用 Cargo 创建它：</p>
+<p>要创建一个新项目，进入第一章创建的<strong>项目</strong>目录，使用 Cargo 创建它：</p>
 <pre><code>$ cargo new guessing_game --bin
 $ cd guessing_game
 </code></pre>
@@ -313,22 +313,22 @@ authors = [&quot;Your Name &lt;you@example.com&gt;&quot;]
 [dependencies]
 </code></pre>
 <p>如果 Cargo 从环境中获取的开发者信息不正确，修改这个文件并再次保存。</p>
-<p>正如第一章那样，<code>cargo new</code>生成了一个“Hello, world!”程序。查看 <em>src/main.rs</em> 文件：</p>
+<p>正如第一章那样，<code>cargo new</code> 生成了一个“Hello, world!”程序。查看 <em>src/main.rs</em> 文件：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
 </code></pre>
-<p>现在让我们使用<code>cargo run</code>在相同的步骤编译并运行这个“Hello, world!”程序：</p>
+<p>现在让我们使用 <code>cargo run</code>，编译运行一步到位：</p>
 <pre><code class="language-sh">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
 Hello, world!
 </code></pre>
-<p><code>run</code>命令在需要快速迭代项目时就派上用场了，而这个游戏就正是这么一个项目：我们需要在进行下一步之前快速测试每次迭代。</p>
-<p>重新打开 <em>src/main.rs</em> 文件。我们将会在这个文件编写全部的代码。</p>
+<p><code>run</code> 命令适合用在需要快速迭代的项目，而这个游戏就是：我们需要在下一步迭代之前快速测试。</p>
+<p>重新打开 <em>src/main.rs</em> 文件。我们将会在这个文件中编写全部代码。</p>
 <a class="header" href="#处理一次猜测" name="处理一次猜测"><h2>处理一次猜测</h2></a>
-<p>程序的第一部分会请求用户输入，处理输入，并检查输入是否为期望的形式。首先，允许玩家输入一个猜测。在 <em>src/main.rs</em> 中输入列表 2-1 中的代码。</p>
+<p>程序的第一部分请求和处理用户输入，并检查输入是否符合预期。首先，需要有一个让玩家输入猜测的地方。在 <em>src/main.rs</em> 中输入列表 2-1 中的代码。</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">use std::io;
 
@@ -346,59 +346,59 @@ fn main() {
 }
 </code></pre>
 <p><span class="caption">Listing 2-1: Code to get a guess from the user and print it out</span></p>
-<p>这些代码包含很多信息，所以让我们一点一点地过一遍。为了获取用户输入并接着打印结果作为输出，我们需要将<code>io</code>（输入/输出）库引入作用域中。<code>io</code>库来自于标准库（也被称为<code>std</code>）：</p>
+<p>这些代码包含很多信息，我们一点一点地过一遍。为了获取用户输入并打印结果作为输出，我们需要将 <code>io</code>（输入/输出）库引入当前作用域。<code>io</code>库来自于标准库（也被称为<code>std</code>）：</p>
 <pre><code class="language-rust,ignore">use std::io;
 </code></pre>
-<p>Rust 默认只在每个程序的 <a href="https://doc.rust-lang.org/std/prelude/index.html"><em>prelude</em></a><!-- ignore --> 中引用很少的一些类型。如果想要使用的类型并不在 prelude 中，你必须使用一个<code>use</code>语句显式的将其引入到作用域中。使用<code>std::io</code>库将提供很多<code>io</code>相关的功能，接受用户输入的功能。</p>
-<p>正如第一章所讲，<code>main</code>函数是程序的入口点：</p>
+<p>Rust 默认只在每个程序的 <a href="https://doc.rust-lang.org/std/prelude/index.html"><em>prelude</em></a><!-- ignore --> 中引入少量类型。如果需要的类型不在 prelude 中，你必须使用一个 <code>use</code> 语句显式的将其引入作用域。<code>std::io</code> 库提供很多 <code>io</code> 相关的功能，比如接受用户输入。</p>
+<p>如第一章所提及，<code>main</code> 函数是程序的入口点：</p>
 <pre><code class="language-rust,ignore">fn main() {
 </code></pre>
-<p><code>fn</code>语法声明了一个新函数，<code>()</code>表明没有参数，<code>{</code>作为函数体的开始。</p>
-<p>第一章也讲到了，<code>println!</code>是一个在屏幕上打印字符串的宏：</p>
+<p><code>fn</code> 语法声明了一个新函数，<code>()</code> 表明没有参数，<code>{</code> 作为函数体的开始。</p>
+<p>第一章也提及，<code>println!</code> 是一个在屏幕上打印字符串的宏：</p>
 <pre><code class="language-rust,ignore">println!(&quot;Guess the number!&quot;);
 
 println!(&quot;Please input your guess.&quot;);
 </code></pre>
-<p>这些代码仅仅打印一个提示，说明游戏的内容并请求用户输入。</p>
+<p>这些代码仅仅打印提示，介绍游戏的内容然后请用户输入。</p>
 <a class="header" href="#用变量储存值" name="用变量储存值"><h3>用变量储存值</h3></a>
 <p>接下来，创建一个地方储存用户输入，像这样：</p>
-<pre><code class="language-rust,ignore">let mut guess = String::new();
+<pre><code class="language-rust">let mut guess = String::new();
 </code></pre>
-<p>现在程序开始变得有意思了！这一小行代码发生了很多事。注意这是一个<code>let</code>语句，用来创建<strong>变量</strong>。这里是另外一个例子：</p>
-<pre><code class="language-rust,ignore">let foo = bar;
+<p>现在程序开始变得有意思了！这一小行代码发生了很多事。注意这是一个 <code>let</code> 语句，用来创建<strong>变量</strong>。这里是另外一个例子：</p>
+<pre><code class="language-rust">let foo = bar;
 </code></pre>
-<p>这行代码会创建一个叫做<code>foo</code>的新变量并把它绑定到值<code>bar</code>上。在 Rust 中，变量默认是不可变的。下面的例子展示了如何在变量名前使用<code>mut</code>来使一个变量可变：</p>
+<p>这行代码会创建一个叫做 <code>foo</code> 的新变量并把它绑定到值 <code>bar</code> 上。在 Rust 中，变量默认是不可变的。下面的例子展示了如何在变量名前使用 <code>mut</code> 来使一个变量可变：</p>
 <pre><code class="language-rust">let foo = 5; // immutable
 let mut bar = 5; // mutable
 </code></pre>
 <blockquote>
 <p>注意：<code>//</code> 开始一个注释，它持续到本行的结尾。Rust 忽略注释中的所有内容。</p>
 </blockquote>
-<p>现在我们知道了<code>let mut guess</code>会引入一个叫做<code>guess</code>的可变变量。等号（<code>=</code>）的另一边是<code>guess</code>所绑定的值，它是<code>String::new</code>的结果，这个函数会返回一个<code>String</code>的新实例。<a href="https://doc.rust-lang.org/std/string/struct.String.html"><code>String</code></a><!-- ignore -->是一个标准库提供的字符串类型，它是可增长的、UTF-8 编码的文本块。</p>
-<p><code>::new</code>那一行的<code>::</code>语法表明<code>new</code>是<code>String</code>类型的一个<strong>关联函数</strong>（<em>associated function</em>）。关联函数是针对类型实现的，在这个例子中是<code>String</code>，而不是<code>String</code>的某个特定实例。一些语言中把它称为<strong>静态方法</strong>（<em>static method</em>）。</p>
-<p><code>new</code>函数创建了一个新的空的<code>String</code>，你会在很多类型上发现<code>new</code>函数，因为这是创建某个类型新值的常用函数名。</p>
-<p>总结一下，<code>let mut guess = String::new();</code>这一行创建了一个可变变量，目前它绑定到一个<code>String</code>新的、空的实例上。哟！</p>
-<p>回忆一下我们在程序的第一行使用<code>use std::io;</code>从标准库中引用输入/输出功能。现在在<code>io</code>上调用一个关联函数，<code>stdin</code>：</p>
+<p>现在我们知道了 <code>let mut guess</code> 会引入一个叫做 <code>guess</code> 的可变变量。等号（<code>=</code>）的右边是 <code>guess</code> 所绑定的值，它是 <code>String::new</code> 的结果，这个函数会返回一个 <code>String</code> 的新实例。<a href="https://doc.rust-lang.org/std/string/struct.String.html"><code>String</code></a><!-- ignore --> 是一个标准库提供的字符串类型，它是 UTF-8 编码的可增长文本块。</p>
+<p><code>::new</code> 那一行的 <code>::</code> 语法表明 <code>new</code> 是 <code>String</code> 类型的一个 <strong>关联函数</strong>（<em>associated function</em>）。关联函数是针对类型实现的，在这个例子中是 <code>String</code>，而不是 <code>String</code> 的某个特定实例。一些语言中把它称为<strong>静态方法</strong>（<em>static method</em>）。</p>
+<p><code>new</code> 函数创建了一个新的空 <code>String</code>，你会在很多类型上发现<code>new</code> 函数，这是创建类型实例的惯用函数名。</p>
+<p>总结一下，<code>let mut guess = String::new();</code> 这一行创建了一个可变变量，绑定到一个新的 <code>String</code> 空实例上。</p>
+<p>回忆一下，我们在程序的第一行使用 <code>use std::io;</code> 从标准库中引入“输入输出”。现在调用 <code>io</code> 的关联函数 <code>stdin</code>：</p>
 <pre><code class="language-rust,ignore">io::stdin().read_line(&amp;mut guess)
     .expect(&quot;Failed to read line&quot;);
 </code></pre>
-<p>如果我们在程序的开头没有<code>use std::io</code>这一行，我们可以把函数调用写成<code>std::io::stdin</code>这样。<code>stdin</code>函数返回一个 <a href="https://doc.rust-lang.org/std/io/struct.Stdin.html"><code>std::io::Stdin</code></a><!-- ignore -->的实例，这是一个代表终端标准输入句柄的类型。</p>
-<p>代码的下一部分，<code>.read_line(&amp;mut guess)</code>，调用 <a href="https://doc.rust-lang.org/std/io/struct.Stdin.html#method.read_line"><code>read_line</code></a><!-- ignore --> 方法从标准输入句柄获取用户输入。我们还向<code>read_line()</code>传递了一个参数：<code>&amp;mut guess</code>。</p>
-<p><code>read_line</code>的工作是把获取任何用户键入到标准输入的字符并放入一个字符串中，所以它获取字符串作为一个参数。这个字符串需要是可变的，这样这个方法就可以通过增加用户的输入来改变字符串的内容。</p>
-<p><code>&amp;</code>表明这个参数是一个<strong>引用</strong>（<em>reference</em>），它提供了一个允许多个不同部分的代码访问同一份数据而不需要在内存中多次拷贝的方法。引用是一个复杂的功能，而 Rust 的一大优势就是它是如何安全而优雅操纵引用的。完成这个程序并不需要知道这么多细节：第四章会更全面的解释引用。现在，我们只需知道它像变量一样，默认是不可变的。因此，需要写成<code>&amp;mut guess</code>而不是<code>&amp;guess</code>来使其可变。</p>
-<p>我们还没有分析完这行代码。虽然这是单独一行代码，但它只是一个逻辑上代码行（虽然换行了但仍是一个语句）的第一部分。第二部分是这个方法：</p>
-<pre><code class="language-rust,ignore">.expect(&quot;Failed to read line&quot;);
+<p>如果程序的开头没有 <code>use std::io</code> 这一行，我们可以把函数调用写成 <code>std::io::stdin</code>。<code>stdin</code> 函数返回一个  <a href="https://doc.rust-lang.org/std/io/struct.Stdin.html"><code>std::io::Stdin</code></a><!-- ignore --> 的实例，这代表终端标准输入句柄的类型。</p>
+<p>代码的下一部分，<code>.read_line(&amp;mut guess)</code>，调用 <a href="https://doc.rust-lang.org/std/io/struct.Stdin.html#method.read_line"><code>read_line</code></a><!-- ignore --> 方法从标准输入句柄获取用户输入。我们还向 <code>read_line()</code> 传递了一个参数：<code>&amp;mut guess</code>。</p>
+<p><code>read_line</code> 的工作是，无论用户在标准输入中键入什么内容，都将其存入一个字符串中，因此它需要字符串作为参数。这个字符串参数应该是可变的，以便 <code>read_line</code> 将用户输入附加上去。</p>
+<p><code>&amp;</code> 表示这个参数是一个<strong>引用</strong>（<em>reference</em>），它允许多处代码访问同一处数据，而无需在内存中多次拷贝。引用是一个复杂的特性，Rust 的一个主要优势就是安全而简单的操纵引用。完成当前程序并不需要了解如此多细节：第四章会更全面的解释引用。现在，我们只需知道它像变量一样，默认是不可变的，需要写成 <code>&amp;mut guess</code> 而不是 <code>&amp;guess</code> 来使其可变。</p>
+<p>我们还没有分析完这行代码。虽然这是单独一行代码，但它是一个逻辑行（虽然换行了但仍是一个语句）的第一部分。第二部分是这个方法：</p>
+<pre><code class="language-rust">.expect(&quot;Failed to read line&quot;);
 </code></pre>
-<p>当使用<code>.expect()</code>语法调用方法时，明智的选择是换行并留出空白（缩进）来把长的代码行拆开。我们可以把代码写成这样：</p>
-<pre><code class="language-rust,ignore">io::stdin().read_line(&amp;mut guess).expect(&quot;Failed to read line&quot;);
+<p>当使用 <code>.expect()</code> 语法调用方法时，通过‘换行并缩进’来把长行拆开，是明智的。我们完全可以这样写：</p>
+<pre><code class="language-rust">io::stdin().read_line(&amp;mut guess).expect(&quot;Failed to read line&quot;);
 </code></pre>
-<p>不过，过长的代码行难以阅读，所以最好拆开来写，两行代码两个方法调用。现在来看看这行代码干了什么。</p>
-<a class="header" href="#使用result类型来处理潜在的错误" name="使用result类型来处理潜在的错误"><h3>使用<code>Result</code>类型来处理潜在的错误</h3></a>
-<p>之前提到过，<code>read_line</code>将用户输入放入到传递给它字符串中，不过它也返回一个值——在这个例子中，一个<a href="https://doc.rust-lang.org/std/io/type.Result.html"><code>io::Result</code></a><!-- ignore -->。Rust 标准库中有很多叫做<code>Result</code>的类型。一个<a href="https://doc.rust-lang.org/std/result/enum.Result.html"><code>Result</code></a><!-- ignore -->泛型以及对应子模块的特定版本，比如<code>io::Result</code>。</p>
-<p><code>Result</code>类型是 <a href="ch06-00-enums.html"><em>枚举</em>（<em>enumerations</em>）</a><!-- ignore -->，通常也写作 <em>enums</em>。枚举拥有固定值集合的类型，而这些值被称为枚举的<strong>成员</strong>（<em>variants</em>）。第六章会更详细的介绍枚举。</p>
-<p>对于<code>Result</code>，它的成员是<code>Ok</code>或<code>Err</code>，<code>Ok</code>表明操作成功了，同时<code>Ok</code>成员之中包含成功生成的值。<code>Err</code>意味着操作失败，<code>Err</code>之中包含操作是为什么或如何失败的信息。</p>
-<p><code>Result</code>类型的作用是编码错误处理信息。<code>Result</code>类型的值，正如其他任何类型，拥有定义于其上的方法。<code>io::Result</code>的实例拥有<a href="https://doc.rust-lang.org/std/result/enum.Result.html#method.expect"><code>expect</code>方法</a><!-- ignore -->可供调用。如果<code>io::Result</code>实例的值是<code>Err</code>，<code>expect</code>会导致程序崩溃并显示显示你作为参数传递给<code>expect</code>的信息。如果<code>io::Result</code>实例的值是<code>Ok</code>，<code>expect</code>会获取<code>Ok</code>中的值并原原本本的返回给你。在本例中，这个值是用户输入到标准输入中的字节的数量。</p>
-<p>如果不使用<code>expect</code>，程序也能编译，不过会出现一个警告：</p>
+<p>不过，过长的行难以阅读，所以最好拆开来写，两行代码两个方法调用。现在来看看这行代码干了什么。</p>
+<a class="header" href="#使用-result-类型来处理潜在的错误" name="使用-result-类型来处理潜在的错误"><h3>使用 <code>Result</code> 类型来处理潜在的错误</h3></a>
+<p>之前提到，<code>read_line</code> 将用户输入附加到传递给它字符串中，不过它也返回一个值——在这个例子中是 <a href="https://doc.rust-lang.org/std/io/type.Result.html"><code>io::Result</code></a><!-- ignore -->。Rust 标准库中有很多叫做 <code>Result</code> 的类型。一个 <a href="https://doc.rust-lang.org/std/result/enum.Result.html"><code>Result</code></a><!-- ignore --> 泛型以及对应子模块的特定版本，比如 <code>io::Result</code>。</p>
+<p><code>Result</code> 类型是 <a href="ch06-00-enums.html"><em>枚举</em>（<em>enumerations</em>）</a><!-- ignore -->，通常也写作 <em>enums</em>。枚举类型持有固定集合的值，这些值被称为枚举的<strong>成员</strong>（<em>variants</em>）。第六章将介绍枚举的更多细节。</p>
+<p>对于 <code>Result</code>，它的成员是 <code>Ok</code> 或 <code>Err</code>，<code>Ok</code> 表示操作成功，内部包含产生的值。<code>Err</code> 意味着操作失败，包含失败的前因后果。</p>
+<p><code>Result</code> 类型的作用是编码错误处理信息。<code>Result</code> 类型的值，像其他类型一样，拥有定义于其上的方法。<code>io::Result</code> 的实例拥有<a href="https://doc.rust-lang.org/std/result/enum.Result.html#method.expect"><code>expect</code>方法</a><!-- ignore -->，如果实例的值是 <code>Err</code>，<code>expect</code> 会导致程序崩溃，并显示当做参数传递给 <code>expect</code> 的信息;如果实例的值是 <code>Ok</code>，<code>expect</code> 会获取 <code>Ok</code> 中的值并原样返回。在本例中，这个值是用户输入到标准输入中的字节的数量。</p>
+<p>如果不使用 <code>expect</code>，程序也能编译，不过会出现一个警告：</p>
 <pre><code>$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 src/main.rs:10:5: 10:39 warning: unused result which must be used,
@@ -406,18 +406,18 @@ src/main.rs:10:5: 10:39 warning: unused result which must be used,
 src/main.rs:10     io::stdin().read_line(&amp;mut guess);
                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 </code></pre>
-<p>Rust 警告我们没有使用<code>read_line</code>返回的值<code>Result</code>，表明程序没有处理一个可能的错误。消除警告的正确方式是老实编写错误处理，不过因为我们仅仅希望程序出现问题就崩溃，可以直接使用<code>expect</code>。第九章会学习从错误中恢复的内容。</p>
-<a class="header" href="#使用println占位符打印值" name="使用println占位符打印值"><h3>使用<code>println!</code>占位符打印值</h3></a>
-<p>除了位于结尾的大括号，目前为止编写的代码就只有一行代码值得讨论一下了，就是这一行：</p>
-<pre><code class="language-rust,ignore">println!(&quot;You guessed: {}&quot;, guess);
+<p>Rust 警告我们没有使用 <code>read_line</code> 的返回值 <code>Result</code>，说明有一个可能的错误没处理。想消除警告，就老实的写错误处理，不过我们就是希望程序在出现问题时立即崩溃，所以直接使用 <code>expect</code>。第九章会学习如何从错误中恢复。</p>
+<a class="header" href="#使用-println-占位符打印值" name="使用-println-占位符打印值"><h3>使用 <code>println!</code> 占位符打印值</h3></a>
+<p>除了位于结尾的大括号，目前为止就只有一行代码值得讨论一下了，就是这一行：</p>
+<pre><code class="language-rust">println!(&quot;You guessed: {}&quot;, guess);
 </code></pre>
-<p>这行代码打印出存储了用户输入的字符串。这对<code>{}</code>是一个在特定位置预留值的占位符。可以使用<code>{}</code>打印多个值：第一个<code>{}</code>对应格式化字符串之后列出的第一个值，第二个对应第二个值，以此类推。用一个<code>println!</code>调用打印多个值应该看起来像这样：</p>
+<p>这行代码打印存储用户输入的字符串。第一个参数是格式化字符串，里面的 <code>{}</code> 是预留在特定位置的占位符。使用占位符也可以打印多个值：格式化字符串中第一个占位符对应第二个参数值，第二个占位符对应第三个参数值，以此类推（第一个参数是格式化字符串本身）。调用一次 <code>println!</code> 打印多个值看起来像这样：</p>
 <pre><code class="language-rust">let x = 5;
 let y = 10;
 
 println!(&quot;x = {} and y = {}&quot;, x, y);
 </code></pre>
-<p>这行代码会打印出<code>x = 5 and y = 10</code>。</p>
+<p>这行代码会打印出 <code>x = 5 and y = 10</code>。</p>
 <a class="header" href="#测试第一部分代码" name="测试第一部分代码"><h3>测试第一部分代码</h3></a>
 <p>让我们来测试下猜猜看游戏的第一部分。使用<code>cargo run</code>运行它：</p>
 <pre><code class="language-sh">$ cargo run
@@ -428,19 +428,19 @@ Please input your guess.
 6
 You guessed: 6
 </code></pre>
-<p>至此为止，游戏的第一部分已经完成：我们从键盘获取了输入并打印了出来。</p>
+<p>至此为止，游戏的第一部分已经完成：我们从键盘获取输入并打印了出来。</p>
 <a class="header" href="#生成一个秘密数字" name="生成一个秘密数字"><h2>生成一个秘密数字</h2></a>
-<p>接下来，需要生成一个秘密数字，用户会尝试猜测它。秘密数字应该每次都不同，这样多玩几次才会有意思。生成一个 1 到 100 之间的随机数这样游戏也不会太难。Rust 标准库中还未包含随机数功能。然而，Rust 团队确实提供了一个<a href="https://crates.io/crates/rand"><code>rand</code> crate</a>。</p>
+<p>接下来，需要生成一个秘密数字，好让用户来猜。秘密数字应该每次都不同，这样重复玩才不会乏味；范围应该在 1 到 100 之间，这样才不会太困难。Rust 标准库中尚未包含随机数功能。然而，Rust 团队还是提供了一个 <a href="https://crates.io/crates/rand"><code>rand</code> crate</a>。</p>
 <a class="header" href="#使用-crate-来增加更多功能" name="使用-crate-来增加更多功能"><h3>使用 crate 来增加更多功能</h3></a>
-<p>记住 <em>crate</em> 是一个 Rust 代码的包。我们正在构建的项目是一个<strong>二进制 crate</strong>，它生成一个可执行文件。 <code>rand</code> crate 是一个 <strong>库 crate</strong>，它包含意在被其他程序使用的代码。</p>
-<p>Cargo 对外部 crate 的运用是其真正闪光的地方。在我们可以使用<code>rand</code>编写代码之前，需要编辑 <em>Cargo.toml</em> 来包含<code>rand</code>作为一个依赖。现在打开这个文件并在<code>[dependencies]</code>部分标题（Cargo 为你创建了它）的下面添加如下代码：</p>
+<p>记住 <em>crate</em> 是一个 Rust 代码的包。我们正在构建的项目是一个<strong>二进制 crate</strong>，它生成一个可执行文件。 <code>rand</code> crate 是一个 <strong>库 crate</strong>，库 crate 可以包含任意能被其他程序使用的代码。</p>
+<p>Cargo 对外部 crate 的运用是亮点。在我们使用 <code>rand</code> 编写代码之前，需要编辑 <em>Cargo.toml</em> ，声明 <code>rand</code> 作为一个依赖。现在打开这个文件并在 <code>[dependencies]</code> 标题（Cargo 为你创建了它）之下添加：</p>
 <p><span class="filename">Filename: Cargo.toml</span></p>
 <pre><code class="language-toml">[dependencies]
 
 rand = &quot;0.3.14&quot;
 </code></pre>
-<p>在 <em>Cargo.toml</em> 文件中，任何标题之后的内容都是属于这个部分的，一直持续到直到另一个部分开始。<code>[dependencies]</code>部分告诉 Cargo 项目依赖了哪个外部 crate 和需要的 crate 版本。在这个例子中，我们使用语义化版本符号<code>0.3.14</code>来指定<code>rand</code>crate。Cargo 理解<a href="http://semver.org">语义化版本（Semantic Versioning）</a><!-- ignore -->（有时也称为 <em>SemVer</em>），这是一个编写版本号的标准。版本号<code>0.3.14</code>事实上是<code>^0.3.14</code>的缩写，它的意思是“任何与 0.3.14 版本公有 API 相兼容的版本”。</p>
-<p>现在，不用修改任何代码，构建项目，如列表 2-2 所示：</p>
+<p>在 <em>Cargo.toml</em> 文件中，标题以及之后的内容属同一个段落，遇到下一个标题则开始新的段落。<code>[dependencies]</code> 部分告诉 Cargo 本项目依赖了哪些外部 crate 及其版本。本例中，我们使用语义化版本 <code>0.3.14</code> 来指定 <code>rand</code> crate。Cargo 理解<a href="http://semver.org">语义化版本（Semantic Versioning）</a><!-- ignore -->（有时也称为 <em>SemVer</em>），是一种定义版本号的标准。<code>0.3.14</code> 事实上是 <code>^0.3.14</code> 的简写，它表示“任何与 0.3.14 版本公有 API 相兼容的版本”。</p>
+<p>现在，不修改任何代码，构建项目，如列表 2-2 所示：</p>
 <pre><code>$ cargo build
     Updating registry `https://github.com/rust-lang/crates.io-index`
  Downloading rand v0.3.14
@@ -451,40 +451,40 @@ rand = &quot;0.3.14&quot;
 </code></pre>
 <p><span class="caption">Listing 2-2: The output from running <code>cargo build</code> after
 adding the rand crate as a dependency</span></p>
-<p>可能会出现不同的版本号（不过多亏了语义化版本，它们与代码是兼容的！），同时显示顺序也可能会有所不同。</p>
-<p>现在我们有了一个外部依赖，Cargo 从 <em>registry</em> （<a href="https://crates.io">Crates.io</a>）上获取了一份（兼容的）最新版本代码的拷贝。Crates.io 是 Rust 生态环境中的开发者们向他人贡献他们的开源 Rust 项目的地方。</p>
-<p>在更新完 registry （索引）后，Cargo 检查<code>[dependencies]</code>部分并下载还不存在的部分。在这个例子中，虽然只列出了<code>rand</code>一个依赖，Cargo 也获取了一份<code>libc</code>的拷贝，因为<code>rand</code>依赖<code>libc</code>来正常工作。在下载他们之后，Rust 编译他们并接着使用这些依赖编译项目。</p>
-<p>如果不做任何修改就立刻再次运行<code>cargo build</code>，则不会有任何输出。Cargo 知道它已经下载并编译了依赖，同时 <em>Cargo.toml</em> 文件中也没有任何相关修改。Cargo 也知道代码没有做任何修改，所以它也不会重新编译代码。因为无事可做，它简单的退出了。如果打开 <em>src/main.rs</em> 文件，并做一些普通的修改，保存并再次构建，只会出现一行输出：</p>
+<p>可能会出现不同的版本号（多亏了语义化版本，它们与代码是兼容的！），同时显示顺序也可能会有所不同。</p>
+<p>现在我们有了一个外部依赖，Cargo 从 <em>registry</em> （<a href="https://crates.io">Crates.io</a>）上获取了一份（兼容的）最新版本的代码。Crates.io 是 Rust 生态环境中的开发者们向他人贡献 Rust 开源项目的地方。</p>
+<p>在更新完 registry （索引）后，Cargo 检查 <code>[dependencies]</code> 段落并下载缺失的部分。本例中，只声明了 <code>rand</code> 一个依赖，然而 Cargo 还是额外获取了 <code>libc</code>，因为 <code>rand</code> 依赖 <code>libc</code> 来正常工作。下载完成后，Rust 编译依赖，然后使用这些依赖编译项目。</p>
+<p>如果不做任何修改，立刻再次运行 <code>cargo build</code>，则不会有任何输出。Cargo 知道它已经下载并编译了依赖，同时 <em>Cargo.toml</em> 文件也没有变动，并且代码也没有任何修改，所以它不会重新编译代码。因为无事可做，它简单的退出了。如果打开 <em>src/main.rs</em> 文件，做一些普通的修改，保存并再次构建，只会出现一行输出：</p>
 <pre><code>$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 </code></pre>
-<p>这一行表明 Cargo 只构建了对 <em>src/main.rs</em> 文件做出的微小修改。依赖没有被修改，所以 Cargo 知道可以复用已经为此下载并编译的代码。它只是重新构建了部分（项目）代码。</p>
+<p>这一行表示 Cargo 只针对 <em>src/main.rs</em> 文件的微小修改而构建。依赖没有变化，所以 Cargo 会复用已经为此下载并编译的代码。它只是重新构建了部分（项目）代码。</p>
 <a class="header" href="#cargolock-文件确保构建是可重现的" name="cargolock-文件确保构建是可重现的"><h4><em>Cargo.lock</em> 文件确保构建是可重现的</h4></a>
-<p>Cargo 有一个机制来确保每次任何人重新构建代码都会生成相同的结果：Cargo 只会使用你指定的依赖的版本，除非你又手动指定了别的。例如，如果下周<code>rand</code> crate 的<code>v0.3.15</code>版本出来了，而它包含一个重要的 bug 修改并也含有一个会破坏代码运行的缺陷的时候会发生什么呢？</p>
-<p>这个问题的答案是 <em>Cargo.lock</em> 文件，它在第一次运行<code>cargo build</code>时被创建并位于 <em>guessing_game</em> 目录。当第一次构建项目时，Cargo 计算出所有符合要求的依赖版本并接着写入 <em>Cargo.lock</em> 文件中。当将来构建项目时，Cargo 发现 <em>Cargo.lock</em> 存在就会使用这里指定的版本，而不是重新进行所有版本的计算。这使得你拥有了一个自动的可重现的构建。换句话说，项目会继续使用<code>0.3.14</code>直到你显式升级，多亏了 <em>Cargo.lock</em> 文件。我们将会在这个文件编写全部的代码。</p>
+<p>Cargo 有一个机制来确保任何人在任何时候重新构建代码，都会产生相同的结果：Cargo 只会使用你指定的依赖的版本，除非你又手动指定了别的。例如，如果下周 <code>rand</code> crate 的 <code>v0.3.15</code> 版本出来了，它修复了一个重要的 bug，同时也含有一个缺陷，会破坏代码的运行，这时会发生什么呢？</p>
+<p>答案是 <em>Cargo.lock</em> 文件。它在第一次运行 <code>cargo build</code> 时创建，并放在 <em>guessing_game</em> 目录，Cargo 计算出所有符合要求的依赖版本并写入 <em>Cargo.lock</em> 文件。当将来构建项目时，如果 <em>Cargo.lock</em> 存在，Cargo 就使用里面指定的版本，不会重新计算。自动使你拥有了一个可重现的构建。换句话说，项目会继续使用 <code>0.3.14</code> 直到你显式升级，感谢 <em>Cargo.lock</em>。</p>
 <a class="header" href="#更新-crate-到一个新版本" name="更新-crate-到一个新版本"><h4>更新 crate 到一个新版本</h4></a>
 <p>当你<strong>确实</strong>需要升级 crate 时，Cargo 提供了另一个命令，<code>update</code>，他会：</p>
 <ol>
-<li>忽略 <em>Cargo.lock</em> 文件并计算出所有符合 <em>Cargo.toml</em> 中规格的最新版本。</li>
+<li>忽略 <em>Cargo.lock</em> 文件，并计算出所有符合 <em>Cargo.toml</em> 声明的最新版本。</li>
 <li>如果成功了，Cargo 会把这些版本写入 <em>Cargo.lock</em> 文件。</li>
 </ol>
-<p>不过，Cargo 默认只会寻找大于<code>0.3.0</code>而小于<code>0.4.0</code>的版本。如果<code>rand</code> crate 发布了两个新版本，<code>0.3.15</code>和<code>0.4.0</code>，在运行<code>cargo update</code>时会出现如下内容：</p>
+<p>不过，Cargo 默认只会寻找大于 <code>0.3.0</code> 而小于 <code>0.4.0</code> 的版本。如果 <code>rand</code> crate 发布了两个新版本，<code>0.3.15</code> 和 <code>0.4.0</code>，在运行 <code>cargo update</code> 时会出现如下内容：</p>
 <pre><code>$ cargo update
     Updating registry `https://github.com/rust-lang/crates.io-index`
     Updating rand v0.3.14 -&gt; v0.3.15
 </code></pre>
 <p>这时，值得注意的是 <em>Cargo.lock</em> 文件中的一个改变，<code>rand</code> crate 现在使用的版本是<code>0.3.15</code>。</p>
-<p>如果想要使用<code>0.4.0</code>版本的<code>rand</code>或是任何<code>0.4.x</code>系列的版本，必须像这样更新 <em>Cargo.toml</em> 文件：</p>
+<p>如果想要使用 <code>0.4.0</code> 版本的 <code>rand</code> 或是任何 <code>0.4.x</code> 系列的版本，必须像这样更新 <em>Cargo.toml</em> 文件：</p>
 <pre><code class="language-toml">[dependencies]
 
 rand = &quot;0.4.0&quot;
 </code></pre>
-<p>下一次运行<code>cargo build</code>时，Cargo 会更新 registry 中可用的 crate 并根据你指定新版本重新计算<code>rand</code>的要求。</p>
-<p>第十四章会讲到<a href="http://doc.crates.io">Cargo</a><!-- ignore --> 和<a href="http://doc.crates.io/crates-io.html">它的生态系统</a><!-- ignore -->的更多内容，不过目前你只需要了解这么多。Cargo 使得复用库文件变得非常容易，所以 Rustacean 们能够通过组合很多包来编写出更轻巧的项目。</p>
+<p>下一次运行 <code>cargo build</code> 时，Cargo 会从 registry 更新，并根据你指定的新版本重新计算。</p>
+<p>第十四章会讲到 <a href="http://doc.crates.io">Cargo</a><!-- ignore --> 及其<a href="http://doc.crates.io/crates-io.html">生态系统</a><!-- ignore -->的更多内容，不过目前你只需要了解这么多。通过 Cargo 复用库文件非常容易，因此 Rustacean 能够编写出由很多包组装而成的更轻巧的项目。</p>
 <a class="header" href="#生成一个随机数" name="生成一个随机数"><h3>生成一个随机数</h3></a>
-<p>让我们开始<strong>使用</strong><code>rand</code>。下一步是更新 <em>src/main.rs</em>，如列表 2-3 所示：</p>
+<p>让我们开始<strong>使用</strong> <code>rand</code>。下一步是更新 <em>src/main.rs</em>，如列表 2-3 所示：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">extern crate rand;
+<pre><code class="language-rust">extern crate rand;
 
 use std::io;
 use rand::Rng;
@@ -508,10 +508,10 @@ fn main() {
 </code></pre>
 <p><span class="caption">Listing 2-3: Code changes needed in order to generate a
 random number</span></p>
-<p>我们在顶部增加一行<code>extern crate rand;</code>来让 Rust 知道我们要使用外部依赖。这也会调用相应的<code>use rand</code>，所以现在可以使用<code>rand::</code>前缀来调用<code>rand</code>中的任何内容。</p>
-<p>接下来，我们增加了另一行<code>use</code>：<code>use rand::Rng</code>。<code>Rng</code>是一个定义了随机数生成器应实现方法的 trait，如果要使用这些方法的话这个 trait 必须在作用域中。第十章会详细介绍 trait。</p>
-<p>另外，中间还新增加了两行。<code>rand::thread_rng</code>函数会提供具体会使用的随机数生成器：它位于当前执行线程本地并从操作系统获取 seed。接下来，调用随机数生成器的<code>gen_range</code>方法。这个方法由我们使用<code>use rand::Rng</code>语句引入到作用域的<code>Rng</code> trait 定义。<code>gen_range</code>方法获取两个数作为参数并生成一个两者之间的随机数。它包含下限但不包含上限，所以需要指定<code>1</code>和<code>101</code>来请求一个<code>1</code>和<code>100</code>之间的数。</p>
-<p>并不是仅仅能够<strong>知道</strong>该 use 哪个 trait 和该从 crate 中调用哪个方法。如何使用 crate 的说明位于每个 crate 的文档中。Cargo 另一个很棒的功能是可以运行<code>cargo doc --open</code>命令来构建所有本地依赖提供的文档并在浏览器中打开。例如，如果你对<code>rand</code> crate 中的其他功能感兴趣，运行<code>cargo doc --open</code>并点击左侧导航栏中的<code>rand</code>。</p>
+<p>我们在顶部增加一行 <code>extern crate rand;</code> 通知 Rust 我们要使用外部依赖。这也会调用相应的 <code>use rand</code>，所以现在可以使用 <code>rand::</code> 前缀来调用 <code>rand</code> 中的内容。</p>
+<p>接下来，我们增加了一行 <code>use</code>：<code>use rand::Rng</code>。<code>Rng</code> 是一个 trait，它定义了随机数生成器应实现的方法 ，想使用这些方法的话此 trait 必须在作用域中。第十章会详细介绍 trait。</p>
+<p>另外，中间还新增加了两行。<code>rand::thread_rng</code> 函数提供实际使用的随机数生成器：它位于当前执行线程，并从操作系统获取 seed。接下来，调用随机数生成器的 <code>gen_range</code> 方法。这个方法由刚才引入到作用域的 <code>Rng</code> trait 定义。<code>gen_range</code> 方法获取两个数字作为参数，并生成一个范围在两者之间的随机数。它包含下限但不包含上限，所以需要指定<code>1</code>和<code>101</code>来请求一个<code>1</code>和<code>100</code>之间的数。</p>
+<p><strong>知道</strong> use 哪个 trait 和该从 crate 中调用哪个方法并不是全部，crate 的说明位于其文档中，Cargo 有一个很棒的功能是：运行 <code>cargo doc --open</code> 命令来构建所有本地依赖提供的文档，并在浏览器中打开。例如，假设你对 <code>rand</code> crate 中的其他功能感兴趣，<code>cargo doc --open</code> 并点击左侧导航栏中的 <code>rand</code>。</p>
 <p>新增加的第二行代码打印出了秘密数字。这在开发程序时很有用，因为我们可以去测试它，不过在最终版本我们会删掉它。游戏一开始就打印出结果就没什么可玩的了！</p>
 <p>尝试运行程序几次：</p>
 <pre><code>$ cargo run
@@ -534,7 +534,7 @@ You guessed: 5
 <a class="header" href="#比较猜测与秘密数字" name="比较猜测与秘密数字"><h2>比较猜测与秘密数字</h2></a>
 <p>现在有了用户输入和一个随机数，我们可以比较他们。这个步骤如列表 2-4 所示：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">extern crate rand;
+<pre><code class="language-rust">extern crate rand;
 
 use std::io;
 use std::cmp::Ordering;
@@ -565,17 +565,17 @@ fn main() {
 </code></pre>
 <p><span class="caption">Listing 2-4: Handling the possible return values of
 comparing two numbers</span></p>
-<p>新代码的第一行是另一个<code>use</code>，从标准库引入了一个叫做<code>std::cmp::Ordering</code>的类型到作用域。<code>Ordering</code>是另一个枚举，像<code>Result</code>一样，不过<code>Ordering</code>的成员是<code>Less</code>、<code>Greater</code>和<code>Equal</code>。这是你比较两个值时可能出现三种结果。</p>
-<p>接着在底部的五行新代码使用了<code>Ordering</code>类型：</p>
-<pre><code class="language-rust,ignore">match guess.cmp(&amp;secret_number) {
+<p>新代码的第一行是另一个 <code>use</code>，从标准库引入了一个叫做 <code>std::cmp::Ordering</code> 的类型。<code>Ordering</code> 是一个像 <code>Result</code> 一样的枚举，不过它的成员是 <code>Less</code>、<code>Greater</code> 和 <code>Equal</code>。这是你做比较时可能出现的三种结果。</p>
+<p>接着，底部的五行新代码使用了 <code>Ordering</code> 类型：</p>
+<pre><code class="language-rust">match guess.cmp(&amp;secret_number) {
     Ordering::Less    =&gt; println!(&quot;Too small!&quot;),
     Ordering::Greater =&gt; println!(&quot;Too big!&quot;),
     Ordering::Equal   =&gt; println!(&quot;You win!&quot;),
 }
 </code></pre>
-<p><code>cmp</code>方法比较两个值并可以在任何可比较的值上调用。它获取一个任何你想要比较的值的引用：这里是把<code>guess</code>与<code>secret_number</code>做比较。<code>cmp</code>返回一个使用<code>use</code>语句引入作用域的<code>Ordering</code>枚举的成员。我们使用一个<a href="ch06-02-match.html"><code>match</code></a><!-- ignore -->表达式根据对<code>guess</code>和<code>secret_number</code>中的值调用<code>cmp</code>后返回的哪个<code>Ordering</code>枚举成员来决定接下来干什么。</p>
-<p>一个<code>match</code>表达式由 <strong>分支（arms）</strong> 构成。一个分支包含一个 <strong>模式</strong>（<em>pattern</em>）和代码，这些代码在<code>match</code>表达式开头给出的值符合分支的模式时将被执行。Rust 获取提供给<code>match</code>的值并挨个检查每个分支的模式。<code>match</code>结构和模式是 Rust 中非常强大的功能，它帮助你体现代码可能遇到的多种情形并帮助你处理全部的可能。这些功能将分别在第六章和第十八章详细介绍。</p>
-<p>让我们看看一个使用这里的<code>match</code>表达式会发生什么的例子。假设用户猜了 50，这时随机生成的秘密数字是 38。当代码比较 50 与 38 时，<code>cmp</code>方法会返回<code>Ordering::Greater</code>，因为 50 比 38 要大。<code>Ordering::Greater</code>是<code>match</code>表达式得到的值。它检查第一个分支的模式，<code>Ordering::Less</code>，不过值<code>Ordering::Greater</code>并不匹配<code>Ordering::Less</code>。所以它忽略了这个分支的代码并移动到下一个分支。下一个分支的模式，<code>Ordering::Greater</code>，<strong>正确</strong>匹配了<code>Ordering::Greater</code>！这个分支关联的代码会被执行并在屏幕打印出<code>Too big!</code>。<code>match</code>表达式就此终止，因为在这个特定场景下没有检查最后一个分支的必要。</p>
+<p><code>cmp</code> 方法用来比较两个值。在任何可比较的值上调用，然后获取另一个被比较值的引用：这里是把 <code>guess</code> 与 <code>secret_number</code> 做比较，返回一个 <code>Ordering</code> 枚举的成员。再使用一个 <a href="ch06-02-match.html"><code>match</code></a><!-- ignore --> 表达式，根据枚举成员来决定接下来干什么。</p>
+<p>一个 <code>match</code> 表达式由 <strong>分支（arms）</strong> 构成。一个分支包含一个 <strong>模式</strong>（<em>pattern</em>）和动作，表达式头的求值结果符合分支的模式时将执行对应的动作。Rust 获取提供给 <code>match</code> 的值并挨个检查每个分支的模式。<code>match</code> 结构和模式是 Rust 的强大功能，它体现了代码可能遇到的多种情形，并帮助你没有遗漏的处理。这些功能将分别在第六章和第十八章详细介绍。</p>
+<p>让我们看看使用 <code>match</code> 表达式的例子。假设用户猜了 50，这时随机生成的秘密数字是 38。比较 50 与 38 时，因为 50 比 38 要大，<code>cmp</code> 方法会返回 <code>Ordering::Greater</code>。<code>match</code> 表达式得到该值，然后检查第一个分支的模式，<code>Ordering::Less</code> 与 <code>Ordering::Greater</code>并不匹配，所以它忽略了这个分支的动作并来到下一个分支。下一个分支的模式是 <code>Ordering::Greater</code>，<strong>正确</strong>匹配！这个分支关联的动作被执行，在屏幕打印出 <code>Too big!</code>。<code>match</code> 表达式就此终止，因为该场景下没有检查最后一个分支的必要。</p>
 <p>然而，列表 2-4 的代码并不能编译，可以尝试一下：</p>
 <pre><code>$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
@@ -591,10 +591,10 @@ error[E0308]: mismatched types
 error: aborting due to previous error
 Could not compile `guessing_game`.
 </code></pre>
-<p>错误的核心表明这里有<strong>不匹配的类型</strong>（<em>mismatched types</em>）。Rust 拥有一个静态强类型系统。不过，它也有类型推断。当我们写出<code>let guess = String::new()</code>时，Rust 能够推断出<code>guess</code>应该是一个<code>String</code>，并不需要我们写出类型。另一方面，<code>secret_number</code>，是一个数字类型。一些数字类型拥有 1 到 100 之间的值：<code>i32</code>，一个 32 位的数字；<code>u32</code>，一个 32 位无符号数字；<code>i64</code>，一个 64 位数字；等等。Rust 默认使用<code>i32</code>，所以<code>secret_number</code>的类型就是它，除非增加类型信息或任何能让 Rust 推断出不同数值类型的信息。这里错误的原因在于 Rust 不会比较字符串类型和数字类型。</p>
-<p>最终我们想要把程序从输入中读取到的<code>String</code>转换为一个真正的数字类型，这样好与秘密数字向比较。可以通过在<code>main</code>函数体中增加如下两行代码来实现：</p>
+<p>错误的核心表明这里有<strong>不匹配的类型</strong>（<em>mismatched types</em>）。Rust 有一个静态强类型系统，同时也有类型推断。当我们写出 <code>let guess = String::new()</code> 时，Rust 推断出 <code>guess</code> 应该是一个<code>String</code>，不需要我们写出类型。另一方面，<code>secret_number</code>，是一个数字类型。多种数字类型拥有 1 到 100 之间的值：32 位数字 <code>i32</code>；32 位无符号数字 <code>u32</code>；64 位数字 <code>i64</code> 等等。Rust 默认使用 <code>i32</code>，所以它是 <code>secret_number</code> 的类型，除非增加类型信息，或任何能让 Rust 推断出不同数值类型的信息。这里错误的原因在于 Rust 不会比较字符串类型和数字类型。</p>
+<p>所以我们必须把从输入中读取到的 <code>String</code> 转换为一个真正的数字类型，才好与秘密数字进行比较。可以通过在 <code>main</code> 函数体中增加如下两行代码来实现：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">extern crate rand;
+<pre><code class="language-rust">extern crate rand;
 
 use std::io;
 use std::cmp::Ordering;
@@ -627,13 +627,13 @@ fn main() {
 }
 </code></pre>
 <p>这两行代码是：</p>
-<pre><code class="language-rust,ignore">let guess: u32 = guess.trim().parse()
+<pre><code class="language-rust">let guess: u32 = guess.trim().parse()
     .expect(&quot;Please type a number!&quot;);
 </code></pre>
-<p>这里创建了一个叫做<code>guess</code>的变量。不过等等，难道这个程序不是已经有了一个叫做<code>guess</code>的变量了吗？确实如此，不过 Rust 允许我们通过<strong>覆盖</strong>（<em>shadow</em>） 用一个新值来覆盖<code>guess</code>之前的值。这个功能经常用在类似需要把一个值从一种类型转换到另一种类型的场景。shadowing 允许我们复用<code>guess</code>变量的名字而不是强迫我们创建两个不同变量，比如<code>guess_str</code>和<code>guess</code>。（第三章会介绍 shadowing 的更多细节。）</p>
-<p><code>guess</code>被绑定到<code>guess.trim().parse()</code>表达式。表达式中的<code>guess</code>对应包含输入的<code>String</code>类型的原始<code>guess</code>。<code>String</code>实例的<code>trim</code>方法会消除字符串开头和结尾的空白。<code>u32</code>只能包含数字字符。不过用户必须输入回车键才能让<code>read_line</code>返回。当用户按下回车键时，会在字符串中增加一个换行（newline）字符。例如，如果用户输入 5 并回车，<code>guess</code>看起来像这样：<code>5\n</code>。<code>\n</code>代表“换行”，回车键。<code>trim</code>方法消除<code>\n</code>，只留下<code>5</code>。</p>
-<p><a href="https://doc.rust-lang.org/std/primitive.str.html#method.parse">字符串的<code>parse</code>方法</a><!-- ignore -->解析一个字符串成某个数字。因为这个方法可以解析多种数字类型，需要告诉 Rust 我们需要的具体的数字类型，这里通过<code>let guess: u32</code>指定。<code>guess</code>后面的冒号（<code>:</code>）告诉 Rust 我们指明了变量的类型。Rust 有一些内建的数字类型；这里的<code>u32</code>是一个无符号的 32 位整型。它是一个好的较小正整数的默认类型。第三章会讲到其他数字类型。另外，例子程序中的<code>u32</code>注解和与<code>secret_number</code>的比较意味着 Rust 会推断<code>secret_number</code>应该是也是<code>u32</code>类型。现在可以使用相同类型比较两个值了！</p>
-<p><code>parse</code>调用容易产生错误。例如，如果字符串包含<code>A👍%</code>，就无法将其转换为一个数字。因为它可能失败，<code>parse</code>方法返回一个<code>Result</code>类型，非常像之前在“使用<code>Result</code>类型来处理潜在的错误”部分讨论的<code>read_line</code>方法。这里再次类似的使用<code>expect</code>方法处理这个<code>Result</code>类型。如果<code>parse</code>因为不能从字符串生成一个数字而返回一个<code>Err</code>的<code>Result</code>成员时，<code>expect</code>会使游戏崩溃并打印提供给它的信息。如果<code>parse</code>能成功地将字符串转换为一个数字，它会返回<code>Result</code>的<code>Ok</code>成员，同时<code>expect</code>会返回<code>Ok</code>中我们需要的数字。</p>
+<p>这里创建了一个叫做 <code>guess</code> 的变量。不过等等，不是已经有了一个叫做<code>guess</code>的变量了吗？确实如此，不过 Rust 允许<strong>遮盖</strong>（<em>shadow</em>），用一个新值来遮盖 <code>guess</code> 之前的值。这个功能常用在需要转换值类型之类的场景，它允许我们复用 <code>guess</code> 变量的名字，而不是被迫创建两个不同变量，诸如 <code>guess_str</code> 和 <code>guess</code> 之类。（第三章会介绍 shadowing 的更多细节。）</p>
+<p><code>guess</code> 被绑定到 <code>guess.trim().parse()</code> 表达式。表达式中的 <code>guess</code> 是包含输入的 <code>String</code> 类型。<code>String</code> 实例的 <code>trim</code> 方法会去除字符串开头和结尾的空白。<code>u32</code> 只能由数字字符转换，不过用户必须输入回车键才能让 <code>read_line</code> 返回，然而用户按下回车键时，会在字符串中增加一个换行（newline）符。例如，用户输入 5 并回车，<code>guess</code> 看起来像这样：<code>5\n</code>。<code>\n</code> 代表“换行”，回车键。<code>trim</code> 方法消除 <code>\n</code>，只留下<code>5</code>。</p>
+<p><a href="https://doc.rust-lang.org/std/primitive.str.html#method.parse">字符串的<code>parse</code>方法</a><!-- ignore --> 将字符串解析成数字。这个方法可以解析多种数字类型，因此需要告诉 Rust 具体的数字类型，这里通过 <code>let guess: u32</code> 指定。<code>guess</code> 后面的冒号（<code>:</code>）告诉 Rust 我们指定了变量的类型。Rust 有一些内建的数字类型；<code>u32</code> 是一个无符号的 32 位整型。对于不大的正整数来说，它是不错的类型，第三章还会讲到其他数字类型。另外，程序中的 <code>u32</code> 注解以及与 <code>secret_number</code> 的比较，意味着 Rust 会推断出 <code>secret_number</code> 也是 <code>u32</code> 类型。现在可以使用相同类型比较两个值了！</p>
+<p><code>parse</code> 调用可能产生错误。例如，字符串中包含 <code>A👍%</code>，就无法将其转换为一个数字。因此，<code>parse</code> 方法返回一个 <code>Result</code> 类型。像之前讨论的 <code>read_line</code> 方法，按部就班的用 <code>expect</code> 方法处理即可。如果 <code>parse</code> 不能从字符串生成一个数字，返回一个 <code>Result::Err</code> 时，<code>expect</code> 会使游戏崩溃并打印附带的信息。如果 <code>parse</code> 成功地将字符串转换为一个数字，它会返回 <code>Result::Ok</code>，然后 <code>expect</code> 会返回 <code>Ok</code> 中的数字。</p>
 <p>现在让我们运行程序！</p>
 <pre><code>$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
@@ -648,9 +648,9 @@ Too big!
 <p>漂亮！即便是在猜测之前添加了空格，程序依然能判断出用户猜测了 76。多运行程序几次来检验不同类型输入的相应行为：猜一个正确的数字，猜一个过大的数字和猜一个过小的数字。</p>
 <p>现在游戏已经大体上能玩了，不过用户只能猜一次。增加一个循环来改变它吧！</p>
 <a class="header" href="#使用循环来允许多次猜测" name="使用循环来允许多次猜测"><h2>使用循环来允许多次猜测</h2></a>
-<p><code>loop</code>关键字提供了一个无限循环。增加它后给了用户多次猜测的机会：</p>
+<p><code>loop</code> 关键字提供了一个无限循环。将其加入后，用户可以反复猜测：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">extern crate rand;
+<pre><code class="language-rust">extern crate rand;
 
 use std::io;
 use std::cmp::Ordering;
@@ -684,8 +684,8 @@ fn main() {
     }
 }
 </code></pre>
-<p>如上所示，我们将提示用户猜测之后的所有内容放入了循环。确保这些代码多缩进了四个空格，并再次运行程序。注意这里有一个新问题，因为程序忠实地执行了我们要求它做的：永远地请求另一个猜测！看起来用户没法退出啊！</p>
-<p>用户总是可以使用<code>Ctrl-C</code>快捷键来终止程序。不过这里还有另一个逃离这个贪得无厌的怪物的方法，就是在“比较猜测”部分提到的<code>parse</code>：如果用户输入一个非数字回答，程序会崩溃。用户可以利用这一点来退出，如下所示：</p>
+<p>如上所示，我们将提示用户猜测之后的所有内容放入了循环。确保这些代码额外缩进了一层，再次运行程序。注意这里有一个新问题，因为程序忠实地执行了我们的要求：永远地请求另一个猜测，用户没法退出！</p>
+<p>用户总能使用 <code>Ctrl-C</code> 终止程序。不过还有另一个方法跳出无限循环，就是“比较猜测”部分提到的 <code>parse</code>：如果用户输入一个非数字答案，程序会崩溃。用户可以利用这一点来退出，如下所示：</p>
 <pre><code>$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
@@ -709,11 +709,11 @@ thread 'main' panicked at 'Please type a number!: ParseIntError { kind: InvalidD
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/guess` (exit code: 101)
 </code></pre>
-<p>输入<code>quit</code>确实退出了程序，同时其他任何非数字输入也一样。然而，毫不夸张的说这是不理想的。我们想要当猜测正确的数字时游戏能自动退出。</p>
+<p>输入 <code>quit</code> 确实退出了程序，同时其他任何非数字输入也一样。然而，这并不理想，我们想要当猜测正确的数字时游戏能自动退出。</p>
 <a class="header" href="#猜测正确后退出" name="猜测正确后退出"><h3>猜测正确后退出</h3></a>
-<p>让我们增加一个<code>break</code>来在用户胜利时退出游戏：</p>
+<p>让我们增加一个 <code>break</code>，在用户猜对时退出游戏：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">extern crate rand;
+<pre><code class="language-rust">extern crate rand;
 
 use std::io;
 use std::cmp::Ordering;
@@ -750,18 +750,18 @@ fn main() {
     }
 }
 </code></pre>
-<p>通过在<code>You win!</code>之后增加一行<code>break</code>，程序在用户猜对了神秘数字后会退出循环。退出循环也就意味着退出程序，因为循环是<code>main</code>的最后一部分。</p>
+<p>通过在 <code>You win!</code> 之后增加一行 <code>break</code>，用户猜对了神秘数字后会退出循环。退出循环也意味着退出程序，因为循环是 <code>main</code> 的最后一部分。</p>
 <a class="header" href="#处理无效输入" name="处理无效输入"><h3>处理无效输入</h3></a>
-<p>为了进一步改善游戏性，而不是在用户输入非数字时崩溃，需要让游戏忽略非数字从而用户可以继续猜测。可以通过修改<code>guess</code>从<code>String</code>转化为<code>u32</code>那部分代码来实现：</p>
-<pre><code class="language-rust,ignore">let guess: u32 = match guess.trim().parse() {
+<p>为了进一步改善游戏性，不要在用户输入非数字时崩溃，需要忽略非数字，让用户可以继续猜测。可以通过修改 <code>guess</code> 将 <code>String</code> 转化为 <code>u32</code> 那部分代码来实现：</p>
+<pre><code class="language-rust">let guess: u32 = match guess.trim().parse() {
     Ok(num) =&gt; num,
     Err(_) =&gt; continue,
 };
 </code></pre>
-<p>从<code>expect</code>调用切换到<code>match</code>语句是如何从遇到错误就崩溃到真正处理错误的常用手段。记住<code>parse</code>返回一个<code>Result</code>类型，而<code>Result</code>是一个拥有<code>Ok</code>或<code>Err</code>两个成员的枚举。在这里使用<code>match</code>表达式，就像之前处理<code>cmp</code>方法返回的<code>Ordering</code>一样。</p>
-<p>如果<code>parse</code>能够成功的将字符串转换为一个数字，它会返回一个包含结果数字<code>Ok</code>值。这个<code>Ok</code>值会匹配第一个分支的模式，这时<code>match</code>表达式仅仅返回<code>parse</code>产生的<code>Ok</code>值之中的<code>num</code>值。这个数字会最终如期变成新创建的<code>guess</code>变量。</p>
-<p>如果<code>parse</code><em>不</em>能将字符串转换为一个数字，它会返回一个包含更多错误信息的<code>Err</code>值。<code>Err</code>值不能匹配第一个<code>match</code>分支的<code>Ok(num)</code>模式，但是会匹配第二个分支的<code>Err(_)</code>模式。<code>_</code>是一个包罗万象的值；在这个例子中，我们想要匹配所有<code>Err</code>值，不管其中有何种信息。所以程序会执行第二个分支的代码，<code>continue</code>，这意味着进入<code>loop</code>的下一次循环并请求另一个猜测。这样程序就有效地忽略了<code>parse</code>可能遇到的所有错误！</p>
-<p>现在万事俱备（只欠东风）了。运行<code>cargo run</code>来尝试一下：</p>
+<p>将 <code>expect</code> 调用换成 <code>match</code> 语句,是从“立即崩溃”转到真正处理错误的惯用方法。须知 <code>parse</code> 返回一个 <code>Result</code> 类型，而 <code>Result</code> 是一个拥有 <code>Ok</code> 或 <code>Err</code> 成员的枚举。这里使用的 <code>match</code> 表达式，和之前处理 <code>cmp</code> 方法返回 <code>Ordering</code> 时用的一样。</p>
+<p>如果 <code>parse</code> 能够成功的将字符串转换为一个数字，它会返回一个包含结果数字的 <code>Ok</code>。这个 <code>Ok</code> 值与<code>match</code> 第一个分支的模式相匹配，该分支对应的动作返回 <code>Ok</code> 值中的数字 <code>num</code>，最后如愿变成新创建的 <code>guess</code> 变量。</p>
+<p>如果 <code>parse</code> <em>不</em>能将字符串转换为一个数字，它会返回一个包含更多错误信息的 <code>Err</code>。<code>Err</code> 值不能匹配第一个 <code>match</code> 分支的 <code>Ok(num)</code> 模式，但是会匹配第二个分支的 <code>Err(_)</code> 模式：<code>_</code> 是一个兜底值，用来匹配所有 <code>Err</code> 值，不管其中有何种信息。所以程序会执行第二个分支的动作，<code>continue</code> 意味着进入 <code>loop</code> 的下一次循环，请求另一个猜测。这样程序就忽略了 <code>parse</code> 可能遇到的所有错误！</p>
+<p>现在万事俱备，只需运行 <code>cargo run</code>：</p>
 <pre><code>$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
@@ -782,9 +782,9 @@ Please input your guess.
 You guessed: 61
 You win!
 </code></pre>
-<p>太棒了！再有最后一个小的修改，就能完成猜猜看游戏了：还记得程序依然会打印出秘密数字。这在测试时还好，但会毁了游戏性。删掉打印秘密数字的<code>println!</code>。列表 2-5 为最终代码：</p>
+<p>太棒了！再有最后一个小的修改，就能完成猜猜看游戏了：还记得程序依然会打印出秘密数字。在测试时还好，但正式发布时会毁了游戏。删掉打印秘密数字的 <code>println!</code>。列表 2-5 为最终代码：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">extern crate rand;
+<pre><code class="language-rust">extern crate rand;
 
 use std::io;
 use std::cmp::Ordering;
@@ -824,18 +824,18 @@ fn main() {
 <p><span class="caption">Listing 2-5: Complete code of the guessing game</span></p>
 <a class="header" href="#总结" name="总结"><h2>总结</h2></a>
 <p>此时此刻，你顺利完成了猜猜看游戏！恭喜！</p>
-<p>这是一个通过动手实践的方式想你介绍许多 Rust 新知识的项目：<code>let</code>、<code>match</code>、方法、关联函数，使用外部 crate，等等。接下来的几章，我们将会详细学习这些概念。第三章涉及到大部分编程语言都有的概念，比如变量、数据类型和函数，以及如何在 Rust 中使用他们。第四章探索所有权（ownership），这是一个 Rust 同其他语言都不相同的功能。第五章讨论结构体和方法的语法，而第六章侧重解释枚举。</p>
+<p>这是一个通过动手实践学习 Rust 新概念的项目：<code>let</code>、<code>match</code>、方法、关联函数、使用外部 crate 等等，接下来的几章，我们将会继续深入。第三章涉及到大部分编程语言都有的概念，比如变量、数据类型和函数，以及如何在 Rust 中使用他们。第四章探索所有权（ownership），这是一个 Rust 同其他语言都不相同的功能。第五章讨论结构体和方法的语法，而第六章侧重解释枚举。</p>
 <a class="header" href="#通用编程概念" name="通用编程概念"><h1>通用编程概念</h1></a>
 <blockquote>
 <p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch03-00-common-programming-concepts.md">ch03-00-common-programming-concepts.md</a>
 <br>
 commit 04aa3a45eb72855b34213703718f50a12a3eeec8</p>
 </blockquote>
-<p>这一章涉及到几乎出现在所有编程语言中的概念，以及他们在 Rust 中是如何工作的。很多编程语言在核心概念上都是共通的。本章中展示的所有概念没有一个是 Rust 所特有的，不过我们会在 Rust 环境中讨论他们并解释他们的使用习惯。</p>
-<p>具体的，我们将会学习变量，基本类型，函数，注释和控制流。这些基础知识将会出现在每一个 Rust 程序中，提早学习这些概念会使你在起步时拥有一个强有力的基础。</p>
+<p>本章涉及一些几乎所有编程语言都有的概念，以及他们在 Rust 中是如何工作的。很多编程语言的核心概念都是共通的，本章中展示的概念都不是 Rust 特有的，不过我们会在 Rust 环境中讨论他们，解释他们的使用习惯。</p>
+<p>具体的，我们将会学习变量，基本类型，函数，注释和控制流。这些基础知识将会出现在每一个 Rust 程序中，提早学习这些概念会使你拥有坚实的起步。</p>
 <blockquote>
 <a class="header" href="#关键字" name="关键字"><h3>关键字</h3></a>
-<p>Rust 语言有一系列被保留为只能被语言使用的<strong>关键字</strong>（<em>keywords</em>），如大部分语言一样。注意你不能使用这些关键字作为变量或函数的名称。大部分关键字有特殊的意义，并将会被用来进行 Rust 程序中的多种任务；一些关键字目前没有相关的功能不过为了将来可能添加进 Rust 的功能而被保留。可以在附录 A 中找到一份关键字的列表</p>
+<p>Rust 语言有一系列保留的<strong>关键字</strong>（<em>keywords</em>），只能由语言本身使用，像大部分语言一样。你不能使用这些关键字作为变量或函数的名称，大部分关键字有特殊的意义，并被用来完成 Rust 程序中的各种任务；一些关键字目前没有分配，是为将来可能添加的功能保留的。可以在附录 A 中找到关键字的列表。</p>
 </blockquote>
 <a class="header" href="#变量和可变性" name="变量和可变性"><h2>变量和可变性</h2></a>
 <blockquote>
@@ -843,8 +843,8 @@ commit 04aa3a45eb72855b34213703718f50a12a3eeec8</p>
 <br>
 commit 04aa3a45eb72855b34213703718f50a12a3eeec8</p>
 </blockquote>
-<p>第二章中提到过，变量默认是<strong>不可变</strong>（<em>immutable</em>）的。这是 Rust 中许多鼓励利用 Rust 提供的安全和简单并发优势编写代码的助力之一。不过，仍然有使变量可变的选项。让我们探索一下如何以及为什么鼓励你拥抱不可变性，还有为什么你可能想要弃之不用。</p>
-<p>当变量是不可变时，这意味着一旦一个值被绑定上了一个名称，你就不能改变这个值。作为说明，通过<code>cargo new --bin variables</code>在 <em>projects</em> 目录生成一个叫做 <em>variables</em> 的新项目。</p>
+<p>第二章中提到过，变量默认是<strong>不可变</strong>（<em>immutable</em>）的。这是利用 Rust 安全和简单并发的优势编写代码一大助力。不过，变量仍然有可变的选项。让我们探讨一下,拥抱不可变性的原因及方法，以及何时你不想拥抱。</p>
+<p>当变量不可变时，意味着一旦值被绑定上一个名称，你就不能改变这个值。作为说明，通过<code>cargo new --bin variables</code>在 <em>projects</em> 目录生成一个叫做 <em>variables</em> 的新项目。</p>
 <p>接着，在新建的 <em>variables</em> 目录，打开 <em>src/main.rs</em> 并替换其代码为如下：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
@@ -866,10 +866,10 @@ error[E0384]: re-assignment of immutable variable `x`
 4 |     x = 6;
   |     ^^^^^ re-assignment of immutable variable
 </code></pre>
-<p>这个例子显示了编译器如何帮助你寻找程序中的错误。即便编译器错误可能是令人沮丧的，他们也仅仅意味着程序不能安全的完成你想让它完成的工作；他们<strong>不能</strong>说明你不是一个好的程序员！有经验的 Rustacean 们也会遇到编译器错误。这些错误表明错误的原因是<code>对不可变变量重新赋值</code>（<code>re-assignment of immutable variable</code>），因为我们尝试对不可变变量<code>x</code>赋第二个值。</p>
-<p>当尝试去改变之前设计为不可变的值出现编译时错误是很重要的，因为这种情况可能导致 bug。如果代码的一部分假设一个值永远也不会改变而另一部分代码改变了它，这样第一部分代码就有可能不能像它设计的那样运行。不得不承认这种 bug 难以跟踪，尤其是当第二部分代码只是<strong>有时</strong>当变量使不可变时。</p>
-<p>Rust 编译器保证如果声明一个值不会改变，它就真的不会改变。这意味着当阅读和编写代码时，并不需要记录如何以及在哪可能会被改变，这使得代码易于推导。</p>
-<p>不过可变性也是非常有用的。变量只是默认不可变；可以通过在变量名之前增加<code>mut</code>来使其可变。它向之后的读者表明了其他部分的代码将会改变这个变量值的意图。</p>
+<p>这个例子展示了编译器如何帮助你找出程序中的错误。即便编译错误令人沮丧，那也不过是说程序不能安全的完成你想让它完成的工作；而<strong>不能</strong>说明你是不是一个好程序员！有经验的 Rustacean 们一样会遇到编译错误。这些错误给出的原因是<code>对不可变变量重新赋值</code>（<code>re-assignment of immutable variable</code>），因为我们尝试对不可变变量<code>x</code>赋第二个值。</p>
+<p>尝试去改变预设为不可变的值，产生编译错误是很重要的，因为这种情况可能导致 bug：如果代码的一部分假设一个值永远也不会改变，而另一部分代码改变了它，第一部分代码就有可能以不可预料的方式运行。不得不承认这种 bug 难以跟踪，尤其是第二部分代码只是<strong>有时</strong>改变其值。</p>
+<p>Rust 编译器保证，如果声明一个值不会变，它就真的不会变。这意味着当阅读和编写代码时，不需要厘清如何以及哪里可能会被改变，从而使得代码易于推导。</p>
+<p>不过可变性也是非常有用的。变量只是默认不可变；可以通过在变量名之前加 <code>mut</code> 来使其可变。它向读者表明了其他代码将会改变这个变量的意图。</p>
 <p>例如，改变 <em>src/main.rs</em> 并替换其代码为如下：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -886,21 +886,21 @@ error[E0384]: re-assignment of immutable variable `x`
 The value of x is: 5
 The value of x is: 6
 </code></pre>
-<p>通过<code>mut</code>，允许把绑定到<code>x</code>的值从<code>5</code>改成<code>6</code>。在一些情况下，你会想要一个变量是可变的，因为这比只使用不可变变量实现的代码更易于编写。</p>
-<p>除了避免 bug 外，这里还有多个需要权衡取舍的地方。例如，有时使用大型数据结构时，适当地使变量可变可能比复制和返回新分配的实例要更快。对于较小的数据结构，总是创建新实例并采用一种更函数式的编程风格可能会使代码更易理解。所以为了可读性而造成的性能惩罚也许是值得的。</p>
+<p>通过 <code>mut</code>，允许把绑定到 <code>x</code> 的值从 <code>5</code> 改成 <code>6</code>。在一些情况下，你会想要一个变量可变，因为相对不可变的风格更容易写。</p>
+<p>除了避免 bug 外，还有多处需要权衡取舍。例如，使用大型数据结构时，适当地使变量可变，可能比复制和返回新分配的实例更快。对于较小的数据结构，总是创建新实例，采用更偏向函数式的风格编程，可能会使代码更易理解，为可读性而遭受性能惩罚或许值得。</p>
 <a class="header" href="#变量和常量的区别" name="变量和常量的区别"><h3>变量和常量的区别</h3></a>
-<p>不能改变一个变量的值可能会使你想起另一个大部分编程语言都有的概念：<strong>常量</strong>（<em>constants</em>）。类似于不可变变量，常量也是绑定到一个名称的不允许改变的值，不过常量与变量还是有一些区别。</p>
-<p>首先，不允许对常量使用<code>mut</code>：常量不光是默认不能改变，它总是不能改变。</p>
-<p>常量使用<code>const</code>关键字而不是<code>let</code>关键字声明，而且<em>必须</em>注明值的类型。现在我们准备在下一部分，“数据类型”，涉及到类型和类型注解，所以现在无需担心这些细节，只需记住必须总是注明类型即可。</p>
+<p>不允许改变值的变量，可能会使你想起另一个大部分编程语言都有的概念：<strong>常量</strong>（<em>constants</em>）。类似于不可变变量，常量也是绑定到一个名称的不允许改变的值，不过常量与变量还是有一些区别。</p>
+<p>首先，不允许对常量使用 <code>mut</code>：常量不光默认不能变，它总是不能变。</p>
+<p>声明常量使用 <code>const</code> 关键字而不是 <code>let</code>，而且<em>必须</em>注明值的类型。在下一部分，“数据类型”，涉及到类型和类型注解，现在无需关心这些细节，记住总是标注类型即可。</p>
 <p>常量可以在任何作用域声明，包括全局作用域，这在一个值需要被很多部分的代码用到时很有用。</p>
-<p>最后一个区别是常量只能用于常量表达式，而不能作为函数调用的结果或任何其他只在运行时计算的值。</p>
-<p>这是一个常量声明的例子，它的名称是<code>MAX_POINTS</code>而它的值是 100,000。（Rust 常量的命名规范是使用大写字母和单词间使用下划线）：</p>
+<p>最后一个区别是常量只能用于常量表达式，而不能作为函数调用的结果，或任何其他只在运行时计算的值。</p>
+<p>这是一个常量声明的例子，它的名称是 <code>MAX_POINTS</code>，值是 100,000。（常量使用下划线分隔的大写字母命名）：</p>
 <pre><code class="language-rust">const MAX_POINTS: u32 = 100_000;
 </code></pre>
-<p>常量在整个程序生命周期中都有效，位于它声明的作用域之中。这使得常量可以用作多个部分的代码可能需要知道的程序范围的值，例如一个游戏中任何玩家可以获得的最高分或者光速。</p>
-<p>将用于整个程序的硬编码的值声明为为常量（并编写文档）对为将来代码维护者表明值的意义是很有用的。它也能帮助你将硬编码的值至于一处以便将来可能需要修改他们。</p>
-<a class="header" href="#覆盖shadowing" name="覆盖shadowing"><h3>覆盖（Shadowing）</h3></a>
-<p>如第二章猜猜看游戏所讲到的，我们可以定义一个与之前变量名称相同的新变量，而新变量会<strong>覆盖</strong>之前的变量。Rustacean 们称其为第一个变量被第二个<strong>给覆盖</strong>了，这意味着第二个变量的值是使用这个变量时会看到的值。可以用相同变量名称来覆盖它自己以及重复使用<code>let</code>关键字来多次覆盖，如下所示：</p>
+<p>常量在整个程序生命周期中都有效，位于它声明的作用域之中。这使得常量可以作为多处代码使用的全局范围的值，例如一个游戏中所有玩家可以获取的最高分或者光速。</p>
+<p>将作用于整个程序的值，由硬编码改为常量（并编写文档），对后来的维护者了解值的意义很用帮助。它也能将硬编码的值汇总一处，为将来可能的修改提供方便。</p>
+<a class="header" href="#遮盖shadowing" name="遮盖shadowing"><h3>遮盖（Shadowing）</h3></a>
+<p>如第二章“猜猜看游戏”所讲的，我们可以定义一个与之前变量重名的新变量，而新变量会<strong>遮盖</strong>之前的变量。Rustacean 称之为“第一个变量被第二个<strong>遮盖</strong>了”，这意味着使用这个变量时会看第二个值。可以用相同变量名称来遮盖它自己，以及重复使用 <code>let</code> 关键字来多次遮盖，如下所示：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
@@ -912,22 +912,22 @@ The value of x is: 6
     println!(&quot;The value of x is: {}&quot;, x);
 }
 </code></pre>
-<p>这个程序首先将<code>x</code>绑定到值<code>5</code>上。接着通过<code>let x =</code>覆盖<code>x</code>，获取原始值并加<code>1</code>这样<code>x</code>的值就变成<code>6</code>了。第三个<code>let</code>语句也覆盖了<code>x</code>，获取之前的值并乘以<code>2</code>，<code>x</code>的最终值是<code>12</code>。当运行这个程序，它会有如下输出：</p>
+<p>这个程序首先将 <code>x</code> 绑定到值 <code>5</code> 上。接着通过 <code>let x =</code> 遮盖 <code>x</code>，获取原始值并加 <code>1</code> 这样 <code>x</code> 的值就变成 <code>6</code> 了。第三个 <code>let</code> 语句也覆盖了 <code>x</code>，获取之前的值并乘以 <code>2</code>，<code>x</code> 最终的值是 <code>12</code>。运行这个程序，它会有如下输出：</p>
 <pre><code>$ cargo run
    Compiling variables v0.1.0 (file:///projects/variables)
      Running `target/debug/variables`
 The value of x is: 12
 </code></pre>
-<p>这与将变量声明为<code>mut</code>是有区别的。因为除非再次使用<code>let</code>关键字，不小心尝试对变量重新赋值会导致编译时错误。我们可以用这个值进行一些计算，不过计算完之后变量仍然是不变的。</p>
-<p>另一个<code>mut</code>与覆盖的区别是当再次使用<code>let</code>关键字时，事实上创建了一个新变量，我们可以改变值的类型。例如，假设程序请求用户输入空格来提供在一些文本之间需要多少空间来分隔，不过我们真正需要的是将输入存储成数字（多少个空格）：</p>
+<p>这与将变量声明为 <code>mut</code> 是有区别的。因为除非再次使用 <code>let</code> 关键字，不小心尝试对变量重新赋值会导致编译时错误。我们可以用这个值进行一些计算，不过计算完之后变量仍然是不变的。</p>
+<p><code>mut</code> 与遮盖的另一个区别是，当再次使用 <code>let</code> 时，实际上创建了一个新变量，我们可以改变值的类型。例如，假设程序请求用户输入空格来提供文本间隔，然而我们真正需要的是将输入存储成数字（多少个空格）：</p>
 <pre><code class="language-rust">let spaces = &quot;   &quot;;
 let spaces = spaces.len();
 </code></pre>
-<p>这里允许第一个<code>spaces</code>变量是字符串类型，而第二个<code>spaces</code>变量，它是一个恰巧与第一个变量名字相同的崭新的变量，它是数字类型。因此覆盖使我们不必使用不同的名字，比如<code>spaces_str</code>和<code>spaces_num</code>；相反，我们可以复用<code>spaces</code>这个更简单的名称。然而，如果尝试使用<code>mut</code>，如下所示：</p>
+<p>这里允许第一个 <code>spaces</code> 变量是字符串类型，而第二个 <code>spaces</code> 变量，它是一个恰巧与第一个变量同名的崭新变量，是数字类型。遮盖使我们不必使用不同的名字，如 <code>spaces_str</code> 和 <code>spaces_num</code>；相反，我们可以复用 <code>spaces</code> 这个更简单的名字。然而，如果尝试使用<code>mut</code>，如下所示：</p>
 <pre><code class="language-rust,ignore">let mut spaces = &quot;   &quot;;
 spaces = spaces.len();
 </code></pre>
-<p>会导致一个编译时错误，因为不允许改变一个变量的类型：</p>
+<p>会导致一个编译错误，因为改变一个变量的类型是不被允许的：</p>
 <pre><code>error[E0308]: mismatched types
  --&gt; src/main.rs:3:14
   |
@@ -944,11 +944,11 @@ spaces = spaces.len();
 <br>
 commit fe4833a8ef2853c55424e7747a4ef8dd64c35b32</p>
 </blockquote>
-<p>Rust 中的任何值都有一个具体的<strong>类型</strong>（<em>type</em>），这告诉了 Rust 它被指定了何种数据，这样 Rust 就知道如何处理这些数据了。这一部分将讲到一些语言内建的类型。我们将这些类型分为两个子集：标量（scalar）和复合（compound）。</p>
-<p>贯穿整个部分，请记住 Rust 是一个<strong>静态类型</strong>（<em>statically typed</em>）语言，也就是说必须在编译时就知道所有变量的类型。编译器通常可以通过值以及如何使用他们来推断出我们想要用的类型。当多个类型都是可能的时候，比如第二章中<code>parse</code>将<code>String</code>转换为数字类型，必须增加类型注解，像这样：</p>
+<p>在 Rust 中，任何值都属于一种明确的<strong>类型</strong>（<em>type</em>），声明它被指定了何种数据，以便明确其处理方式。我们将分两部分探讨一些内建类型：标量（scalar）和复合（compound）。</p>
+<p>Rust 是<strong>静态类型</strong>（<em>statically typed</em>）语言，也就是说在编译时就需要知道所有变量的类型，这一认知将贯穿整个章节，请在头脑中明确。通过值的形式及其使用方式，编译器通常可以推断出我们想要用的类型。多种类型均有可能时，比如第二章中使用 <code>parse</code> 将 <code>String</code> 转换为数字，必须增加类型注解，像这样：</p>
 <pre><code class="language-rust">let guess: u32 = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
 </code></pre>
-<p>如果这里不添加类型注解，Rust 会显示如下错误，它意味着编译器需要我们提供更多我们想要使用哪个可能的类型的信息：</p>
+<p>如果不添加类型注解，Rust 会显示如下错误。这说明编译器需要更多信息，来了解我们想要的类型：</p>
 <pre><code>error[E0282]: unable to infer enough type information about `_`
  --&gt; src/main.rs:2:9
   |
@@ -957,11 +957,11 @@ commit fe4833a8ef2853c55424e7747a4ef8dd64c35b32</p>
   |
   = note: type annotations or generic parameter binding required
 </code></pre>
-<p>在我们讨论各种数据类型时会看到不同的类型注解。</p>
+<p>在我们讨论各种数据类型时，你会看到多样的类型注解。</p>
 <a class="header" href="#标量类型" name="标量类型"><h3>标量类型</h3></a>
 <p><strong>标量</strong>类型代表一个单独的值。Rust 有四种基本的标量类型：整型、浮点型、布尔类型和字符类型。你可能在其他语言中见过他们，不过让我们深入了解他们在 Rust 中时如何工作的。</p>
 <a class="header" href="#整型" name="整型"><h4>整型</h4></a>
-<p><strong>整数</strong>是一个没有小数部分的数字。我们在这一章的前面使用过一个整型，<code>i32</code>类型。这个类型声明表明在 32 位系统上它关联的值应该是一个有符号整数（因为这个<code>i</code>，与<code>u</code>代表的无符号相对）。表格 3-1 展示了 Rust 内建的整数类型。每一个变体的有符号和无符号列（例如，<em>i32</em>）可以用来声明对应的整数值。</p>
+<p><strong>整数</strong>是一个没有小数部分的数字。我们在这一章的前面使用过 <code>i32</code> 类型。该类型声明指示，i32 关联的值应该是一个占据32比特位的有符号整数（因为这个<code>i</code>，与<code>u</code>代表的无符号相对）。表格 3-1 展示了 Rust 内建的整数类型。每一种变体的有符号和无符号列（例如，<em>i32</em>）可以用来声明对应的整数值。</p>
 <p><span class="caption">Table 3-1: Integer Types in Rust</span></p>
 <table><thead><tr><td> Length </td><td> Signed </td><td> Unsigned </td></tr></thead>
 <tr><td> 8-bit  </td><td> i8     </td><td> u8       </td></tr>
@@ -970,10 +970,10 @@ commit fe4833a8ef2853c55424e7747a4ef8dd64c35b32</p>
 <tr><td> 64-bit </td><td> i64    </td><td> u64      </td></tr>
 <tr><td> arch   </td><td> isize  </td><td> usize    </td></tr>
 </table>
-<p>每一种变体都可以是有符号或无符号的并有一个显式的大小。有符号和无符号代表数字是否能够是正数或负数；换句话说，数字是否需要有一个符号（有符号数）或者永远只需要是正的这样就可以不用符号（无符号数）。这有点像在纸上书写数字：当需要考虑符号的时候，数字前面会加上一个加号或减号；然而，当可以安全地假设为正数时，可以不带符号（加号）。有符号数以二进制补码形式（two’s complement representation）存储（如果你不清楚这是什么，可以在网上搜索；对其的解释超出了本书的范畴）。</p>
-<p>每一个有符号的变体可以储存包含从 -(2<sup>n - 1</sup>) 到 2<sup>n - 1</sup> - 1 在内的数字，这里<code>n</code>是变体使用的位数。所以<code>i8</code>可以储存从 -(2<sup>7</sup>) 到 2<sup>7</sup> - 1 在内的数字，也就是从 -128 到 127。无符号的变体可以储存从 0 到 2<sup>n</sup> - 1 的数字，所以<code>u8</code>可以储存从 0 到 2<sup>8</sup> - 1 的数字，也就是从 0 到 255。</p>
-<p>另外，<code>isize</code>和<code>usize</code>类型依赖运行程序的计算机类型（构架）：64 位构架他们是 64 位的而 32 位构架他们就是 32 位的。</p>
-<p>可以使用表格 3-2 中的任何一种形式编写数字字面值。注意除了字节字面值以外的数字字面值允许使用类型后缀，例如<code>57u8</code>，而<code>_</code>是可视化分隔符（visual separator），例如<code>1_000</code>位的。</p>
+<p>每一种变体都可以是有符号或无符号的，并有一个明确的大小。有符号和无符号代表数字能否为负值；换句话说，数字是否需要有一个符号（有符号数），或者永远为正而不需要符号（无符号数）。这有点像在纸上书写数字：当需要考虑符号的时候，数字以加号或减号作为前缀；然而，可以安全地假设为正数时，加号前缀通常省略。有符号数以二进制补码形式（two’s complement representation）存储（如果你不清楚这是什么，可以在网上搜索；对其的解释超出了本书的范畴）。</p>
+<p>每一个有符号的变体可以储存包含从 -(2<sup>n - 1</sup>) 到 2<sup>n - 1</sup> - 1 在内的数字，这里 <code>n</code> 是变体使用的位数。所以 <code>i8</code> 可以储存从 -(2<sup>7</sup>) 到 2<sup>7</sup> - 1 在内的数字，也就是从 -128 到 127。无符号的变体可以储存从 0 到 2<sup>n</sup> - 1 的数字，所以 <code>u8</code> 可以储存从 0 到 2<sup>8</sup> - 1 的数字，也就是从 0 到 255。</p>
+<p>另外，<code>isize</code> 和 <code>usize</code> 类型依赖运行程序的计算机架构：64 位架构上他们是 64 位的， 32 位架构上他们是 32 位的。</p>
+<p>可以使用表格 3-2 中的任何一种形式编写数字字面值。除字节以外的其它字面值允许使用类型后缀，例如 <code>57u8</code>，允许使用 <code>_</code> 做为分隔符以方便读数，例如 <code>1_000</code> (分隔符的数量与位置并不影响实际的数字)。</p>
 <p><span class="caption">Table 3-2: Integer Literals in Rust</span></p>
 <table><thead><tr><td> Number literals  </td><td> Example       </td></tr></thead>
 <tr><td> Decimal          </td><td> <code>98_222</code>      </td></tr>
@@ -982,9 +982,9 @@ commit fe4833a8ef2853c55424e7747a4ef8dd64c35b32</p>
 <tr><td> Binary           </td><td> <code>0b1111_0000</code> </td></tr>
 <tr><td> Byte (<code>u8</code> only) </td><td> <code>b'A'</code>        </td></tr>
 </table>
-<p>那么如何知晓该使用哪种类型的数字呢？如果对此拿不定主意，Rust 的默认类型通常就是一个很好的选择，这个默认数字类型是<code>i32</code>：它通常是最快的，甚至是在 64 位系统上。使用<code>isize</code>或<code>usize</code>的主要场景是索引一些集合。</p>
+<p>那么该使用哪种类型的数字呢？如果拿不定主意，Rust 的默认类型通常就很好，数字类型默认是 <code>i32</code>：它通常是最快的，甚至在 64 位系统上也是。<code>isize</code> 或 <code>usize</code> 的主要作为集合的索引。</p>
 <a class="header" href="#浮点型" name="浮点型"><h4>浮点型</h4></a>
-<p>Rust 也有两个主要的<strong>浮点数</strong>（<em>floating-point numbers</em>）类型，他们是有小数点的数字。Rust 的浮点数类型是<code>f32</code>和<code>f64</code>，分别是 32 位 和 64 位大小。默认类型是<code>f64</code>，因为它基本上与<code>f32</code>一样快不过精度更高。在 32 位系统上使用<code>f64</code>是可能的，不过会比<code>f32</code>要慢。大部分情况，牺牲潜在可能的更低性能来换取更高的精度是一个合理的初始选择，同时如果怀疑浮点数的大小有问题的时候应该先对代码进行性能测试。</p>
+<p>Rust 同样有两个主要的<strong>浮点数</strong>类型，<code>f32</code> 和 <code>f64</code>，它们是带小数点的数字，分别占 32 位和 64 位比特。默认类型是 <code>f64</code>，因为它与 <code>f32</code> 速度差不多，然而精度更高。在 32 位系统上也能够使用 <code>f64</code>，不过比使用 <code>f32</code> 要慢。多数情况下，以潜在的性能损耗换取更高的精度是合理的；如果觉得浮点数的大小是个麻烦，你应该以性能测试作为决策依据。</p>
 <p>这是一个展示浮点数的实例：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -1039,7 +1039,7 @@ commit fe4833a8ef2853c55424e7747a4ef8dd64c35b32</p>
 <p><strong>复合类型</strong>可以将多个其他类型的值组合成一个类型。Rust 有两个原生的复合类型：元组（tuple）和数组（array）。</p>
 <a class="header" href="#将值组合进元组" name="将值组合进元组"><h4>将值组合进元组</h4></a>
 <p>元组是一个将多个其他类型的值组合进一个复合类型的主要方式。</p>
-<p>我们使用一个括号中的逗号分隔的值列表来创建一个元组。元组中的每一个位置都有一个类型，而且这写不同值的类型也不必是相同的。这个例子中使用了额外的可选类型注解：</p>
+<p>我们使用一个括号中的逗号分隔的值列表来创建一个元组。元组中的每一个位置都有一个类型，而且这些不同值的类型也不必是相同的。这个例子中使用了额外的可选类型注解：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let tup: (i32, f64, u8) = (500, 6.4, 1);
@@ -1659,7 +1659,7 @@ println!(&quot;{}&quot;, s); // This will print `hello, world!`
 <li>需要一个当我们处理完<code>String</code>时将内存返回给操作系统的方法</li>
 </ol>
 <p>第一部分由我们完成：当调用<code>String::from</code>时，它的实现请求它需要的内存。这在编程语言中是非常通用的。</p>
-<p>然而，第二部分实现起来就各有区别了。在有**垃圾回收（GC）**的语言中， GC 记录并清除不再使用的内存，而我们作为程序员，并不需要关心他们。没有 GC 的话，识别出不再使用的内存并调用代码显式释放就是我们程序员的责任了，正如请求内存的时候一样。从历史的角度上说正确处理内存回收曾经是一个困难的编程问题。如果忘记回收了会浪费内存。如果过早回收了，将会出现无效变量。如果重复回收，这也是个 bug。我们需要<code>allocate</code>和<code>free</code>一一对应。</p>
+<p>然而，第二部分实现起来就各有区别了。在有<strong>垃圾回收</strong>（<em>GC</em>）的语言中， GC 记录并清除不再使用的内存，而我们作为程序员，并不需要关心他们。没有 GC 的话，识别出不再使用的内存并调用代码显式释放就是我们程序员的责任了，正如请求内存的时候一样。从历史的角度上说正确处理内存回收曾经是一个困难的编程问题。如果忘记回收了会浪费内存。如果过早回收了，将会出现无效变量。如果重复回收，这也是个 bug。我们需要<code>allocate</code>和<code>free</code>一一对应。</p>
 <p>Rust 采取了一个不同的策略：内存在拥有它的变量离开作用域后就被自动释放。下面是列表 4-1 中作用域例子的一个使用<code>String</code>而不是字符串字面值的版本：</p>
 <pre><code class="language-rust">{
     let s = String::from(&quot;hello&quot;); // s is valid from this point forward
@@ -1968,7 +1968,7 @@ immutable
 <p>哇哦！我们<strong>也</strong>不能在拥有不可变引用的同时拥有可变引用。不可变引用的用户可不希望在它的眼皮底下值突然就被改变了！然而，多个不可变引用是没有问题的因为没有哪个读取数据的人有能力影响其他人读取到的数据。</p>
 <p>即使这些错误有时是使人沮丧的。记住这是 Rust 编译器在提早指出一个潜在的 bug（在编译时而不是运行时）并明确告诉你问题在哪而不是任由你去追踪为何有时数据并不是你想象中的那样。</p>
 <a class="header" href="#悬垂引用" name="悬垂引用"><h3>悬垂引用</h3></a>
-<p>在存在指针的语言中，容易通过释放内存时保留指向它的指针而错误地生成一个<strong>悬垂指针</strong>（<em>dangling pointer</em>），所谓悬垂指针是其指向的内存可能已经被分配给其它持有者，。相比之下，在 Rust 中编译器确保引用永远也不会变成悬垂状态：当我们拥有一些数据的引用，编译器确保数据不会在其引用之前离开作用域。</p>
+<p>在存在指针的语言中，容易通过释放内存时保留指向它的指针而错误地生成一个<strong>悬垂指针</strong>（<em>dangling pointer</em>），所谓悬垂指针是其指向的内存可能已经被分配给其它持有者。相比之下，在 Rust 中编译器确保引用永远也不会变成悬垂状态：当我们拥有一些数据的引用，编译器确保数据不会在其引用之前离开作用域。</p>
 <p>让我们尝试创建一个悬垂引用：</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
@@ -9647,11 +9647,11 @@ commit 9430a3d28a2121a938d704ce48b15d21062f880e</p>
 <p>我们说“<strong>几乎</strong>所有内容都不属于语言本身”，那么属于语言本身的是什么呢？是两个 trait，都位于<code>std::marker</code>： <code>Sync</code>和<code>Send</code>。</p>
 <a class="header" href="#send用于表明所有权可能被传送给其他线程" name="send用于表明所有权可能被传送给其他线程"><h3><code>Send</code>用于表明所有权可能被传送给其他线程</h3></a>
 <p><code>Send</code>标记 trait 表明类型的所有权可能被在线程间传递。几乎所有的 Rust 类型都是<code>Send</code>的，不过有一些例外。比如标准库中提供的 <code>Rc&lt;T&gt;</code>：如果克隆<code>Rc&lt;T&gt;</code>值，并尝试将克隆的所有权传递给另一个线程，这两个线程可能会同时更新引用计数。正如上一部分提到的，<code>Rc&lt;T&gt;</code>被实现为用于单线程场景，这时不需要为拥有线程安全的引用计数而付出性能代价。</p>
-<p>因为<code>Rc&lt;T&gt;</code>没有标记为<code>Send</code>，Rust 的类型系统和 trait bound 会确保我们不会错误的把一个<code>Rc&lt;T&gt;</code>值不安全的在线程间传递。列表 16-14 曾尝试这么做，不过得到了一个错误，<code>the trait Send is not implemented for Rc&lt;Mutex&lt;i32&gt;&gt;</code>。当切换为标记为<code>Send</code>的<code>Arc&lt;T&gt;</code>时，就没有问题了。</p>
-<p>任何完全由<code>Send</code>的类型组成的类型也会自动被标记为<code>Send</code>。几乎所有基本类型都是<code>Send</code>的，大部分标准库类型是<code>Send</code>的，除了<code>Rc&lt;T&gt;</code>，以及第十九章将会讨论的裸指针（raw pointer）。</p>
-<a class="header" href="#sync表明多线程访问是安全的" name="sync表明多线程访问是安全的"><h3><code>Sync</code>表明多线程访问是安全的</h3></a>
-<p><code>Sync</code>标记 trait 表明一个类型可以安全的在多个线程中拥有其值的引用。换一种方式来说就是，对于任意类型<code>T</code>，如果<code>&amp;T</code>（<code>T</code>的引用）是<code>Send</code>的话<code>T</code>就是<code>Sync</code>的，这样其引用就可以安全的发送到另一个线程。类似于<code>Send</code>的情况，基本类型是<code>Sync</code>的，完全由<code>Sync</code>的类型组成的类型也是<code>Sync</code>的。</p>
-<p><code>Rc&lt;T&gt;</code>也不是<code>Sync</code>的，出于其不是<code>Send</code>的相同的原因。<code>RefCell&lt;T&gt;</code>（第十五章讨论过）和<code>Cell&lt;T&gt;</code>系列类型不是<code>Sync</code>的。<code>RefCell&lt;T&gt;</code>在运行时所进行的借用检查也不是线程安全的。<code>Mutex&lt;T&gt;</code>是<code>Sync</code>的，正如上一部分所讲的它可以被用来在多线程中共享访问。</p>
+<p>因为 <code>Rc&lt;T&gt;</code> 没有标记为 <code>Send</code>，Rust 的类型系统和 trait bound 会确保我们不会错误的把一个 <code>Rc&lt;T&gt;</code> 值不安全的在线程间传递。列表 16-14 曾尝试这么做，不过得到了一个错误，<code>the trait Send is not implemented for Rc&lt;Mutex&lt;i32&gt;&gt;</code>。而使用标记为 <code>Send</code> 的 <code>Arc&lt;T&gt;</code> 时，就没有问题了。</p>
+<p>任何完全由 <code>Send</code> 的类型组成的类型也会自动被标记为 <code>Send</code>：几乎所有基本类型都是 <code>Send</code> 的，大部分标准库类型是<code>Send</code>的，除了<code>Rc&lt;T&gt;</code>，以及第十九章将会讨论的裸指针（raw pointer）。</p>
+<a class="header" href="#sync-表明多线程访问是安全的" name="sync-表明多线程访问是安全的"><h3><code>Sync</code> 表明多线程访问是安全的</h3></a>
+<p><code>Sync</code> 标记 trait 表明一个类型可以安全的在多个线程中拥有其值的引用。换一种方式来说，对于任意类型 <code>T</code>，如果<code>&amp;T</code>（<code>T</code>的引用）是<code>Send</code>的话<code>T</code>就是<code>Sync</code>的，这样其引用就可以安全的发送到另一个线程。类似于 <code>Send</code> 的情况，基本类型是 <code>Sync</code> 的，完全由 <code>Sync</code> 的类型组成的类型也是 <code>Sync</code> 的。</p>
+<p><code>Rc&lt;T&gt;</code> 也不是 <code>Sync</code> 的，出于其不是<code>Send</code>的相同的原因。<code>RefCell&lt;T&gt;</code>（第十五章讨论过）和<code>Cell&lt;T&gt;</code>系列类型不是<code>Sync</code>的。<code>RefCell&lt;T&gt;</code>在运行时所进行的借用检查也不是线程安全的。<code>Mutex&lt;T&gt;</code>是<code>Sync</code>的，正如上一部分所讲的它可以被用来在多线程中共享访问。</p>
 <a class="header" href="#手动实现send和sync是不安全的" name="手动实现send和sync是不安全的"><h3>手动实现<code>Send</code>和<code>Sync</code>是不安全的</h3></a>
 <p>通常并不需要实现<code>Send</code>和<code>Sync</code> trait，由属于<code>Send</code>和<code>Sync</code>的类型组成的类型，自动就是<code>Send</code>和<code>Sync</code>的。因为他们是标记 trait，甚至都不需要实现任何方法。他们只是用来加强并发相关的不可变性的。</p>
 <p>实现这些标记 trait 涉及到编写不安全的 Rust 代码，第十九章将会讲述具体的方法；当前重要的是，在创建新的由不是<code>Send</code>和<code>Sync</code>的部分构成的并发类型时需要多加小心，以确保维持其安全保证。<a href="https://doc.rust-lang.org/stable/nomicon/">The Nomicon</a> 中有更多关于这些保证以及如何维持他们的信息。</p>
@@ -9753,22 +9753,22 @@ commit 67876e3ef5323ce9d394f3ea6b08cb3d173d9ba9</p>
 <!-- The code example I want to reference did not have a listing number; it's
 the one with SpreadsheetCell. I will go back and add Listing 8-1 next time I
 get Chapter 8 for editing. /Carol -->
-<p>有时，我们希望使用的类型的集合对于使用库的程序员来说是可扩展的。例如，很多图形用户接口（GUI）工具有一个条目列表的概念，它通过遍历列表并对每一个条目调用<code>draw</code>方法来绘制在屏幕上。我们将要创建一个叫做<code>rust_gui</code>的包含一个 GUI 库结构的库 crate。GUI 库可以包含一些供开发者使用的类型，比如<code>Button</code>或<code>TextField</code>。使用<code>rust_gui</code>的程序员会想要创建更多可以绘制在屏幕上的类型：一个程序员可能会增加一个<code>Image</code>，而另一个可能会增加一个<code>SelectBox</code>。我们不会在本章节实现一个功能完善的 GUI 库，不过会展示各个部分是如何结合在一起的。</p>
+<p>有时，我们希望使用的类型的集合对于使用库的程序员来说是可扩展的。例如，很多图形用户接口（GUI）工具有一个条目列表的概念，它通过遍历列表并对每一个条目调用 <code>draw</code> 方法来绘制在屏幕上。我们将要创建一个叫做 <code>rust_gui</code> 的包含一个 GUI 库结构的库 crate。GUI 库可以包含一些供开发者使用的类型，比如 <code>Button</code> 或 <code>TextField</code>。使用 <code>rust_gui</code> 的程序员会想要创建更多可以绘制在屏幕上的类型：一个程序员可能会增加一个 <code>Image</code>，而另一个可能会增加一个 <code>SelectBox</code>。我们不会在本章节实现一个功能完善的 GUI 库，不过会展示各个部分是如何结合在一起的。</p>
 <p>当写 <code>rust_gui</code> 库时，我们不知道其他程序员需要什么类型，所以无法定义一个 <code>enum</code> 来包含所有的类型。然而 <code>rust_gui</code> 需要跟踪所有这些不同类型的值，需要有在每个值上调用 <code>draw</code> 方法能力。我们的 GUI 库不需要确切地知道调用 <code>draw</code> 方法会发生什么，只需要有可用的方法供我们调用。</p>
 <p>在可以继承的语言里，我们会定义一个名为 <code>Component</code> 的类，该类上有一个<code>draw</code>方法。其他的类比如<code>Button</code>、<code>Image</code>和<code>SelectBox</code>会从<code>Component</code>继承并拥有<code>draw</code>方法。它们各自覆写<code>draw</code>方法以自定义行为，但是框架会把所有的类型当作是<code>Component</code>的实例，并在其上调用<code>draw</code>。</p>
 <a class="header" href="#定义一个带有自定义行为的trait" name="定义一个带有自定义行为的trait"><h3>定义一个带有自定义行为的Trait</h3></a>
 <p>不过，在Rust语言中，我们可以定义一个 <code>Draw</code> trait，包含名为 <code>draw</code> 的方法。我们定义一个由<em>trait对象</em>组成的vector，绑定了某种指针的trait，比如<code>&amp;</code>引用或者一个<code>Box&lt;T&gt;</code>智能指针。</p>
-<p>之前提到，我们不会称结构体和枚举为对象，以区分其他语言的结构体和枚举对象。结构体或者枚举成员中的数据和<code>impl</code>块中的行为是分开的，而其他语言则是数据和行为被组合到一个对象里。Trait 对象更像其他语言的对象，因为他们将其指针指向的具体对象作为数据，将在trait 中定义的方法作为行为，组合在了一起。但是，trait 对象和其他语言是不同的，我们不能向一个 trait 对象增加数据。trait 对象不像其他语言那样有用：它们的目的是允许从公有行为上抽象。</p>
-<p>trait 对象定义了给定情况下应有的行为。当需要具有某种特性的不确定具体类型时，我们可以把 trait 对象当作 trait 使用。Rust 的类型系统会保证我们为 trait 对象带入的任何值会实现 trait 的方法。我们不需要在编译阶段知道所有可能的类型，却可以把所有的实例统一对待。Listing 17-03展示了如何定义一个名为<code>Draw</code>的带有<code>draw</code>方法的trait。</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<p>之前提到，我们不会称结构体和枚举为对象，以区分其他语言的结构体和枚举对象。结构体或者枚举成员中的数据和<code>impl</code>块中的行为是分开的，而其他语言则是数据和行为被组合到一个对象里。Trait 对象更像其他语言的对象，因为他们将其指针指向的具体对象作为数据，将在 trait 中定义的方法作为行为，组合在了一起。但是，trait 对象和其他语言是不同的，我们不能向一个 trait 对象增加数据。trait 对象不像其他语言那样有用：它们的目的是允许从公有行为上抽象。</p>
+<p>trait 对象定义了给定情况下应有的行为。当需要具有某种特性的不确定具体类型时，我们可以把 trait 对象当作 trait 使用。Rust 的类型系统会保证我们为 trait 对象带入的任何值会实现 trait 的方法。我们不需要在编译阶段知道所有可能的类型，却可以把所有的实例统一对待。列表 17-03 展示了如何定义一个名为<code>Draw</code>的带有<code>draw</code>方法的 trait。</p>
+<p><span class="filename">文件名: src/lib.rs</span></p>
 <pre><code class="language-rust">pub trait Draw {
     fn draw(&amp;self);
 }
 </code></pre>
-<p><span class="caption">Listing 17-3:<code>Draw</code> trait的定义</span></p>
+<p><span class="caption">列表 17-3:<code>Draw</code> trait 的定义</span></p>
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
-<p>因为我们已经在第10章讨论过如何定义 trait，你可能比较熟悉。下面是新的定义：Listing 17-4有一个名为 <code>Screen</code> 的结构体，里面有一个名为 <code>components</code> 的 vector，<code>components</code> 的类型是Box<Draw>。<code>Box&lt;Draw&gt;</code> 是一个 trait 对象：它是 <code>Box</code> 内部任意一个实现了 <code>Draw</code> trait 的类型的替身。</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<p>因为我们已经在第十章讨论过如何定义 trait，你可能比较熟悉。下面是新的定义：列表 17-4 有一个名为 <code>Screen</code> 的结构体，里面有一个名为 <code>components</code> 的 vector，<code>components</code> 的类型是 <code>Box&lt;Draw&gt;</code>。<code>Box&lt;Draw&gt;</code> 是一个 trait 对象：它是 <code>Box</code> 内部任意一个实现了 <code>Draw</code> trait 的类型的替身。</p>
+<p><span class="filename">文件名: src/lib.rs</span></p>
 <pre><code class="language-rust"># pub trait Draw {
 #     fn draw(&amp;self);
 # }
@@ -9777,10 +9777,9 @@ pub struct Screen {
     pub components: Vec&lt;Box&lt;Draw&gt;&gt;,
 }
 </code></pre>
-<p><span class="caption">Listing 17-4: 定义一个 <code>Screen</code> 结构体，带有一个含有实现了 <code>Draw</code> trait 的 <code>components</code> vector 成员</p>
-<p></span></p>
-<p>在 <code>Screen</code> 结构体上，我们将要定义一个 <code>run</code> 方法，该方法会在它的 <code>components</code> 上调用 <code>draw</code> 方法，如Listing 17-5所示：</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<p><span class="caption">列表 17-4: 一个 <code>Screen</code> 结构体的定义，它带有一个字段<code>components</code>，其包含实现了 <code>Draw</code> trait 的 trait 对象的 vector</span></p>
+<p>在 <code>Screen</code> 结构体上，我们将要定义一个 <code>run</code> 方法，该方法会在它的 <code>components</code> 上的每一个元素调用 <code>draw</code> 方法，如列表 17-5 所示：</p>
+<p><span class="filename">文件名: src/lib.rs</span></p>
 <pre><code class="language-rust"># pub trait Draw {
 #     fn draw(&amp;self);
 # }
@@ -9797,10 +9796,10 @@ impl Screen {
     }
 }
 </code></pre>
-<p><span class="caption">Listing 17-5:在 <code>Screen</code> 上实现一个 <code>run</code> 方法，该方法在每个组件上调用 <code>draw</code> 方法
+<p><span class="caption">列表 17-5:在 <code>Screen</code> 上实现一个 <code>run</code> 方法，该方法在每个 component 上调用 <code>draw</code> 方法
 </span></p>
-<p>这与带 trait 约束的泛型结构体不同(trait 约束泛型参数)。泛型参数一次只能被一个具体类型替代，而 trait 对象可以在运行时允许多种具体类型填充 trait 对象。比如，我们已经定义了 <code>Screen</code> 结构体使用泛型和一个 trait 约束，如Listing 17-6所示：</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<p>这与带 trait 约束的泛型结构体不同(trait 约束泛型参数)。泛型参数一次只能被一个具体类型替代，而 trait 对象可以在运行时允许多种具体类型填充 trait 对象。比如，我们已经定义了 <code>Screen</code> 结构体使用泛型和一个 trait 约束，如列表 17-6 所示：</p>
+<p><span class="filename">文件名: src/lib.rs</span></p>
 <pre><code class="language-rust"># pub trait Draw {
 #     fn draw(&amp;self);
 # }
@@ -9818,13 +9817,13 @@ impl&lt;T&gt; Screen&lt;T&gt;
     }
 }
 </code></pre>
-<p><span class="caption">Listing 17-6: 一种 <code>Screen</code> 结构体的替代实现，它的 <code>run</code> 方法使用通用类型和 trait 绑定
+<p><span class="caption">列表 17-6: 一种 <code>Screen</code> 结构体的替代实现，它的 <code>run</code> 方法使用通用类型和 trait 绑定
 </span></p>
 <p>这个例子中，<code>Screen</code> 实例所有组件类型必需全是 <code>Button</code>，或者全是 <code>TextField</code>。如果你的组件集合是单一类型的，那么可以优先使用泛型和 trait 约束，因为其使用的具体类型在编译阶段即可确定。</p>
 <p>而 <code>Screen</code> 结构体内部的 <code>Vec&lt;Box&lt;Draw&gt;&gt;</code> trait 对象列表，则可以同时包含 <code>Box&lt;Button&gt;</code> 和 <code>Box&lt;TextField&gt;</code>。我们看它是怎么工作的，然后讨论运行时性能。</p>
 <a class="header" href="#来自我们或者库使用者的实现" name="来自我们或者库使用者的实现"><h3>来自我们或者库使用者的实现</h3></a>
-<p>现在，我们增加一些实现了 <code>Draw</code> trait 的类型，再次提供 <code>Button</code>。实现一个 GUI 库实际上超出了本书的范围，因此 <code>draw</code> 方法留空。为了想象实现可能的样子，<code>Button</code> 结构体有 <code>width</code>、<code>height</code> 和 <code>label</code>字段，如Listing 17-7所示：</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<p>现在，我们增加一些实现了 <code>Draw</code> trait 的类型，再次提供 <code>Button</code>。实现一个 GUI 库实际上超出了本书的范围，因此 <code>draw</code> 方法留空。为了想象实现可能的样子，<code>Button</code> 结构体有 <code>width</code>、<code>height</code> 和 <code>label</code>字段，如列表 17-7 所示：</p>
+<p><span class="filename">文件名: src/lib.rs</span></p>
 <pre><code class="language-rust"># pub trait Draw {
 #     fn draw(&amp;self);
 # }
@@ -9841,11 +9840,11 @@ impl Draw for Button {
     }
 }
 </code></pre>
-<p><span class="caption">Listing 17-7: 实现了<code>Draw</code> trait的<code>Button</code> 结构体</span></p>
+<p><span class="caption">列表 17-7: 实一个现了<code>Draw</code> trait 的 <code>Button</code> 结构体</span></p>
 <p>在 <code>Button</code> 上的 <code>width</code>、<code>height</code> 和 <code>label</code> 会和其他组件不同，比如 <code>TextField</code> 可能有 <code>width</code>、<code>height</code>,
 <code>label</code> 以及 <code>placeholder</code> 字段。每个我们可以在屏幕上绘制的类型都会实现 <code>Draw</code> trait，在 <code>draw</code> 方法中使用不同的代码，定义了如何绘制 <code>Button</code>。除了 <code>Draw</code> trait，<code>Button</code> 也可能有一个 <code>impl</code> 块，包含按钮被点击时的响应方法。这类方法不适用于 <code>TextField</code> 这样的类型。</p>
-<p>假定我们的库的用户相要实现一个包含 <code>width</code>、<code>height</code> 和 <code>options</code> 的 <code>SelectBox</code> 结构体。同时也在 <code>SelectBox</code> 类型上实现了 <code>Draw</code> trait，如 Listing 17-8所示：</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<p>假定我们的库的用户相要实现一个包含 <code>width</code>、<code>height</code> 和 <code>options</code> 的 <code>SelectBox</code> 结构体。同时也在 <code>SelectBox</code> 类型上实现了 <code>Draw</code> trait，如 列表  17-8 所示：</p>
+<p><span class="filename">文件名: src/main.rs</span></p>
 <pre><code class="language-rust">extern crate rust_gui;
 use rust_gui::Draw;
 
@@ -9861,10 +9860,10 @@ impl Draw for SelectBox {
     }
 }
 </code></pre>
-<p><span class="caption">Listing 17-8: 另外一个 crate 中，在 <code>SelectBox</code> 结构体上使用 <code>rust_gui</code> 和实现了<code>Draw</code> trait
+<p><span class="caption">列表 17-8: 另外一个 crate 中，在 <code>SelectBox</code> 结构体上使用 <code>rust_gui</code> 和实现了<code>Draw</code> trait
 </span></p>
-<p>库的用户现在可以在他们的 <code>main</code> 函数中创建一个 <code>Screen</code> 实例，然后把自身放入 <code>Box&lt;T&gt;</code> 变成 trait 对象，向 screen 增加 <code>SelectBox</code> 和 <code>Button</code>。他们可以在这个 <code>Screen</code> 实例上调用 <code>run</code> 方法，这又会调用每个组件的 <code>draw</code> 方法。 Listing 17-9 展示了实现：</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<p>库的用户现在可以在他们的 <code>main</code> 函数中创建一个 <code>Screen</code> 实例，然后把自身放入 <code>Box&lt;T&gt;</code> 变成 trait 对象，向 screen 增加 <code>SelectBox</code> 和 <code>Button</code>。他们可以在这个 <code>Screen</code> 实例上调用 <code>run</code> 方法，这又会调用每个组件的 <code>draw</code> 方法。 列表 17-9 展示了实现：</p>
+<p><span class="filename">文件名: src/main.rs</span></p>
 <pre><code class="language-rust">use rust_gui::{Screen, Button};
 
 fn main() {
@@ -9890,13 +9889,13 @@ fn main() {
     screen.run();
 }
 </code></pre>
-<p><span class="caption">Listing 17-9: 使用 trait 对象来存储实现了相同 trait 的不同类型
+<p><span class="caption">列表 17-9: 使用 trait 对象来存储实现了相同 trait 的不同类型
 </span></p>
 <p>虽然我们不知道哪一天会有人增加 <code>SelectBox</code> 类型，但是我们的 <code>Screen</code> 能够操作 <code>SelectBox</code> 并绘制它，因为 <code>SelectBox</code> 实现了 <code>Draw</code> 类型，这意味着它实现了 <code>draw</code> 方法。</p>
 <p>只关心值的响应，而不关心其具体类型，这类似于动态类型语言中的 <em>duck typing</em>：如果它像鸭子一样走路，像鸭子一样叫，那么它就是只鸭子！在 Listing 17-5 <code>Screen</code> 的 <code>run</code> 方法实现中，<code>run</code> 不需要知道每个组件的具体类型。它也不检查组件是 <code>Button</code> 还是 <code>SelectBox</code> 的实例，只管调用组件的 <code>draw</code> 方法。通过指定 <code>Box&lt;Draw&gt;</code> 作为 <code>components</code> 列表中元素的类型，我们约束了 <code>Screen</code> 需要这些实现了 <code>draw</code> 方法的值。</p>
 <p>Rust 类型系统使用 trait 对象来支持 duck typing 的好处是，我们无需在运行时检查一个值是否实现了特定方法，或是担心调用了一个值没有实现的方法。如果值没有实现 trait 对象需要的 trait（方法），Rust 不会编译。</p>
-<p>比如，Listing 17-10 展示了当我们创建一个使用 <code>String</code> 做为其组件的 <code>Screen</code> 时发生的情况：</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<p>比如，列表 17-10 展示了当我们创建一个使用 <code>String</code> 做为其组件的 <code>Screen</code> 时发生的情况：</p>
+<p><span class="filename">文件名: src/main.rs</span></p>
 <pre><code class="language-rust">extern crate rust_gui;
 use rust_gui::Draw;
 
@@ -9910,10 +9909,10 @@ fn main() {
     screen.run();
 }
 </code></pre>
-<p><span class="caption">Listing 17-10: 尝试使用一种没有实现 trait 对象的类型</p>
+<p><span class="caption">列表 17-10: 尝试使用一种没有实现 trait 对象的类型</p>
 <p></span></p>
 <p>我们会遇到这个错误，因为 <code>String</code> 没有实现 <code>Draw</code> trait：</p>
-<pre><code class="language-text">error[E0277]: the trait bound `std::string::String: Draw` is not satisfied
+<pre><code>error[E0277]: the trait bound `std::string::String: Draw` is not satisfied
   --&gt;
    |
  4 |             Box::new(String::from(&quot;Hi&quot;)),
@@ -9924,8 +9923,8 @@ fn main() {
 </code></pre>
 <p>这个错误告诉我们，要么传入 <code>Screen</code> 需要的类型，要么在 <code>String</code> 上实现 <code>Draw</code>，以便　<code>Screen</code> 调用它的 <code>draw</code> 方法。</p>
 <a class="header" href="#trait-对象执行动态分发" name="trait-对象执行动态分发"><h3>Trait 对象执行动态分发</h3></a>
-<p>回忆一下第10章我们讨论过的，当我们在泛型上使用 trait 约束时，编译器按单态类型处理：在需要使用范型参数的地方，编译器为每个具体类型生成非泛型的函数和方法实现。单态类型处理产生的代码实际就是做 <em>static dispatch</em>：方法的代码在编译阶段就已经决定了，当调用时，寻找那段代码非常快速。</p>
-<p>当我们使用 trait 对象，编译器不能按单态类型处理，因为无法知道使用代码的所有可能类型。而是调用方法的时候，Rust 跟踪可能被使用的代码，在运行时找出调用该方法时应使用的代码。这也是我们熟知的 <em>dynamic dispatch</em>，查找过程会产生运行时开销。动态分发也会阻止编译器内联函数，失去一些优化途径。尽管获得了额外的灵活性，但仍然需要权衡取舍。</p>
+<p>回忆一下第十章我们讨论过的，当我们在泛型上使用 trait 约束时，编译器按单态类型处理：在需要使用范型参数的地方，编译器为每个具体类型生成非泛型的函数和方法实现。单态类型处理产生的代码实际就是做 <em>static dispatch</em>：方法的代码在编译阶段就已经决定了，当调用时，寻找那段代码非常快速。</p>
+<p>当我们使用 trait 对象，编译器不能按单态类型处理，因为无法知道使用代码的所有可能类型。而是调用方法的时候，Rust 跟踪可能被使用的代码，在运行时找出调用该方法时应使用的代码。这也是我们熟知的 <em>dynamic dispatch</em>，查找过程会产生运行时开销。动态分发也会阻止编译器内联函数，失去一些优化途径。尽管获得了额外的灵活性，但仍然需要权衡取舍。</p>
 <a class="header" href="#trait-对象需要对象安全" name="trait-对象需要对象安全"><h3>Trait 对象需要对象安全</h3></a>
 <!-- Liz: we're conflicted on including this section. Not being able to use a
 trait as a trait object because of object safety is something that
@@ -9936,86 +9935,45 @@ a quick caveat, that just says something like "Some traits can't be trait
 objects. Clone is an example of one. You'll get errors that will let you know
 if a trait can't be a trait object, look up object safety if you're interested
 in the details"? Thanks! /Carol -->
-<p>Not all traits can be made into trait objects; only <em>object safe</em> traits can. A
-trait is object safe as long as both of the following are true:</p>
+<p>不是所有的 trait 都可以被放进 trait 对象中; 只有<em>对象安全的</em>（<em>object safe</em>）trait 才可以这样做. 一个 trait 只有同时满足如下两点时才被认为是对象安全的:</p>
 <ul>
-<li>The trait does not require <code>Self</code> to be <code>Sized</code></li>
-<li>All of the trait's methods are object safe.</li>
+<li>该 trait 要求 <code>Self</code> 不是 <code>Sized</code>;</li>
+<li>该 trait 的所有方法都是对象安全的;</li>
 </ul>
-<p><code>Self</code> is a keyword that is an alias for the type that we're implementing
-traits or methods on. <code>Sized</code> is a marker trait like the <code>Send</code> and <code>Sync</code>
-traits that we talked about in Chapter 16. <code>Sized</code> is automatically implemented
-on types that have a known size at compile time, such as <code>i32</code> and references.
-Types that do not have a known size include slices (<code>[T]</code>) and trait objects.</p>
-<p><code>Sized</code> is an implicit trait bound on all generic type parameters by default.
-Most useful operations in Rust require a type to be <code>Sized</code>, so making <code>Sized</code>
-a default requirement on trait bounds means we don't have to write <code>T: Sized</code>
-with most every use of generics. If we want to be able to use a trait on
-slices, however, we need to opt out of the <code>Sized</code> trait bound, and we can do
-that by specifying <code>T: ?Sized</code> as a trait bound.</p>
-<p>Traits have a default bound of <code>Self: ?Sized</code>, which means that they can be
-implemented on types that may or may not be <code>Sized</code>. If we create a trait <code>Foo</code>
-that opts out of the <code>Self: ?Sized</code> bound, that would look like the following:</p>
+<p><code>Self</code> 是一个类型的别名关键字，它表示当前正被实现的 trait 类型或者是方法所属的类型. <code>Sized</code>是一个像在第十六章中介绍的<code>Send</code>和<code>Sync</code>那样的标记 trait, 在编译时它会自动被放进大小确定的类型里，比如<code>i32</code>和引用. 大小不确定的类型有 slice（<code>[T]</code>）和 trait 对象.</p>
+<p><code>Sized</code> 是一个默认会被绑定到所有常规类型参数的内隐 trait. Rust 中要求一个类型是<code>Sized</code>的最具可用性的用法是让<code>Sized</code>成为一个默认的 trait 绑定，这样我们就可以在大多数的常规的用法中不去写 <code>T: Sized</code> 了. 如果我们想在切片（slice）中使用一个 trait, 我们需要取消对<code>Sized</code>的 trait 绑定, 我们只需制定<code>T: ?Sized</code>作为 trait 绑定.</p>
+<p>默认绑定到 <code>Self: ?Sized</code> 的 trait 可以被实现到是 <code>Sized</code> 或非 <code>Sized</code> 的类型上. 如果我们创建一个不绑定 <code>Self: ?Sized</code> 的 trait <code>Foo</code>，它看上去应该像这样:</p>
 <pre><code class="language-rust">trait Foo: Sized {
     fn some_method(&amp;self);
 }
 </code></pre>
-<p>The trait <code>Sized</code> is now a <em>super trait</em> of trait <code>Foo</code>, which means trait
-<code>Foo</code> requires types that implement <code>Foo</code> (that is, <code>Self</code>) to be <code>Sized</code>.
-We're going to talk about super traits in more detail in Chapter 19.</p>
-<p>The reason a trait like <code>Foo</code> that requires <code>Self</code> to be <code>Sized</code> is not allowed
-to be a trait object is that it would be impossible to implement the trait
-<code>Foo</code> for the trait object <code>Foo</code>: trait objects aren't sized, but <code>Foo</code>
-requires <code>Self</code> to be <code>Sized</code>. A type can't be both sized and unsized at the
-same time!</p>
-<p>For the second object safety requirement that says all of a trait's methods
-must be object safe, a method is object safe if either:</p>
+<p>Trait <code>Sized</code>现在就是 trait <code>Foo</code>的一个<em>超级 trait</em>（<em>supertrait</em>）, 也就是说 trait <code>Foo</code> 需要实现了 <code>Foo</code> 的类型(即<code>Self</code>)是<code>Sized</code>. 我们将在第十九章中更详细的介绍超 trait（supertrait）.</p>
+<p>像<code>Foo</code>那样要求<code>Self</code>是<code>Sized</code>的 trait 不允许成为 trait 对象的原因是不可能为 trait 对象<code>Foo</code>实现 trait <code>Foo</code>: trait 对象是无确定大小的，但是 <code>Foo</code> 要求 <code>Self</code> 是 <code>Sized</code>. 一个类型不可能同时既是有大小的又是无确定大小的.</p>
+<p>第二点说对象安全要求一个 trait 的所有方法必须是对象安全的. 一个对象安全的方法满足下列条件:</p>
 <ul>
-<li>It requires <code>Self</code> to be <code>Sized</code> or</li>
-<li>It meets all three of the following:
+<li>它要求 <code>Self</code> 是 <code>Sized</code> 或者</li>
+<li>它符合下面全部三点:
 <ul>
-<li>It must not have any generic type parameters</li>
-<li>Its first argument must be of type <code>Self</code> or a type that dereferences to
-the Self type (that is, it must be a method rather than an associated
-function and have <code>self</code>, <code>&amp;self</code>, or <code>&amp;mut self</code> as the first argument)</li>
-<li>It must not use <code>Self</code> anywhere else in the signature except for the
-first argument</li>
+<li>它不包含任意类型的常规参数</li>
+<li>它的第一个参数必须是类型 <code>Self</code> 或一个引用到 <code>Self</code> 的类型(也就是说它必须是一个方法而非关联函数并且以 <code>self</code>、<code>&amp;self</code> 或 <code>&amp;mut self</code> 作为第一个参数)</li>
+<li>除了第一个参数外它不能在其它地方用 <code>Self</code> 作为方法的参数签名</li>
 </ul>
 </li>
 </ul>
-<p>Those rules are a bit formal, but think of it this way: if your method requires
-the concrete <code>Self</code> type somewhere in its signature, but an object forgets the
-exact type that it is, there's no way that the method can use the original
-concrete type that it's forgotten. Same with generic type parameters that are
-filled in with concrete type parameters when the trait is used: the concrete
-types become part of the type that implements the trait. When the type is
-erased by the use of a trait object, there's no way to know what types to fill
-in the generic type parameters with.</p>
-<p>An example of a trait whose methods are not object safe is the standard
-library's <code>Clone</code> trait. The signature for the <code>clone</code> method in the <code>Clone</code>
-trait looks like this:</p>
+<p>虽然这些规则有一点形式化, 但是换个角度想一下: 如果你的方法在它的参数签名的其它地方也需要具体的 <code>Self</code> 类型参数, 但是一个对象又忘记了它的具体类型是什么, 这时该方法就无法使用被它忘记的原先的具体类型. 当该 trait 被使用时, 被具体类型参数填充的常规类型参数也是如此: 这个具体的类型就成了实现该 trait 的类型的某一部分, 如果使用一个 trait 对象时这个类型被抹掉了, 就没有办法知道该用什么类型来填充这个常规类型参数.</p>
+<p>一个 trait 的方法不是对象安全的一个例子是标准库中的 <code>Clone</code> trait. <code>Clone</code> trait 的 <code>clone</code> 方法的参数签名是这样的:</p>
 <pre><code class="language-rust">pub trait Clone {
     fn clone(&amp;self) -&gt; Self;
 }
 </code></pre>
-<p><code>String</code> implements the <code>Clone</code> trait, and when we call the <code>clone</code> method on
-an instance of <code>String</code> we get back an instance of <code>String</code>. Similarly, if we
-call <code>clone</code> on an instance of <code>Vec</code>, we get back an instance of <code>Vec</code>. The
-signature of <code>clone</code> needs to know what type will stand in for <code>Self</code>, since
-that's the return type.</p>
-<p>If we try to implement <code>Clone</code> on a trait like the <code>Draw</code> trait from Listing
-17-3, we wouldn't know whether <code>Self</code> would end up being a <code>Button</code>, a
-<code>SelectBox</code>, or some other type that will implement the <code>Draw</code> trait in the
-future.</p>
-<p>The compiler will tell you if you're trying to do something that violates the
-rules of object safety in regards to trait objects. For example, if we had
-tried to implement the <code>Screen</code> struct in Listing 17-4 to hold types that
-implement the <code>Clone</code> trait instead of the <code>Draw</code> trait, like this:</p>
-<pre><code class="language-rust,ignore">pub struct Screen {
+<p><code>String</code> 实现了 <code>Clone</code> trait, 当我们在一个 <code>String</code> 实例上调用 <code>clone</code> 方法时, 我们会得到一个 <code>String</code> 实例. 同样地, 如果我们在一个 <code>Vec</code> 实例上调用 <code>clone</code> 方法, 我们会得到一个 <code>Vec</code> 实例. <code>clone</code> 的参数签名需要知道 <code>Self</code> 是什么类型, 因为它需要返回这个类型.</p>
+<p>如果我们像列表 17-3 中列出的 <code>Draw</code> trait 那样的 trait 上实现 <code>Clone</code>, 我们就不知道 <code>Self</code> 将会是一个 <code>Button</code>, 一个 <code>SelectBox</code>, 或者是其它的在将来要实现 <code>Draw</code> trait 的类型.</p>
+<p>如果你做了违反 trait 对象的对象安全性规则的事情, 编译器将会告诉你. 比如, 如果你实现在列表 17-4 中列出的 <code>Screen</code> 结构, 你想让该结构像这样持有实现了 <code>Clone</code> trait 的类型而不是 <code>Draw</code> trait:</p>
+<pre><code class="language-rust">pub struct Screen {
     pub components: Vec&lt;Box&lt;Clone&gt;&gt;,
 }
 </code></pre>
-<p>We'll get this error:</p>
+<p>我们将会得到下面的错误:</p>
 <pre><code class="language-text">error[E0038]: the trait `std::clone::Clone` cannot be made into an object
  --&gt;
   |
