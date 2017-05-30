@@ -11,7 +11,7 @@
 
 任何其它的对一个提交上来的博客的更改都不会生效. 例如, 如果我们想在审核一个博客的草稿之前就把它批准通过, 那么这个提交上来的博客将仍然将停留在未发布的草稿状态.
 
-17-11中以代码的形式罗列展示了这个工作流. 这是一个我们将实现在一个名叫`blog`的crate库中的API的用法的例子:
+列表17-11中以代码的形式展示了这个工作流. 这是一个我们将实现在一个名叫`blog`的crate库中的API的用法的例子:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -33,8 +33,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 17-11: Code that demonstrates the desired
-behavior we want our `blog` crate to have</span>
+<span class="caption">列表17-11: 展示我们希望我们的`blog`crate所拥有的行为的代码</span>
 
 We want to be able to create a new draft blog post with `Post::new`. Then, we
 want to add some text to the blog post while we're in the draft state. If we
