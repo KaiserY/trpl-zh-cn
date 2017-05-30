@@ -9,12 +9,9 @@
 3. 一旦提交被审核通过, 它就被发布.
 4. 在所有的博客中， 只有被发布的博客才返回它的内容, 所以我们不能显示未被审核的博客的内容.
 
-Any other changes attempted on a post should have no effect. For example, if we
-try to approve a draft blog post before we've requested a review, the post
-should stay an unpublished draft.
+任何其它的对一个提交上来的博客的更改都不会生效. 例如, 如果我们想在审核一个博客的草稿之前就把它批准通过, 那么这个提交上来的博客将仍然将停留在未发布的草稿状态.
 
-Listing 17-11 shows this workflow in code form. This is an example usage of the
-API we're going to implement in a library crate named `blog`:
+17-11中以代码的形式罗列展示了这个工作流. 这是一个我们将实现在一个名叫`blog`的crate库中的API的用法的例子:
 
 <span class="filename">Filename: src/main.rs</span>
 
