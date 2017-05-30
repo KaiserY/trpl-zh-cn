@@ -93,7 +93,7 @@
     - [可扩展的并发：`Sync`和`Send`](ch16-04-extensible-concurrency-sync-and-send.md)
 
 - [面向对象](ch17-00-oop.md)	
-	- [什么是面向对象](ch17-01-what-is-oo.md)
-	- [trait对象](ch17-02-trait-objects.md)
-    
+	- [什么是面向对象？](ch17-01-what-is-oo.md)
+	- [为使用不同类型的值而设计的 trait 对象](ch17-02-trait-objects.md)
+    - [面向对象设计模式的实现](ch17-03-oo-design-patterns.md)
 	
