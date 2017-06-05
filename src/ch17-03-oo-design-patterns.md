@@ -35,25 +35,11 @@ fn main() {
 
 <span class="caption">列表17-11: 展示我们希望我们的`blog`crate所拥有的行为的代码</span>
 
-We want to be able to create a new draft blog post with `Post::new`. Then, we
-want to add some text to the blog post while we're in the draft state. If we
-try to print out the post's content immediately, though, we shouldn't get any
-text, since the post is still a draft. We've added an `assert_eq!` here for
-demonstration purposes. Asserting that a draft blog post returns an empty
-string from the `content` method would make an excellent unit test in our
-library, but we're not going to write tests for this example.
+我们希望用`Post::new`来创建一个新的博客草稿. 然后, 我们想在草稿状态的时候把一些文字添加到博客中. 如果我们想直接把博客的内容打印出来, 我们将不会得到任何文字, 因为该博客仍然是一个草稿. 我们在这里加了一个`assert_eq`是用于演示目的. 断言一个提交的博客草稿从`content`方法返回一个空字符串可以在我们的库中提供出色的单元测试, 但是我们将不会为这个例子写测试.
 
-Next, we want to be able to request a review of our post, and `content` should
-still return an empty string while waiting for a review. Lastly, when we
-approve the blog post, it should get published, which means the text we added
-will be returned when we call `content`.
+然后, 我们希望能够请求审查我们提交的博客, 在等待审查期间`content`应该仍然返回一个空字符串. 最后当我们审查通过这个提交的博客后, 它应该被发布, 也就是说当我们调用`content`时, 刚才被我们添加的文字回被返回.
 
-Notice that the only type we're interacting with from the crate is the `Post`
-type. The various states a post can be in (draft, waiting for review,
-published) are managed internally to the `Post` type. The states change due to
-the methods we call on the `Post` instance, but we don't have to manage the
-state changes directly. This also means we won't make a mistake with the
-states, like forgetting to request a review before publishing.
+注意我们和crate联系的唯一类型是`Post`类型. 一个博客的状态可以是草稿、等待审核和发布中的一种, 这些状态在`Post`类型内部被管理. 状态通过我们调用`Post`实例上的方法被改变, 我们不必直接去改变状态. 这也意味着我们不会用状态来犯错误, 比如在发布之前忘了请求审核.
 
 ### Defining `Post` and Creating a New Instance in the Draft State
 
