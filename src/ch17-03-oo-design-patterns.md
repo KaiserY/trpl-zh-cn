@@ -41,9 +41,9 @@ fn main() {
 
 注意我们和crate联系的唯一类型是`Post`类型. 一个博客的状态可以是草稿、等待审核和发布中的一种, 这些状态在`Post`类型内部被管理. 状态通过我们调用`Post`实例上的方法被改变, 我们不必直接去改变状态. 这也意味着我们不会用状态来犯错误, 比如在发布之前忘了请求审核.
 
-### Defining `Post` and Creating a New Instance in the Draft State
+### 定义`Post`类型并创建一个草稿状态的新实例
 
-Let's get started on the implementation of the library! We know we want to have
+让我们开始来实现这个库吧! We know we want to have
 a public `Post` struct that holds some content, so let's start with the
 definition of the struct and an associated public `new` function to create an
 instance of `Post` as shown in Listing 17-12. We're also going to have a
