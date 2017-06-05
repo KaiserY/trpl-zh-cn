@@ -37,23 +37,13 @@ fn main() {
 
 我们希望用`Post::new`来创建一个新的博客草稿. 然后, 我们想在草稿状态的时候把一些文字添加到博客中. 如果我们想直接把博客的内容打印出来, 我们将不会得到任何文字, 因为该博客仍然是一个草稿. 我们在这里加了一个`assert_eq`是用于演示目的. 断言一个提交的博客草稿从`content`方法返回一个空字符串可以在我们的库中提供出色的单元测试, 但是我们将不会为这个例子写测试.
 
-然后, 我们希望能够请求审查我们提交的博客, 在等待审查期间`content`应该仍然返回一个空字符串. 最后当我们审查通过这个提交的博客后, 它应该被发布, 也就是说当我们调用`content`时, 刚才被我们添加的文字回被返回.
+然后, 我们希望能够请求审查我们提交的博客, 在等待审查期间`content`应该仍然返回一个空字符串. 最后当我们审核通过这个提交的博客后, 它应该被发布, 也就是说当我们调用`content`时, 刚才被我们添加的文字回被返回.
 
 注意我们和crate联系的唯一类型是`Post`类型. 一个博客的状态可以是草稿、等待审核和发布中的一种, 这些状态在`Post`类型内部被管理. 状态通过我们调用`Post`实例上的方法被改变, 我们不必直接去改变状态. 这也意味着我们不会用状态来犯错误, 比如在发布之前忘了请求审核.
 
 ### 定义`Post`类型并创建一个草稿状态的新实例
 
-让我们开始来实现这个库吧! We know we want to have
-a public `Post` struct that holds some content, so let's start with the
-definition of the struct and an associated public `new` function to create an
-instance of `Post` as shown in Listing 17-12. We're also going to have a
-private trait `State`. `Post` will hold a trait object of `Box<State>` inside
-an `Option` in a private field named `state`. We'll see why the `Option` is
-necessary in a bit. The `State` trait defines all the behavior different post
-states share, and the `Draft`, `PendingReview`, and `Published` states will all
-implement the `State` trait. For now, the trait does not have any methods, and
-we're going to start by defining just the `Draft` state since that's the state
-we want to start in:
+让我们开始来实现这个库吧! 我们知道我们想有一个持有某些内容的公有的`Post`结构, 所以让我们从这个结构的定义和这个结构的一个公有的关联函数`new`开始, 这个`new`函数会创建如列表17-12中所示的`Post`实例. 我们也将有一个名叫`State`的私有的trait. `Post`将有一个私有的`state`属性, 该属性是一个`Option`, 它会持有一个`Box<State>`类型的trait对象. 等会儿我们还将看到为什么`Option`是必要的. 这个`State`trait定义了不同的提交上来的博客的状态会共享的所有行为, 因此`Draft`、 `PendingReview`和`Published`状态都将会实现`State`trait. 目前为止, 这个trait还没有一个方法, 我们将从定义`Draft`状态开始, 因为它是我们想要的起始状态:
 
 <span class="filename">Filename: src/lib.rs</span>
 
