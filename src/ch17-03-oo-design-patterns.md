@@ -71,7 +71,7 @@ impl State for Draft {}
 
 <span class="caption">列表17-12: 定义一个`Post`结构, 一个`Post`结构的创建一个新的`Post`实例的关联函数`new`, 一个`State`trait, 和一个实现了`State`的结构`Draft`.</span>
 
-当我们创建一个新的`Post`实例时, 我们把它的`state`字段设为一个持有指向一个新的`Draft`结构实例的`Box`的`Some`类型的值. 这就确保无论何时我们创建一个`Post`类型的新实例时, 它总是处于草稿状态. 因为`Post`的`state`字段是私有的, 也就没有办法创建一个处于其它状态的`Post`!
+当我们创建一个新的`Post`实例时, 我们把它的`state`字段设为一个`Some`类型的值, 该值持有指向一个新的`Draft`结构实例的`Box`. 这就确保无论何时我们创建一个`Post`类型的新实例时, 它总是处于草稿状态. 因为`Post`的`state`字段是私有的, 除了调用`new`无法创建一个处于其它状态的`Post`!
 
 ### Storing the Text of the Post Content
 
