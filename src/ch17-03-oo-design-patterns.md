@@ -69,15 +69,9 @@ struct Draft {}
 impl State for Draft {}
 ```
 
-<span class="caption">Listing 17-12: Definition of a `Post` struct and a `new`
-function that creates a new `Post` instance, a `State` trait, and a `Draft`
-struct that implements `State`</span>
+<span class="caption">列表17-12: 定义一个`Post`结构, 一个`Post`结构的创建一个新的`Post`实例的关联函数`new`, 一个`State`trait, 和一个实现了`State`的结构`Draft`.</span>
 
-When we create a new `Post`, we set its `state` field to a `Some` value holding
-a `Box` pointing to a new instance of the `Draft` struct. This ensures whenever
-we create a new instance of `Post`, it'll start out as a draft. Because the
-`state` field of `Post` is private, there's no way to create a `Post` in any
-other state!
+当我们创建一个新的`Post`实例时, 我们把它的`state`字段设为一个持有指向一个新的`Draft`结构实例的`Box`的`Some`类型的值. 这就确保无论何时我们创建一个`Post`类型的新实例时, 它总是处于草稿状态. 因为`Post`的`state`字段是私有的, 也就没有办法创建一个处于其它状态的`Post`!
 
 ### Storing the Text of the Post Content
 
