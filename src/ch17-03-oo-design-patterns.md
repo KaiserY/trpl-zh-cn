@@ -75,14 +75,7 @@ impl State for Draft {}
 
 ### 存放Post的文本内容
 
-In the `Post::new` function, we set the `content` field to a new, empty
-`String`. In Listing 17-11, we showed that we want to be able to call a method
-named `add_text` and pass a `&str` to it to add that text to the content of the
-blog post. We're choosing to implement this as a method rather than exposing
-the `content` field as `pub` because we want to be able to control how the
-`content` field's data is read by implementing a method later. The `add_text`
-method is pretty straightforward though, let's add the implementation in
-Listing 17-13 to the `impl Post` block:
+在`Post::new`函数中, 我们把`content`字段设为一个新的空字符串. 在列表17-11中, 我们演示我们想能调用一个`add_text`方法, 通过传递一个`&str`到这个方法中来把文字添加到博客的内容中. 我们选择把这个实现为一个方法而不是把`content`暴露成一个`pub`型的字段是因为稍后我们想实现一个方法来控制对`content`字段内容的读取. `add_text`方法很容易理解, 让我们在列表17-13中来把它的实现添加到`impl Post`块中:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -99,22 +92,13 @@ impl Post {
 }
 ```
 
-<span class="caption">Listing 17-13: Implementing the `add_text` method to add
-text to a post's `content`</span>
+<span class="caption">列表17-13: 实现`add_text`方法来把文字添加到博客的`content`方法中</span>
 
-`add_text` takes a mutable reference to `self`, since we're changing the `Post`
-instance that we're calling `add_text` on. We then call `push_str` on the
-`String` in `content` and pass the `text` argument to add to the saved
-`content`. This isn't part of the state pattern since its behavior doesn't
-depend on the state that the post is in. The `add_text` method doesn't interact
-with the `state` field at all, but it is part of the behavior we want to
-support.
+因为当调用`add_text`方法时, 我们将会改变`Post`实例, 所以我们用一个可变的`self`引用作为参数. 然后我们调用`content`的`String`类型上的`push_str`方法, 传入`text`参数来把它添加到调用方法的实例的`content`上. 这不是状态模式的一部分, 因为它的行为并不依赖博客所处的状态. `add_text`方法根本不与`state`字段交互, 但它是我们想提供的功能的一部分.
 
-### Content of a Draft Post is Empty
+### 草稿博客的内容为空
 
-After we've called `add_text` and added some content to our post, we still want
-the `content` method to return an empty string slice since the post is still in
-the draft state, as shown on line 8 of Listing 17-11. For now, let's implement
+列表17-11的第八行显示, 在我们调用`add_text`把某些内容添加到博客后, 当博客仍然处于草稿状态时, 我们仍然希望`content`方法返回一个空字符串切片. For now, let's implement
 the `content` method with the simplest thing that will fulfill this requirement:
 always returning an empty string slice. We're going to change this later once
 we implement the ability to change a post's state to be published. With what we
