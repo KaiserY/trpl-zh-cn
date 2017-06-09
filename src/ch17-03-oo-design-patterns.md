@@ -98,13 +98,7 @@ impl Post {
 
 ### 草稿博客的内容为空
 
-列表17-11的第八行显示, 在我们调用`add_text`把某些内容添加到博客后, 当博客仍然处于草稿状态时, 我们仍然希望`content`方法返回一个空字符串切片. For now, let's implement
-the `content` method with the simplest thing that will fulfill this requirement:
-always returning an empty string slice. We're going to change this later once
-we implement the ability to change a post's state to be published. With what we
-have so far, though, posts can only be in the draft state, which means the post
-content should always be empty. Listing 17-14 shows this placeholder
-implementation:
+列表17-11的第八行显示, 在我们调用`add_text`把某些内容添加到博客后, 当博客仍然处于草稿状态时, 我们仍然希望`content`方法返回一个空字符串切片. 现在, 让我们用最简单的办法来实现完全满足需求的`content`方法: 永远返回一个空的字符串切片. 稍后等我们实现了把提交上来的博客的状态变成已发布状态的功能后, 我们再来修改这段代码. 就目前的情况来看, 提交的博客只处于草稿状态, 也就是说提交的内容永远都为空. 列表17-14显示了这种占位符式的实现代码:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -121,16 +115,13 @@ impl Post {
 }
 ```
 
-<span class="caption">Listing 17-14: Adding a placeholder implementation for
-the `content` method on `Post` that always returns an empty string slice</span>
+<span class="caption">列表17-14: 为`Post`的`content`方法加入一个占位符实现, 让它永远都返回一个空的字符串切片</span>
 
-With this added `content` method, everything in Listing 17-11 up to line 8
-works as we intend.
+通过加入`content`方法, 在列表17-11中的第八行以前的所以东西都可以如我们期望的那样运行了.
 
-### Requesting a Review of the Post Changes its State
+### 请求审核博客来改变它的状态
 
-Next up is requesting a review of a post, which should change its state from
-`Draft` to `PendingReview`. We want `post` to have a public method named
+接着就是请求审核博客了, 这会把博客的状态从`Draft`变成`PendingReview`. We want `post` to have a public method named
 `request_review` that will take a mutable reference to `self`. Then we're going
 to call an internal `request_review` method on the state that we're holding, and
 this second `request_review` method will consume the current state and return a
