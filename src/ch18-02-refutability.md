@@ -1,8 +1,6 @@
-## Refutability: Whether a Pattern Might Fail to Match
+## Refutability(可反驳性): 模式是否会匹配失效
 
-Patterns come in two forms: refutable and irrefutable. Patterns which cannot
-fail to match for any possible value are said to be *irrefutable*, and patterns
-which can fail to match for some possible value are said to be *refutable*.
+模式有两种形式: refutable(可反驳)和irrefutable(不可反驳). 对任意可能的值进行匹配都不会失效的模式被称为是*irrefutable*(不可反驳)的, 而对某些可能的值进行匹配会失效的模式被称为是*refutable*(可反驳)的.
 `let` statements, function parameters, and `for` loops are restricted to only
 accept irrefutable patterns, since there's nothing correct the program could do
 if the pattern fails to match. `if let`, and `while let` expressions are
