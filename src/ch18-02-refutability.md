@@ -1,21 +1,11 @@
 ## Refutability(可反驳性): 模式是否会匹配失效
 
-模式有两种形式: refutable(可反驳)和irrefutable(不可反驳). 对任意可能的值进行匹配都不会失效的模式被称为是*irrefutable*(不可反驳)的, 而对某些可能的值进行匹配会失效的模式被称为是*refutable*(可反驳)的.
-`let` statements, function parameters, and `for` loops are restricted to only
-accept irrefutable patterns, since there's nothing correct the program could do
-if the pattern fails to match. `if let`, and `while let` expressions are
-restricted to only accept refutable patterns, since they're made to handle
-possible failure and we wouldn't need their functionality if the pattern could
-never fail.
+匹配模式有两种形式: refutable(可反驳)和irrefutable(不可反驳). 对任意可能的值进行匹配都不会失效的模式被称为是*irrefutable*(不可反驳)的, 而对某些可能的值进行匹配会失效的模式被称为是*refutable*(可反驳)的.
+`let`语句、 函数参数和`for`循环被约束为只接受*irrefutable*模式, 因为如果模式匹配失效程序就不会正确运行. `if let`和`while let`表达式被约束为只接受*refutable*模式, 因为它们需要处理可能存在的匹配失效的情况, 并且如果模式匹配永不失效, 那它们就派不上用场了.
 
-In general, you shouldn't have to worry about the distinction between refutable
-and irrefutable patterns; just be familiar with the concept of refutability
-when you see it mentioned in an error message. When you get an error message
-involving refutability, you'll need to change either the pattern or the
-construct you're using the pattern with, depending on your intentions for the
-behavior of the code.
+通常, 你不用关心*refutable*和*irrefutable*模式的区别, 当你看见它出现在了错误消息中时, 你只要了解*可反驳性*(refutability)的概念即可. 如果你得到一个涉及到可反驳性概念的错误消息, 根据你的代码行为的意图, 你只需改变匹配模式或者是改变你构造模式的方法即可.
 
-Let's look at some examples. Earlier in this chapter, we had `let x = 5;`. `x`
+让我们来看几个例子. Earlier in this chapter, we had `let x = 5;`. `x`
 is indeed an irrefutable pattern we're allowed to use: since it matches
 anything, it can't fail to match. In contrast, consider trying to match one
 variant of an enum with `let`, such as matching only a `Some<T>` value from the
