@@ -5,18 +5,13 @@
 
 通常, 你不用关心*refutable*和*irrefutable*模式的区别, 当你看见它出现在了错误消息中时, 你只要了解*可反驳性*(refutability)的概念即可. 如果你得到一个涉及到可反驳性概念的错误消息, 根据你的代码行为的意图, 你只需改变匹配模式或者是改变你构造模式的方法即可.
 
-让我们来看几个例子. Earlier in this chapter, we had `let x = 5;`. `x`
-is indeed an irrefutable pattern we're allowed to use: since it matches
-anything, it can't fail to match. In contrast, consider trying to match one
-variant of an enum with `let`, such as matching only a `Some<T>` value from the
-`Option<T>` enum as shown in Listing 18-7:
+让我们来看几个例子. 在本章的前面部分, 我们提到`let x = 5;`. 这里`x`就是一个我们被允许使用*irrefutable*的模式: 因为它不可能匹配失效. 相反, 如果用`let`来匹配一个枚举的变体, 比如像**例18-7**中列出的那样从`Option<T>`枚举中只匹配`Some<T>`这个值:
 
 ```rust,ignore
 let Some(x) = some_option_value;
 ```
 
-<span class="caption">Listing 18-7: Attempting to use a refutable pattern with
-`let`</span>
+<span class="caption">例18-7: 试试用一个有`let`的*refutable*模式</span>
 
 If `some_option_value` was a `None` value, `some_option_value` would not match
 the pattern `Some(x)`. The pattern `Some(x)` is refutable since there exists a
