@@ -25,9 +25,7 @@ error[E0005]: refutable pattern in local binding: `None` not covered
 
 因为我们没有(也不能)覆盖到模式`Some(x)`的每一个可能的值, 所以Rust会报错.
 
-如果我们采用*refutable*模式, 使用`if let`而不是`let`. 这样当模式不匹配时, 在花括号中的代码将不执行, 这段代码只有在值匹配模式的时候才会执行, 也只在此时有意义. Listing 18-8 shows how to fix the code in Listing 18-7 with `Some(x)`
-matching `some_option_value`. Using the refutable pattern `Some(x)` is allowed,
-since this example uses `if let`:
+如果我们采用*refutable*模式, 使用`if let`而不是`let`. 这样当模式不匹配时, 在花括号中的代码将不执行, 这段代码只有在值匹配模式的时候才会执行, 也只在此时才有意义. 例18-8显示了如何修正在例18-7中用`Some(x)`来匹配`some_option_value`的代码. 因为这个例子使用了`if let`, 因此使用*refutable*模式的`Some(x)`就没问题了:
 
 ```rust
 # let some_option_value: Option<i32> = None;
@@ -36,11 +34,9 @@ if let Some(x) = some_option_value {
 }
 ```
 
-<span class="caption">Listing 18-8: Using `if let` and a block with refutable
-patterns instead of `let`</span>
+<span class="caption">例18-8: 使用`if let`和一个有*refutable*模式的代码块来代替`let`</span>
 
-Consequently, if we give `if let` an irrefutable pattern that will always match,
-such as `x` as shown in Listing 18-9:
+此外, 如果我们给`if let`一个绝对会匹配的*irrefutable*模式, 比如在例18-9中显示的`x`:
 
 ```rust,ignore
 if let x = 5 {
@@ -48,11 +44,9 @@ if let x = 5 {
 };
 ```
 
-<span class="caption">Listing 18-9: Attempting to use an irrefutable pattern
-with `if let`</span>
+<span class="caption">例18-9: 尝试把一个*irrefutable*模式用到`if let`上</span>
 
-Rust will complain that it doesn't make sense to use `if let` with an
-irrefutable pattern:
+Rust将会抱怨把`if let`和一个*irrefutable*模式一起使用没有意义:
 
 ```text
 error[E0162]: irrefutable if-let pattern
@@ -62,10 +56,7 @@ error[E0162]: irrefutable if-let pattern
   |        ^ irrefutable pattern
 ```
 
-Generally, match arms use refutable patterns, except for the last arm that
-might match any remaining values with an irrefutable pattern. A `match` with
-only one arm whose pattern is irrefutable is allowed, but it's not particularly
-useful and could be replaced with a simpler `let` statement. Both the expressions
+一般来说, 多数匹配使用*refutable*模式, 除非是那种可以匹配任意值的情况使用*irrefutable*模式. `match`操作符中如果只有一个*irrefutable*模式分支也没有什么问题, 但这就没什么特别的用处, 此时可以用一个更简单的`let`语句来替换. 不管是把表达式关联到`let`语句亦或是 Both the expressions
 associated with a `let` statement and a single arm irrefutable match will
 unconditionally be run, so the end result is the same if their expressions are.
 
