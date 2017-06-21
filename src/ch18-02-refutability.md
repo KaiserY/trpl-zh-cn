@@ -13,12 +13,7 @@ let Some(x) = some_option_value;
 
 <span class="caption">例18-7: 试试用一个有`let`的*refutable*模式</span>
 
-If `some_option_value` was a `None` value, `some_option_value` would not match
-the pattern `Some(x)`. The pattern `Some(x)` is refutable since there exists a
-case in which it would fail to match a value. There's nothing valid that our
-code could do with this `let` statement if `some_option_value` was the `None`
-value. Therefore, Rust will complain at compile time that we've tried to use a
-refutable pattern where an irrefutable pattern is required:
+如果`some_option_value`的值是`None`, `some_option_value`将不会匹配模式`Some(x)`. 模式`Some(x)`是可反驳的(refutable), 因为存在一个使它匹配失效的值. 如果`some_option_value`的值是`None`, 那么`let`语句就不会产生任何效果. 因此Rust会在编译时会报*期望irrefutable模式但是却得到了一个refutable模式*的错误:
 
 ```text
 error[E0005]: refutable pattern in local binding: `None` not covered
@@ -28,13 +23,9 @@ error[E0005]: refutable pattern in local binding: `None` not covered
   |     ^^^^^^^ pattern `None` not covered
 ```
 
-We didn't cover (and couldn't cover!) every valid value with the pattern
-`Some(x)`, so Rust will rightfully complain.
+因为我们没有(也不能)覆盖到模式`Some(x)`的每一个可能的值, 所以Rust会报错.
 
-If we have a refutable pattern, instead of using `let`, we can use `if let`.
-That way, if the pattern doesn't match, the code inside the curly braces won't
-execute. That code will only make sense and run if the value matches the
-pattern. Listing 18-8 shows how to fix the code in Listing 18-7 with `Some(x)`
+如果我们采用*refutable*模式, 使用`if let`而不是`let`. 这样当模式不匹配时, 在花括号中的代码将不执行, 这段代码只有在值匹配模式的时候才会执行, 也只在此时有意义. Listing 18-8 shows how to fix the code in Listing 18-7 with `Some(x)`
 matching `some_option_value`. Using the refutable pattern `Some(x)` is allowed,
 since this example uses `if let`:
 
