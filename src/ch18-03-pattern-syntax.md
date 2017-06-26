@@ -1,12 +1,10 @@
-## All the Pattern Syntax
+## 所有的模式语法
 
-We've seen some examples of different kinds of patterns throughout the book.
-This section lists all the syntax valid in patterns and why you might want to
-use each of them.
+通过本书我们已领略过一些不同类型模式的例子. 本节会列出所有在模式中有效的语法并且会阐述你为什么可能会使用它们中的每一个.
 
-### Literals
+### 字面量
 
-As we saw in Chapter 6, you can match against literals directly:
+我们在第6章已经见过, 你可以直接匹配字面量:
 
 ```rust
 let x = 1;
@@ -19,19 +17,13 @@ match x {
 }
 ```
 
-This prints `one` since the value in `x` is 1.
+这段代码会打印`one`因为`x`的值是1.
 
-### Named Variables
+### 命名变量
 
-Named variables are irrefutable patterns that match any value.
+命名变量是可匹配任何值的`irrefutable`(不可反驳)模式.
 
-As with all variables, variables declared as part of a pattern will shadow
-variables with the same name outside of the `match` construct since a `match`
-starts a new scope. In Listing 18-10, we declare a variable named `x` with the
-value `Some(5)` and a variable `y` with the value `10`. Then we have a `match`
-expression on the value `x`. Take a look at the patterns in the match arms and
-the `println!` at the end, and make a guess about what will be printed before
-running this code or reading further:
+与所有变量一样, 模式中声明的变量会屏蔽`match`表达式外层的同名变量, 因为一个`match`表达式会开启一个新的作用域. 在列表18-10中, 我们声明了一个值为`Some(5)`的变量`x`和一个值为`10`的变量`y`. 然后是一个值`x`上的`match`表达式. 看一看开始匹配的模式和结尾的`println!`, 你可以在继续阅读或运行代码前猜一猜什么会被打印出来:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -50,12 +42,11 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-10: A `match` statement with an arm that
-introduces a shadowed variable `y`</span>
+<span class="caption">列表18-10: 引入了一个阴影变量`y`的`match`语句</span>
 
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 
-Let's walk through what happens when the `match` statement runs. The first
+让我们看看当`match`语句运行的时候发生了什么. The first
 match arm has the pattern `Some(50)`, and the value in `x` (`Some(5)`) does not
 match `Some(50)`, so we continue. In the second match arm, the pattern
 `Some(y)` introduces a new variable name `y` that will match any value inside a
