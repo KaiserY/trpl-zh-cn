@@ -69,11 +69,11 @@ match x {
 }
 ```
 
-This prints `one or two`.
+上面的代码会打印`one or two`.
 
-### Matching Ranges of Values with `...`
+### 通过`...`匹配值的范围
 
-You can match an inclusive range of values with `...`:
+你可以用`...`匹配一个值包含的范围:
 
 ```rust
 let x = 5;
@@ -84,10 +84,9 @@ match x {
 }
 ```
 
-If `x` is 1, 2, 3, 4, or 5, the first arm will match.
+上面的代码中, 如果`x`是1、 2、 3、 4或5, 第一个分支就会匹配.
 
-Ranges are only allowed with numeric values or `char` values. Here's an example
-using ranges of `char` values:
+范围只能是数字或`char`类型的值. 下面是一个使用`char`类型值范围的例子:
 
 ```rust
 let x = 'c';
@@ -99,14 +98,11 @@ match x {
 }
 ```
 
-This will print `early ASCII letter`.
+上面的代码会打印`early ASCII letter`.
 
-### Destructuring to Break Apart Values
+### 解构提取值
 
-Patterns can be used to *destructure* structs, enums, tuples, and references.
-Destructuring means to break a value up into its component pieces. Listing
-18-11 shows a `Point` struct with two fields, `x` and `y`, that we can break
-apart by using a pattern with a `let` statement:
+模式可以用来*解构*(*destructure*)结构、枚举、元组和引用. 解构意味着把一个值分解成它的组成部分. 例18-11中的结构`Point`有两个字段`x`和`y`, 我们可以通过一个模式和`let`语句来进行提取:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -125,15 +121,9 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-11: Destructuring using struct field
-shorthand</span>
+<span class="caption">例18-11: 用结构的字段来解构</span>
 
-This creates the variables `x` and `y` that match the `x` and `y` of `p`. The
-names of the variables must match the names of the fields to use this
-shorthand. If we wanted to use names different than the variable names, we can
-specify `field_name: variable_name` in the pattern. In Listing 18-12, `a` will
-have the value in the `Point` instance's `x` field and `b` will have the value
-in the `y` field:
+上面的代码创建了匹配`p`中的`x`和`y`字段的变量`x`和`y`. 变量的名字必须匹配使用了这个写法中的字段. 如果我们想使用不同的变量名字, 我们可以在模式中使用`field_name: variable_name`. 在例18-12中, `a`会拥有`Point`实例的`x`字段的值, `b`会拥有`y`字段的值:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -152,13 +142,9 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-12: Destructuring struct fields into variables
-with different names than the fields</span>
+<span class="caption">例18-12: 把结构解构到与字段不同名的变量中</span>
 
-We can also use destructuring with literal values in order to test and use
-inner parts of a value. Listing 18-13 shows a `match` statement that determines
-whether a point lies directly on the `x` axis (which is true when `y = 0`), on
-the `y` axis (`x = 0`), or neither:
+为了测试和使用一个值内部的某个属性, 我们也可以用字面量来解构. 例18-13用一个`match`语句来判断一个点是位于`x`(此时`y` = 0)轴上还是在`y`(此时`x` = 0)轴上或者不在两个轴上面:
 
 ```rust
 # struct Point {
@@ -177,18 +163,13 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-13: Destructuring and matching literal values
-in one pattern</span>
+<span class="caption">例18-13: 解构和匹配一个模式中的字面量</span>
 
-This will print `On the y axis at 7` since the value `p` matches the second arm
-by virtue of `x` having the value 0.
+上面的代码会打印`On the y axis at 7`, 因为`p`的`x`字段的值是0, 这正好匹配第二个分支.
 
-We used destructuring on enums in Chapter 6, such as in Listing 6-5 where we
-destructured an `Option<i32>` using a `match` expression and added one to the
-inner value of the `Some` variant.
+在第6章中我们对枚举进行了解构, 比如例6-5中, 我们用一个`match`表达式来解构一个`Option<i32>`, 其中被提取出来的一个是`Some`内的变量.
 
-When the value we're matching against a pattern contains a reference, we can
-specify a `&` in the pattern in order to separate the reference and the value.
+当我们正匹配的值在一个包含了引用的模式里面时, 为了把引用和值分割开我们可以在模式中指定一个`&`符号.
 This is especially useful in closures used with iterators that iterate over
 references to values when we want to use the values in the closure rather than
 the references. Listing 18-14 shows how to iterate over references to `Point`
