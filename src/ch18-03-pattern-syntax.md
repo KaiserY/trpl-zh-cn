@@ -167,7 +167,7 @@ fn main() {
 
 上面的代码会打印`On the y axis at 7`, 因为`p`的`x`字段的值是0, 这正好匹配第二个分支.
 
-在第6章中我们对枚举进行了解构, 比如例6-5中, 我们用一个`match`表达式来解构一个`Option<i32>`, 其中被提取出来的一个是`Some`内的变量.
+在第6章中我们对枚举进行了解构, 比如例6-5中, 我们用一个`match`表达式来解构一个`Option<i32>`, 其中被提取出来的一个值是`Some`内的变量.
 
 当我们正匹配的值在一个包含了引用的模式里面时, 为了把引用和值分割开我们可以在模式中指定一个`&`符号.
 This is especially useful in closures used with iterators that iterate over
