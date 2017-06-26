@@ -46,34 +46,18 @@ fn main() {
 
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 
-让我们看看当`match`语句运行的时候发生了什么. 第一个匹配分支是模式`Some(50)`, `x`中的值(`Some(5)`)不匹配`Some(50)`, 所以我们继续. In the second match arm, the pattern
-`Some(y)` introduces a new variable name `y` that will match any value inside a
-`Some` value. Because we're in a new scope inside the `match` expression, this
-is a new variable, not the `y` we declared at the beginning that has the
-value 10. The new `y` binding will match any value inside a `Some`, which is
-what we have in `x`, so we execute the expression for that arm and print
-`Matched, y = 5` since this `y` binds to the inner value of the `Some` in `x`,
-which is 5.
+让我们看看当`match`语句运行的时候发生了什么. 第一个匹配分支是模式`Some(50)`, `x`中的值(`Some(5)`)不匹配`Some(50)`, 所以我们继续. 在第二个匹配分支中, 模式`Some(y)`引入了一个可以匹配在`Some`里的任意值的新变量`y`. 因为我们位于`match`表达式里面的新作用域中, 所以`y`就是一个新变量而不是在开头被声明的其值为10的变量`y`. 这个新的`y`绑定将会匹配在`Some`中的任意值, 这里也就是`x`中的值, 因为`y`绑定到`Some`中的值是`x`, 这里是5, 所以我们就执行了这个分支中的表达式并打印出`Matched, y = 5`.
 
-If `x` had been a `None` value instead of `Some(5)`, we would have matched the
-underscore since the other two arms' patterns would not have matched. In the
-expression for that match arm, since we did not introduce an `x` variable in
-the pattern of the arm, this `x` is still the outer `x` that has not been
-shadowed. In this hypothetical case, the `match` would print `Default case, x =
+如果`x`的值是`None`而不是`Some(5)`, 我们将会匹配下划线因为其它两个分支的模式将不会被匹配. 在这个匹配分支(下划线)的表达式里, 因为我们没有在分支的模式中引入变量`x`, 所以这个`x`仍然是`match`作用域外部的那个没被屏蔽的`x`. 在这个假想的例子中, `match`表达式将会打印出`Default case, x =
 None`.
 
-Once the `match` expression is over, its scope ends, and so does the scope of
-the inner `y`. The last `println!` produces `at the end: x = Some(5), y = 10`.
+一旦`match`表达式执行完毕, 它的作用域也就结束了, 同时`match`内部的`y`也就结束了. 最后的`println!`会打印`at the end: x = Some(5), y = 10`.
 
-In order to make a `match` expression that compares the values of the outer `x`
-and `y` rather than introducing a shadowed variable, we would need to use a
-match guard conditional instead. We'll be talking about match guards later in
-this section.
+为了让`match`表达式能比较外部变量`x`和`y`的值而不是内部引入的阴影变量`x`和`y`, 我们需要使用一个有条件的匹配守卫(guard). 我们将在本节的后面讨论匹配守卫.
 
-### Multiple patterns
+### 多种模式
 
-In `match` expressions only, you can match multiple patterns with `|`, which
-means *or*:
+只有在`match`表达式中, 你可以通过`|`符号匹配多个模式, 它代表*或*(*or*)的意思:
 
 ```rust
 let x = 1;
