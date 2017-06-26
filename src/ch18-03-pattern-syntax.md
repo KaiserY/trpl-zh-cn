@@ -23,7 +23,7 @@ match x {
 
 命名变量是可匹配任何值的`irrefutable`(不可反驳)模式.
 
-与所有变量一样, 模式中声明的变量会屏蔽`match`表达式外层的同名变量, 因为一个`match`表达式会开启一个新的作用域. 在列表18-10中, 我们声明了一个值为`Some(5)`的变量`x`和一个值为`10`的变量`y`. 然后是一个值`x`上的`match`表达式. 看一看开始匹配的模式和结尾的`println!`, 你可以在继续阅读或运行代码前猜一猜什么会被打印出来:
+与所有变量一样, 模式中声明的变量会屏蔽`match`表达式外层的同名变量, 因为一个`match`表达式会开启一个新的作用域. 在列表18-10中, 我们声明了一个值为`Some(5)`的变量`x`和一个值为`10`的变量`y`. 然后是一个值`x`上的`match`表达式. 看一看匹配分支的模式和结尾的`println!`, 你可以在继续阅读或运行代码前猜一猜什么会被打印出来:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -46,9 +46,7 @@ fn main() {
 
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 
-让我们看看当`match`语句运行的时候发生了什么. The first
-match arm has the pattern `Some(50)`, and the value in `x` (`Some(5)`) does not
-match `Some(50)`, so we continue. In the second match arm, the pattern
+让我们看看当`match`语句运行的时候发生了什么. 第一个匹配分支是模式`Some(50)`, `x`中的值(`Some(5)`)不匹配`Some(50)`, 所以我们继续. In the second match arm, the pattern
 `Some(y)` introduces a new variable name `y` that will match any value inside a
 `Some` value. Because we're in a new scope inside the `match` expression, this
 is a new variable, not the `y` we declared at the beginning that has the
