@@ -475,10 +475,7 @@ fn main() {
 
 上例会打印出`Default case, x = Some(5)`. 因为第二个匹配分支没有往模式中引入新变量`y`, 所以外部变量`y`就不会被遮掩, 这样我们就可以在匹配守卫中直接使用外部变量`y`. 我们还把`x`解构到了内部变量`n`中, 这样我们就可以在匹配守卫中比较`n`和`y`了.
 
-If you're using a match guard with multiple patterns specified by `|`, the
-match guard condition applies to all of the patterns. Listing 18-29 shows a
-match guard that applies to the value matched by all three patterns in the
-first arm:
+如果你在由`|`指定的多模式中使用匹配守卫, 匹配守卫的条件就会应用到所有的模式上. 例18-29演示了在第一个匹配分支中的匹配守卫会在被匹配的全部三个模式的值上生效:
 
 ```rust
 let x = 4;
@@ -490,30 +487,24 @@ match x {
 }
 ```
 
-<span class="caption">Listing 18-29: Combining multiple patterns with a match
-guard</span>
+<span class="caption">例18-29: 用一个匹配守卫来合成多个模式</span>
 
-This prints `no` since the `if` condition applies to the whole pattern `4 | 5 |
-6`, not only to the last value `6`. In other words, the precedence of a match
-guard in relation to a pattern behaves like this:
+上例会打印`no`因为条件`if`会应用到整个模式`4 | 5 |
+6`上, 而不是只应用到最后一个值`6`上面. 换一种说法, 一个与模式关联的匹配守卫的优先级是:
 
 ```text
 (4 | 5 | 6) if y => ...
 ```
 
-rather than this:
+而不是:
 
 ```text
 4 | 5 | (6 if y) => ...
 ```
 
-### `@` Bindings
+### `@`绑定
 
-In order to test a value in a pattern but also be able to create a variable
-bound to the value, we can use `@`. Listing 18-30 shows an example where we
-want to test that a `Message::Hello` `id` field is within the range `3...7` but
-also be able to bind to the value so that we can use it in the code associated
-with the arm:
+为了既能测试一个模式的值又能创建一个绑定到值的变量, 我们可以使用`@`. 例18-30演示了在匹配分支中我们想测试一个`Message::Hello`的`id`字段是否位于`3...7`之间, 同时我们又想绑定这个值这样我们可以在代码中使用它:
 
 ```rust
 enum Message {
@@ -535,27 +526,12 @@ match msg {
 }
 ```
 
-<span class="caption">Listing 18-30: Using `@` to bind to a value in a pattern
-while also testing it</span>
+<span class="caption">例18-30: 在测试模式中的值的时候用`@`符号来绑定值</span>
 
-This example will print `Found an id in range: 5`. By specifying `id @` before
-the range, we're capturing whatever value matched the range while also testing
-it. In the second arm where we only have a range specified in the pattern, the
-code associated with the arm doesn't know if `id` is 10, 11, or 12, since we
-haven't saved the `id` value in a variable: we only know that the value matched
-something in that range if that arm's code is executed. In the last arm where
-we've specified a variable without a range, we do have the value available to
-use in the arm's code, but we haven't applied any other test to the value.
-Using `@` lets us test a value and save it in a variable within one pattern.
+上例会打印`Found an id in range: 5`. 通过在范围前指定`id @`, 我们就在测试模式的同时又捕获了匹配范围的值. 在第二个分支我们只有一个在模式中指定的范围, 与这个分支关联的代码就不知道`id`是10还是11或12, 因为我们没有把`id`的值保存在某个变量中: 我们只知道如果匹配分支代码被执行这个值与范围匹配. 在最后一个匹配分支中我们指定了一个无范围的变量, 这个值就可以用在分支代码中, 此时我们没有对这个值进行任何其它的测试. 在一个模式中使用`@`让我们可以测试模式中的值并把它保存在一个变量中.
 
-## Summary
+## 总结
 
-Patterns are a useful feature of Rust that help to distinguish between
-different kinds of data. When used in `match` statements, Rust makes sure that
-your patterns cover every possible value. Patterns in `let` statements and
-function parameters make those constructs more powerful, enabling the
-destructuring of values into smaller parts at the same time as assigning to
-variables.
+模式是Rust的一个很有用的特点, 它帮助区分不同类型的数据. 当被用在`match`语句中时, Rust确保你的模式覆盖了每个可能的值. 在`let`语句和函数参数中的模式使得这些构造更加强大, 这些模式在赋值给变量的同时可以把值解构成更小的部分.
 
-Now, for the penultimate chapter of the book, let's take a look at some
-advanced parts of a variety of Rust's features.
+现在让我们进入倒数第二章吧, 让我们看一下Rust的某些高级特性.
