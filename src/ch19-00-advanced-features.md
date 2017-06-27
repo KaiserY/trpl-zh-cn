@@ -1,14 +1,8 @@
-# Advanced Features
+# 高级特性
 
-We've come a long way! By now, we've learned 99% of the things you'll need to
-know when writing Rust. Before we do one more project in Chapter 20, let's talk
-about a few things that you may run into that last 1% of the time. Feel free to
-skip this chapter and come back to it once you run into these things in the
-wild; the features we'll learn to use here are useful in very specific
-situations. We don't want to leave these features out, but you won't find
-yourself reaching for them often.
+我们已经走了很长的路! 现在我们已经学了使用Rust时99%的需要学习的内容. 在我们做第20章中的项目之前, 让我们来谈谈你可能会遇到的最后的1%的问题. 你可以随便跳过本章, 当你在实作中遇到这些问题时再回过头来学习也无妨; 我们将学习的在这里列出的特性在某些特定的情况下非常有用. 我们不想舍弃这些特性, 但你用到它们的时候确实不多.
 
-In this chapter, we're going to cover:
+本章将覆盖如下内容:
 
 * Unsafe Rust: for when you need to opt out of some of Rust's guarantees and
   tell the compiler that you will be responsible for upholding the guarantees
