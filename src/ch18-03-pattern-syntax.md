@@ -282,12 +282,9 @@ fn main() {
 
 <span class="caption">例18-18: 为了消除对未被使用变量的警告以一个下划线开始来命名变量</span>
 
-Note that there is a subtle difference between using only `_` and using a name
-that starts with an underscore like `_x`: `_x` still binds the value to the
-variable, but `_` doesn't bind at all.
+注意, 只使用`_`和使用一个以一个下划线起头的名字是有微妙的不同的: `_x`仍然会把值绑定到变量上但是`_`不会绑定值.
 
-Listing 18-19 shows a case where this distinction matters: `s` will still be
-moved into `_s`, which prevents us from using `s` again:
+例18-19显示了这种区别的主要地方: `s`将仍然被转移到`_s`, 它会阻止我们继续使用`s`:
 
 ```rust,ignore
 let s = Some(String::from("Hello!"));
@@ -299,11 +296,9 @@ if let Some(_s) = s {
 println!("{:?}", s);
 ```
 
-<span class="caption">Listing 18-19: An unused variable starting with an
-underscore still binds the value, which may take ownership of the value</span>
+<span class="caption">例18-19: 以下划线起头的未被使用的变量仍然会绑定值, 它也会拥有值的所有权</span>
 
-Using underscore by itself, however, doesn't ever bind to the value. Listing
-18-20 will compile without any errors since `s` does not get moved into `_`:
+只使用下划线本身却不会绑定值. 例18-20在编译时将不会报错, 因为`s`不会被转移到`_`:
 
 ```rust
 let s = Some(String::from("Hello!"));
@@ -315,20 +310,14 @@ if let Some(_) = s {
 println!("{:?}", s);
 ```
 
-<span class="caption">Listing 18-20: Using underscore does not bind the
-value</span>
+<span class="caption">例18-20: 使用下划线不会绑定值</span>
 
-This works just fine. Because we never bind `s` to anything, it's not moved.
+上面的代码能很好的运行. 因为我们没有把`s`绑定到其它地方, 它没有被转移.
 
-#### Ignoring Remaining Parts of a Value with `..`
+#### 用`..`忽略剩余的值
 
-With values that have many parts, we can extract only a few parts and avoid
-having to list underscores for each remaining part by instead using `..`. The
-`..` pattern will ignore any parts of a value that we haven't explicitly
-matched in the rest of the pattern. In Listing 18-21, we have a `Point` struct
-that holds a coordinate in three dimensional space. In the `match` expression,
-we only want to operate on the `x` coordinate and ignore the values in the `y`
-and `z` fields:
+对于有多个字段的值而言, 我们可以只提取少数字段并使用`..`来代替下划线, 这就避免了用`_`把剩余的部分列出来的麻烦. `..`模式将忽略值中没有被精确匹配值中的其它部分. 在例18-21中, 我们有一个持有三维空间坐标的`Point`结构. 在`match`表达式里,
+我们只想操作`x`坐标上的值并忽略`y`坐标和`z`坐标上的值:
 
 ```rust
 struct Point {
@@ -344,15 +333,11 @@ match origin {
 }
 ```
 
-<span class="caption">Listing 18-21: Ignoring all fields of a `Point` except
-for `x` by using `..`</span>
+<span class="caption">例18-21: 通过用`..`来忽略除了`x`以外的所有其它`Point`的字段</span>
 
-Using `..` is shorter to type than having to list out `y: _` and `z: _`. The
-`..` pattern is especially useful when working with structs that have lots of
-fields in situations where only one or two fields are relevant.
+使用`..`比列出`y: _`和`z: _`写起来更简单. 当一个结构有很多字段但却只需要使用少量字段时`..`模式就特别有用.
 
-`..` will expand to as many values as it needs to be. Listing 18-22 shows a use
-of `..` with a tuple:
+`..`将会囊括它能匹配的尽可能多的值. 例18-22显示了一个在元组中使用`..`的情况:
 
 ```rust
 fn main() {
@@ -366,15 +351,11 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-22: Matching only the first and last values in
-a tuple and ignoring all other values with `..`</span>
+<span class="caption">例18-22: 用`..`匹配元组中的第一和最后一个值并忽略掉所有的其它值</span>
 
-Here, we have the first and last value matched, with `first` and `last`. The
-`..` will match and ignore all of the things in the middle.
+我们在这里用`first`和`last`来匹配了第一和最后一个值. `..`将匹配并忽略中间的所有其它值.
 
-Using `..` must be unambiguous, however. Listing 18-23 shows an example where
-it's not clear to Rust which values we want to match and which values we want
-to ignore:
+然而使用`..`必须清晰明了. 例18-23中的代码就不是很清晰, Rust看不出哪些值时我们想匹配的, 也看不出哪些值是我们想忽略的:
 
 ```rust,ignore
 fn main() {
@@ -388,10 +369,9 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-23: An attempt to use `..` in a way that is
-ambiguous</span>
+<span class="caption">例18-23: 尝试含混不清地使用`..`</span>
 
-If we compile this example, we get this error:
+如果我们编译上面的例子, 我们会得到下面的错误:
 
 ```text
 error: `..` can only be used once per tuple or tuple struct pattern
@@ -401,20 +381,11 @@ error: `..` can only be used once per tuple or tuple struct pattern
   |                      ^^
 ```
 
-It's not possible to determine how many values in the tuple should be ignored
-before one value is matched with `second`, and then how many further values are
-ignored after that. We could mean that we want to ignore 2, bind `second` to 4,
-then ignore 8, 16, and 32, or we could mean that we want to ignore 2 and 4,
-bind `second` to 8, then ignore 16 and 32, and so forth. The variable name
-`second` doesn't mean anything special to Rust, so we get a compiler error
-since using `..` in two places like this is ambiguous.
+上面的代码中在一个值被匹配到`second`之前不可能知道元组中有多少值应该被忽略, 同样在`second`被匹配后也不知道应该有多少值被忽略. 我们可以忽略2, 把`second`绑定到4, 然后忽略8、16和32, 或者我们也可以忽略2和4, 把`second`绑定到8, 然后再忽略16和32. 对Rust而言, 变量名`second`并不意味着某个确定的值, 因为像这样在两个地方使用`..`是含混不清的, 所以我们就得到了一个编译错误.
 
-### `ref` and `ref mut` to Create References in Patterns
+### 用`ref`和`ref mut`在模式中创建引用
 
-Usually, when you match against a pattern, the variables that the pattern
-introduces are bound to a value. This means you'll end up moving the value into
-the `match` (or wherever you're using the pattern) since the ownership rules
-apply. Listing 18-24 shows an example:
+当你匹配一个模式时, 模式匹配的变量会被绑定到一个值. 也就是说你会把值转移进`match`(或者是其它你使用了模式的地方), 这是所有权规则的作用. 例18-24提供了一个例子:
 
 ```rust,ignore
 let robot_name = Some(String::from("Bors"));
@@ -427,8 +398,7 @@ match robot_name {
 println!("robot_name is: {:?}", robot_name);
 ```
 
-<span class="caption">Listing 18-24: Creating a variable in a match arm pattern
-takes ownership of the value</span>
+<span class="caption">例18-24: 在一个匹配分支模式里创建的变量会拥有值的所有权</span>
 
 This example will fail to compile since the value inside the `Some` value in
 `robot_name` is moved within the `match` when `name` binds to that value.
