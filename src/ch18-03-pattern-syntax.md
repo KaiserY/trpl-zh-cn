@@ -169,12 +169,7 @@ fn main() {
 
 在第6章中我们对枚举进行了解构, 比如例6-5中, 我们用一个`match`表达式来解构一个`Option<i32>`, 其中被提取出来的一个值是`Some`内的变量.
 
-当我们正匹配的值在一个包含了引用的模式里面时, 为了把引用和值分割开我们可以在模式中指定一个`&`符号.
-This is especially useful in closures used with iterators that iterate over
-references to values when we want to use the values in the closure rather than
-the references. Listing 18-14 shows how to iterate over references to `Point`
-instances in a vector, and destructure both the reference and the struct in
-order to be able to perform calculations on the `x` and `y` values easily:
+当我们正匹配的值在一个包含了引用的模式里面时, 为了把引用和值分割开我们可以在模式中指定一个`&`符号. 在迭代器对值的引用进行迭代时当我们想在闭包中使用值而不是引用的时侯这个符号在闭包里特别有用. 例18-14演示了如何在一个向量里迭代`Point`实例的引用, 为了能方便地对`x`和`y`的值进行计算还对引用的结构进行了解构:
 
 ```rust
 # struct Point {
@@ -193,12 +188,9 @@ let sum_of_squares: i32 = points
     .sum();
 ```
 
-<span class="caption">Listing 18-14: Destructuring a reference to a struct into
-the struct field values</span>
+<span class="caption">例18-14: 把结构的引用解构到结构的字段值中</span>
 
-Because `iter` iterates over references to the items in the vector, if we
-forgot the `&` in the closure arguments in the `map`, we'd get a type mismatch
-error like this:
+因为`iter`会对向量里面的项目的引用进行迭代, 如果我们在`map`里的闭包的参数上忘了`&`符号, 我们将会得到下面的类型不匹配的错误:
 
 ```text
 error[E0308]: mismatched types
@@ -211,13 +203,9 @@ error[E0308]: mismatched types
               found type `Point`
 ```
 
-This says Rust was expecting our closure to match `&Point`, but we tried to
-match the value with a pattern that was a `Point` value, not a reference to a
-`Point`.
+这个报错提示Rust希望我们的闭包匹配参数匹配`&Point`, 但是我们却试图用一个`Point`的值的模式去匹配它, 而不是一个`Point`的引用.
 
-We can mix, match, and nest destructuring patterns in even more complex ways:
-we can do something complicated like this example where we nest structs and 
-tuples inside of a tuple and destructure all the primitive values out:
+我们可以用更复杂的方法来合成、匹配和嵌套解构模式: 下例中我们通过在一个元组中嵌套结构和元组来解构出所有的基础类型的值:
 
 ```rust
 # struct Point {
@@ -228,21 +216,15 @@ tuples inside of a tuple and destructure all the primitive values out:
 let ((feet, inches), Point {x, y}) = ((3, 10), Point { x: 3, y: -10 });
 ```
 
-This lets us break complex types into their component parts.
+这使得我们把复杂的类型提取成了它们的组成成分.
 
-### Ignoring Values in a Pattern
+### 忽略模式中的值
 
-There are a few ways to ignore entire values or parts of values: using the `_`
-pattern, using the `_` pattern within another pattern, using a name that starts
-with an underscore, or using `..` to ignore all remaining parts of a value.
-Let's explore how and why to do each of these.
+有一些简单的方法可以忽略模式中全部或部分值: 使用`_`模式, 在另一个模式中使用`_`模式, 使用一个以下划线开始的名字, 或者使用`..`来忽略掉所有剩下的值. 下面让我们来探索如何以及为什么要这么做.
 
-#### Ignoring an Entire Value with `_`
+#### 用`_`忽略整个值
 
-We've seen the use of underscore as a wildcard pattern that will match any value
-but not bind to the value. While the underscore pattern is especially useful as
-the last arm in a `match` expression, we can use it in any pattern, such as
-function arguments as shown in Listing 18-15:
+我们已经见过了用下划线作为通配符会匹配任意值, 但是它不会绑定值. 把下划线模式用作`match`表达式的最后一个匹配分支特别有用, 我们可以在任意模式中使用它, 比如在例18-15中显示的函数参数:
 
 ```rust
 fn foo(_: i32) {
@@ -250,18 +232,13 @@ fn foo(_: i32) {
 }
 ```
 
-<span class="caption">Listing 18-15: Using `_` in a function signature</span>
+<span class="caption">例18-15: 在一个函数签名中使用`_`</span>
 
-Normally, you would change the signature to not have the unused parameter. In
-cases such as implementing a trait, where you need a certain type signature,
-using an underscore lets you ignore a parameter, and the compiler won't warn
-about unused function parameters like it would if we had used a name instead.
+通常, 你应该把这种函数的参数声明改成不用无用参数. 如果是要实现这样一个有特定类型签名的*trait*, 使用下划线可以让你忽略一个参数, 并且编译器不会像使用命名参数那样警告有未使用的函数参数.
 
-#### Ignoring Parts of a Value with a Nested `_`
+#### 用一个嵌套的`_`忽略部分值
 
-We can also use `_` inside of another pattern to ignore just part of a value.
-In Listing 18-16, the first `match` arm's pattern matches a `Some` value but
-ignores the value inside of the `Some` variant as specified by the underscore:
+我们也可以在另一个模式中使用`_`来忽略部分值. 在例18-16中, 第一个`match`分支中的模式匹配了一个`Some`值, 但是却通过下划线忽略掉了`Some`变量中的值:
 
 ```rust
 let x = Some(5);
@@ -272,15 +249,11 @@ match x {
 }
 ```
 
-<span class="caption">Listing 18-16: Ignoring the value inside of the `Some`
-variant by using a nested underscore</span>
+<span class="caption">例18-16: 通过使用一个嵌套的下划线忽略`Some`变量中的值</span>
 
-This is useful when the code associated with the `match` arm doesn't use the
-nested part of the variable at all.
+当代码关联的`match`分支不需要使用被嵌套的全部变量时这很有用.
 
-We can also use underscores in multiple places within one pattern, as shown in
-Listing 18-17 where we're ignoring the second and fourth values in a tuple of
-five items:
+我们也可以在一个模式中多处使用下划线, 在例18-17中我们将忽略掉一个五元元组中的第二和第四个值:
 
 ```rust
 let numbers = (2, 4, 8, 16, 32);
@@ -292,22 +265,13 @@ match numbers {
 }
 ```
 
-<span class="caption">Listing 18-17: Ignoring multiple parts of a tuple</span>
+<span class="caption">例18-17: 忽略元组中的多个部分</span>
 
-This will print `Some numbers: 2, 8, 32`, and the values 4 and 16 will be
-ignored.
+上面的代码将会打印出`Some numbers: 2, 8, 32`, 元组中的4和16会被忽略.
 
-#### Ignoring an Unused Variable by Starting its Name with an Underscore
+#### 通过在名字前以一个下划线开头来忽略不使用的变量
 
-Usually, Rust will warn you if you create a variable but don't use it anywhere,
-since that could be a bug. If you're prototyping or just starting a project,
-though, you might create a variable that you'll use eventually, but temporarily
-it will be unused. If you're in this situation and would like to tell Rust not
-to warn you about the unused variable, you can start the name of the variable
-with an underscore. This works just like a variable name in any pattern, only
-Rust won't warn you if the variable goes unused. In Listing 18-18, we
-do get a warning about not using the variable `y`, but we don't get a warning
-about not using the variable `_x`:
+如果你创建了一个变量却不使用它, Rust通常会给你一个警告, 因为这可能会是个bug. 如果你正在做原型或者刚开启一个项目, 那么你可能会创建一个暂时不用但是以后会使用的变量. 如果你面临这个情况并且希望Rust不要对你警告未使用的变量, 你可以让那个变量以一个下划线开头. 这和其它模式中的变量名没什么区别, 只是Rust不会警告你这个变量没用被使用. 在例18-18中, 我们会得到一个没用使用变量`y`的警告, 但是我们不会得到没用使用变量`_x`的警告:
 
 ```rust
 fn main() {
@@ -316,8 +280,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-18: Starting a variable name with an underscore
-in order to not get unused variable warnings</span>
+<span class="caption">例18-18: 为了消除对未被使用变量的警告以一个下划线开始来命名变量</span>
 
 Note that there is a subtle difference between using only `_` and using a name
 that starts with an underscore like `_x`: `_x` still binds the value to the
