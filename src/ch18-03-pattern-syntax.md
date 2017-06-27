@@ -100,7 +100,7 @@ match x {
 
 上面的代码会打印`early ASCII letter`.
 
-### 解构提取值
+### 解构并提取值
 
 模式可以用来*解构*(*destructure*)结构、枚举、元组和引用. 解构意味着把一个值分解成它的组成部分. 例18-11中的结构`Point`有两个字段`x`和`y`, 我们可以通过一个模式和`let`语句来进行提取:
 
@@ -400,13 +400,9 @@ println!("robot_name is: {:?}", robot_name);
 
 <span class="caption">例18-24: 在一个匹配分支模式里创建的变量会拥有值的所有权</span>
 
-This example will fail to compile since the value inside the `Some` value in
-`robot_name` is moved within the `match` when `name` binds to that value.
+上例的代码不能编译通过, 因为`robot_name`中的值被转移到了`match`中的`Some`的值所绑定的`name`里了.
 
-Using `&` in a pattern matches an existing reference in the value, as we saw in
-the "Destructuring to Break Apart Values" section. If you want to create a
-reference instead in order to borrow the value in a pattern variable, use the
-`ref` keyword before the new variable, as shown in Listing 18-25:
+在模式中使用`&`会匹配已存在的引用中的值, 我们在"解构并提取值"这一节中已经见过了. 如果你想创建一个引用来借用模式中变量的值, 可以在新变量名前使用`ref`关键字, 比如例18-25:
 
 ```rust
 let robot_name = Some(String::from("Bors"));
@@ -419,15 +415,11 @@ match robot_name {
 println!("robot_name is: {:?}", robot_name);
 ```
 
-<span class="caption">Listing 18-25: Creating a reference so that a pattern
-variable does not take ownership of a value</span>
+<span class="caption">例18-25: 创建一个引用这样模式中的变量就不会拥有值的所有权</span>
 
-This example will compile because the value in the `Some` variant in
-`robot_name` is not moved into the `Some(ref name)` arm of the match; the match
-only took a reference to the data in `robot_name` rather than moving it.
+上例可以编译, 因为`robot_name`没有被转移到`Some(ref name)`匹配分支的`Some`变量中; 这个匹配分支只是持有`robot_name`中的数据, `robot_name`并没被转移.
 
-To create a mutable reference, use `ref mut` for the same reason as shown in
-Listing 18-26:
+如果要创建一个可变引用, 可以像例18-26那样使用`ref mut`:
 
 ```rust
 let mut robot_name = Some(String::from("Bors"));
@@ -440,19 +432,13 @@ match robot_name {
 println!("robot_name is: {:?}", robot_name);
 ```
 
-<span class="caption">Listing 18-26: Creating a mutable reference to a value as
-part of a pattern using `ref mut`</span>
+<span class="caption">例18-26: 在模式中使用`ref mut`来创建一个值的可变引用</span>
 
-This example will compile and print `robot_name is: Some("Another name")`.
-Since `name` is a mutable reference, within the match arm code, we need to
-dereference using the `*` operator in order to be able to mutate the value.
+上例可以编译并打印出`robot_name is: Some("Another name")`. 因为在匹配分支的代码中`name`是一个可变引用, 为了能够改变这个值, 我们需要用`*`操作符来对它解引用.
 
-### Extra Conditionals with Match Guards
+### 用了匹配守卫的额外条件
 
-You can introduce *match guards* as part of a match arm by specifying an
-additional `if` conditional after the pattern. The conditional can use
-variables created in the pattern. Listing 18-27 has a `match` expression with a
-match guard in the first arm:
+你可以通过在模式后面指定一个额外的`if`条件来往匹配分支中引入*匹配守卫*(*match guards*). 这个条件可以使用模式中创建的变量. 例18-27中的`match`表达式的第一个匹配分支就有一个匹配守卫:
 
 ```rust
 let num = Some(4);
@@ -464,16 +450,11 @@ match num {
 }
 ```
 
-<span class="caption">Listing 18-27: Adding a match guard to a pattern</span>
+<span class="caption">例18-27: 往一个模式中加入匹配守卫</span>
 
-This example will print `less than five: 4`. If `num` was instead `Some(7)`,
-this example would print `7`. Match guards allow you to express more complexity
-than patterns alone give you.
+上例会打印`less than five: 4`. 如果把`num`换成`Some(7)`, 上例将会打印`7`.  匹配守卫让你能表达出模式不能给予你的更多的复杂的东西.
 
-In Listing 18-10, we saw that since patterns shadow variables, we weren't able
-to specify a pattern to express the case when a value was equal to a variable
-outside the `match`. Listing 18-28 shows how we can use a match guard to
-accomplish this:
+在例18-10中, 我们见过了模式中的阴影变量, 当一个值等于`match`外部的变量时我们不能用模式来表达出这种情况. 例18-28演示了我们如何用一个匹配守卫来解决这个问题:
 
 ```rust
 fn main() {
@@ -490,13 +471,9 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-28: Using a match guard to test for equality
-with an outer variable</span>
+<span class="caption">例18-28: 用一个匹配守卫来测试与外部变量的相等性</span>
 
-This will now print `Default case, x = Some(5)`. Because the second match arm
-is not introducing a new variable `y` that shadows the outer `y` in the
-pattern, we can use `y` in the match guard. We're still destructuring `x` to
-get the inner value `n`, and then we can compare `n` and `y` in the match guard.
+上例会打印出`Default case, x = Some(5)`. 因为第二个匹配分支没有往模式中引入新变量`y`, 所以外部变量`y`就不会被遮掩, 这样我们就可以在匹配守卫中直接使用外部变量`y`. 我们还把`x`解构到了内部变量`n`中, 这样我们就可以在匹配守卫中比较`n`和`y`了.
 
 If you're using a match guard with multiple patterns specified by `|`, the
 match guard condition applies to all of the patterns. Listing 18-29 shows a
