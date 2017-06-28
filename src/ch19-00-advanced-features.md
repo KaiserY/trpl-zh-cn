@@ -4,10 +4,10 @@
 
 本章将覆盖如下内容:
 
-* Unsafe Rust: 用于当你需要弃用Rust的某些保证时你告诉编译器你将负责维护某些保证
+* 不安全的Rust: 用于当你需要弃用Rust的某些保证时你告诉编译器你将负责维护某些保证
 * 高级生命周期: 应对复杂情况的额外的生命周期语法
 * 高级Traits: 关联类型, 默认类型参数, 完全合格的句法(fully qualified
-  syntax), 超级trait(supertraits), 和与trait关联的新类型模式 
+  syntax), 超级trait(supertraits), 和与trait关联的newtype模式 
 * 高级类型: 关于newtype模式、类型别名、"never"类型和动态sized类型的高级话题
 * 高级函数和闭包: 函数指针和返回闭包
 
