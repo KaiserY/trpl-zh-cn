@@ -1,4 +1,4 @@
-## Unsafe Rust
+## 不安全的Rust
 
 In all of the previous chapters in this book, we've been discussing code
 written in Rust that has memory safety guarantees enforced at compile time.
