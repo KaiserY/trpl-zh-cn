@@ -1,24 +1,10 @@
 ## 不安全的Rust
 
-In all of the previous chapters in this book, we've been discussing code
-written in Rust that has memory safety guarantees enforced at compile time.
-However, Rust has a second language hiding out inside of it, unsafe Rust, which
-does not enforce these memory safety guarantees. Unsafe Rust works just like
-regular Rust does, but it gives you extra superpowers not available in safe
-Rust code.
+在本书之前的章节, 我们讨论了Rust代码在编译时会强制保证内存安全. 然而, Rust还有另一个隐藏的语言特性, 这就是不安全的Rust, 它不会担保内存安全. 不安全的Rust和常规Rust代码无异, 但是它会给你安全的Rust代码不具备的超能力.
 
-Unsafe Rust exists because, by nature, static analysis is conservative. When
-trying to determine if code upholds some guarantees or not, it's better to
-reject some programs that are valid than it is to accept some programs that are
-invalid. There are some times when your code might be okay, but Rust thinks
-it's not! In these cases, you can use unsafe code to tell the compiler, "trust
-me, I know what I'm doing." The downside is that you're on your own; if you get
-unsafe code wrong, problems due to memory unsafety like null pointer
-dereferencing can occur.
+不安全的Rust之所以存在, 本质上是因为编译器对代码的静态分析趋于保守. 代码何时保证内存安全, 何时放权这种担保呢? 把合法的代码拒绝掉通常比接纳非法的代码要好一点. 有些时候你的代码的确没问题, 但是Rust却不这样认为! 这时你可以用不安全的代码告诉编译器, "相信我吧, 我知道我在做什么." 这样缺陷可能就在于你自己了; 如果你的不安全代码发生了错误, 比如对null指针解引用就可能会引发内存不安全的大问题.
 
-There's another reason that Rust needs to have unsafe code: the underlying
-hardware of computers is inherently not safe. If Rust didn't let you do unsafe
-operations, there would be some tasks that you simply could not do. But Rust
+还有另一个Rust需要不安全代码的原因: 底层电脑硬件固有的不安全性. 如果Rust不让你执行不安全的操作, 那么有些任务你就完成不了. But Rust
 needs to be able to let you do low-level systems programming like directly
 interacting with your operating system, or even writing your own operating
 system! That's part of the goals of the language. We need some way to do these
