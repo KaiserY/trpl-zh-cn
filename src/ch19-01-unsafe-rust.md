@@ -4,58 +4,26 @@
 
 不安全的Rust之所以存在, 本质上是因为编译器对代码的静态分析趋于保守. 代码何时保证内存安全, 何时放权这种担保呢? 把合法的代码拒绝掉通常比接纳非法的代码要好一点. 有些时候你的代码的确没问题, 但是Rust却不这样认为! 这时你可以用不安全的代码告诉编译器, "相信我吧, 我知道我在做什么." 这样缺陷可能就在于你自己了; 如果你的不安全代码发生了错误, 比如对null指针解引用就可能会引发内存不安全的大问题.
 
-还有另一个Rust需要不安全代码的原因: 底层电脑硬件固有的不安全性. 如果Rust不让你执行不安全的操作, 那么有些任务你就完成不了. But Rust
-needs to be able to let you do low-level systems programming like directly
-interacting with your operating system, or even writing your own operating
-system! That's part of the goals of the language. We need some way to do these
-kinds of things.
+还有另一个Rust需要不安全代码的原因: 底层电脑硬件固有的不安全性. 如果Rust不让你执行不安全的操作, 那么有些任务你就完成不了. 但是Rust需要你能够做像直接与操作系统交互甚至是写你自己的操作系统这样的底层操作! 这也是Rust语言的一部分目标, 所以我们需要一些来做这些事情的方法.
 
-### Unsafe Superpowers
+### 不安全的神力
 
-We switch into unsafe Rust by using the `unsafe` keyword and starting a new
-block that holds the unsafe code. There are four actions that you can take in
-unsafe Rust that you can't in safe Rust. We call these the "unsafe
-superpowers." We haven't seen most of these features yet since they're only
-usable with `unsafe`!
+我们通过使用`unsafe`关键字开启一个持有不安全代码的代码块来切换到不安全的Rust. 你可以在不安全的Rust中进行四个安全的Rust做不到的操作. 我们把它们称作"不安全的神力". 之前我们没见过这几个特性是因为它们只用在`unsafe`代码块中! 它们是: 
 
-1. Dereferencing a raw pointer
-2. Calling an unsafe function or method
-3. Accessing or modifying a mutable static variable
-4. Implementing an unsafe trait
+1. 解引用原生指针
+2. 调用一个不安全的函数或方法
+3. 访问或修改一个不可变的静态变量
+4. 实现一个不安全的trait
 
-It's important to understand that `unsafe` doesn't turn off the borrow checker
-or disable any other of Rust's safety checks: if you use a reference in unsafe
-code, it will still be checked. The only thing the `unsafe` keyword does is
-give you access to these four features that aren't checked by the compiler for
-memory safety. You still get some degree of safety inside of an unsafe block!
-Furthermore, `unsafe` does not mean the code inside the block is dangerous or
-definitely will have memory safety problems: the intent is that you as the
-programmer will ensure that the code inside an `unsafe` block will have valid
-memory, since you've turned off the compiler checks.
+记住这一点很重要, `unsafe`不会关掉借用检查器也不会禁用其它的Rust安全性检查: 如果你在不安全的代码中用了引用, 它仍将会被检查. `unsafe`关键字做的唯一的一件事是让你存取编译器因内存安全性而没去检查的上述四个特性.在一个unsafe代码块中你仍然会获得某种程度的安全性! 此外, `unsafe`并不是说代码块中的代码是危险的或者有内存安全性问题: 它只是表明作为程序员的关掉了编译器检查, 你将确保`unsafe`代码块会拥有合理的内存.
 
-People are fallible, however, and mistakes will happen. By requiring these four
-unsafe operations to be inside blocks annotated with `unsafe`, if you make a
-mistake and get an error related to memory safety, you'll know that it has to
-be related to one of the places that you opted into this unsafety. That makes
-the cause of memory safety bugs much easier to find, since we know Rust is
-checking all of the other code for us. To get this benefit of only having a few
-places to investigate memory safety bugs, it's important to contain your unsafe
-code to as small of an area as possible. Any code inside of an `unsafe` block
-is suspect when debugging a memory problem: keep `unsafe` blocks small and
-you'll thank yourself later since you'll have less code to investigate.
+人是会犯错误的, 错误总会发生. 在`unsafe`代码块中执行上述四个不安全的操作时, 如果你犯了错误并得到一个内存安全性的错误, 你必定会知道它与你使用不安全的代码有关. 这样就更容易处理内存安全性的bug, 因为Rust已经帮我们把其它的代码做了检查. 能缩小排查内存安全性bug的出现区域当然好, 所以尽量缩小你的不安全代码的数量吧. 当修正内存安全问题时, `unsafe`代码块中的任意代码都可能出错: 所以让`unsafe`代码块尽可能的小吧, 以后你需要排查的代码也会少一些.
 
-In order to isolate unsafe code as much as possible, it's a good idea to
-enclose unsafe code within a safe abstraction and provide a safe API, which
-we'll be discussing once we get into unsafe functions and methods. Parts of the
-standard library are implemented as safe abstractions over unsafe code that has
-been audited. This prevents uses of `unsafe` from leaking out into all the
-places that you or your users might want to make use of the functionality
-implemented with `unsafe` code, since using a safe abstraction is safe.
+为了尽可能隔离不安全的代码, 在安全的抽象中包含不安全的代码并提供一个安全的API是一个好主意, 当我们进入不安全的函数和方法的学习时我们会讨论它. 标准库中有些不安全代码被实现为安全的抽象, 它们中的部分已被审核过了. 当你或者你的用户使用通过`unsafe`代码实现的功能时, 因为使用一个安全的抽象时安全的, 这样就可以避免到处都是`unsafe`字样.
 
-Let's talk about each of the four unsafe superpowers in turn, and along the way
-we'll look at some abstractions that provide a safe interface to unsafe code.
+让我们按顺序讲介绍上述四个不安全的神力, 同时我们会见到一些抽象, 它们为不安全代码的代码提供了安全的接口.
 
-### Dereferencing a Raw Pointer
+### 解引用原生指针
 
 Way back in Chapter 4, we first learned about references. We also learned that
 the compiler ensures that references are always valid. Unsafe Rust has two new
