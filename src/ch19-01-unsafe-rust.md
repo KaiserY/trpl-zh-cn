@@ -64,30 +64,15 @@ unsafe {
 
 <span class="caption">例19-3: 在`unsafe`代码块中解引用原生指针</span>
 
-Creating a pointer can't do any harm; it's only when accessing the value that
-it points at that you might end up dealing with an invalid value.
+创建一个指针不会造成任何危险; 只有在你访问指针指向的值时可能出问题, 因为你可能会用它处理无效的值.
 
-Note also that in Listing 19-1 and 19-3 we created a `*const i32` and a `*mut
-i32` that both pointed to the same memory location, that of `num`. If we had
-tried to create an immutable and a mutable reference to `num` instead of raw
-pointers, this would not have compiled due to the rule that says we can't have
-a mutable reference at the same time as any immutable references. With raw
-pointers, we are able to create a mutable pointer and an immutable pointer to
-the same location, and change data through the mutable pointer, potentially
-creating a data race. Be careful!
+注意在19-1和19-3中我们创建的一个`*const i32`和一个`*mut i32`都指向同一个内存位置, 也就是`num`. 如果我们尝试创建一个不可变的和可变的`num`的引用而不是原生指针, 这就不能被编译, 因为我们不能在使用了不可变引用的同时再对同一个值进行可变引用. 通过原生指针, 我们能创建指向同一个内存位置的可变指针和不可变指针, 我们可以通过可变指针来改变数据, 但是要小心, 因为这可能会产生数据竞争!
 
-With all of these dangers, why would we ever use raw pointers? One major use
-case is interfacing with C code, as we'll see in the next section on unsafe
-functions. Another case is to build up safe abstractions that the borrow
-checker doesn't understand. Let's introduce unsafe functions then look at an
-example of a safe abstraction that uses unsafe code.
+既然存在这么多的危险, 为什么我们还要使用原生指针呢? 一个主要的原因是为了与C代码交互, 在下一节的不安全函数里我们将会看到. 另一个原因是创建一个借用检查器理解不了的安全的抽象. 下面让我们介绍不安全的函数, 然后再看一个使用了不安全代码的安全的抽象的例子.
 
-### Calling an Unsafe Function or Method
+### 调用一个不安全的函数或方法
 
-The second operation that requires an unsafe block is calling an unsafe
-function. Unsafe functions and methods look exactly like regular functions and
-methods, but they have an extra `unsafe` out front. Bodies of unsafe functions
-are effectively `unsafe` blocks. Here's an unsafe function named `dangerous`:
+需要一个不安全的代码块的才能执行的第二个操作是调用不安全的函数. 不安全的函数和方法与常规的函数和方法看上去没有什么异样, 只是他们前面有一个额外的`unsafe`关键字. 不安全的函数的函数体自然是`unsafe`的代码块. 下例是一个名叫`dangerous`的不安全的函数:
 
 ```rust
 unsafe fn dangerous() {}
@@ -97,7 +82,7 @@ unsafe {
 }
 ```
 
-If we try to call `dangerous` without the `unsafe` block, we'll get an error:
+如果不用`unsafe`代码块来调用`dangerous`, 我们将会得到下面的错误:
 
 ```text
 error[E0133]: call to unsafe function requires unsafe function or block
@@ -107,11 +92,9 @@ error[E0133]: call to unsafe function requires unsafe function or block
   |     ^^^^^^^^^^^ call to unsafe function
 ```
 
-By inserting the `unsafe` block around our call to `dangerous`, we're asserting
-to Rust that we've read the documentation for this function, we understand how
-to use it properly, and we've verified that everything is correct.
+通过把对`dangerous`的调用放到`unsafe`代码块中, 我们表明我们已经阅读了该函数的文档, 我们明白如何正确的使用它, 并且我们已经验证了调用的正确性.
 
-#### Creating a Safe Abstraction Over Unsafe Code
+#### 创建一个不安全的代码上的安全的抽象
 
 As an example, let's check out some functionality from the standard library,
 `split_at_mut`, and explore how we might implement it ourselves. This safe
