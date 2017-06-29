@@ -25,12 +25,7 @@
 
 ### 解引用原生指针
 
-Way back in Chapter 4, we first learned about references. We also learned that
-the compiler ensures that references are always valid. Unsafe Rust has two new
-types similar to references called *raw pointers*. Just like references, we can
-have an immutable raw pointer and a mutable raw pointer. In the context of raw
-pointers, "immutable" means that the pointer can't be directly dereferenced and
-assigned to. Listing 19-1 shows how to create raw pointers from references:
+回到第4章, 我们在哪里学习了引用. 我们知道编译器会确保引用永远合法. 不安全的Rust有两个类似于引用的被称为*原生指针*(*raw pointers*)的新类型. 和引用一样, 我们可以有一个不可变的原生指针和一个可变的原生指针. 在原生指针的上下文中, "不可变"意味着指针不能直接被解引用和被赋值. 例19-1演示了如何通过引用来创建一个原生指针:
 
 ```rust
 let mut num = 5;
@@ -39,32 +34,21 @@ let r1 = &num as *const i32;
 let r2 = &mut num as *mut i32;
 ```
 
-<span class="caption">Listing 19-1: Creating raw pointers from references</span>
+<span class="caption">例19-1: 通过引用创建原生指针</span>
 
-The `*const T` type is an immutable raw pointer, and `*mut T` is a mutable raw
-pointer. We've created raw pointers by using `as` to cast an immutable and a
-mutable reference into their corresponding raw pointer types. Unlike
-references, these pointers may or may not be valid.
+上例中`*const T`类型是一个不可变的原生指针, `*mut T`是一个可变的原生指针. 我们通过使用`as`把一个可变的和一个不可变的引用转换成它们对应的原生指针类型来创建原生指针. 与引用不同, 这些指针的合法性不能得到保证.
 
-Listing 19-2 shows how to create a raw pointer to an arbitrary location in
-memory. Trying to use arbitrary memory is undefined: there may be data at that
-address, there may not be any data at that address, the compiler might optimize
-the code so that there is no memory access, or your program might segfault.
-There's not usually a good reason to be writing code like this, but it is
-possible:
+例19-2演示了如何创建一个指向内存中任意地址的原生指针. 试图随便访问内存地址所带来的结果是难以预测的: 也许在那个地址处有数据, 也许在那个地址处没有任何数据, 编译器也可能会优化代码导致那块内存不能访问, 亦或你的程序可能会发生段错误. 虽然可以写出下面的代码, 但是通常找不到好的理由来这样做:
 
 ```rust
 let address = 0x012345;
 let r = address as *const i32;
 ```
 
-<span class="caption">Listing 19-2: Creating a raw pointer to an arbitrary
-memory address</span>
+<span class="caption">例子19-2: 创建一个指向任意内存地址的原生指针</span>
 
-Note there's no `unsafe` block in either Listing 19-1 or 19-2. You can *create*
-raw pointers in safe code, but you can't *dereference* raw pointers and read
-the data being pointed to. Using the dereference operator, `*`, on a raw
-pointer requires an `unsafe` block, as shown in Listing 19-3:
+注意在例19-1和19-2中没有`unsafe`代码块. 你可以在安全代码中*创建*原生指针
+raw pointers in safe code, 但是你不能在安全代码中*解引用*(*dereference*)原生指针来读取被指针指向的数据. 如例19-3所示, 对原生指针解引用需要在`unsafe`代码块中使用解引用操作符`*`:
 
 ```rust
 let mut num = 5;
@@ -78,8 +62,7 @@ unsafe {
 }
 ```
 
-<span class="caption">Listing 19-3: Dereferencing raw pointers within an
-`unsafe` block</span>
+<span class="caption">例19-3: 在`unsafe`代码块中解引用原生指针</span>
 
 Creating a pointer can't do any harm; it's only when accessing the value that
 it points at that you might end up dealing with an invalid value.
