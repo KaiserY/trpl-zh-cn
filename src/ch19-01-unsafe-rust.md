@@ -96,11 +96,7 @@ error[E0133]: call to unsafe function requires unsafe function or block
 
 #### 创建一个不安全的代码上的安全的抽象
 
-As an example, let's check out some functionality from the standard library,
-`split_at_mut`, and explore how we might implement it ourselves. This safe
-method is defined on mutable slices, and it takes one slice and makes it into
-two by splitting the slice at the index given as an argument, as demonstrated
-in Listing 19-4:
+让我们用标准库中的某个函数比如`split_at_mut`来举个例子, 然后来探讨我们如何自己来实现它. 这个方法被定义在一个可变的切片(slice)上, 它通过参数指定的索引把一个切片分割成两个, 如例19-4所示:
 
 ```rust
 let mut v = vec![1, 2, 3, 4, 5, 6];
@@ -113,13 +109,9 @@ assert_eq!(a, &mut [1, 2, 3]);
 assert_eq!(b, &mut [4, 5, 6]);
 ```
 
-<span class="caption">Listing 19-4: Using the safe `split_at_mut`
-function</span>
+<span class="caption">例19-4: 使用安全的`split_at_mut`函数</span>
 
-This function can't be implemented using only safe Rust. An attempt might look
-like Listing 19-5. For simplicity, we're implementing `split_at_mut` as a
-function rather than a method, and only for slices of `i32` values rather than
-for a generic type `T`:
+用安全的Rust代码是不能实现这个函数的. 如果要试一下用安全的Rust来实现它可以参考例19-5. 简单起见, 我们把`split_at_mut`实现成一个函数而不是一个方法, 这个函数只处理`i32`类型的切片而不是泛型类型`T`的切片:
 
 ```rust,ignore
 fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
@@ -132,19 +124,13 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 }
 ```
 
-<span class="caption">Listing 19-5: An attempted implementation of
-`split_at_mut` using only safe Rust</span>
+<span class="caption">例19-5: 尝试用安全的Rust来实现`split_at_mut`</span>
 
-This function first gets the total length of the slice, then asserts that the
-index given as a parameter is within the slice by checking that the parameter
-is less than or equal to the length. The assertion means that if we pass an
-index that's greater than the length of the slice to split at, the function
-will panic before it attempts to use that index.
+该函数先取得切片(slice)的长度, 然后通过检查参数是否小于或等于这个长度来断言参数给定的索引位于切片(slice)当中. 这个断言意外着如果我们传入的索引比要分割的切片(slice)的长度大, 这个函数就会在使用这个索引前中断(panic).
 
-Then we return two mutable slices in a tuple: one from the start of the initial
-slice to the `mid` index, and another from `mid` to the end of the slice.
+接着我们在一个元组中返回两个可变的切片(slice): 一个从被分割的切片的头部开始直到`mid`索引的前一个元素中止, 另一个从被分割的切片的`mid`索引开始直到被分割的切片的末尾结束.
 
-If we try to compile this, we'll get an error:
+如果我们编译上面的代码, 我们将得到一个错误:
 
 ```text
 error[E0499]: cannot borrow `*slice` as mutable more than once at a time
@@ -158,14 +144,9 @@ error[E0499]: cannot borrow `*slice` as mutable more than once at a time
   | - first borrow ends here
 ```
 
-Rust's borrow checker can't understand that we're borrowing different parts of
-the slice; it only knows that we're borrowing from the same slice twice.
-Borrowing different parts of a slice is fundamentally okay; our two `&mut
-[i32]`s aren't overlapping. However, Rust isn't smart enough to know this. When
-we know something is okay, but Rust doesn't, it's time to reach for unsafe code.
+Rust的借用检查器不能理解为什么我们要借用这个切片(slice)的不同部分; 它只知道我们对同一个切片借用了两次. 借用一个切片(slice)的不同部分在功能上是没问题的; 而且我们的两个`&mut [i32]`也没有重叠. 但是Rust并没有聪明到能明白这一点. 当我们知道有些东西是可以的但是Rust却不知道的时候就是时候使用不安全的代码了.
 
-Listing 19-6 shows how to use an `unsafe` block, a raw pointer, and some calls
-to unsafe functions to make the implementation of `split_at_mut` work:
+例子19-6演示了如何用一个`unsafe`代码块、 一个原生指针和一个不安全的函数调用来实现`split_at_mut`:
 
 ```rust
 use std::slice;
@@ -183,12 +164,9 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 }
 ```
 
-<span class="caption">Listing 19-6: Using unsafe code in the implementation of
-the `split_at_mut` function</span>
+<span class="caption">例19-6: 用不安全的代码来实现`split_at_mut`</span>
 
-Recall from Chapter 4 that slices are a pointer to some data and the length of
-the slice. We've often used the `len` method to get the length of a slice; we
-can use the `as_mut_ptr` method to get access to the raw pointer of a slice. In
+回顾一下第4章, 切片(slice)是一个指向某个数据的指针和这个切片(slice)的长度. 我们经常用`len`方法来取得切片的长度; 也可以用`as_mut_ptr`方法来访问切片的原生指针. In
 this case, since we have a mutable slice to `i32` values, `as_mut_ptr` returns
 a raw pointer with the type `*mut i32`, which we've stored in the variable
 `ptr`.
