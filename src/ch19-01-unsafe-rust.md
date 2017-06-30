@@ -166,39 +166,15 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 
 <span class="caption">例19-6: 用不安全的代码来实现`split_at_mut`</span>
 
-回顾一下第4章, 切片(slice)是一个指向某个数据的指针和这个切片(slice)的长度. 我们经常用`len`方法来取得切片的长度; 也可以用`as_mut_ptr`方法来访问切片的原生指针. In
-this case, since we have a mutable slice to `i32` values, `as_mut_ptr` returns
-a raw pointer with the type `*mut i32`, which we've stored in the variable
-`ptr`.
+回顾一下第4章, 切片(slice)是一个指向某个数据的指针和这个切片(slice)的长度. 我们经常用`len`方法来取得切片的长度; 也可以用`as_mut_ptr`方法来访问切片的原生指针. 在这个例子里, 因为我们有一个可变的`i32`类型的切片, `as_mut_ptr`返回一个`*mut i32`类型的原生指针, 我们把它存放在变量`ptr`里.
 
-The assertion that the `mid` index is within the slice stays the same. Then,
-the `slice::from_raw_parts_mut` function does the reverse from the `as_mut_ptr`
-and `len` methods: it takes a raw pointer and a length and creates a slice. We
-call `slice::from_raw_parts_mut` to create a slice that starts from `ptr` and is
-`mid` items long. Then we call the `offset` method on `ptr` with `mid` as an
-argument to get a raw pointer that starts at `mid`, and we create a slice using
-that pointer and the remaining number of items after `mid` as the length.
+对索引`mid`合法性的断言上面已经介绍过了. 函数`slice::from_raw_parts_mut`的行为与`as_mut_ptr`和`len`方法相反: 它以一个原生指针和一个长度为参数并返回一个切片(slice). 我们调用`slice::from_raw_parts_mut`来创建一个从`ptr`开始且拥有`mid`个元素的切片. 然后我们以`mid`为参数调用`prt`上的`offset`方法来得到一个从索引`mid`开始的原生指针, 然后我们用这个原生指针和索引`mid`之后的元素个数为参数创建一个切片.
 
-Because slices are checked, they're safe to use once we've created them. The
-function `slice::from_raw_parts_mut` is an unsafe function because it takes a
-raw pointer and trusts that this pointer is valid. The `offset` method on raw
-pointers is also unsafe, since it trusts that the location some offset after a
-raw pointer is also a valid pointer. We've put an `unsafe` block around our
-calls to `slice::from_raw_parts_mut` and `offset` to be allowed to call them,
-and we can tell by looking at the code and by adding the assertion that `mid`
-must be less than or equal to `len` that all the raw pointers used within the
-`unsafe` block will be valid pointers to data within the slice. This is an
-acceptable and appropriate use of `unsafe`.
+因为切片(slice)会被检查, 所以一旦我们创建了它就可以安全使用. 函数`slice::from_raw_parts_mut`是一个不安全的函数因为它有一个原生指针参数, 而且它相信这个指针是有效的. 原生指针的`offset`方法也是不安全的, 因为它相信一个原生指针的位置偏移一些后也是一个有效的指针. 为了能调用`slice::from_raw_parts_mut`和`offset`, 我们把他们的调用放到一个`unsafe`代码块中, 我们可以通过查看代码并添加`mid`不大于`len`的断言来表明`unsafe`代码块中的原生指针是指向切片中的数据的有效指针. 这是一个`unsafe`恰当用法.
 
-Note that the resulting `split_at_mut` function is safe: we didn't have to add
-the `unsafe` keyword in front of it, and we can call this function from safe
-Rust. We've created a safe abstraction to the unsafe code by writing an
-implementation of the function that uses `unsafe` code in a safe way by only
-creating valid pointers from the data this function has access to.
+注意结果`split_at_mut`函数是安全的: 我们不用在它的前面添加`unsafe`关键字, 并且我们可以从安全的Rust代码中调用它. 我们通过写一个使用了`unsafe`代码的函数来创建不安全代码的安全抽象, 上例用一种安全的方式通过函数访问的数据来创建有效的指针.
 
-In contrast, the use of `slice::from_raw_parts_mut` in Listing 19-7 would
-likely crash when the slice is used. This code takes an arbitrary memory
-location and creates a slice ten thousand items long:
+相反, 当使用切片(slice)时, 例19-7中`slice::from_raw_parts_mut`的用法很可能会崩溃. 下面的代码用一个随意的内存地址来创建一个有10000个元素的切片:
 
 ```rust
 use std::slice;
@@ -211,14 +187,11 @@ let slice = unsafe {
 };
 ```
 
-<span class="caption">Listing 19-7: Creating a slice from an arbitrary memory
-location</span>
+<span class="caption">例19-7: 通过一个任意的内存位置来创建一个切片</span>
 
-We don't own the memory at this arbitrary location, and there's no guarantee
-that the slice this code creates contains valid `i32` values. Attempting to use
-`slice` as if it was a valid slice would be undefined behavior.
+我们不能拥有任意地址的内存, 也不能保证这个代码创建的切片会包含有效的`i32`类型的值. 试图使用臆测是有效切片的`slice`的行为是难以预测的.
 
-#### `extern`  Functions for Calling External Code are Unsafe
+#### 调用外部代码的`extern`函数是不安全的
 
 Sometimes, your Rust code may need to interact with code written in another
 language. To do this, Rust has a keyword, `extern`, that facilitates creating
