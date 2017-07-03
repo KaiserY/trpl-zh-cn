@@ -193,8 +193,7 @@ let slice = unsafe {
 
 #### 调用外部代码的`extern`函数是不安全的
 
-有时, 你的Rust代码需要与其它语言交互. To do this, Rust has a keyword, `extern`, that facilitates creating
-and using a *Foreign Function Interface* (FFI). Listing 19-8 demonstrates how
+有时, 你的Rust代码需要与其它语言交互. Rust有一个`extern`关键字可以实现这个功能, 这有助于创建并使用*外部功能接口(Foreign Function Interface)* (FFI). 例19-8 demonstrates how
 to set up an integration with a function named `some_function` defined in an
 external library written in a language other than Rust. Functions declared
 within `extern` blocks are always unsafe to call from Rust code:
