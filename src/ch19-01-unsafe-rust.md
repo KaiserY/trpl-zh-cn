@@ -207,32 +207,17 @@ fn main() {
 }
 ```
 
-<span class="caption">例19-8: Declaring and calling an `extern` function
-defined in another language</span>
+<span class="caption">例19-8: 声明并调用一个用其它语言写成的函数</span>
 
-Within the `extern "C"` block, we list the names and signatures of functions
-defined in a library written in another language that we want to be able to
-call.`"C"` defines which *application binary interface* (ABI) the external
-function uses. The ABI defines how to call the function at the assembly level.
-The `"C"` ABI is the most common, and follows the C programming language's ABI.
+在`extern "C"`代码块中, 我们列出了我们想调用的用其它语言实现的库中定义的函数名和这个函数的特征签名.`"C"`定义了外部函数使用了哪种*应用程序接口(application binary interface)* (ABI). ABI定义了如何在汇编层调研这个函数. `"C"`是最常用的遵循C语言的ABI.
 
-Calling an external function is always unsafe. If we're calling into some other
-language, that language does not enforce Rust's safety guarantees. Since Rust
-can't check that the external code is safe, we are responsible for checking the
-safety of the external code and indicating we have done so by using an `unsafe`
-block to call external functions.
+调用一个外部函数总是不安全的. 如果我们要调用其他语言, 这种语言却不会遵循Rust的安全保证. 因为Rust不能检查外部代码是否是安全的, 我们只负责检查外部代码的安全性来表明我们已经用`unsafe`代码块来调用外部函数了.
 
 <!-- PROD: START BOX -->
 
-##### Calling Rust Functions from Other Languages
+##### 通过其它语言来调用Rust函数
 
-The `extern` keyword is also used for creating an interface that allows other
-languages to call Rust functions. Instead of an `extern` block, we can add the
-`extern` keyword and specifying the ABI to use just before the `fn` keyword. We
-also add the `#[no_mangle]` annotation to tell the Rust compiler not to mangle
-the name of this function. The `call_from_c` function in this example would be
-accessible from C code, once we've compiled to a shared library and linked from
-C:
+`extern`关键字也总是被用来创建一个允许被其他语言调用的Rust函数. 与`extern`代码块不同, 我们可以在`fn`关键字之前添加`extern`关键字并指定要使用的ABI. 我们也加入注解`#[no_mangle]`来告诉Rust编译器不要取笑这个函数的名字. 一旦我们把下例的代码编译成一个共享库并链接到C, 这个`call_from_c`函数就可以被C代码访问了:
 
 ```rust
 #[no_mangle]
@@ -241,14 +226,13 @@ pub extern "C" fn call_from_c() {
 }
 ```
 
-This usage of `extern` does not require `unsafe`
+上例的`extern`不需要`unsafe`就可以直接用
 
 <!-- PROD: END BOX -->
 
-### Accessing or Modifying a Mutable Static Variable
+### 访问或修改一个可变的静态变量
 
-We've gone this entire book without talking about *global variables*. Many
-programming languages support them, and so does Rust. However, global variables
+目前为止本书还没有*讨论全局变量(global variables)*. 很多语言都支持全局变量, 当然Rust也不例外. However, global variables
 can be problematic: for example, if you have two threads accessing the same
 mutable global variable, a data race can happen.
 
