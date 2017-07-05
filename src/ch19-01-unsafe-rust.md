@@ -232,12 +232,9 @@ pub extern "C" fn call_from_c() {
 
 ### 访问或修改一个可变的静态变量
 
-目前为止本书还没有*讨论全局变量(global variables)*. 很多语言都支持全局变量, 当然Rust也不例外. However, global variables
-can be problematic: for example, if you have two threads accessing the same
-mutable global variable, a data race can happen.
+目前为止本书还没有*讨论全局变量(global variables)*. 很多语言都支持全局变量, 当然Rust也不例外. 然而全局变量也有问题: 比如, 如果两个线程访问同一个可变的全局变量有可能会发生数据竞争.
 
-Global variables are called *static* in Rust. Listing 19-9 shows an example
-declaration and use of a static variable with a string slice as a value:
+全局变量在Rust中被称为是*静态(static)*变量. 例19-9中声明并使用了一个字符串切片类型的静态变量:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -249,23 +246,11 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-9: Defining and using an immutable static
-variable</span>
+<span class="caption">例19-9: 定义和使用一个不可变的静态变量</span>
 
-`static` variables are similar to constants: their names are also in
-`SCREAMING_SNAKE_CASE` by convention, and we *must* annotate the variable's
-type, which is `&'static str` in this case. Only references with the `'static`
-lifetime may be stored in a static variable. Because of this, the Rust compiler
-can figure out the lifetime by itself and we don't need to annotate it explicitly.
-Accessing immutable static variables is safe. Values in a static variable have a
-fixed address in memory, and using the value will always access the same data.
-Constants, on the other hand, are allowed to duplicate their data whenever they
-are used.
+`static`变量类似于常量: 按照惯例它们的命名遵从`SCREAMING_SNAKE_CASE(用下划线分割的全大写字母)`风格, 我们也*必须*注明变量的类型, 本例中是`&'static str`. 只有定义为`'static`的生命期才可以被存储在一个静态变量中. 也正因为此, Rust编译器自己就已经很清楚静态变量的生命期了, 所以我们也不需要明确地注明它了. 访问不可变的静态变量是安全的. 因为静态变量的值有一个固定的内存地址, 所以使用该值的时候总会得到同样的数据. 另一方面, 当常量被使用时, 复制它们的数据也是被允许的.
 
-Another way in which static variables are different from constants is that
-static variables can be mutable. Both accessing and modifying mutable static
-variables is unsafe. Listing 19-10 shows how to declare, access, and modify a
-mutable static variable named `COUNTER`:
+静态变量与常量的另一个不同是静态变量可以是可变的. 访问和修改可变的静态变量都是不安全的. 例19-10演示了如何声明、访问和修改一个名叫`COUNTER`的可变的静态变量:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -287,12 +272,9 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-10: Reading from or writing to a mutable
-static variable is unsafe</span>
+<span class="caption">例19-10: 读取或修改一个可变的静态变量是不安全的</span>
 
-Just like with regular variables, we specify that a static variable should be
-mutable using the `mut` keyword. Any time that we read or write from `COUNTER`
-has to be within an `unsafe` block. This code compiles and prints `COUNTER: 3`
+与常规变量一样, 我们用`mut`关键字来表明这个静态变量是可变的. 每次我们对`COUNTER`的读写都必须被放到一个`unsafe`代码块中. This code compiles and prints `COUNTER: 3`
 as we would expect since it's single threaded, but having multiple threads
 accessing `COUNTER` would likely result in data races.
 
