@@ -1,13 +1,13 @@
-## Advanced Lifetimes
+## 高级生命周期
 
-Back in Chapter 10, we learned how to annotate references with lifetime
+回到第10章, we learned how to annotate references with lifetime
 parameters to help Rust understand how the lifetimes of different references
 relate. We saw how most of the time, Rust will let you elide lifetimes, but
 every reference has a lifetime. There are three advanced features of lifetimes
 that we haven't covered though: *lifetime subtyping*, *lifetime
 bounds*, and *trait object lifetimes*.
 
-### Lifetime Subtyping
+### 生命周期子类型
 
 Imagine that we want to write a parser. To do this, we'll have a structure that
 holds a reference to the string that we're parsing, and we'll call that struct
