@@ -93,7 +93,13 @@
     - [可扩展的并发：`Sync`和`Send`](ch16-04-extensible-concurrency-sync-and-send.md)
 
 - [面向对象](ch17-00-oop.md)	
-	- [什么是面向对象](ch17-01-what-is-oo.md)
-	- [trait对象](ch17-02-trait-objects.md)
-    
+	- [什么是面向对象？](ch17-01-what-is-oo.md)
+	- [为使用不同类型的值而设计的 trait 对象](ch17-02-trait-objects.md)
+    - [面向对象设计模式的实现](ch17-03-oo-design-patterns.md)
 	
+## 高级主题
+
+- [模式用来匹配值的结构](ch18-00-patterns.md)
+    - [所有可能会用到模式的位置](ch18-01-all-the-places-for-patterns.md)
+    - [refutable：何时模式可能会匹配失败](ch18-02-refutability.md)
+    - [模式的全部语法](ch18-03-pattern-syntax.md)
