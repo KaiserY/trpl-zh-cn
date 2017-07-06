@@ -274,17 +274,11 @@ fn main() {
 
 <span class="caption">例19-10: 读取或修改一个可变的静态变量是不安全的</span>
 
-与常规变量一样, 我们用`mut`关键字来表明这个静态变量是可变的. 每次我们对`COUNTER`的读写都必须被放到一个`unsafe`代码块中. This code compiles and prints `COUNTER: 3`
-as we would expect since it's single threaded, but having multiple threads
-accessing `COUNTER` would likely result in data races.
+与常规变量一样, 我们用`mut`关键字来表明这个静态变量是可变的. 每次我们对`COUNTER`的读写都必须被放到一个`unsafe`代码块中. 上面的代码编译运行会打印`COUNTER: 3`, 这正如我们期望的那样, 因为程序现在是一个单线程, 如果有多个线程访问`COUNTER`就可能会导致数据竞争.
 
-Mutable data that is globally accessible is difficult to manage and ensure that
-there are no data races, which is why Rust considers mutable static variables
-to be unsafe. If possible, prefer using the concurrency techniques and
-threadsafe smart pointers we discussed in Chapter 16 to have the compiler check
-that data accessed from different threads is done safely.
+可全局访问的可变数据难于管理也很难保证没有数据竞争, 这也正是Rust认为可变的静态变量是不安全的原因. 如果可能, 请使用在第16章中介绍的并发技术和线程安全的职能指针, 这样可以让编译器从不同的线程检查被访问的数据是安全的.
 
-### Implementing an Unsafe Trait
+### 实现一个不安全的Trait
 
 Finally, the last action we're only allowed to take when we use the `unsafe`
 keyword is implementing an unsafe trait. We can declare that a trait is
