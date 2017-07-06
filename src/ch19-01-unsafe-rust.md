@@ -280,10 +280,7 @@ fn main() {
 
 ### 实现一个不安全的Trait
 
-Finally, the last action we're only allowed to take when we use the `unsafe`
-keyword is implementing an unsafe trait. We can declare that a trait is
-`unsafe` by adding the `unsafe` keyword before `trait`, and then implementing
-the trait must be marked as `unsafe` too, as shown in Listing 19-11:
+最后, 当我们使用`unsafe`关键字时最后一个只在不安全的代码中才能做的事是实现一个不安全的trait. 我们可以在`trait`之前添加一个`unsafe`关键字来声明一个trait是不安全的, 以后实现这个trait的时候也必须标记一个`unsafe`关键字, 如19-11所示:
 
 ```rust
 unsafe trait Foo {
@@ -295,24 +292,11 @@ unsafe impl Foo for i32 {
 }
 ```
 
-<span class="caption">Listing 19-11: Defining and implementing an unsafe
-trait</span>
+<span class="caption">例19-11: 定义并实现一个不安全的trait</span>
 
-Like unsafe functions, methods in an unsafe trait have some invariant that the
-compiler cannot verify. By using `unsafe impl`, we're promising that we'll
-uphold these invariants.
+与不安全的函数类似, 一个不安全的trait中的方法也有一些编译器无法验证的盲点. 通过使用`unsafe impl`, 我们就是在说明我们来保证这些有疑虑的地方的安全.
 
-As an example, recall the `Sync` and `Send` marker traits from Chapter 16, and
-that the compiler implements these automatically if our types are composed
-entirely of `Send` and `Sync` types. If we implement a type that contains
-something that's not `Send` or `Sync` such as raw pointers, and we want to mark
-our type as `Send` or `Sync`, that requires using `unsafe`. Rust can't verify
-that our type upholds the guarantees that a type can be safely sent across
-threads or accessed from multiple threads, so we need to do those checks
-ourselves and indicate as such with `unsafe`.
+举个例子, 回想一下第16章中的`Sync`和`Send`这两个标记trait, 如果我们的类型全部由`Send`和`Sync`类型组合而成, 编译器会自动实现它们. 如果我们要实现的一个类型包含了不是`Send`或`Sync`的东西, 比如原生指针, 若是我们像把我们的类型标记成`Send`或`Sync`, 这就要求使用`unsafe`关键字. Rust不能验证我们的类型能保证可以安全地跨线程发送或从多个线程访问, 所以我们需要用`unsafe`关键字来表明我们会自己来做这些检查.
 
-Using `unsafe` to take one of these four actions isn't wrong or frowned upon,
-but it is trickier to get `unsafe` code correct since the compiler isn't able
-to help uphold memory safety. When you have a reason to use `unsafe` code,
-however, it's possible to do so, and having the explicit `unsafe` annotation
-makes it easier to track down the source of problems if they occur.
+使用`unsafe`来执行这四个动作之一是没有问题的, 因为编译器不能确保内存安全, 所以把
+`unsafe`代码写正确也实属不易. 当你需要使用`unsafe`代码时, 你可以这样做, 明确注明`unsafe`, 这样如果出现问题可以更容易地追踪问题的源头.
