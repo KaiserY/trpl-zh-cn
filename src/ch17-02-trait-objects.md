@@ -21,9 +21,9 @@ get Chapter 8 for editing. /Carol -->
 不过，在 Rust 中，我们可以定义一个 `Draw` trait，包含名为 `draw` 的方法。接着可以定义一个存放**trait 对象**（*trait
 object*）的 vector，trait 对象是一个位于某些指针，比如 `&` 引用或 `Box<T>` 智能指针，之后的 trait。第十九章会讲到为何 trait 对象必须位于指针之后的原因。
 
-之前提到，我们不会称结构体和枚举为对象，以区分其他语言的结构体和枚举对象。结构体或者枚举成员中的数据和`impl`块中的行为是分开的，而其他语言则是数据和行为被组合到一个对象里。Trait 对象更像其他语言的对象，因为他们将其指针指向的具体对象作为数据，将在 trait 中定义的方法作为行为，组合在了一起。但是，trait 对象和其他语言是不同的，我们不能向一个 trait 对象增加数据。trait 对象不像其他语言那样有用：它们的目的是允许从公有行为上抽象。
+之前提到过，我们并不将结构体与枚举称之为“对象”，以便与其他语言中的对象相区别。结构体与枚举和 `impl` 块中的行为是分开的，不同于其他语言中将数据和行为组合进一个称为对象的概念中。trait 对象将由指向具体对象的指针构成的数据和定义于 trait 中方法的行为结合在一起，从这种意义上说它**则**更类似其他语言中的对象。不过 trait 对象与其他语言中的对象是不同的，因为不能向 trait 对象增加数据。trait 对象并不像其他语言中的对象那么通用：他们（trait 对象）的作用是允许对通用行为的抽象。
 
-trait 对象定义了给定情况下应有的行为。当需要具有某种特性的不确定具体类型时，我们可以把 trait 对象当作 trait 使用。Rust 的类型系统会保证我们为 trait 对象带入的任何值会实现 trait 的方法。我们不需要在编译阶段知道所有可能的类型，却可以把所有的实例统一对待。列表 17-03 展示了如何定义一个名为`Draw`的带有`draw`方法的 trait。
+trait 对象定义了在给定情况下所需的行为。接着就可以在要使用具体类型或泛型的地方使用 trait 来作为 trait 对象。Rust 的类型系统会确保任何我们替换为 trait 对象的值都会实现了 trait 的方法。这样就无需在编译时就知道所有可能的类型，就能够用同样的方法处理所有的实例。列表 17-3 展示了如何定义一个带有 `draw` 方法的 trait `Draw`：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -37,7 +37,9 @@ pub trait Draw {
 
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 
-因为我们已经在第十章讨论过如何定义 trait，你可能比较熟悉。下面是新的定义：列表 17-4 有一个名为 `Screen` 的结构体，里面有一个名为 `components` 的 vector，`components` 的类型是 `Box<Draw>`。`Box<Draw>` 是一个 trait 对象：它是 `Box` 内部任意一个实现了 `Draw` trait 的类型的替身。
+
+
+因为第十章已经讨论过如何定义 trait，这看起来应该比较眼熟。接下来就是新内容了：列表 17-4 有一个名为 `Screen` 的结构体定义，它存放了一个叫做 `components` 的 `Box<Draw>` 类型的 vector 。`Box<Draw>` 是一个 trait 对象：它是 `Box` 中任何实现了 `Draw` trait 的类型的替身。
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -53,7 +55,7 @@ pub struct Screen {
 
 <span class="caption">列表 17-4: 一个 `Screen` 结构体的定义，它带有一个字段`components`，其包含实现了 `Draw` trait 的 trait 对象的 vector</span>
 
-在 `Screen` 结构体上，我们将要定义一个 `run` 方法，该方法会在它的 `components` 上的每一个元素调用 `draw` 方法，如列表 17-5 所示：
+在 `Screen` 结构体上，我们将定义一个 `run` 方法，该方法会对其 `components` 上的每一个元素调用 `draw` 方法，如列表 17-5 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -75,10 +77,9 @@ impl Screen {
 }
 ```
 
-<span class="caption">列表 17-5:在 `Screen` 上实现一个 `run` 方法，该方法在每个 component 上调用 `draw` 方法
-</span>
+<span class="caption">列表 17-5:在 `Screen` 上实现一个 `run` 方法，该方法在每个 component 上调用 `draw` 方法</span>
 
-这与带 trait 约束的泛型结构体不同(trait 约束泛型参数)。泛型参数一次只能被一个具体类型替代，而 trait 对象可以在运行时允许多种具体类型填充 trait 对象。比如，我们已经定义了 `Screen` 结构体使用泛型和一个 trait 约束，如列表 17-6 所示：
+这与定义使用了带有 trait bound 的泛型类型参数的结构体不同。泛型类型参数一次只能替代一个具体的类型，而 trait 对象则允许在运行时替代多种具体类型。例如，可以像列表 17-6 那样定义使用泛型和 trait bound 的结构体 `Screen`：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -101,16 +102,15 @@ impl<T> Screen<T>
 }
 ```
 
-<span class="caption">列表 17-6: 一种 `Screen` 结构体的替代实现，它的 `run` 方法使用通用类型和 trait 绑定
-</span>
+<span class="caption">列表 17-6: 一种 `Screen` 结构体的替代实现，它的 `run` 方法使用泛型和 trait bound</span>
 
-这个例子中，`Screen` 实例所有组件类型必需全是 `Button`，或者全是 `TextField`。如果你的组件集合是单一类型的，那么可以优先使用泛型和 trait 约束，因为其使用的具体类型在编译阶段即可确定。
+这只允许我们拥有一个包含全是 `Button` 类型或者全是 `TextField` 类型的 component 列表的 `Screen` 实例。如果只拥有相同类型的集合，那么使用泛型和 trait bound 是更好的，因为在编译时使用具体类型其定义是单态（monomorphized）的。
 
-而 `Screen` 结构体内部的 `Vec<Box<Draw>>` trait 对象列表，则可以同时包含 `Box<Button>` 和 `Box<TextField>`。我们看它是怎么工作的，然后讨论运行时性能。
+相反对于存放了 `Vec<Box<Draw>>` trait 对象的 component 列表的 `Screen` 定义，一个 `Screen` 实例可以存放一个既可以包含 `Box<Button>`，也可以包含 `Box<TextField>` 的 `Vec`。让我们看看它是如何工作的，接着会讲到其运行时性能影响。
 
-### 来自我们或者库使用者的实现
+### 来自我们或者库使用者的 trait 实现
 
-现在，我们增加一些实现了 `Draw` trait 的类型，再次提供 `Button`。实现一个 GUI 库实际上超出了本书的范围，因此 `draw` 方法留空。为了想象实现可能的样子，`Button` 结构体有 `width`、`height` 和 `label`字段，如列表 17-7 所示：
+现在来增加一些实现了 `Draw` trait 的类型。我们将提供 `Button` 类型，再一次重申，真正实现 GUI 库超出了本书的范畴，所以 `draw` 方法体中不会有任何有意义的实现。为了想象一下这个实现看起来像什么，一个 `Button` 结构体可能会拥有 `width`、`height`和`label`字段，如列表 17-7 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -132,12 +132,11 @@ impl Draw for Button {
 }
 ```
 
-<span class="caption">列表 17-7: 实一个现了`Draw` trait 的 `Button` 结构体</span>
+<span class="caption">列表 17-7: 一个实现了`Draw` trait 的 `Button` 结构体</span>
 
-在 `Button` 上的 `width`、`height` 和 `label` 会和其他组件不同，比如 `TextField` 可能有 `width`、`height`,
-`label` 以及 `placeholder` 字段。每个我们可以在屏幕上绘制的类型都会实现 `Draw` trait，在 `draw` 方法中使用不同的代码，定义了如何绘制 `Button`。除了 `Draw` trait，`Button` 也可能有一个 `impl` 块，包含按钮被点击时的响应方法。这类方法不适用于 `TextField` 这样的类型。
+在 `Button` 上的 `width`、`height` 和 `label` 字段会和其他组件不同，比如 `TextField` 可能有 `width`、`height`、`label` 以及 `placeholder` 字段。每一个我们希望能在屏幕上绘制的类型都会使用不同的代码来实现 `Draw` trait 的 `draw` 方法，来定义如何绘制像这里的 `Button` 类型（并不包含任何实际的 GUI 代码，这超出了本章的范畴）。除了实现 `Draw` trait 之外，`Button` 还可能有另一个包含按钮点击如何响应的方法的 `impl` 块。这类方法并不适用于像 `TextField` 这样的类型。
 
-假定我们的库的用户相要实现一个包含 `width`、`height` 和 `options` 的 `SelectBox` 结构体。同时也在 `SelectBox` 类型上实现了 `Draw` trait，如 列表  17-8 所示：
+一些库的使用者决定实现一个包含 `width`、`height`和`options` 字段的结构体 `SelectBox`。并也为其实现了 `Draw` trait，如列表 17-8 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -158,10 +157,9 @@ impl Draw for SelectBox {
 }
 ```
 
-<span class="caption">列表 17-8: 另外一个 crate 中，在 `SelectBox` 结构体上使用 `rust_gui` 和实现了`Draw` trait
-</span>
+<span class="caption">列表 17-8: 在另一个使用 `rust_gui` 的 crate 中，在 `SelectBox` 结构体上实现 `Draw` trait</span>
 
-库的用户现在可以在他们的 `main` 函数中创建一个 `Screen` 实例，然后把自身放入 `Box<T>` 变成 trait 对象，向 screen 增加 `SelectBox` 和 `Button`。他们可以在这个 `Screen` 实例上调用 `run` 方法，这又会调用每个组件的 `draw` 方法。 列表 17-9 展示了实现：
+库使用者现在可以在他们的 `main` 函数中创建一个 `Screen` 实例，并通过将 `SelectBox` 和 `Button` 放入 `Box<T>` 转变为 trait 对象来将它们放入屏幕实例。接着可以调用 `Screen` 的 `run` 方法，它会调用每个组件的 `draw` 方法。列表 17-9 展示了这个实现：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -192,16 +190,15 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 17-9: 使用 trait 对象来存储实现了相同 trait 的不同类型
-</span>
+<span class="caption">列表 17-9: 使用 trait 对象来存储实现了相同 trait 的不同类型的值</span>
 
-虽然我们不知道哪一天会有人增加 `SelectBox` 类型，但是我们的 `Screen` 能够操作 `SelectBox` 并绘制它，因为 `SelectBox` 实现了 `Draw` 类型，这意味着它实现了 `draw` 方法。
+即使我们不知道何时何人会增加 `SelectBox` 类型，`Screen` 的实现能够操作`SelectBox` 并绘制它，因为 `SelectBox` 实现了 `Draw` trait，这意味着它实现了 `draw` 方法。
 
-只关心值的响应，而不关心其具体类型，这类似于动态类型语言中的 *duck typing*：如果它像鸭子一样走路，像鸭子一样叫，那么它就是只鸭子！在 Listing 17-5 `Screen` 的 `run` 方法实现中，`run` 不需要知道每个组件的具体类型。它也不检查组件是 `Button` 还是 `SelectBox` 的实例，只管调用组件的 `draw` 方法。通过指定 `Box<Draw>` 作为 `components` 列表中元素的类型，我们约束了 `Screen` 需要这些实现了 `draw` 方法的值。
+只关心值所反映的信息而不是值的具体类型，这类似于动态类型语言中称为**鸭子类型**（*duck typing*）的概念：如果它走起来像一只鸭子，叫起来像一只鸭子，那么它就是一只鸭子！在列表 17-5 中 `Screen` 上的 `run` 实现中，`run` 并不需要知道各个组件的具体类型是什么。它并不检查组件实例是 `Button` 或者是`SelectBox`，它只是调用组件上的 `draw` 方法。通过指定 `Box<Draw>` 作为 `components` vector 中值的类型，我们就定义了 `Screen` 需要可以在其上调用 `draw` 方法的值。
 
-Rust 类型系统使用 trait 对象来支持 duck typing 的好处是，我们无需在运行时检查一个值是否实现了特定方法，或是担心调用了一个值没有实现的方法。如果值没有实现 trait 对象需要的 trait（方法），Rust 不会编译。
+使用 trait 对象和 Rust 类型系统来使用鸭子类型的优势是无需在运行时检查一个值是否实现了特定方法或者担心在调用时因为值没有实现方法而产生错误。如果值没有实现 trait 对象所需的 trait 则 Rust 不会编译这些代码。
 
-比如，列表 17-10 展示了当我们创建一个使用 `String` 做为其组件的 `Screen` 时发生的情况：
+例如，列表 17-10 展示了当创建一个使用 `String` 做为其组件的 `Screen` 时发生的情况：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -220,9 +217,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 17-10: 尝试使用一种没有实现 trait 对象的类型
-
-</span>
+<span class="caption">列表 17-10: 尝试使用一种没有实现 trait 对象的 trait 的类型</span>
 
 我们会遇到这个错误，因为 `String` 没有实现 `Draw` trait：
 
@@ -237,9 +232,9 @@ error[E0277]: the trait bound `std::string::String: Draw` is not satisfied
    = note: required for the cast to the object type `Draw`
 ```
 
-这个错误告诉我们，要么传入 `Screen` 需要的类型，要么在 `String` 上实现 `Draw`，以便　`Screen` 调用它的 `draw` 方法。
+这告诉了我们，要么是我们传递了并不希望传递给 `Screen` 的类型并应该提供其他类型，要么应该在 `String` 上实现 `Draw` 以便 `Screen` 可以调用其上的 `draw`。
 
-### Trait 对象执行动态分发
+### trait 对象执行动态分发
 
 回忆一下第十章我们讨论过的，当我们在泛型上使用 trait 约束时，编译器按单态类型处理：在需要使用范型参数的地方，编译器为每个具体类型生成非泛型的函数和方法实现。单态类型处理产生的代码实际就是做 *static dispatch*：方法的代码在编译阶段就已经决定了，当调用时，寻找那段代码非常快速。
 
