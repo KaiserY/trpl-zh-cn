@@ -236,11 +236,11 @@ error[E0277]: the trait bound `std::string::String: Draw` is not satisfied
 
 ### trait 对象执行动态分发
 
-回忆一下第十章我们讨论过的，当我们在泛型上使用 trait 约束时，编译器按单态类型处理：在需要使用范型参数的地方，编译器为每个具体类型生成非泛型的函数和方法实现。单态类型处理产生的代码实际就是做 *static dispatch*：方法的代码在编译阶段就已经决定了，当调用时，寻找那段代码非常快速。
+回忆一下第十章讨论过的，当对泛型使用 trait bound 时编译器所进行单态化处理：编译器为每一个被泛型类型参数代替的具体类型生成了非泛型的函数和方法实现。单态化所产生的代码进行**静态分发**（*static dispatch*）：当方法被调用时，伴随方法调用的代码在编译时就被确定了，同时寻找这些代码是非常快速的。
 
-当我们使用 trait 对象，编译器不能按单态类型处理，因为无法知道使用代码的所有可能类型。而是调用方法的时候，Rust 跟踪可能被使用的代码，在运行时找出调用该方法时应使用的代码。这也是我们熟知的 *dynamic dispatch*，查找过程会产生运行时开销。动态分发也会阻止编译器内联函数，失去一些优化途径。尽管获得了额外的灵活性，但仍然需要权衡取舍。
+当使用 trait 对象时，编译器并不进行单态化，因为并不知道所有可能会使用这些代码的类型。相反，Rust 记录当方法被调用时可能会用到的代码，并在运行时计算出特定方法调用时所需的代码。这被称为**动态分发**（*dynamic dispatch*），进行这种代码搜寻是有运行时开销的。动态分发也阻止编译有选择的内联方法的代码，这会禁用一些优化。尽管在编写和支持代码的过程中确实获得了额外的灵活性，但仍然需要权衡取舍。
 
-### Trait 对象需要对象安全
+### Trait 对象要求对象安全
 
 <!-- Liz: we're conflicted on including this section. Not being able to use a
 trait as a trait object because of object safety is something that
@@ -252,16 +252,16 @@ objects. Clone is an example of one. You'll get errors that will let you know
 if a trait can't be a trait object, look up object safety if you're interested
 in the details"? Thanks! /Carol -->
 
-不是所有的 trait 都可以被放进 trait 对象中; 只有*对象安全的*（*object safe*）trait 才可以这样做. 一个 trait 只有同时满足如下两点时才被认为是对象安全的:
+不是所有的 trait 都可以被放进 trait 对象中；只有**对象安全**（*object safe*）的 trait 才可以。 一个 trait 只有同时满足如下两点时才被认为是对象安全的:
 
-* 该 trait 要求 `Self` 不是 `Sized`;
-* 该 trait 的所有方法都是对象安全的;
+* trait 不要求 `Self` 是 `Sized` 的
+* 所有的 trait 方法都是对象安全的
 
-`Self` 是一个类型的别名关键字，它表示当前正被实现的 trait 类型或者是方法所属的类型. `Sized`是一个像在第十六章中介绍的`Send`和`Sync`那样的标记 trait, 在编译时它会自动被放进大小确定的类型里，比如`i32`和引用. 大小不确定的类型有 slice（`[T]`）和 trait 对象.
+`Self` 关键字是我们要实现 trait 或方法的类型的别名。`Sized` 是一个类似第十六章中介绍的 `Send` 和 `Sync` 那样的标记 trait。`Sized` 会自动为在编译时有已知大小的类型实现，比如 `i32` 和引用。包括 slice （`[T]`）和 trait 对象这样的没有已知大小的类型则没有。
 
-`Sized` 是一个默认会被绑定到所有常规类型参数的内隐 trait. Rust 中要求一个类型是`Sized`的最具可用性的用法是让`Sized`成为一个默认的 trait 绑定，这样我们就可以在大多数的常规的用法中不去写 `T: Sized` 了. 如果我们想在切片（slice）中使用一个 trait, 我们需要取消对`Sized`的 trait 绑定, 我们只需制定`T: ?Sized`作为 trait 绑定.
+`Sized` 是一个所有泛型参数类型默认的隐含 trait bound。Rust 中大部分实用的操作都要求类型是 `Sized` 的，所以将 `Sized` 作为默认 trait bound 要求，就可以不必在每一次使用泛型时编写 `T: Sized` 了。然而，如果想要使用在 slice 上使用 trait，则需要去掉 `Sized` trait bound，可以通过指定 `T: ?Sized` 作为 trait bound 来做到这一点。
 
-默认绑定到 `Self: ?Sized` 的 trait 可以被实现到是 `Sized` 或非 `Sized` 的类型上. 如果我们创建一个不绑定 `Self: ?Sized` 的 trait `Foo`，它看上去应该像这样: 
+trait 有一个默认的 bound `Self: ?Sized`，这意味着他们可以在是或者不是 `Sized` 的类型上实现。如果创建了一个去掉了 `Self: ?Sized` bound 的 trait `Foo`，它可能看起来像这样：
 
 ```rust
 trait Foo: Sized {
@@ -269,21 +269,21 @@ trait Foo: Sized {
 }
 ```
 
-Trait `Sized`现在就是 trait `Foo`的一个*超级 trait*（*supertrait*）, 也就是说 trait `Foo` 需要实现了 `Foo` 的类型(即`Self`)是`Sized`. 我们将在第十九章中更详细的介绍超 trait（supertrait）.
+trait `Sized` 现在就是 trait `Foo` 的**父 trait**（*supertrait*）了，也就意味着 trait `Foo` 要求实现 `Foo` 的类型（也就是 `Self`）是 `Sized` 的。我们将在第十九章中更详细的介绍父 trait。
 
-像`Foo`那样要求`Self`是`Sized`的 trait 不允许成为 trait 对象的原因是不可能为 trait 对象`Foo`实现 trait `Foo`: trait 对象是无确定大小的，但是 `Foo` 要求 `Self` 是 `Sized`. 一个类型不可能同时既是有大小的又是无确定大小的.
+像 `Foo` 这样要求 `Self` 是 `Sized` 的 trait 不被允许成为 trait 对象的原因是，不可能为 trait 对象实现 `Foo` trait：trait 对象不是 `Sized` 的，但是 `Foo` 又要求 `Self` 是 `Sized` 的。一个类型不可能同时既是有确定大小的又是无确定大小的。
 
-第二点说对象安全要求一个 trait 的所有方法必须是对象安全的. 一个对象安全的方法满足下列条件:
+关于第二条对象安全要求说到 trait 的所有方法都必须是对象安全的，一个对象安全的方法满足下列条件之一：
 
-* 它要求 `Self` 是 `Sized` 或者
-* 它符合下面全部三点:
-    * 它不包含任意类型的常规参数
-    * 它的第一个参数必须是类型 `Self` 或一个引用到 `Self` 的类型(也就是说它必须是一个方法而非关联函数并且以 `self`、`&self` 或 `&mut self` 作为第一个参数)
-    * 除了第一个参数外它不能在其它地方用 `Self` 作为方法的参数签名
+* 要求 `Self` 是 `Sized` 的，或者
+* 满足如下三点：
+    * 必须不包含任何泛型类型参数
+    * 其第一个参数必须是 `Self` 类型或者能解引用为 `Self` 的类型（也就是说它必须是一个方法而非关联函数，并且以 `self`、`&self` 或 `&mut self` 作为第一个参数）
+    * 必须不能在方法签名中除第一个参数之外的地方使用 `Self`
 
-虽然这些规则有一点形式化, 但是换个角度想一下: 如果你的方法在它的参数签名的其它地方也需要具体的 `Self` 类型参数, 但是一个对象又忘记了它的具体类型是什么, 这时该方法就无法使用被它忘记的原先的具体类型. 当该 trait 被使用时, 被具体类型参数填充的常规类型参数也是如此: 这个具体的类型就成了实现该 trait 的类型的某一部分, 如果使用一个 trait 对象时这个类型被抹掉了, 就没有办法知道该用什么类型来填充这个常规类型参数.
+虽然这些规则有一点形式化, 但是换个角度想一下：如果方法在它的签名的其他什么地方要求使用具体的 `Self` 类型，而一个对象又忘记了它具体的类型，这时方法就无法使用它遗忘的原始的具体类型了。当使用 trait 的泛型类型参数被放入具体类型参数时也是如此：这个具体的类型就成了实现该 trait 的类型的一部分。一旦这个类型因使用 trait 对象而被擦除掉了之后，就无法知道放入泛型类型参数的类型是什么了。
 
-一个 trait 的方法不是对象安全的一个例子是标准库中的 `Clone` trait. `Clone` trait 的 `clone` 方法的参数签名是这样的:
+一个 trait 的方法不是对象安全的例子是标准库中的 `Clone` trait。`Clone` trait 的 `clone` 方法的参数签名看起来像这样：
 
 ```rust
 pub trait Clone {
@@ -291,21 +291,21 @@ pub trait Clone {
 }
 ```
 
-`String` 实现了 `Clone` trait, 当我们在一个 `String` 实例上调用 `clone` 方法时, 我们会得到一个 `String` 实例. 同样地, 如果我们在一个 `Vec` 实例上调用 `clone` 方法, 我们会得到一个 `Vec` 实例. `clone` 的参数签名需要知道 `Self` 是什么类型, 因为它需要返回这个类型.
+`String` 实现了 `Clone` trait，当在 `String` 实例上调用 `clone` 方法时会得到一个 `String` 实例。类似的，当调用 `Vec` 实例的 `clone` 方法会得到一个 `Vec` 实例。`clone` 的签名需要知道什么类型会代替 `Self`，因为这是它的返回值。
 
-如果我们像列表 17-3 中列出的 `Draw` trait 那样的 trait 上实现 `Clone`, 我们就不知道 `Self` 将会是一个 `Button`, 一个 `SelectBox`, 或者是其它的在将来要实现 `Draw` trait 的类型.
+如果尝试在像列表 17-3 中 `Draw` 那样的 trait 上实现 `Clone`，就无法知道 `Self` 将会是 `Button`、`SelectBox` 亦或是将来会实现 `Draw` trait 的其他什么类型。
 
-如果你做了违反 trait 对象的对象安全性规则的事情, 编译器将会告诉你. 比如, 如果你实现在列表 17-4 中列出的 `Screen` 结构, 你想让该结构像这样持有实现了 `Clone` trait 的类型而不是 `Draw` trait:
+如果尝试做一些违反有关 trait 对象但违反对象安全规则的事情，编译器会提示你。例如，如果尝试实现列表 17-4 中的 `Screen` 结构体来存放实现了 `Clone` trait 而不是 `Draw` trait 的类型，像这样：
 
-```rust
+```rust,ignore
 pub struct Screen {
     pub components: Vec<Box<Clone>>,
 }
 ```
 
-我们将会得到下面的错误:
+将会得到如下错误：
 
-```text
+```
 error[E0038]: the trait `std::clone::Clone` cannot be made into an object
  -->
   |
