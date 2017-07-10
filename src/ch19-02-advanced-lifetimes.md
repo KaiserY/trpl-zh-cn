@@ -1,20 +1,11 @@
 ## 高级生命周期
 
-回到第10章, we learned how to annotate references with lifetime
-parameters to help Rust understand how the lifetimes of different references
-relate. We saw how most of the time, Rust will let you elide lifetimes, but
-every reference has a lifetime. There are three advanced features of lifetimes
-that we haven't covered though: *lifetime subtyping*, *lifetime
-bounds*, and *trait object lifetimes*.
+回到第10章, 我们学习了如何用生命周期注解引用参数来帮助 Rust 理解不同的引用所关联的生命周期. 我们看到大多数时候, Rust 都会让你忽略生命周期, 但是每个引用都有一个生命周期. 还有三个关于生命周期的高级特性我们以前没有介绍, 它们是: *生命周期子类型(lifetime subtyping)*, *生命周期绑定(lifetime
+bounds)*, 和 *trait 对象生命周期*.
 
 ### 生命周期子类型
 
-Imagine that we want to write a parser. To do this, we'll have a structure that
-holds a reference to the string that we're parsing, and we'll call that struct
-`Context`. We'll write a parser that will parse this string and return success
-or failure. The parser will need to borrow the context to do the parsing.
-Implementing this would look like the code in Listing 19-12, which won't
-compile because we've left off the lifetime annotations for now:
+想象一下我们想写一个解释器. 为此, 我们将有一个持有我们将解析的字符串的引用的结构, 我们把这个结构叫做`Context`. 我们将写一个能够解析这个字符串并返回成功或失败的解析器. 该解析器需要借用这个上下文来完成解析. 实现这个功能的代码如例 19-12, 但是这个代码不能被编译因为我们没有使用生命周期注解:
 
 ```rust,ignore
 struct Context(&str);
