@@ -23,14 +23,9 @@ impl Parser {
 
 <span class="caption">例19-12: 定义持有一个字符串切片的`Context`结构, 一个持有某个`Context`实例引用的`Parser`结构, 和一个总是返回一个错误的`parse`方法, 这个被返回的错误引用了该字符串切片</span>
 
-为了简单起见, 我们的`parse`函数返回一个`Result<(), &str>`. 也就是说, 我们在成功时不做任何事情, 在失败时我们返回部分没有解析正确的字符串切片. 一个真正的实现将会有更多的错误信息, 而且实际上在解析成功时会返回当时创建的内容, 但是我们将实现的这部分省略了因为它们与本例的生命周期无关. We're also defining
-`parse` to always produce an error after the first byte. Note that this may
-panic if the first byte is not on a valid character boundary; again, we're
-simplifying the example in order to concentrate on the lifetimes involved.
+为了简单起见, 我们的`parse`函数返回一个`Result<(), &str>`. 也就是说, 我们在成功时不做任何事情, 在失败时我们返回部分没有解析正确的字符串切片. 一个真正的实现将会有更多的错误信息, 而且实际上在解析成功时会返回当时创建的内容, 但是我们将实现的这部分省略了因为它们与本例的生命周期无关. 我们也定义`parse`总在第一个字节后产生一个错误. 请注意如果第一个字节不在有效的字符边界内这可能会出现错误; 再说一下, 为了把注意力放在生命周期上, 我们简化了这个例子.
 
-So how do we fill in the lifetime parameters for the string slice in `Context`
-and the reference to the `Context` in `Parser`? The most straightforward thing
-to do is to use the same lifetime everywhere, as shown in Listing 19-13:
+那么我们如何设置`Context`中的字符串切片的生命周期参数和`Parser`中的`Context`引用呢? 最直接的办法就是使用同样的生命周期, 如例19-13所示:
 
 ```rust
 struct Context<'a>(&'a str);
@@ -46,12 +41,9 @@ impl<'a> Parser<'a> {
 }
 ```
 
-<span class="caption">Listing 19-13: Annotating all references in `Context` and
-`Parser` with the same lifetime parameter</span>
+<span class="caption">例19-13: 限定`Context`和`Parser`中的所有引用具有同样的生命周期参数</span>
 
-This compiles fine. Next, in Listing 19-14, let's write a function that takes
-an instance of `Context`, uses a `Parser` to parse that context, and returns
-what `parse` returns. This won't quite work:
+这样就能够编译了. 然后, 在例19-14中, 让我们写一个以`Context`实例为参数的函数, 该函数用一个`Parser`来解析那个`Context`实例并把`parse`方法的结果直接返回. 但是这个代码不能正常工作:
 
 ```rust,ignore
 fn parse_context(context: Context) -> Result<(), &str> {
@@ -59,11 +51,9 @@ fn parse_context(context: Context) -> Result<(), &str> {
 }
 ```
 
-<span class="caption">Listing 19-14: An attempt to add a `parse_context`
-function that takes a `Context` and uses a `Parser`</span>
+<span class="caption">例19-14: 尝试添加有一个`parse_context`函数, 该函数有一个`Context`参数, 在函数中使用了`Parser`</span>
 
-We get two quite verbose errors when we try to compile the code with the
-addition of the `parse_context` function:
+当我们试图用新添加的`parse_context`函数来编译代码时我们会得到两个相当详细的错误:
 
 ```text
 error: borrowed value does not live long enough
