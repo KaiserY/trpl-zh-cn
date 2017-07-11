@@ -5,7 +5,7 @@ bounds)*, 和 *trait 对象生命周期*.
 
 ### 生命周期子类型
 
-想象一下我们想写一个解释器. 为此, 我们将有一个持有我们将解析的字符串的引用的结构, 我们把这个结构叫做`Context`. 我们将写一个能够解析这个字符串并返回成功或失败的解析器. 该解析器需要借用这个上下文(解析器中的`context`属性)来完成解析. 实现这个功能的代码如例 19-12, 但是这个代码不能被编译因为我们没有使用生命周期注解:
+想象一下我们想写一个解释器. 为此, 我们需要一个持有即将被解析的字符串的引用的结构, 我们把这个结构叫做`Context`. 我们将写一个能够解析这个字符串并返回成功或失败的解析器. 该解析器需要借用这个上下文(解析器中的`context`属性)来完成解析. 实现这个功能的代码如例 19-12, 但是这个代码不能被编译因为我们没有使用生命周期注解:
 
 ```rust,ignore
 struct Context(&str);
@@ -21,17 +21,9 @@ impl Parser {
 }
 ```
 
-<span class="caption">Listing 19-12: Defining a `Context` struct that holds a
-string slice, a `Parser` struct that holds a reference to a `Context` instance,
-and a `parse` method that always returns an error referencing the string
-slice</span>
+<span class="caption">例19-12: 定义持有一个字符串切片的`Context`结构, 一个持有某个`Context`实例引用的`Parser`结构, 和一个总是返回一个错误的`parse`方法, 这个被返回的错误引用了该字符串切片</span>
 
-For simplicity's sake, our `parse` function returns a `Result<(), &str>`. That
-is, we don't do anything on success, and on failure we return the part of the
-string slice that didn't parse correctly. A real implementation would have more
-error information than that, and would actually return something created when
-parsing succeeds, but we're leaving those parts of the implementation off since
-they aren't relevant to the lifetimes part of this example. We're also defining
+为了简单起见, 我们的`parse`函数返回一个`Result<(), &str>`. 也就是说, 我们在成功时不做任何事情, 在失败时我们返回部分没有解析正确的字符串切片. 一个真正的实现将会有更多的错误信息, 而且实际上在解析成功时会返回当时创建的内容, 但是我们将实现的这部分省略了因为它们与本例的生命周期无关. We're also defining
 `parse` to always produce an error after the first byte. Note that this may
 panic if the first byte is not on a valid character boundary; again, we're
 simplifying the example in order to concentrate on the lifetimes involved.
