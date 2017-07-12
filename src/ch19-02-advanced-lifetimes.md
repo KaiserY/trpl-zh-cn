@@ -103,33 +103,17 @@ body at 15:55...
     fn parse(&self) -> Result<(), &str> {
 ```
 
-还记得生命周期的省略规则吗? If we annotate the lifetimes of the references, the
-signature would be:
+还记得生命周期的省略规则吗? 如果我们注解引用的生命周期, 那么可以这样写:
 
 ```rust,ignore
     fn parse<'a>(&'a self) -> Result<(), &'a str> {
 ```
 
-That is, the error part of the return value of `parse` has a lifetime that is
-tied to the `Parser` instance's lifetime (that of `&self` in the `parse` method
-signature). That makes sense, as the returned string slice references the
-string slice in the `Context` instance that the `Parser` holds, and we've
-specified in the definition of the `Parser` struct that the lifetime of the
-reference to `Context` that `Parser` holds and the lifetime of the string slice
-that `Context` holds should be the same.
+也就是说, `parse`函数返回值的错误中的部分是因为它有一个生命周期被绑定到了`Parser`实例的生命周期上面(也就是`parse`方法中的`&self`). 这就是了, 因为被返回的字符串切片引用了`Parser`持有的`Context`实例中的字符串切片, 并且我们已经在`Parser`结构的定义中指定了`Parser`中的`Context`的引用的生命周期和`Context`持有的字符串切片的生命周期是一样的.
 
-The problem is that the `parse_context` function returns the value returned
-from `parse`, so the lifetime of the return value of `parse_context` is tied to
-the lifetime of the `Parser` as well. But the `Parser` instance created in the
-`parse_context` function won't live past the end of the function (it's
-temporary), and the `context` will go out of scope at the end of the function
-(`parse_context` takes ownership of it).
+问题是`parse_context`函数要返回`parse`方法的返回值, 这样`parse_context`的返回值的生命周期也就被绑定到了`Parser`的生命周期上了. 但是在`parse_context`函数中创建的`Parser`实例在函数结束后就不会存活了(它是临时的), 并且`context`在函数结束后也会越过作用域(`parse_context`拥有它的所有权).
 
-We're not allowed to return a reference to a value that goes out of scope at
-the end of the function. Rust thinks that's what we're trying to do because we
-annotated all the lifetimes with the same lifetime parameter. That told Rust
-the lifetime of the string slice that `Context` holds is the same as that of
-the lifetime of the reference to `Context` that `Parser` holds.
+我们不能返回只在函数作用域内才能存活的值的引用. Rust就认为我们在做这个事情, 因为我们把所有的生命周期参数都注解成一样的了. 这就告诉 Rust `Context`持有的字符串切片的生命周期和`Parser`持有的`Context`引用的生命周期是一样的.
 
 The `parse_context` function can't see that within the `parse` function, the
 string slice returned will outlive both `Context` and `Parser`, and that the
