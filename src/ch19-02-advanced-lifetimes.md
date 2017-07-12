@@ -93,25 +93,17 @@ body at 15:55...
    | |_^
 ```
 
-These errors are saying that both the `Parser` instance we're creating and the
-`context` parameter live from the line that the `Parser` is created until the
-end of the `parse_context` function, but they both need to live for the entire
-lifetime of the function.
+这些错误表明不管是我们创建的`Parser`实例还是作用于从`Parser`被创建的行开始到`parse_context`函数结束的`context`参数, 都需要拥有整个函数的生命周期.
 
-In other words, `Parser` and `context` need to *outlive* the entire function
-and be valid before the function starts as well as after it ends in order for
-all the references in this code to always be valid. Both the `Parser` we're
-creating and the `context` parameter go out of scope at the end of the
-function, though (since `parse_context` takes ownership of `context`).
+换句话说, `Parser`和`context`存活的时间要比整个函数更长, 为了让代码中的所有引用都有效它们也应该在函数被调用前后都有效. 不管是我们正创建的`Parser`还是在函数结束时就会结束作用域的`context`参数都是如此(因为`parse_context`函数会获得`context`的所有权).
 
-Let's look at the definitions in Listing 19-13 again, especially the signature
-of the `parse` method:
+让我们再看一下例19-13中的定义, 特别是`parse`方法的声明:
 
 ```rust,ignore
     fn parse(&self) -> Result<(), &str> {
 ```
 
-Remember the elision rules? If we annotate the lifetimes of the references, the
+还记得生命周期的省略规则吗? If we annotate the lifetimes of the references, the
 signature would be:
 
 ```rust,ignore
