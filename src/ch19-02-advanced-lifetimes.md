@@ -117,10 +117,7 @@ body at 15:55...
 
 `parse_context`函数看不到`parse`函数中的东西, 被返回的字符串切片的存活时间将比`Context`和`Parser`更长, 并且`parse_context`返回的是字符串切片的引用而不是`Context`和`Parser`的引用.
 
-通过了解`parse`的实现 does, 我们明白了`parse`的返回值被绑定到`Parser`的唯一原因是因为它引用了`Prser`中的`Context`, 也就是一个字符串切片的引用, 所以它的生命周期才是`parse_context`需要关心的字符串切片的真正的生命周期. We need a way to tell Rust that the string slice in `Context` and the
-reference to the `Context` in `Parser` have different lifetimes and that the
-return value of `parse_context` is tied to the lifetime of the string slice in
-`Context`.
+通过了解`parse`的实现, 我们明白了`parse`的返回值被绑定到`Parser`的唯一原因是因为它引用了`Prser`中的`Context`, 也就是对一个字符串切片的引用, 所以它的生命周期才是`parse_context`需要关心的字符串切片的真正的生命周期. 我们需要告诉 Rust 在`Context`中的字符串切片和对`Parser`中的`Context`的引用有不同的生命周期, 我们还要告诉 Rust `parse_context` 函数的返回值被绑定到了`Context`中的字符串切片的生命周期.
 
 We could try only giving `Parser` and `Context` different lifetime parameters
 as shown in Listing 19-15. We've chosen the lifetime parameter names `'s` and
