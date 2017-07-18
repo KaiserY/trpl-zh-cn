@@ -119,12 +119,7 @@ body at 15:55...
 
 通过了解`parse`的实现, 我们明白了`parse`的返回值被绑定到`Parser`的唯一原因是因为它引用了`Prser`中的`Context`, 也就是对一个字符串切片的引用, 所以它的生命周期才是`parse_context`需要关心的字符串切片的真正的生命周期. 我们需要告诉 Rust 在`Context`中的字符串切片和对`Parser`中的`Context`的引用有不同的生命周期, 我们还要告诉 Rust `parse_context` 函数的返回值被绑定到了`Context`中的字符串切片的生命周期.
 
-We could try only giving `Parser` and `Context` different lifetime parameters
-as shown in Listing 19-15. We've chosen the lifetime parameter names `'s` and
-`'c` here to be clearer about which lifetime goes with the string slice in
-`Context` and which goes with the reference to `Context` in `Parser`. Note that
-this won't completely fix the problem, but it's a start and we'll look at why
-this isn't sufficient when we try to compile.
+我们可以尝试像例 19-15 中显示的那样只给`Parser`和`Context`不同的生命周期参数. 我们选择了生命周期参数`'s`和`'c`, 这样可以很方便的区分哪个生命周期伴随`Context`中的字符串切片, 哪个生命周期伴随`Parser`中的`Context`引用. 注意这还不能完全修正问题, 但这是一个开始, 编译时我们就会明白为什么它还不够.
 
 ```rust,ignore
 struct Context<'s>(&'s str);
@@ -144,8 +139,7 @@ fn parse_context(context: Context) -> Result<(), &str> {
 }
 ```
 
-<span class="caption">Listing 19-15: Specifying different lifetime parameters
-for the references to the string slice and to `Context`</span>
+<span class="caption">例19-15: 给对字符串切片和对`Context`的引用指定不同的生命周期参数</span>
 
 We've annotated the lifetimes of the references in all the same places that we
 annotated them in Listing 19-13, but used different parameters depending on
