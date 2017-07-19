@@ -141,13 +141,9 @@ fn parse_context(context: Context) -> Result<(), &str> {
 
 <span class="caption">例19-15: 给对字符串切片和对`Context`的引用指定不同的生命周期参数</span>
 
-We've annotated the lifetimes of the references in all the same places that we
-annotated them in Listing 19-13, but used different parameters depending on
-whether the reference goes with the string slice or with `Context`. We've also
-added an annotation to the string slice part of the return value of `parse` to
-indicate that it goes with the lifetime of the string slice in `Context`.
+在例 19-13 中, 我们在所有相同的地方注释了引用的生命周期, 但是是否使用不同的参数却依赖于引用是否与字符串切片或`Context`一起使用. 我们也在`parse`的返回值的字符串切片部分添加了一个生命周期注解来表明它与`Context`的生命周期一样.
 
-Here's the error we get now:
+下面就是例19-15编译的结果:
 
 ```text
 error[E0491]: in type `&'c Context<'s>`, reference has a longer lifetime than the data it references
@@ -172,11 +168,7 @@ note: but the referenced data is only valid for the lifetime 's as defined on th
   | |_^
 ```
 
-Rust doesn't know of any relationship between `'c` and `'s`. In order to be
-valid, the referenced data in `Context` with lifetime `'s` needs to be
-constrained to guarantee that it lives longer than the reference to `Context`
-that has lifetime `'c`. If `'s` is not longer than `'c`, then the reference to
-`Context` might not be valid.
+Rust 并不知道 `'c` 和 `'s` 之间的关系. `Context`中被引用的数据的生命周期是`'s`, 对`Context`的引用有生命周期`'c`, 为了让代码有效, 需要保证生命周期 `'s` 比生命周期 `'c` 更长. 如果 `'s` 存活的时间没有 `'c` 长, 那么对 `Context` 的引用可能就要出问题.
 
 Which gets us to the point of this section: Rust has a feature called *lifetime
 subtyping*, which is a way to specify that one lifetime parameter lives at
