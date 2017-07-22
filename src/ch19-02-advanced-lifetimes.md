@@ -170,9 +170,7 @@ note: but the referenced data is only valid for the lifetime 's as defined on th
 
 Rust 并不知道 `'c` 和 `'s` 之间的关系. `Context`中被引用的数据的生命周期是`'s`, 对`Context`的引用有生命周期`'c`, 为了让代码有效, 需要保证生命周期 `'s` 比生命周期 `'c` 更长. 如果 `'s` 存活的时间没有 `'c` 长, 那么对 `Context` 的引用可能就要出问题.
 
-Which gets us to the point of this section: Rust has a feature called *lifetime
-subtyping*, which is a way to specify that one lifetime parameter lives at
-least as long as another one. In the angle brackets where we declare lifetime
+现在就让我们来看这一节: Rust 有一个被称为*生命周期子类型(lifetime subtyping)*的特性, 它可以指明一个生命周期参数的存活时间不会比另一个生命周期短. In the angle brackets where we declare lifetime
 parameters, we can declare a lifetime `'a` as usual, and declare a lifetime
 `'b` that lives at least as long as `'a` by declaring `'b` with the syntax `'b:
 'a`.
