@@ -191,4 +191,85 @@ struct Parser<'c, 's: 'c> {
 
 ### 生命周期 bound
 
-在第十章，我们讨论了如何在泛型类型上使用 trait bound。也可以像泛型那样为生命周期参数增加限制，这被称为**生命周期 bound**。例如，考虑一下一个封装了引用的类型。
+在第十章，我们讨论了如何在泛型类型上使用 trait bound。也可以像泛型那样为生命周期参数增加限制，这被称为**生命周期 bound**。例如，考虑一下一个封装了引用的类型。回忆一下第十五章的 `RefCell<T>` 类型：其 `borrow` 和 `borrow_mut` 方法分别返回 `Ref` 和 `RefMut` 类型。这些类型是引用的封装，他们在运行时记录检查借用规则。`Ref` 结构体的定义如列表 19-16 所示，现在还不带有生命周期 bound：
+
+```rust
+struct Ref<'a, T>(&'a T);
+```
+
+<span class="caption">列表 19-16：定义结构体来封装泛型的引用；开始时没有生命周期 bound</span>
+
+若不限制生命周期 `'a` 为与泛型参数 `T` 有关，会得到一个错误因为 Rust 不知道泛型 `T` 会存活多久：
+
+```
+error[E0309]: the parameter type `T` may not live long enough
+ --> <anon>:1:19
+  |
+1 | struct Ref<'a, T>(&'a T);
+  |                   ^^^^^^
+  |
+  = help: consider adding an explicit lifetime bound `T: 'a`...
+note: ...so that the reference type `&'a T` does not outlive the data it points at
+ --> <anon>:1:19
+  |
+1 | struct Ref<'a, T>(&'a T);
+  |                   ^^^^^^
+```
+
+因为 `T` 可以是任意类型，`T` 自身也可能是一个引用，或者是一个存放了一个或多个引用的类型，而他们各自可能有着不同的生命周期。Rust 不能确认 `T` 会与 `'a` 存活的一样久。
+
+幸运的是，Rust 提供了这个情况下如何指定生命周期 bound 的有用建议：
+
+```
+consider adding an explicit lifetime bound `T: 'a` so that the reference type
+`&'a T` does not outlive the data it points at.
+```
+
+列表 19-17 展示了按照这个建议，在声明泛型 `T` 时指定生命周期 bound。现在代码可以编译了，因为 `T: 'a` 指定了 `T` 可以为任意类型，不过如果它包含任何引用的话，其生命周期必须至少与 `'a` 一样长：
+
+```rust
+struct Ref<'a, T: 'a>(&'a T);
+```
+
+<span class="caption">列表19-17：为 `T` 增加生命周期 bound 来指定 `T` 中的任何引用需至少与 `'a` 存活的一样久</span>
+
+我们可以选择不同的方法来解决这个问题，如列表 19-18 中展示的 `StaticRef` 结构体定义所示，通过在 `T` 上增加 `'static` 生命周期 bound。这意味着如果 `T` 包含任何引用，他们必须有 `'static` 生命周期：
+
+```rust
+struct StaticRef<T: 'static>(&'static T);
+```
+
+<span class="caption">列表 19-18：在 `T` 上增加 `'static` 生命周期 bound 来限制 `T` 为只拥有 `'static` 引用或没有引用的类型</span>
+
+没有任何引用的类型被算作 `T: 'static`。因为 `'static` 意味着引用必须同整个程序存活的一样长，一个不包含引用的类型满足所有引用都与程序存活的一样长的标准（因为他们没有引用）。可以这样理解：如果借用检查器关心的是引用是否存活的够久，那么没有引用的类型与有永远存在的引用的类型并没有真正的区别；对于确定引用是否比其所引用的值存活得较短的目的来说两者是一样的。
+
+### trait 对象生命周期
+
+在第十七章，我们学习了 trait 对象，它包含位于引用之后的 trait 用以使用动态分发。然而，我们并没有讨论如果 trait 对象中实现 trait 的类型带有生命周期时会发生什么。考虑一下 19-19，这里有 trait `Foo`，和带有一个实现了 trait `Foo` 的引用（因此还有其生命周期参数）的结构体 `Bar`，我们希望使用 `Bar` 的实例作为 trait 对象 `Box<Foo>`：
+
+```rust
+trait Foo { }
+
+struct Bar<'a> {
+    x: &'a i32,
+}
+
+impl<'a> Foo for Bar<'a> { }
+
+let num = 5;
+
+let obj = Box::new(Bar { x: &num }) as Box<Foo>;
+```
+
+<span class="caption">列表 19-19：使用一个带有生命周期的类型作为 trait 对象</span>
+
+这些代码能没有任何错误的编译，即便并没有明确指出 `obj` 中涉及的任何生命周期。这是因为有如下生命周期与 trait 对象必须遵守的规则：
+
+* trait 对象的默认生命周期是 `'static`。
+* 如果有 `&'a X` 或 `&'a mut X`，则默认（生命周期）是 `'a`。
+* 如果只有 `T: 'a`， 则默认是 `'a`。
+* 如果有多个类似 `T: 'a` 的从句，则没有默认值；必须明确指定。
+
+当必须明确指定时，可以为像 `Box<Foo>` 这样的 trait 对象增加生命周期 bound，根据需要使用语法 `Box<Foo + 'a>` 或 `Box<Foo + 'static>`。正如其他的 bound，这意味着任何包含引用的实现了 `Foo` trait 的类型，其中的引用必须拥有 trait 对象所指定的生命周期。
+
+接下来，让我们看看一些其他处理 trait 的功能吧！
