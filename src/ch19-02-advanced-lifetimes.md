@@ -170,15 +170,9 @@ note: but the referenced data is only valid for the lifetime 's as defined on th
 
 Rust 并不知道 `'c` 和 `'s` 之间的关系. `Context`中被引用的数据的生命周期是`'s`, 对`Context`的引用有生命周期`'c`, 为了让代码有效, 需要保证生命周期 `'s` 比生命周期 `'c` 更长. 如果 `'s` 存活的时间没有 `'c` 长, 那么对 `Context` 的引用可能就要出问题.
 
-本节就是为了解决这个问题: Rust 有一个被称为 *生命周期子类型 (lifetime subtyping)* 的特性, 它可以指明一个生命周期参数的存活时间不会比另一个生命周期短. In the angle brackets where we declare lifetime
-parameters, we can declare a lifetime `'a` as usual, and declare a lifetime
-`'b` that lives at least as long as `'a` by declaring `'b` with the syntax `'b:
-'a`.
+本节就是为了解决这个问题: Rust 有一个被称为 *生命周期子类型 (lifetime subtyping)* 的特性, 它可以指明一个生命周期参数的存活时间不会比另一个生命周期短. 在我们声明生命周期的尖括号里, 我们可以声明一个普通的生命周期 `'a`, 还可以通过语法 `'b: 'a` 声明一个存活时间至少和 `'a` 一样长的生命周期 `'b`.
 
-In our definition of `Parser`, in order to say that `'s` (the lifetime of the
-string slice) is guaranteed to live at least as long as `'c` (the lifetime of
-the reference to `Context`), we change the lifetime declarations to look like
-this:
+在我们的 `Parser` 的定义里, 为了保证 `'s`(字符串切片的生命周期) 的生命周期的存活时间至少和 `'c`(对 `Context` 引用的生命周期) 一样长, 我们把生命周期的声明改成这样:
 
 ```rust
 # struct Context<'a>(&'a str);
