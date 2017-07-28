@@ -182,31 +182,19 @@ struct Parser<'c, 's: 'c> {
 }
 ```
 
-Now, the reference to `Context` in the `Parser` and the reference to the string
-slice in the `Context` have different lifetimes, and we've ensured that the
-lifetime of the string slice is longer than the reference to the `Context`.
+现在, 对`Parser`中的`Context`的引用和对`Context`中的字符串切片的引用就有了不同的生命周期, 并且我们还保证对字符串切片的引用的生命周期比对`Context`的引用的生命周期更长.
 
-That was a very long-winded example, but as we mentioned at the start of this
-chapter, these features are pretty niche. You won't often need this syntax, but
-it can come up in situations like this one, where you need to refer to
-something you have a reference to.
+哦, 这个例子真的很长, 但正如本章开头所说, 这些功能非常适用. 你不会经常使用这个语法, 但是在你需要引用另一个引用中的某些内容的时候你就用得上它了.
 
-### Lifetime Bounds
+### 生命周期绑定
 
-In Chapter 10, we discussed how to use trait bounds on generic types. We can
-also add lifetime parameters as constraints on generic types. For example,
-let's say we wanted to make a wrapper over references. Remember `RefCell<T>`
-from Chapter 15? This is how the `borrow` and `borrow_mut` methods work; they
-return wrappers over references in order to keep track of the borrowing rules
-at runtime. The struct definition, without lifetime parameters for now, would
-look like Listing 19-16:
+我们在第10章里面讨论过如何在泛型上使用 trait 绑定. 我们也可以在泛型上添加生命周期参数来作为约束. 比如, 我们想在引用上做一个封装. 还记得第15章中的 `RefCell<T>` 吗? 它就是 `borrow` 和 `borrow_mut` 方法的工作原理; 为了在运行时追踪借用规则它们返回引用的封装. 例 19-16 中给出了一个没有生命周期参数的结构的定义:
 
 ```rust,ignore
 struct Ref<T>(&T);
 ```
 
-<span class="caption">Listing 19-16: Defining a struct to wrap a reference to a
-generic type; without lifetime parameters to start</span>
+<span class="caption">例 19-16: 先不使用生命周期参数定义一个结构来封装一个对泛型的引用</span>
 
 However, using no lifetime bounds at all gives an error because Rust doesn't
 know how long the generic type `T` will live:
