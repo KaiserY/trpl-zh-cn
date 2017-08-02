@@ -1,6 +1,6 @@
 ## 高级生命周期
 
-回到第10章, 我们学习了如何用生命周期注解引用参数来帮助 Rust 理解不同的引用所关联的生命周期. 我们看到大多数时候, Rust 都会让你忽略生命周期, 但是每个引用都有一个生命周期. 还有三个关于生命周期的高级特性我们以前没有介绍, 它们是: *生命周期子类型(lifetime subtyping)*, *生命周期绑定(lifetime
+回顾一下第10章, 我们学习了如何用生命周期注解引用参数来帮助 Rust 理解不同的引用所关联的生命周期. 我们看到大多数时候, Rust 都会让你忽略生命周期, 但是每个引用都有一个生命周期. 还有三个关于生命周期的高级特性我们以前没有介绍, 它们是: *生命周期子类型(lifetime subtyping)*, *生命周期绑定(lifetime
 bounds)*, 和 *trait 对象生命周期*.
 
 ### 生命周期子类型
@@ -188,7 +188,7 @@ struct Parser<'c, 's: 'c> {
 
 ### 生命周期绑定
 
-我们在第10章里面讨论过如何在泛型上使用 trait 绑定. 我们也可以在泛型上添加生命周期参数来作为约束. 比如, 我们想在引用上做一个封装. 还记得第15章中的 `RefCell<T>` 吗? 它就是 `borrow` 和 `borrow_mut` 方法的工作原理; 为了在运行时追踪借用规则它们返回引用的封装. 例 19-16 中给出了一个没有生命周期参数的结构的定义:
+我们在第10章里面讨论过如何在泛型上使用 trait 绑定. 我们也可以在泛型上添加生命周期参数来对它进行约束. 比如, 我们想在引用上做一个封装. 还记得第15章中的 `RefCell<T>` 吗? 它就是 `borrow` 和 `borrow_mut` 方法的工作原理; 为了在运行时追踪借用规则它们返回引用的封装. 例 19-16 中给出了一个没有生命周期参数的结构的定义:
 
 ```rust,ignore
 struct Ref<T>(&T);
@@ -196,8 +196,7 @@ struct Ref<T>(&T);
 
 <span class="caption">例 19-16: 先不使用生命周期参数定义一个结构来封装一个对泛型的引用</span>
 
-However, using no lifetime bounds at all gives an error because Rust doesn't
-know how long the generic type `T` will live:
+但是, 不使用生命周期会产生编译错误, 因为 Rust 并不不知道泛型类型 `T` 会存活多久:
 
 ```text
 error[E0309]: the parameter type `T` may not live long enough
@@ -214,31 +213,22 @@ note: ...so that the reference type `&'a T` does not outlive the data it points 
   |                   ^^^^^^
 ```
 
-This is the same error that we'd get if we filled in `T` with a concrete type,
-like `struct Ref(&i32)`; all references in struct definitions need a lifetime
-parameter. However, because we have a generic type parameter, we can't add a
-lifetime parameter in the same way. Defining `Ref` as `struct Ref<'a>(&'a T)`
-will result in an error because Rust can't determine that `T` lives long
-enough. Since `T` can be any type, `T` could itself be a reference or it could
-be a type that holds one or more references, each of which have their own
-lifetimes.
+如果我们把 `T` 换成一个具体的类型我们也会得到同样的错误, 比如像 `struct Ref(&i32)`; 在结构定义中的所有引用都需要一个生命周期参数. 然而, 因为我们有一个泛型类型参数, 所以我们不能以同样的方式来添加一个生命周期参数. 把 `Ref` 定义成 `struct Ref<'a>(&'a T)` 将会产生一个错误因为 Rust 不知道 `T` 能存活多久. 因为 `T` 可以是任意类型, `T` 本身可以是一个引用, 它也可以是一个持有一个多个引用的类型, 这些被持有的每一个引用都有它们自己的生命周期.
 
-Rust helpfully gave us good advice on how to specify the lifetime parameter in
-this case:
+Rust 帮忙给了我们很好的建议, 它告诉我们在这种情况下如何使用生命周期参数:
 
 ```text
 consider adding an explicit lifetime bound `T: 'a` so that the reference type
 `&'a T` does not outlive the data it points to.
 ```
 
-The code in Listing 19-17 works because `T: 'a` syntax specifies that `T` can
-be any type, but if it contains any references, `T` must live as long as `'a`:
+例 19-17 中的代码可以运行因为语法 `T: 'a` 指明 `T` 可以是任意类型, 但是如果它包含任意引用, `T` 必须存活至少有 `'a` 那么长:
 
 ```rust
 struct Ref<'a, T: 'a>(&'a T);
 ```
 
-<span class="caption">Listing 19-17: Adding lifetime bounds on `T` to specify
+<span class="caption">例 19-17: Adding lifetime bounds on `T` to specify
 that any references in `T` live at least as long as `'a`</span>
 
 We could choose to solve this in a different way as shown in Listing 19-18 by
