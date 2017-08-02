@@ -218,7 +218,7 @@ note: ...so that the reference type `&'a T` does not outlive the data it points 
 
 因为 `T` 可以是任意类型，`T` 自身也可能是一个引用，或者是一个存放了一个或多个引用的类型，而他们各自可能有着不同的生命周期。Rust 不能确认 `T` 会与 `'a` 存活的一样久。
 
-幸运的是，Rust 提供了这个情况下如何指定生命周期 bound 的有用建议：
+幸运的是，Rust 在这种情况下给出了如何指定生命周期 bound 的好建议：
 
 ```
 consider adding an explicit lifetime bound `T: 'a` so that the reference type
