@@ -8,9 +8,9 @@
 
 ### 关联类型
 
-**关联类型**（*associated types*）是一个将类型占位符与 trait 相关联的方法，如此 trait 的方法定义的签名中就可以使用这些占位符类型。实现 trait 的类型将会在特定实现中指定所用的具体类型。
+**关联类型**（*associated types*）是一个将类型占位符与 trait 相关联的方式，这样 trait 的方法签名中就可以使用这些占位符类型。实现一个 trait 的人只需要针对专门的实现在这个类型的位置指定相应的类型即可。
 
-本章描述的大部分内容都非常少见。关联类型则比较适中；他们比本书其他的内容要少见，不过比本章很多的内容要更常见。
+本章描述的大部分内容都非常少见。关联类型则比较适中；他们比本书其他的内容要少见，不过比本章中的很多内容要更常见。
 
 一个带有关联类型的 trait 的例子是标准库提供的 `Iterator` trait。它有一个叫做 `Item` 的关联类型来替代遍历的值的类型。第十三章曾提到过 `Iterator` trait 的定义如列表 19-20 所示：
 
@@ -23,7 +23,7 @@ pub trait Iterator {
 
 <span class="caption">列表 19-20：`Iterator` trait 的定义中带有关联类型 `Item`</span>
 
-这就是说 `Iterator` trait 有一个关联类型 `Item`。`Item` 是一个占位类型，同时 `next` 方法会返回 `Option<Self::Item>` 类型的值。这个 trait 的实现者会指定 `Item` 的具体类型，而 `next` 方法会返回一个 `Option` 包含无论实现者指定的何种类型的值。
+这就是说 `Iterator` trait 有一个关联类型 `Item`。`Item` 是一个占位类型，同时 `next` 方法会返回 `Option<Self::Item>` 类型的值。这个 trait 的实现者会指定 `Item` 的具体类型，而不管实现者指定何种类型, `next` 方法都会返回一个包含了这种类型值的 `Option`。
 
 #### 关联类型 vs 泛型
 
