@@ -245,7 +245,7 @@ struct StaticRef<T: 'static>(&'static T);
 
 ### trait 对象生命周期
 
-在第十七章，我们学习了 trait 对象，它包含位于引用之后的 trait 用以使用动态分发。然而，我们并没有讨论如果 trait 对象中实现 trait 的类型带有生命周期时会发生什么。考虑一下 19-19，这里有 trait `Foo`，和带有一个实现了 trait `Foo` 的引用（因此还有其生命周期参数）的结构体 `Bar`，我们希望使用 `Bar` 的实例作为 trait 对象 `Box<Foo>`：
+在第十七章，我们学习了 trait 对象，其中介绍了可以把一个 trait 放在一个引用后面来进行动态分发。然而，我们并没有讨论如果 trait 对象中实现 trait 的类型带有生命周期时会发生什么。考虑一下 19-19，这里有 trait `Foo`，和带有一个实现了 trait `Foo` 的引用（因此还有其生命周期参数）的结构体 `Bar`，我们希望使用 `Bar` 的实例作为 trait 对象 `Box<Foo>`：
 
 ```rust
 trait Foo { }
@@ -270,6 +270,6 @@ let obj = Box::new(Bar { x: &num }) as Box<Foo>;
 * 如果只有 `T: 'a`， 则默认是 `'a`。
 * 如果有多个类似 `T: 'a` 的从句，则没有默认值；必须明确指定。
 
-当必须明确指定时，可以为像 `Box<Foo>` 这样的 trait 对象增加生命周期 bound，根据需要使用语法 `Box<Foo + 'a>` 或 `Box<Foo + 'static>`。正如其他的 bound，这意味着任何包含引用的实现了 `Foo` trait 的类型，其中的引用必须拥有 trait 对象所指定的生命周期。
+当必须明确指定时，可以为像 `Box<Foo>` 这样的 trait 对象增加生命周期 bound，根据需要使用语法 `Box<Foo + 'a>` 或 `Box<Foo + 'static>`。正如其他的 bound，这意味着任何 `Foo` trait 的实现如果在内部包含有引用, 就必须在 trait 对象 bounds 中为那些引用指定生命周期。
 
 接下来，让我们看看一些其他处理 trait 的功能吧！
