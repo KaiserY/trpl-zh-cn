@@ -103,3 +103,18 @@
     - [所有可能会用到模式的位置](ch18-01-all-the-places-for-patterns.md)
     - [refutable：何时模式可能会匹配失败](ch18-02-refutability.md)
     - [模式的全部语法](ch18-03-pattern-syntax.md)
+
+- [高级特征](ch19-00-advanced-features.md)
+    - [不安全的 Rust](ch19-01-unsafe-rust.md)
+    - [高级生命周期](ch19-02-advanced-lifetimes.md)
+    - [高级 trait](ch19-03-advanced-traits.md)
+    - [高级类型](ch19-04-advanced-types.md)
+    - [高级函数与闭包](ch19-05-advanced-functions-and-closures.md)
+
+- [Final Project: Building a Multithreaded Web Server](ch20-00-final-project-a-web-server.md)
+    - [A Single Threaded Web Server](ch20-01-single-threaded.md)
+    - [How Slow Requests Affect Throughput](ch20-02-slow-requests.md)
+    - [Designing the Thread Pool Interface](ch20-03-designing-the-interface.md)
+    - [Creating the Thread Pool and Storing Threads](ch20-04-storing-threads.md)
+    - [Sending Requests to Threads Via Channels](ch20-05-sending-requests-via-channels.md)
+    - [Graceful Shutdown and Cleanup](ch20-06-graceful-shutdown-and-cleanup.md)
