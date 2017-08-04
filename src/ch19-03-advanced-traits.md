@@ -10,7 +10,7 @@
 
 **关联类型**（*associated types*）是一个将类型占位符与 trait 相关联的方式，这样 trait 的方法签名中就可以使用这些占位符类型。实现一个 trait 的人只需要针对专门的实现在这个类型的位置指定相应的类型即可。
 
-本章描述的大部分内容都非常少见。关联类型则比较适中；他们比本书其他的内容要少见，不过比本章中的很多内容要更常见。
+本章描述的大部分内容都非常少见。关联类型则比较适中；它们比本书其他的内容要少见，不过比本章中的很多内容要更常见。
 
 一个带有关联类型的 trait 的例子是标准库提供的 `Iterator` trait。它有一个叫做 `Item` 的关联类型来替代遍历的值的类型。第十三章曾提到过 `Iterator` trait 的定义如列表 19-20 所示：
 
@@ -23,7 +23,7 @@ pub trait Iterator {
 
 <span class="caption">列表 19-20：`Iterator` trait 的定义中带有关联类型 `Item`</span>
 
-这就是说 `Iterator` trait 有一个关联类型 `Item`。`Item` 是一个占位类型，同时 `next` 方法会返回 `Option<Self::Item>` 类型的值。这个 trait 的实现者会指定 `Item` 的具体类型，而不管实现者指定何种类型, `next` 方法都会返回一个包含了这种类型值的 `Option`。
+这就是说 `Iterator` trait 有一个关联类型 `Item`。`Item` 是一个占位类型，同时 `next` 方法会返回 `Option<Self::Item>` 类型的值。这个 trait 的实现者会指定 `Item` 的具体类型，然而不管实现者指定何种类型, `next` 方法都会返回一个包含了这种类型值的 `Option`。
 
 #### 关联类型 vs 泛型
 
@@ -36,7 +36,7 @@ impl Iterator for Counter {
     fn next(&mut self) -> Option<Self::Item> {
 ```
 
-这感觉类似于泛型。那么为什么 `Iterator` trait 不定义为如列表 19-21 所示这样呢？
+这感觉类似于泛型。那么为什么 `Iterator` trait 不像列表 19-21 那样定义呢？
 
 ```rust
 pub trait Iterator<T> {
@@ -79,7 +79,7 @@ fn distance<N, E, G: GGraph<N, E>>(graph: &G, start: &N, end: &N) -> u32 {
 
 <span class="caption">列表 19-23：`distance` 函数的签名，它使用 `GGraph` trait 并必须指定所有的泛型参数</span>
 
-函数需要指定泛型参数 `N`、`E` 和 `G`，其中 `G` 拥有以 `N` 类型作为 `Node` 和 `E` 类型作为 `Edge` 的 `GGraph` trait 作为 trait bound。即便 `distance` 函数无需指定边的类型，我们也强制声明了 `E` 参数，因为需要使用 `GGraph` trait 而这样一来需要指定 `Edge` 的类型。
+函数需要指定泛型参数 `N`、`E` 和 `G`，其中 `G` 拥有以 `N` 类型作为 `Node` 和 `E` 类型作为 `Edge` 的 `GGraph` trait 作为 trait bound。即便 `distance` 函数无需指定边的类型，我们也强制声明了 `E` 参数，因为需要使用 `GGraph` trait, 而 `GGraph` 需要指定 `Edge` 的类型。
 
 与此相对，列表 19-24 中的 `distance` 定义使用列表 19-22 中带有关联类型的 `AGraph` trait：
 
