@@ -193,4 +193,201 @@ fn handle_connection(mut stream: TcpStream) {
 
 `write` 可能会失败，所以 `write` 返回 `Result<T, E>`；我们继续使用 `unwrap` 以继续本章的核心内容而不是处理错误。最后，`flush` 会等待直到所有字节都被写入连接中；`TcpStream` 包含一个内部缓冲区来最小化对底层操作系统的调用。
 
-有了这些修改，运行我们的代码并进行请求！
+有了这些修改，运行我们的代码并进行请求！我们不再向终端打印任何数据，所以不会再看到除了 Cargo 以外的任何输出。不过当在浏览器中加载 `127.0.0.1:8080` 时，会得到一个空页面而不是错误。太棒了！我们刚刚手写了一个 HTTP 请求与响应。
+
+### 返回真正的 HTML
+
+让我们不只是返回空页面。在项目根目录创建一个新文件，*hello.html*，也就是说，不是在 `src` 目录。在此可以放入任何你期望的 HTML；列表 20-4 展示了本书作者所采用的：
+
+<span class="filename">文件名: hello.html</span>
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Hello!</title>
+  </head>
+  <body>
+    <h1>Hello!</h1>
+    <p>Hi from Rust</p>
+  </body>
+</html>
+```
+
+<span class="caption">列表 20-4：一个简单的 HTML 文件用来作为响应</span>
+
+这是一个极小化的 HTML 5 文档，它有一个标题和一小段文本。如列表 20-5 所示修改 `handle_connection` 来读取 HTML 文件，将其加入到响应的 body 中，并发送：
+
+<span class="filename">文件名: src/main.rs</span>
+
+```rust
+# use std::io::prelude::*;
+# use std::net::TcpStream;
+use std::fs::File;
+
+// ...snip...
+
+fn handle_connection(mut stream: TcpStream) {
+    let mut buffer = [0; 512];
+    stream.read(&mut buffer).unwrap();
+
+    let mut file = File::open("hello.html").unwrap();
+
+    let mut contents = String::new();
+    file.read_to_string(&mut contents).unwrap();
+
+    let response = format!("HTTP/1.1 200 OK\r\n\r\n{}", contents);
+
+    stream.write(response.as_bytes()).unwrap();
+    stream.flush().unwrap();
+}
+```
+
+<span class="caption">列表 20-5：将 *hello.html* 的内容作为响应 body 发送</span>
+
+在开头增加了一行来将标准库中的 `File` 引入作用域，打开和读取文件的代码应该看起来很熟悉，因为第十二章 I/O 项目的列表 12-4 中读取文件内容时出现过类似的代码。
+
+接下来，使用 `format!` 将文件内容加入到将要写入流的成功响应的 body 中。
+
+使用 `cargo run` 运行程序，在浏览器加载 `127.0.0.1:8080`，你应该会看到渲染出来的 HTML 文件！
+
+注意目前忽略了 `buffer` 中的请求数据并无条件的发送了 HTML 文件的内容。尝试在浏览器中请求 `127.0.0.1:8080/something-else` 也会得到同样的 HTML。对于所有请求都发送相同的响应其作用是非常有限的，也不是大部分 server 所做的；让我们检查请求并只对格式良好（well-formed）的请求 `/` 发送 HTML 文件。
+
+### 验证请求并有选择的响应
+
+目前我们的 server 不管客户端请求什么都会返回相同的 HTML 文件。让我们检查浏览器是否请求 `/`， 并在其请求其他内容时返回错误。如列表 20-6 所示修改 `handle_connection` ，它增加了所需的那部分代码。这一部分将接收到的请求的内容与已知的 `/` 请求的一部分做比较，并增加了 `if` 和 `else` 块来加入处理不同请求的代码：
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+# use std::io::prelude::*;
+# use std::net::TcpStream;
+# use std::fs::File;
+// ...snip...
+
+fn handle_connection(mut stream: TcpStream) {
+    let mut buffer = [0; 512];
+    stream.read(&mut buffer).unwrap();
+
+    let get = b"GET / HTTP/1.1\r\n";
+
+    if buffer.starts_with(get) {
+        let mut file = File::open("hello.html").unwrap();
+
+        let mut contents = String::new();
+        file.read_to_string(&mut contents).unwrap();
+
+        let response = format!("HTTP/1.1 200 OK\r\n\r\n{}", contents);
+
+        stream.write(response.as_bytes()).unwrap();
+        stream.flush().unwrap();
+    } else {
+        // some other request
+    };
+}
+```
+
+<span class="caption">列表 20-6：将请求与期望的 `/` 请求内容做匹配，并设置对 `/` 和其他请求的条件化处理</span>
+
+这里在变量 `get` 中硬编码了所需的请求相关的数据。因为我们从缓冲区中读取原始字节，所以使用了字节字符串，使用 `b""` 使得 `get` 也是一个字节字符串。接着检查 `buffer` 是否以 `get` 中的字节开头。如果是，这就是一个格式良好的 `/` 请求，也就是 `if` 块中期望处理的成功情况。`if` 块中包含列表 20-5 中增加的返回 HTML 文件内容的代码。
+
+如果 `buffer` 不以 `get` 中的字节开头，就说明是其他请求。对于所有其他请求都将使用 `else` 块中增加的代码来响应。
+
+如果运行代码并请求 `127.0.0.1:8080`，就会得到 *hello.html* 中的 HTML。如果进行其他请求，比如 `127.0.0.1:8080/something-else`，则会得到像运行列表 20-1 和 20-2 中代码那样的连接错误。
+
+如列表 20-7 所示向 `else` 块增加代码来返回一个带有 `404` 状态码的响应，这代表了所请求的内容没有找到。接着也会返回一个 HTML 向浏览器终端用户表明此意：
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+# use std::io::prelude::*;
+# use std::net::TcpStream;
+# use std::fs::File;
+# fn handle_connection(mut stream: TcpStream) {
+# if true {
+// ...snip...
+
+} else {
+    let header = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
+    let mut file = File::open("404.html").unwrap();
+    let mut contents = String::new();
+
+    file.read_to_string(&mut contents).unwrap();
+
+    let response = format!("{}{}", header, contents);
+
+    stream.write(response.as_bytes()).unwrap();
+    stream.flush().unwrap();
+}
+# }
+```
+
+<span class="caption">列表 20-7：对于任何不是 `/` 的请求返回 `404` 状态码的响应和错误页面</span>
+
+这里，响应头有状态码 `404` 和原因短语 `NOT FOUND`。仍然没有任何 header，而其 body 将是 *404.html* 文件中的 HTML。也在 *hello.html* 同级目录创建 *404.html* 文件作为错误页面；这一次也可以随意使用任何 HTML 或使用列表 20-8 中的示例 HTML：
+
+<span class="filename">文件名: 404.html</span>
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Hello!</title>
+  </head>
+  <body>
+    <h1>Oops!</h1>
+    <p>Sorry, I don't know what you're asking for.</p>
+  </body>
+</html>
+```
+
+<span class="caption">列表 20-8：任何 `404` 响应所返回错误页面内容样例</span>
+
+有了这些修改，再次运行 server。请求 `127.0.0.1:8080` 应该会返回 *hello.html*，而对于任何其他请求，比如 `127.0.0.1:8080/foo`，应该会返回 *404.html* 中的错误 HTML！
+
+`if` 和 `else` 块中的代码有很多的重复：他们都读取文件并将其内容写入流。这两个情况唯一的区别是状态行和文件名。将这些区别分别提取到一行 `if` 和 `else` 中，对状态行和文件名变量赋值；然后在读取文件和写入响应的代码中无条件的使用这些变量。重构后代码后的结果如列表 20-9 所示：
+
+<span class="filename">文件名: src/main.rs</span>
+
+```rust
+# use std::io::prelude::*;
+# use std::net::TcpStream;
+# use std::fs::File;
+// ...snip...
+
+fn handle_connection(mut stream: TcpStream) {
+#     let mut buffer = [0; 512];
+#     stream.read(&mut buffer).unwrap();
+#
+#     let get = b"GET / HTTP/1.1\r\n";
+    // ...snip...
+
+   let (status_line, filename) = if buffer.starts_with(get) {
+        ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
+    } else {
+        ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
+    };
+
+    let mut file = File::open(filename).unwrap();
+    let mut contents = String::new();
+
+    file.read_to_string(&mut contents).unwrap();
+
+    let response = format!("{}{}", status_line, contents);
+
+    stream.write(response.as_bytes()).unwrap();
+    stream.flush().unwrap();
+}
+```
+
+<span class="caption">列表 20-9：重构代码使得 `if` 和 `else` 块中只包含两个情况所不同的代码</span>
+
+这里，`if` 和 `else` 块所做的唯一的事就是在一个元组中返回合适的状态行和文件名的值；接着使用第十八章讲到的使用模式的 `let` 语句通过解构元组的两部分给 `filename` 和 `header` 赋值。
+
+读取文件和写入响应的冗余代码现在位于 `if` 和 `else` 块之外，并会使用变量 `status_line` 和 `filename`。这样更易于观察这两种情况真正有何不同，并且如果需要改变如何读取文件或写入响应时只需要更新一处的代码。列表 20-9 中代码的行为与列表 20-8 完全一样。
+
+好极了！我们有了一个 40 行左右 Rust 代码的小而简单的 server，它对一个请求返回页面内容而对所有其他请求返回 `404` 响应。
+
+不过因为 server 运行于单线程中，它一次只能处理一个请求。让我们模拟一些慢请求来看看这如何会称为一个问题。

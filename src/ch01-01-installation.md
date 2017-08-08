@@ -10,7 +10,7 @@
 
 ### 在 Linux 或 Mac 上安装
 
-如果你使用 Linux 或 Mac，你需要做的全部，就是打开一个终端并输入：
+如果你使用 Linux 或 Mac，你需要做的全部就是打开一个终端并输入：
 
 ```
 $ curl https://sh.rustup.rs -sSf | sh
