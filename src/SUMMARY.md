@@ -118,3 +118,12 @@
     - [创建线程池并储存线程](ch20-04-storing-threads.md)
     - [使用通道向线程发送请求](ch20-05-sending-requests-via-channels.md)
     - [Graceful Shutdown 与清理](ch20-06-graceful-shutdown-and-cleanup.md)
+
+- [附录](appendix-00.md)
+    - [A - 关键字](appendix-01-keywords.md)
+    - [B - 运算符](appendix-02-operators.md)
+    - [C - 可导出的 trait]()
+    - [D - Rust 开发版]()
+    - [E - 宏]()
+    - [F - 本书翻译]()
+    - [G - 最新功能](appendix-07-newest-features.md)
