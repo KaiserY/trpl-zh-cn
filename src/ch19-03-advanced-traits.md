@@ -100,7 +100,7 @@ fn distance<G: AGraph>(graph: &G, start: &G::Node, end: &G::Node) -> u32 {
 
 #### 带有关联类型的 trait 对象
 
-你可能会好奇为什么不在列表 19-23 和 19-24 的 `distance` 函数中使用 trait 对象。当使用 trait 对象时使用泛型 `GGraph` trait 的 `distance` 函数的签名确实跟准确了一些：
+你可能会好奇为什么不在列表 19-23 和 19-24 的 `distance` 函数中使用 trait 对象。当使用 trait 对象时使用泛型 `GGraph` trait 的 `distance` 函数的签名确实更准确了一些：
 
 ```rust
 # trait GGraph<Node, Edge> {}
@@ -114,7 +114,7 @@ fn distance<N, E>(graph: &GGraph<N, E>, start: &N, end: &N) -> u32 {
 
 不可能改变列表 19-24 来对图使用 trait 对象，因为这样就无法引用 `AGraph` trait 中的关联类型。
 
-但是一般而言使用带有关联类型的 trait 的 trait 对象是可能；列表 19-25 展示了一个函数 `traverse` ，它无需在其他参数中使用关联类型。然而这种情况必须指定关联类型的具体类型。这里选择接受以 `usize` 作为 `Node` 和以两个 `usize` 值的元组作为  `Edge` 的实现了 `AGraph` trait 的类型：
+但是一般而言常见的情形是使用带有关联类型 trait 的 trait 对象；列表 19-25 展示了一个函数 `traverse` ，它无需在其他参数中使用关联类型。然而这种情况必须指定关联类型的具体类型。这里选择接受以 `usize` 作为 `Node` 和以两个 `usize` 值的元组作为  `Edge` 的实现了 `AGraph` trait 的类型：
 
 ```rust
 # trait AGraph {
@@ -125,7 +125,7 @@ fn distance<N, E>(graph: &GGraph<N, E>, start: &N, end: &N) -> u32 {
 fn traverse(graph: &AGraph<Node=usize, Edge=(usize, usize)>) {}
 ```
 
-虽然 trait 对象意味着无需在编译时就知道 `graph` 参数的具体类型，但是我们确实需要在 `traverse` 函数中通过具体的关联类型来限制 `AGraph` trait 的使用。如果不提供这样的限制，Rust 将不能计算出用哪个 `impl` 来匹配这个 trait 对象，因为关联类型可以作为方法签名的一部分，Rust 需要在虚函数表中寻找他们。
+虽然 trait 对象意味着无需在编译时就知道 `graph` 参数的具体类型，但是我们确实需要在 `traverse` 函数中通过具体的关联类型来限制 `AGraph` trait 的使用。如果不提供这样的限制，Rust 将不能计算出用哪个 `impl` 来匹配这个 trait 对象，因为关联类型可以作为方法签名的一部分，Rust 需要在虚函数表(vtable)中查找它们。
 
 ### 运算符重载和默认类型参数
 
