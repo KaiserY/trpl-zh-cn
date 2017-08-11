@@ -2,17 +2,17 @@
 
 > [ch01-02-hello-world.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-02-hello-world.md)
 > <br>
-> commit 4f2dc564851dc04b271a2260c834643dfd86c724
+> commit d06a6a181fd61704cbf7feb55bc61d518c6469f9
 
-Rust 已安好，让我们来编写第一个程序。当学习一门新语言的时候，使用该语言在屏幕上打印 “Hello, world!” 是一项传统，我们将遵循这个传统。
+现在安装好了 Rust，让我们来编写第一个程序。当学习一门新语言的时候，使用该语言在屏幕上打印 “Hello, world!” 是一项传统，我们将遵循这个传统。
 
-> 注意：本书假设你熟悉基本的命令行操作。对于你的编辑器、工具，以及你的代码存在何处，Rust 并没有特殊要求，如果你更喜欢 IDE，请随意。
+> 注意：本书假设你熟悉基本的命令行操作。Rust 对于你的编辑器、工具，以及代码位于何处并没有特定的要求，如果相比命令行你更倾向于 IDE，请随意使用合意的 IDE。
 
-### 创建项目文件夹
+### 创建项目文目录
 
-首先，创建一个存放代码的文件夹。Rust 并不关心它的位置，不过在本书中，我们建议你在 home 目录中创建一个 *projects* 目录，并把你的所有项目放在这。打开一个终端，输入如下命令来创建一个文件夹：
+首先，创建一个存放 Rust 代码的目录。Rust 并不关心代码的位置，不过在本书中，我们建议你在 home 目录中创建一个 *projects* 目录，并把你的所有项目放在这。打开一个终端，输入如下命令为这个项目创建一个文件夹：
 
-Linux 和 Mac:
+Linux 和 Mac：
 
 ```
 $ mkdir ~/projects
@@ -21,7 +21,7 @@ $ mkdir hello_world
 $ cd hello_world
 ```
 
-Windows:
+Windows 的 cmd：
 
 ```cmd
 > mkdir %USERPROFILE%\projects
@@ -30,13 +30,22 @@ Windows:
 > cd hello_world
 ```
 
+Windows 的 PowerShell：
+
+```powershell
+> mkdir $env:USERPROFILE\projects
+> cd $env:USERPROFILE\projects
+> mkdir hello_world
+> cd hello_world
+```
+
 ### 编写并运行 Rust 程序
 
-接下来，新建一个叫做 *main.rs* 的文件。Rust 源代码总是以 *.rs* 后缀结尾。如果文件名包含多个单词，使用下划线分隔它们。例如 *my_program.rs*，而不是 *myprogram.rs*。
+接下来，新建一个叫做 *main.rs* 的源文件。Rust 源代码总是以 *.rs* 后缀结尾。如果文件名包含多个单词，使用下划线分隔它们。例如 *my_program.rs*，而不是 *myprogram.rs*。
 
 现在打开刚创建的 *main.rs* 文件，输入如下代码：
 
-<span class="filename">Filename: main.rs</span>
+<span class="filename">文件名: main.rs</span>
 
 ```rust
 fn main() {
@@ -52,7 +61,7 @@ $ ./main
 Hello, world!
 ```
 
-在 Windows 上，运行 `.\main.exe`，而不是`./main`。不管使用何种系统，你应该在终端看到 `Hello, world!` 字样。如果你做到了，恭喜你！你已经正式编写了一个 Rust 程序，成为一名 Rust 程序员！
+在 Windows 上，运行 `.\main.exe`，而不是`./main`。不管使用何种系统，应该在终端看到 `Hello, world!` 字样。如果你做到了，恭喜你！你已经正式编写了一个 Rust 程序。现在你成为了一名 Rust 程序员！欢迎！
 
 ### 分析 Rust 程序
 
