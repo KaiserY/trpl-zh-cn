@@ -1,27 +1,27 @@
 # 猜猜看
 
-> [ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/master/src/ch02-00-guessing-game-tutorial.md)
+> [ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch02-00-guessing-game-tutorial.md)
 > <br>
-> commit e6d6caab41471f7115a621029bd428a812c5260e
+> commit 2e269ff82193fd65df8a87c06561d74b51ac02f7
 
-让我们亲自动手，快速熟悉 Rust！本章将介绍 Rust 中常用的一些概念，并通过真实的程序来展示如何运用。你将会学到更多诸如 `let`、`match`、方法、关联函数、外部 crate 等知识！后继章节会深入探索这些概念的细节。在这一章，我们将练习基础。
+让我们一起动手完成一个项目，来快速上手 RUst！本章将介绍 Rust 中常用的一些概念，并通过真实的程序来展示如何运用他们。你将会学到更多诸如 `let`、`match`、方法、关联函数、外部 crate 等很多的知识！后继章节会深入探索这些概念的细节。在这一章，我们将练习基础。
 
-我们会实现一个经典的新手编程问题：猜猜看游戏。它是这么工作的：程序将会随机生成一个 1 到 100 之间的随机整数。接着它会请玩家猜一个数并输入，然后提示猜测是大了还是小了。如果猜对了，它会在退出前祝贺你。
+我们会实现一个经典的新手编程问题：猜猜看游戏。它是这么工作的：程序将会随机生成一个 1 到 100 之间的随机整数。接着它会请玩家猜一个数并输入，然后提示猜测是大了还是小了。如果猜对了，它会打印祝贺信息并退出。
 
 ## 准备一个新项目
 
-要创建一个新项目，进入第一章创建的**项目**目录，使用 Cargo 创建它：
+要创建一个新项目，进入第一章中创建的 *projects* 目录，使用 Cargo 新建一个项目，如下：
 
-```
+```text
 $ cargo new guessing_game --bin
 $ cd guessing_game
 ```
 
-第一个命令，`cargo new`，获取项目的名称（`guessing_game`）作为第一个参数。`--bin`参数告诉 Cargo 创建一个二进制项目，与第一章类似。第二个命令进入到新创建的项目目录。
+第一个命令，`cargo new`，它获取项目的名称（`guessing_game`）作为第一个参数。`--bin` 参数告诉 Cargo 创建一个二进制项目，与第一章类似。第二个命令进入到新创建的项目目录。
 
 看看生成的 *Cargo.toml* 文件：
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">文件名: Cargo.toml</span>
 
 ```toml
 [package]
@@ -34,9 +34,9 @@ authors = ["Your Name <you@example.com>"]
 
 如果 Cargo 从环境中获取的开发者信息不正确，修改这个文件并再次保存。
 
-正如第一章那样，`cargo new` 生成了一个“Hello, world!”程序。查看 *src/main.rs* 文件：
+正如第一章那样，`cargo new` 生成了一个 “Hello, world!” 程序。查看 *src/main.rs* 文件：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -44,25 +44,24 @@ fn main() {
 }
 ```
 
-现在让我们使用 `cargo run`，编译运行一步到位：
+现在编译 “Hello, world!” 程序，使用 `cargo run` 编译运行一步到位：
 
-
-```sh
+```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
 Hello, world!
 ```
 
-`run` 命令适合用在需要快速迭代的项目，而这个游戏就是：我们需要在下一步迭代之前快速测试。
+`run` 命令适合用于需要快速迭代的项目，而这个游戏便是这样的项目：我们需要在下一步迭代之前快速测试。
 
 重新打开 *src/main.rs* 文件。我们将会在这个文件中编写全部代码。
 
 ## 处理一次猜测
 
-程序的第一部分请求和处理用户输入，并检查输入是否符合预期。首先，需要有一个让玩家输入猜测的地方。在 *src/main.rs* 中输入列表 2-1 中的代码。
+程序的第一部分请求和处理用户输入，并检查输入是否符合预期的格式。首先，允许用户输入猜测。在 *src/main.rs* 中输入列表 2-1 中的代码。
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
 use std::io;
@@ -81,9 +80,9 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 2-1: Code to get a guess from the user and print it out</span>
+<span class="caption">列表 2-1：获取用户猜测并打印的代码</span>
 
-这些代码包含很多信息，我们一点一点地过一遍。为了获取用户输入并打印结果作为输出，我们需要将 `io`（输入/输出）库引入当前作用域。`io`库来自于标准库（也被称为`std`）：
+这些代码包含很多信息，我们一点一点地过一遍。为了获取用户输入并打印结果作为输出，我们需要将 `io`（输入/输出）库引入当前作用域。`io` 库来自于标准库（也被称为`std`）：
 
 ```rust,ignore
 use std::io;
@@ -101,7 +100,7 @@ fn main() {
 
 `fn` 语法声明了一个新函数，`()` 表明没有参数，`{` 作为函数体的开始。
 
-第一章也提及，`println!` 是一个在屏幕上打印字符串的宏：
+第一章也提及了 `println!` 是一个在屏幕上打印字符串的宏：
 
 ```rust,ignore
 println!("Guess the number!");
@@ -109,49 +108,49 @@ println!("Guess the number!");
 println!("Please input your guess.");
 ```
 
-这些代码仅仅打印提示，介绍游戏的内容然后请用户输入。
+这些代码仅仅打印提示，介绍游戏的内容然后请求用户输入。
 
-### 用变量储存值
+### 使用变量储存值
 
 接下来，创建一个地方储存用户输入，像这样：
 
-```rust
+```rust,ignore
 let mut guess = String::new();
 ```
 
-现在程序开始变得有意思了！这一小行代码发生了很多事。注意这是一个 `let` 语句，用来创建**变量**。这里是另外一个例子：
+现在程序开始变得有意思了！这一小行代码发生了很多事。注意这是一个 `let` 语句，用来创建 **变量**。这里是另外一个例子：
 
-```rust
+```rust,ignore
 let foo = bar;
 ```
 
-这行代码会创建一个叫做 `foo` 的新变量并把它绑定到值 `bar` 上。在 Rust 中，变量默认是不可变的。下面的例子展示了如何在变量名前使用 `mut` 来使一个变量可变：
+这行代码新建了一个叫做 `foo` 的变量并把它绑定到值 `bar` 上。在 Rust 中，变量默认是不可变的。下面的例子展示了如何在变量名前使用 `mut` 来使一个变量可变：
 
 ```rust
 let foo = 5; // immutable
 let mut bar = 5; // mutable
 ```
 
-> 注意：`//` 开始一个注释，它持续到本行的结尾。Rust 忽略注释中的所有内容。
+> 注意：`//` 语法开始一个持续到本行的结尾的注释。Rust 忽略注释中的所有内容。
 
 现在我们知道了 `let mut guess` 会引入一个叫做 `guess` 的可变变量。等号（`=`）的右边是 `guess` 所绑定的值，它是 `String::new` 的结果，这个函数会返回一个 `String` 的新实例。[`String`][string]<!-- ignore --> 是一个标准库提供的字符串类型，它是 UTF-8 编码的可增长文本块。
 
 [string]: https://doc.rust-lang.org/std/string/struct.String.html
 
-`::new` 那一行的 `::` 语法表明 `new` 是 `String` 类型的一个 **关联函数**（*associated function*）。关联函数是针对类型实现的，在这个例子中是 `String`，而不是 `String` 的某个特定实例。一些语言中把它称为**静态方法**（*static method*）。
+`::new` 那一行的 `::` 语法表明 `new` 是 `String` 类型的一个 **关联函数**（*associated function*）。关联函数是针对类型实现的，在这个例子中是 `String`，而不是 `String` 的某个特定实例。一些语言中把它称为 **静态方法**（*static method*）。
 
-`new` 函数创建了一个新的空 `String`，你会在很多类型上发现`new` 函数，这是创建类型实例的惯用函数名。
+`new` 函数创建了一个新的空 `String`，你会在很多类型上发现 `new` 函数，这是创建类型实例的惯用函数名。
 
-总结一下，`let mut guess = String::new();` 这一行创建了一个可变变量，绑定到一个新的 `String` 空实例上。
+总结一下，`let mut guess = String::new();` 这一行创建了一个可变变量，当前它绑定到一个新的 `String` 空实例上。
 
-回忆一下，我们在程序的第一行使用 `use std::io;` 从标准库中引入“输入输出”。现在调用 `io` 的关联函数 `stdin`：
+回忆一下，我们在程序的第一行使用 `use std::io;` 从标准库中引入了输入/输出功能。现在调用 `io` 的关联函数 `stdin`：
 
 ```rust,ignore
 io::stdin().read_line(&mut guess)
     .expect("Failed to read line");
 ```
 
-如果程序的开头没有 `use std::io` 这一行，我们可以把函数调用写成 `std::io::stdin`。`stdin` 函数返回一个  [`std::io::Stdin`][iostdin]<!-- ignore --> 的实例，这代表终端标准输入句柄的类型。
+如果程序的开头没有 `use std::io` 这一行，可以把函数调用写成 `std::io::stdin`。`stdin` 函数返回一个  [`std::io::Stdin`][iostdin]<!-- ignore --> 的实例，这代表终端标准输入句柄的类型。
 
 [iostdin]: https://doc.rust-lang.org/std/io/struct.Stdin.html
 
@@ -159,19 +158,19 @@ io::stdin().read_line(&mut guess)
 
 [read_line]: https://doc.rust-lang.org/std/io/struct.Stdin.html#method.read_line
 
-`read_line` 的工作是，无论用户在标准输入中键入什么内容，都将其存入一个字符串中，因此它需要字符串作为参数。这个字符串参数应该是可变的，以便 `read_line` 将用户输入附加上去。
+`read_line` 的工作是，无论用户在标准输入中键入什么内容，都将其存入一个字符串中，因此它需要字符串作为参数。这个字符串参数应该是可变的，以便 `read_line` 将用户输入附加上去。
 
-`&` 表示这个参数是一个**引用**（*reference*），它允许多处代码访问同一处数据，而无需在内存中多次拷贝。引用是一个复杂的特性，Rust 的一个主要优势就是安全而简单的操纵引用。完成当前程序并不需要了解如此多细节：第四章会更全面的解释引用。现在，我们只需知道它像变量一样，默认是不可变的，需要写成 `&mut guess` 而不是 `&guess` 来使其可变。
+`&` 表示这个参数是一个 **引用**（*reference*），它允许多处代码访问同一处数据，而无需在内存中多次拷贝。引用是一个复杂的特性，Rust 的一个主要优势就是安全而简单的操纵引用。完成当前程序并不需要了解如此多细节：第四章会更全面的解释引用。现在，我们只需知道它像变量一样，默认是不可变的，需要写成 `&mut guess` 而不是 `&guess` 来使其可变。
 
 我们还没有分析完这行代码。虽然这是单独一行代码，但它是一个逻辑行（虽然换行了但仍是一个语句）的第一部分。第二部分是这个方法：
 
-```rust
+```rust,ignore
 .expect("Failed to read line");
 ```
 
-当使用 `.expect()` 语法调用方法时，通过‘换行并缩进’来把长行拆开，是明智的。我们完全可以这样写：
+当使用 `.foo()` 语法调用方法时，通过换行并缩进来把长行拆开，是明智的。我们完全可以这样写：
 
-```rust
+```rust,ignore
 io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```
 
@@ -184,19 +183,19 @@ io::stdin().read_line(&mut guess).expect("Failed to read line");
 [ioresult]: https://doc.rust-lang.org/std/io/type.Result.html
 [result]: https://doc.rust-lang.org/std/result/enum.Result.html
 
-`Result` 类型是 [*枚举*（*enumerations*）][enums]<!-- ignore -->，通常也写作 *enums*。枚举类型持有固定集合的值，这些值被称为枚举的**成员**（*variants*）。第六章将介绍枚举的更多细节。
+`Result` 类型是 [*枚举*（*enumerations*）][enums]<!-- ignore -->，通常也写作 *enums*。枚举类型持有固定集合的值，这些值被称为枚举的 **成员**（*variants*）。第六章将介绍枚举的更多细节。
 
 [enums]: ch06-00-enums.html
 
-对于 `Result`，它的成员是 `Ok` 或 `Err`，`Ok` 表示操作成功，内部包含产生的值。`Err` 意味着操作失败，包含失败的前因后果。
+对于 `Result`，它的成员是 `Ok` 或 `Err`，`Ok` 表示操作成功，内部包含成功时产生的值。`Err` 意味着操作失败，包含失败的前因后果。
 
-`Result` 类型的作用是编码错误处理信息。`Result` 类型的值，像其他类型一样，拥有定义于其上的方法。`io::Result` 的实例拥有[`expect`方法][expect]<!-- ignore -->，如果实例的值是 `Err`，`expect` 会导致程序崩溃，并显示当做参数传递给 `expect` 的信息;如果实例的值是 `Ok`，`expect` 会获取 `Ok` 中的值并原样返回。在本例中，这个值是用户输入到标准输入中的字节的数量。
+`Result` 类型的作用是编码错误处理信息。`Result` 类型的值，像其他类型一样，拥有定义于其上的方法。`io::Result` 的实例拥有[`expect` 方法][expect]<!-- ignore -->，如果实例的值是 `Err`，`expect` 会导致程序崩溃，并显示当做参数传递给 `expect` 的信息。如果 `read_line` 方法返回 `Err`，则可能是来源于底层操作系统错误的结果。如果 `io::Result` 实例的值是 `Ok`，`expect` 会获取 `Ok` 中的值并原样返回。在本例中，这个值是用户输入到标准输入中的字节的数量。
 
 [expect]: https://doc.rust-lang.org/std/result/enum.Result.html#method.expect
 
 如果不使用 `expect`，程序也能编译，不过会出现一个警告：
 
-```
+```text
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 src/main.rs:10:5: 10:39 warning: unused result which must be used,
@@ -205,7 +204,7 @@ src/main.rs:10     io::stdin().read_line(&mut guess);
                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ```
 
-Rust 警告我们没有使用 `read_line` 的返回值 `Result`，说明有一个可能的错误没处理。想消除警告，就老实的写错误处理，不过我们就是希望程序在出现问题时立即崩溃，所以直接使用 `expect`。第九章会学习如何从错误中恢复。
+Rust 警告我们没有使用 `read_line` 的返回值 `Result`，说明有一个可能的错误没有处理。想消除警告，就老实的写错误处理，不过我们就是希望程序在出现问题时立即崩溃，所以直接使用 `expect`。第九章会学习如何从错误中恢复。
 
 ### 使用 `println!` 占位符打印值
 
