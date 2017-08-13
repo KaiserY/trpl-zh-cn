@@ -1,8 +1,8 @@
 ## 方法语法
 
-> [ch05-01-method-syntax.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch05-01-method-syntax.md)
+> [ch05-03-method-syntax.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch05-03-method-syntax.md)
 > <br>
-> commit 8c1c1a55d5c0f9bc3c866ee79b267df9dc5c04e2
+> commit 44bf3afd93519f8b0f900f21a5f2344d36e13448
 
 **方法**与函数类似：他们使用`fn`关键和名字声明，他们可以拥有参数和返回值，同时包含一些代码会在某处被调用时执行。不过方法与函数是不同的，因为他们在结构体（或者枚举或者 trait 对象，将分别在第六章和第十七章讲解）的上下文中被定义，并且他们第一个参数总是`self`，它代表方法被调用的结构体的实例。
 
@@ -105,7 +105,7 @@ fn main() {
 
 我们希望看到如下输出，因为`rect2`的长宽都小于`rect1`，而`rect3`比`rect1`要宽：
 
-```
+```text
 Can rect1 hold rect2? true
 Can rect1 hold rect3? false
 ```
