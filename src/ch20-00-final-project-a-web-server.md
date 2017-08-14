@@ -8,7 +8,7 @@
 
 下面就是我们将要做的：一个简单的 web server：
 
-![hello from rust](img/hello.png)
+![hello from rust](img/trpl20-01.png)
 
 为此我们将：
 
