@@ -20,13 +20,15 @@
     - [引用 & 借用](ch04-02-references-and-borrowing.md)
     - [Slices](ch04-03-slices.md)
 
-- [结构体](ch05-00-structs.md)
-    - [方法语法](ch05-01-method-syntax.md)
+- [使用结构体组织相关联的数据](ch05-00-structs.md)
+    - [定义并实例化结构体](ch05-01-defining-structs.md)
+    - [一个使用结构体的示例程序](ch05-02-example-structs.md)
+    - [方法语法](ch05-03-method-syntax.md)
 
 - [枚举和模式匹配](ch06-00-enums.md)
     - [定义枚举](ch06-01-defining-an-enum.md)
-    - [`match`控制流运算符](ch06-02-match.md)
-    - [`if let`简单控制流](ch06-03-if-let.md)
+    - [`match` 控制流运算符](ch06-02-match.md)
+    - [`if let` 简单控制流](ch06-03-if-let.md)
 
 ## 基本 Rust 技能
 

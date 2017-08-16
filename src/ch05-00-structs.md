@@ -1,4 +1,4 @@
-# 结构体
+# 使用结构体组织相关联的数据
 
 > [ch05-00-structs.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch05-00-structs.md)
 > <br>
