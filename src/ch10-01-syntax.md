@@ -253,11 +253,28 @@ fn main() {
 
 <span class="caption">列表 10-9：在 `Point<T>` 结构体上实现方法 `x`，它返回 `T` 类型的字段 `x` 的引用</span>
 
-注意必须在 `impl` 后面声明 `T`，这样就可以在 `Point<T>` 上实现的方法中使用它了。
+注意必须在 `impl` 后面声明 `T`，这样就可以在 `Point<T>` 上实现的方法中使用它了。在 `impl` 之后声明泛型 `T` ，这样 Rust 就知道 `Point` 的加括号中的类型是泛型而不是具体类型。例如，可以选择为 `Point<f32>` 实例实现方法，而不是为泛型 `Point` 实例。列表 10-10 展示了一个没有在 `impl` 之后（的尖括号）声明泛型的例子，这里使用了一个具体类型，`f32`：
 
-结构体定义中的泛型类型参数并不总是与结构体方法签名中使用的泛型是同一类型。列表 10-10 中在列表 10-8 中的结构体`Point<T, U>`上定义了一个方法`mixup`。这个方法获取另一个`Point`作为参数，而它可能与调用`mixup`的`self`是不同的`Point`类型。这个方法用`self`的`Point`类型的`x`值（类型`T`）和参数的`Point`类型的`y`值（类型`W`）来创建一个新`Point`类型的实例：
+```rust
+# struct Point<T> {
+#     x: T,
+#     y: T,
+# }
+#
+impl Point<f32> {
+    fn distance_from_origin(&self) -> f32 {
+        (self.x.powi(2) + self.y.powi(2)).sqrt()
+    }
+}
+```
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="caption">列表 10-10：构建一个只用于拥有泛型参数 `T` 的结构体的具体类型的 `impl` 块</span>
+
+这段代码意味着 `Point<f32>` 类型会有一个方法 `distance_from_origin`，而其他 `T` 不是 `f32` 类型的 `Point<T>` 实例则没有定义此方法。这个方法计算点实例与另一个点坐标之间的距离，它使用了只能用于浮点型的数学运算符。
+
+结构体定义中的泛型类型参数并不总是与结构体方法签名中使用的泛型是同一类型。列表 10-11 中在列表 10-8 中的结构体 `Point<T, U>` 上定义了一个方法 `mixup`。这个方法获取另一个 `Point` 作为参数，而它可能与调用 `mixup` 的 `self` 是不同的 `Point` 类型。这个方法用 `self` 的 `Point` 类型的 `x` 值（类型 `T`）和参数的 `Point` 类型的 `y` 值（类型 `W`）来创建一个新 `Point` 类型的实例：
+
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 struct Point<T, U> {
@@ -284,33 +301,32 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-10: Methods that use different generic types
-than their struct's definition</span>
+<span class="caption">列表 10-11：方法使用了与结构体定义中不同类型的泛型</span>
 
-在`main`函数中，定义了一个有`i32`类型的`x`（其值为`5`）和`f64`的`y`（其值为`10.4`）的`Point`。`p2`则是一个有着字符串 slice 类型的`x`（其值为`"Hello"`）和`char`类型的`y`（其值为`c`）的`Point`。在`p1`上以`p2`调用`mixup`会返回一个`p3`，它会有一个`i32`类型的`x`，因为`x`来自`p1`，并拥有一个`char`类型的`y`，因为`y`来自`p2`。`println!`会打印出`p3.x = 5, p3.y = c`。
+在 `main` 函数中，定义了一个有 `i32` 类型的 `x`（其值为 `5`）和 `f64` 的 `y`（其值为 `10.4`）的 `Point`。`p2` 则是一个有着字符串 slice 类型的 `x`（其值为 `"Hello"`）和 `char` 类型的 `y`（其值为`c`）的 `Point`。在 `p1` 上以 `p2` 作为参数调用 `mixup` 会返回一个 `p3`，它会有一个 `i32` 类型的 `x`，因为 `x` 来自 `p1`，并拥有一个 `char` 类型的 `y`，因为 `y` 来自 `p2`。`println!` 会打印出 `p3.x = 5, p3.y = c`。
 
-注意泛型参数`T`和`U`声明于`impl`之后，因为他们于结构体定义相对应。而泛型参数`V`和`W`声明于`fn mixup`之后，因为他们只是相对于方法本身的。
+注意泛型参数 `T` 和 `U` 声明于 `impl` 之后，因为他们与结构体定义相对应。而泛型参数 `V` 和 `W` 声明于 `fn mixup` 之后，因为他们只是相对于方法本身的。
 
 ### 泛型代码的性能
 
 在阅读本部分的内容的同时你可能会好奇使用泛型类型参数是否会有运行时消耗。好消息是：Rust 实现泛型泛型的方式意味着你的代码使用泛型类型参数相比指定具体类型并没有任何速度上的损失。
 
-Rust 通过在编译时进行泛型代码的**单态化**（*monomorphization*）来保证效率。单态化是一个将泛型代码转变为实际放入的具体类型的特定代码的过程。
+Rust 通过在编译时进行泛型代码的 **单态化**（*monomorphization*）来保证效率。单态化是一个将泛型代码转变为实际放入的具体类型的特定代码的过程。
 
 编译器所做的工作正好与列表 10-5 中我们创建泛型函数的步骤相反。编译器寻找所有泛型代码被调用的位置并使用泛型代码针对具体类型生成代码。
 
-让我们看看一个使用标准库中`Option`枚举的例子：
+让我们看看一个使用标准库中 `Option` 枚举的例子：
 
 ```rust
 let integer = Some(5);
 let float = Some(5.0);
 ```
 
-当 Rust 编译这些代码的时候，它会进行单态化。编译器会读取传递给`Option`的值并发现有两种`Option<T>`：一个对应`i32`另一个对应`f64`。为此，它会将泛型定义`Option<T>`展开为`Option_i32`和`Option_f64`，接着将泛型定义替换为这两个具体的定义。
+当 Rust 编译这些代码的时候，它会进行单态化。编译器会读取传递给 `Option` 的值并发现有两种 `Option<T>`：一个对应 `i32` 另一个对应 `f64`。为此，它会将泛型定义 `Option<T>` 展开为 `Option_i32` 和 `Option_f64`，接着将泛型定义替换为这两个具体的定义。
 
-编译器生成的单态化版本的代码看起来像这样，并包含将泛型`Option`替换为编译器创建的具体定义后的用例代码：
+编译器生成的单态化版本的代码看起来像这样，并包含将泛型 `Option` 替换为编译器创建的具体定义后的用例代码：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 enum Option_i32 {
