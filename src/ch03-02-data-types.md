@@ -52,7 +52,7 @@ error[E0282]: unable to infer enough type information about `_`
 
 可以使用表格 3-2 中的任何一种形式编写数字字面值。注意除字节以外的其它字面值允许使用类型后缀，例如 `57u8`，允许使用 `_` 做为分隔符以方便读数。
 
-<span class="caption">表格 3-2: RUst 中的整型字面值</span>
+<span class="caption">表格 3-2: Rust 中的整型字面值</span>
 
 | 数字字面值  | 例子       |
 |------------------|---------------|
