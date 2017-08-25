@@ -274,11 +274,11 @@ test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 
 ### 使用 `assert_eq!` 和 `assert_ne!` 宏来测试相等
 
-测试功能的一个常用方法是将需要测试代码的值与期望值做比较，并检查是否相等。可以通过向`assert!`宏传递一个使用`==`宏的表达式来做到。不过这个操作实在是太常见了，以至于标注库提供了一对宏来方便处理这些操作：`assert_eq!`和`assert_ne!`。这两个宏分别比较两个值是相等还是不相等。当断言失败时他们也会打印出这两个值具体是什么，以便于观察测试**为什么**失败，而`assert!`只会打印出它从`==`表达式中得到了`false`值，而不是导致`false`值的原因。
+测试功能的一个常用方法是将需要测试代码的值与期望值做比较，并检查是否相等。可以通过向 `assert!` 宏传递一个使用 `==` 运算符的表达式来做到。不过这个操作实在是太常见了，以至于标注库提供了一对宏来方便处理这些操作：`assert_eq!` 和 `assert_ne!`。这两个宏分别比较两个值是相等还是不相等。当断言失败时他们也会打印出这两个值具体是什么，以便于观察测试 **为什么** 失败，而 `assert!` 只会打印出它从 `==` 表达式中得到了 `false` 值，而不是导致 `false` 的两个值。
 
-列表 11-7 中，让我们编写一个对其参数加二并返回结果的函数`add_two`。接着使用`assert_eq!`宏测试这个函数：
+列表 11-7 中，让我们编写一个对其参数加二并返回结果的函数 `add_two`。接着使用 `assert_eq!` 宏测试这个函数：
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">文件名: src/lib.rs</span>
 
 ```rust
 pub fn add_two(a: i32) -> i32 {
@@ -296,21 +296,20 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-7: Testing the function `add_two` using the
-`assert_eq!` macro </span>
+<span class="caption">列表 11-7：使用 `assert_eq!` 宏测试 `add_two`</span>
 
 测试通过了！
 
-```
+```text
 running 1 test
 test tests::it_adds_two ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-传递给`assert_eq!`宏的第一个参数，4，等于调用`add_two(2)`的结果。我们将会看到这个测试的那一行说`test tests::it_adds_two ... ok`，`ok`表明测试通过了！
+传递给 `assert_eq!` 宏的第一个参数，4，等于调用 `add_two(2)` 的结果。我们将会看到这个测试的那一行说 `test tests::it_adds_two ... ok`，`ok` 表明测试通过了！
 
-在代码中引入一个 bug 来看看使用`assert_eq!`的测试失败是什么样的。修改`add_two`函数的实现使其加 3：
+在代码中引入一个 bug 来看看使用 `assert_eq!` 的测试失败是什么样的。修改 `add_two` 函数的实现使其加 3：
 
 ```rust
 pub fn add_two(a: i32) -> i32 {
@@ -320,7 +319,7 @@ pub fn add_two(a: i32) -> i32 {
 
 再次运行测试：
 
-```
+```text
 running 1 test
 test tests::it_adds_two ... FAILED
 
@@ -337,17 +336,17 @@ failures:
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 ```
 
-测试捕获到了 bug！`it_adds_two`测试失败并显示信息`` assertion failed: `(left == right)` (left: `4`, right: `5`) ``。这个信息有助于我们开始调试：它说`assert_eq!`的`left`参数是 4，而`right`参数，也就是`add_two(2)`的结果，是 5。
+测试捕获到了 bug！`it_adds_two` 测试失败并显示信息 `` assertion failed: `(left == right)` (left: `4`, right: `5`) ``。这个信息有助于我们开始调试：它说 `assert_eq!` 的 `left` 参数是 4，而 `right` 参数，也就是 `add_two(2)` 的结果，是 5。
 
-注意在一些语言和测试框架中，断言两个值相等的函数的参数叫做`expected`和`actual`，而且指定参数的顺序是需要注意的。然而在 Rust 中，他们则叫做`left`和`right`，同时指定期望的值和被测试代码产生的值的顺序并不重要。这个测试中的断言也可以写成`assert_eq!(add_two(2), 4)`，这时错误信息会变成`` assertion failed: `(left == right)` (left: `5`, right: `4`) ``。
+注意在一些语言和测试框架中，断言两个值相等的函数的参数叫做 `expected` 和 `actual`，而且指定参数的顺序是需要注意的。然而在 Rust 中，他们则叫做 `left` 和 `right`，同时指定期望的值和被测试代码产生的值的顺序并不重要。这个测试中的断言也可以写成 `assert_eq!(add_two(2), 4)`，这时错误信息会变成 `` assertion failed: `(left == right)` (left: `5`, right: `4`) ``。
 
-`assert_ne!`宏在传递给它的两个值不相等时通过而在相等时失败。这个宏在代码按照我们期望运行时不确定值**应该**是什么，不过知道他们绝对**不应该**是什么的时候最有用处。例如，如果一个函数确定会以某种方式改变其输出，不过这种方式由运行测试是星期几来决定，这时最好的断言可能就是函数的输出不等于其输入。
+`assert_ne!` 宏在传递给它的两个值不相等时通过而在相等时失败。这个宏在代码按照我们期望运行时不确定值 **会** 是什么，不过知道他们绝对 **不会**是什么的时候最有用处。例如，如果一个函数确定会以某种方式改变其输出，不过这种方式由运行测试是星期几来决定，这时最好的断言可能就是函数的输出不等于其输入。
 
-`assert_eq!`和`assert_ne!`宏在底层分别使用了`==`和`!=`。当断言失败时，这些宏会使用调试格式打印出其参数，这意味着被比较的值必需实现了`PartialEq`和`Debug` trait。所有的基本类型和大部分标准库类型都实现了这些 trait。对于自定义的结构体和枚举，需要实现 `PartialEq`才能断言他们的值是否相等。需要实现 `Debug`才能在断言失败时打印他们的值。因为这两个 trait 都是可推导 trait，如第五章所提到的，通常可以直接在结构体或枚举上添加`#[derive(PartialEq, Debug)]`注解。附录 C 中有更多关于这些和其他可推导 trait 的详细信息。
+`assert_eq!` 和 `assert_ne!` 宏在底层分别使用了 `==` 和 `!=`。当断言失败时，这些宏会使用调试格式打印出其参数，这意味着被比较的值必需实现了 `PartialEq` 和 `Debug` trait。所有的基本类型和大部分标准库类型都实现了这些 trait。对于自定义的结构体和枚举，需要实现 `PartialEq` 才能断言他们的值是否相等。需要实现 `Debug` 才能在断言失败时打印他们的值。因为这两个 trait 都是可推导 trait，如第五章所提到的，通常可以直接在结构体或枚举上添加 `#[derive(PartialEq, Debug)]` 注解。附录 C 中有更多关于这些和其他可推导 trait 的详细信息。
 
 ### 自定义错误信息
 
-也可以向`assert!`、`assert_eq!`和`assert_ne!`宏传递一个可选的参数来增加用于打印的自定义错误信息。任何在`assert!`必需的一个参数和`assert_eq!`和`assert_ne!`必需的两个参数之后指定的参数都会传递给第八章讲到的`format!`宏，所以可以传递一个包含`{}`占位符的格式字符串和放入占位符的值。自定义信息有助于记录断言的意义，这样到测试失败时，就能更好的例子代码出了什么问题。
+也可以向 `assert!`、`assert_eq!` 和 `assert_ne!` 宏传递一个可选的参数来增加用于打印的自定义错误信息。任何在 `assert!` 必需的一个参数和 `assert_eq!` 和 `assert_ne!` 必需的两个参数之后指定的参数都会传递给第八章讲到的 `format!` 宏，所以可以传递一个包含 `{}` 占位符的格式字符串和放入占位符的值。自定义信息有助于记录断言的意义，这样到测试失败时，就能更好的理解代码出了什么问题。
 
 例如，比如说有一个根据人名进行问候的函数，而我们希望测试将传递给函数的人名显示在输出中：
 
@@ -370,10 +369,10 @@ mod tests {
 }
 ```
 
-这个程序的需求还没有被确定，而我们非常确定问候开始的`Hello`文本不会改变。我们决定并不想在人名改变时
-不得不更新测试，所以相比检查`greeting`函数返回的确切的值，我们将仅仅断言输出的文本中包含输入参数。
+这个程序的需求还没有被确定，而我们非常确定问候开始的 `Hello` 文本不会改变。我们决定并不想在人名改变时
+不得不更新测试，所以相比检查 `greeting` 函数返回的确切的值，我们将仅仅断言输出的文本中包含输入参数。
 
-让我们通过改变`greeting`不包含`name`来在代码中引入一个 bug 来测试失败时是怎样的，
+让我们通过将 `greeting` 改为不包含 `name` 来在代码中引入一个 bug 来测试失败时是怎样的，
 
 ```rust
 pub fn greeting(name: &str) -> String {
@@ -398,7 +397,7 @@ failures:
     tests::greeting_contains_name
 ```
 
-这仅仅告诉了我们断言失败了和失败的行号。一个更有用的错误信息应该打印出从`greeting`函数得到的值。让我们改变测试函数来使用一个由包含占位符的格式字符串和从`greeting`函数取得的值组成的自定义错误信息：
+这仅仅告诉了我们断言失败了和失败的行号。一个更有用的错误信息应该打印出从 `greeting` 函数得到的值。让我们改变测试函数来使用一个由包含占位符的格式字符串和从 `greeting` 函数取得的值组成的自定义错误信息：
 
 ```rust,ignore
 #[test]
@@ -413,7 +412,7 @@ fn greeting_contains_name() {
 
 现在如果再次运行测试，将会看到更有价值的错误信息：
 
-```
+```text
 ---- tests::greeting_contains_name stdout ----
 	thread 'tests::greeting_contains_name' panicked at 'Greeting did not contain
     name, value was `Hello`', src/lib.rs:12
@@ -422,15 +421,15 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 可以在测试输出中看到所取得的确切的值，这会帮助我们理解发生了什么而不是期望发生什么。
 
-### 使用`should_panic`检查 panic
+### 使用 `should_panic` 检查 panic
 
-除了检查代码是否返回期望的正确的值之外，检查代码是否按照期望处理错误情况也是很重要的。例如，考虑第九章列表 9-8 创建的`Guess`类型。其他使用`Guess`的代码依赖于`Guess`实例只会包含 1 到 100 的值的保证。可以编写一个测试来确保创建一个超出范围的值的`Guess`实例会 panic。
+除了检查代码是否返回期望的正确的值之外，检查代码是否按照期望处理错误情况也是很重要的。例如，考虑第九章列表 9-8 创建的 `Guess` 类型。其他使用 `Guess` 的代码依赖于 `Guess` 实例只会包含 1 到 100 的值的保证。可以编写一个测试来确保创建一个超出范围的值的 `Guess` 实例会 panic。
 
-可以通过对函数增加另一个属性`should_panic`来实现这些。这个属性在函数中的代码 panic 时会通过，而在其中的代码没有 panic 时失败。
+可以通过对函数增加另一个属性 `should_panic` 来实现这些。这个属性在函数中的代码 panic 时会通过，而在其中的代码没有 panic 时失败。
 
-列表 11-8 展示了如何编写一个测试来检查`Guess::new`按照我们的期望出现的错误情况：
+列表 11-8 展示了如何编写一个测试来检查 `Guess::new` 按照我们的期望出现的错误情况：
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">文件名: src/lib.rs</span>
 
 ```rust
 struct Guess {
@@ -444,7 +443,7 @@ impl Guess {
         }
 
         Guess {
-            value: value,
+            value
         }
     }
 }
@@ -461,19 +460,18 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-8: Testing that a condition will cause a
-`panic!` </span>
+<span class="caption">列表 11-8：测试会造成 `panic!` 的条件</span>
 
-`#[should_panic]`属性位于`#[test]`之后和对应的测试函数之前。让我们看看测试通过时它时什么样子：
+`#[should_panic]` 属性位于 `#[test]` 之后和对应的测试函数之前。让我们看看测试通过时它时什么样子：
 
-```
+```text
 running 1 test
 test tests::greater_than_100 ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-看起来不错！现在在代码中引入 bug，通过移除`new`函数在值大于 100 时会 panic 的条件：
+看起来不错！现在在代码中引入 bug，移除 `new` 函数在值大于 100 时会 panic 的条件：
 
 ```rust
 # struct Guess {
@@ -487,7 +485,7 @@ impl Guess {
         }
 
         Guess {
-            value: value,
+            value
         }
     }
 }
@@ -495,7 +493,7 @@ impl Guess {
 
 如果运行列表 11-8 的测试，它会失败：
 
-```
+```text
 running 1 test
 test tests::greater_than_100 ... FAILED
 
@@ -507,11 +505,11 @@ failures:
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 ```
 
-这回并没有得到非常有用的信息，不过一旦我们观察测试函数，会发现它标注了`#[should_panic]`。这个错误意味着代码中函数`Guess::new(200)`并没有产生 panic。
+这回并没有得到非常有用的信息，不过一旦我们观察测试函数，会发现它标注了 `#[should_panic]`。这个错误意味着代码中函数 `Guess::new(200)` 并没有产生 panic。
 
-然而`should_panic`测试可能是非常含糊不清的，因为他们只是告诉我们代码并没有产生 panic。`should_panic`甚至在测试因为其他不同的原因而不是我们期望发生的那个而 panic 时也会通过。为了使`should_panic`测试更精确，可以给`should_panic`属性增加一个可选的`expected`参数。测试工具会确保错误信息中包含其提供的文本。例如，考虑列表 11-9 中修改过的`Guess`，这里`new`函数更具其值是过大还或者过小而提供不同的 panic 信息：
+然而 `should_panic` 测试可能是非常含糊不清的，因为他们只是告诉我们代码并没有产生 panic。`should_panic` 甚至在测试因为其他不同的原因而不是我们期望发生的情况而 panic 时也会通过。为了使 `should_panic` 测试更精确，可以给 `should_panic` 属性增加一个可选的 `expected` 参数。测试工具会确保错误信息中包含其提供的文本。例如，考虑列表 11-9 中修改过的 `Guess`，这里 `new` 函数根据其值是过大还或者过小而提供不同的 panic 信息：
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">文件名: src/lib.rs</span>
 
 ```rust
 struct Guess {
@@ -529,7 +527,7 @@ impl Guess {
         }
 
         Guess {
-            value: value,
+            value
         }
     }
 }
@@ -546,12 +544,11 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-9: Testing that a condition will cause a
-`panic!` with a particular panic message </span>
+<span class="caption">列表 11-9：一个会带有特定错误信息的 `panic!` 条件的测试</span>
 
-这个测试会通过，因为`should_panic`属性中`expected`参数提供的值是`Guess::new`函数 panic 信息的子字符串。我们可以指定期望的整个 panic 信息，在这个例子中是`Guess value must be less than or equal to 100, got 200.`。这依赖于 panic 有多独特或动态和你希望测试有多准确。在这个例子中，错误信息的子字符串足以确保函数在`else if value > 100`的情况下运行。
+这个测试会通过，因为 `should_panic` 属性中 `expected` 参数提供的值是 `Guess::new` 函数 panic 信息的子字符串。我们可以指定期望的整个 panic 信息，在这个例子中是 `Guess value must be less than or equal to 100, got 200.`。这依赖于 panic 有多独特或动态，和你希望测试有多准确。在这个例子中，错误信息的子字符串足以确保函数在 `else if value > 100` 的情况下运行。
 
-为了观察带有`expected`信息的`should_panic`测试失败时会发生什么，让我们再次引入一个 bug 来将`if value < 1`和`else if value > 100`的代码块对换：
+为了观察带有 `expected` 信息的 `should_panic` 测试失败时会发生什么，让我们再次引入一个 bug，将 `if value < 1` 和 `else if value > 100` 的代码块对换：
 
 ```rust,ignore
 if value < 1 {
@@ -561,9 +558,9 @@ if value < 1 {
 }
 ```
 
-这一次运行`should_panic`测试，它会失败：
+这一次运行 `should_panic` 测试，它会失败：
 
-```
+```text
 running 1 test
 test tests::greater_than_100 ... FAILED
 
@@ -582,6 +579,6 @@ failures:
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 ```
 
-错误信息表明测试确实如期望 panic 了，不过 panic 信息`did not include expected string 'Guess value must be less than or equal to 100'`。可以看到我们的到的 panic 信息，在这个例子中是`Guess value must be greater than or equal to 1, got 200.`。这样就可以开始寻找 bug 在哪了！
+错误信息表明测试确实如期望 panic 了，不过 panic 信息是 `did not include expected string 'Guess value must be less than or equal to 100'`。可以看到我们得到的 panic 信息，在这个例子中是 `Guess value must be greater than or equal to 1, got 200.`。这样就可以开始寻找 bug 在哪了！
 
-现在我们讲完了编写测试的方法，让我们看看运行测试时会发生什么并讨论可以用于`cargo test`的不同选项。
+现在我们讲完了编写测试的方法，让我们看看运行测试时会发生什么并讨论可以用于 `cargo test` 的不同选项。

@@ -2,24 +2,23 @@
 
 > [ch12-01-accepting-command-line-arguments.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-01-accepting-command-line-arguments.md)
 > <br>
-> commit b8e4fcbf289b82c12121b282747ce05180afb1fb
+> commit 50658e654fb6a9208b635179cdd79939aa0ab133
 
-第一个任务是让`greprs`能够接受两个命令行参数：文件名和要搜索的字符串。也就是说希望能够使用`cargo run`，要搜索的字符串和被搜索的文件的路径来运行程序，像这样：
+一如之前使用 `cargo new` 新建一个项目。我们称之为 `minigrep` 以便与可能已经安装在系统上的`grep`工具相区别：
 
+```text
+$ cargo new --bin minigrep
+     Created binary (application) `minigrep` project
+$ cd minigrep
 ```
+
+第一个任务是让 `minigrep` 能够接受两个命令行参数：文件名和要搜索的字符串。也就是说我们希望能够使用 `cargo run`、要搜索的字符串和被搜索的文件的路径来运行程序，像这样：
+
+```text
 $ cargo run searchstring example-filename.txt
 ```
 
-现在`cargo new`生成的程序忽略任何传递给它的参数。crates.io 上有一些现存的可以帮助我们接受命令行参数的库，不过因为我们正在学习，让我们实现一个。
-
-<!--Below -- I'm not clear what we need the args function for, yet, can you set
-it out more concretely? Otherwise, will it make more sense in context of the
-code later? Is this function needed to allow our function to accept arguments,
-is that was "args" is for? -->
-<!-- We mentioned in the intro to this chapter that grep takes as arguments a
-filename and a string. I've added an example of how we want to run our
-resulting tool and what we want the behavior to be, please let me know if this
-doesn't clear it up. /Carol-->
+现在 `cargo new` 生成的程序忽略任何传递给它的参数。crates.io 上有一些现成的库可以帮助我们接受命令行参数，不过因为正在学习，让我们自己来实现一个。
 
 ### 读取参数值
 
