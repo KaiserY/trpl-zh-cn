@@ -1,8 +1,12 @@
-## 闭包
+## 闭包：可以捕获环境的匿名函数
 
 > [ch13-01-closures.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch13-01-closures.md)
 > <br>
-> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
+> commit 56352c28cf3fe0402fa5a7cba73890e314d720eb
+
+Rust 的闭包是可以保存进变量或作为参数传递给其他函数的匿名函数。
+
+
 
 Rust 提供了定义**闭包**的能力，它类似于函数。让我们先不从技术上的定义开始，而是看看闭包语句结构，然后再返回他们的定义。列表 13-1 展示了一个被赋值给变量`add_one`的小的闭包定义，之后可以用这个变量来调用闭包：
 

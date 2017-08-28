@@ -22,19 +22,11 @@ $ cargo run searchstring example-filename.txt
 
 ### 读取参数值
 
-为了能够获取传递给程序的命令行参数的值，我们需要调用一个 Rust 标准库提供的函数：`std::env::args`。这个函数返回一个传递给程序的命令行参数的**迭代器**（*iterator*）。我们还未讨论到迭代器，第十三章会全面的介绍他们。但是对于我们现在的目的来说只需要明白两点：
+首先我们需要程序能够获取传递给它的命令行参数的值，为此需要一个 Rust 标准库提供的函数：`std::env::args`。这个函数返回一个传递给程序的命令行参数的 **迭代器**（*iterator*）。我们还未讨论到迭代器，第十三章会全面的介绍他们。但是对于我们现在的目的来说只需要明白两点：迭代器生成一系列的值，可以在迭代器上调用 `collect` 方法将其转换为一个 vector，比如包含所有迭代器产生元素的 vector。
 
-1. 迭代器生成一系列的值。
-2. 在迭代器上调用`collect`方法可以将其生成的元素转换为一个 vector。
+让我们尝试一下：使用列表 12-1 中的代码来读取任何传递给 `minigrep` 的命令行参数并将其收集到一个 vector 中。
 
-让我们尝试一下：使用列表 12-1 中的代码来读取任何传递给`greprs`的命令行参数并将其收集到一个 vector 中。
-
-<!-- Give what a try, here, what are we making? Can you lay that out? I've
-tried above but I'm not sure it's complete -->
-<!-- We're not creating anything, we're just reading. I'm not sure if I've made
-this clearer. /Carol -->
-
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 use std::env;
@@ -45,61 +37,34 @@ fn main() {
 }
 ```
 
-Listing 12-1: Collect the command line arguments into a vector and print them
-out
+列表 12-1：将命令行参数收集到一个 vector 中并打印出来
 
-<!-- Will add wingdings in libreoffice /Carol -->
+首先使用 `use` 语句来将 `std::env` 模块引入作用域以便可以使用它的 `args` 函数。注意 `std::env::args` 函数被嵌套进了两层模块中。正如第七章讲到的，当所需函数嵌套了多于一层模块时，通常将父模块引入作用域，而不是其自身。这便于我们利用 `std::env` 中的其他函数。这比增加了 `use std::env::args;` 后仅仅使用 `args` 调用函数要更明确一些；这样容易被错认成一个定义于当前模块的函数。
 
-首先使用`use`语句来将`std::env`模块引入作用域以便可以使用它的`args`函数。注意`std::env::args`函数嵌套进了两层模块中。如第七章讲到的，当所需函数嵌套了多于一层模块时，通常将父模块引入作用域，而不是其自身。这便于我们利用`std::env`中的其他函数。这比增加了`use std::env::args;`后仅仅使用`args`调用函数要更明确一些；这样看起来好像一个定义于当前模块的函数。
+> ### `args` 函数和无效的 Unicode
+>
+> 注意 `std::env::args` 在其任何参数包含无效 Unicode 字符时会 panic。如果你需要接受包含无效 Unicode 字符的参数，使用 `std::env::args_os` 代替。这个函数返回 `OsString` 值而不是 `String` 值。这里出于简单考虑使用了 `std::env::args`，因为 `OsString` 值每个平台都不一样而且比 `String` 值处理起来更复杂。
 
-<!-- We realized that we need to add the following caveat to fully specify
-the behavior of `std::env::args` /Carol -->
+在 `main` 函数的第一行，我们调用了 `env::args`，并立即使用 `collect` 来创建了一个包含迭代器所有值的 vector。`collect` 可以被用来创建很多类型的集合，所以这里显式注明的 `args` 类型来指定我们需要一个字符串 vector。虽然在 Rust 中我们很少会需要注明类型，`collect` 就是一个经常需要注明类型的函数，因为 Rust 不能推断出你想要什么类型的集合。
 
-<!-- PROD: START BOX -->
+最后，我们使用调试格式 `:?` 打印出 vector。让我们尝试不用参数运行代码，接着用两个参数：
 
-> 注意：`std::env::args`在其任何参数包含无效 Unicode 字符时会 panic。如果你需要接受包含无效 Unicode 字符的参数，使用`std::env::args_os`代替。这个函数返回`OsString`值而不是`String`值。出于简单考虑这里使用`std::env::args`，因为`OsString`值每个平台都不一样而且比`String`值处理起来更复杂。
-
-<!-- PROD: END BOX -->
-
-<!--what is it we're making into a vector here, the arguments we pass?-->
-<!-- The iterator of the arguments. /Carol -->
-
-在`main`函数的第一行，我们调用了`env::args`，并立即使用`collect`来创建了一个包含迭代器所有值的 vector。`collect`可以被用来创建很多类型的集合，所以这里显式注明的`args`类型来指定我们需要一个字符串 vector。虽然在 Rust 中我们很少会需要注明类型，`collect`就是一个经常需要注明类型的函数，因为 Rust 不能推断出你想要什么类型的集合。
-
-最后，我们使用调试格式`:?`打印出 vector。让我们尝试不用参数运行代码，接着用两个参数：
-
-```
+```text
 $ cargo run
-["target/debug/greprs"]
+["target/debug/minigrep"]
 
 $ cargo run needle haystack
 ...snip...
-["target/debug/greprs", "needle", "haystack"]
+["target/debug/minigrep", "needle", "haystack"]
 ```
 
-<!--Below --- This initially confused me, do you mean that the argument at
-index 0 is taken up by the name of the binary, so we start arguments at 1 when
-setting them? It seems like it's something like that, reading on, and I've
-edited as such, can you check? -->
-<!-- Mentioning the indexes here seemed repetitive with the text after Listing
-12-2. We're not "setting" arguments here, we're saving the value in variables.
-I've hopefully cleared this up without needing to introduce repetition.
-/Carol-->
-
-你可能注意到了 vector 的第一个值是"target/debug/greprs"，它是我们二进制文件的名称。其原因超出了本章介绍的范围，不过需要记住的是我们保存了所需的两个参数。
+你可能注意到了 vector 的第一个值是 `"target/debug/minigrep"`，它是我们二进制文件的名称。这与 C 中的参数列表的行为相符合，并使得程序可以在执行过程中使用它的名字。能够访问程序名称在需要在信息中打印时，或者需要根据执行程序所使用的命令行别名来改变程序行为时显得很方便，不过考虑到本章的目的，我们将忽略它并只保存所需的两个参数。
 
 ### 将参数值保存进变量
 
-打印出参数 vector 中的值仅仅展示了可以访问程序中指定为命令行参数的值。但是这并不是我们想要做的，我们希望将这两个参数的值保存进变量这样就可以在程序使用这些值。让我们如列表 12-2 这样做：
+打印出参数 vector 中的值展示了程序可以访问指定为命令行参数的值。现在需要将这两个参数的值保存进变量这样就可以在程序的余下部分使用这些值。让我们如列表 12-2 这样做：
 
-<!-- By 'find the ones we care about' did you mean set particular arguments so
-the user knows what to enter? I'm a little confused about what we are doing,
-I've tried to clarify above -->
-<!-- We're incrementally adding features and adding some code that helps the
-reader be able to see and experience what the code is doing rather than just
-taking our word for it. I've hopefully clarified below. /Carol -->
-
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust,should_panic
 use std::env;
@@ -115,18 +80,16 @@ fn main() {
 }
 ```
 
-Listing 12-2: Create variables to hold the query argument and filename argument
+列表 12-2：创建变量来存放查询参数和文件名参数
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+正如之前打印出 vector 时所所看到的，程序的名称占据了 vector 的第一个值 `args[0]`，所以我们从索引 `1` 开始。`minigrep` 获取的第一个参数是需要搜索的字符串，所以将其将第一个参数的引用存放在变量 `query` 中。第二个参数将是文件名，所以将第二个参数的引用放入变量 `filename` 中。
 
-正如我们在打印出 vector 时所看到的，程序的名称占据了 vector 的第一个值`args[0]`，所以我们从索引`1`开始。第一个参数`greprs`是需要搜索的字符串，所以将其将第一个参数的引用存放在变量`query`中。第二个参数将是文件名，所以将第二个参数的引用放入变量`filename`中。
+我们将临时打印出出这些变量的值，再一次证明代码如我们期望的那样工作。让我们使用参数 `test` 和 `sample.txt` 再次运行这个程序：
 
-我们将临时打印出出这些变量的值，再一次证明代码如我们期望的那样工作。让我们使用参数`test`和`sample.txt`再次运行这个程序：
-
-```
+```text
 $ cargo run test sample.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs test sample.txt`
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/minigrep test sample.txt`
 Searching for test
 In file sample.txt
 ```
