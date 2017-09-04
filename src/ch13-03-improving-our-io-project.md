@@ -2,17 +2,19 @@
 
 > [ch13-03-improving-our-io-project.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch13-03-improving-our-io-project.md)
 > <br>
-> commit 0608e2d0743951d8e628b6e130c6b5744775a783
+> commit 714be7f0d6b2f6110afe8808a7f528f9eae75c61
 
-在我们上一章实现的`grep` I/O 项目中，其中有一些地方的代码可以使用迭代器来变得更清楚简洁一些。让我们看看迭代器如何能够改进`Config::new`函数和`search`函数的实现。
+我们可以使用迭代器来改进第十二章中 I/O 项目的实现来使得代码更简洁明了。让我们看看迭代器如何能够改进 `Config::new` 函数和 `search` 函数的实现。
 
-### 使用迭代器并去掉`clone`
+### 使用迭代器并去掉 `clone`
 
-回到列表 12-8 中，这些代码获取一个`String` slice 并创建一个`Config`结构体的实例，它检查参数的数量、索引 slice 中的值、并克隆这些值以便`Config`可以拥有他们的所有权：
+在列表 12-6 中，我们增加了一些代码获取一个 `String` slice 并创建一个 `Config` 结构体的实例，他们索引 slice 中的值并克隆这些值以便 `Config` 结构体可以拥有这些值。在列表 13-24 中原原本本的重现了第十二章结尾 `Config::new` 函数的实现：
+
+<span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
 impl Config {
-    fn new(args: &[String]) -> Result<Config, &'static str> {
+    pub fn new(args: &[String]) -> Result<Config, &'static str> {
         if args.len() < 3 {
             return Err("not enough arguments");
         }
@@ -20,48 +22,90 @@ impl Config {
         let query = args[1].clone();
         let filename = args[2].clone();
 
-        Ok(Config {
-            query: query,
-            filename: filename,
-        })
+        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
+
+        Ok(Config { query, filename, case_sensitive })
     }
 }
 ```
 
-当时我们说不必担心这里的`clone`调用，因为将来会移除他们。好吧，就是现在了！所以，为什么这里需要`clone`呢？这里的问题是参数`args`中有一个`String`元素的 slice，而`new`函数并不拥有`args`。为了能够返回`Config`实例的所有权，我们需要克隆`Config`中字段`query`和`filename`的值，这样`Config`就能拥有这些值了。
+<span class="caption">列表 13-24：重现第十二章结尾的 `Config::new` 函数</span>
 
-现在在认识了迭代器之后，我们可以将`new`函数改为获取一个有所有权的迭代器作为参数。可以使用迭代器来代替之前必要的 slice 长度检查和特定位置的索引。因为我们获取了迭代器的所有权，就不再需要借用所有权的索引操作了，我们可以直接将迭代器中的`String`值移动到`Config`中，而不用调用`clone`来创建一个新的实例。
+这时可以不必担心低效的 `clone` 调用了，因为将来可以去掉他们。好吧，就是现在！
 
-首先，让我们看看列表 12-6 中的`main`函数，将`env::args`的返回值改为传递给`Config::new`，而不是调用`collect`并传递一个 slice：
+起初这里需要 `clone` 的原因是参数 `args` 中有一个 `String` 元素的 slice，而 `new` 函数并不拥有 `args`。为了能够返回 `Config` 实例的所有权，我们需要克隆 `Config` 中字段 `query` 和 `filename` 的值，这样 `Config` 实例就能拥有这些值。
+
+通过迭代器的新知识，我们可以将 `new` 函数改为获取一个有所有权的迭代器作为参数而不是借用 slice。我们将使用迭代器功能之前检查 slice 长度和索引特定位置的代码。这会清理 `Config::new` 的工作因为迭代器会负责访问这些值。
+
+一旦 `Config::new` 获取了迭代器的所有权并不再使用借用的索引操作，就可以将迭代器中的 `String` 值移动到 `Config` 中，而不是调用 `clone` 分配新的空间。
+
+#### 直接使用 `env::args` 返回的迭代器
+
+在 I/O 项目的 *src/main.rs* 中，让我们修改第十二章结尾 `main` 函数中的这些代码：
 
 ```rust,ignore
 fn main() {
-    let config = Config::new(env::args());
+    let args: Vec<String> = env::args().collect();
+
+    let config = Config::new(&args).unwrap_or_else(|err| {
+        eprintln!("Problem parsing arguments: {}", err);
+        process::exit(1);
+    });
+
     // ...snip...
+}
 ```
 
-<!-- Will add ghosting in libreoffice /Carol -->
+将他们改为如列表 13-25 所示：
 
-如果参看标准库中`env::args`函数的文档，我们会发现它的返回值类型是`std::env::Args`。所以下一步就是更新`Config::new`的签名使得参数`args`拥有`std::env::Args`类型而不是`&[String]`：
+<span class="filename">文件名: src/main.rs</span>
+
+```rust,ignore
+fn main() {
+    let config = Config::new(env::args()).unwrap_or_else(|err| {
+        eprintln!("Problem parsing arguments: {}", err);
+        process::exit(1);
+    });
+
+    // ...snip...
+}
+```
+
+<span class="caption">列表 13-25：将 `env::args` 的返回值传递给 `Config::new`</span>
+
+`env::args` 函数返回一个迭代器！不同于将迭代器的值收集到一个 vector 中接着传递一个 slice 给 `Config::new`，现在我们直接将 `env::args` 返回的迭代器的所有权传递给 `Config::new`。
+
+接下来需要更新 `Config::new` 的定义。在 I/O 项目的 *src/lib.rs* 中，将 `Config::new` 的签名改为如列表 13-26 所示：
+
+<span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
 impl Config {
-    fn new(args: std::env::Args) -> Result<Config, &'static str> {
+    pub fn new(args: std::env::Args) -> Result<Config, &'static str> {
         // ...snip...
 ```
 
-<!-- Will add ghosting in libreoffice /Carol -->
+<span class="caption">列表 13-26：更新 `Config::new` 的签名来接受一个迭代器</span>
 
-之后我们将修复`Config::new`的函数体。因为标准库文档也表明，`std::env::Args`实现了`Iterator` trait，所以我们知道可以调用其`next`方法！如下就是新的代码：
+`env::args` 函数的标准库文档展示了其返回的迭代器类型是 `std::env::Args`。需要更新 `Config::new` 函数的签名中 `args` 参数的类型为 `std::env::Args` 而不是 `&[String]`。
+
+#### 使用 `Iterator` trait 方法带起索引
+
+接下来修复 `Config::new` 的函数体。标准库文档也提到了 `std::env::Args` 实现了 `Iterator` trait，所以可以在其上调用 `next` 方法！列表 13-27 更新了列表 12-23 中的代码为使用 `next` 方法：
+
+<span class="filename">文件名: src/lib.rs</span>
 
 ```rust
+# use std::env;
+#
 # struct Config {
 #     query: String,
 #     filename: String,
+#     case_sensitive: bool,
 # }
 #
 impl Config {
-    fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
+    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
     	args.next();
 
         let query = match args.next() {
@@ -74,21 +118,44 @@ impl Config {
             None => return Err("Didn't get a file name"),
         };
 
+        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
+
         Ok(Config {
-            query: query,
-            filename: filename,
+            query, filename, case_sensitive
         })
     }
 }
 ```
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<span class="caption">列表 13-27：修改 `Config::new` 的函数体为使用迭代器方法</span>
 
-还记得`env::args`返回值的第一个值是程序的名称吗。我们希望忽略它，所以首先调用`next`并不处理其返回值。第二次调用`next`的返回值应该是希望放入`Config`中`query`字段的值。使用`match`来在`next`返回`Some`时提取值，而在因为没有足够的参数（这会造成`next`调用返回`None`）而提早返回`Err`值。
-
-对`filename`值也进行相同处理。稍微有些可惜的是`query`和`filename`的`match`表达式是如此的相似。如果可以对`next`返回的`Option`使用`?`就好了，不过目前`?`只能用于`Result`值。即便我们可以像`Result`一样对`Option`使用`?`，得到的值也是借用的，而我们希望能够将迭代器中的`String`移动到`Config`中。
+请记住 `env::args` 返回值的第一个值是程序的名称。我们希望忽略它并获取下一个值，所以首先调用 `next` 并不对返回值做任何操作。之后对希望放入 `Config` 中字段 `query` 调用 `next`。如果 `next` 返回 `Some`，使用 `match` 来提取其值。如果它返回 `None`，则意味着没有提供足够的参数并通过 `Err` 值提早返回。对 `filename` 值进行同样的操作。
 
 ### 使用迭代器适配器来使代码更简明
+
+I/O 项目中其他可以利用迭代器优势的地方位于 `search` 函数，在列表 13-28 中重现了第十二章结尾的此函数定义：
+
+<span class="filename">文件名: src/lib.rs</span>
+
+```rust,ignore
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let mut results = Vec::new();
+
+    for line in contents.lines() {
+        if line.contains(query) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+```
+
+<span class="caption">列表 13-28：第十二章结尾 `search` 函数的定义</span>
+
+可以通过使用迭代器适配器方法来编写更短的代码。这也避免了一个可变的中间 `results` vector 的使用。函数式编程风格倾向于最小化可变状态的数量来使代码更简洁。去掉可变状态
+
+
 
 另一部分可以利用迭代器的代码位于列表 12-15 中实现的`search`函数中：
 
