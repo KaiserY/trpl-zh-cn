@@ -2,21 +2,22 @@
 
 > [ch14-02-publishing-to-crates-io.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch14-02-publishing-to-crates-io.md)
 > <br>
-> commit f2eef19b3a39ee68dd363db2fcba173491ba9dc4
+> commit 56352c28cf3fe0402fa5a7cba73890e314d720eb
 
-我们曾经在项目中增加 crates.io 上的 crate 作为依赖。也可以选择将代码分享给其他人。Crates.io 用来分发包的源代码，所以它主要用于分发开源代码。
+我们曾经在项目中增加 crates.io 上的包作为依赖，不过你也可以通过发布自己的包来向它人分享代码。Crates.io 用来分发包的源代码，所以它主要托管开源代码。
 
-Rust 和 Cargo 有一些帮助人们找到和使用你发布的包的功能。我们将介绍这些功能，接着讲到如何发布一个包。
+Rust 和 Cargo 有一些帮助它人更方便找到和使用你发布的包的功能。我们将介绍一些这样的功能，接着讲到如何发布一个包。
 
-### 文档注释
 
-在第三章中，我们见到了以`//`开头的注释，Rust 还有第二种注释：**文档注释**（*documentation comment*）。注释固然对阅读代码的人有帮助，也可以生成 HTML 代码来显式公有 API 的文档注释，这有助于那些对如何**使用** crate 有兴趣而不关心如何**实现**的人。注意只有库 crate 能生成文档，因为二进制 crate 并没有人们需要知道如何使用的公有 API。
+### 编写有用的文档注释
 
-文档注释使用`///`而不是`//`并支持 Markdown 注解。他们就位于需要文档的项的之前。如下是一个`add_one`函数的文档注释：
+准确的包文档有助于其他用户立即如何以及何时使用他们，所以花一些时间编写文档是值得的。第三章中我们讨论了如何使用 `//` 注释 Rust 代码。Rust 也有特定的用于文档的注释类型，通常被称为 **文档注释**（*documentation comments*），他们会生成 HTML 文档。这些 HTML 展示公有 API 文档注释的内容，他们意在让对库感兴趣的程序员理解如何 **使用** 这个 crate，而不是它是如何被 **实现** 的。
 
-<span class="filename">Filename: src/lib.rs</span>
+文档注释使用 `///` 而不是 `//` 并支持 Markdown 注解来格式化文本。文档注释就位于需要文档的项的之前。列表 14-2 展示了一个 `my_crate` crate 中 `add_one` 函数的文档注释：
 
-````rust
+<span class="filename">文件名: src/lib.rs</span>
+
+```rust,ignore
 /// Adds one to the number given.
 ///
 /// # Examples
@@ -24,15 +25,14 @@ Rust 和 Cargo 有一些帮助人们找到和使用你发布的包的功能。�
 /// ```
 /// let five = 5;
 ///
-/// assert_eq!(6, add_one(five));
+/// assert_eq!(6, my_crate::add_one(5));
 /// ```
 pub fn add_one(x: i32) -> i32 {
     x + 1
 }
-````
+```
 
-<span class="caption">Listing 14-1: A documentation comment for a
-function</span>
+<span class="caption">列表 14-2：一个函数的文档注释</span>
 
 `cargo doc`运行一个由 Rust 分发的工具，`rustdoc`，来为这些注释生成 HTML 文档。可以运行`cargo doc --open`在本地尝试一下，这会构建当前状态的文档（以及 crate 的依赖）并在浏览器中打开。导航到`add_one`函数将会发现文档注释是如何渲染的。
 

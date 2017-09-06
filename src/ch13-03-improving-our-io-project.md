@@ -153,58 +153,22 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 <span class="caption">列表 13-28：第十二章结尾 `search` 函数的定义</span>
 
-可以通过使用迭代器适配器方法来编写更短的代码。这也避免了一个可变的中间 `results` vector 的使用。函数式编程风格倾向于最小化可变状态的数量来使代码更简洁。去掉可变状态
+可以通过使用迭代器适配器方法来编写更短的代码。这也避免了一个可变的中间 `results` vector 的使用。函数式编程风格倾向于最小化可变状态的数量来使代码更简洁。去掉可变状态可能会使得将来进行并行搜索的增强变得更容易，因为我们不必管理 `results` vector 的并发访问。列表 13-29 展示了该变化：
 
+<span class="filename">文件名: src/lib.rs</span>
 
-
-另一部分可以利用迭代器的代码位于列表 12-15 中实现的`search`函数中：
-
-<!-- We hadn't had a listing number for this code sample when we submitted
-chapter 12; we'll fix the listing numbers in that chapter after you've
-reviewed it. /Carol -->
-
-```rust
-fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
-
-    for line in contents.lines() {
-        if line.contains(query) {
-            results.push(line);
-        }
-    }
-
-    results
-}
-```
-
-我们可以用一种更简短的方式来编写这些代码，并避免使用了一个作为可变中间值的`results` vector，像这样使用迭代器适配器方法来实现：
-
-```rust
-fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+```rust,ignore
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     contents.lines()
         .filter(|line| line.contains(query))
         .collect()
 }
 ```
 
-这里使用了`filter`适配器来只保留`line.contains(query)`为真的那些行。接着使用`collect`将他们放入另一个 vector 中。这就简单多了！
+<span class="caption">列表 13-29：在 `search` 函数实现中使用迭代器适配器</span>
 
-也可以对列表 12-16 中定义的`search_case_insensitive`函数使用如下同样的技术：
+回忆 `search` 函数的目的是返回所有 `contents` 中包含 `query` 的行。类似于列表 13-19 中的 `filter` 例子，可以使用 `filter` 适配器只保留 `line.contains(query)` 为真的那些行。接着使用 `collect` 将匹配行收集到另一个 vector 中。这样就容易多了！请随意对 `search_case_insensitive` 函数做出同样的使用迭代器方法的修改。
 
-<!-- Similarly, the code snippet that will be 12-16 didn't have a listing
-number when we sent you chapter 12, we will fix it. /Carol -->
+接下来的逻辑问题就是在代码中应该选择哪种风格：列表 13-28 中的原始实现，或者是列表 13-29 中使用迭代器的版本。大部分 Rust 程序员倾向于使用迭代器风格。开始这有点难以理解，不过一旦你对不同迭代器的工作方式有了感觉之后，迭代器可能会更容易理解。相比摆弄不同的循环并创建新 vector，（迭代器）代码则更关注循环的目的。这抽象出了那些老生常谈的代码，这样就更容易看清代码所特有的概念，比如迭代器中每个元素必须面对的过滤条件。
 
-```rust
-fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let query = query.to_lowercase();
-
-    contents.lines()
-        .filter(|line| {
-            line.to_lowercase().contains(&query)
-        }).collect()
-}
-```
-
-看起来还不坏！那么到底该用哪种风格呢？大部分 Rust 程序员倾向于使用迭代器风格。开始这有点难以理解，不过一旦你对不同迭代器的工作方式有了直觉上的理解之后，他们将更加容易理解。相比使用很多看起来大同小异的循环并创建一个 vector，抽象出这些老生常谈的代码将使得我们更容易看清代码所特有的概念，比如迭代器中用于过滤每个元素的条件。
-
-不过他们真的完全等同吗？当然更底层的循环会更快一些。让我们聊聊性能吧。
+不过这两种实现真的完全等同吗？直觉上的假设是更底层的循环会更快一些。让我们聊聊性能吧。
