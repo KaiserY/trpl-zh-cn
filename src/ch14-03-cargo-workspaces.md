@@ -2,9 +2,12 @@
 
 > [ch14-03-cargo-workspaces.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch14-03-cargo-workspaces.md)
 > <br>
-> commit d945f6d4046f4fc3c09326213100492790aebb45
+> commit 6e53771a409794d9933c2a31310d78149b7e0534
 
-第十二章中，我们构建一个包含二进制 crate 和库 crate 的包。不过如果库 crate 继续变得更大而我们想要进一步将包拆分为多个库 crate 呢？随着包增长，拆分出其主要组件将是非常有帮助的。对于这种情况，Cargo 提供了一个叫**工作空间**（*workspaces*）的功能，它可以帮助我们管理多个相关的并行开发的包。
+第十二章中，我们构建一个包含二进制 crate 和库 crate 的包。
+
+
+不过如果库 crate 继续变得更大而我们想要进一步将包拆分为多个库 crate 呢？随着包增长，拆分出其主要组件将是非常有帮助的。对于这种情况，Cargo 提供了一个叫**工作空间**（*workspaces*）的功能，它可以帮助我们管理多个相关的并行开发的包。
 
 **工作空间**是一系列的包都共享同样的 *Cargo.lock* 和输出目录。让我们使用工作空间创建一个项目，这是我们熟悉的所以就可以关注工作空间的结构了。这里有一个二进制项目它使用了两个库：一个会提供`add_one`方法而第二个会提供`add_two`方法。让我们为这个二进制项目创建一个新 crate 作为开始：
 
