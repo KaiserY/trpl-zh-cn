@@ -122,7 +122,7 @@ main.rs
 $ ./main  # or .\main.exe on Windows
 ```
 
-如果 *main.rs* 是 “Hello, world!” 程序，它将会在终端上打印 `Hello, world!`。
+如果 *main.rs* 是上文所述的 “Hello, world!” 程序，它将会在终端上打印 `Hello, world!`。
 
 来自 Ruby、Python 或 JavaScript 这样的动态类型语言背景的同学，可能不太习惯将编译和执行分为两个单独的步骤。Rust 是一种 **预编译静态类型语言**（*ahead-of-time compiled language*），这意味着你可以编译程序并将其交与他人，他们不需要安装 Rust 即可运行。相反如果你给他们一个 `.rb`、`.py` 或 `.js` 文件，他们需要先分别安装 Ruby，Python，JavaScript 实现（运行时环境，VM），不过你只需要一句命令就可以编译和执行程序。这一切都是语言设计上的权衡取舍。
 
