@@ -57,7 +57,7 @@ $ rustup update
 
 ### 卸载
 
-卸载 Rust 与安装一个简单。在 shell 中执行卸载脚本:
+卸载 Rust 与安装同样简单。在 shell 中执行卸载脚本:
 
 ```text
 $ rustup self uninstall
