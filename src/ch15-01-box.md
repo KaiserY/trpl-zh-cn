@@ -1,4 +1,4 @@
-## `Box<T>` 用于已知大小的堆上数据
+## `Box<T>` 在堆上存储数据，并且可确定大小
 
 > [ch15-01-box.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch15-01-box.md)
 > <br>
