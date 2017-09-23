@@ -1,6 +1,6 @@
 ## `Result` 与可恢复的错误
 
-> [ch09-01-unrecoverable-errors-with-panic.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch09-02-recoverable-errors-with-result.md)
+> [ch09-02-recoverable-errors-with-result.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch09-02-recoverable-errors-with-result.md)
 > <br>
 > commit e6d6caab41471f7115a621029bd428a812c5260e
 
