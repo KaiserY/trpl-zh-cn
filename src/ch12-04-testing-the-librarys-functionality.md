@@ -15,11 +15,11 @@
 
 这只是众多编写软件的方法之一，不过 TDD 有助于驱动代码的设计。在编写能使测试通过的代码之前编写测试有助于在开发过程中保持高测试覆盖率。
 
-我们将测试驱动实现实际在文件内容中搜索查询字符串并返回匹配的行列表的功能。我们将在一个叫做 `search` 的函数中增加这些功能。
+我们将测试驱动实现实际在文件内容中搜索查询字符串并返回匹配的行示例的功能。我们将在一个叫做 `search` 的函数中增加这些功能。
 
 ### 编写失败测试
 
-首先，去掉 *src/lib.rs* 和 *src/main.rs* 中的`println!`语句，因为不再真正需要他们了。接着我们会像第十一章那样增加一个 `test` 模块和一个测试函数。测试函数指定了 `search` 函数期望拥有的行为：它会获取一个需要查询的字符串和用来查询的文本，并只会返回包含请求的文本行。列表 12-15 展示了这个测试：
+首先，去掉 *src/lib.rs* 和 *src/main.rs* 中的`println!`语句，因为不再真正需要他们了。接着我们会像第十一章那样增加一个 `test` 模块和一个测试函数。测试函数指定了 `search` 函数期望拥有的行为：它会获取一个需要查询的字符串和用来查询的文本，并只会返回包含请求的文本行。示例 12-15 展示了这个测试：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -48,11 +48,11 @@ Pick three.";
 }
 ```
 
-<span class="caption">列表 12-15：创建一个我们期望的 `search` 函数的失败测试</span>
+<span class="caption">示例 12-15：创建一个我们期望的 `search` 函数的失败测试</span>
 
 这里选择使用 "duct" 作为这个测试中需要搜索的字符串。用来搜索的文本有三行，其中只有一行包含 "duct"。我们断言 `search` 函数的返回值只包含期望的那一行。
 
-我们还不能运行这个测试并看到它失败，因为它甚至都还不能编译！我们将增加足够的代码来使其能够编译：一个总是会返回空 vector 的 `search` 函数定义，如列表 12-16 所示。一旦有了它，这个测试应该能够编译并因为空 vector 并不匹配一个包含一行 `"safe, fast, productive."` 的 vector 而失败。
+我们还不能运行这个测试并看到它失败，因为它甚至都还不能编译！我们将增加足够的代码来使其能够编译：一个总是会返回空 vector 的 `search` 函数定义，如示例 12-16 所示。一旦有了它，这个测试应该能够编译并因为空 vector 并不匹配一个包含一行 `"safe, fast, productive."` 的 vector 而失败。
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -62,7 +62,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-<span class="caption">列表 12-16：刚好足够使测试通过编译的 `search` 函数定义</span>
+<span class="caption">示例 12-16：刚好足够使测试通过编译的 `search` 函数定义</span>
 
 注意需要在 `search` 的签名中定义一个显式生命周期 `'a` 并用于 `contents` 参数和返回值。回忆一下第十章中讲到生命周期参数指定哪个参数的生命周期与返回值的生命周期相关联。在这个例子中，我们表明返回的 vector 中应该包含引用参数 `contents`（而不是参数`query`） slice 的字符串 slice。
 
@@ -120,15 +120,15 @@ error: test failed
 
 * 遍历每一行文本。
 * 查看这一行是否包含要搜索的字符串。
-* 如果有，将这一行加入返回列表中。
+* 如果有，将这一行加入返回示例中。
 * 如果没有，什么也不做。
-* 返回匹配到的列表
+* 返回匹配到的示例
 
 让我们一步一步的来，从遍历每行开始。
 
 #### 使用 `lines` 方法遍历每一行
 
-Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被命名为 `lines`，它如列表 12-17 这样工作：
+Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被命名为 `lines`，它如示例 12-17 这样工作：
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -140,13 +140,13 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-<span class="caption">列表 12-17：遍历 `contents` 的每一行</span>
+<span class="caption">示例 12-17：遍历 `contents` 的每一行</span>
 
-`lines` 方法返回一个迭代器。第十三章会深入了解迭代器，不过我们已经在列表 3-6 中见过使用迭代器的方法，在那里使用了一个 `for` 循环和迭代器在一个集合的每一项上运行了一些代码。
+`lines` 方法返回一个迭代器。第十三章会深入了解迭代器，不过我们已经在示例 3-6 中见过使用迭代器的方法，在那里使用了一个 `for` 循环和迭代器在一个集合的每一项上运行了一些代码。
 
 #### 用查询字符串搜索每一行
 
-接下来将会增加检查当前行是否包含查询字符串的功能。幸运的是，字符串类型为此也有一个叫做 `contains` 的实用方法！如列表 12-18 所示在 `search` 函数中加入 `contains` 方法调用：
+接下来将会增加检查当前行是否包含查询字符串的功能。幸运的是，字符串类型为此也有一个叫做 `contains` 的实用方法！如示例 12-18 所示在 `search` 函数中加入 `contains` 方法调用：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -160,11 +160,11 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-<span class="caption">列表 12-18：增加检查文本行是否包含 `query` 中字符串的功能</span>
+<span class="caption">示例 12-18：增加检查文本行是否包含 `query` 中字符串的功能</span>
 
 #### 存储匹配的行
 
-最后我们需要一个方法来存储包含查询字符串的行。为此可以在 `for` 循环之前创建一个可变的 vector 并调用 `push` 方法在 vector 中存放一个 `line`。在 `for` 循环之后，返回这个 vector，如列表 12-19 所示：
+最后我们需要一个方法来存储包含查询字符串的行。为此可以在 `for` 循环之前创建一个可变的 vector 并调用 `push` 方法在 vector 中存放一个 `line`。在 `for` 循环之后，返回这个 vector，如示例 12-19 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -182,7 +182,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-<span class="caption">列表 12-19：储存匹配的行以便可以返回他们</span>
+<span class="caption">示例 12-19：储存匹配的行以便可以返回他们</span>
 
 现在 `search` 函数应该返回只包含 `query` 的那些行，而测试应该会通过。让我们运行测试：
 

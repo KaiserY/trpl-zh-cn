@@ -10,7 +10,7 @@ Rust 的闭包是可以保存进变量或作为参数传递给其他函数的匿
 
 让我们看看一个展示储存闭包并在之后执行如何有用的情形的例子。其间我们会讨论闭包的语法、类型推断和 trait。
 
-这个假想的情况如下：我们在一个通过 app 生成自定义健身计划的初创企业工作。其后端使用 Rust 编写，而生成健身计划的算法需要考虑很多不同的因素，比如用户的年龄、身体质量指数（Body Mass Index）、用户喜好、最近的健身活动和用户指定的强度系数。本例中实际的算法并不重要。我们只希望在需要时调用算法，并且只希望调用一次，这样就不会让用户等得太久。这里将通过调用 `simulated_expensive_calculation` 函数来模拟调用假象的算法，如列表 13-1 所示，它会打印出 `calculating slowly...`，等待两秒，并接着返回传递给它的数字：
+这个假想的情况如下：我们在一个通过 app 生成自定义健身计划的初创企业工作。其后端使用 Rust 编写，而生成健身计划的算法需要考虑很多不同的因素，比如用户的年龄、身体质量指数（Body Mass Index）、用户喜好、最近的健身活动和用户指定的强度系数。本例中实际的算法并不重要。我们只希望在需要时调用算法，并且只希望调用一次，这样就不会让用户等得太久。这里将通过调用 `simulated_expensive_calculation` 函数来模拟调用假象的算法，如示例 13-1 所示，它会打印出 `calculating slowly...`，等待两秒，并接着返回传递给它的数字：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -25,7 +25,7 @@ fn simulated_expensive_calculation(intensity: i32) -> i32 {
 }
 ```
 
-<span class="caption">列表 13-1：一个用来代替假象计算的函数，它大约会执行两秒</span>
+<span class="caption">示例 13-1：一个用来代替假象计算的函数，它大约会执行两秒</span>
 
 接下来，`main` 函数中将会包含本例的健身 app 中的重要部分。这代表当用户请求健身计划时 app 会调用的代码。因为与 app 前端的交互与闭包的使用并不相关，所以我们将硬编码代表程序输入的值并打印输出。
 
@@ -36,7 +36,7 @@ fn simulated_expensive_calculation(intensity: i32) -> i32 {
 
 程序的输出将会是建议的锻炼计划。
 
-列表 13-2 展示了我们将要使用的 `main` 函数。处于简单考虑这里硬编码了 `simulated_user_specified_value` 变量的值为 10 和 `simulated_random_number` 变量的值为 7；一个实际的程序会从 app 前端获取强度系数并使用 `rand` crate 来生成随机数，正如第二章的猜猜看游戏所做的那样。`main` 函数使用模拟的输入值调用 `generate_workout` 函数：
+示例 13-2 展示了我们将要使用的 `main` 函数。处于简单考虑这里硬编码了 `simulated_user_specified_value` 变量的值为 10 和 `simulated_random_number` 变量的值为 7；一个实际的程序会从 app 前端获取强度系数并使用 `rand` crate 来生成随机数，正如第二章的猜猜看游戏所做的那样。`main` 函数使用模拟的输入值调用 `generate_workout` 函数：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -50,9 +50,9 @@ fn main() {
 # fn generate_workout(intensity: i32, random_number: i32) {}
 ```
 
-<span class="caption">列表 13-2：`main` 函数包含了用于 `generate_workout` 函数的模拟用户输入和模拟随机数输入</span>
+<span class="caption">示例 13-2：`main` 函数包含了用于 `generate_workout` 函数的模拟用户输入和模拟随机数输入</span>
 
-这就是我们的执行上下文。列表 13-3 中的 `generate_workout` 函数包含我们最关心的 app 业务逻辑。本例中余下的代码修改都将在这个函数中：
+这就是我们的执行上下文。示例 13-3 中的 `generate_workout` 函数包含我们最关心的 app 业务逻辑。本例中余下的代码修改都将在这个函数中：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -89,9 +89,9 @@ fn generate_workout(intensity: i32, random_number: i32) {
 }
 ```
 
-<span class="caption">列表 13-3：程序的业务逻辑，它根据输入并调用 `simulated_expensive_calculation` 函数来打印出健身计划</span>
+<span class="caption">示例 13-3：程序的业务逻辑，它根据输入并调用 `simulated_expensive_calculation` 函数来打印出健身计划</span>
 
-列表 13-3 中的代码有多处慢计算函数的调用。第一个 `if` 块调用了 `simulated_expensive_calculation` 两次，外部 `else` 中的 `if` 完全没有调用它，`else` 中的 `else` 调用了它一次。
+示例 13-3 中的代码有多处慢计算函数的调用。第一个 `if` 块调用了 `simulated_expensive_calculation` 两次，外部 `else` 中的 `if` 完全没有调用它，`else` 中的 `else` 调用了它一次。
 
 `generate_workout` 函数的合意的行为是首先检查用户需要低强度（由小于 25 的系数代表）锻炼还是高强度（25 或以上）锻炼。低强度锻炼计划会根据由 `simulated_expensive_calculation` 函数所模拟的复杂算法建议一定数量的俯卧撑和仰卧起坐，此函数需要强度系数作为输入。
 
@@ -99,7 +99,7 @@ fn generate_workout(intensity: i32, random_number: i32) {
 
 数据科学部门的同学告知我们必须对调用算法的方式做出一些改变。为了简化做出这些改变的更新，我们将重构代码来只调用 `simulated_expensive_calculation` 一次。同时还希望去掉目前多余的连续两次函数调用，并不希望在计算过程中增加任何其他此函数的调用。也就是说，我们不希望在完全无需其结果的情况调用函数，不过最终仍然需要调用函数一次。
 
-有多种方法可以重构此程序。我们首先尝试的是将重复的慢计算函数调用提取到一个变量中，如列表 13-4 所示：
+有多种方法可以重构此程序。我们首先尝试的是将重复的慢计算函数调用提取到一个变量中，如示例 13-4 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -139,7 +139,7 @@ fn generate_workout(intensity: i32, random_number: i32) {
 }
 ```
 
-<span class="caption">列表 13-4：将 `simulated_expensive_calculation` 调用提取到一个位置，位于 `if` 块之前并将结果储存在变量 `expensive_result` 中</span>
+<span class="caption">示例 13-4：将 `simulated_expensive_calculation` 调用提取到一个位置，位于 `if` 块之前并将结果储存在变量 `expensive_result` 中</span>
 
 这个修改统一了 `simulated_expensive_calculation` 调用并解决了第一个 `if` 块中不必要的两次调用函数的问题。不幸的是，现在所有的情况下都需要调用函数并等待结果，而内部 `if` 块完全不需要其结果。
 
@@ -147,7 +147,7 @@ fn generate_workout(intensity: i32, random_number: i32) {
 
 ### 闭包储存了之后会执行的代码
 
-不同于总是在 `if` 块之前调用 `simulated_expensive_calculation` 函数并储存其结果，我们可以定义一个闭包并将其储存在变量中，如列表 13-5 所示。实际上可以选择将整个 `simulated_expensive_calculation` 函数体移动到这里引入的闭包中：
+不同于总是在 `if` 块之前调用 `simulated_expensive_calculation` 函数并储存其结果，我们可以定义一个闭包并将其储存在变量中，如示例 13-5 所示。实际上可以选择将整个 `simulated_expensive_calculation` 函数体移动到这里引入的闭包中：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -163,7 +163,7 @@ let expensive_closure = |num| {
 # expensive_closure(5);
 ```
 
-<span class="caption">列表 13-5：使用慢计算的函数体定义一个闭包并储存到变量 `expensive_closure` 中</span>
+<span class="caption">示例 13-5：使用慢计算的函数体定义一个闭包并储存到变量 `expensive_closure` 中</span>
 
 闭包定义是 `expensive_closure` 赋值的 `=` 之后的部分。闭包的定义以一对竖线（`|`）开始。在竖线中指定闭包的参数；之所以选择这个语法是因为它与 Smalltalk 和 Ruby 的闭包定义类似。这个闭包有一个参数 `num`；如果有多于一个参数，可以使用逗号分隔，比如 `|param1, param2|`。
 
@@ -171,7 +171,7 @@ let expensive_closure = |num| {
 
 注意这个 `let` 语句意味着 `expensive_closure` 包含一个匿名函数的 **定义**，不是调用匿名函数的 **返回值**。回忆一下使用闭包的原因是我们需要在一个位置定义代码，储存代码，并在之后的位置实际调用它；期望调用的代码现在储存在 `expensive_closure` 中。
 
-现在我们定义了闭包，可以改变 `if` 块中的代码来调用闭包以执行代码并获取结果值。调用闭包看起来非常类似调用函数；指定存放闭包定义的变量名并后跟包含期望使用的参数的括号，如列表 13-6 所示：
+现在我们定义了闭包，可以改变 `if` 块中的代码来调用闭包以执行代码并获取结果值。调用闭包看起来非常类似调用函数；指定存放闭包定义的变量名并后跟包含期望使用的参数的括号，如示例 13-6 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -208,9 +208,9 @@ fn generate_workout(intensity: i32, random_number: i32) {
 }
 ```
 
-<span class="caption">列表 13-6：调用定义的 `expensive_closure`</span>
+<span class="caption">示例 13-6：调用定义的 `expensive_closure`</span>
 
-现在我们达成了将满计算统一到一个地方的目标，并只会在需要结果的时候执行改代码。然而，我们又重新引入了列表 13-3 中的问题：仍然在第一个 `if` 块中调用了闭包两次，这会调用慢计算两次并使用户多等待一倍的时间。可以通过在 `if` 块中创建一个本地变量存放闭包调用的结果来解决这个问题，不过正因为使用了闭包还有另一个解决方案。稍后会回到这个方案上；首先讨论一下为何闭包定义中和所涉及的 trait 中没有类型注解。
+现在我们达成了将满计算统一到一个地方的目标，并只会在需要结果的时候执行改代码。然而，我们又重新引入了示例 13-3 中的问题：仍然在第一个 `if` 块中调用了闭包两次，这会调用慢计算两次并使用户多等待一倍的时间。可以通过在 `if` 块中创建一个本地变量存放闭包调用的结果来解决这个问题，不过正因为使用了闭包还有另一个解决方案。稍后会回到这个方案上；首先讨论一下为何闭包定义中和所涉及的 trait 中没有类型注解。
 
 ### 闭包类型推断和注解
 
@@ -220,7 +220,7 @@ fn generate_workout(intensity: i32, random_number: i32) {
 
 另外，闭包通常很短并只与对应相对任意的场景较小的上下文中。在这些有限制的上下文中，编译器能可靠的推断参数和返回值的类型，类似于它是如何能够推断大部分变量的类型一样。强制在这些小的匿名函数中注明类型是很恼人的，并且与编译器已知的信息存在大量的重复。
 
-类似于变量，如果相比严格的必要性你更希望增加明确性并变得更啰嗦，可以选择增加类型注解；为列表 13-4 中定义的闭包标注类型将看起来像列表 13-7 中的定义：
+类似于变量，如果相比严格的必要性你更希望增加明确性并变得更啰嗦，可以选择增加类型注解；为示例 13-4 中定义的闭包标注类型将看起来像示例 13-7 中的定义：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -235,7 +235,7 @@ let expensive_closure = |num: i32| -> i32 {
 };
 ```
 
-<span class="caption">列表 13-7：为闭包的参数和返回值增加可选的类型注解</span>
+<span class="caption">示例 13-7：为闭包的参数和返回值增加可选的类型注解</span>
 
 有了类型注解闭包的语法就更类似函数了。如下是一个对其参数加一的函数的定义与拥有相同行为闭包语法的纵向对比。这里增加了一些空格来对其相应部分。这展示了闭包语法如何类似于函数语法，除了使用竖线而不是括号以及几个可选的语法：
 
@@ -248,7 +248,7 @@ let add_one_v4 = |x|               x + 1  ;
 
 第一行展示了一个函数定义，而第二行展示了一个完整标注的闭包定义。第三行闭包定义中省略了类型注解，而第四行去掉了可选的大括号，因为闭包体只有一行。
 
-闭包定义会为每个参数和返回值推断一个具体类型。例如，列表 13-8 中展示了仅仅将参数作为返回值的简短的闭包定义。除了作为示例的目的这个闭包并不是很实用。注意其定义并没有增加任何类型注解：如果尝试调用闭包两次，第一次使用 `String` 类型作为参数而第一次使用 `i32`，则会得到一个错误：
+闭包定义会为每个参数和返回值推断一个具体类型。例如，示例 13-8 中展示了仅仅将参数作为返回值的简短的闭包定义。除了作为示例的目的这个闭包并不是很实用。注意其定义并没有增加任何类型注解：如果尝试调用闭包两次，第一次使用 `String` 类型作为参数而第一次使用 `i32`，则会得到一个错误：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -259,7 +259,7 @@ let s = example_closure(String::from("hello"));
 let n = example_closure(5);
 ```
 
-<span class="caption">列表 13-8：尝试调用一个被推断为两个不同类型的闭包</span>
+<span class="caption">示例 13-8：尝试调用一个被推断为两个不同类型的闭包</span>
 
 编译器给出如下错误：
 
@@ -279,7 +279,7 @@ error[E0308]: mismatched types
 
 ### 使用带有泛型和 `Fn` trait 的闭包
 
-回到我们的健身计划生成 app ，在列表 13-6 中的代码仍然调用了多于需要的慢计算闭包。在全部代码中的每一个需要多个慢计算闭包结果的地方，可以将将结果保存进变量以供复用，这样就可以使用变量而不是再次调用闭包。但是这样就会有很多重复的保存结果变量的地方。
+回到我们的健身计划生成 app ，在示例 13-6 中的代码仍然调用了多于需要的慢计算闭包。在全部代码中的每一个需要多个慢计算闭包结果的地方，可以将将结果保存进变量以供复用，这样就可以使用变量而不是再次调用闭包。但是这样就会有很多重复的保存结果变量的地方。
 
 然而，因为拥有一个慢计算的闭包，我们还可以采取另一个解决方案。可以创建一个存放闭包和调用闭包结果的结构体。该结构体只会在需要结果时执行闭包，并会缓存结果值，这样余下的代码就不必再负责保存结果并可以复用该值。你可能见过这种模式被称 *memoization* 或 *lazy evaluation*。
 
@@ -289,7 +289,7 @@ error[E0308]: mismatched types
 
 为了满足 `Fn` trait bound 我们增加了代表闭包所必须的参数和返回值类型的类型。在这个例子中，闭包有一个 `i32` 的参数并返回一个 `i32`，这样所指定的 trait bound 就是 `Fn(i32) -> i32`。
 
-列表 13-9 展示了存放了闭包和一个 Option 结果值的 `Cacher` 结构体的定义：
+示例 13-9 展示了存放了闭包和一个 Option 结果值的 `Cacher` 结构体的定义：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -302,13 +302,13 @@ struct Cacher<T>
 }
 ```
 
-<span class="caption">列表 13-9：定义一个 `Cacher` 结构体来在 `calculation` 中存放闭包并在 `value` 中存放 Option 值</span>
+<span class="caption">示例 13-9：定义一个 `Cacher` 结构体来在 `calculation` 中存放闭包并在 `value` 中存放 Option 值</span>
 
 结果提 `Cacher` 有一个泛型  `T` 的字段 `calculation`。`T` 的 trait bound 指定了 `T` 是一个使用 `Fn` 的闭包。任何我们希望储存到 `Cacher` 实例的 `calculation` 字段的闭包必须有一个 `i32` 参数（由 `Fn` 之后的括号的内容指定）并必须返回一个 `i32`（由 `->` 之后的内容）。
 
 `value` 是 `Option<i32>` 类型的。在执行闭包之前，`value` 将是 `None`。如果使用 `Cacher` 的代码请求闭包的结果，这时会执行闭包并将结果储存在 `value` 字段的 `Some` 成员中。接着如果代码再次请求闭包的结果，这时不再执行闭包，而是会返回存放在 `Some` 成员中的结果。
 
-刚才讨论的油管 `value` 字段逻辑定义于列表 13-10：
+刚才讨论的油管 `value` 字段逻辑定义于示例 13-10：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -343,7 +343,7 @@ impl<T> Cacher<T>
 }
 ```
 
-<span class="caption">列表 13-10：一个 `Cacher` 的关联函数 `new` 和管理缓存逻辑的 `value` 方法的实现</span>
+<span class="caption">示例 13-10：一个 `Cacher` 的关联函数 `new` 和管理缓存逻辑的 `value` 方法的实现</span>
 
 `Cacher` 结构体的字段是私有的，因为我们希望 `Cacher` 管理这些值而不是任由调用代码潜在的直接改变他们。`Cacher::new` 函数获取一个泛型参数 `T`，它定义于 `impl` 块上下文中并与 `Cacher`  结构体有着相同的 trait bound。`Cacher::new` 返回一个在 `calculation` 字段中存放了指定闭包和在 `value` 字段中存放了 `None` 值的 `Cacher` 实例，因为我们还未执行闭包。
 
@@ -351,7 +351,7 @@ impl<T> Cacher<T>
 
 如果 `self.value` 是 `None`，则会调用 `self.calculation` 中储存的闭包，将结果保存到 `self.value` 以便将来使用，并同时返回结果值。
 
-列表 13-11 展示了如何在列表 13-6 的 `generate_workout` 函数中利用 `Cacher` 结构体：
+示例 13-11 展示了如何在示例 13-6 的 `generate_workout` 函数中利用 `Cacher` 结构体：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -417,9 +417,9 @@ fn generate_workout(intensity: i32, random_number: i32) {
 }
 ```
 
-<span class="caption">列表 13-11：在 `generate_workout` 函数中利用 `Cacher` 结构体来抽象出缓存逻辑</span>
+<span class="caption">示例 13-11：在 `generate_workout` 函数中利用 `Cacher` 结构体来抽象出缓存逻辑</span>
 
-不同于直接将闭包保存进一个变量，我们保存一个新的 `Cacher` 实例来存放闭包。接着，在每一个需要结果的地方，调用 `Cacher` 实例的 `value` 方法。可以调用 `value` 方法任意多次，或者一次也不调用，而慢计算最多只会运行一次。尝试使用列表 13-2 中的 `main` 函数来运行这段程序，并将 `simulated_user_specified_value` 和 `simulated_random_number` 变量中的值来验证在所有情况下在多个 `if` 和 `else` 块中，闭包打印的 `calculating slowly...` 只会在需要时出现并只会出现一次。
+不同于直接将闭包保存进一个变量，我们保存一个新的 `Cacher` 实例来存放闭包。接着，在每一个需要结果的地方，调用 `Cacher` 实例的 `value` 方法。可以调用 `value` 方法任意多次，或者一次也不调用，而慢计算最多只会运行一次。尝试使用示例 13-2 中的 `main` 函数来运行这段程序，并将 `simulated_user_specified_value` 和 `simulated_random_number` 变量中的值来验证在所有情况下在多个 `if` 和 `else` 块中，闭包打印的 `calculating slowly...` 只会在需要时出现并只会出现一次。
 
 `Cacher` 负责确保不会调用超过所需的慢计算所需的逻辑，这样 `generate_workout` 就可以专注业务逻辑了。值缓存是一种更加广泛的实用行为，我们可能希望在代码中的其他闭包中也使用他们。然而，目前 `Cacher` 的实现存在一些小问题，这使得在不同上下文中复用变得很困难。
 
@@ -439,7 +439,7 @@ fn call_with_different_values() {
 
 这个测试使用返回传递给它的值的闭包创建了一个新的 `Cacher` 实例。使用为 1 的 `arg` 和为 2 的 `arg` 调用 `Cacher` 实例的 `value` 方法，同时我们期望使用为 2 的 `arg` 调用 `value` 会返回 2。
 
-使用列表 13-9 和列表 13-10 的 `Cacher` 实现运行测试，它会在 `assert_eq!` 失败并显示如下信息：
+使用示例 13-9 和示例 13-10 的 `Cacher` 实现运行测试，它会在 `assert_eq!` 失败并显示如下信息：
 
 ```text
 thread 'call_with_different_arg_values' panicked at 'assertion failed:
@@ -456,7 +456,7 @@ thread 'call_with_different_arg_values' panicked at 'assertion failed:
 
 在健身计划生成器的例子中，我们只将闭包作为内联匿名函数来使用。不过闭包还有另一个函数所没有的功能：他们可以捕获其环境并访问定义他们的作用域的变量。
 
-列表 13-12 有一个储存在 `equal_to_x` 变量中闭包的例子，它使用了闭包环境中的变量 `x`：
+示例 13-12 有一个储存在 `equal_to_x` 变量中闭包的例子，它使用了闭包环境中的变量 `x`：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -472,7 +472,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 13-12：一个引用了其周围作用域中变量的闭包示例</span>
+<span class="caption">示例 13-12：一个引用了其周围作用域中变量的闭包示例</span>
 
 这里，即便 `x` 并不是 `equal_to_x` 的一个参数，`equal_to_x` 闭包也被允许使用变量 `x`，因为它与 `equal_to_x` 定义于相同的作用域。
 
@@ -513,9 +513,9 @@ closure form instead
 * `Fn` 从其环境不可变的借用值
 * `FnMut` 可变的借用值所以可以改变其环境
 
-当创建一个闭包时，Rust 根据其如何使用环境中变量来推断我们希望如何引用环境。在列表 13-12 中，`equal_to_x` 闭包不可变的借用了 `x`（所以 `equal_to_x` 使用 `Fn` trait），因为闭包体只需要读取 `x` 的值。
+当创建一个闭包时，Rust 根据其如何使用环境中变量来推断我们希望如何引用环境。在示例 13-12 中，`equal_to_x` 闭包不可变的借用了 `x`（所以 `equal_to_x` 使用 `Fn` trait），因为闭包体只需要读取 `x` 的值。
 
-如果我们希望强制闭包获取其使用的环境值的所有权，可以在参数列表前使用 `move` 关键字。这在将闭包传递给新线程以便将数据移动到新线程中时最为实用。第十六章讨论并发时会展示更多 `move` 闭包的例子，不过现在这里修改了列表 13-12 中的代码（作为演示），在闭包定义中增加 `move` 关键字并使用 vector 代替整型，因为整型可以被拷贝而不是移动：
+如果我们希望强制闭包获取其使用的环境值的所有权，可以在参数列表前使用 `move` 关键字。这在将闭包传递给新线程以便将数据移动到新线程中时最为实用。第十六章讨论并发时会展示更多 `move` 闭包的例子，不过现在这里修改了示例 13-12 中的代码（作为演示），在闭包定义中增加 `move` 关键字并使用 vector 代替整型，因为整型可以被拷贝而不是移动：
 
 <span class="filename">文件名: src/main.rs</span>
 

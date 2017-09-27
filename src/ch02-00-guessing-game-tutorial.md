@@ -59,7 +59,7 @@ Hello, world!
 
 ## 处理一次猜测
 
-程序的第一部分请求和处理用户输入，并检查输入是否符合预期的格式。首先，允许用户输入猜测。在 *src/main.rs* 中输入列表 2-1 中的代码。
+程序的第一部分请求和处理用户输入，并检查输入是否符合预期的格式。首先，允许用户输入猜测。在 *src/main.rs* 中输入示例 2-1 中的代码。
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -80,7 +80,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 2-1：获取用户猜测并打印的代码</span>
+<span class="caption">示例 2-1：获取用户猜测并打印的代码</span>
 
 这些代码包含很多信息，我们一点一点地过一遍。为了获取用户输入并打印结果作为输出，我们需要将 `io`（输入/输出）库引入当前作用域。`io` 库来自于标准库（也被称为`std`）：
 
@@ -265,7 +265,7 @@ rand = "0.3.14"
 
 [semver]: http://semver.org
 
-现在，不修改任何代码，构建项目，如列表 2-2 所示：
+现在，不修改任何代码，构建项目，如示例 2-2 所示：
 
 ```text
 $ cargo build
@@ -277,7 +277,7 @@ $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 
-<span class="caption">列表 2-2: 增加 rand crate 作为依赖之后运行 `cargo build` 的输出</span>
+<span class="caption">示例 2-2: 增加 rand crate 作为依赖之后运行 `cargo build` 的输出</span>
 
 可能会出现不同的版本号（多亏了语义化版本，它们与代码是兼容的！），同时显示顺序也可能会有所不同。
 
@@ -336,7 +336,7 @@ rand = "0.4.0"
 
 ### 生成一个随机数
 
-让我们开始 **使用** `rand`。下一步是更新 *src/main.rs*，如列表 2-3 所示：
+让我们开始 **使用** `rand`。下一步是更新 *src/main.rs*，如示例 2-3 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -364,7 +364,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 2-3：为了生成随机数而做的修改</span>
+<span class="caption">示例 2-3：为了生成随机数而做的修改</span>
 
 这里在顶部增加一行 `extern crate rand;` 通知 Rust 我们要使用外部依赖。这也会调用相应的 `use rand`，所以现在可以使用 `rand::` 前缀来调用 `rand` crate 中的任何内容。
 
@@ -400,7 +400,7 @@ You guessed: 5
 
 ## 比较猜测与秘密数字
 
-现在有了用户输入和一个随机数，我们可以比较他们。这个步骤如列表 2-4 所示：
+现在有了用户输入和一个随机数，我们可以比较他们。这个步骤如示例 2-4 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -435,7 +435,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 2-4：处理比较两个数字可能的返回值</span>
+<span class="caption">示例 2-4：处理比较两个数字可能的返回值</span>
 
 新代码的第一行是另一个 `use`，从标准库引入了一个叫做 `std::cmp::Ordering` 的类型。`Ordering` 是一个像 `Result` 一样的枚举，不过它的成员是 `Less`、`Greater` 和 `Equal`。这是比较两个值时可能出现的三种结果。
 
@@ -457,7 +457,7 @@ match guess.cmp(&secret_number) {
 
 让我们看看使用 `match` 表达式的例子。假设用户猜了 50，这时随机生成的秘密数字是 38。比较 50 与 38 时，因为 50 比 38 要大，`cmp` 方法会返回 `Ordering::Greater`。`Ordering::Greater` 是 `match` 表达式得到的值。它检查第一个分支的模式，`Ordering::Less` 与 `Ordering::Greater`并不匹配，所以它忽略了这个分支的动作并来到下一个分支。下一个分支的模式是 `Ordering::Greater`，**正确** 匹配！这个分支关联的代码被执行，在屏幕打印出 `Too big!`。`match` 表达式就此终止，因为该场景下没有检查最后一个分支的必要。
 
-然而，列表 2-4 的代码并不能编译，可以尝试一下：
+然而，示例 2-4 的代码并不能编译，可以尝试一下：
 
 ```text
 $ cargo build
@@ -713,7 +713,7 @@ You guessed: 61
 You win!
 ```
 
-太棒了！再有最后一个小的修改，就能完成猜猜看游戏了：还记得程序依然会打印出秘密数字。在测试时还好，但正式发布时会毁了游戏。删掉打印秘密数字的 `println!`。列表 2-5 为最终代码：
+太棒了！再有最后一个小的修改，就能完成猜猜看游戏了：还记得程序依然会打印出秘密数字。在测试时还好，但正式发布时会毁了游戏。删掉打印秘密数字的 `println!`。示例 2-5 为最终代码：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -756,7 +756,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 2-5：猜猜看游戏的完整代码</span>
+<span class="caption">示例 2-5：猜猜看游戏的完整代码</span>
 
 ## 总结
 

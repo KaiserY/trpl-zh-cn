@@ -19,7 +19,7 @@ enum Result<T, E> {
 
 `T` 和 `E` 是泛型类型参数；第十章会详细介绍泛型。现在你需要知道的就是 `T` 代表成功时返回的 `Ok` 成员中的数据的类型，而 `E` 代表失败时返回的 `Err` 成员中的错误的类型。因为 `Result` 有这些泛型类型参数，我们可以将 `Result` 类型和标准库中为其定义的函数用于很多不同的场景，这些情况中需要返回的成功值和失败值可能会各不相同。
 
-让我们调用一个返回 `Result` 的函数，因为它可能会失败：如列表 9-2 所示打开一个文件：
+让我们调用一个返回 `Result` 的函数，因为它可能会失败：如示例 9-2 所示打开一个文件：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -31,7 +31,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 9-2：打开文件</span>
+<span class="caption">示例 9-2：打开文件</span>
 
 如何知道 `File::open` 返回一个 `Result` 呢？我们可以查看标准库 API 文档，或者可以直接问编译器！如果给 `f` 某个我们知道 **不是** 函数返回值类型的类型注解，接着尝试编译代码，编译器会告诉我们类型不匹配。然后错误信息会告诉我们 `f` 的类型 **应该** 是什么，为此我们将 `let f` 语句改为：
 
@@ -59,7 +59,7 @@ error[E0308]: mismatched types
 
 当 `File::open` 成功的情况下，变量 `f` 的值将会是一个包含文件句柄的 `Ok` 实例。在失败的情况下，`f` 会是一个包含更多关于出现了何种错误信息的 `Err` 实例。
 
-我们需要在列表 9-2 的代码中增加根据 `File::open` 返回值进行不同处理的逻辑。列表 9-3 展示了一个使用基本工具处理 `Result` 的例子：第六章学习过的 `match` 表达式。
+我们需要在示例 9-2 的代码中增加根据 `File::open` 返回值进行不同处理的逻辑。示例 9-3 展示了一个使用基本工具处理 `Result` 的例子：第六章学习过的 `match` 表达式。
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -78,7 +78,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 9-3：使用 `match` 表达式处理可能的 `Result` 成员</span>
+<span class="caption">示例 9-3：使用 `match` 表达式处理可能的 `Result` 成员</span>
 
 注意与 `Option` 枚举一样，`Result` 枚举和其成员也被导入到了 prelude 中，所以就不需要在 `match` 分支中的 `Ok` 和 `Err` 之前指定 `Result::`。
 
@@ -93,7 +93,7 @@ Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
 
 ### 匹配不同的错误
 
-列表 9-3 中的代码不管 `File::open` 是因为什么原因失败都会 `panic!`。我们真正希望的是对不同的错误原因采取不同的行为：如果 `File::open `因为文件不存在而失败，我们希望创建这个文件并返回新文件的句柄。如果 `File::open` 因为任何其他原因失败，例如没有打开文件的权限，我们仍然希望像列表 9-3 那样 `panic!`。让我们看看列表 9-4，其中 `match` 增加了另一个分支：
+示例 9-3 中的代码不管 `File::open` 是因为什么原因失败都会 `panic!`。我们真正希望的是对不同的错误原因采取不同的行为：如果 `File::open `因为文件不存在而失败，我们希望创建这个文件并返回新文件的句柄。如果 `File::open` 因为任何其他原因失败，例如没有打开文件的权限，我们仍然希望像示例 9-3 那样 `panic!`。让我们看看示例 9-4，其中 `match` 增加了另一个分支：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -127,7 +127,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 9-4：使用不同的方式处理不同类型的错误</span>
+<span class="caption">示例 9-4：使用不同的方式处理不同类型的错误</span>
 
 `File::open` 返回的 `Err` 成员中的值类型 `io::Error`，它是一个标准库中提供的结构体。这个结构体有一个返回 `io::ErrorKind` 值的 `kind` 方法可供调用。`io::ErrorKind` 是一个标准库提供的枚举，它的成员对应 `io` 操作可能导致的不同错误类型。我们感兴趣的成员是 `ErrorKind::NotFound`，它代表尝试打开的文件并不存在。
 
@@ -137,7 +137,7 @@ fn main() {
 
 ### 失败时 panic 的捷径：`unwrap` 和 `expect`
 
-`match` 能够胜任它的工作，不过它可能有点冗长并且不总是能很好的表明意图。`Result<T, E>` 类型定义了很多辅助方法来处理各种情况。其中之一叫做 `unwrap`，它的实现就类似于列表 9-3 中的 `match` 语句。如果 `Result` 值是成员 `Ok`，`unwrap` 会返回 `Ok` 中的值。如果 `Result` 是成员 `Err`，`unwrap` 会为我们调用 `panic!`。
+`match` 能够胜任它的工作，不过它可能有点冗长并且不总是能很好的表明意图。`Result<T, E>` 类型定义了很多辅助方法来处理各种情况。其中之一叫做 `unwrap`，它的实现就类似于示例 9-3 中的 `match` 语句。如果 `Result` 值是成员 `Ok`，`unwrap` 会返回 `Ok` 中的值。如果 `Result` 是成员 `Err`，`unwrap` 会为我们调用 `panic!`。
 
 ```rust,should_panic
 use std::fs::File;
@@ -177,7 +177,7 @@ thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
 
 当编写一个其实现会调用一些可能会失败的操作的函数时，除了在这个函数中处理错误外，还可以选择让调用者知道这个错误并决定该如何处理。这被称为 **传播**（*propagating*）错误，这样能更好的控制代码调用，因为比起你代码所拥有的上下文，调用者可能拥有更多信息或逻辑来决定应该如何处理错误。
 
-例如，列表 9-5 展示了一个从文件中读取用户名的函数。如果文件不存在或不能读取，这个函数会将这些错误返回给调用它的代码：
+例如，示例 9-5 展示了一个从文件中读取用户名的函数。如果文件不存在或不能读取，这个函数会将这些错误返回给调用它的代码：
 
 ```rust
 use std::io;
@@ -201,11 +201,11 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<span class="caption">列表 9-5：一个函数使用 `match` 将错误返回给代码调用者</span>
+<span class="caption">示例 9-5：一个函数使用 `match` 将错误返回给代码调用者</span>
 
 首先让我们看看函数的返回值：`Result<String, io::Error>`。这意味着函数返回一个 `Result<T, E>` 类型的值，其中泛型参数 `T` 的具体类型是 `String`，而 `E` 的具体类型是 `io::Error`。如果这个函数没有出任何错误成功返回，函数的调用者会收到一个包含 `String` 的 `Ok` 值————函数从文件中读取到的用户名。如果函数遇到任何错误，函数的调用者会收到一个 `Err` 值，它储存了一个包含更多这个问题相关信息的 `io::Error` 实例。这里选择 `io::Error` 作为函数的返回值是因为它正好是函数体中那两个可能会失败的操作的错误返回值：`File::open` 函数和 `read_to_string` 方法。
 
-函数体以 `File::open` 函数开头。接着使用 `match` 处理返回值 `Result`，类似于列表 9-3 中的 `match`，唯一的区别是不再当 `Err` 时调用 `panic!`，而是提早返回并将 `File::open` 返回的错误值作为函数的错误返回值传递给调用者。如果 `File::open` 成功了，我们将文件句柄储存在变量 `f` 中并继续。
+函数体以 `File::open` 函数开头。接着使用 `match` 处理返回值 `Result`，类似于示例 9-3 中的 `match`，唯一的区别是不再当 `Err` 时调用 `panic!`，而是提早返回并将 `File::open` 返回的错误值作为函数的错误返回值传递给调用者。如果 `File::open` 成功了，我们将文件句柄储存在变量 `f` 中并继续。
 
 接着我们在变量 `s` 中创建了一个新 `String` 并调用文件句柄 `f` 的 `read_to_string` 方法来将文件的内容读取到 `s` 中。`read_to_string` 方法也返回一个 `Result` 因为它也可能会失败：哪怕是 `File::open` 已经成功了。所以我们需要另一个 `match` 来处理这个 `Result`：如果 `read_to_string` 成功了，那么这个函数就成功了，并返回文件中的用户名，它现在位于被封装进 `Ok` 的 `s` 中。如果`read_to_string` 失败了，则像之前处理 `File::open` 的返回值的 `match` 那样返回错误值。并不需要显式的调用 `return`，因为这是函数的最后一个表达式。
 
@@ -215,7 +215,7 @@ fn read_username_from_file() -> Result<String, io::Error> {
 
 ### 传播错误的捷径：`?`
 
-列表 9-6 展示了一个 `read_username_from_file` 的实现，它实现了与列表 9-5 中的代码相同的功能，不过这个实现是使用了问号运算符的：
+示例 9-6 展示了一个 `read_username_from_file` 的实现，它实现了与示例 9-5 中的代码相同的功能，不过这个实现是使用了问号运算符的：
 
 ```rust
 use std::io;
@@ -230,11 +230,11 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<span class="caption">列表 9-6：一个使用 `?` 向调用者返回错误的函数</span>
+<span class="caption">示例 9-6：一个使用 `?` 向调用者返回错误的函数</span>
 
-`Result` 值之后的 `?` 被定义为与列表 9-5 中定义的处理 `Result` 值的 `match` 表达式有着完全相同的工作方式。如果 `Result` 的值是 `Ok`，这个表达式将会返回 `Ok` 中的值而程序将继续执行。如果值是 `Err`，`Err` 中的值将作为整个函数的返回值，就好像使用了 `return` 关键字一样，这样错误值就被传播给了调用者。
+`Result` 值之后的 `?` 被定义为与示例 9-5 中定义的处理 `Result` 值的 `match` 表达式有着完全相同的工作方式。如果 `Result` 的值是 `Ok`，这个表达式将会返回 `Ok` 中的值而程序将继续执行。如果值是 `Err`，`Err` 中的值将作为整个函数的返回值，就好像使用了 `return` 关键字一样，这样错误值就被传播给了调用者。
 
-在列表 9-6 的上下文中，`File::open` 调用结尾的 `?` 将会把 `Ok` 中的值返回给变量 `f`。如果出现了错误，`?` 会提早返回整个函数并将任何 `Err` 值传播给调用者。同理也适用于 `read_to_string` 调用结尾的 `?`。
+在示例 9-6 的上下文中，`File::open` 调用结尾的 `?` 将会把 `Ok` 中的值返回给变量 `f`。如果出现了错误，`?` 会提早返回整个函数并将任何 `Err` 值传播给调用者。同理也适用于 `read_to_string` 调用结尾的 `?`。
 
 `?` 消除了大量样板代码并使得函数的实现更简单。我们甚至可以在 `?` 之后直接使用链式方法调用来进一步缩短代码：
 
@@ -252,11 +252,11 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-在 `s` 中创建新的 `String` 被放到了函数开头；这没有什么变化。我们对 `File::open("hello.txt")?` 的结果直接链式调用了 `read_to_string`，而不再创建变量 `f`。仍然需要 `read_to_string` 调用结尾的 `?`，而且当 `File::open` 和 `read_to_string` 都成功没有失败时返回包含用户名 `s` 的 `Ok` 值。其功能再一次与列表 9-5 和列表 9-5 保持一致，不过这是一个与众不同且更符合工程学的写法。
+在 `s` 中创建新的 `String` 被放到了函数开头；这没有什么变化。我们对 `File::open("hello.txt")?` 的结果直接链式调用了 `read_to_string`，而不再创建变量 `f`。仍然需要 `read_to_string` 调用结尾的 `?`，而且当 `File::open` 和 `read_to_string` 都成功没有失败时返回包含用户名 `s` 的 `Ok` 值。其功能再一次与示例 9-5 和示例 9-5 保持一致，不过这是一个与众不同且更符合工程学的写法。
 
 ### `?` 只能被用于返回 `Result` 的函数
 
-`?` 只能被用于返回值类型为 `Result` 的函数，因为他被定义为与列表 9-5 中的 `match` 表达式有着完全相同的工作方式。`match` 的 `return Err(e)` 部分要求返回值类型是 `Result`，所以函数的返回值必须是 `Result` 才能与这个 `return` 相兼容。
+`?` 只能被用于返回值类型为 `Result` 的函数，因为他被定义为与示例 9-5 中的 `match` 表达式有着完全相同的工作方式。`match` 的 `return Err(e)` 部分要求返回值类型是 `Result`，所以函数的返回值必须是 `Result` 才能与这个 `return` 相兼容。
 
 让我们看看在 `main` 函数中使用 `?` 会发生什么，如果你还记得的话它的返回值类型是`()`：
 

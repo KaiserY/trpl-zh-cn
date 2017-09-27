@@ -65,7 +65,7 @@ pub fn add_one(x: i32) -> i32 {
 }
 ```
 
-打开 `adder` 的 *src/main.rs* 并增加一行 `extern crate` 将新的 `add-one` 库引入作用域，并修改 `main` 函数来调用 `add_one` 函数，如列表 14-12 所示：
+打开 `adder` 的 *src/main.rs* 并增加一行 `extern crate` 将新的 `add-one` 库引入作用域，并修改 `main` 函数来调用 `add_one` 函数，如示例 14-12 所示：
 
 ```rust,ignore
 extern crate add_one;
@@ -76,7 +76,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 14-12：使用来自 `adder` crate 的库 crate `add-one`</span>
+<span class="caption">示例 14-12：使用来自 `adder` crate 的库 crate `add-one`</span>
 
 在 *adder* 目录下运行 `cargo build` 来构建 `adder` crate！
 

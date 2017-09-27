@@ -4,7 +4,7 @@
 > <br>
 > commit b693c8400817f1022820fd63e3529cbecc35070c
 
-接下来我们将读取由命令行文件名参数指定的文件。首先，需要一个用来测试的示例文件——用来确保 `minigrep` 正常工作的最好的文件是拥有少量文本和多个行且有一些重复单词的文件。列表 12-3 是一首艾米莉·狄金森（Emily Dickinson）的诗，它正适合这个工作！在项目根目录创建一个文件 `poem.txt`，并输入诗 "I'm nobody! Who are you?"：
+接下来我们将读取由命令行文件名参数指定的文件。首先，需要一个用来测试的示例文件——用来确保 `minigrep` 正常工作的最好的文件是拥有少量文本和多个行且有一些重复单词的文件。示例 12-3 是一首艾米莉·狄金森（Emily Dickinson）的诗，它正适合这个工作！在项目根目录创建一个文件 `poem.txt`，并输入诗 "I'm nobody! Who are you?"：
 
 <span class="filename">文件名: poem.txt</span>
 
@@ -20,9 +20,9 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-<span class="caption">列表 12-3：艾米莉·狄金森的诗 “I’m nobody! Who are you?”，一个好的测试用例</span>
+<span class="caption">示例 12-3：艾米莉·狄金森的诗 “I’m nobody! Who are you?”，一个好的测试用例</span>
 
-创建完这个文件之后，修改 *src/main.rs* 并增加如列表 12-4 所示的打开文件的代码：
+创建完这个文件之后，修改 *src/main.rs* 并增加如示例 12-4 所示的打开文件的代码：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -51,7 +51,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 12-4：读取第二个参数所指定的文件内容</span>
+<span class="caption">示例 12-4：读取第二个参数所指定的文件内容</span>
 
 首先，我们增加了更多的 `use` 语句来引入标准库中的相关部分：需要 `std::fs::File` 来处理文件，而 `std::io::prelude::*` 则包含许多对于 I/O 包括文件 I/O 有帮助的 trait。类似于 Rust 有一个通用的 prelude 来自动引入特定内容，`std::io` 也有其自己的 prelude 来引入处理 I/O 时所需的通用内容。不同于默认的 prelude，必须显式 `use` 位于 `std::io` 中的 prelude。
 

@@ -74,7 +74,7 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 
 这指向了一个不是我们编写的文件，*libcollections/vec.rs*。这是标准库中 `Vec<T>` 的实现。这是当对 vector `v` 使用 `[]` 时 *libcollections/vec.rs* 中会执行的代码，也是真正出现 `panic!` 的地方。
 
-接下来的几行提醒我们可以设置 `RUST_BACKTRACE` 环境变量来得到一个 backtrace 来调查究竟是什么导致了错误。让我们来试试看。列表 9-1 显示了其输出：
+接下来的几行提醒我们可以设置 `RUST_BACKTRACE` 环境变量来得到一个 backtrace 来调查究竟是什么导致了错误。让我们来试试看。示例 9-1 显示了其输出：
 
 ```text
 $ RUST_BACKTRACE=1 cargo run
@@ -116,7 +116,7 @@ stack backtrace:
   17:                0x0 - <unknown>
 ```
 
-<span class="caption">列表 9-1：当设置 `RUST_BACKTRACE` 环境变量时 `panic!` 调用所生成的 backtrace 信息</span>
+<span class="caption">示例 9-1：当设置 `RUST_BACKTRACE` 环境变量时 `panic!` 调用所生成的 backtrace 信息</span>
 
 这里有大量的输出！backtrace 第 11 行指向了我们程序中引起错误的行：*src/main.rs* 的第四行。backtrace 是一个执行到目前位置所有被调用的函数的列表。Rust 的 backtrace 跟其他语言中的一样：阅读 backtrace 的关键是从头开始读直到发现你编写的文件。这就是问题的发源地。这一行往上是你的代码调用的代码；往下则是调用你的代码的代码。这些行可能包含核心 Rust 代码，标准库代码或用到的 crate 代码。
 

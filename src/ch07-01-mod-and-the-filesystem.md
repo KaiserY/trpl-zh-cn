@@ -47,7 +47,7 @@ mod network {
 
 `mod` 关键字的后面是模块的名字，`network`，接着是位于大括号中的代码块。代码块中的一切都位于 `network` 命名空间中。在这个例子中，只有一个函数，`connect`。如果想要在 `network` 模块外面的代码中调用这个函数，需要指定模块名并使用命名空间语法 `::`，像这样：`network::connect()`，而不是只是 `connect()`。
 
-也可以在 *src/lib.rs* 文件中同时存在多个模块。例如，再拥有一个 `client` 模块，它也有一个叫做 `connect` 的函数，如列表 7-1 中所示那样增加这个模块：
+也可以在 *src/lib.rs* 文件中同时存在多个模块。例如，再拥有一个 `client` 模块，它也有一个叫做 `connect` 的函数，如示例 7-1 中所示那样增加这个模块：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -63,11 +63,11 @@ mod client {
 }
 ```
 
-<span class="caption">列表 7-1：`network` 模块和 `client` 一同定义于 *src/lib.rs*</span>
+<span class="caption">示例 7-1：`network` 模块和 `client` 一同定义于 *src/lib.rs*</span>
 
 现在我们有了 `network::connect` 函数和 `client::connect` 函数。他们可能有着完全不同的功能，同时他们也不会彼此冲突，因为他们位于不同的模块。
 
-在这个例子中，因为我们构建的是一个库，作为库入口点的文件是 *src/lib.rs*。然而，对于创建模块来说，*src/lib.rs* 并没有什么特殊意义。也可以在二进制 crate 的 *src/main.rs* 中创建模块，正如在库 crate 的 *src/lib.rs* 创建模块一样。事实上，也可以将模块放入其他模块中。这有助于随着模块的增长，将相关的功能组织在一起并又保持各自独立。如何选择组织代码依赖于如何考虑代码不同部分之间的关系。例如，对于库的用户来说，`client` 模块和它的函数 `connect` 可能放在 `network` 命名空间里显得更有道理，如列表 7-2 所示：
+在这个例子中，因为我们构建的是一个库，作为库入口点的文件是 *src/lib.rs*。然而，对于创建模块来说，*src/lib.rs* 并没有什么特殊意义。也可以在二进制 crate 的 *src/main.rs* 中创建模块，正如在库 crate 的 *src/lib.rs* 创建模块一样。事实上，也可以将模块放入其他模块中。这有助于随着模块的增长，将相关的功能组织在一起并又保持各自独立。如何选择组织代码依赖于如何考虑代码不同部分之间的关系。例如，对于库的用户来说，`client` 模块和它的函数 `connect` 可能放在 `network` 命名空间里显得更有道理，如示例 7-2 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -83,11 +83,11 @@ mod network {
 }
 ```
 
-<span class="caption">列表 7-2：将 `client` 模块移动到 `network` 模块中</span>
+<span class="caption">示例 7-2：将 `client` 模块移动到 `network` 模块中</span>
 
-在 *src/lib.rs* 文件中，将现有的 `mod network` 和 `mod client` 的定义替换为列表 7-2 中的定义，这里将 `client` 模块作为 `network` 的一个内部模块。现在我们有了 `network::connect` 和 `network::client::connect` 函数：同样的，这两个 `connect` 函数也不相冲突，因为他们在不同的命名空间中。
+在 *src/lib.rs* 文件中，将现有的 `mod network` 和 `mod client` 的定义替换为示例 7-2 中的定义，这里将 `client` 模块作为 `network` 的一个内部模块。现在我们有了 `network::connect` 和 `network::client::connect` 函数：同样的，这两个 `connect` 函数也不相冲突，因为他们在不同的命名空间中。
 
-这样，模块之间形成了一个层次结构。*src/lib.rs* 的内容位于最顶层，而其子模块位于较低的层次。如下是列表 7-1 中的例子以层次的方式考虑的结构：
+这样，模块之间形成了一个层次结构。*src/lib.rs* 的内容位于最顶层，而其子模块位于较低的层次。如下是示例 7-1 中的例子以层次的方式考虑的结构：
 
 ```text
 communicator
@@ -95,7 +95,7 @@ communicator
  └── client
 ```
 
-而这是列表 7-2 中例子的的层次结构：
+而这是示例 7-2 中例子的的层次结构：
 
 ```text
 communicator
@@ -103,11 +103,11 @@ communicator
      └── client
 ```
 
-可以看到列表 7-2 中，`client` 是 `network` 的子模块，而不是它的同级模块。更为复杂的项目可以有很多的模块，所以他们需要符合逻辑地组合在一起以便记录他们。在项目中 “符合逻辑” 的意义全凭你的理解和库的用户对你项目领域的认识。利用我们这里讲到的技术来创建同级模块和嵌套的模块，总有一个会是你会喜欢的结构。
+可以看到示例 7-2 中，`client` 是 `network` 的子模块，而不是它的同级模块。更为复杂的项目可以有很多的模块，所以他们需要符合逻辑地组合在一起以便记录他们。在项目中 “符合逻辑” 的意义全凭你的理解和库的用户对你项目领域的认识。利用我们这里讲到的技术来创建同级模块和嵌套的模块，总有一个会是你会喜欢的结构。
 
 ### 将模块移动到其他文件
 
-位于层级结构中的模块，非常类似计算机领域的另一个我们非常熟悉的结构：文件系统！我们可以利用 Rust 的模块系统连同多个文件一起分解 Rust 项目，这样就不会是所有的内容都落到 *src/lib.rs* 或 *src/main.rs* 中了。为了举例，我们将从列表 7-3 中的代码开始：
+位于层级结构中的模块，非常类似计算机领域的另一个我们非常熟悉的结构：文件系统！我们可以利用 Rust 的模块系统连同多个文件一起分解 Rust 项目，这样就不会是所有的内容都落到 *src/lib.rs* 或 *src/main.rs* 中了。为了举例，我们将从示例 7-3 中的代码开始：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -128,7 +128,7 @@ mod network {
 }
 ```
 
-<span class="caption">列表 7-3：三个模块，`client`、`network` 和 `network::server`，他们都定义于 *src/lib.rs*</span>
+<span class="caption">示例 7-3：三个模块，`client`、`network` 和 `network::server`，他们都定义于 *src/lib.rs*</span>
 
 *src/lib.rs* 文件有如下层次结构：
 
@@ -253,7 +253,7 @@ fn connect() {
 }
 ```
 
-当尝试运行 `cargo build` 时，会出现如列表 7-4 中所示的错误：
+当尝试运行 `cargo build` 时，会出现如示例 7-4 中所示的错误：
 
 ```text
 $ cargo build
@@ -276,11 +276,11 @@ note: ... or maybe `use` the module `server` instead of possibly redeclaring it
   |     ^^^^^^
 ```
 
-<span class="caption">列表 7-4：尝试将 `server` 子模块提取到 *src/server.rs* 时出现的错误</span>
+<span class="caption">示例 7-4：尝试将 `server` 子模块提取到 *src/server.rs* 时出现的错误</span>
 
 这个错误说明 “不能在这个位置新声明一个模块” 并指出 *src/network.rs* 中的 `mod server;` 这一行。看来 *src/network.rs* 与 *src/lib.rs* 在某些方面是不同的；继续阅读以理解这是为什么。
 
-列表 7-4 中间的 note 事实上是非常有帮助的，因为它指出了一些我们还未讲到的操作：
+示例 7-4 中间的 note 事实上是非常有帮助的，因为它指出了一些我们还未讲到的操作：
 
 ```text
 note: maybe move this module `network` to its own directory via
@@ -301,7 +301,7 @@ $ mv src/network.rs src/network/mod.rs
 $ mv src/server.rs src/network
 ```
 
-现在如果运行 `cargo build` 的话将顺利编译（虽然仍有警告）。现在模块的布局看起来仍然与列表 7-3 中所有代码都在 *src/lib.rs* 中时完全一样：
+现在如果运行 `cargo build` 的话将顺利编译（虽然仍有警告）。现在模块的布局看起来仍然与示例 7-3 中所有代码都在 *src/lib.rs* 中时完全一样：
 
 ```text
 communicator

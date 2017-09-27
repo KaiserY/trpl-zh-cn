@@ -13,7 +13,7 @@ Rust 和 Cargo 有一些帮助它人更方便找到和使用你发布的包的�
 
 准确的包文档有助于其他用户立即如何以及何时使用他们，所以花一些时间编写文档是值得的。第三章中我们讨论了如何使用 `//` 注释 Rust 代码。Rust 也有特定的用于文档的注释类型，通常被称为 **文档注释**（*documentation comments*），他们会生成 HTML 文档。这些 HTML 展示公有 API 文档注释的内容，他们意在让对库感兴趣的程序员理解如何 **使用** 这个 crate，而不是它是如何被 **实现** 的。
 
-文档注释使用 `///` 而不是 `//` 并支持 Markdown 注解来格式化文本。文档注释就位于需要文档的项的之前。列表 14-2 展示了一个 `my_crate` crate 中 `add_one` 函数的文档注释：
+文档注释使用 `///` 而不是 `//` 并支持 Markdown 注解来格式化文本。文档注释就位于需要文档的项的之前。示例 14-2 展示了一个 `my_crate` crate 中 `add_one` 函数的文档注释：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -32,7 +32,7 @@ pub fn add_one(x: i32) -> i32 {
 }
 ```
 
-<span class="caption">列表 14-2：一个函数的文档注释</span>
+<span class="caption">示例 14-2：一个函数的文档注释</span>
 
 这里，我们提供了一个 `add_one` 函数工作的描述，接着开始了一个标题为 “Examples” 的部分，和展示如何使用 `add_one` 函数的代码。可以运行 `cargo doc` 来生成这个文档注释的 HTML 文档。这个命令运行由 Rust 分发的工具 `rustdoc` 并将生成的 HTML 文档放入 *target/doc* 目录。
 
@@ -44,7 +44,7 @@ pub fn add_one(x: i32) -> i32 {
 
 #### 常用（文档注释）部分
 
-列表 14-2 中使用了 `# Examples` Markdown 标题在 HTML 中创建了一个以 “Examples” 为标题的部分。一些其他经常在文档注释中使用的部分有：
+示例 14-2 中使用了 `# Examples` Markdown 标题在 HTML 中创建了一个以 “Examples” 为标题的部分。一些其他经常在文档注释中使用的部分有：
 
 - Panics：这个函数可能会 `panic!` 的场景。并不希望程序崩溃的函数调用者应该确保他们不会在这些情况下调用此函数。
 - Errors：如果这个函数返回 `Result`，此部分描述可能会出现何种错误以及什么情况会造成这些错误，这有助于调用者编写代码来采用不同的方式处理不同的错误。
@@ -54,7 +54,7 @@ pub fn add_one(x: i32) -> i32 {
 
 #### 文档注释作为测试
 
-在文档注释中增加示例代码块是一个清楚的表明如何使用库的方法，这么做还有一个额外的好处：`cargo test` 也会像测试那样运行文档中的示例代码！没有什么比有例子的文档更好的了！也没有什么比不能正常工作的例子更糟的了，因为代码在编写文档时已经改变。尝试 `cargo test` 运行像列表 14-2 中 `add_one` 函数的文档；应该在测试结果中看到像这样的部分：
+在文档注释中增加示例代码块是一个清楚的表明如何使用库的方法，这么做还有一个额外的好处：`cargo test` 也会像测试那样运行文档中的示例代码！没有什么比有例子的文档更好的了！也没有什么比不能正常工作的例子更糟的了，因为代码在编写文档时已经改变。尝试 `cargo test` 运行像示例 14-2 中 `add_one` 函数的文档；应该在测试结果中看到像这样的部分：
 
 ```text
    Doc-tests my_crate
@@ -71,7 +71,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 
 还有另一种风格的文档注释，`//!`，这为包含注释的项，而不是注释之后的项增加文档。这通常用于 crate 根文件或模块的根文件为 crate 或模块整体提供文档。
 
-作为一个例子，如果我们希望增加描述包含 `add_one` 函数的 `my_crate` crate 目的的文档，可以在 *src/lib.rs* 开头增加以 `//!` 开头的注释，如列表 14-4 所示：
+作为一个例子，如果我们希望增加描述包含 `add_one` 函数的 `my_crate` crate 目的的文档，可以在 *src/lib.rs* 开头增加以 `//!` 开头的注释，如示例 14-4 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -85,7 +85,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 // ...snip...
 ```
 
-<span class="caption">列表 14-4：`my_crate` crate 整体的文档</span>
+<span class="caption">示例 14-4：`my_crate` crate 整体的文档</span>
 
 注意 `//!` 的最后一行之后没有任何代码。因为他们以 `//!` 开头而不是 `///`，这是属于包含此注释的项而不是注释之后项的文档。在这个情况中，包含这个注释的项是 *src/lib.rs* 文件，也就是 crate 根文件。这些注释描述了整个 crate。
 
@@ -106,7 +106,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 
 好消息是，如果结果对于用户来说 **不是** 很方便，你也无需重新安排内部组织：你可以选择使用 `pub use` 重导出（re-export）项来使公有结构不同于私有结构。重导出获取位于一个位置的公有项并将其公开到另一个位置，好像它就定义在这个新位置一样。
 
-例如，假设我们创建了一个模块化了充满艺术化气息的库 `art`。在这个库中是一个包含两个枚举 `PrimaryColor` 和 `SecondaryColor` 的模块 `kinds`，以及一个包含函数 `mix` 的模块 `utils`，如列表 14-6 所示：
+例如，假设我们创建了一个模块化了充满艺术化气息的库 `art`。在这个库中是一个包含两个枚举 `PrimaryColor` 和 `SecondaryColor` 的模块 `kinds`，以及一个包含函数 `mix` 的模块 `utils`，如示例 14-6 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -143,7 +143,7 @@ pub mod utils {
 }
 ```
 
-<span class="caption">列表 14-6：一个库 `art` 其组织包含 `kinds` 和 `utils` 模块</span>
+<span class="caption">示例 14-6：一个库 `art` 其组织包含 `kinds` 和 `utils` 模块</span>
 
 `cargo doc` 所生成的 crate 文档首页如图 14-7 所示：
 
@@ -153,7 +153,7 @@ pub mod utils {
 
 注意 `PrimaryColor` 和 `SecondaryColor` 类型没有在首页中列出，`mix` 函数也是。必须点击 `kinds` 或 `utils` 才能看到他们。
 
-另一个依赖这个库的 crate 需要 `use` 语句来导入 `art` 中的项，这包含指定其当前定义的模块结构。列表 14-8 展示了一个使用 `art` crate 中 `PrimaryColor` 和 `mix` 项的 crate 的例子：
+另一个依赖这个库的 crate 需要 `use` 语句来导入 `art` 中的项，这包含指定其当前定义的模块结构。示例 14-8 展示了一个使用 `art` crate 中 `PrimaryColor` 和 `mix` 项的 crate 的例子：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -170,11 +170,11 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 14-8：一个通过导出内部结构使用 `art` crate 中项的 crate</span>
+<span class="caption">示例 14-8：一个通过导出内部结构使用 `art` crate 中项的 crate</span>
 
-列表 14-8 中使用 `art` crate 代码的作者不得不搞清楚 `PrimaryColor` 位于 `kinds` 模块而 `mix` 位于 `utils` 模块。`art` crate 的模块结构相比使用它的开发者来说对编写它的开发者更有意义。其内部的 `kinds` 模块和 `utils` 模块的组织结构并没有对尝试理解如何使用它的人提供任何有价值的信息。`art` crate 的模块结构因不得不搞清楚所需的内容在何处和必须在 `use` 语句中指定模块名称而显得混乱和不便。
+示例 14-8 中使用 `art` crate 代码的作者不得不搞清楚 `PrimaryColor` 位于 `kinds` 模块而 `mix` 位于 `utils` 模块。`art` crate 的模块结构相比使用它的开发者来说对编写它的开发者更有意义。其内部的 `kinds` 模块和 `utils` 模块的组织结构并没有对尝试理解如何使用它的人提供任何有价值的信息。`art` crate 的模块结构因不得不搞清楚所需的内容在何处和必须在 `use` 语句中指定模块名称而显得混乱和不便。
 
-为了从公有 API 中去掉 crate 的内部组织，我们可以采用列表 14-6 中的 `art` crate 并增加 `pub use` 语句来重导出项到顶层结构，如列表 14-9 所示：
+为了从公有 API 中去掉 crate 的内部组织，我们可以采用示例 14-6 中的 `art` crate 并增加 `pub use` 语句来重导出项到顶层结构，如示例 14-9 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -196,7 +196,7 @@ pub mod utils {
 }
 ```
 
-<span class="caption">列表 14-9：增加 `pub use` 语句重导出项</span>
+<span class="caption">示例 14-9：增加 `pub use` 语句重导出项</span>
 
 现在此 crate 由 `cargo doc` 生成的 API 文档会在首页列出重导出的项以及其链接，如图 14-10 所示，这就使得这些类型易于查找。
 
@@ -204,7 +204,7 @@ pub mod utils {
 
 <span class="caption">图 14-10：`art` 文档的首页，这里列出了重导出的项</span>
 
-`art` crate 的用户仍然可以看见和选择使用列表 14-8 中的内部结构，或者可以使用列表 14-9 中更为方便的结构，如列表 14-11 所示：
+`art` crate 的用户仍然可以看见和选择使用示例 14-8 中的内部结构，或者可以使用示例 14-9 中更为方便的结构，如示例 14-11 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -219,7 +219,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 14-11：一个使用 `art` crate</span>
+<span class="caption">示例 14-11：一个使用 `art` crate</span>
 
 对于有很多嵌套模块的情况，使用 `pub use` 将类型重导出到顶级结构对于使用 crate 的人来说将会是大为不同的体验。
 
