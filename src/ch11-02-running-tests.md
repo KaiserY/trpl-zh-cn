@@ -26,7 +26,7 @@ $ cargo test -- --test-threads=1
 
 如果测试通过了，Rust 的测试库默认会捕获打印到标准输出的任何内容。例如，如果在测试中调用 `println!` 而测试通过了，我们将不会在终端看到 `println!` 的输出：只会看到说明测试通过的行。如果测试失败了，就会看到所有标准输出和其他错误信息。
 
-例如，列表 11-20 有一个无意义的函数它打印出其参数的值并接着返回 10。接着还有一个会通过的测试和一个会失败的测试：
+例如，示例 11-20 有一个无意义的函数它打印出其参数的值并接着返回 10。接着还有一个会通过的测试和一个会失败的测试：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -54,7 +54,7 @@ mod tests {
 }
 ```
 
-<span class="caption">列表 11-10：一个调用了 `println!` 的函数的测试</span>
+<span class="caption">示例 11-10：一个调用了 `println!` 的函数的测试</span>
 
 运行 `cargo test` 将会看到这些测试的输出：
 
@@ -85,7 +85,7 @@ test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 $ cargo test -- --nocapture
 ```
 
-使用 `--nocapture` 参数再次运行列表 11-10 中的测试会显示：
+使用 `--nocapture` 参数再次运行示例 11-10 中的测试会显示：
 
 ```text
 running 2 tests
@@ -111,7 +111,7 @@ test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 
 有时运行整个测试集会耗费很长时间。如果你负责特定位置的代码，你可能会希望只运行这些代码相关的测试。可以向 `cargo test` 传递希望运行的测试的（部分）名称作为参数来选择运行哪些测试。
 
-为了展示如何运行测试的子集，列表 11-11 使用 `add_two` 函数创建了三个测试来供我们选择运行哪一个：
+为了展示如何运行测试的子集，示例 11-11 使用 `add_two` 函数创建了三个测试来供我们选择运行哪一个：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -141,7 +141,7 @@ mod tests {
 }
 ```
 
-<span class="caption">列表 11-11：不同名称的三个测试</span>
+<span class="caption">示例 11-11：不同名称的三个测试</span>
 
 如果没有传递任何参数就运行测试，如你所见，所有测试都会并行运行：
 

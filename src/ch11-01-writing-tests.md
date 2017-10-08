@@ -35,13 +35,13 @@ mod tests {
 }
 ```
 
-<span class="caption">列表 11-1：由 `cargo new` 自动生成的测试模块和函数</span>
+<span class="caption">示例 11-1：由 `cargo new` 自动生成的测试模块和函数</span>
 
 现在让我们暂时忽略 `tests` 模块和 `#[cfg(test)]` 注解并只关注函数来了解其如何工作。注意 `fn` 行之前的 `#[test]`：这个属性表明这是一个测试函数，这样测试执行者就知道将其作为测试处理。也可以在 `tests` 模块中拥有非测试的函数来帮助我们建立通用场景或进行常见操作，所以需要使用 `#[test]` 属性标明哪些函数是测试。
 
 这个函数目前没有任何内容，这意味着没有代码会使测试失败；一个空的测试是可以通过的！让我们运行一下看看它是否通过了。
 
-`cargo test` 命令会运行项目中所有的测试，如列表 11-2 所示：
+`cargo test` 命令会运行项目中所有的测试，如示例 11-2 所示：
 
 ```text
 $ cargo test
@@ -61,7 +61,7 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-<span class="caption">列表 11-2：运行自动生成测试的输出</span>
+<span class="caption">示例 11-2：运行自动生成测试的输出</span>
 
 Cargo 编译并运行了测试。在 `Compiling`、`Finished` 和 `Running` 这几行之后，可以看到 `running 1 test` 这一行。下一行显示了生成的测试函数的名称，它是 `it_works`，以及测试的运行结果，`ok`。接着可以看到全体测试运行结果的总结：`test result: ok.` 意味着所有测试都通过了。`1 passed; 0 failed` 表示通过或失败的测试数量。
 
@@ -91,7 +91,7 @@ test tests::exploration ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-让我们增加另一个测试，不过这一次是一个会失败的测试！当测试函数中出现 panic 时测试就失败了。每一个测试都在一个新线程中运行，当主线程发现测试线程异常了，就将对应测试标记为失败。第九章讲到了最简单的造成 panic 的方法：调用 `panic!` 宏！写入新函数后 `src/lib.rs` 现在看起来如列表 11-3 所示：
+让我们增加另一个测试，不过这一次是一个会失败的测试！当测试函数中出现 panic 时测试就失败了。每一个测试都在一个新线程中运行，当主线程发现测试线程异常了，就将对应测试标记为失败。第九章讲到了最简单的造成 panic 的方法：调用 `panic!` 宏！写入新函数后 `src/lib.rs` 现在看起来如示例 11-3 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -109,10 +109,10 @@ mod tests {
 }
 ```
 
-<span class="caption">列表 11-3：增加第二个测试：他会失败因为调用了 `panic!` 宏</span>
+<span class="caption">示例 11-3：增加第二个测试：他会失败因为调用了 `panic!` 宏</span>
 
 
-再次 `cargo test` 运行测试。输出应该看起来像列表 11-4，它表明 `exploration` 测试通过了而 `another` 失败了：
+再次 `cargo test` 运行测试。输出应该看起来像示例 11-4，它表明 `exploration` 测试通过了而 `another` 失败了：
 
 ```text
 running 2 tests
@@ -133,7 +133,7 @@ test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 error: test failed
 ```
 
-<span class="caption">列表 11-4：一个测试通过和一个测试失败的测试结果</span>
+<span class="caption">示例 11-4：一个测试通过和一个测试失败的测试结果</span>
 
 `test tests::another` 这一行是 `FAILED` 而不是 `ok` 了。在单独测试结果和总结之间多了两个新的部分：第一个部分显示了测试失败的详细原因。在这个例子中，`another` 因为 `panicked at 'Make this test fail'` 而失败，这位于 *src/lib.rs* 的第 9 行。下一部分仅仅列出了所有失败的测试，这在很有多测试和很多失败测试的详细输出时很有帮助。可以使用失败测试的名称来只运行这个测试，这样比较方便调试；下一部分会讲到更多运行测试的方法。
 
@@ -145,7 +145,7 @@ error: test failed
 
 `assert!` 宏由标准库提供，在希望确保测试中一些条件为 `true` 时非常有用。需要向 `assert!` 宏提供一个计算为布尔值的参数。如果值是 `true`，`assert!` 什么也不做同时测试会通过。如果值为 `false`，`assert!` 调用 `panic!` 宏，这会导致测试失败。这是一个帮助我们检查代码是否以期望的方式运行的宏。
 
-回忆一下第五章中，列表 5-9 中有一个 `Rectangle` 结构体和一个 `can_hold` 方法，在列表 11-5 中再次使用他们。将他们放进 *src/lib.rs* 而不是 *src/main.rs* 并使用 `assert!` 宏编写一些测试。
+回忆一下第五章中，示例 5-9 中有一个 `Rectangle` 结构体和一个 `can_hold` 方法，在示例 11-5 中再次使用他们。将他们放进 *src/lib.rs* 而不是 *src/main.rs* 并使用 `assert!` 宏编写一些测试。
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -163,9 +163,9 @@ impl Rectangle {
 }
 ```
 
-<span class="caption">列表 11-5：第五章中 `Rectangle` 结构体和其 `can_hold` 方法</span>
+<span class="caption">示例 11-5：第五章中 `Rectangle` 结构体和其 `can_hold` 方法</span>
 
-`can_hold` 方法返回一个布尔值，这意味着它完美符合 `assert!` 宏的使用场景。在列表 11-6 中，让我们编写一个 `can_hold` 方法的测试来作为练习，这里创建一个长为 8 宽为 7 的 `Rectangle` 实例，并假设它可以放得下另一个长为 5 宽为 1 的 `Rectangle` 实例：
+`can_hold` 方法返回一个布尔值，这意味着它完美符合 `assert!` 宏的使用场景。在示例 11-6 中，让我们编写一个 `can_hold` 方法的测试来作为练习，这里创建一个长为 8 宽为 7 的 `Rectangle` 实例，并假设它可以放得下另一个长为 5 宽为 1 的 `Rectangle` 实例：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -184,7 +184,7 @@ mod tests {
 }
 ```
 
-<span class="caption">列表 11-6：一个 `can_hold` 的测试，检查一个较大的矩形确实能放得下一个较小的矩形</span>
+<span class="caption">示例 11-6：一个 `can_hold` 的测试，检查一个较大的矩形确实能放得下一个较小的矩形</span>
 
 注意在 `tests` 模块中新增加了一行：`use super::*;`。`tests` 是一个普通的模块，它遵循第七章介绍的通常的可见性规则。因为这是一个内部模块，需要将外部模块中被测试的代码引入到内部模块的作用域中。这里选择使用全局导入使得外部模块定义的所有内容在 `tests` 模块中都是可用的。
 
@@ -276,7 +276,7 @@ test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 
 测试功能的一个常用方法是将需要测试代码的值与期望值做比较，并检查是否相等。可以通过向 `assert!` 宏传递一个使用 `==` 运算符的表达式来做到。不过这个操作实在是太常见了，以至于标注库提供了一对宏来方便处理这些操作：`assert_eq!` 和 `assert_ne!`。这两个宏分别比较两个值是相等还是不相等。当断言失败时他们也会打印出这两个值具体是什么，以便于观察测试 **为什么** 失败，而 `assert!` 只会打印出它从 `==` 表达式中得到了 `false` 值，而不是导致 `false` 的两个值。
 
-列表 11-7 中，让我们编写一个对其参数加二并返回结果的函数 `add_two`。接着使用 `assert_eq!` 宏测试这个函数：
+示例 11-7 中，让我们编写一个对其参数加二并返回结果的函数 `add_two`。接着使用 `assert_eq!` 宏测试这个函数：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -296,7 +296,7 @@ mod tests {
 }
 ```
 
-<span class="caption">列表 11-7：使用 `assert_eq!` 宏测试 `add_two`</span>
+<span class="caption">示例 11-7：使用 `assert_eq!` 宏测试 `add_two`</span>
 
 测试通过了！
 
@@ -423,11 +423,11 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 ### 使用 `should_panic` 检查 panic
 
-除了检查代码是否返回期望的正确的值之外，检查代码是否按照期望处理错误情况也是很重要的。例如，考虑第九章列表 9-8 创建的 `Guess` 类型。其他使用 `Guess` 的代码依赖于 `Guess` 实例只会包含 1 到 100 的值的保证。可以编写一个测试来确保创建一个超出范围的值的 `Guess` 实例会 panic。
+除了检查代码是否返回期望的正确的值之外，检查代码是否按照期望处理错误情况也是很重要的。例如，考虑第九章示例 9-8 创建的 `Guess` 类型。其他使用 `Guess` 的代码依赖于 `Guess` 实例只会包含 1 到 100 的值的保证。可以编写一个测试来确保创建一个超出范围的值的 `Guess` 实例会 panic。
 
 可以通过对函数增加另一个属性 `should_panic` 来实现这些。这个属性在函数中的代码 panic 时会通过，而在其中的代码没有 panic 时失败。
 
-列表 11-8 展示了如何编写一个测试来检查 `Guess::new` 按照我们的期望出现的错误情况：
+示例 11-8 展示了如何编写一个测试来检查 `Guess::new` 按照我们的期望出现的错误情况：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -460,7 +460,7 @@ mod tests {
 }
 ```
 
-<span class="caption">列表 11-8：测试会造成 `panic!` 的条件</span>
+<span class="caption">示例 11-8：测试会造成 `panic!` 的条件</span>
 
 `#[should_panic]` 属性位于 `#[test]` 之后和对应的测试函数之前。让我们看看测试通过时它时什么样子：
 
@@ -491,7 +491,7 @@ impl Guess {
 }
 ```
 
-如果运行列表 11-8 的测试，它会失败：
+如果运行示例 11-8 的测试，它会失败：
 
 ```text
 running 1 test
@@ -507,7 +507,7 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 
 这回并没有得到非常有用的信息，不过一旦我们观察测试函数，会发现它标注了 `#[should_panic]`。这个错误意味着代码中函数 `Guess::new(200)` 并没有产生 panic。
 
-然而 `should_panic` 测试可能是非常含糊不清的，因为他们只是告诉我们代码并没有产生 panic。`should_panic` 甚至在测试因为其他不同的原因而不是我们期望发生的情况而 panic 时也会通过。为了使 `should_panic` 测试更精确，可以给 `should_panic` 属性增加一个可选的 `expected` 参数。测试工具会确保错误信息中包含其提供的文本。例如，考虑列表 11-9 中修改过的 `Guess`，这里 `new` 函数根据其值是过大还或者过小而提供不同的 panic 信息：
+然而 `should_panic` 测试可能是非常含糊不清的，因为他们只是告诉我们代码并没有产生 panic。`should_panic` 甚至在测试因为其他不同的原因而不是我们期望发生的情况而 panic 时也会通过。为了使 `should_panic` 测试更精确，可以给 `should_panic` 属性增加一个可选的 `expected` 参数。测试工具会确保错误信息中包含其提供的文本。例如，考虑示例 11-9 中修改过的 `Guess`，这里 `new` 函数根据其值是过大还或者过小而提供不同的 panic 信息：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -544,7 +544,7 @@ mod tests {
 }
 ```
 
-<span class="caption">列表 11-9：一个会带有特定错误信息的 `panic!` 条件的测试</span>
+<span class="caption">示例 11-9：一个会带有特定错误信息的 `panic!` 条件的测试</span>
 
 这个测试会通过，因为 `should_panic` 属性中 `expected` 参数提供的值是 `Guess::new` 函数 panic 信息的子字符串。我们可以指定期望的整个 panic 信息，在这个例子中是 `Guess value must be less than or equal to 100, got 200.`。这依赖于 panic 有多独特或动态，和你希望测试有多准确。在这个例子中，错误信息的子字符串足以确保函数在 `else if value > 100` 的情况下运行。
 

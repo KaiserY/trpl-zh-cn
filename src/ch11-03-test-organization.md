@@ -33,7 +33,7 @@ mod tests {
 
 #### 测试私有函数
 
-测试社区中一直存在关于是否应该对私有函数进行单元测试的论战，而其他语言中难以甚至不可能测试私有函数。不过无论你坚持哪种测试意识形态，Rust 的私有性规则确实允许你测试私有函数，由于私有性规则。考虑列表 11-12 中带有私有函数 `internal_adder` 的代码：
+测试社区中一直存在关于是否应该对私有函数进行单元测试的论战，而其他语言中难以甚至不可能测试私有函数。不过无论你坚持哪种测试意识形态，Rust 的私有性规则确实允许你测试私有函数，由于私有性规则。考虑示例 11-12 中带有私有函数 `internal_adder` 的代码：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -57,7 +57,7 @@ mod tests {
 }
 ```
 
-<span class="caption">列表 11-12：测试私有函数</span>
+<span class="caption">示例 11-12：测试私有函数</span>
 
 注意 `internal_adder` 函数并没有标记为 `pub`，不过因为测试也不过是 Rust 代码同时 `tests` 也仅仅是另一个模块，我们完全可以在测试中导入和调用 `internal_adder`。如果你并不认为私有函数应该被测试，Rust 也不会强迫你这么做。
 
@@ -69,7 +69,7 @@ mod tests {
 
 为了编写集成测试，需要在项目根目录创建一个 *tests* 目录，与 *src* 同级。Cargo 知道如何去寻找这个目录中的集成测试文件。接着可以随意在这个目录中创建任意多的测试文件，Cargo 会将每一个文件当作单独的 crate 来编译。
 
-让我们试一试吧！保留列表 11-12 中 *src/lib.rs* 的代码。创建一个 *tests* 目录，新建一个文件 *tests/integration_test.rs*，并输入列表 11-13 中的代码。
+让我们试一试吧！保留示例 11-12 中 *src/lib.rs* 的代码。创建一个 *tests* 目录，新建一个文件 *tests/integration_test.rs*，并输入示例 11-13 中的代码。
 
 <span class="filename">文件名: tests/integration_test.rs</span>
 
@@ -82,7 +82,7 @@ fn it_adds_two() {
 }
 ```
 
-<span class="caption">列表 11-13：一个 `adder` crate 中函数的集成测试</span>
+<span class="caption">示例 11-13：一个 `adder` crate 中函数的集成测试</span>
 
 我们在顶部增加了 `extern crate adder`，这在单元测试中是不需要的。这是因为每一个 `tests` 目录中的测试文件都是完全独立的 crate，所以需要在每一个文件中导入库。集成测试就像其他库使用者那样通过导入 crate 并只使用公有 API。
 
@@ -113,7 +113,7 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-现在有了三个部分的输出：单元测试、集成测试和文档测试。第一部分单元测试与我们之前见过的一样：每一个单元测试一行（列表 11-12 中有一个叫做 `internal` 的测试），接着是一个单元测试的总结行。
+现在有了三个部分的输出：单元测试、集成测试和文档测试。第一部分单元测试与我们之前见过的一样：每一个单元测试一行（示例 11-12 中有一个叫做 `internal` 的测试），接着是一个单元测试的总结行。
 
 集成测试部分以行 `Running target/debug/deps/integration-test-ce99bcc2479f4607`（输出最后的哈希值可能不同）开头。接着是每一个集成测试中的测试函数一行，以及一个就在 `Doc-tests adder` 部分开始之前的集成测试的总结行。
 

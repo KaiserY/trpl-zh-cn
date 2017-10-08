@@ -4,7 +4,7 @@
 > <br>
 > commit 0a4ed5875aeba78a81ae03ac73aeb84d2e2aca86
 
-我们通过将 `network` 和 `network::server` 的代码分别移动到 *src/network/mod.rs* 和 *src/network/server.rs* 文件中解决了列表 7-4 中出现的错误信息。现在，`cargo build` 能够构建我们的项目，不过仍然有一些警告信息，表示 `client::connect`、`network::connect` 和`network::server::connect` 函数没有被使用：
+我们通过将 `network` 和 `network::server` 的代码分别移动到 *src/network/mod.rs* 和 *src/network/server.rs* 文件中解决了示例 7-4 中出现的错误信息。现在，`cargo build` 能够构建我们的项目，不过仍然有一些警告信息，表示 `client::connect`、`network::connect` 和`network::server::connect` 函数没有被使用：
 
 ```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
@@ -169,7 +169,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 
 ### 私有性示例
 
-让我们看看更多例子作为练习。创建一个新的库项目并在新项目的 *src/lib.rs* 输入列表 7-5 中的代码：
+让我们看看更多例子作为练习。创建一个新的库项目并在新项目的 *src/lib.rs* 输入示例 7-5 中的代码：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -194,7 +194,7 @@ fn try_me() {
 }
 ```
 
-<span class="caption">列表 7-5：私有和公有函数的例子，其中部分是不正确的</span>
+<span class="caption">示例 7-5：私有和公有函数的例子，其中部分是不正确的</span>
 
 在尝试编译这些代码之前，猜测一下 `try_me` 函数的哪一行会出错。接着编译项目来看看是否猜对了，然后继续阅读后面关于错误的讨论！
 
