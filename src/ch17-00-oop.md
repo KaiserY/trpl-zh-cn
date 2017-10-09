@@ -1,4 +1,4 @@
-﻿## Rust 是一个面向对象的编程语言吗？
+﻿# Rust 是一个面向对象的编程语言吗？
 
 > [ch17-00-oop.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch17-00-oop.md)
 > <br>
