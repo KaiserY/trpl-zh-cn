@@ -8,7 +8,7 @@
 
 ### 定义方法
 
-让我们将获取一个 `Rectangle` 实例作为参数的 `area` 函数改写成一个定义于 `Rectangle` 结构体上的 `area` 方法，如列表 5-13 所示：
+让我们将获取一个 `Rectangle` 实例作为参数的 `area` 函数改写成一个定义于 `Rectangle` 结构体上的 `area` 方法，如示例 5-13 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -35,7 +35,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 5-13：在 `Rectangle` 结构体上定义 `area` 方法</span>
+<span class="caption">示例 5-13：在 `Rectangle` 结构体上定义 `area` 方法</span>
 
 为了使函数定义于 `Rectangle` 的上下文中，我们开始了一个 `impl` 块（`impl` 是 *implementation* 的缩写）。接着将函数移动到 `impl` 大括号中，并将签名中的第一个（在这里也是唯一一个）参数和函数体中其他地方的对应参数改成 `self`。然后在`main` 中将我们调用 `area` 方法并传递 `rect1` 作为参数的地方，改成使用 **方法语法**（*method syntax*）在 `Rectangle` 实例上调用 `area` 方法。方法语法获取一个实例并加上一个点号后跟方法名、括号以及任何参数。
 
@@ -78,7 +78,7 @@ fn main() {
 
 ### 带有更多参数的方法
 
-让我们更多的实践一下方法，通过为 `Rectangle` 结构体实现第二个方法。这回，我们让一个 `Rectangle` 的实例获取另一个 `Rectangle` 实例并返回 `self` 能否完全包含第二个长方形，如果能返回 `true` 若不能则返回 `false`。一旦定义了 `can_hold` 方法，就可以运行列表 5-14 中的代码了：
+让我们更多的实践一下方法，通过为 `Rectangle` 结构体实现第二个方法。这回，我们让一个 `Rectangle` 的实例获取另一个 `Rectangle` 实例并返回 `self` 能否完全包含第二个长方形，如果能返回 `true` 若不能则返回 `false`。一旦定义了 `can_hold` 方法，就可以运行示例 5-14 中的代码了：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -93,7 +93,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 5-14：展示还未实现的 `can_hold` 方法的应用</span>
+<span class="caption">示例 5-14：展示还未实现的 `can_hold` 方法的应用</span>
 
 我们希望看到如下输出，因为 `rect2` 的长宽都小于 `rect1`，而 `rect3` 比 `rect1` 要宽：
 
@@ -102,7 +102,7 @@ Can rect1 hold rect2? true
 Can rect1 hold rect3? false
 ```
 
-因为我们想定义一个方法，所以它应该位于 `impl Rectangle` 块中。方法名是 `can_hold`，并且它会获取另一个 `Rectangle` 的不可变借用作为参数。通过观察调用位置的代码可以看出参数是什么类型的：`rect1.can_hold(&rect2)` 传入了 `&rect2`，它是一个 `Rectangle` 的实例 `rect2` 的不可变借用。这是可以理解的，因为我们只需要读取 `rect2`（而不是写入，这意味着我们需要一个可变借用）而且希望 `main` 保持 `rect2` 的所有权这样就可以在调用这个方法后继续使用它。`can_hold` 的返回值是一个布尔值，其实现会分别检查 `self` 的长宽是否都大于另一个 `Rectangle`。让我们在列表 5-13 的 `impl` 块中增加这个新方法，如列表 5-15 所示：
+因为我们想定义一个方法，所以它应该位于 `impl Rectangle` 块中。方法名是 `can_hold`，并且它会获取另一个 `Rectangle` 的不可变借用作为参数。通过观察调用位置的代码可以看出参数是什么类型的：`rect1.can_hold(&rect2)` 传入了 `&rect2`，它是一个 `Rectangle` 的实例 `rect2` 的不可变借用。这是可以理解的，因为我们只需要读取 `rect2`（而不是写入，这意味着我们需要一个可变借用）而且希望 `main` 保持 `rect2` 的所有权这样就可以在调用这个方法后继续使用它。`can_hold` 的返回值是一个布尔值，其实现会分别检查 `self` 的长宽是否都大于另一个 `Rectangle`。让我们在示例 5-13 的 `impl` 块中增加这个新方法，如示例 5-15 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -124,9 +124,9 @@ impl Rectangle {
 }
 ```
 
-<span class="caption">列表 5-15：在 `Rectangle` 上实现 `can_hold` 方法，它获取另一个 `Rectangle` 实例作为参数</span>
+<span class="caption">示例 5-15：在 `Rectangle` 上实现 `can_hold` 方法，它获取另一个 `Rectangle` 实例作为参数</span>
 
-如果结合列表 5-14 的 `main` 函数来运行，就会看到想要得到的输出。方法可以在 `self` 后增加多个参数，而且这些参数就像函数中的参数一样工作。
+如果结合示例 5-14 的 `main` 函数来运行，就会看到想要得到的输出。方法可以在 `self` 后增加多个参数，而且这些参数就像函数中的参数一样工作。
 
 ### 关联函数
 
@@ -154,7 +154,7 @@ impl Rectangle {
 
 ### 多个 `impl` 块
 
-每个结构体都允许拥有多个 `impl` 块。例如，列表 5-15 等同于列表 5-16 的代码，这里每个方法有其自己的 `impl` 块：
+每个结构体都允许拥有多个 `impl` 块。例如，示例 5-15 等同于示例 5-16 的代码，这里每个方法有其自己的 `impl` 块：
 
 ```rust
 # #[derive(Debug)]
@@ -176,7 +176,7 @@ impl Rectangle {
 }
 ```
 
-<span class="caption">列表 5-16：使用多个 `impl` 块重写列表 5-15</span>
+<span class="caption">示例 5-16：使用多个 `impl` 块重写示例 5-15</span>
 
 ## 总结
 

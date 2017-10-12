@@ -58,7 +58,7 @@ fn calculate_length(s: &String) -> usize { // s is a reference to a String
 
 我们将获取引用作为函数参数称为 **借用**（*borrowing*）。正如现实生活中，如果一个人拥有某样东西，你可以从他那里借来。当你使用完毕，必须还回去。
 
-如果我们尝试修改借用的变量呢？尝试列表 4-9 中的代码。剧透：这行不通！
+如果我们尝试修改借用的变量呢？尝试示例 4-9 中的代码。剧透：这行不通！
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -74,7 +74,7 @@ fn change(some_string: &String) {
 }
 ```
 
-<span class="caption">列表 4-9：尝试修改借用的值</span>
+<span class="caption">示例 4-9：尝试修改借用的值</span>
 
 这里是错误：
 
@@ -90,7 +90,7 @@ error: cannot borrow immutable borrowed content `*some_string` as mutable
 
 ### 可变引用
 
-可以通过一个小调整来修复在列表 4-9 代码中的错误，在列表 4-9 的代码中：
+可以通过一个小调整来修复在示例 4-9 代码中的错误，在示例 4-9 的代码中：
 
 <span class="filename">文件名: src/main.rs</span>
 

@@ -33,7 +33,7 @@
 
 ### 提取参数解析器
 
-首先，我们将解析参数的功能提取到一个 `main` 将会调用的函数中，为将命令行解析逻辑移动到 *src/lib.rs* 做准备。列表 12-5 中展示了新 `main` 函数的开头，它调用了新函数 `parse_config`。目前它仍将定义在 *src/main.rs* 中：
+首先，我们将解析参数的功能提取到一个 `main` 将会调用的函数中，为将命令行解析逻辑移动到 *src/lib.rs* 做准备。示例 12-5 中展示了新 `main` 函数的开头，它调用了新函数 `parse_config`。目前它仍将定义在 *src/main.rs* 中：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -54,7 +54,7 @@ fn parse_config(args: &[String]) -> (&str, &str) {
 }
 ```
 
-<span class="caption">列表 12-5：从 `main` 中提取出 `parse_config` 函数</span>
+<span class="caption">示例 12-5：从 `main` 中提取出 `parse_config` 函数</span>
 
 我们仍然将命令行参数收集进一个 vector，不过不同于在`main`函数中将索引 1 的参数值赋值给变量 `query` 和将索引 2 的值赋值给变量 `filename`，我们将整个 vector 传递给 `parse_config` 函数。接着 `parse_config` 函数将包含决定哪个参数该放入哪个变量的逻辑，并将这些值返回到 `main`。仍然在 `main` 中创建变量 `query` 和 `filename`，不过 `main` 不再负责处理命令行参数与变量如何对应。
 
@@ -68,7 +68,7 @@ fn parse_config(args: &[String]) -> (&str, &str) {
 
 > 注意：一些同学将这种拒绝使用相对而言更为合适的复合类型而使用基本类型的模式称为 **基本类型偏执**（*primitive obsession*）。
 
-列表 12-6 展示了新定义的结构体 `Config`，它有字段 `query` 和 `filename`。我们也改变了 `parse_config` 函数来返回一个 `Config` 结构体的实例，并更新 `main` 来使用结构体字段而不是单独的变量：
+示例 12-6 展示了新定义的结构体 `Config`，它有字段 `query` 和 `filename`。我们也改变了 `parse_config` 函数来返回一个 `Config` 结构体的实例，并更新 `main` 来使用结构体字段而不是单独的变量：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -102,7 +102,7 @@ fn parse_config(args: &[String]) -> Config {
 }
 ```
 
-<span class="caption">列表 12-6：重构 `parse_config` 返回一个 `Config` 结构体实例</span>
+<span class="caption">示例 12-6：重构 `parse_config` 返回一个 `Config` 结构体实例</span>
 
 `parse_config` 的签名表明它现在返回一个 `Config` 值。在 `parse_config` 的函数体中，之前返回引用了 `args` 中 `String` 值的字符串 slice，现在我们选择定义 `Config` 来包含拥有所有权的 `String` 值。`main` 中的 `args` 变量是参数值的所有者并只允许 `parse_config` 函数借用他们，这意味着如果 `Config` 尝试获取 `args` 中值的所有权将违反 Rust 的借用规则。
 
@@ -120,7 +120,7 @@ fn parse_config(args: &[String]) -> Config {
 
 目前为止，我们将负责解析命令行参数的逻辑从 `main` 提取到了 `parse_config` 函数中，这有助于我们看清值 `query` 和 `filename` 是相互关联的并应该在代码中表现这种关系。接着我们增加了 `Config` 结构体来描述 `query` 和 `filename` 的相关性，并能够从 `parse_config` 函数中将这些值的名称作为结构体字段名称返回。
 
-所以现在 `parse_config` 函数的目的是创建一个 `Config` 实例，我们可以将 `parse_config` 从一个普通函数变为一个叫做 `new` 的与结构体关联的函数。做出这个改变使得代码更符合习惯：可以像标准库中的 `String` 调用 `String::new` 来创建一个该类型的实例那样，将 `parse_config` 变为一个与 `Config` 关联的 `new` 函数。列表 12-7 展示了需要做出的修改：
+所以现在 `parse_config` 函数的目的是创建一个 `Config` 实例，我们可以将 `parse_config` 从一个普通函数变为一个叫做 `new` 的与结构体关联的函数。做出这个改变使得代码更符合习惯：可以像标准库中的 `String` 调用 `String::new` 来创建一个该类型的实例那样，将 `parse_config` 变为一个与 `Config` 关联的 `new` 函数。示例 12-7 展示了需要做出的修改：
 
 
 <span class="filename">文件名: src/main.rs</span>
@@ -153,7 +153,7 @@ impl Config {
 }
 ```
 
-<span class="caption">列表 12-7：将 `parse_config` 变为 `Config::new`</span>
+<span class="caption">示例 12-7：将 `parse_config` 变为 `Config::new`</span>
 
 这里将 `main` 中调用 `parse_config` 的地方更新为调用 `Config::new`。我们将 `parse_config` 的名字改为 `new` 并将其移动到 `impl` 块中，这使得 `new` 函数与 `Config` 相关联。再次尝试编译并确保它可以工作。
 
@@ -174,7 +174,7 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 ### 改善错误信息
 
-在列表 12-8 中，在 `new` 函数中增加了一个检查在访问索引 1 和 2 之前检查 slice 是否足够长。如果 slice 不够长，我们使用一个更好的错误信息 panic 而不是 `index out of bounds` 信息：
+在示例 12-8 中，在 `new` 函数中增加了一个检查在访问索引 1 和 2 之前检查 slice 是否足够长。如果 slice 不够长，我们使用一个更好的错误信息 panic 而不是 `index out of bounds` 信息：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -187,9 +187,9 @@ fn new(args: &[String]) -> Config {
     // ...snip...
 ```
 
-<span class="caption">列表 12-8：增加一个参数数量检查</span>
+<span class="caption">示例 12-8：增加一个参数数量检查</span>
 
-这类似于列表 9-8 中的 `Guess::new` 函数，那里如果 `value` 参数超出了有效值的范围就调用 `panic!`。不同于检查值的范围，这里检查 `args` 的长度至少是 3，而函数的剩余部分则可以在假设这个条件成立的基础上运行。如果 
+这类似于示例 9-8 中的 `Guess::new` 函数，那里如果 `value` 参数超出了有效值的范围就调用 `panic!`。不同于检查值的范围，这里检查 `args` 的长度至少是 3，而函数的剩余部分则可以在假设这个条件成立的基础上运行。如果 
 `args` 少于 3 个项，则这个条件将为真，并调用 `panic!` 立即终止程序。
 
 有了 `new` 中这几行额外的代码，再次不带任何参数运行程序并看看现在错误看起来像什么：
@@ -202,13 +202,13 @@ thread 'main' panicked at 'not enough arguments', src/main.rs:29
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-这个输出就好多了，现在有了一个合理的错误信息。然而，我们还有一堆额外的信息不希望提供给用户。所以在这里使用列表 9-8 中的技术可能不是最好的；无论如何 `panic!` 调用更适合程序上的问题而不是使用上的问题，正如第九章所讲到的。相反我们可以使用那一章学习的另一个技术：返回一个可以表明成功或错误的 `Result`。
+这个输出就好多了，现在有了一个合理的错误信息。然而，我们还有一堆额外的信息不希望提供给用户。所以在这里使用示例 9-8 中的技术可能不是最好的；无论如何 `panic!` 调用更适合程序上的问题而不是使用上的问题，正如第九章所讲到的。相反我们可以使用那一章学习的另一个技术：返回一个可以表明成功或错误的 `Result`。
 
 #### 从 `new` 中返回 `Result` 而不是调用 `panic!`
 
 我们可以选择返回一个 `Result` 值，它在成功时会包含一个 `Config` 的实例，而在错误时会描述问题。当 `Config::new` 与 `main` 交流时，可以使用 `Result` 类型来表明这里存在问题。接着修改 `main` 将 `Err` 成员转换为对用户更友好的错误，而不是 `panic!` 调用产生的关于 `thread 'main'` 和 `RUST_BACKTRACE` 的文本。
 
-列表 12-9 展示了为了返回 `Result` 在 `Config::new` 的返回值和函数体中所需的改变：
+示例 12-9 展示了为了返回 `Result` 在 `Config::new` 的返回值和函数体中所需的改变：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -227,7 +227,7 @@ impl Config {
 }
 ```
 
-<span class="caption">列表 12-9：从 `Config::new` 中返回 `Result`</span>
+<span class="caption">示例 12-9：从 `Config::new` 中返回 `Result`</span>
 
 现在 `new` 函数返回一个 `Result`，在成功时带有一个 `Config` 实例而在出现错误时带有一个 `&'static str`。回忆一下第十章 “静态生命周期” 中讲到 `&'static str` 是一个字符串字面值，也是目前的错误信息。
 
@@ -237,7 +237,7 @@ impl Config {
 
 ### `Config::new` 调用并处理错误
 
-为了处理错误情况并打印一个对用户友好的信息，我们需要像列表 12-10 那样更新 `main` 函数来处理现在 `Config::new` 返回的 `Result`。另外还需要负责手动实现 `panic!` 的使用非零错误码退出命令行工具的工作。非零的退出状态是一个告诉调用程序的进程我们的程序以错误状态退出的惯例信号。
+为了处理错误情况并打印一个对用户友好的信息，我们需要像示例 12-10 那样更新 `main` 函数来处理现在 `Config::new` 返回的 `Result`。另外还需要负责手动实现 `panic!` 的使用非零错误码退出命令行工具的工作。非零的退出状态是一个告诉调用程序的进程我们的程序以错误状态退出的惯例信号。
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -255,11 +255,11 @@ fn main() {
     // ...snip...
 ```
 
-<span class="caption">列表 12-10：如果新建 `Config` 失败则使用错误码退出</span>
+<span class="caption">示例 12-10：如果新建 `Config` 失败则使用错误码退出</span>
 
-在上面的列表中，使用了一个之前没有涉及到的方法：`unwrap_or_else`，它定义于标准库的 `Result<T, E>` 上。使用 `unwrap_or_else` 可以进行一些自定义的非 `panic!` 的错误处理。当 `Result` 是 `Ok` 时，这个方法的行为类似于 `unwrap`：它返回 `Ok` 内部封装的值。然而，当其值是 `Err` 时，该方法会调用一个 **闭包**（*closure*），也就是一个我们定义的作为参数传递给 `unwrap_or_else` 的匿名函数。第十三章会更详细的介绍闭包。现在你需要理解的是 `unwrap_or_else` 会将 `Err` 的内部值，也就是列表 12-9 中增加的 `not enough arguments` 静态字符串的情况，传递给闭包中位于两道竖线间的参数 `err`。闭包中的代码在其运行时可以使用这个 `err` 值。
+在上面的示例中，使用了一个之前没有涉及到的方法：`unwrap_or_else`，它定义于标准库的 `Result<T, E>` 上。使用 `unwrap_or_else` 可以进行一些自定义的非 `panic!` 的错误处理。当 `Result` 是 `Ok` 时，这个方法的行为类似于 `unwrap`：它返回 `Ok` 内部封装的值。然而，当其值是 `Err` 时，该方法会调用一个 **闭包**（*closure*），也就是一个我们定义的作为参数传递给 `unwrap_or_else` 的匿名函数。第十三章会更详细的介绍闭包。现在你需要理解的是 `unwrap_or_else` 会将 `Err` 的内部值，也就是示例 12-9 中增加的 `not enough arguments` 静态字符串的情况，传递给闭包中位于两道竖线间的参数 `err`。闭包中的代码在其运行时可以使用这个 `err` 值。
 
-我们新增了一个 `use` 行来从标准库中导入 `process`。在错误的情况闭包中将被运行的代码只有两行：我们打印出了 `err` 值，接着调用了 `std::process::exit`。`process::exit` 会立即停止程序并将传递给它的数字作为退出状态码。这类似于列表 12-8 中使用的基于 `panic!` 的错误处理，除了不会再得到所有的额外输出了。让我们试试：
+我们新增了一个 `use` 行来从标准库中导入 `process`。在错误的情况闭包中将被运行的代码只有两行：我们打印出了 `err` 值，接着调用了 `std::process::exit`。`process::exit` 会立即停止程序并将传递给它的数字作为退出状态码。这类似于示例 12-8 中使用的基于 `panic!` 的错误处理，除了不会再得到所有的额外输出了。让我们试试：
 
 ```text
 $ cargo run
@@ -275,7 +275,7 @@ Problem parsing arguments: not enough arguments
 
 现在我们完成了配置解析的重构：让我们转向程序的逻辑。正如 “二进制项目的关注分离” 部分所展开的讨论，我们将提取一个叫做 `run` 的函数来存放目前 `main `函数中不属于设置配置或处理错误的所有逻辑。一旦完成这些，`main` 函数将简明的足以通过观察来验证，而我们将能够为所有其他逻辑编写测试。
 
-列表 12-11 展示了提取出来的 `run` 函数。目前我们只进行小的增量式的提取函数的改进。我们仍将在 *src/main.rs* 中定义这个函数：
+示例 12-11 展示了提取出来的 `run` 函数。目前我们只进行小的增量式的提取函数的改进。我们仍将在 *src/main.rs* 中定义这个函数：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -302,13 +302,13 @@ fn run(config: Config) {
 // ...snip...
 ```
 
-<span class="caption">列表 12-11：提取 `run` 函数来包含剩余的程序逻辑</span>
+<span class="caption">示例 12-11：提取 `run` 函数来包含剩余的程序逻辑</span>
 
 现在 `run` 函数包含了 `main` 中从读取文件开始的剩余的所有逻辑。`run` 函数获取一个 `Config` 实例作为参数。
 
 #### 从 `run` 函数中返回错误
 
-通过将剩余的逻辑分离进 `run` 函数而不是留在 `main` 中，就可以像列表 12-9 中的 `Config::new` 那样改进错误处理。不再通过 `expect` 允许程序 panic，`run` 函数将会在出错时返回一个 `Result<T, E>`。这让我们进一步以一种对用户友好的方式统一 `main` 中的错误处理。列表 12-12 展示了 `run` 签名和函数体中的改变：
+通过将剩余的逻辑分离进 `run` 函数而不是留在 `main` 中，就可以像示例 12-9 中的 `Config::new` 那样改进错误处理。不再通过 `expect` 允许程序 panic，`run` 函数将会在出错时返回一个 `Result<T, E>`。这让我们进一步以一种对用户友好的方式统一 `main` 中的错误处理。示例 12-12 展示了 `run` 签名和函数体中的改变：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -329,7 +329,7 @@ fn run(config: Config) -> Result<(), Box<Error>> {
 }
 ```
 
-<span class="caption">列表 12-12：修改 `run` 函数返回 `Result`</span>
+<span class="caption">示例 12-12：修改 `run` 函数返回 `Result`</span>
  `Result<(), Box<Error>>`。之前这个函数返回 unit 类型 `()`，现在它仍然保持作为 `Ok` 时的返回值。
 
 对于错误类型，使用了 **trait 对象** `Box<Error>`（在开头使用了 `use` 语句将 `std::error::Error` 引入作用域）。第十七章会涉及 trait 对象。目前只需知道 `Box<Error>` 意味着函数会返回实现了 `Error` trait 的类型，不过无需指定具体将会返回的值的类型。这提供了在不同的错误场景可能有不同类型的错误返回值的灵活性。
@@ -353,7 +353,7 @@ Rust 提示我们的代码忽略了 `Result` 值，它可能表明这里存在�
 
 #### 处理 `main` 中 `run` 返回的错误
 
-我们将检查错误并使用类似列表 12-10 中 `Config::new` 处理错误的技术来处理他们，不过有一些细微的不同：
+我们将检查错误并使用类似示例 12-10 中 `Config::new` 处理错误的技术来处理他们，不过有一些细微的不同：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -387,7 +387,7 @@ fn main() {
 - `Config` 的定义
 - `Config::new` 函数定义
 
-现在 *src/lib.rs* 的内容应该看起来像列表 12-13（为了简洁省略了函数体）：
+现在 *src/lib.rs* 的内容应该看起来像示例 12-13（为了简洁省略了函数体）：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -412,11 +412,11 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 }
 ```
 
-<span class="caption">列表 12-13：将 `Config` 和 `run` 移动到 *src/lib.rs*</span>
+<span class="caption">示例 12-13：将 `Config` 和 `run` 移动到 *src/lib.rs*</span>
 
 这里使用了公有的 `pub`：在 `Config`、其字段和其 `new`方法，以及 `run` 函数上。现在我们有了一个拥有可以测试的公有 API 的库 crate 了。
 
-现在需要在 *src/main.rs* 中使用 `extern crate greprs` 将移动到 *src/lib.rs* 的代码引入二进制 crate 的作用域。接着我们将增加一个 `use greprs::Config` 行将 `Config` 类型引入作用域，并使用库 crate 的名称作为 `run` 函数的前缀，如列表 12-14 所示：
+现在需要在 *src/main.rs* 中使用 `extern crate greprs` 将移动到 *src/lib.rs* 的代码引入二进制 crate 的作用域。接着我们将增加一个 `use greprs::Config` 行将 `Config` 类型引入作用域，并使用库 crate 的名称作为 `run` 函数的前缀，如示例 12-14 所示：
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -436,7 +436,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 12-14：将 `minigrep` crate 引入 *src/main.rs* 的作用域</span>
+<span class="caption">示例 12-14：将 `minigrep` crate 引入 *src/main.rs* 的作用域</span>
 
 为了将库 crate 引入二进制 crate，我们使用 `extern crate minigrep`。接着增加 `use minigrep::Config` 将 `Config` 类型引入作用域，并使用 crate 名作为 `run` 函数的前缀。通过这些重构，所有功能应该能够联系在一起并运行了。运行 `cargo run` 来确保一切都正确的衔接在一起。
 

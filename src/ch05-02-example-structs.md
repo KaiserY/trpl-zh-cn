@@ -6,7 +6,7 @@
 
 为了理解何时会需要使用结构体，让我们编写一个计算长方形面积的程序。我们会从单独的变量开始，接着重构程序直到使用结构体替代他们为止。
 
-使用 Cargo 来创建一个叫做 *rectangles* 的新二进制程序，它会获取一个长方形以像素为单位的长度和宽度并计算它的面积。列表 5-2 中是项目的 *src/main.rs* 文件中为此实现的一个小程序：
+使用 Cargo 来创建一个叫做 *rectangles* 的新二进制程序，它会获取一个长方形以像素为单位的长度和宽度并计算它的面积。示例 5-2 中是项目的 *src/main.rs* 文件中为此实现的一个小程序：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -26,7 +26,7 @@ fn area(length: u32, width: u32) -> u32 {
 }
 ```
 
-<span class="caption">列表 5-8：通过指定长方形的长宽变量来计算长方形面积</span>
+<span class="caption">示例 5-8：通过指定长方形的长宽变量来计算长方形面积</span>
 
 尝试使用 `cargo run` 运行程序：
 
@@ -36,7 +36,7 @@ The area of the rectangle is 1500 square pixels.
 
 ### 使用元组重构
 
-虽然列表 5-8 可以运行，并调用 `area` 函数用长方形的每个维度来计算出面积，不过我们可以做的更好。长度和宽度是相关联的，因为他们在一起才能定义一个长方形。
+虽然示例 5-8 可以运行，并调用 `area` 函数用长方形的每个维度来计算出面积，不过我们可以做的更好。长度和宽度是相关联的，因为他们在一起才能定义一个长方形。
 
 这个做法的问题突显在 `area` 的签名上：
 
@@ -44,7 +44,7 @@ The area of the rectangle is 1500 square pixels.
 fn area(length: u32, width: u32) -> u32 {
 ```
 
-函数 `area` 本应该计算一个长方形的面积，不过函数却有两个参数。这两个参数是相关联的，不过程序自身却哪里也没有表现出这一点。将长度和宽度组合在一起将更易懂也更易处理。第三章的 “将值组合进元组” 部分已经讨论过了一种可行的方法：元组。列表 5-9 是另一个使用元组的版本：
+函数 `area` 本应该计算一个长方形的面积，不过函数却有两个参数。这两个参数是相关联的，不过程序自身却哪里也没有表现出这一点。将长度和宽度组合在一起将更易懂也更易处理。第三章的 “将值组合进元组” 部分已经讨论过了一种可行的方法：元组。示例 5-9 是另一个使用元组的版本：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -63,7 +63,7 @@ fn area(dimensions: (u32, u32)) -> u32 {
 }
 ```
 
-<span class="caption">列表 5-8：使用元组来指定长方形的长宽</span>
+<span class="caption">示例 5-8：使用元组来指定长方形的长宽</span>
 
 在某种程度上说这样好一点了。元组帮助我们增加了一些结构性，现在在调用 `area` 的时候只用传递一个参数。不过在另一方面这个方法却更不明确了：元组并没有给出它元素的名称，所以计算变得更费解了，因为不得不使用索引来获取元组的每一部分：
 
@@ -71,7 +71,7 @@ fn area(dimensions: (u32, u32)) -> u32 {
 
 ### 使用结构体重构：增加更多意义
 
-现在引入结构体的时候了。我们可以将元组转换为一个有整体名称而且每个部分也有对应名字的数据类型，如列表 5-10 所示：
+现在引入结构体的时候了。我们可以将元组转换为一个有整体名称而且每个部分也有对应名字的数据类型，如示例 5-10 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -95,7 +95,7 @@ fn area(rectangle: &Rectangle) -> u32 {
 }
 ```
 
-<span class="caption">列表 5-10：定义 `Rectangle` 结构体</span>
+<span class="caption">示例 5-10：定义 `Rectangle` 结构体</span>
 
 这里我们定义了一个结构体并称其为 `Rectangle`。在 `{}` 中定义了字段 `length` 和 `width`，都是 `u32` 类型的。接着在 `main` 中，我们创建了一个长度为 50 和宽度为 30 的 `Rectangle` 的具体实例。
 
@@ -105,7 +105,7 @@ fn area(rectangle: &Rectangle) -> u32 {
 
 ### 通过衍生 trait 增加实用功能
 
-如果能够在调试程序时打印出 `Rectangle` 实例来查看其所有字段的值就更好了。列表 5-11 像往常一样使用 `println!` 宏：
+如果能够在调试程序时打印出 `Rectangle` 实例来查看其所有字段的值就更好了。示例 5-11 像往常一样使用 `println!` 宏：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -122,7 +122,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 5-11：尝试打印出 `Rectangle` 实例</span>
+<span class="caption">示例 5-11：尝试打印出 `Rectangle` 实例</span>
 
 如果运行代码，会出现带有如下核心信息的错误：
 
@@ -154,7 +154,7 @@ note: `Rectangle` cannot be formatted using `:?`; if it is defined in your
 crate, add `#[derive(Debug)]` or manually implement it
 ```
 
-Rust **确实** 包含了打印出调试信息的功能，不过我们必须为结构体显式选择这个功能。为此，在结构体定义之前加上 `#[derive(Debug)]` 注解，如列表 5-12 所示：
+Rust **确实** 包含了打印出调试信息的功能，不过我们必须为结构体显式选择这个功能。为此，在结构体定义之前加上 `#[derive(Debug)]` 注解，如示例 5-12 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -172,7 +172,7 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 5-12：增加注解来导出 `Debug` trait </span>
+<span class="caption">示例 5-12：增加注解来导出 `Debug` trait </span>
 
 此时此刻运行程序，运行这个程序，不会有任何错误并会出现如下输出：
 

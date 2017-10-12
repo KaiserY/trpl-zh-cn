@@ -2,7 +2,7 @@
 
 > [ch03-02-data-types.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch03-02-data-types.md)
 > <br>
-> commit 1d4f34661d4b13ecda4885d496e1b84cdbcbed31
+> commit f4bce88a0f4c09aaf0c996021729c6d42907bc2a
 
 在 Rust 中，任何值都属于一种明确的 **类型**（*type*），这告诉了 Rust 它被指定了何种数据，以便明确其处理方式。我们将分两部分探讨一些内建类型：标量（scalar）和复合（compound）。
 
@@ -32,7 +32,7 @@ error[E0282]: unable to infer enough type information about `_`
 
 #### 整型
 
-**整数** 是一个没有小数部分的数字。我们在这一章的前面使用过 `i32` 类型。该类型声明指示，i32 关联的值应该是一个占据 32 比特位的有符号整数（因为这个`i`，与`u`代表的无符号相对）。表格 3-1 展示了 Rust 内建的整数类型。每一种变体的有符号和无符号列（例如，*i32*）可以用来声明对应的整数值。
+**整数** 是一个没有小数部分的数字。我们在这一章的前面使用过 `u32` 类型。该类型声明指示，i32 关联的值应该是一个占据 32 比特位的无符号整数（有符号整型类型以 `i` 开头而不是 `u`）。表格 3-1 展示了 Rust 内建的整数类型。每一种变体的有符号和无符号列（例如，*i8*）可以用来声明对应的整数值。
 
 <span class="caption">表格 3-1: Rust 中的整型</span>
 
