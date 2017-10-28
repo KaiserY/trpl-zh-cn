@@ -323,7 +323,7 @@ fn takes_and_gives_back(a_string: String) -> String { // a_string comes into
 
 在每一个函数中都获取并接着返回所有权可能有些冗余。如果我们想要函数使用一个值但不获取所有权改怎么办呢？如果我们还要接着使用它的话，每次都传递出去再传回来就有点烦人了，另外我们也可能想要返回函数体产生的任何（不止一个）数据。
 
-使用元组来返回多个值是可能的，像这样：
+可以使用元组来返回多个值，像这样：
 
 <span class="filename">文件名: src/main.rs</span>
 
