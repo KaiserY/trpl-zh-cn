@@ -343,4 +343,4 @@ fn calculate_length(s: String) -> (String, usize) {
 }
 ```
 
-但是这不免有些形式主义，同时这离一个通用的观点还有很长距离。幸运的是，Rust 对此提供了一个功能，叫做 **引用**（*references*）。
+但是这不免有些形式主义，而且这种场景应该很常见。幸运的是，Rust 对此提供了一个功能，叫做 **引用**（*references*）。
