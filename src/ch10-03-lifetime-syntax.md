@@ -442,7 +442,7 @@ parameters need to be declared and used since the lifetime parameters could go
 with the struct's fields or with references passed into or returned from
 methods. /Carol -->
 
-当为带有生命周期的结构体实现方法时，其语法依然类似示例 10-11 中展示的泛型类型参数的语法：声明和使用生命周期参数的位置依赖于生命周期参数是否同结构体字段或方法参数和返回值相关
+当为带有生命周期的结构体实现方法时，其语法依然类似示例 10-11 中展示的泛型类型参数的语法：声明和使用生命周期参数的位置依赖于生命周期参数是否同结构体字段或方法参数和返回值相关。
 
 （实现方法时）结构体字段的生命周期必须总是在 `impl` 关键字之后声明并在结构体名称之后被使用，因为这些生命周期是结构体类型的一部分。
 
