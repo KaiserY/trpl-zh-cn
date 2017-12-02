@@ -93,7 +93,7 @@ fn generate_workout(intensity: i32, random_number: i32) {
 
 示例 13-3 中的代码有多处慢计算函数的调用。第一个 `if` 块调用了 `simulated_expensive_calculation` 两次，外部 `else` 中的 `if` 完全没有调用它，`else` 中的 `else` 调用了它一次。
 
-`generate_workout` 函数的合意的行为是首先检查用户需要低强度（由小于 25 的系数代表）锻炼还是高强度（25 或以上）锻炼。低强度锻炼计划会根据由 `simulated_expensive_calculation` 函数所模拟的复杂算法建议一定数量的俯卧撑和仰卧起坐，此函数需要强度系数作为输入。
+`generate_workout` 函数的期望行为是首先检查用户需要低强度（由小于 25 的系数表示）锻炼还是高强度（25 或以上）锻炼。低强度锻炼计划会根据由 `simulated_expensive_calculation` 函数所模拟的复杂算法建议一定数量的俯卧撑和仰卧起坐，此函数需要强度系数作为输入。
 
 如果用户需要高强度锻炼，这里有一些额外的逻辑：如果 app 生成的随机数刚好是 3，app 相反会建议用户稍做休息并补充水分。如果不是，则用户会从复杂算法中得到数分钟跑步的高强度锻炼计划。
 
