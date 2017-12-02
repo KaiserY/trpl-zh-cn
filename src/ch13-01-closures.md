@@ -83,7 +83,7 @@ fn generate_workout(intensity: i32, random_number: i32) {
             println!(
                 "Today, run for {} minutes!",
                 simulated_expensive_calculation(intensity)
-            )
+            );
         }
     }
 }
