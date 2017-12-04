@@ -188,9 +188,9 @@ authors = ["Your Name <you@example.com>"]
 
 第一行，`[package]`，是一个段落标题，表明下面的语句用来配置一个包。随着我们在这个文件增加更多的信息，还将增加其他段落。
 
-接下来的三行设置了三个 Cargo 所需的配置，他们告诉 Cargo 需要编译这个项目：名称、版本和作者。Cargo 从环境中获取你的名称和 email 信息。如果不正确，请修改并保存此文件。
+接下来的三行设置了三个 Cargo 所需的配置，项目的名称、版本和作者，它们告诉 Cargo 需要编译这个项目。Cargo 从环境中获取你的名称和 email 信息。如果不正确，请修改并保存此文件。
 
-最后一行，`[dependencies]`，是项目依赖的 *crates* 列表（我们这样称呼 Rust 代码包）段落的开始，这样 Cargo 就知道下载和编译它们了。这个项目并不需要任何其他的 crate，不过在下一章猜猜看教程会用得上。
+最后一行，`[dependencies]`，是项目依赖的 *crates* 列表（我们称呼 Rust 代码包为 crate）段落的开始，这样 Cargo 就知道应该下载和编译它们了。这个项目并不需要任何其他的 crate，不过在下一章猜猜看教程会用得上。
 
 现在看看 *src/main.rs*：
 
@@ -213,21 +213,21 @@ Cargo 期望源文件位于 *src* 目录，将项目根目录留给 README、lic
 
 ### 构建并运行 Cargo 项目
 
-现在让我们看看通过 Cargo 构建和运行 Hello World 程序有什么不同。为此，输入如下命令：
+现在让我们看看通过 Cargo 构建和运行 Hello World 程序有什么不同。为此输入下面的命令：
 
 ```text
 $ cargo build
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
 ```
 
-这应该会创建 *target/debug/hello_cargo*（或者在 Windows 上是 *target\debug\hello_cargo.exe*）可执行文件，可以通过这个命令运行：
+这应该会创建 *target/debug/hello_cargo*可执行文件（或者在 Windows 上是 *target\debug\hello_cargo.exe*），可以通过这个命令运行：
 
 ```text
 $ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
 Hello, world!
 ```
 
-好的！如果一切顺利，`Hello, world!`应该再次打印在终端上。
+很好！如果一切顺利，`Hello, world!`应该再次打印在终端上。
 
 首次运行 `cargo build` 的时候，Cargo 会在项目根目录创建一个新文件，*Cargo.lock*，它看起来像这样：
 
