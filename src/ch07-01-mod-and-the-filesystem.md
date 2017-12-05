@@ -4,7 +4,7 @@
 > <br>
 > commit c6a9e77a1b1ed367e0a6d5dcd222589ad392a8ac
 
-我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章猜猜看游戏中作为依赖使用的 `rand` 就是这样的 crate。
+我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过这次不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章猜猜看游戏中作为依赖使用的 `rand` 就是这样的 crate。
 
 我们将创建一个提供一些通用网络功能的项目的骨架结构；我们将专注于模块和函数的组织，而不担心函数体中的具体代码。这个项目叫做 `communicator`。Cargo 默认会创建一个库 crate 除非指定其他项目类型，所以如果不像一直以来那样加入 `--bin` 参数则项目将会是一个库：
 
@@ -22,11 +22,12 @@ $ cd communicator
 mod tests {
     #[test]
     fn it_works() {
+        assert_eq!(2 + 2, 4);
     }
 }
 ```
 
-Cargo 创建了一个空的测试来帮助我们开始库项目，不像使用 `--bin` 参数那样创建一个 “Hello, world!” 二进制项目。在本章之后的 “使用 `super` 访问父模块” 部分会介绍 `#[]` 和 `mod tests` 语法，目前只需确保他们位于 *src/lib.rs* 底部即可。
+Cargo 创建了一个空的测试来帮助我们开始库项目，不像使用 `--bin` 参数那样创建一个 “Hello, world!” 二进制项目。在本章之后的 “使用 `super` 访问父模块” 部分会介绍 `#[]` 和 `mod tests` 语法，目前只需确保它们位于 *src/lib.rs* 底部即可。
 
 因为没有 *src/main.rs* 文件，所以没有可供 Cargo 的 `cargo run` 执行的东西。因此，我们将使用 `cargo build` 命令只是编译库 crate 的代码。
 
@@ -65,7 +66,7 @@ mod client {
 
 <span class="caption">示例 7-1：`network` 模块和 `client` 一同定义于 *src/lib.rs*</span>
 
-现在我们有了 `network::connect` 函数和 `client::connect` 函数。他们可能有着完全不同的功能，同时他们也不会彼此冲突，因为他们位于不同的模块。
+现在我们有了 `network::connect` 函数和 `client::connect` 函数。它们可能有着完全不同的功能，同时它们也不会彼此冲突，因为它们位于不同的模块。
 
 在这个例子中，因为我们构建的是一个库，作为库入口点的文件是 *src/lib.rs*。然而，对于创建模块来说，*src/lib.rs* 并没有什么特殊意义。也可以在二进制 crate 的 *src/main.rs* 中创建模块，正如在库 crate 的 *src/lib.rs* 创建模块一样。事实上，也可以将模块放入其他模块中。这有助于随着模块的增长，将相关的功能组织在一起并又保持各自独立。如何选择组织代码依赖于如何考虑代码不同部分之间的关系。例如，对于库的用户来说，`client` 模块和它的函数 `connect` 可能放在 `network` 命名空间里显得更有道理，如示例 7-2 所示：
 
@@ -85,7 +86,7 @@ mod network {
 
 <span class="caption">示例 7-2：将 `client` 模块移动到 `network` 模块中</span>
 
-在 *src/lib.rs* 文件中，将现有的 `mod network` 和 `mod client` 的定义替换为示例 7-2 中的定义，这里将 `client` 模块作为 `network` 的一个内部模块。现在我们有了 `network::connect` 和 `network::client::connect` 函数：同样的，这两个 `connect` 函数也不相冲突，因为他们在不同的命名空间中。
+在 *src/lib.rs* 文件中，将现有的 `mod network` 和 `mod client` 的定义替换为示例 7-2 中的定义，这里将 `client` 模块作为 `network` 的一个内部模块。现在我们有了 `network::connect` 和 `network::client::connect` 函数：同样的，这两个 `connect` 函数也不相冲突，因为它们在不同的命名空间中。
 
 这样，模块之间形成了一个层次结构。*src/lib.rs* 的内容位于最顶层，而其子模块位于较低的层次。如下是示例 7-1 中的例子以层次的方式考虑的结构：
 
@@ -103,7 +104,7 @@ communicator
      └── client
 ```
 
-可以看到示例 7-2 中，`client` 是 `network` 的子模块，而不是它的同级模块。更为复杂的项目可以有很多的模块，所以他们需要符合逻辑地组合在一起以便记录他们。在项目中 “符合逻辑” 的意义全凭你的理解和库的用户对你项目领域的认识。利用我们这里讲到的技术来创建同级模块和嵌套的模块，总有一个会是你会喜欢的结构。
+可以看到示例 7-2 中，`client` 是 `network` 的子模块，而不是它的同级模块。更为复杂的项目可以有很多的模块，所以它们需要符合逻辑地组合在一起以便记录它们。在项目中 “符合逻辑” 的意义全凭你的理解和库的用户对你项目领域的认识。利用我们这里讲到的技术来创建同级模块和嵌套的模块，总有一个会是你会喜欢的结构。
 
 ### 将模块移动到其他文件
 
@@ -128,7 +129,7 @@ mod network {
 }
 ```
 
-<span class="caption">示例 7-3：三个模块，`client`、`network` 和 `network::server`，他们都定义于 *src/lib.rs*</span>
+<span class="caption">示例 7-3：三个模块，`client`、`network` 和 `network::server`，它们都定义于 *src/lib.rs*</span>
 
 *src/lib.rs* 文件有如下层次结构：
 
@@ -139,7 +140,7 @@ communicator
      └── server
 ```
 
-如果这些模块有很多函数，而这些函数又很长，将难以在文件中寻找我们需要的代码。因为这些函数被嵌套进一个或多个模块中，同时函数中的代码也会开始变长。这就有充分的理由将`client`、`network` 和 `server`每一个模块从 *src/lib.rs* 抽出并放入他们自己的文件中。
+如果这些模块有很多函数，而这些函数又很长，将难以在文件中寻找我们需要的代码。因为这些函数被嵌套进一个或多个模块中，同时函数中的代码也会开始变长。这就有充分的理由将`client`、`network` 和 `server`每一个模块从 *src/lib.rs* 抽出并放入它们自己的文件中。
 
 首先，将 `client` 模块的代码替换为只有 `client` 模块声明，这样 *src/lib.rs* 看起来应该像这样：
 
@@ -205,7 +206,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   |         ^
 ```
 
-这些警告提醒我们有从未被使用的函数。目前不用担心这些警告；在本章后面的 “使用 `pub` 控制可见性” 部分会解决他们。好消息是，他们仅仅是警告；我们的项目能够被成功编译。
+这些警告提醒我们有从未被使用的函数。目前不用担心这些警告，在本章后面的 “使用 `pub` 控制可见性” 部分会解决它们。好消息是，它们仅仅是警告，我们的项目能够被成功编译。
 
 下面使用相同的模式将 `network` 模块提取到自己的文件中。删除 *src/lib.rs* 中 `network` 模块的内容并在声明后加上一个分号，像这样：
 

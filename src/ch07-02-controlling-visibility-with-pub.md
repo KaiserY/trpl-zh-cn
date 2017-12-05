@@ -26,9 +26,9 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-那么为什么会出现这些错误信息呢？我们构建的是一个库，它的函数的目的是被 **用户** 使用，而不一定要被项目自身使用，所以不应该担心这些 `connect` 函数是未使用的。创建他们的意义就在于被另一个项目而不是被我们自己使用。
+那么为什么会出现这些错误信息呢？我们构建的是一个库，它的函数的目的是被 **用户** 使用，而不一定要被项目自身使用，所以不应该担心这些 `connect` 函数是未使用的。创建它们的意义就在于被另一个项目而不是被我们自己使用。
 
-为了理解为什么这个程序出现了这些警告，尝试作为另一个项目来使用这个 `connect` 库，从外部调用他们。为此，通过创建一个包含这些代码的 *src/main.rs* 文件，在与库 crate 相同的目录创建一个二进制 crate：
+为了理解为什么这个程序出现了这些警告，尝试作为另一个项目来使用这个 `connect` 库，从外部调用它们。为此，通过创建一个包含这些代码的 *src/main.rs* 文件，在与库 crate 相同的目录创建一个二进制 crate：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -82,7 +82,7 @@ error: function `connect` is private
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ```
 
-非常好！另一个不同的错误！好的，不同的错误信息也是值得庆祝的（可能是程序员被黑的最惨的一次）。新错误表明 “函数 `connect` 是私有的”，那么让我们修改 *src/client.rs* 将 `client::connect` 也设为公有：
+非常好！另一个不同的错误！好的，不同的错误信息也是值得庆祝的（可能是程序员被黑的最惨的一次）。新错误表明“函数 `connect` 是私有的”，那么让我们修改 *src/client.rs* 将 `client::connect` 也设为公有：
 
 <span class="filename">文件名: src/client.rs</span>
 
@@ -109,7 +109,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 
 编译通过了，关于 `client::connect` 未被使用的警告消失了！
 
-未被使用的代码并不总是意味着他们需要被设为公有的：如果你 **不** 希望这些函数成为公有 API 的一部分，未被使用的代码警告可能是在警告你这些代码不再需要并可以安全的删除他们。这也可能是警告你出 bug 了，如果你刚刚不小心删除了库中所有这个函数的调用。
+未被使用的代码并不总是意味着它们需要被设为公有的：如果你 **不** 希望这些函数成为公有 API 的一部分，未被使用的代码警告可能是在警告你这些代码不再需要并可以安全的删除它们。这也可能是警告你出 bug 了，如果你刚刚不小心删除了库中所有这个函数的调用。
 
 当然我们的情况是，**确实** 希望另外两个函数也作为 crate 公有 API 的一部分，所以让我们也将其标记为 `pub` 并去掉剩余的警告。修改 *src/network/mod.rs* 为：
 
@@ -138,7 +138,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-恩，虽然将 `network::connect` 设为 `pub` 了我们仍然得到了一个未被使用函数的警告。这是因为模块中的函数是公有的，不过函数所在的 `network` 模块却不是公有的。这回我们是自内向外修改库文件的，而 `client::connect` 的时候是自外向内修改的。我们需要修改 *src/lib.rs* 让 `network` 也是公有的：
+虽然将 `network::connect` 设为 `pub` 了我们仍然得到了一个未被使用函数的警告。这是因为模块中的函数是公有的，不过函数所在的 `network` 模块却不是公有的。这回我们是自内向外修改库文件的，而 `client::connect` 的时候是自外向内修改的。我们需要修改 *src/lib.rs* 让 `network` 也是公有的：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -200,7 +200,7 @@ fn try_me() {
 
 #### 检查错误
 
-`try_me` 函数位于项目的根模块。叫做 `outermost` 的模块是私有的，不过第二条私有性规则说明` try_me` 函数允许访问 `outermost` 模块，因为 `outermost` 位于当前（根）模块，`try_me` 也是。
+`try_me` 函数位于项目的根模块。叫做 `outermost` 的模块是私有的，不过第二条私有性规则说明 `try_me` 函数允许访问 `outermost` 模块，因为 `outermost` 位于当前（根）模块，`try_me` 也是。
 
 `outermost::middle_function` 的调用是正确的。因为 `middle_function` 是公有的，而 `try_me` 通过其父模块 `outermost` 访问 `middle_function`。根据上一段的规则我们可以确定这个模块是可访问的。
 
@@ -210,12 +210,12 @@ fn try_me() {
 
 #### 修改错误
 
-这里有一些尝试修复错误的代码修改意见。在你尝试他们之前，猜测一下他们哪个能修复错误，接着编译查看你是否猜对了，并结合私有性规则理解为什么。
+这里有一些尝试修复错误的代码修改意见。在你尝试它们之前，猜测一下它们哪个能修复错误，接着编译查看你是否猜对了，并结合私有性规则理解为什么。
 
 * 如果 `inside` 模块是公有的？
 * 如果 `outermost` 是公有的而 `inside` 是私有的？
 * 如果在 `inner_function` 函数体中调用 `::outermost::middle_secret_function()`？（开头的两个冒号意味着从根模块开始引用模块。）
 
-请随意设计更多的实验并尝试理解他们！
+请随意设计更多的实验并尝试理解它们！
 
 接下来，让我们讨论一下使用 `use` 关键字将模块项目引入作用域。
