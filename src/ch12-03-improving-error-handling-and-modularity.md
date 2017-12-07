@@ -416,7 +416,7 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 
 这里使用了公有的 `pub`：在 `Config`、其字段和其 `new`方法，以及 `run` 函数上。现在我们有了一个拥有可以测试的公有 API 的库 crate 了。
 
-现在需要在 *src/main.rs* 中使用 `extern crate greprs` 将移动到 *src/lib.rs* 的代码引入二进制 crate 的作用域。接着我们将增加一个 `use greprs::Config` 行将 `Config` 类型引入作用域，并使用库 crate 的名称作为 `run` 函数的前缀，如示例 12-14 所示：
+现在需要在 *src/main.rs* 中使用 `extern crate minigrep` 将移动到 *src/lib.rs* 的代码引入二进制 crate 的作用域。接着我们将增加一个 `use minigrep::Config` 行将 `Config` 类型引入作用域，并使用库 crate 的名称作为 `run` 函数的前缀，如示例 12-14 所示：
 
 <span class="filename">Filename: src/main.rs</span>
 
