@@ -252,7 +252,7 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-在 `s` 中创建新的 `String` 被放到了函数开头；这没有什么变化。我们对 `File::open("hello.txt")?` 的结果直接链式调用了 `read_to_string`，而不再创建变量 `f`。仍然需要 `read_to_string` 调用结尾的 `?`，而且当 `File::open` 和 `read_to_string` 都成功没有失败时返回包含用户名 `s` 的 `Ok` 值。其功能再一次与示例 9-5 和示例 9-5 保持一致，不过这是一个与众不同且更符合工程学的写法。
+在 `s` 中创建新的 `String` 被放到了函数开头；这没有什么变化。我们对 `File::open("hello.txt")?` 的结果直接链式调用了 `read_to_string`，而不再创建变量 `f`。仍然需要 `read_to_string` 调用结尾的 `?`，而且当 `File::open` 和 `read_to_string` 都成功没有失败时返回包含用户名 `s` 的 `Ok` 值。其功能再一次与示例 9-5 和示例 9-6 保持一致，不过这是一个与众不同且更符合工程学的写法。
 
 ### `?` 只能被用于返回 `Result` 的函数
 
