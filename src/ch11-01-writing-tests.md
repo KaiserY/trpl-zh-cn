@@ -135,7 +135,7 @@ error: test failed
 
 <span class="caption">示例 11-4：一个测试通过和一个测试失败的测试结果</span>
 
-`test tests::another` 这一行是 `FAILED` 而不是 `ok` 了。在单独测试结果和总结之间多了两个新的部分：第一个部分显示了测试失败的详细原因。在这个例子中，`another` 因为 `panicked at 'Make this test fail'` 而失败，这位于 *src/lib.rs* 的第 9 行。下一部分仅仅列出了所有失败的测试，这在很有多测试和很多失败测试的详细输出时很有帮助。可以使用失败测试的名称来只运行这个测试，这样比较方便调试；下一部分会讲到更多运行测试的方法。
+`test tests::another` 这一行是 `FAILED` 而不是 `ok` 了。在单独测试结果和总结之间多了两个新的部分：第一个部分显示了测试失败的详细原因。在这个例子中，`another` 因为 `panicked at 'Make this test fail'` 而失败，这位于 *src/lib.rs* 的第 9 行。下一部分仅仅列出了所有失败的测试，这在有很多测试和很多失败测试的详细输出时很有帮助。可以使用失败测试的名称来只运行这个测试，这样比较方便调试；下一部分会讲到更多运行测试的方法。
 
 最后是总结行：总体上讲，一个测试结果是 `FAILED` 的。有一个测试通过和一个测试失败。
 
@@ -462,7 +462,7 @@ mod tests {
 
 <span class="caption">示例 11-8：测试会造成 `panic!` 的条件</span>
 
-`#[should_panic]` 属性位于 `#[test]` 之后和对应的测试函数之前。让我们看看测试通过时它时什么样子：
+`#[should_panic]` 属性位于 `#[test]` 之后和对应的测试函数之前。让我们看看测试通过时它是什么样子：
 
 ```text
 running 1 test

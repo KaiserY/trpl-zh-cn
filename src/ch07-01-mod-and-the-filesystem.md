@@ -96,7 +96,7 @@ communicator
  └── client
 ```
 
-而这是示例 7-2 中例子的的层次结构：
+而这是示例 7-2 中例子的层次结构：
 
 ```text
 communicator
