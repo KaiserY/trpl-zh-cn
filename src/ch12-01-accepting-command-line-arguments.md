@@ -45,7 +45,7 @@ fn main() {
 >
 > 注意 `std::env::args` 在其任何参数包含无效 Unicode 字符时会 panic。如果你需要接受包含无效 Unicode 字符的参数，使用 `std::env::args_os` 代替。这个函数返回 `OsString` 值而不是 `String` 值。这里出于简单考虑使用了 `std::env::args`，因为 `OsString` 值每个平台都不一样而且比 `String` 值处理起来更复杂。
 
-在 `main` 函数的第一行，我们调用了 `env::args`，并立即使用 `collect` 来创建了一个包含迭代器所有值的 vector。`collect` 可以被用来创建很多类型的集合，所以这里显式注明的 `args` 类型来指定我们需要一个字符串 vector。虽然在 Rust 中我们很少会需要注明类型，`collect` 就是一个经常需要注明类型的函数，因为 Rust 不能推断出你想要什么类型的集合。
+在 `main` 函数的第一行，我们调用了 `env::args`，并立即使用 `collect` 来创建了一个包含迭代器所有值的 vector。`collect` 可以被用来创建很多类型的集合，所以这里显式注明 `args` 的类型来指定我们需要一个字符串 vector。虽然在 Rust 中我们很少会需要注明类型，`collect` 就是一个经常需要注明类型的函数，因为 Rust 不能推断出你想要什么类型的集合。
 
 最后，我们使用调试格式 `:?` 打印出 vector。让我们尝试不用参数运行代码，接着用两个参数：
 
