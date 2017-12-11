@@ -308,7 +308,7 @@ struct Cacher<T>
 
 `value` 是 `Option<i32>` 类型的。在执行闭包之前，`value` 将是 `None`。如果使用 `Cacher` 的代码请求闭包的结果，这时会执行闭包并将结果储存在 `value` 字段的 `Some` 成员中。接着如果代码再次请求闭包的结果，这时不再执行闭包，而是会返回存放在 `Some` 成员中的结果。
 
-刚才讨论的油管 `value` 字段逻辑定义于示例 13-10：
+刚才讨论的有关 `value` 字段逻辑定义于示例 13-10：
 
 <span class="filename">文件名: src/main.rs</span>
 
