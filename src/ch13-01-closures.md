@@ -141,7 +141,7 @@ fn generate_workout(intensity: i32, random_number: i32) {
 
 <span class="caption">示例 13-4：将 `simulated_expensive_calculation` 调用提取到一个位置，位于 `if` 块之前并将结果储存在变量 `expensive_result` 中</span>
 
-这个修改统一了 `simulated_expensive_calculation` 调用并解决了第一个 `if` 块中不必要的两次调用函数的问题。不幸的是，现在所有的情况下都需要调用函数并等待结果，而内部 `if` 块完全不需要其结果。
+这个修改统一了 `simulated_expensive_calculation` 调用并解决了第一个 `if` 块中不必要的两次调用函数的问题。不幸的是，现在所有的情况下都需要调用函数并等待结果，包括那个完全不需要这一结果的内部 `if` 块。
 
 我们希望能够在程序的一个位置指定某些代码，并只在程序的某处实际需要结果的时候执行这些代码。这正是闭包的用武之地！
 
