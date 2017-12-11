@@ -102,7 +102,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 
 第七章介绍了如何使用 `mod` 关键字来将代码组织进模块中，如何使用 `pub` 关键字将项变为公有，和如何使用 `use` 关键字将项引入作用域。然而对你开发来说很有道理的结果可能对用户来说就不太方便了。你可能希望将结构组织进有多个层次的层级中，不过想要使用被定义在很深层级中的类型的人可能很难发现这些类型是否存在。他们也可能会厌烦 `use my_crate::some_module::another_module::UsefulType;` 而不是 `use my_crate::UsefulType;` 来使用类型。
 
-公有 API 的结构是你发布 crate 时主要需要考虑的。crate 用户没有你那么熟悉其结构，并且如何模块层级过大他们可能会难以找到所需的部分。
+公有 API 的结构是你发布 crate 时主要需要考虑的。crate 用户没有你那么熟悉其结构，并且如果模块层级过大他们可能会难以找到所需的部分。
 
 好消息是，如果结果对于用户来说 **不是** 很方便，你也无需重新安排内部组织：你可以选择使用 `pub use` 重导出（re-export）项来使公有结构不同于私有结构。重导出获取位于一个位置的公有项并将其公开到另一个位置，好像它就定义在这个新位置一样。
 
@@ -309,7 +309,7 @@ Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
 
 ### 发布现存 crate 的新版本
 
-当你修改了 crate 并准备好发布新版本时，改变 *Cargo.toml* 中 `version` 所指定的值。请使用 [语义化版本规则][semver] 来根据修改的类型决定下一个版本呢号。接着运行 `cargo publish` 来上传新版本。
+当你修改了 crate 并准备好发布新版本时，改变 *Cargo.toml* 中 `version` 所指定的值。请使用 [语义化版本规则][semver] 来根据修改的类型决定下一个版本号。接着运行 `cargo publish` 来上传新版本。
 
 [semver]: http://semver.org/
 
