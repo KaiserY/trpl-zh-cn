@@ -73,7 +73,7 @@ fn main() {
 }
 ```
 
-这几行定义了一个 Rust **函数**。`main` 函数是特殊的：它是每个可执行的 Rust 程序首先执行的。第一行代码表示 “我声明了一个叫做 `main` 的函数，它没有参数也没有返回值。” 如果有参数的话，他们的名称应该出现在括号中，`(`和`)`之间。
+这几行定义了一个 Rust **函数**。`main` 函数是特殊的：它是每个可执行的 Rust 程序首先执行的。第一行代码表示 “我声明了一个叫做 `main` 的函数，它没有参数也没有返回值。” 如果有参数的话，它们的名称应该出现在括号中，`(`和`)`之间。
 
 还须注意函数体被包裹在花括号中，`{`和`}` 之间。Rust 要求所有函数体都要用花括号包裹起来（译者注：有些语言，当函数体只有一行时可以省略花括号，但在 Rust 中是不行的）。一般来说，将左花括号与函数声明置于同一行并以空格分隔，是良好的代码风格。
 
@@ -124,13 +124,13 @@ $ ./main  # or .\main.exe on Windows
 
 如果 *main.rs* 是上文所述的 “Hello, world!” 程序，它将会在终端上打印 `Hello, world!`。
 
-来自 Ruby、Python 或 JavaScript 这样的动态类型语言背景的同学，可能不太习惯将编译和执行分为两个单独的步骤。Rust 是一种 **预编译静态类型语言**（*ahead-of-time compiled language*），这意味着你可以编译程序并将其交与他人，他们不需要安装 Rust 即可运行。相反如果你给他们一个 `.rb`、`.py` 或 `.js` 文件，他们需要先分别安装 Ruby，Python，JavaScript 实现（运行时环境，VM），不过你只需要一句命令就可以编译和执行程序。这一切都是语言设计上的权衡取舍。
+来自 Ruby、Python 或 JavaScript 这样的动态类型语言背景的同学，可能不太习惯将编译和执行分为两个单独的步骤。Rust 是一种 **预编译静态类型语言**（*ahead-of-time compiled language*），这意味着你可以编译程序并将其交与他人，它们不需要安装 Rust 即可运行。相反如果你给他们一个 `.rb`、`.py` 或 `.js` 文件，他们需要先分别安装 Ruby，Python，JavaScript 实现（运行时环境，VM），不过你只需要一句命令就可以编译和执行程序。这一切都是语言设计上的权衡取舍。
 
 使用 `rustc` 编译简单程序是没问题的，不过随着项目的增长，你可能需要控制你项目的方方面面，并且更容易地将代码分享给其它人或项目。接下来，我们要介绍一个叫做 Cargo 的工具，它会帮助你编写真实世界中的 Rust 程序。
 
 ## Hello, Cargo!
 
-Cargo 是 Rust 的构建系统和包管理工具，同时 Rustacean 们使用 Cargo 来管理他们的 Rust 项目，它使得很多任务变得更轻松。例如，Cargo 负责构建代码、下载依赖库并编译他们。我们把代码需要的库叫做 **依赖**（*dependencies*）。
+Cargo 是 Rust 的构建系统和包管理工具，同时 Rustacean 们使用 Cargo 来管理他们的 Rust 项目，它使得很多任务变得更轻松。例如，Cargo 负责构建代码、下载依赖库并编译它们。我们把代码需要的库叫做 **依赖**（*dependencies*）。
 
 最简单的 Rust 程序，比如我们刚刚编写的，并没有任何依赖，所以我们只使用了 Cargo 构建代码的功能。随着编写的程序更加复杂，你会想要添加依赖，如果你使用 Cargo 开始的话，这将会变得简单许多。
 
@@ -188,9 +188,9 @@ authors = ["Your Name <you@example.com>"]
 
 第一行，`[package]`，是一个段落标题，表明下面的语句用来配置一个包。随着我们在这个文件增加更多的信息，还将增加其他段落。
 
-接下来的三行设置了三个 Cargo 所需的配置，他们告诉 Cargo 需要编译这个项目：名称、版本和作者。Cargo 从环境中获取你的名称和 email 信息。如果不正确，请修改并保存此文件。
+接下来的三行设置了三个 Cargo 所需的配置，项目的名称、版本和作者，它们告诉 Cargo 需要编译这个项目。Cargo 从环境中获取你的名称和 email 信息。如果不正确，请修改并保存此文件。
 
-最后一行，`[dependencies]`，是项目依赖的 *crates* 列表（我们这样称呼 Rust 代码包）段落的开始，这样 Cargo 就知道下载和编译它们了。这个项目并不需要任何其他的 crate，不过在下一章猜猜看教程会用得上。
+最后一行，`[dependencies]`，是项目依赖的 *crates* 列表（我们称呼 Rust 代码包为 crate）段落的开始，这样 Cargo 就知道应该下载和编译它们了。这个项目并不需要任何其他的 crate，不过在下一章猜猜看教程会用得上。
 
 现在看看 *src/main.rs*：
 
@@ -213,21 +213,21 @@ Cargo 期望源文件位于 *src* 目录，将项目根目录留给 README、lic
 
 ### 构建并运行 Cargo 项目
 
-现在让我们看看通过 Cargo 构建和运行 Hello World 程序有什么不同。为此，输入如下命令：
+现在让我们看看通过 Cargo 构建和运行 Hello World 程序有什么不同。为此输入下面的命令：
 
 ```text
 $ cargo build
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
 ```
 
-这应该会创建 *target/debug/hello_cargo*（或者在 Windows 上是 *target\debug\hello_cargo.exe*）可执行文件，可以通过这个命令运行：
+这应该会创建 *target/debug/hello_cargo*可执行文件（或者在 Windows 上是 *target\debug\hello_cargo.exe*），可以通过这个命令运行：
 
 ```text
 $ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
 Hello, world!
 ```
 
-好的！如果一切顺利，`Hello, world!`应该再次打印在终端上。
+很好！如果一切顺利，`Hello, world!`应该再次打印在终端上。
 
 首次运行 `cargo build` 的时候，Cargo 会在项目根目录创建一个新文件，*Cargo.lock*，它看起来像这样：
 
@@ -267,7 +267,7 @@ Cargo 的另一个优点是，不管你使用什么操作系统其命令都是�
 
 ### 发布（release）构建
 
-当项目最终准备好发布了，可以使用 `cargo build --release` 来优化编译项目。这会在 *target/release* 而不是  *target/debug* 下生成可执行文件。这些优化可以让 Rust 代码运行的更快，不过启用这些优化也需要消耗更长的编译时间。这也就是为什么会有两种不同的配置：一种为了开发，你需要经常快速重新构建；另一种为了构建给用户最终程序，他们不会重新构建，并且希望程序运行得越快越好。如果你在测试代码的运行时间，请确保运行 `cargo build --release` 并使用 *target/release* 下的可执行文件进行测试。
+当项目最终准备好发布了，可以使用 `cargo build --release` 来优化编译项目。这会在 *target/release* 而不是  *target/debug* 下生成可执行文件。这些优化可以让 Rust 代码运行的更快，不过启用这些优化也需要消耗更长的编译时间。这也就是为什么会有两种不同的配置：一种为了开发，你需要经常快速重新构建；另一种为了构建给用户最终程序，它们不会重新构建，并且希望程序运行得越快越好。如果你在测试代码的运行时间，请确保运行 `cargo build --release` 并使用 *target/release* 下的可执行文件进行测试。
 
 ### 把 Cargo 当作习惯
 

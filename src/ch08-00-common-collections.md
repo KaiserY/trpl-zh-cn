@@ -14,4 +14,4 @@ Rust 标准库中包含一系列被称为 **集合**（*collections*）的非常
 
 [collections]: https://doc.rust-lang.org/std/collections
 
-我们将讨论如何创建和更新 vector、字符串和哈希 map，以及他们有什么不同。
+我们将讨论如何创建和更新 vector、字符串和哈希 map，以及它们有什么不同。
