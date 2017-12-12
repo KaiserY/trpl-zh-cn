@@ -76,7 +76,7 @@ let mut s = String::from("foo");
 s.push_str("bar");
 ```
 
-执行这两行代码之后 `s` 将会包含 “foobar”。`push_str` 方法获取字符串 slice，因为并不需要获取参数的所有权。例如，如果将 `s2` 的内容附加到 `s1` 中后自身不能被使用就糟糕了：
+执行这两行代码之后 `s` 将会包含 “foobar”。`push_str` 方法获取字符串 slice，因为我们并不需要获取参数的所有权。例如，如果将 `s2` 的内容附加到 `s1` 中后自身不能被使用就糟糕了：
 
 ```rust
 let mut s1 = String::from("foo");
