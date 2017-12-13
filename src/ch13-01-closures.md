@@ -141,7 +141,7 @@ fn generate_workout(intensity: i32, random_number: i32) {
 
 <span class="caption">示例 13-4：将 `simulated_expensive_calculation` 调用提取到一个位置，位于 `if` 块之前并将结果储存在变量 `expensive_result` 中</span>
 
-这个修改统一了 `simulated_expensive_calculation` 调用并解决了第一个 `if` 块中不必要的两次调用函数的问题。不幸的是，现在所有的情况下都需要调用函数并等待结果，而内部 `if` 块完全不需要其结果。
+这个修改统一了 `simulated_expensive_calculation` 调用并解决了第一个 `if` 块中不必要的两次调用函数的问题。不幸的是，现在所有的情况下都需要调用函数并等待结果，包括那个完全不需要这一结果的内部 `if` 块。
 
 我们希望能够在程序的一个位置指定某些代码，并只在程序的某处实际需要结果的时候执行这些代码。这正是闭包的用武之地！
 
@@ -304,7 +304,7 @@ struct Cacher<T>
 
 <span class="caption">示例 13-9：定义一个 `Cacher` 结构体来在 `calculation` 中存放闭包并在 `value` 中存放 Option 值</span>
 
-结构体 `Cacher` 有一个泛型  `T` 的字段 `calculation`。`T` 的 trait bound 指定了 `T` 是一个使用 `Fn` 的闭包。任何我们希望储存到 `Cacher` 实例的 `calculation` 字段的闭包必须有一个 `i32` 参数（由 `Fn` 之后的括号的内容指定）并必须返回一个 `i32`（由 `->` 之后的内容）。
+结构体 `Cacher` 有一个泛型  `T` 的字段 `calculation`。`T` 的 trait bound 指定了 `T` 是一个使用 `Fn` 的闭包。任何我们希望储存到 `Cacher` 实例的 `calculation` 字段的闭包必须有一个 `i32` 参数（由 `Fn` 之后的括号的内容指定）并必须返回一个 `i32`（由 `->` 之后的内容）。
 
 `value` 是 `Option<i32>` 类型的。在执行闭包之前，`value` 将是 `None`。如果使用 `Cacher` 的代码请求闭包的结果，这时会执行闭包并将结果储存在 `value` 字段的 `Some` 成员中。接着如果代码再次请求闭包的结果，这时不再执行闭包，而是会返回存放在 `Some` 成员中的结果。
 
