@@ -147,7 +147,7 @@ hi number 3 from the main thread!
 hi number 4 from the main thread!
 ```
 
-稍微考虑一下将`join`放置与何处会影响线程是否同时运行。
+稍微考虑一下将`join`放置于何处会影响线程是否同时运行。
 
 ### 线程和`move`闭包
 
