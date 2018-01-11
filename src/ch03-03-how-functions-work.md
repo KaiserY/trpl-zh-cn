@@ -2,7 +2,7 @@
 
 > [ch03-03-how-functions-work.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch03-03-how-functions-work.md)
 > <br>
-> commit d06a6a181fd61704cbf7feb55bc61d518c6469f9
+> commit 6aad5008b69078a2fc18e6dd7e00ef395170c749
 
 函数在 Rust 代码中应用广泛。你已经见过一个语言中最重要的函数：`main` 函数，它是很多程序的入口点。你也见过了 `fn` 关键字，它用来声明新函数。
 
@@ -31,6 +31,7 @@ Rust 中的函数定义以 `fn` 开始并在函数名后跟一对括号。大括
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.28 secs
      Running `target/debug/functions`
 Hello, world!
 Another function.
@@ -61,6 +62,7 @@ fn another_function(x: i32) {
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+    Finished dev [unoptimized + debuginfo] target(s) in 1.21 secs
      Running `target/debug/functions`
 The value of x is: 5
 ```
@@ -86,17 +88,18 @@ fn another_function(x: i32, y: i32) {
 
 这个例子创建了一个有两个参数的函数，都是 `i32` 类型的。函数打印出了这两个参数的值。注意函数参数并不一定都是相同类型的，这个例子中它们只是碰巧相同罢了。
 
-尝试运行代码。使用上面的例子替换当前 *function* 项目的 *src/main.rs* 文件，并用 `cargo run` 运行它：
+尝试运行代码。使用上面的例子替换当前 *functions* 项目的 *src/main.rs* 文件，并用 `cargo run` 运行它：
 
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/functions`
 The value of x is: 5
 The value of y is: 6
 ```
 
-因为我们使用 `5` 作为 `x` 的值， `6` 作为 `y` 的值来调用函数，这两个字符串和它们的值被相应打印出来。
+因为我们使用 `5` 作为 `x` 的值 `6` 作为 `y` 的值来调用函数，这两个字符串和它们的值被相应打印出来。
 
 ### 函数体
 
@@ -106,7 +109,7 @@ The value of y is: 6
 
 我们已经用过语句与表达式了。**语句**（*Statements*）是执行一些操作但不返回值的指令。表达式（*Expressions*）计算并产生一个值。让我们看一些例子：
 
-使用 `let` 关键字创建变量并绑定一个值是一个语句。在列表 3-3 中，`let y = 6;` 是一个语句：
+使用 `let` 关键字创建变量并绑定一个值是一个语句。在列表 3-1 中，`let y = 6;` 是一个语句：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -116,13 +119,13 @@ fn main() {
 }
 ```
 
-<span class="caption">列表 3-3：包含一个语句的 `main` 函数定义</span>
+<span class="caption">列表 3-1：包含一个语句的 `main` 函数定义</span>
 
 函数定义也是语句，上面整个例子本身就是一个语句。
 
-语句并不返回值。因此，不能把`let`语句赋值给另一个变量，比如下面的例子尝试做的：
+语句并不返回值。因此，不能把 `let` 语句赋值给另一个变量，比如下面的例子尝试做的，这会产生一个错误：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -197,6 +200,7 @@ fn main() {
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.30 secs
      Running `target/debug/functions`
 The value of x is: 5
 ```
@@ -248,16 +252,12 @@ error[E0308]: mismatched types
 7 |   fn plus_one(x: i32) -> i32 {
   |  ____________________________^
 8 | |     x + 1;
+  | |          - help: consider removing this semicolon
 9 | | }
   | |_^ expected i32, found ()
   |
   = note: expected type `i32`
              found type `()`
-help: consider removing this semicolon:
- --> src/main.rs:8:10
-  |
-8 |     x + 1;
-  |          ^
 ```
 
 主要的错误信息，“mismatched types”（类型不匹配），揭示了代码的核心问题。函数 `plus_one` 的定义说明它要返回一个 `i32`，不过语句并不返回一个值，这由那个空元组 `()` 表明。因此，这个函数返回了空元组 `()`，这与函数定义相矛盾并导致一个错误。在输出中，Rust 提供了一个可能会对修正问题有帮助的信息：它建议去掉分号，这会修复这个错误。

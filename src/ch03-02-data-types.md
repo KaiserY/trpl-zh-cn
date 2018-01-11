@@ -2,9 +2,9 @@
 
 > [ch03-02-data-types.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch03-02-data-types.md)
 > <br>
-> commit f4bce88a0f4c09aaf0c996021729c6d42907bc2a
+> commit ec65990849230388e4ce4db5b7a0cb8a0f0d60e2
 
-在 Rust 中，任何值都属于一种明确的 **类型**（*type*），这告诉了 Rust 它被指定为何种数据，以便明确其处理方式。我们将分两部分探讨一些内建类型：标量（scalar）和复合（compound）。
+在 Rust 中，任何值都属于一种明确的 **类型**（*type*），这告诉了 Rust 它被指定为何种数据，以便明确其处理方式。本部分我们将看到一系列内建于语言中的类型。我们将其分为两类：标量（scalar）和复合（compound）。
 
 Rust 是 **静态类型**（*statically typed*）语言，也就是说在编译时就必须知道所有变量的类型，这一点将贯穿整个章节。通过值的形式及其使用方式，编译器通常可以推断出我们想要用的类型。多种类型均有可能时，比如第二章中使用 `parse` 将 `String` 转换为数字时，必须增加类型注解，像这样：
 
@@ -15,24 +15,25 @@ let guess: u32 = "42".parse().expect("Not a number!");
 这里如果不添加类型注解，Rust 会显示如下错误，这说明编译器需要更多信息，来了解我们想要的类型：
 
 ```text
-error[E0282]: unable to infer enough type information about `_`
+error[E0282]: type annotations needed
  --> src/main.rs:2:9
   |
 2 |     let guess = "42".parse().expect("Not a number!");
-  |         ^^^^^ cannot infer type for `_`
-  |
-  = note: type annotations or generic parameter binding required
+  |         ^^^^^
+  |         |
+  |         cannot infer type for `_`
+  |         consider giving `guess` a type
 ```
 
-在我们讨论各种数据类型时，你会看到多样的类型注解。
+在我们讨论各种数据类型时，你会看到不同的类型注解。
 
 ### 标量类型
 
-**标量**（*scalar*）类型代表一个单独的值。Rust 有四种基本的标量类型：整型、浮点型、布尔类型和字符类型。你可能在其他语言中见过它们，不过让我们深入了解它们在 Rust 中时如何工作的。
+**标量**（*scalar*）类型代表一个单独的值。Rust 有四种基本的标量类型：整型、浮点型、布尔类型和字符类型。你可能在其他语言中见过它们，不过让我们深入了解它们在 Rust 中是如何工作的。
 
 #### 整型
 
-**整数** 是一个没有小数部分的数字。我们在这一章的前面使用过 `u32` 类型。该类型声明指示，u32 关联的值应该是一个占据 32 比特位的无符号整数（有符号整型类型以 `i` 开头而不是 `u`）。表格 3-1 展示了 Rust 内建的整数类型。每一种变体的有符号和无符号列（例如，*i8*）可以用来声明对应的整数值。
+**整数** 是一个没有小数部分的数字。我们在这一章的前面使用过 `u32` 类型。该类型声明表明，u32 关联的值应该是一个占据 32 比特位的无符号整数（有符号整型类型以 `i` 开头而不是 `u`）。表格 3-1 展示了 Rust 内建的整数类型。每一种变体都有符号和无符号列（例如，*i8*）可以用来声明对应的整数值。
 
 <span class="caption">表格 3-1: Rust 中的整型</span>
 
@@ -62,11 +63,11 @@ error[E0282]: unable to infer enough type information about `_`
 | Binary           | `0b1111_0000` |
 | Byte (`u8` only) | `b'A'`        |
 
-那么该使用哪种类型的数字呢？如果拿不定主意，Rust 的默认类型通常就很好，数字类型默认是 `i32`：它通常是最快的，甚至在 64 位系统上也是。`isize` 或 `usize` 主要作为集合的索引。
+那么该使用哪种类型的数字呢？如果拿不定主意，Rust 的默认类型通常就很好，数字类型默认是 `i32`：它通常是最快的，甚至在 64 位系统上也是。`isize` 或 `usize` 主要作为某些集合的索引。
 
 #### 浮点型
 
-Rust 同样有两个主要的 **浮点数**（*floating-point numbers*）类型，`f32` 和 `f64`，它们是带小数点的数字，分别占 32 位和 64 位比特。默认类型是 `f64`，因为它与 `f32` 速度差不多，然而精度更高。在 32 位系统上也能够使用 `f64`，不过比使用 `f32` 要慢。多数情况下，一开始以潜在的性能损耗换取更高的精度是合理的；如果觉得浮点数的大小是个麻烦，你应该以性能测试作为决策依据。
+Rust 同样有两个主要的 **浮点数**（*floating-point numbers*）类型，`f32` 和 `f64`，它们是带小数点的数字，分别占 32 位和 64 位比特。默认类型是 `f64`，因为在现代 CPU 中它与 `f32` 速度几乎一样，不过精度更高。
 
 这是一个展示浮点数的实例：
 
@@ -127,7 +128,7 @@ fn main() {
 
 #### 字符类型
 
-目前为止只使用到了数字，不过 Rust 也支持字符。Rust 的 `char` 类型是大部分语言中基本字母字符类型，如下代码展示了如何使用它：
+目前为止只使用到了数字，不过 Rust 也支持字符。Rust 的 `char` 类型是大部分语言中基本字母字符类型，如下代码展示了如何使用它。注意 `char` 由单引号指定，不同于字符串使用双引号：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -139,7 +140,7 @@ fn main() {
 }
 ```
 
-Rust 的 `char` 类型代表了一个 Unicode 标量值（Unicode Scalar Value），这意味着它可以比 ASCII 表示更多内容。拼音字母（Accented letters），中文/日文/韩文等象形文字，emoji（絵文字）以及零长度的空白字符对于 Rust `char` 类型都是有效的。Unicode 标量值包含从 `U+0000` 到 `U+D7FF` 和 `U+E000` 到 `U+10FFFF` 之间的值。不过，“字符” 并不是一个 Unicode 中的概念，所以人直觉上的 “字符” 可能与 Rust 中的 `char` 并不符合。第八章的 “字符串” 部分将详细讨论这个主题。
+Rust 的 `char` 类型代表了一个 Unicode 标量值（Unicode Scalar Value），这意味着它可以比 ASCII 表示更多内容。拼音字母（Accented letters），中文/日文/韩文等象形文字，emoji（絵文字）以及零长度的空白字符对于 Rust `char` 类型都是有效的。Unicode 标量值包含从 `U+0000` 到 `U+D7FF` 和 `U+E000` 到 `U+10FFFF` 在内的值。不过，“字符” 并不是一个 Unicode 中的概念，所以人直觉上的 “字符” 可能与 Rust 中的 `char` 并不符合。第八章的 “字符串” 部分将详细讨论这个主题。
 
 ### 复合类型
 
@@ -231,11 +232,11 @@ fn main() {
 }
 ```
 
-在这个例子中，叫做 `first` 的变量的值是 `1`，因为它是数组索引 `[0]` 的值。`second` 将会是数组索引 `[1]` 的值 `2`。
+在这个例子中，叫做 `first` 的变量的值是 `1`，因为它是数组索引 `[0]` 的值。变量 `second` 将会是数组索引 `[1]` 的值 `2`。
 
 ##### 无效的数组元素访问
 
-如果我们访问数组结尾之后的元素会发生什么呢？比如我们将上面的例子改成下面这样：
+如果我们访问数组结尾之后的元素会发生什么呢？比如我们将上面的例子改成下面这样，这可以编译不过在运行时会因错误而退出：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -255,6 +256,7 @@ fn main() {
 ```text
 $ cargo run
    Compiling arrays v0.1.0 (file:///projects/arrays)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/arrays`
 thread '<main>' panicked at 'index out of bounds: the len is 5 but the index is
  10', src/main.rs:6
