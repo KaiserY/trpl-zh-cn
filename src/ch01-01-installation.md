@@ -2,7 +2,7 @@
 
 > [ch01-01-installation.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-01-installation.md)
 > <br>
-> commit d06a6a181fd61704cbf7feb55bc61d518c6469f9
+> commit b6dcc87f2b811c88fc741c86cf6ed3976333acba
 
 使用 Rust 的第一步是安装。你需要网络连接来执行本章的命令，因为将要从网上下载 Rust。
 
@@ -22,7 +22,7 @@ $ curl https://sh.rustup.rs -sSf | sh
 Rust is installed now. Great!
 ```
 
-当然，如果你对于 `curl | sh` 这样的模式心有疑虑，请随意下载、检查和运行这个脚本。
+当然，如果你不信任采用 `curl URL | sh` 来安装软禁啊，请随意下载、检查和运行这个脚本。
 
 此安装脚本自动将 Rust 加入系统 PATH 环境变量中，再次登陆时生效。如果你希望立刻（不重新登陆）就开始使用 Rust，在 shell 中运行如下命令：
 

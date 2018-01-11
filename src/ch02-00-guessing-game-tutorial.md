@@ -2,7 +2,7 @@
 
 > [ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch02-00-guessing-game-tutorial.md)
 > <br>
-> commit 2e269ff82193fd65df8a87c06561d74b51ac02f7
+> commit 8a145ebea5c05f07fc240269bc9557340972188f
 
 让我们一起动手完成一个项目，来快速上手 Rust！本章将介绍 Rust 中常用的一些概念，并通过真实的程序来展示如何运用它们。你将会学到更多诸如 `let`、`match`、方法、关联函数、外部 crate 等很多的知识！后继章节会深入探索这些概念的细节。在这一章，我们将练习基础。
 
@@ -53,9 +53,9 @@ $ cargo run
 Hello, world!
 ```
 
-`run` 命令适合用于需要快速迭代的项目，而这个游戏便是这样的项目：我们需要在下一步迭代之前快速测试。
+`run` 命令适合用于需要快速迭代的项目，而这个游戏便是这样的项目：我们需要在下一步迭代之前快速测试每一步。
 
-重新打开 *src/main.rs* 文件。我们将会在这个文件中编写全部代码。
+重新打开 *src/main.rs* 文件。我们将会在这个文件中编写全部的代码。
 
 ## 处理一次猜测
 
@@ -88,7 +88,7 @@ fn main() {
 use std::io;
 ```
 
-Rust 默认只在每个程序的 [*prelude*][prelude]<!-- ignore --> 中引入少量类型。如果需要的类型不在 prelude 中，你必须使用一个 `use` 语句显式的将其引入作用域。`std::io` 库提供很多 `io` 相关的功能，比如接受用户输入。
+Rust 默认只在每个程序的 [*prelude*][prelude]<!-- ignore --> 中引入少量类型。如果需要的类型不在 prelude 中，你必须使用一个 `use` 语句显式的将其引入作用域。`std::io` 库提供很多 `io` 相关的功能，比如接受用户输入的功能。
 
 [prelude]: https://doc.rust-lang.org/std/prelude/index.html
 
@@ -150,7 +150,7 @@ io::stdin().read_line(&mut guess)
     .expect("Failed to read line");
 ```
 
-如果程序的开头没有 `use std::io` 这一行，可以把函数调用写成 `std::io::stdin`。`stdin` 函数返回一个  [`std::io::stdin`][iostdin]<!-- ignore --> 的实例，这代表终端标准输入句柄的类型。
+如果程序的开头没有 `use std::io` 这一行，可以把函数调用写成 `std::io::stdin`。`stdin` 函数返回一个 [`std::io::stdin`][iostdin]<!-- ignore --> 的实例，这代表终端标准输入句柄的类型。
 
 [iostdin]: https://doc.rust-lang.org/std/io/struct.Stdin.html
 
@@ -162,13 +162,13 @@ io::stdin().read_line(&mut guess)
 
 `&` 表示这个参数是一个 **引用**（*reference*），它允许多处代码访问同一处数据，而无需在内存中多次拷贝。引用是一个复杂的特性，Rust 的一个主要优势就是安全而简单的操纵引用。完成当前程序并不需要了解如此多细节：第四章会更全面的解释引用。现在，我们只需知道它像变量一样，默认是不可变的，需要写成 `&mut guess` 而不是 `&guess` 来使其可变。
 
-我们还没有分析完这行代码。虽然这是单独一行代码，但它是一个逻辑行（虽然换行了但仍是一个语句）的第一部分。第二部分是这个方法：
+我们还没有完全分析完这行代码。虽然这是单独一行代码，但它是一个逻辑行（虽然换行了但仍是一个语句）的第一部分。第二部分是这个方法：
 
 ```rust,ignore
 .expect("Failed to read line");
 ```
 
-当使用 `.foo()` 语法调用方法时，通过换行并缩进来把长行拆开，是明智的。我们完全可以这样写：
+当使用 `.foo()` 语法调用方法时，通过换行并缩进来把长行拆开是明智的。我们完全可以这样写：
 
 ```rust,ignore
 io::stdin().read_line(&mut guess).expect("Failed to read line");
@@ -187,24 +187,27 @@ io::stdin().read_line(&mut guess).expect("Failed to read line");
 
 [enums]: ch06-00-enums.html
 
-对于 `Result`，它的成员是 `Ok` 或 `Err`，`Ok` 表示操作成功，内部包含成功时产生的值。`Err` 意味着操作失败，包含失败的前因后果。
+对于 `Result`，它的成员是 `Ok` 或 `Err`，`Ok` 表示操作成功，内部包含成功时产生的值。`Err` 意味着操作失败，并且包含失败的前因后果。
 
 这些 `Result` 类型的作用是编码错误处理信息。`Result` 类型的值，像其他类型一样，拥有定义于其上的方法。`io::Result` 的实例拥有 [`expect` 方法][expect]<!-- ignore -->。如果 `io::Result` 实例的值是 `Err`，`expect` 会导致程序崩溃，并显示当做参数传递给 `expect` 的信息。如果 `read_line` 方法返回 `Err`，则可能是来源于底层操作系统错误的结果。如果 `io::Result` 实例的值是 `Ok`，`expect` 会获取 `Ok` 中的值并原样返回。在本例中，这个值是用户输入到标准输入中的字节的数量。
 
 [expect]: https://doc.rust-lang.org/std/result/enum.Result.html#method.expect
 
-如果不使用 `expect`，程序也能编译，不过会出现一个警告：
+如果不调用 `expect`，程序也能编译，不过会出现一个警告：
 
 ```text
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-src/main.rs:10:5: 10:39 warning: unused result which must be used,
-#[warn(unused_must_use)] on by default
-src/main.rs:10     io::stdin().read_line(&mut guess);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: unused `std::result::Result` which must be used
+  --> src/main.rs:10:5
+   |
+10 |     io::stdin().read_line(&mut guess);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: #[warn(unused_must_use)] on by default
 ```
 
-Rust 警告我们没有使用 `read_line` 的返回值 `Result`，说明有一个可能的错误没有处理。想消除警告，就老实的写错误处理，不过我们就是希望程序在出现问题时立即崩溃，所以直接使用 `expect`。第九章会学习如何从错误中恢复。
+Rust 警告我们没有使用 `read_line` 的返回值 `Result`，说明有一个可能的错误没有处理。消除警告的正确做法是实际编写错误处理代码，不过我们就是希望程序在出现问题时立即崩溃，所以直接使用 `expect`。第九章会学习如何从错误中恢复。
 
 ### 使用 `println!` 占位符打印值
 
@@ -232,6 +235,7 @@ println!("x = {} and y = {}", x, y);
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
      Running `target/debug/guessing_game`
 Guess the number!
 Please input your guess.
@@ -249,9 +253,9 @@ You guessed: 6
 
 ### 使用 crate 来增加更多功能
 
-记住 *crate* 是一个 Rust 代码的包。我们正在构建的项目是一个**二进制 crate**，它生成一个可执行文件。 `rand` crate 是一个 **库 crate**，库 crate 可以包含任意能被其他程序使用的代码。
+记住 *crate* 是一个 Rust 代码的包。我们正在构建的项目是一个 **二进制 crate**，它生成一个可执行文件。 `rand` crate 是一个 **库 crate**，库 crate 可以包含任意能被其他程序使用的代码。
 
-Cargo 对外部 crate 的运用是其亮点。在我们使用 `rand` 编写代码之前，需要编辑 *Cargo.toml* ，声明 `rand` 作为一个依赖。现在打开这个文件并在底部的 `[dependencies]` 段落标题之下添加：
+Cargo 对外部 crate 的运用是其真正闪光的地方。在我们使用 `rand` 编写代码之前，需要编辑 *Cargo.toml* ，声明 `rand` 作为一个依赖。现在打开这个文件并在底部的 `[dependencies]` 部分标题之下添加：
 
 <span class="filename">文件名: Cargo.toml</span>
 
@@ -261,7 +265,7 @@ Cargo 对外部 crate 的运用是其亮点。在我们使用 `rand` 编写代�
 rand = "0.3.14"
 ```
 
-在 *Cargo.toml* 文件中，标题以及之后的内容属同一个段落，直到遇到下一个标题才开始新的段落。`[dependencies]` 段落告诉 Cargo 本项目依赖了哪些外部 crate 及其版本。本例中，我们使用语义化版本 `0.3.14` 来指定 `rand` crate。Cargo 理解[语义化版本（Semantic Versioning）][semver]<!-- ignore -->（有时也称为 *SemVer*），这是一种定义版本号的标准。`0.3.14` 事实上是 `^0.3.14` 的简写，它表示 “任何与 0.3.14 版本公有 API 相兼容的版本”。
+在 *Cargo.toml* 文件中，标题以及之后的内容属同一个部分，直到遇到下一个标题才开始新的部分。`[dependencies]` 部分告诉 Cargo 本项目依赖了哪些外部 crate 及其版本。本例中，我们使用语义化版本 `0.3.14` 来指定 `rand` crate。Cargo 理解[语义化版本（Semantic Versioning）][semver]<!-- ignore -->（有时也称为 *SemVer*），这是一种定义版本号的标准。`0.3.14` 事实上是 `^0.3.14` 的简写，它表示 “任何与 0.3.14 版本公有 API 相兼容的版本”。
 
 [semver]: http://semver.org
 
@@ -275,6 +279,7 @@ $ cargo build
    Compiling libc v0.2.14
    Compiling rand v0.3.14
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
 ```
 
 <span class="caption">示例 2-2: 增加 rand crate 作为依赖之后运行 `cargo build` 的输出</span>
@@ -287,18 +292,19 @@ $ cargo build
 
 在更新完 registry 后，Cargo 检查 `[dependencies]` 段落并下载缺失的部分。本例中，虽然只声明了 `rand` 一个依赖，然而 Cargo 还是额外获取了 `libc` 的拷贝，因为 `rand` 依赖 `libc` 来正常工作。下载完成后，Rust 编译依赖，然后使用这些依赖编译项目。
 
-如果不做任何修改，立刻再次运行 `cargo build`，则不会有任何输出。Cargo 知道它已经下载并编译了依赖，同时 *Cargo.toml* 文件也没有变动。Cargo 还知道代码也没有任何修改，所以它不会重新编译代码。因为无事可做，它简单的退出了。如果打开 *src/main.rs* 文件，做一些无关紧要的修改，保存并再次构建，只会出现一行输出：
+如果不做任何修改，立刻再次运行 `cargo build`，则不会有任何输出。Cargo 知道它已经下载并编译了依赖，同时 *Cargo.toml* 文件也没有变动。Cargo 还知道代码也没有任何修改，所以它不会重新编译代码。因为无事可做，它简单的退出了。如果打开 *src/main.rs* 文件，做一些无关紧要的修改，保存并再次构建，只会出现两行输出：
 
 ```text
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
 ```
 
 这一行表示 Cargo 只针对 *src/main.rs* 文件的微小修改而更新构建。依赖没有变化，所以 Cargo 知道它可以复用已经为此下载并编译的代码。它只是重新构建了部分（项目）代码。
 
 #### *Cargo.lock* 文件确保构建是可重现的
 
-Cargo 有一个机制来确保任何人在任何时候重新构建代码，都会产生相同的结果：Cargo 只会使用你指定的依赖的版本，除非你又手动指定了别的。例如，如果下周 `rand` crate 的 `v0.3.15` 版本出来了，它修复了一个重要的 bug，同时也含有一个缺陷，会破坏代码的运行，这时会发生什么呢？
+Cargo 有一个机制来确保任何人在任何时候重新构建代码，都会产生相同的结果：Cargo 只会使用你指定的依赖的版本，除非你又手动指定了别的。例如，如果下周 `rand` crate 的 `v0.3.15` 版本出来了，它修复了一个重要的 bug，同时也含有一个会破坏代码运行的缺陷，这时会发生什么呢？
 
 这个问题的答案是 *Cargo.lock* 文件。它在第一次运行 `cargo build` 时创建，并放在 *guessing_game* 目录。当第一次构建项目时，Cargo 计算出所有符合要求的依赖版本并写入 *Cargo.lock* 文件。当将来构建项目时，Cargo 会发现 *Cargo.lock* 存在并使用其中指定的版本，而不是再次计算所有的版本。这使得你拥有了一个自动化的可重现的构建。换句话说，项目会持续使用 `0.3.14` 直到你显式升级，感谢 *Cargo.lock* 文件。
 

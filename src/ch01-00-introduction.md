@@ -20,6 +20,6 @@ registry site），[crates.io]！我们由衷期待**你**使用 Rust 进行创�
 [on GitHub]: https://github.com/rust-lang/book
 [CONTRIBUTING.md]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
 
-> 译者注：译本的 [GitHub 仓库][trpl-zh-cn]，同样欢迎 Issue 和 PR :)
+> 译者注：本译本的 [GitHub 仓库][trpl-zh-cn]，同样欢迎 Issue 和 PR :)
 
 [trpl-zh-cn]: https://github.com/KaiserY/trpl-zh-cn
