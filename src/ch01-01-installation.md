@@ -22,7 +22,7 @@ $ curl https://sh.rustup.rs -sSf | sh
 Rust is installed now. Great!
 ```
 
-当然，如果你不信任采用 `curl URL | sh` 来安装软件啊，请随意下载、检查和运行这个脚本。
+当然，如果你不信任采用 `curl URL | sh` 来安装软件，请随意下载、检查和运行这个脚本。
 
 此安装脚本自动将 Rust 加入系统 PATH 环境变量中，再次登陆时生效。如果你希望立刻（不重新登陆）就开始使用 Rust，在 shell 中运行如下命令：
 
