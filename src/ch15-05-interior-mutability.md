@@ -29,7 +29,7 @@ Rust 编译器执行的静态分析天生是保守的。代码的一些属性则
 
 示例 15-14 展示了如何使用`RefCell<T>`来使函数不可变的和可变的借用它的参数。注意`data`变量使用`let data`而不是`let mut data`来声明为不可变的，而`a_fn_that_mutably_borrows`则允许可变的借用数据并修改它！
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 use std::cell::RefCell;
@@ -54,7 +54,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-14: Using `RefCell<T>`, `borrow`, and
+<span class="caption">示例 15-14: 使用 `RefCell<T>`, `borrow` 和
 `borrow_mut`</span>
 
 这个例子打印出：
@@ -122,7 +122,7 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 那么为什么要权衡考虑选择引入`RefCell<T>`呢？好吧，还记得我们说过`Rc<T>`只能拥有一个`T`的不可变引用吗？考虑到`RefCell<T>`是不可变的，但是拥有内部可变性，可以将`Rc<T>`与`RefCell<T>`结合来创造一个既有引用计数又可变的类型。示例 15-15 展示了一个这么做的例子，再次回到示例 15-5 中的 cons list。在这个例子中，不同于在 cons list 中储存`i32`值，我们储存一个`Rc<RefCell<i32>>`值。希望储存这个类型是因为其可以拥有不属于列表一部分的这个值的所有者（`Rc<T>`提供的多个所有者功能），而且还可以改变内部的`i32`值（`RefCell<T>`提供的内部可变性功能）：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 #[derive(Debug)]
@@ -152,8 +152,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-15: Using `Rc<RefCell<i32>>` to create a
-`List` that we can mutate</span>
+<span class="caption">示例 15-15: 使用 `Rc<RefCell<i32>>` 创建能够修改的 `List`</span>
 
 我们创建了一个值，它是`Rc<RefCell<i32>>`的实例。将其储存在变量`value`中因为我们希望之后能直接访问它。接着在`a`中创建了一个拥有存放了`value`值的`Cons`成员的`List`，而且`value`需要被克隆因为我们希望除了`a`之外还拥有`value`的所有权。接着将`a`封装进`Rc<T>`中这样就可以创建都引用`a`的有着不同开头的列表`b`和`c`，类似示例 15-12 中所做的那样。
 

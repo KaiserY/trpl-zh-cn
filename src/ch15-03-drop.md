@@ -12,7 +12,7 @@
 
 示例 15-8 展示了并没有实际功能的结构体`CustomSmartPointer`，不过我们会在创建实例之后打印出`CustomSmartPointer created.`，而在实例离开作用域时打印出`Dropping CustomSmartPointer!`，这样就能看出每一段代码是何时被执行的。实际的项目中，我们应该在`drop`中清理任何智能指针运行所需要的资源，而不是这个例子中的`println!`语句：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 struct CustomSmartPointer {
@@ -32,9 +32,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-8: A `CustomSmartPointer` struct that
-implements the `Drop` trait, where we could put code that would clean up after
-the `CustomSmartPointer`.</span>
+<span class="caption">示例 15-8: 结构体 `CustomSmartPointer` 实现了 `Drop` trait, 我们能够放入代码以便在 `CustomSmartPointer` 离开作用域后进行清理</span>
 
 `Drop` trait 位于 prelude 中，所以无需导入它。`drop`方法的实现调用了`println!`；这里是你需要放入实际关闭套接字代码的地方。在`main`函数中，我们创建一个`CustomSmartPointer`的新实例并打印出`CustomSmartPointer created.`以便在运行时知道代码运行到此处。在`main`的结尾，`CustomSmartPointer`的实例会离开作用域。注意我们没有显式调用`drop`方法：
 
@@ -50,7 +48,7 @@ Dropping CustomSmartPointer!
 
 可以使用`std::mem::drop`函数来在值离开作用域之前丢弃它。这通常是不必要的；整个`Drop` trait 的要点在于它自动的帮我们处理清理工作。在第十六章讲到并发时我们会看到一个需要在离开作用域之前丢弃值的例子。现在知道这是可能的即可，`std::mem::drop`位于 prelude 中所以可以如示例 15-9 所示直接调用`drop`：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -61,8 +59,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-9: Calling `std::mem::drop` to explicitly drop
-a value before it goes out of scope</span>
+<span class="caption">示例 15-9: 在一个值离开作用域之前，调用 `std::mem::drop` 显式进行回收</span>
 
 运行这段代码会打印出如下内容，因为`Dropping CustomSmartPointer!`在`CustomSmartPointer created.`和`Wait for it...`之间被打印出来，表明析构代码被执行了：
 

@@ -28,9 +28,9 @@
 
 ### `Mutex<T>`的 API
 
-让我们看看列表 16-12 中使用互斥器的例子，现在不涉及多线程：
+让我们看看示例 16-12 中使用互斥器的例子，现在不涉及多线程：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 use std::sync::Mutex;
@@ -47,23 +47,22 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-12: Exploring the API of `Mutex<T>` in a
-single threaded context for simplicity</span>
+<span class="caption">示例 16-12: 为简单，在一个单线程中探索 `Mutex<T>` 的 API</span>
 
-像很多类型一样，我们使用关联函数 `new` 来创建一个 `Mutex<T>`。使用`lock`方法获取锁，以访问互斥器中的数据。这个调用会阻塞，直到我们拥有锁为止。如果另一个线程拥有锁，并且那个线程 panic 了，则这个调用会失败。类似于列表 16-6 那样，我们暂时使用 `unwrap()` 进行错误处理，或者使用第九章中提及的更好的工具。
+像很多类型一样，我们使用关联函数 `new` 来创建一个 `Mutex<T>`。使用`lock`方法获取锁，以访问互斥器中的数据。这个调用会阻塞，直到我们拥有锁为止。如果另一个线程拥有锁，并且那个线程 panic 了，则这个调用会失败。类似于示例 16-6 那样，我们暂时使用 `unwrap()` 进行错误处理，或者使用第九章中提及的更好的工具。
 
 
 一旦获取了锁，就可以将返回值（在这里是`num`）作为一个数据的可变引用使用了。观察 Rust 类型系统如何保证使用值之前必须获取锁：`Mutex<i32>`并不是一个`i32`，所以**必须**获取锁才能使用这个`i32`值。我们是不会忘记这么做的，因为类型系统不允许。
 
 
-你也许会怀疑，`Mutex<T>`是一个智能指针？是的！更准确的说，`lock`调用返回一个叫做`MutexGuard`的智能指针。类似我们在第十五章见过的智能指针，它实现了`Deref`来指向其内部数据。另外`MutexGuard`有一个用来释放锁的`Drop`实现。这样就不会忘记释放锁了。这在`MutexGuard`离开作用域时会自动发生，例如它发生于列表 16-12 中内部作用域的结尾。接着可以打印出互斥器的值并发现能够将其内部的`i32`改为 6。
+你也许会怀疑，`Mutex<T>`是一个智能指针？是的！更准确的说，`lock`调用返回一个叫做`MutexGuard`的智能指针。类似我们在第十五章见过的智能指针，它实现了`Deref`来指向其内部数据。另外`MutexGuard`有一个用来释放锁的`Drop`实现。这样就不会忘记释放锁了。这在`MutexGuard`离开作用域时会自动发生，例如它发生于示例 16-12 中内部作用域的结尾。接着可以打印出互斥器的值并发现能够将其内部的`i32`改为 6。
 
 #### 在线程间共享`Mutex<T>`
 
 现在让我们尝试使用`Mutex<T>`在多个线程间共享值。我们将启动十个线程，并在各个线程中对同一个计数器值加一，这样计数器将从 0 变为 10。注意，接下来的几个例子会出现编译错误，而我们将通过这些错误来学习如何使用
-`Mutex<T>`，以及 Rust 又是如何辅助我们以确保正确。列表 16-13 是最开始的例子：
+`Mutex<T>`，以及 Rust 又是如何辅助我们以确保正确。示例 16-13 是最开始的例子：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
 use std::sync::Mutex;
@@ -90,12 +89,11 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-13: The start of a program having 10 threads
-each increment a counter guarded by a `Mutex<T>`</span>
+<span class="caption">示例 16-13: 程序启动了 10 个线程，每个线程都通过 `Mutex<T>` 来增加计数器的值</span>
 
-这里创建了一个 `counter` 变量来存放内含 `i32` 的 `Mutex<T>`，类似列表 16-12 那样。接下来使用 range 创建了 10 个线程。使用了 `thread::spawn` 并对所有线程使用了相同的闭包：他们每一个都将调用 `lock` 方法来获取 `Mutex<T>` 上的锁，接着将互斥器中的值加一。当一个线程结束执行，`num` 会离开闭包作用域并释放锁，这样另一个线程就可以获取它了。
+这里创建了一个 `counter` 变量来存放内含 `i32` 的 `Mutex<T>`，类似示例 16-12 那样。接下来使用 range 创建了 10 个线程。使用了 `thread::spawn` 并对所有线程使用了相同的闭包：他们每一个都将调用 `lock` 方法来获取 `Mutex<T>` 上的锁，接着将互斥器中的值加一。当一个线程结束执行，`num` 会离开闭包作用域并释放锁，这样另一个线程就可以获取它了。
 
-在主线程中，我们像列表 16-2 那样收集了所有的 join 句柄，调用它们的 `join` 方法来确保所有线程都会结束。之后，主线程会获取锁并打印出程序的结果。
+在主线程中，我们像示例 16-2 那样收集了所有的 join 句柄，调用它们的 `join` 方法来确保所有线程都会结束。之后，主线程会获取锁并打印出程序的结果。
 
 之前提示过这个例子不能编译，让我们看看为什么！
 
@@ -114,7 +112,7 @@ referenced variables), use the `move` keyword, as shown:
    |         let handle = thread::spawn(move || {
 ```
 
-这类似于列表 16-5 中解决了的问题。考虑到启动了多个线程，Rust 无法知道这些线程会运行多久，而在每一个线程尝试借用 `counter` 时它是否仍然有效。帮助信息提醒了我们如何解决它：可以使用 `move` 来给予每个线程其所有权。尝试在闭包上做一点改动：
+这类似于示例 16-5 中解决了的问题。考虑到启动了多个线程，Rust 无法知道这些线程会运行多久，而在每一个线程尝试借用 `counter` 时它是否仍然有效。帮助信息提醒了我们如何解决它：可以使用 `move` 来给予每个线程其所有权。尝试在闭包上做一点改动：
 
 ```rust,ignore
 thread::spawn(move || {
@@ -149,9 +147,9 @@ error[E0382]: use of moved value: `counter`
 error: aborting due to 2 previous errors
 ```
 
-`move` 并没有像列表 16-5 中那样解决问题。为什么呢？错误信息有点难懂，因为它表明 `counter` 被移动进了闭包，接着它在调用 `lock` 时被捕获。这似乎是我们希望的，然而不被允许。
+`move` 并没有像示例 16-5 中那样解决问题。为什么呢？错误信息有点难懂，因为它表明 `counter` 被移动进了闭包，接着它在调用 `lock` 时被捕获。这似乎是我们希望的，然而不被允许。
 
-让我们推理一下。这次不再使用 `for` 循环创建 10 个线程，只创建两个线程，看看会发生什么。将列表 16-13 中第一个`for`循环替换为如下代码：
+让我们推理一下。这次不再使用 `for` 循环创建 10 个线程，只创建两个线程，看看会发生什么。将示例 16-13 中第一个`for`循环替换为如下代码：
 
 ```rust,ignore
 let handle = thread::spawn(move || {
@@ -203,9 +201,9 @@ error: aborting due to 2 previous errors
 
 #### 多线程和多所有权
 
-在第十五章中，我们通过使用智能指针 `Rc<T>` 来创建引用计数的值，以便拥有多所有权。同时第十五章提到了 `Rc<T>` 只能在单线程环境中使用，不过还是在这里试用 `Rc<T>` 看看会发生什么。列表 16-14 将 `Mutex<T>` 装进了 `Rc<T>` 中，并在移入线程之前克隆了 `Rc<T>`。再用循环来创建线程，保留闭包中的 `move` 关键字：
+在第十五章中，我们通过使用智能指针 `Rc<T>` 来创建引用计数的值，以便拥有多所有权。同时第十五章提到了 `Rc<T>` 只能在单线程环境中使用，不过还是在这里试用 `Rc<T>` 看看会发生什么。示例 16-14 将 `Mutex<T>` 装进了 `Rc<T>` 中，并在移入线程之前克隆了 `Rc<T>`。再用循环来创建线程，保留闭包中的 `move` 关键字：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 use std::rc::Rc;
@@ -234,8 +232,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-14: Attempting to use `Rc<T>` to allow
-multiple threads to own the `Mutex<T>`</span>
+<span class="caption">示例 16-14: 尝试使用 `Rc<T>` 来允许多个线程拥有 `Mutex<T>`</span>
 
 再一次编译并...出现了不同的错误！编译器真是教会了我们很多！
 
@@ -266,9 +263,9 @@ std::marker::Send` is not satisfied
 
 为什么不是所有的原始类型都是原子性的？为什么不是所有标准库中的类型都默认使用`Arc<T>`实现？线程安全带来性能惩罚，我们希望只在必要时才为此买单。如果只是在单线程中对值进行操作，原子性提供的保证并无必要，代码可以因此运行的更快。
 
-回到之前的例子：`Arc<T>`和`Rc<T>`除了`Arc<T>`内部的原子性之外没有区别。其 API 也相同，所以可以修改`use`行和`new`调用。列表 16-15 中的代码最终可以编译和运行：
+回到之前的例子：`Arc<T>`和`Rc<T>`除了`Arc<T>`内部的原子性之外没有区别。其 API 也相同，所以可以修改`use`行和`new`调用。示例 16-15 中的代码最终可以编译和运行：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 use std::sync::{Mutex, Arc};
@@ -296,8 +293,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-15: Using an `Arc<T>` to wrap the `Mutex<T>`
-to be able to share ownership across multiple threads</span>
+<span class="caption">示例 16-15: 使用 `Arc<T>` 包装一个 `Mutex<T>` 能够实现在多线程之间共享所有权</span>
 
 这会打印出：
 

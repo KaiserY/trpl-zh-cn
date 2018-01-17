@@ -20,9 +20,9 @@
 
 ### 使用`spawn`创建新线程
 
-为了创建一个新线程，调用`thread::spawn`函数并传递一个闭包（第十三章学习了闭包），它包含希望在新线程运行的代码。列表 16-1 中的例子在新线程中打印了一些文本而其余的文本在主线程中打印：
+为了创建一个新线程，调用`thread::spawn`函数并传递一个闭包（第十三章学习了闭包），它包含希望在新线程运行的代码。示例 16-1 中的例子在新线程中打印了一些文本而其余的文本在主线程中打印：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 use std::thread;
@@ -40,8 +40,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-1: Creating a new thread to print one thing
-while the main thread is printing something else</span>
+<span class="caption">示例 16-1: 创建一个打印某些内容的新线程，但是主线程打印其它内容</span>
 
 
 注意这个函数编写的方式，当主线程结束时，它也会停止新线程。这个程序的输出每次可能都略微不同，不过它大体上看起来像这样：
@@ -62,9 +61,9 @@ hi number 5 from the spawned thread!
 
 #### 使用`join`等待所有线程结束
 
-由于主线程先于新建线程结束，不仅列表 16-1 中的代码大部分时候不能保证新建线程执行完毕，甚至不能实际保证新建线程会被执行！可以通过保存`thread::spawn`的返回值来解决这个问题，这是一个`JoinHandle`。这看起来如列表 16-2 所示：
+由于主线程先于新建线程结束，不仅示例 16-1 中的代码大部分时候不能保证新建线程执行完毕，甚至不能实际保证新建线程会被执行！可以通过保存`thread::spawn`的返回值来解决这个问题，这是一个`JoinHandle`。这看起来如示例 16-2 所示：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 use std::thread;
@@ -84,8 +83,8 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-2: Saving a `JoinHandle` from `thread::spawn`
-to guarantee the thread is run to completion</span>
+<span class="caption">示例 16-2: 从 `thread::spawn` 保存一个 `JoinHandle`， 
+以确保该线程能够运行至结束</span>
 
 `JoinHandle`是一个拥有所有权的值，它可以等待一个线程结束，这也正是`join`方法所做的。通过调用这个句柄的`join`，当前线程会阻塞直到句柄所代表的线程结束。因为我们将`join`调用放在了主线程的`for`循环之后，运行这个例子将产生类似这样的输出：
 
@@ -109,7 +108,7 @@ hi number 9 from the spawned thread!
 
 如果将`handle.join()`放在主线程的`for`循环之前，像这样：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 use std::thread;
@@ -157,9 +156,9 @@ hi number 4 from the main thread!
 
 现在我们正在创建新线程，所以让我们讨论一下获取环境值的闭包吧！
 
-注意列表 16-1 中传递给`thread::spawn`的闭包并没有任何参数：并没有在新建线程代码中使用任何主线程的数据。为了在新建线程中使用来自于主线程的数据，需要新建线程的闭包获取它需要的值。列表 16-3 展示了一个尝试在主线程中创建一个 vector 并用于新建线程的例子，不过这么写还不能工作：
+注意示例 16-1 中传递给`thread::spawn`的闭包并没有任何参数：并没有在新建线程代码中使用任何主线程的数据。为了在新建线程中使用来自于主线程的数据，需要新建线程的闭包获取它需要的值。示例 16-3 展示了一个尝试在主线程中创建一个 vector 并用于新建线程的例子，不过这么写还不能工作：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
 use std::thread;
@@ -175,8 +174,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-3: Attempting to use a vector created by the
-main thread from another thread</span>
+<span class="caption">示例 16-3: 在主线程中创建一个 vector，尝试在其它线程中使用它/span>
 
 闭包使用了`v`，所以闭包会获取`v`并使其成为闭包环境的一部分。因为`thread::spawn`在一个新线程中运行这个闭包，所以可以在新线程中访问`v`。
 
@@ -199,9 +197,9 @@ variables), use the `move` keyword, as shown:
 
 当在闭包环境中获取某些值时，Rust 会尝试推断如何获取它。`println!`只需要`v`的一个引用，所以闭包尝试借用`v`。但是这有一个问题：我们并不知道新建线程会运行多久，所以无法知道`v`是否一直时有效的。
 
-考虑一下列表 16-4 中的代码，它展示了一个`v`的引用很有可能不再有效的场景：
+考虑一下示例 16-4 中的代码，它展示了一个`v`的引用很有可能不再有效的场景：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
 use std::thread;
@@ -219,8 +217,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-4: A thread with a closure that attempts to
-capture a reference to `v` from a main thread that drops `v`</span>
+<span class="caption">示例 16-4: 一个具有闭包的线程，尝试使用一个在主线程中被回收的引用 `v`</span>
 
 这些代码可以运行，而新建线程则可能直接就出错了并完全没有机会运行。新建线程内部有一个`v`的引用，不过主线程仍在执行：它立刻丢弃了`v`，使用了第十五章提到的显式丢弃其参数的`drop`函数。接着，新建线程开始执行，现在`v`是无效的了，所以它的引用也就是无效的。噢，这太糟了！
 
@@ -232,9 +229,9 @@ variables), use the `move` keyword, as shown:
   |     let handle = thread::spawn(move || {
 ```
 
-通过在闭包之前增加`move`关键字，我们强制闭包获取它使用的值的所有权，而不是引用借用。列表 16-5 中展示的对列表 16-3 代码的修改可以按照我们的预期编译并运行：
+通过在闭包之前增加`move`关键字，我们强制闭包获取它使用的值的所有权，而不是引用借用。示例 16-5 中展示的对示例 16-3 代码的修改可以按照我们的预期编译并运行：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 use std::thread;
@@ -250,10 +247,9 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-5: Using the `move` keyword to force a closure
-to take ownership of the values it uses</span>
+<span class="caption">示例 16-5: 使用 `move` 关键字强制获取它使用的值的所有权</span>
 
-那么列表 16-4 中那个主线程调用了`drop`的代码该怎么办呢？如果在闭包上增加了`move`，就将`v`移动到了闭包的环境中，我们将不能对其调用`drop`了。相反会出现这个编译时错误：
+那么示例 16-4 中那个主线程调用了`drop`的代码该怎么办呢？如果在闭包上增加了`move`，就将`v`移动到了闭包的环境中，我们将不能对其调用`drop`了。相反会出现这个编译时错误：
 
 ```
 error[E0382]: use of moved value: `v`
