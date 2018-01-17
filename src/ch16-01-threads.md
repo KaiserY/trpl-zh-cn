@@ -174,7 +174,7 @@ fn main() {
 }
 ```
 
-<span class="caption">示例 16-3: 在主线程中创建一个 vector，尝试在其它线程中使用它/span>
+<span class="caption">示例 16-3: 在主线程中创建一个 vector，尝试在其它线程中使用它</span>
 
 闭包使用了`v`，所以闭包会获取`v`并使其成为闭包环境的一部分。因为`thread::spawn`在一个新线程中运行这个闭包，所以可以在新线程中访问`v`。
 
