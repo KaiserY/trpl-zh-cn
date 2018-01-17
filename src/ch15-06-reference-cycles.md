@@ -10,7 +10,7 @@
 
 在示例 15-16 中，我们将使用示例 15-5 中`List`定义的另一个变体。我们将回到储存`i32`值作为`Cons`成员的第一个元素。现在`Cons`成员的第二个元素是`RefCell<Rc<List>>`：这时就不能修改`i32`值了，但是能够修改`Cons`成员指向的那个`List`。还需要增加一个`tail`方法来方便我们在拥有一个`Cons`成员时访问第二个项：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
 #[derive(Debug)]
@@ -29,12 +29,11 @@ impl List {
 }
 ```
 
-<span class="caption">Listing 15-16: A cons list definition that holds a
-`RefCell` so that we can modify what a `Cons` variant is referring to</span>
+<span class="caption">示例 15-16: 持有 `RefCell` 的 cons 列表定义，我们不能修改 `Cons` 变体引用的内容/span>
 
 接下来，在示例 15-17 中，我们将在变量`a`中创建一个`List`值，其内部是一个`5, Nil`的列表。接着在变量`b`创建一个值 10 和指向`a`中列表的`List`值。最后修改`a`指向`b`而不是`Nil`，这会创建一个循环：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 # #[derive(Debug)]
@@ -82,15 +81,13 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-17: Creating a reference cycle of two `List`
-values pointing to each other</span>
+<span class="caption">示例 15-17: 创建一个引用循环：两个`List` 的值互相指向彼此</span>
 
 使用`tail`方法来获取`a`中`RefCell`的引用，并将其放入变量`link`中。接着对`RefCell`使用`borrow_mut`方法将其中的值从存放`Nil`值的`Rc`改为`b`中的`Rc`。这创建了一个看起来像图 15-18 所示的引用循环：
 
 <img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 15-18: A reference cycle of lists `a` and `b`
-pointing to each other</span>
+<span class="caption">图 15-18: 列表 `a` 和 `b` 彼此互相指向形成引用循环</span>
 
 如果你注释掉最后的`println!`，Rust 会尝试打印出`a`指向`b`指向`a`这样的循环直到栈溢出。
 
@@ -122,7 +119,7 @@ struct Node {
 我们希望能够`Node`拥有其子节点，同时也希望变量可以拥有每个节点以便可以直接访问他们。这就是为什么`Vec`中的项是`Rc<Node>`值。我们也希望能够修改其他节点的子节点，这就是为什么`children`中`Vec`被放进了`RefCell`的原因。在示例 15-19 中创建了一个叫做`leaf`的带有值 3 并没有子节点的`Node`实例，和另一个带有值 5 和以`leaf`作为子节点的实例`branch`：
 
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -138,9 +135,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-19: Creating a `leaf` node and a `branch` node
-where `branch` has `leaf` as one of its children but `leaf` has no reference to
-`branch`</span>
+<span class="caption">示例 15-19: 创建一个 `leaf` 节点 和一个 `branch` 节点，使 `leaf` 作为 `branch` 的一个孩子之一，但是`leaf` 没有持有 `branch` 的引用</span>
 
 `leaf`中的`Node`现在有两个所有者：`leaf`和`branch`，因为我们克隆了`leaf`中的`Rc`并储存在了`branch`中。`branch`中的`Node`知道它与`leaf`相关联因为`branch`在`branch.children`中有`leaf`的引用。然而，`leaf`并不知道它与`branch`相关联，而我们希望`leaf`知道`branch`是其父节点。
 
@@ -148,7 +143,7 @@ where `branch` has `leaf` as one of its children but `leaf` has no reference to
 
 所以在`parent`的类型中是使用`Weak<T>`而不是`Rc`，具体来说是`RefCell<Weak<Node>>`：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 use std::rc::{Rc, Weak};
@@ -164,7 +159,7 @@ struct Node {
 
 这样，一个节点就能够在拥有父节点时指向它，而并不拥有其父节点。一个父节点哪怕在拥有指向它的子节点也会被丢弃，只要是其自身也没有一个父节点就行。现在将`main`函数更新为如示例 15-20 所示：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -188,8 +183,8 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-20: A `leaf` node and a `branch` node where
-`leaf` has a `Weak` reference to its parent, `branch`</span>
+<span class="caption">示例 15-20: 一个 `leaf` 节点和一个 `branch` 节点， 
+`leaf` 节点具有一个指向其父节点 `branch` 的 `Weak` 引用</span>
 
 创建`leaf`节点是类似的；因为它作为开始并没有父节点，这里创建了一个新的`Weak`引用实例。当尝试通过`upgrade`方法获取`leaf`父节点的引用时，会得到一个`None`值，如第一个`println!`输出所示：
 
@@ -209,7 +204,7 @@ children: RefCell { value: [] } }] } })
 
 没有无限的输出（或直到栈溢出）的事实表明这里并没有引用循环。另一种证明的方式时观察调用`Rc::strong_count`和`Rc::weak_count`的值。在示例 15-21 中，创建了一个新的内部作用域并将`branch`的创建放入其中，这样可以观察`branch`被创建时和离开作用域被丢弃时发生了什么：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -255,8 +250,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-21: Creating `branch` in an inner scope and
-examining strong and weak reference counts of `leaf` and `branch`</span>
+<span class="caption">示例 15-21: 在内部范围创建一个 `branch` 节点，并检查 `leaf` 和 `branch` 的强弱引用计数</span>
 
 创建`leaf`之后，强引用计数是 1 （用于`leaf`自身）而弱引用计数是 0。在内部作用域中，在创建`branch`和关联`leaf`和`branch`之后，`branch`的强引用计数为 1（用于`branch`自身）而弱引用计数为 1（因为`leaf.parent`通过一个`Weak<T>`指向`branch`）。`leaf`的强引用计数为 2，因为`branch`现在有一个`leaf`克隆的`Rc`储存在`branch.children`中。`leaf`的弱引用计数仍然为 0。
 
