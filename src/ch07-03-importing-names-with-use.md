@@ -1,10 +1,10 @@
-## 导入命名
+## 引用不同模块中的名称
 
 > [ch07-03-importing-names-with-use.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-03-importing-names-with-use.md)
 > <br>
-> commit d06a6a181fd61704cbf7feb55bc61d518c6469f9
+> commit 550c8ea6f74060ff1f7b67e7e1878c4da121682d
 
-我们已经讲到了如何使用模块名称作为调用的一部分，来调用模块中的函数，如示例 7-6 中所示的 `nested_modules` 函数调用。
+我们已经讲到了如何使用模块名称作为调用的一部分，来调用模块中的函数，如示例 7-7 中所示的 `nested_modules` 函数调用。
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -22,13 +22,13 @@ fn main() {
 }
 ```
 
-<span class="caption">示例 7-6：通过完全指定模块中的路径来调用函数</span>
+<span class="caption">示例 7-7：通过完全指定模块中的路径来调用函数</span>
 
 如你所见，指定函数的完全限定名称可能会非常冗长。所幸 Rust 有一个关键字使得这些调用显得更简洁。
 
-### 使用 `use` 的简单导入
+### 使用 `use` 关键字将名称导入作用域
 
-Rust 的 `use` 关键字的工作是缩短冗长的函数调用，通过将想要调用的函数所在的模块引入到作用域中。这是一个将 `a::series::of` 模块导入一个二进制 crate 的根作用域的例子：
+Rust 的 `use` 关键字的工作通过将想要调用的函数所在的模块引入到作用域中来缩短冗长的函数调用。这是一个将 `a::series::of` 模块导入一个二进制 crate 的根作用域的例子：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -72,7 +72,7 @@ fn main() {
 
 这使得我们可以忽略所有的模块并直接引用函数。
 
-因为枚举也像模块一样组成了某种命名空间，也可以使用 `use` 来导入枚举的成员。对于任何类型的 `use` 语句，如果从一个命名空间导入多个项，可以使用大括号和逗号来列举它们，像这样：
+因为枚举也像模块一样组成了某种命名空间，也可以使用 `use` 来导入枚举的成员。对于任何类型的 `use` 语句，如果从一个命名空间导入多个项，可以在最后使用大括号和逗号来列举它们，像这样：
 
 ```rust
 enum TrafficLight {
@@ -90,9 +90,11 @@ fn main() {
 }
 ```
 
-### 使用 `*` 的全局引用导入
+我们仍然为 `Green` 成员指定了 `TrafficLight` 命名空间，因为并没有在 `use` 语句中包含 `Green`。
 
-为了一次导入某个命名空间的所有项，可以使用 `*` 语法。例如：
+### 使用 glob 将所有名称引入作用域
+
+为了一次将某个命名空间下的所有名称都引入作用域，可以使用 `*` 语法，这称为 **glob 运算符**（*glob operator*）。这个例子将一个枚举的所有成员引入作用域而没有将其一一列举出来：
 
 ```rust
 enum TrafficLight {
@@ -110,7 +112,7 @@ fn main() {
 }
 ```
 
-`*` 被称为 **全局导入**（*glob*），它会导入命名空间中所有可见的项。全局导入应该保守的使用：它们是方便的，但是也可能会引入多于你预期的内容从而导致命名冲突。
+`*` 会将 `TrafficLight` 命名空间中所有可见的项都引入作用域。请保守的使用 glob：它们是方便的，但是也可能会引入多于预期的内容从而导致命名冲突。
 
 ### 使用 `super` 访问父模块
 
@@ -132,7 +134,7 @@ mod tests {
 }
 ```
 
-第十一章会更详细的解释测试，不过其部分内容现在应该可以理解了：有一个叫做 `tests` 的模块紧邻其他模块，同时包含一个叫做 `it_works` 的函数。即便存在一些特殊注解，`tests` 也不过是另外一个模块！所以我们的模块层次结构看起来像这样：
+第十一章会更详细的解释测试，不过其中部分内容现在应该可以理解了：有一个叫做 `tests` 的模块紧邻其他模块，同时包含一个叫做 `it_works` 的函数。即便存在一些特殊注解，`tests` 也不过是另外一个模块！所以我们的模块层次结构看起来像这样：
 
 ```text
 communicator
@@ -142,7 +144,7 @@ communicator
  └── tests
 ```
 
-测试是为了检验库中的代码而存在的，所以让我们尝试在 `it_works` 函数中调用 `client::connect` 函数，即便现在不准备测试任何功能：
+测试是为了检验库中的代码而存在的，所以让我们尝试在 `it_works` 函数中调用 `client::connect` 函数，即便现在不准备测试任何功能。这还不能工作：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -165,7 +167,7 @@ error[E0433]: failed to resolve. Use of undeclared type or module `client`
  --> src/lib.rs:9:9
   |
 9 |         client::connect();
-  |         ^^^^^^^^^^^^^^^ Use of undeclared type or module `client`
+  |         ^^^^^^ Use of undeclared type or module `client`
 ```
 
 编译失败了，不过为什么呢？并不需要像 *src/main.rs* 那样将 `communicator::` 置于函数前，因为这里肯定是在 `communicator` 库 crate 之内的。失败的原因是路径是相对于当前模块的，在这里就是 `tests`。唯一的例外就是 `use` 语句，它默认是相对于 crate 根模块的。我们的 `tests` 模块需要 `client` 模块位于其作用域中！
@@ -176,7 +178,7 @@ error[E0433]: failed to resolve. Use of undeclared type or module `client`
 ::client::connect();
 ```
 
-要么可以使用 `super` 在层级中获取当前模块的上一级模块：
+要么可以使用 `super` 在层级中上移到当前模块的上一级模块，如下：
 
 ```rust,ignore
 super::client::connect();
@@ -212,7 +214,7 @@ $ cargo test
 running 1 test
 test tests::it_works ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 ## 总结

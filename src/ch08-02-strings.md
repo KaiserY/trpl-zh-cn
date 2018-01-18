@@ -1,8 +1,8 @@
-## 字符串
+## 字符串存储了 UTF-8 编码的文本
 
 > [ch08-02-strings.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch08-02-strings.md)
 > <br>
-> commit 692c4a78aac93670bc6f1fa5d33f71ed161b9339
+> commit c2fd7b2d39c4130dd17bb99c101ac94af83d1a44
 
 第四章已经讲过一些字符串的内容，不过现在让我们更深入地了解它。字符串是新晋 Rustacean 们通常会被困住的领域。这是由于三方面内容的结合：Rust 倾向于确保暴露出可能的错误，字符串是比很多程序员所想象的要更为复杂的数据结构，以及 UTF-8。所有这些结合起来对于来自其他语言背景的程序员就可能显得很困难了。
 

@@ -2,7 +2,7 @@
 
 > [ch07-01-mod-and-the-filesystem.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-01-mod-and-the-filesystem.md)
 > <br>
-> commit c6a9e77a1b1ed367e0a6d5dcd222589ad392a8ac
+> commit 478fa6f92b6e7975f5e4da8a84a498fb873b937d
 
 我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过这次不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章猜猜看游戏中作为依赖使用的 `rand` 就是这样的 crate。
 
@@ -35,7 +35,7 @@ Cargo 创建了一个空的测试来帮助我们开始库项目，不像使用 `
 
 ### 模块定义
 
-对于 `communicator` 网络库，首先要定义一个叫做 `network` 的模块，它包含一个叫做 `connect` 的函数定义。Rust 中所有模块的定义以关键字 `mod` 开始。在 *src/lib.rs* 文件的开头在测试代码的上面增加这些代码：
+对于 `communicator` 网络库，首先要定义一个叫做 `network` 的模块，它包含一个叫做 `connect` 的函数定义。Rust 中所有模块的定义都以关键字 `mod` 开始。在 *src/lib.rs* 文件的开头在测试代码的上面增加这些代码：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -140,9 +140,9 @@ communicator
      └── server
 ```
 
-如果这些模块有很多函数，而这些函数又很长，将难以在文件中寻找我们需要的代码。因为这些函数被嵌套进一个或多个模块中，同时函数中的代码也会开始变长。这就有充分的理由将`client`、`network` 和 `server`每一个模块从 *src/lib.rs* 抽出并放入它们自己的文件中。
+如果这些模块有很多函数，而这些函数又很长，将难以在文件中寻找我们需要的代码。因为这些函数被嵌套进一个或多个 `mod` 块中，同时函数中的代码也会开始变长。这就有充分的理由将 `client`、`network` 和 `server` 每一个模块从 *src/lib.rs* 抽出并放入它们自己的文件中。
 
-首先，将 `client` 模块的代码替换为只有 `client` 模块声明，这样 *src/lib.rs* 看起来应该像这样：
+首先，将 `client` 模块的代码替换为只有 `client` 模块声明，这样 *src/lib.rs* 看起来应该像如示例 7-4 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -160,6 +160,8 @@ mod network {
 }
 ```
 
+<span class="caption">示例 7-4：提取出 `client` 模块的内容但仍将其声明留在 *src/lib.rs*</span>
+
 这里我们仍然 **声明** 了 `client` 模块，不过将代码块替换为了分号，这告诉了 Rust 在 `client` 模块的作用域中寻找另一个定义代码的位置。换句话说，`mod client;` 行意味着：
 
 ```rust,ignore
@@ -170,7 +172,7 @@ mod client {
 
 那么现在需要创建对应模块名的外部文件。在 *src/* 目录创建一个 *client.rs* 文件，接着打开它并输入如下内容，它是上一步被去掉的 `client` 模块中的 `connect` 函数：
 
-<span class="filename">Filename: src/client.rs</span>
+<span class="filename">文件名: src/client.rs</span>
 
 ```rust
 fn connect() {
@@ -186,31 +188,35 @@ Rust 默认只知道 *src/lib.rs* 中的内容。如果想要对项目加入更�
 ```text
 $ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/client.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
+  |
+  = note: #[warn(dead_code)] on by default
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/lib.rs:4:5
   |
-4 |     fn connect() {
-  |     ^
+4 | /     fn connect() {
+5 | |     }
+  | |_____^
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/lib.rs:8:9
   |
-8 |         fn connect() {
-  |         ^
+8 | /         fn connect() {
+9 | |         }
+  | |_________^
 ```
 
-这些警告提醒我们有从未被使用的函数。目前不用担心这些警告，在本章后面的 “使用 `pub` 控制可见性” 部分会解决它们。好消息是，它们仅仅是警告，我们的项目能够被成功编译。
+这些警告提醒我们有从未被使用的函数。目前不用担心这些警告，在本章后面的 “使用 `pub` 控制可见性” 部分会解决它们。好消息是，它们仅仅是警告，我们的项目能够成功编译。
 
 下面使用相同的模式将 `network` 模块提取到自己的文件中。删除 *src/lib.rs* 中 `network` 模块的内容并在声明后加上一个分号，像这样：
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
 mod client;
@@ -220,7 +226,7 @@ mod network;
 
 接着新建 *src/network.rs* 文件并输入如下内容：
 
-<span class="filename">Filename: src/network.rs</span>
+<span class="filename">文件名: src/network.rs</span>
 
 ```rust
 fn connect() {
@@ -236,7 +242,7 @@ mod server {
 
 现在再次运行 `cargo build`。成功！不过我们还需要再提取出另一个模块：`server`。因为这是一个子模块——也就是模块中的模块——目前的将模块提取到对应名字的文件中的策略就不管用了。如果我们仍这么尝试则会出现错误。对 *src/network.rs* 的第一个修改是用 `mod server;` 替换 `server` 模块的内容：
 
-<span class="filename">Filename: src/network.rs</span>
+<span class="filename">文件名: src/network.rs</span>
 
 ```rust,ignore
 fn connect() {
@@ -247,14 +253,14 @@ mod server;
 
 接着创建 *src/server.rs* 文件并输入需要提取的 `server` 模块的内容：
 
-<span class="filename">Filename: src/server.rs</span>
+<span class="filename">文件名: src/server.rs</span>
 
 ```rust
 fn connect() {
 }
 ```
 
-当尝试运行 `cargo build` 时，会出现如示例 7-4 中所示的错误：
+当尝试运行 `cargo build` 时，会出现如示例 7-5 中所示的错误：
 
 ```text
 $ cargo build
@@ -265,7 +271,7 @@ error: cannot declare a new module at this location
 4 | mod server;
   |     ^^^^^^
   |
-note: maybe move this module `network` to its own directory via `network/mod.rs`
+note: maybe move this module `src/network.rs` to its own directory via `src/network/mod.rs`
  --> src/network.rs:4:5
   |
 4 | mod server;
@@ -277,11 +283,11 @@ note: ... or maybe `use` the module `server` instead of possibly redeclaring it
   |     ^^^^^^
 ```
 
-<span class="caption">示例 7-4：尝试将 `server` 子模块提取到 *src/server.rs* 时出现的错误</span>
+<span class="caption">示例 7-5：尝试将 `server` 子模块提取到 *src/server.rs* 时出现的错误</span>
 
 这个错误说明 “不能在这个位置新声明一个模块” 并指出 *src/network.rs* 中的 `mod server;` 这一行。看来 *src/network.rs* 与 *src/lib.rs* 在某些方面是不同的；继续阅读以理解这是为什么。
 
-示例 7-4 中间的 note 事实上是非常有帮助的，因为它指出了一些我们还未讲到的操作：
+示例 7-5 中间的 note 事实上是非常有帮助的，因为它指出了一些我们还未讲到的操作：
 
 ```text
 note: maybe move this module `network` to its own directory via
@@ -291,7 +297,7 @@ note: maybe move this module `network` to its own directory via
 我们可以按照记录所建议的去操作，而不是继续使用之前的与模块同名文件的模式：
 
 1. 新建一个叫做 *network* 的 **目录**，这是父模块的名字
-2. 将 *src/network.rs* 移动到新建的 *network* 目录中并重命名，现在它是 *src/network/mod.rs*
+2. 将 *src/network.rs* 移动到新建的 *network* 目录中并重命名为 *src/network/mod.rs*
 3. 将子模块文件 *src/server.rs* 移动到 *network* 目录中
 
 如下是执行这些步骤的命令：
@@ -322,7 +328,7 @@ communicator
 │       └── server.rs
 ```
 
-那么，当我们想要提取 `network::server` 模块时，为什么也必须将 *src/network.rs* 文件改名成 *src/network/mod.rs* 文件呢，还有为什么要将`network::server`的代码放入 *network* 目录的 *src/network/server.rs* 文件中，而不能将 `network::server` 模块提取到 *src/server.rs* 中呢？原因是如果 *server.rs* 文件在 *src* 目录中那么 Rust 就不能知道 `server` 应当是 `network` 的子模块。为了阐明这里 Rust 的行为，让我们考虑一下有着如下层级的另一个例子，它的所有定义都位于 *src/lib.rs* 中：
+那么，当我们想要提取 `network::server` 模块时，为什么也必须将 *src/network.rs* 文件改名成 *src/network/mod.rs* 文件呢，还有为什么要将 `network::server` 的代码放入 *network* 目录的 *src/network/server.rs* 文件中，而不能将 `network::server` 模块提取到 *src/server.rs* 中呢？原因是如果 *server.rs* 文件在 *src* 目录中那么 Rust 就不能知道 `server` 应当是 `network` 的子模块。为了阐明这里 Rust 的行为，让我们考虑一下有着如下层级的另一个例子，其所有定义都位于 *src/lib.rs* 中：
 
 ```text
 communicator
@@ -333,11 +339,11 @@ communicator
 
 在这个例子中，仍然有这三个模块，`client`、`network` 和 `network::client`。如果按照与上面最开始将模块提取到文件中相同的步骤来操作，对于 `client` 模块会创建 *src/client.rs*。对于 `network` 模块，会创建 *src/network.rs*。但是接下来不能将 `network::client` 模块提取到 *src/client.rs* 文件中，因为它已经存在了，对应顶层的 `client` 模块！如果将 `client` 和 `network::client` 的代码都放入 *src/client.rs* 文件，Rust 将无从可知这些代码是属于 `client` 还是 `network::client` 的。
 
-因此，一旦想要将 `network` 模块的子模块 `network::client` 提取到一个文件中，需要为 `network` 模块新建一个目录替代 *src/network.rs* 文件。接着 `network` 模块的代码将进入 *src/network/mod.rs* 文件，而子模块 `network::client` 将拥有其自己的文件 *src/network/client.rs*。现在顶层的 *src/client.rs* 中的代码毫无疑问的都属于 `client` 模块。
+因此，为了将 `network` 模块的子模块 `network::client` 提取到一个文件中，需要为 `network` 模块新建一个目录替代 *src/network.rs* 文件。接着 `network` 模块的代码将进入 *src/network/mod.rs* 文件，而子模块 `network::client` 将拥有其自己的文件 *src/network/client.rs*。现在顶层的 *src/client.rs* 中的代码毫无疑问的都属于 `client` 模块。
 
 ### 模块文件系统的规则
 
-与文件系统相关的模块规则总结如下：
+让我们总结一下与文件有关的模块规则：
 
 * 如果一个叫做 `foo` 的模块没有子模块，应该将 `foo` 的声明放入叫做 *foo.rs* 的文件中。
 * 如果一个叫做 `foo` 的模块有子模块，应该将 `foo` 的声明放入叫做 *foo/mod.rs* 的文件中。
