@@ -2,7 +2,7 @@
 
 > [ch10-03-lifetime-syntax.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-03-lifetime-syntax.md)
 > <br>
-> commit aa4be9389d18c31f587ebf75cbbb6af39ff4247d
+> commit fa0e4403f8350287b034c5b64af752f647ebb5a2
 
 当在第四章讨论引用时，我们遗漏了一个重要的细节：Rust 中的每一个引用都有其 **生命周期**（*lifetime*），也就是引用保持有效的作用域。大部分时候生命周期是隐含并可以推断的，正如大部分时候类型也是可以推断的一样。类似于当因为有多种可能类型的时候必须注明类型，也会出现引用的生命周期以一些不同方式相关联的情况，所以 Rust 需要我们使用泛型生命周期参数来注明他们的关系，这样就能确保运行时实际使用的引用绝对是有效的。
 
