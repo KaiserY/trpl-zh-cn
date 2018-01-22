@@ -2,15 +2,13 @@
 
 > [ch12-05-working-with-environment-variables.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-05-working-with-environment-variables.md)
 > <br>
-> commit adababc48956f4d39c97c8b6fc14a104d90e20dc
+> commit 1fe78a83f37ecc69b840fdc8dcfc727f88a3a3d4
 
-我们将用一个额外的功能来改进我们的工具：一个通过环境变量启用的大小写不敏感搜索的选项。我们可以将其设计为一个命令行参数并要求用户每次需要时都加上它，不过相反我们将使用环境变量。这允许用户设置环境变量一次之后在整个终端会话中所有的搜索都将是大小写不敏感的。
+我们将增加一个额外的功能来改进 `minigrep`：一个通过环境变量启用的大小写不敏感搜索的选项。可以将其设计为一个命令行参数并要求用户每次需要时都加上它，不过相反我们将使用环境变量。这允许用户设置环境变量一次之后在整个终端会话中所有的搜索都将是大小写不敏感的。
 
 ### 编写一个大小写不敏感 `search` 函数的失败测试
 
-首先，增加一个新函数，当设置了环境变量时会调用它。
-
-这里将继续遵循上一部分开始使用的 TDD 过程，其第一步是再次编写一个失败测试。我们将为新的大小写不敏感搜索函数新增一个测试函数，并将老的测试函数从 `one_result` 改名为 `case_sensitive` 来更清楚的表明这两个测试的区别，如示例 12-20 所示：
+我们希望增加一个新函数 `search_case_insensitive`，并将会在设置了环境变量时调用它。这里将继续遵循 TDD 过程，其第一步是再次编写一个失败测试。我们将为新的大小写不敏感搜索函数新增一个测试函数，并将老的测试函数从 `one_result` 改名为 `case_sensitive` 来更清楚的表明这两个测试的区别，如示例 12-20 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -93,7 +91,7 @@ running 2 tests
 test test::case_insensitive ... ok
 test test::case_sensitive ... ok
 
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 好的！现在，让我们在 `run` 函数中实际调用新 `search_case_insensitive` 函数。首先，我们将在 `Config` 结构体中增加一个配置项来切换大小写敏感和大小写不敏感搜索：
@@ -108,7 +106,7 @@ pub struct Config {
 }
 ```
 
-这里增加了 `case_sensitive` 字符来存放一个布尔值。接着我们需要 `run` 函数检查 `case_sensitive` 字段的值并使用它来决定是否调用 `search` 函数或 `search_case_insensitive` 函数，如示例 12-22 所示：
+这里增加了 `case_sensitive` 字符来存放一个布尔值。接着我们需要 `run` 函数检查 `case_sensitive` 字段的值并使用它来决定是否调用 `search` 函数或 `search_case_insensitive` 函数，如示例 12-22 所示。注意这还不能编译：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -131,7 +129,7 @@ pub struct Config {
 #     case_sensitive: bool,
 # }
 #
-pub fn run(config: Config) -> Result<(), Box<Error>>{
+pub fn run(config: Config) -> Result<(), Box<Error>> {
     let mut f = File::open(config.filename)?;
 
     let mut contents = String::new();
@@ -165,7 +163,7 @@ use std::env;
 #     case_sensitive: bool,
 # }
 
-// ...snip...
+// --snip--
 
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
@@ -195,6 +193,7 @@ impl Config {
 
 ```text
 $ cargo run to poem.txt
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
@@ -211,6 +210,13 @@ Are you nobody, too?
 How dreary to be somebody!
 To tell your name the livelong day
 To an admiring bog!
+```
+
+如果你使用 PowerShell，则需要用两句命令而不是一句来设置环境变量并运行程序：
+
+```text
+$ $env.CASE_INSENSITIVE=1
+$ cargo run to poem.txt
 ```
 
 好极了，我们也得到了包含 “To” 的行！现在 `minigrep` 程序可以通过环境变量控制进行大小写不敏感搜索了。现在你知道了如何管理由命令行参数或环境变量设置的选项了！
