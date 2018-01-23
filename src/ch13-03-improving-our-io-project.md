@@ -2,13 +2,13 @@
 
 > [ch13-03-improving-our-io-project.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch13-03-improving-our-io-project.md)
 > <br>
-> commit 714be7f0d6b2f6110afe8808a7f528f9eae75c61
+> commit 2bcb126815a381acc3d46b0d6fc382cb4c98fbc5
 
-我们可以使用迭代器来改进第十二章中 I/O 项目的实现来使得代码更简洁明了。让我们看看迭代器如何能够改进 `Config::new` 函数和 `search` 函数的实现。
+有了这些关于迭代器的新知识，我们可以使用迭代器来改进第十二章中 I/O 项目的实现来使得代码更简洁明了。让我们看看迭代器如何能够改进 `Config::new` 函数和 `search` 函数的实现。
 
 ### 使用迭代器并去掉 `clone`
 
-在示例 12-6 中，我们增加了一些代码获取一个 `String` slice 并创建一个 `Config` 结构体的实例，他们索引 slice 中的值并克隆这些值以便 `Config` 结构体可以拥有这些值。在示例 13-24 中原原本本的重现了第十二章结尾 `Config::new` 函数的实现：
+在示例 12-6 中，我们增加了一些代码获取一个 `String` slice 并创建一个 `Config` 结构体的实例，他们索引 slice 中的值并克隆这些值以便 `Config` 结构体可以拥有这些值。在示例 13-24 中原原本本的重现了第十二章结尾示例 12-23 中 `Config::new` 函数的实现：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -35,13 +35,15 @@ impl Config {
 
 起初这里需要 `clone` 的原因是参数 `args` 中有一个 `String` 元素的 slice，而 `new` 函数并不拥有 `args`。为了能够返回 `Config` 实例的所有权，我们需要克隆 `Config` 中字段 `query` 和 `filename` 的值，这样 `Config` 实例就能拥有这些值。
 
-通过迭代器的新知识，我们可以将 `new` 函数改为获取一个有所有权的迭代器作为参数而不是借用 slice。我们将使用迭代器功能之前检查 slice 长度和索引特定位置的代码。这会清理 `Config::new` 的工作因为迭代器会负责访问这些值。
+通过迭代器的新知识，我们可以将 `new` 函数改为获取一个有所有权的迭代器作为参数而不是借用 slice。我们将使用迭代器功能之前检查 slice 长度和索引特定位置的代码。这会明确 `Config::new` 的工作因为迭代器会负责访问这些值。
 
 一旦 `Config::new` 获取了迭代器的所有权并不再使用借用的索引操作，就可以将迭代器中的 `String` 值移动到 `Config` 中，而不是调用 `clone` 分配新的空间。
 
 #### 直接使用 `env::args` 返回的迭代器
 
-在 I/O 项目的 *src/main.rs* 中，让我们修改第十二章结尾 `main` 函数中的这些代码：
+打开 I/O 项目的 *src/main.rs* 文件，它看起来应该像这样：
+
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -52,9 +54,11 @@ fn main() {
         process::exit(1);
     });
 
-    // ...snip...
+    // --snip--
 }
 ```
+
+我们会修改第十二章结尾示例 12-24 中的 `main` 函数的开头为示例 13-25 中的代码。直到同时更新 `Config::new` 这些代码还不能编译：
 
 将他们改为如示例 13-25 所示：
 
@@ -67,7 +71,7 @@ fn main() {
         process::exit(1);
     });
 
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -75,21 +79,21 @@ fn main() {
 
 `env::args` 函数返回一个迭代器！不同于将迭代器的值收集到一个 vector 中接着传递一个 slice 给 `Config::new`，现在我们直接将 `env::args` 返回的迭代器的所有权传递给 `Config::new`。
 
-接下来需要更新 `Config::new` 的定义。在 I/O 项目的 *src/lib.rs* 中，将 `Config::new` 的签名改为如示例 13-26 所示：
+接下来需要更新 `Config::new` 的定义。在 I/O 项目的 *src/lib.rs* 中，将 `Config::new` 的签名改为如示例 13-26 所示。这仍然不能编译因为我们还需更新函数体：
 
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
 impl Config {
-    pub fn new(args: std::env::Args) -> Result<Config, &'static str> {
-        // ...snip...
+    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
+        // --snip--
 ```
 
 <span class="caption">示例 13-26：更新 `Config::new` 的签名来接受一个迭代器</span>
 
-`env::args` 函数的标准库文档展示了其返回的迭代器类型是 `std::env::Args`。需要更新 `Config::new` 函数的签名中 `args` 参数的类型为 `std::env::Args` 而不是 `&[String]`。
+`env::args` 函数的标准库文档展示了其返回的迭代器类型是 `std::env::Args`。需要更新 `Config::new` 函数的签名中 `args` 参数的类型为 `std::env::Args` 而不是 `&[String]`。因为这里需要获取 `args` 的所有权且通过迭代改变 `args`，我们可以在 `args` 参数前指定 `mut` 关键字使其可变。
 
-#### 使用 `Iterator` trait 方法带起索引
+#### 使用 `Iterator` trait 方法代替索引
 
 接下来修复 `Config::new` 的函数体。标准库文档也提到了 `std::env::Args` 实现了 `Iterator` trait，所以可以在其上调用 `next` 方法！示例 13-27 更新了示例 12-23 中的代码为使用 `next` 方法：
 
@@ -106,7 +110,7 @@ impl Config {
 #
 impl Config {
     pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
-    	args.next();
+        args.next();
 
         let query = match args.next() {
             Some(arg) => arg,
@@ -120,9 +124,7 @@ impl Config {
 
         let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
-        Ok(Config {
-            query, filename, case_sensitive
-        })
+        Ok(Config { query, filename, case_sensitive })
     }
 }
 ```
@@ -133,7 +135,7 @@ impl Config {
 
 ### 使用迭代器适配器来使代码更简明
 
-I/O 项目中其他可以利用迭代器优势的地方位于 `search` 函数，在示例 13-28 中重现了第十二章结尾的此函数定义：
+I/O 项目中其他可以利用迭代器优势的地方位于 `search` 函数，在示例 13-28 中重现了第十二章结尾示例 12-19 中此函数的定义：
 
 <span class="filename">文件名: src/lib.rs</span>
 
