@@ -82,7 +82,7 @@
 
 - [智能指针](ch15-00-smart-pointers.md)
     - [`Box<T>` 在堆上存储数据，并且可确定大小](ch15-01-box.md)
-    - [`Deref` Trait 允许通过引用访问数据](ch15-02-deref.md)
+    - [通过 `Deref` trait 将智能指针当作常规引用处理](ch15-02-deref.md)
     - [`Drop` Trait 运行清理代码](ch15-03-drop.md)
     - [`Rc<T>` 引用计数智能指针](ch15-04-rc.md)
     - [`RefCell<T>` 和内部可变性模式](ch15-05-interior-mutability.md)
