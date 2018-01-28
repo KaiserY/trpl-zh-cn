@@ -86,7 +86,7 @@
     - [`Drop` Trait 运行清理代码](ch15-03-drop.md)
     - [`Rc<T>` 引用计数智能指针](ch15-04-rc.md)
     - [`RefCell<T>` 和内部可变性模式](ch15-05-interior-mutability.md)
-    - [引用循环和内存泄漏是安全的](ch15-06-reference-cycles.md)
+    - [引用循环与内存泄漏](ch15-06-reference-cycles.md)
 
 - [无畏并发](ch16-00-concurrency.md)
     - [线程](ch16-01-threads.md)
