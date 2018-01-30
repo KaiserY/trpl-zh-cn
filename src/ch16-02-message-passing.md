@@ -2,7 +2,7 @@
 
 > [ch16-02-message-passing.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch16-02-message-passing.md)
 > <br>
-> commit da15de39eaabd50100d6fa662c653169254d9175
+> commit 90406bd5a4cd4447b46cd7e03d33f34a651e9bb7
 
 最近人气正在上升的一个并发方式是**消息传递**（*message passing*），这里线程或 actor 通过发送包含数据的消息来沟通。这个思想来源于口号：
 
