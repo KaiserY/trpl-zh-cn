@@ -2,14 +2,15 @@
 
 > [ch16-03-shared-state.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch16-03-shared-state.md)
 > <br>
-> commit 9df612e93e038b05fc959db393c15a5402033f47
+> commit 90406bd5a4cd4447b46cd7e03d33f34a651e9bb7
 
-虽然消息传递是一个很好的处理并发的方式，但并不是唯一的一个。再次考虑一下它的口号：
+虽然消息传递是一个很好的处理并发的方式，但并不是唯一一个。再一次思考一下 Go 编程语言文档中口号的这一部分：“通过共享内存通讯”：
 
-> Do not communicate by sharing memory; instead, share memory by
-> communicating.
+> What would communicating by sharing memory look like? In addition, why would message passing enthusiasts not use it and do the opposite instead?
 >
-> 不要共享内存来通讯；而是要通讯来共享内存。
+> 通过共享内存通讯看起来如何？除此之外，为何消息传递的拥护者并不使用它并反其道而行之呢？
+
+在某种程度上
 
 那么“共享内存来通讯”是怎样的呢？共享内存并发有点像多所有权：多个线程可以同时访问相同的内存位置。第十五章介绍了智能指针如何使得多所有权成为可能，然而这会增加额外的复杂性，因为需要以某种方式管理这些不同的所有者。
 
