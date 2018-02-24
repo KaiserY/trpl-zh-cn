@@ -17,7 +17,7 @@ different way in the below paragraph /Carol -->
 
 让我们首先看看 `*` 如何处理引用，接着尝试定义我们自己的类 `Box<T>` 类型并看看为何 `*` 不能像引用一样工作。我们会探索如何实现 `Deref` trait 使得智能指针以类似引用的方式工作变为可能。最后，我们会讨论 Rust 的 **解引用强制多态**（*deref coercions*）功能和它是如何一同处理引用或智能指针的。
 
-### 通过 `*` 追钟指针的值
+### 通过 `*` 追踪指针的值
 
 <!-- I want to avoid too much cross referencing, I think it can be distracting,
 make the reader feel they need to flip back but they don't really, here -->
@@ -294,7 +294,7 @@ fn main() {
 
 `(*m)` 将 `MyBox<String>` 解引用为 `String`。接着 `&` 和 `[..]` 获取了整个 `String` 的字符串 slice 来匹配 `hello` 的签名。没有解引用强制多态所有这些符号混在一起将更难以读写和理解。解引用强制多态使得 Rust 自动的帮我们处理这些转换。
 
-当所涉及到的类型定义了 `Deref` trait，Rust 会分析这些类型并使用任意多次 `Deref::deref` 调用以获得匹配参数的类型。这写解析都发生在编译时，所以利用解引用强制多态并没有运行时惩罚！
+当所涉及到的类型定义了 `Deref` trait，Rust 会分析这些类型并使用任意多次 `Deref::deref` 调用以获得匹配参数的类型。这些解析都发生在编译时，所以利用解引用强制多态并没有运行时惩罚！
 
 ### 解引用强制多态如何与可变性交互
 
