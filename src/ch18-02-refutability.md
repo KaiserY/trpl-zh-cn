@@ -1,19 +1,24 @@
-## Refutability(可反驳性): 模式是否会匹配失效
+## Refutability（可反驳性）: 模式是否会匹配失效
 
-匹配模式有两种形式: refutable(可反驳)和irrefutable(不可反驳). 对任意可能的值进行匹配都不会失效的模式被称为是*irrefutable*(不可反驳)的, 而对某些可能的值进行匹配会失效的模式被称为是*refutable*(可反驳)的.
-`let`语句、 函数参数和`for`循环被约束为只接受*irrefutable*模式, 因为如果模式匹配失效程序就不会正确运行. `if let`和`while let`表达式被约束为只接受*refutable*模式, 因为它们需要处理可能存在的匹配失效的情况, 并且如果模式匹配永不失效, 那它们就派不上用场了.
+> [ch18-02-refutability.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch18-02-refutability.md)
+> <br>
+> commit 267f442fa1c637eab07b4eebb64a6dcd2c943a36
 
-通常, 你不用关心*refutable*和*irrefutable*模式的区别, 当你看见它出现在了错误消息中时, 你只要了解*可反驳性*(refutability)的概念即可. 如果你得到一个涉及到可反驳性概念的错误消息, 根据你的代码行为的意图, 你只需改变匹配模式或者是改变你构造模式的方法即可.
+模式有两种形式：refutable（可反驳的）和 irrefutable（不可反驳的）。能匹配任何传递的可能值的模式被称为是 **不可反驳的**（*irrefutable*）。一个例子就是 `let x = 5;` 语句中的 `x`，因为 `x` 可以匹配任何值所以不可能会失败。对某些可能的值进行匹配会失败的模式被称为是 **可反驳的**（*refutable*）。一个这样的例子便是 `if let Some(x) = a_value` 表达式中的 `Some(x)`；如果变量 `a_value` 中的值是 `None` 而不是 `Some`，那么 `Some(x)` 模式不能匹配。
 
-让我们来看几个例子. 在本章的前面部分, 我们提到`let x = 5;`. 这里`x`就是一个我们被允许使用*irrefutable*的模式: 因为它不可能匹配失效. 相反, 如果用`let`来匹配一个枚举的变体, 比如像**例18-7**中列出的那样从`Option<T>`枚举中只匹配`Some<T>`这个值:
+`let` 语句、 函数参数和 `for` 循环只能接受不可反驳的模式，因为通过不匹配的值程序无法进行有意义的工作。`if let` 和 `while let` 表达式被限制为只能接受可反驳的模式，因为根据定义他们意在处理可能的失败 ———— 条件表达式的功能就是根据成功或失败执行不同的操作。
+
+通常无需担心可反驳和不可反驳模式的区别，不过确实需要熟悉可反驳性的概念，这样当在错误信息中看到时就知道如何应对。遇到这些情况，根据代码行为的意图，需要修改模式或者使用模式的结构。
+
+让我们看看一个尝试在 Rust 要求不可反驳模式的地方使用可反驳模式以及相反情况的例子。在示例 18-8 中，有一个 `let` 语句，不过模式被指定为可反驳模式 `Some(x)`。如你所见，这会出现错误：
 
 ```rust,ignore
 let Some(x) = some_option_value;
 ```
 
-<span class="caption">例18-7: 试试用一个有`let`的*refutable*模式</span>
+<span class="caption">示例 18-8: 尝试在 `let` 中使用可反驳模式</span>
 
-如果`some_option_value`的值是`None`, `some_option_value`将不会匹配模式`Some(x)`. 模式`Some(x)`是可反驳的(refutable), 因为存在一个使它匹配失效的值. 如果`some_option_value`的值是`None`, 那么`let`语句就不会产生任何效果. 因此Rust会在编译时会报*期望irrefutable模式但是却得到了一个refutable模式*的错误:
+如果 `some_option_value` 的值是 `None`，其不会成功匹配模式 `Some(x)`，表明这个模式是可反驳的。然而 `let` 语句只能接受不可反驳模式因为代码不能通过 `None` 值进行有效的操作。Rust 会在编译时抱怨我们尝试在要求不可反驳模式的地方使用可反驳模式：
 
 ```text
 error[E0005]: refutable pattern in local binding: `None` not covered
@@ -23,9 +28,9 @@ error[E0005]: refutable pattern in local binding: `None` not covered
   |     ^^^^^^^ pattern `None` not covered
 ```
 
-因为我们没有(也不能)覆盖到模式`Some(x)`的每一个可能的值, 所以Rust会报错.
+因为我们没有（也不可能）覆盖到模式 `Some(x)` 的每一个可能的值, 所以 Rust 会合理的抗议.
 
-如果我们采用*refutable*模式, 使用`if let`而不是`let`. 这样当模式不匹配时, 在花括号中的代码将不执行, 这段代码只有在值匹配模式的时候才会执行, 也只在此时才有意义. 例18-8显示了如何修正在例18-7中用`Some(x)`来匹配`some_option_value`的代码. 因为这个例子使用了`if let`, 因此使用*refutable*模式的`Some(x)`就没问题了:
+为了修复在需要不可反驳模式的地方使用可反驳模式的情况，可以修改使用模式的代码：不同于使用 `let`，可以使用 `if let`。如此，如果模式不匹配，大括号中的代码将被忽略，其余代码保持有效。示例 18-9 展示了如何修复示例 18-8 中的代码。
 
 ```rust
 # let some_option_value: Option<i32> = None;
@@ -34,9 +39,15 @@ if let Some(x) = some_option_value {
 }
 ```
 
-<span class="caption">例18-8: 使用`if let`和一个有*refutable*模式的代码块来代替`let`</span>
+<span class="caption">示例 18-9: 使用 `if let` 和一个带有可反驳模式的代码块来代替 `let`</span>
 
-此外, 如果我们给`if let`一个绝对会匹配的*irrefutable*模式, 比如在例18-9中显示的`x`:
+<!-- Whats the first commented out line here, I had though this was copied from
+8-7 but it isn't quite the same -->
+<!-- Sorry, that line has to do with the way we test our code examples and I
+missed removing it before sending this chapter to you. Sorry about that! /Carol
+-->
+
+我们给了代码一个得以继续的出路！这段代码可以完美运行，当让如此意味着我们不能再使用不可反驳模式并免于收到错误。如果为 `if let` 提供了一个总是会匹配的模式，比如示例 18-10 中的 `x`，则会出错：
 
 ```rust,ignore
 if let x = 5 {
@@ -44,9 +55,9 @@ if let x = 5 {
 };
 ```
 
-<span class="caption">例18-9: 尝试把一个*irrefutable*模式用到`if let`上</span>
+<span class="caption">示例 18-10: 尝试把不可反驳模式用到 `if let` 上</span>
 
-Rust将会抱怨把`if let`和一个*irrefutable*模式一起使用没有意义:
+Rust 会抱怨将不可反驳模式用于 `if let` 是没有意义的：
 
 ```text
 error[E0162]: irrefutable if-let pattern
@@ -56,7 +67,6 @@ error[E0162]: irrefutable if-let pattern
   |        ^ irrefutable pattern
 ```
 
-一般来说, 多数匹配使用*refutable*模式, 除非是那种可以匹配任意值的情况使用*irrefutable*模式. `match`操作符中如果只有一个*irrefutable*模式分支也没有什么问题, 但这就没什么特别的用处, 此时可以用一个更简单的`let`语句来替换. 不管是把表达式关联到`let`语句亦或是关联到只有一个*irrefutable*模式分支的`match`操作, 代码都肯定会运行, 如果它们的表达式一样的话最终的结果也相同.
+如此，匹配分支必须使用可反驳模式，除了最后一个分支需要使用能匹配任何剩余值的不可反驳模式。允许将不可反驳模式用于只有一个分支的 `match`，不过这么做不是特别有用，并可以被更简单的 `let` 语句替代。
 
-目前我们已经讨论了所有可以使用模式的地方, 也介绍了*refutable*模式和*irrefutable*模式的不同, 下面让我们一起去把可以用来创建模式的语法过目一遍吧.
-
+目前我们已经讨论了所有可以使用模式的地方, 以及可反驳模式与不可反驳模式的区别，下面让我们一起去把可以用来创建模式的语法过目一遍吧。
