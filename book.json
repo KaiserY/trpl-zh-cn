@@ -13,10 +13,6 @@
 
     "language": "zh-hans",
 
-    "styles": {
-        "pdf": "styles/pdf.css"
-    },
-
     "plugins": [],
 
     "pluginsConfig": {}
