@@ -114,7 +114,7 @@ error[E0369]: binary operation `>` cannot be applied to type `T`
 note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
 ```
 
-注释中提到了 `std::cmp::PartialOrd`，这是一个 *trait*。下一部分会讲到 trait，不过简单来说，这个错误表明 `largest` 的函数体不能适用于 `T` 的所有可能的类型；因为在函数体需要比较 `T` 类型的值，不过它只能用于我们知道如何排序的类型。标准库中定义的 `std::cmp::PartialOrd` trait 可以实现类型的排序功能。在下一部分会再次回到 trait 并讲解如何为泛型指定一个 trait，不过让我们先把这个例子放在一边并探索其他那些可以使用泛型类型参数的地方。
+注释中提到了 `std::cmp::PartialOrd`，这是一个 *trait*。下一部分会讲到 trait，不过简单来说，这个错误表明 `largest` 的函数体不能适用于 `T` 的所有可能的类型；因为在函数体需要比较 `T` 类型的值，不过它只能用于我们知道如何排序的类型。标准库中定义的 `std::cmp::PartialOrd` trait 可以实现类型的比较功能。在下一部分会再次回到 trait 并讲解如何为泛型指定一个 trait，不过让我们先把这个例子放在一边并探索其他那些可以使用泛型类型参数的地方。
 
 <!-- Liz: this is the reason we had the topics in the order we did in the first
 draft of this chapter; it's hard to do anything interesting with generic types
@@ -253,7 +253,7 @@ fn main() {
 
 <span class="caption">示例 10-9：在 `Point<T>` 结构体上实现方法 `x`，它返回 `T` 类型的字段 `x` 的引用</span>
 
-注意必须在 `impl` 后面声明 `T`，这样就可以在 `Point<T>` 上实现的方法中使用它了。在 `impl` 之后声明泛型 `T` ，这样 Rust 就知道 `Point` 的加括号中的类型是泛型而不是具体类型。例如，可以选择为 `Point<f32>` 实例实现方法，而不是为泛型 `Point` 实例。示例 10-10 展示了一个没有在 `impl` 之后（的尖括号）声明泛型的例子，这里使用了一个具体类型，`f32`：
+注意必须在 `impl` 后面声明 `T`，这样就可以在 `Point<T>` 上实现的方法中使用它了。在 `impl` 之后声明泛型 `T` ，这样 Rust 就知道 `Point` 的尖括号中的类型是泛型而不是具体类型。例如，可以选择为 `Point<f32>` 实例实现方法，而不是为泛型 `Point` 实例。示例 10-10 展示了一个没有在 `impl` 之后（的尖括号）声明泛型的例子，这里使用了一个具体类型，`f32`：
 
 ```rust
 # struct Point<T> {
@@ -309,7 +309,7 @@ fn main() {
 
 ### 泛型代码的性能
 
-在阅读本部分的内容的同时你可能会好奇使用泛型类型参数是否会有运行时消耗。好消息是：Rust 实现泛型泛型的方式意味着你的代码使用泛型类型参数相比指定具体类型并没有任何速度上的损失。
+在阅读本部分的内容的同时你可能会好奇使用泛型类型参数是否会有运行时消耗。好消息是：Rust 实现泛型的方式意味着你的代码使用泛型类型参数相比指定具体类型并没有任何速度上的损失！
 
 Rust 通过在编译时进行泛型代码的 **单态化**（*monomorphization*）来保证效率。单态化是一个将泛型代码转变为实际放入的具体类型的特定代码的过程。
 

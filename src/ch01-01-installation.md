@@ -2,11 +2,11 @@
 
 > [ch01-01-installation.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-01-installation.md)
 > <br>
-> commit d06a6a181fd61704cbf7feb55bc61d518c6469f9
+> commit b6dcc87f2b811c88fc741c86cf6ed3976333acba
 
 使用 Rust 的第一步是安装。你需要网络连接来执行本章的命令，因为将要从网上下载 Rust。
 
-这里将会展示很多使用终端的命令，这些命令均以 `$` 开头。不需要真的输入`$`，在这里他们代表每行命令的起始。网上有很多教程和例子遵循这种惯例：`$` 代表以常规用户身份运行命令，`#` 代表需要用管理员身份运行命令。没有以 `$`（或 `#`）起始的行通常是之前命令的输出。
+这里将会展示很多使用终端的命令，这些命令均以 `$` 开头。不需要真的输入`$`，在这里它们代表每行命令的起始。网上有很多教程和例子遵循这种惯例：`$` 代表以常规用户身份运行命令，`#` 代表需要用管理员身份运行命令。没有以 `$`（或 `#`）起始的行通常是之前命令的输出。
 
 ### 在 Linux 或 Mac 上安装
 
@@ -22,7 +22,7 @@ $ curl https://sh.rustup.rs -sSf | sh
 Rust is installed now. Great!
 ```
 
-当然，如果你对于 `curl | sh` 这样的模式心有疑虑，请随意下载、检查和运行这个脚本。
+当然，如果你不信任采用 `curl URL | sh` 来安装软件，请随意下载、检查和运行这个脚本。
 
 此安装脚本自动将 Rust 加入系统 PATH 环境变量中，再次登陆时生效。如果你希望立刻（不重新登陆）就开始使用 Rust，在 shell 中运行如下命令：
 
@@ -57,7 +57,7 @@ $ rustup update
 
 ### 卸载
 
-卸载 Rust 与安装一个简单。在 shell 中执行卸载脚本:
+卸载 Rust 与安装同样简单。在 shell 中执行卸载脚本:
 
 ```text
 $ rustup self uninstall

@@ -1,0 +1,21 @@
+sudo: false
+dist: trusty
+language: rust
+cache: cargo
+rust:
+  - nightly
+branches:
+  only:
+  - master
+before_script:
+  - (cargo install mdbook --vers 0.0.26 --force || true)
+script:
+  - mdbook build
+deploy:
+  provider: pages
+  local-dir: mdbook
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: false
+  on:
+    branch: master

@@ -2,7 +2,7 @@
 
 > [ch10-02-traits.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-02-traits.md)
 > <br>
-> commit 1cbcc277af6931d3091fe46a8f379fefae7202db
+> commit 131859023a0a6be67168d36dcdc8e2aa43f806fd
 
 trait 允许我们进行另一种抽象：他们让我们可以抽象类型所通用的行为。*trait* 告诉 Rust 编译器某个特定类型拥有可能与其他类型共享的功能。在使用泛型类型参数的场景中，可以使用 *trait bounds* 在编译时指定泛型可以是任何实现了某个 trait 的类型，并由此在这个场景下拥有我们希望的功能。
 
@@ -32,7 +32,7 @@ trait 体中可以有多个方法，一行一个方法签名且都以分号结�
 
 ### 为类型实现 trait
 
-现在我们定义了 `Summarizable` trait，接着就可以在多媒体聚合库中需要拥有这个行为的类型上实现它了。示例 10-12 中展示了 `NewsArticle` 结构体上 `Summarizable` trait 的一个实现，它使用标题、作者和创建的位置作为 `summary` 的返回值。对于 `Tweet` 结构体，我们选择将 `summary` 定义为用户名后跟推文的全部文本作为返回值，并假设推文内容已经被限制为 140 字符以内。
+现在我们定义了 `Summarizable` trait，接着就可以在多媒体聚合库中需要拥有这个行为的类型上实现它了。示例 10-13 中展示了 `NewsArticle` 结构体上 `Summarizable` trait 的一个实现，它使用标题、作者和创建的位置作为 `summary` 的返回值。对于 `Tweet` 结构体，我们选择将 `summary` 定义为用户名后跟推文的全部文本作为返回值，并假设推文内容已经被限制为 140 字符以内。
 
 <span class="filename">文件名: lib.rs</span>
 
@@ -70,7 +70,7 @@ impl Summarizable for Tweet {
 
 <span class="caption">示例 10-13：在 `NewsArticle` 和 `Tweet` 类型上实现 `Summarizable` trait</span>
 
-在类型上实现 trait 类似与实现与 trait 无关的方法。区别在于 `impl` 关键字之后，我们提供需要实现 trait 的名称，接着是 `for` 和需要实现 trait 的类型的名称。在 `impl` 块中，使用 trait 定义中的方法签名，不过不再后跟分号，而是需要在大括号中编写函数体来为特定类型实现 trait 方法所拥有的行为。
+在类型上实现 trait 类似于实现与 trait 无关的方法。区别在于 `impl` 关键字之后，我们提供需要实现 trait 的名称，接着是 `for` 和需要实现 trait 的类型的名称。在 `impl` 块中，使用 trait 定义中的方法签名，不过不再后跟分号，而是需要在大括号中编写函数体来为特定类型实现 trait 方法所拥有的行为。
 
 一旦实现了 trait，我们就可以用与 `NewsArticle` 和 `Tweet` 实例的非 trait 方法一样的方式调用 trait 方法了：
 
@@ -87,7 +87,7 @@ println!("1 new tweet: {}", tweet.summary());
 
 这会打印出 `1 new tweet: horse_ebooks: of course, as you probably already know, people`。
 
-注意因为示例 10-12 中我们在相同的 `lib.rs` 里定义了 `Summarizable` trait 和 `NewsArticle` 与 `Tweet` 类型，所以他们是位于同一作用域的。如果这个 `lib.rs` 是对应 `aggregator` crate 的，而别人想要利用我们 crate 的功能外加为其 `WeatherForecast` 结构体实现 `Summarizable` trait，在实现 `Summarizable` trait 之前他们首先就需要将其导入其作用域中，如示例 10-14 所示：
+注意因为示例 10-13 中我们在相同的 `lib.rs` 里定义了 `Summarizable` trait 和 `NewsArticle` 与 `Tweet` 类型，所以他们是位于同一作用域的。如果这个 `lib.rs` 是对应 `aggregator` crate 的，而别人想要利用我们 crate 的功能外加为其 `WeatherForecast` 结构体实现 `Summarizable` trait，在实现 `Summarizable` trait 之前他们首先就需要将其导入其作用域中，如示例 10-14 所示：
 
 <span class="filename">文件名: lib.rs</span>
 
@@ -115,7 +115,7 @@ impl Summarizable for WeatherForecast {
 
 另外这段代码假设 `Summarizable` 是一个公有 trait，这是因为示例 10-12 中 `trait` 之前使用了 `pub` 关键字。
 
-trait 实现的一个需要注意的限制是：只能在 trait 或对应类型位于我们 crate 本地的时候为其实现 trait。换句话说，不允许对外部类型实现外部 trait。例如，不能在 `Vec` 上实现 `Display` trait，因为 `Display` 和 `Vec` 都定义于标准库中。允许在像 `Tweet` 这样作为我们 `aggregator`crate 部分功能的自定义类型上实现标准库中的 trait `Display`。也允许在 `aggregator`crate 中为 `Vec` 实现 `Summarizable`，因为 `Summarizable` 定义与此。这个限制是我们称为 **孤儿规则**（*orphan rule*）的一部分，如果你感兴趣的可以在类型理论中找到它。简单来说，它被称为 orphan rule 是因为其父类型不存在。没有这条规则的话，两个 crate 可以分别对相同类型是实现相同的 trait，因而这两个实现会相互冲突：Rust 将无从得知应该使用哪一个。因为 Rust 强制执行 orphan rule，其他人编写的代码不会破坏你代码，反之亦是如此。
+trait 实现的一个需要注意的限制是：只能在 trait 或对应类型位于我们 crate 本地的时候为其实现 trait。换句话说，不允许对外部类型实现外部 trait。例如，不能在 `Vec` 上实现 `Display` trait，因为 `Display` 和 `Vec` 都定义于标准库中。允许在像 `Tweet` 这样作为我们 `aggregator`crate 部分功能的自定义类型上实现标准库中的 trait `Display`。也允许在 `aggregator`crate 中为 `Vec` 实现 `Summarizable`，因为 `Summarizable` 定义于此。这个限制是我们称为 **孤儿规则**（*orphan rule*）的一部分，如果你感兴趣的可以在类型理论中找到它。简单来说，它被称为 orphan rule 是因为其父类型不存在。没有这条规则的话，两个 crate 可以分别对相同类型实现相同的 trait，因而这两个实现会相互冲突：Rust 将无从得知应该使用哪一个。因为 Rust 强制执行 orphan rule，其他人编写的代码不会破坏你代码，反之亦是如此。
 
 ### 默认实现
 
@@ -159,7 +159,7 @@ println!("New article available! {}", article.summary());
 
 将 `Summarizable` trait 改变为拥有默认 `summary` 实现并不要求对示例 10-13 中 `Tweet` 和示例 10-14 中 `WeatherForecast` 的 `Summarizable` 实现做任何改变：重载一个默认实现的语法与实现没有默认实现的 trait 方法时完全一样的。
 
-默认实现允许调用相同 trait 中的其他方法，哪怕这些方法没有默认实现。通过这种方法，trait 可以实现很多有用的功能而只需实现一小部分特定内容。我们可以选择让`Summarizable` trait 也拥有一个要求实现 的`author_summary` 方法，接着 `summary` 方法则提供默认实现并调用 `author_summary` 方法：
+默认实现允许调用相同 trait 中的其他方法，哪怕这些方法没有默认实现。通过这种方法，trait 可以实现很多有用的功能而只需实现一小部分特定内容。我们可以选择让`Summarizable` trait 也拥有一个要求实现的`author_summary` 方法，接着 `summary` 方法则提供默认实现并调用 `author_summary` 方法：
 
 ```rust
 pub trait Summarizable {
@@ -198,7 +198,7 @@ println!("1 new tweet: {}", tweet.summary());
 
 注意在重载过的实现中调用默认实现是不可能的。
 
-### trait bounds
+### Trait Bounds
 
 现在我们定义了 trait 并在类型上实现了这些 trait，也可以对泛型类型参数使用 trait。我们可以限制泛型不再适用于任何类型，编译器会确保其被限制为那些实现了特定 trait 的类型，由此泛型就会拥有我们希望其类型所拥有的功能。这被称为指定泛型的 *trait bounds*。
 
@@ -215,6 +215,7 @@ trait bounds 连同泛型类型参数声明一同出现，位于尖括号中的�
 可以通过 `+` 来为泛型指定多个 trait bounds。如果我们需要能够在函数中使用 `T` 类型的显示格式的同时也能使用 `summary` 方法，则可以使用 trait bounds `T: Summarizable + Display`。这意味着 `T` 可以是任何实现了 `Summarizable` 和 `Display` 的类型。
 
 对于拥有多个泛型类型参数的函数，每一个泛型都可以有其自己的 trait bounds。在函数名和参数列表之间的尖括号中指定很多的 trait bound 信息将是难以阅读的，所以有另外一个指定 trait bounds 的语法，它将其移动到函数签名后的 `where` 从句中。所以相比这样写：
+
 
 ```rust,ignore
 fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32 {
@@ -278,8 +279,6 @@ error[E0507]: cannot move out of borrowed content
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-use std::cmp::PartialOrd;
-
 fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
     let mut largest = list[0];
 
@@ -311,7 +310,7 @@ fn main() {
 
 ### 使用 trait bound 有条件的实现方法
 
-通过使用带有 trati bound 的泛型 `impl` 块，可以有条件的只为实现了特定 trait 的类型实现方法。例如，示例 10-17 中的类型 `Pair<T>` 总是实现了 `new` 方法，不过只有 `Pair<T>` 内部的 `T` 实现了 `PartialOrd` trait 来允许比较和 `Display` trait 来启用打印，才会实现 `cmp_display`：
+通过使用带有 trait bound 的泛型 `impl` 块，可以有条件的只为实现了特定 trait 的类型实现方法。例如，示例 10-17 中的类型 `Pair<T>` 总是实现了 `new` 方法，不过只有 `Pair<T>` 内部的 `T` 类型实现了 `PartialOrd` trait 来允许比较和 `Display` trait 来启用打印，才会实现 `cmp_display`：
 
 ```rust
 use std::fmt::Display;
@@ -347,7 +346,7 @@ impl<T: Display + PartialOrd> Pair<T> {
 
 ```rust,ignore
 impl<T: Display> ToString for T {
-    // ...snip...
+    // --snip--
 }
 ```
 
