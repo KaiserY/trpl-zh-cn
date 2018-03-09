@@ -12,6 +12,8 @@ before_script:
 script:
   - mdbook build
 deploy:
+  edge:
+    branch: v1.8.47
   provider: pages
   local-dir: mdbook
   skip-cleanup: true
