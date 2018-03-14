@@ -272,7 +272,7 @@ impl Messenger for MockMessenger {
 }
 ```
 
-<span class="caption">示例 15-26：在同一作用域中创建连个可变引用并观察 `RefCell<T>` panic</span>
+<span class="caption">示例 15-26：在同一作用域中创建两个可变引用并观察 `RefCell<T>` panic</span>
 
 这里为 `borrow_mut` 返回的 `RefMut` 智能指针创建了 `one_borrow` 变量。接着用相同的方式在变量 `two_borrow` 创建了另一个可变借用。这会在相同作用域中创建一个可变引用，这是不允许的，如果运行库的测试，编译时不会有任何错误，不过测试会失败：
 
