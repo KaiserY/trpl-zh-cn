@@ -239,7 +239,7 @@ takes time, the `handle_connection` function could potentially finish and
 unless we call `flush`. This is how streams work in many languages and is a
 small detail I don't think is worth going into in depth. /Carol -->
 
-有了这些修改，运行我们的代码并进行请求！我们不再向终端打印任何数据，所以不会再看到除了 Cargo 以外的任何输出。不过当在浏览器中加载 `127.0.0.1:8080` 时，会得到一个空页面而不是错误。太棒了！我们刚刚手写了一个 HTTP 请求与响应。
+有了这些修改，运行我们的代码并进行请求！我们不再向终端打印任何数据，所以不会再看到除了 Cargo 以外的任何输出。不过当在浏览器中加载 `127.0.0.1:7878` 时，会得到一个空页面而不是错误。太棒了！我们刚刚手写了一个 HTTP 请求与响应。
 
 ### 返回真正的 HTML
 
@@ -298,7 +298,7 @@ fn handle_connection(mut stream: TcpStream) {
 
 使用 `cargo run` 运行程序，在浏览器加载 `127.0.0.1:7878`，你应该会看到渲染出来的 HTML 文件！
 
-目前忽略了 `buffer` 中的请求数据并无条件的发送了 HTML 文件的内容。这意味着如果尝试在浏览器中请求 `127.0.0.1:8080/something-else` 也会得到同样的 HTML 响应。如此其作用是非常有限的，也不是大部分 server 所做的；让我们检查请求并只对格式良好（well-formed）的请求 `/` 发送 HTML 文件。
+目前忽略了 `buffer` 中的请求数据并无条件的发送了 HTML 文件的内容。这意味着如果尝试在浏览器中请求 `127.0.0.1:7878/something-else` 也会得到同样的 HTML 响应。如此其作用是非常有限的，也不是大部分 server 所做的；让我们检查请求并只对格式良好（well-formed）的请求 `/` 发送 HTML 文件。
 
 ### 验证请求并有选择的进行响应
 
