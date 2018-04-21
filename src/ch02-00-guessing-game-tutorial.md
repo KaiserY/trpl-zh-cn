@@ -150,7 +150,7 @@ io::stdin().read_line(&mut guess)
     .expect("Failed to read line");
 ```
 
-如果程序的开头没有 `use std::io` 这一行，可以把函数调用写成 `std::io::stdin`。`stdin` 函数返回一个 [`std::io::stdin`][iostdin]<!-- ignore --> 的实例，这代表终端标准输入句柄的类型。
+如果程序的开头没有 `use std::io` 这一行，可以把函数调用写成 `std::io::stdin`。`stdin` 函数返回一个 [`std::io::Stdin`][iostdin]<!-- ignore --> 的实例，这代表终端标准输入句柄的类型。
 
 [iostdin]: https://doc.rust-lang.org/std/io/struct.Stdin.html
 
