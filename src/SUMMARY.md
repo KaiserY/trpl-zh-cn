@@ -1,12 +1,16 @@
 # Rust 程序设计语言
 
+[前言](foreword.md)
+[介绍](ch00-00-introduction.md)
+
 ## 入门指南
 
-- [介绍](ch01-00-introduction.md)
+- [入门指南](ch01-00-getting-started.md)
     - [安装](ch01-01-installation.md)
     - [Hello, World!](ch01-02-hello-world.md)
+    - [Hello, Cargo!](ch01-03-hello-cargo.md)
 
-- [猜猜看教程](ch02-00-guessing-game-tutorial.md)
+- [猜猜看游戏教程](ch02-00-guessing-game-tutorial.md)
 
 - [通用编程概念](ch03-00-common-programming-concepts.md)
     - [变量与可变性](ch03-01-variables-and-mutability.md)
@@ -16,7 +20,7 @@
     - [控制流](ch03-05-control-flow.md)
 
 - [认识所有权](ch04-00-understanding-ownership.md)
-    - [什么是所有权](ch04-01-what-is-ownership.md)
+    - [什么是所有权？](ch04-01-what-is-ownership.md)
     - [引用与借用](ch04-02-references-and-borrowing.md)
     - [Slices](ch04-03-slices.md)
 
@@ -81,21 +85,21 @@
     - [Cargo 自定义扩展命令](ch14-05-extending-cargo.md)
 
 - [智能指针](ch15-00-smart-pointers.md)
-    - [`Box<T>` 在堆上存储数据，并且可确定大小](ch15-01-box.md)
+    - [`Box<T>` 指向堆上数据，并且可确定大小](ch15-01-box.md)
     - [通过 `Deref` trait 将智能指针当作常规引用处理](ch15-02-deref.md)
     - [`Drop` Trait 运行清理代码](ch15-03-drop.md)
     - [`Rc<T>` 引用计数智能指针](ch15-04-rc.md)
-    - [`RefCell<T>` 和内部可变性模式](ch15-05-interior-mutability.md)
-    - [引用循环与内存泄漏](ch15-06-reference-cycles.md)
+    - [`RefCell<T>` 与内部可变性模式](ch15-05-interior-mutability.md)
+    - [引用循环与内存泄漏是安全的](ch15-06-reference-cycles.md)
 
 - [无畏并发](ch16-00-concurrency.md)
     - [线程](ch16-01-threads.md)
     - [消息传递](ch16-02-message-passing.md)
     - [共享状态](ch16-03-shared-state.md)
-    - [可扩展的并发：`Sync`和`Send`](ch16-04-extensible-concurrency-sync-and-send.md)
+    - [可扩展的并发：`Sync` 与 `Send`](ch16-04-extensible-concurrency-sync-and-send.md)
 
-- [Rust 是面向对象语言吗？](ch17-00-oop.md)
-    - [什么是面向对象？](ch17-01-what-is-oo.md)
+- [Rust 的面向对象编程特征](ch17-00-oop.md)
+    - [面向对象语言的特点](ch17-01-what-is-oo.md)
     - [为使用不同类型的值而设计的 trait 对象](ch17-02-trait-objects.md)
     - [面向对象设计模式的实现](ch17-03-oo-design-patterns.md)
 
@@ -125,3 +129,4 @@
     - [D - 宏](appendix-04-macros.md)
     - [E - 本书翻译](appendix-05-translation.md)
     - [F - 最新功能](appendix-06-newest-features.md)
+    - [G - Rust 是如何开发的与 “Nightly Rust”](appendix-07-nightly-rust.md)
