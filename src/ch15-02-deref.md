@@ -220,7 +220,7 @@ fn hello(name: &str) {
 
 <span class="caption">示例 15-13：`hello` 函数有着 `&str` 类型的参数 `name`</span>
 
-可以使用字符串 slice 作为参数调用 `hello` 函数，比如 `hello("Rust");`。解引用强制多态使得用 `MyBox<String>` 类型值的引用调用 `hello` 称为可能，如示例 15-14 所示：
+可以使用字符串 slice 作为参数调用 `hello` 函数，比如 `hello("Rust");`。解引用强制多态使得用 `MyBox<String>` 类型值的引用调用 `hello` 成为可能，如示例 15-14 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
