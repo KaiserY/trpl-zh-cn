@@ -496,7 +496,7 @@ impl fmt::Display for Point {
 
 在第十章的 “为类型实现 trait” 部分，我们提到了孤儿规则（orphan rule），它说明只要 trait 或类型对于当前 crate 是本地的话就可以在此类型上实现该 trait。一个绕开这个限制的方法是使用**newtype 模式**（*newtype pattern*），它涉及到在一个元组结构体（第五章 “用没有命名字段的元组结构体来创建不同的类型” 部分介绍了元组结构体）中创建一个新类型。这个元组结构体带有一个字段作为希望实现 trait 的类型的简单封装。接着这个封装类型对于 crate 是本地的，这样就可以在这个封装上实现 trait。“Newtype” 是一个源自（U.C.0079，逃）Haskell 编程语言的概念。使用这个模式没有运行时性能惩罚，这个封装类型在编译时就被省略了。
 
-例如，如果想要在 `Vec` 上实现 `Display`，而孤儿规则组织我们直接这么做，因为 `Display` trait 和 `Vec` 都定义于我们的 crate 之外。可以创建一个包含 `Vec` 实例的 `Wrapper` 结构体，接着可以如列表 19-31 那样在 `Wrapper` 上实现 `Display` 并使用 `Vec` 的值：
+例如，如果想要在 `Vec` 上实现 `Display`，而孤儿规则阻止我们直接这么做，因为 `Display` trait 和 `Vec` 都定义于我们的 crate 之外。可以创建一个包含 `Vec` 实例的 `Wrapper` 结构体，接着可以如列表 19-31 那样在 `Wrapper` 上实现 `Display` 并使用 `Vec` 的值：
 
 可以创建一个包含 `Vec` 实例的 `Wrapper` 结构体。接着可以如列表 19-30 那样在 `Wrapper` 上实现 `Display` 并使用 `Vec` 的值：
 

@@ -405,7 +405,7 @@ fn main() {
 
 当内部作用域结束时，`branch` 离开作用域，其强引用计数减少为 0，所以其 `Node` 被丢弃。来自 `leaf.parent` 的弱引用计数 1 与 `Node` 是否被丢弃无关，所以并没有产生任何内存泄露！
 
-如果在内部作用域结束后尝试访问 `leaf` 的父结点，会再次得到 `None`。在程序的结尾，`leaf` 中 `Rc` 的强引用计数为 1，弱引用计数为 0，因为因为现在 `leaf` 又是 `Rc` 唯一的引用了。
+如果在内部作用域结束后尝试访问 `leaf` 的父结点，会再次得到 `None`。在程序的结尾，`leaf` 中 `Rc` 的强引用计数为 1，弱引用计数为 0，因为现在 `leaf` 又是 `Rc` 唯一的引用了。
 
 <!-- Just to clarify, leaf is pointing to itself? -->
 <!-- `leaf` is the variable pointing to the `Rc`, the `Rc` is what has the
