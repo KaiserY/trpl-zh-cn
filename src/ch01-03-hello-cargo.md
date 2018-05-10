@@ -154,7 +154,7 @@ $ cargo build
 你已经准备好迎来 Rust 之旅的伟大开始！在本章中，你学习了如何：
 
 * 使用 `rustup` 安装最新稳定版的 Rust
-* 跟新到新版的 Rust
+* 更新到新版的 Rust
 * 打开本地安装的文档
 * 直接通过 `rustc` 编写并运行 “Hello, world!” 程序
 * 使用 Cargo 风格创建并运行新项目
