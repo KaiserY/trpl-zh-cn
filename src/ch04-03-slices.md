@@ -157,7 +157,7 @@ let slice = &s[..];
 
 > 注意：字符串 slice range 的索引必须位于有效的 UTF-8 字符边界内，如果尝试从一个多字节字符的中间位置创建字符串 slice，则程序将会因错误而退出。出于介绍字符串 slice 的目的，本部分假设只使用 ASCII 字符集；第八章的 “字符串” 部分会更加全面的讨论 UTF-8 处理问题。
 
-在记住所有这些知识后，让我们重写 `first_word` 来返回一个 slice。“字符串 slice” 的类型签名写作 `&str`：
+在记住所有这些知识后，让我们重写 `first_word` 来返回一个 slice。“字符串 slice” 的类型声明写作 `&str`：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -228,7 +228,7 @@ let s = "Hello, world!";
 
 #### 字符串 slice 作为参数
 
-在知道了能够获取字面值和 `String` 的 slice 后引起了另一个对 `first_word` 的改进，这是它的签名：
+在知道了能够获取字面值和 `String` 的 slice 后引起了另一个对 `first_word` 的改进，这是它的声明：
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {
