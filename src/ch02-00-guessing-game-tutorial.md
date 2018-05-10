@@ -88,7 +88,7 @@ fn main() {
 use std::io;
 ```
 
-Rust 默认只在每个程序的 [*prelude*][prelude]<!-- ignore --> 中引入少量类型。如果需要的类型不在 prelude 中，你必须使用一个 `use` 语句显式的将其引入作用域。`std::io` 库提供很多 `io` 相关的功能，比如接受用户输入的功能。
+Rust 默认只在每个程序的 [*prelude*][prelude]<!-- ignore --> 中引入少量类型。如果需要的类型不在 prelude 中，你必须使用一个 `use` 语句显式地将其引入作用域。`std::io` 库提供很多 `io` 相关的功能，比如接受用户输入的功能。
 
 [prelude]: https://doc.rust-lang.org/std/prelude/index.html
 
