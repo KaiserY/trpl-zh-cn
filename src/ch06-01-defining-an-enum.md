@@ -2,7 +2,7 @@
 
 > [ch06-01-defining-an-enum.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch06-01-defining-an-enum.md)
 > <br>
-> commit 5544b998ff426aca7d1eaf248a1d9340df5ab9e7
+> commit 923201d5117c45bf78ce433422b50e4de9bd9b11
 
 让我们看看一个需要诉诸于代码的场景，来考虑为何此时使用枚举更为合适且实用。假设我们要处理 IP 地址。目前被广泛使用的两个主要 IP 标准：IPv4（version four）和 IPv6（version six）。这是我们的程序可能会遇到的所有可能的 IP 地址类型：所以可以 **枚举** 出所有可能的值，这也正是此枚举名字的由来。
 
@@ -120,11 +120,11 @@ let loopback = IpAddr::V6(String::from("::1"));
 
 ```rust
 struct Ipv4Addr {
-    // details elided
+    // --snip--
 }
 
 struct Ipv6Addr {
-    // details elided
+    // --snip--
 }
 
 enum IpAddr {
@@ -157,7 +157,7 @@ enum Message {
 * `Write` 包含单独一个 `String`。
 * `ChangeColor` 包含三个 `i32`。
 
-定义一个像示例 6-2 中的枚举类似于定义不同类型的结构体，除了枚举不使用 `struct` 关键字并且所有成员都被组合在一起位于 `Message` 下之外。如下这些结构体可以包含与之前枚举成员中相同的数据：
+定义一个类如示例 6-2 中所示那样的有关联值的枚举的方式和定义多个不同类型的结构体的方式很相像——除了枚举不使用 `struct` 关键字以及其所有成员都被组合在一起位于 `Message` 下之外。如下这些结构体可以包含与之前枚举成员中相同的数据：
 
 ```rust
 struct QuitMessage; // unit struct
@@ -169,7 +169,7 @@ struct WriteMessage(String); // tuple struct
 struct ChangeColorMessage(i32, i32, i32); // tuple struct
 ```
 
-不过如果我们使用不同的结构体，它们都有不同的类型，将不能轻易的定义一个获取任何这些信息类型的函数，正如可以使用示例 6-2 中定义的 `Message` 枚举那样，因为它们是一个类型的。
+不过，如果我们使用多个不同类型的结构体，由于它们都有不同的类型，我们将不能像使用示例 6-2 中定义 `Message` 枚举的那样，轻易的定义一个能够处理这些不同类型的结构体的函数。因为使用枚举的情况下，“它们”是一个类型的。
 
 结构体和枚举还有另一个相似点：就像可以使用 `impl` 来为结构体定义方法那样，也可以在枚举上定义方法。这是一个定义于我们 `Message` 枚举上的叫做 `call` 的方法：
 
@@ -201,7 +201,7 @@ m.call();
 
 编程语言的设计经常从其包含功能的角度考虑问题，但是从其所排除在外的功能的角度思考也很重要。Rust 并没有很多其他语言中有的空值功能。**空值**（*Null* ）是一个值，它代表没有值。在有空值的语言中，变量总是这两种状态之一：空值和非空值。
 
-在 “Null References: The Billion Dollar Mistake” 中，Tony Hoare，null 的发明者，曾经说到：
+Tony Hoare，null 的发明者，在他 2009 年的演讲 “Null References: The Billion Dollar Mistake” 中曾经说到：
 
 > I call it my billion-dollar mistake. At that time, I was designing the first
 > comprehensive type system for references in an object-oriented language. My
@@ -270,7 +270,7 @@ not satisfied
 
 换句话说，在对 `Option<T>` 进行 `T` 的运算之前必须将其转换为 `T`。通常这能帮助我们捕获空值最常见的问题之一：假设某值不为空但实际上为空的情况。
 
-无需担心错过存在非空值的假设让我们对代码更加有信心，为了拥有一个可能为空的值，必须显式的将其放入对应类型的 `Option<T>` 中。接着，当使用这个值时，必须明确的处理值为空的情况。任何地方一个值不是 `Option<T>` 类型的话，**可以** 安全的假设它的值不为空。这是 Rust 的一个有意为之的设计选择，来限制空值的泛滥和增加 Rust 代码的安全性。
+不再需要担心会错把一个值当作非空值来使用让我们对代码更加有信心，为了拥有一个可能为空的值，我们必须要显式的将其放入对应类型的 `Option<T>` 中。接着，当使用这个值时，必须明确的处理值为空的情况。任何地方一个值不是 `Option<T>` 类型的话，我们就 **可以** 安全的认为它的值不为空。这是 Rust 的一个有意为之的设计选择，来限制空值的泛滥以增加 Rust 代码的安全性。
 
 那么当有一个 `Option<T>` 的值时，如何从 `Some` 成员中取出 `T` 的值来使用它呢？`Option<T>` 枚举拥有大量用于各种情况的方法：你可以查看[相关代码][docs]<!-- ignore -->。熟悉 `Option<T>` 的方法将对你的 Rust 之旅提供巨大的帮助。
 
