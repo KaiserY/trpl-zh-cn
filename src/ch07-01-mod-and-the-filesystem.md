@@ -2,14 +2,14 @@
 
 > [ch07-01-mod-and-the-filesystem.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-01-mod-and-the-filesystem.md)
 > <br>
-> commit 478fa6f92b6e7975f5e4da8a84a498fb873b937d
+> commit a120c730714e07f8f32d905e9374a50b2e0ffdf5
 
 我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过这次不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章猜猜看游戏中作为依赖使用的 `rand` 就是这样的 crate。
 
-我们将创建一个提供一些通用网络功能的项目的骨架结构；我们将专注于模块和函数的组织，而不担心函数体中的具体代码。这个项目叫做 `communicator`。Cargo 默认会创建一个库 crate 除非指定其他项目类型，所以如果不像一直以来那样加入 `--bin` 参数则项目将会是一个库：
+我们将创建一个提供一些通用网络功能的项目的骨架结构；我们将专注于模块和函数的组织，而不担心函数体中的具体代码。这个项目叫做 `communicator`。若要创建一个库，应当使用 `--lib` 参数而不是之前所用的 `--bin` 参数：
 
 ```text
-$ cargo new communicator
+$ cargo new communicator --lib
 $ cd communicator
 ```
 
@@ -46,7 +46,7 @@ mod network {
 }
 ```
 
-`mod` 关键字的后面是模块的名字，`network`，接着是位于大括号中的代码块。代码块中的一切都位于 `network` 命名空间中。在这个例子中，只有一个函数，`connect`。如果想要在 `network` 模块外面的代码中调用这个函数，需要指定模块名并使用命名空间语法 `::`，像这样：`network::connect()`，而不是只是 `connect()`。
+`mod` 关键字的后面是模块的名字，`network`，接着是位于大括号中的代码块。代码块中的一切都位于 `network` 命名空间中。在这个例子中，只有一个函数，`connect`。如果想要在 `network` 模块外面的代码中调用这个函数，需要指定模块名并使用命名空间语法 `::`，像这样：`network::connect()`。
 
 也可以在 *src/lib.rs* 文件中同时存在多个模块。例如，再拥有一个 `client` 模块，它也有一个叫做 `connect` 的函数，如示例 7-1 中所示那样增加这个模块：
 
@@ -86,7 +86,7 @@ mod network {
 
 <span class="caption">示例 7-2：将 `client` 模块移动到 `network` 模块中</span>
 
-在 *src/lib.rs* 文件中，将现有的 `mod network` 和 `mod client` 的定义替换为示例 7-2 中的定义，这里将 `client` 模块作为 `network` 的一个内部模块。现在我们有了 `network::connect` 和 `network::client::connect` 函数：同样的，这两个 `connect` 函数也不相冲突，因为它们在不同的命名空间中。
+在 *src/lib.rs* 文件中，将现有的 `mod network` 和 `mod client` 的定义替换为示例 7-2 中的定义，这里将 `client` 模块作为 `network` 的一个内部模块。现在我们有了 `network::connect` 和 `network::client::connect` 函数：它们都叫 `connect` ，但它们并不互相冲突，因为它们在不同的命名空间中。
 
 这样，模块之间形成了一个层次结构。*src/lib.rs* 的内容位于最顶层，而其子模块位于较低的层次。如下是示例 7-1 中的例子以层次的方式考虑的结构：
 
@@ -320,15 +320,15 @@ communicator
 对应的文件布局现在看起来像这样：
 
 ```text
-├── src
-│   ├── client.rs
-│   ├── lib.rs
-│   └── network
-│       ├── mod.rs
-│       └── server.rs
+└── src
+    ├── client.rs
+    ├── lib.rs
+    └── network
+        ├── mod.rs
+        └── server.rs
 ```
 
-那么，当我们想要提取 `network::server` 模块时，为什么也必须将 *src/network.rs* 文件改名成 *src/network/mod.rs* 文件呢，还有为什么要将 `network::server` 的代码放入 *network* 目录的 *src/network/server.rs* 文件中，而不能将 `network::server` 模块提取到 *src/server.rs* 中呢？原因是如果 *server.rs* 文件在 *src* 目录中那么 Rust 就不能知道 `server` 应当是 `network` 的子模块。为了阐明这里 Rust 的行为，让我们考虑一下有着如下层级的另一个例子，其所有定义都位于 *src/lib.rs* 中：
+那么，当我们想要提取 `network::server` 模块时，为什么也必须将 *src/network.rs* 文件改名成 *src/network/mod.rs* 文件呢，还有为什么要将 `network::server` 的代码放入 *network* 目录的 *src/network/server.rs* 文件中呢？原因是如果 *server.rs* 文件在 *src* 目录中那么 Rust 就不能知道 `server` 应当是 `network` 的子模块。为了阐明这里 Rust 的行为，让我们考虑一下有着如下层级的另一个例子，其所有定义都位于 *src/lib.rs* 中：
 
 ```text
 communicator
@@ -351,9 +351,9 @@ communicator
 这些规则适用于递归（嵌套），所以如果 `foo` 模块有一个子模块 `bar` 而 `bar` 没有子模块，则 *src* 目录中应该有如下文件：
 
 ```text
-├── foo
-│   ├── bar.rs (contains the declarations in `foo::bar`)
-│   └── mod.rs (contains the declarations in `foo`, including `mod bar`)
+└── foo
+    ├── bar.rs (contains the declarations in `foo::bar`)
+    └── mod.rs (contains the declarations in `foo`, including `mod bar`)
 ```
 
 模块自身则应该使用 `mod` 关键字定义于父模块的文件中。
