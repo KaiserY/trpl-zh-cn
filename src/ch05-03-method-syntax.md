@@ -2,7 +2,7 @@
 
 > [ch05-03-method-syntax.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch05-03-method-syntax.md)
 > <br>
-> commit ec65990849230388e4ce4db5b7a0cb8a0f0d60e2
+> commit c560db1e0145d5a64b9415c9cfe463c7dac31ab8
 
 **方法** 与函数类似：它们使用 `fn` 关键字和名称声明，可以拥有参数和返回值，同时包含一段该方法在某处被调用时会执行的代码。不过方法与函数是不同的，因为它们在结构体的上下文中被定义（或者是枚举或 trait 对象的上下文，将分别在第六章和第十七章讲解），并且它们第一个参数总是 `self`，它代表调用该方法的结构体实例。
 
@@ -47,11 +47,11 @@ fn main() {
 
 > ### `->`运算符到哪去了？
 >
-> 像在 C++ 这样的语言中，有两个不同的运算符来调用方法：`.` 直接在对象上调用方法，而 `->` 在一个对象的指针上调用方法，这时需要先解引用（dereference）指针。换句话说，如果 `object` 是一个指针，那么 `object->something()` 就像 `(*object).something()` 一样。
+> 像在 C/C++ 这样的语言中，有两个不同的运算符来调用方法：`.` 直接在对象上调用方法，而 `->` 在一个对象的指针上调用方法，这时需要先解引用（dereference）指针。换句话说，如果 `object` 是一个指针，那么 `object->something()` 就像 `(*object).something()` 一样。
 >
 > Rust 并没有一个与 `->` 等效的运算符；相反，Rust 有一个叫 **自动引用和解引用**（*automatic referencing and dereferencing*）的功能。方法调用是 Rust 中少数几个拥有这种行为的地方。
 >
-> 这是它如何工作的：当使用 `object.something()` 调用方法时，Rust 会自动增加 `&`、`&mut` 或 `*` 以便使 `object` 符合方法的签名。也就是说，这些代码是等价的：
+> 他是这样工作的：当使用 `object.something()` 调用方法时，Rust 会自动添加 `&`、`&mut` 或 `*` 以便使 `object` 符合方法的签名。也就是说，这些代码是等价的：
 >
 > ```rust
 > # #[derive(Debug,Copy,Clone)]
@@ -78,7 +78,7 @@ fn main() {
 
 ### 带有更多参数的方法
 
-让我们更多的实践一下方法，通过为 `Rectangle` 结构体实现第二个方法。这回，我们让一个 `Rectangle` 的实例获取另一个 `Rectangle` 实例并返回 `self` 能否完全包含第二个长方形，如果能则返回 `true` ，如果不能则返回 `false`。一旦定义了 `can_hold` 方法，就可以运行示例 5-14 中的代码了：
+让我们练习通过实现 `Rectangle` 结构体上的另一方法来使用方法。这回，我们让一个 `Rectangle` 的实例获取另一个 `Rectangle` 实例并返回 `true` 如果 `self` 能完全包含第二个长方形，否则返回 `false`。一旦定义了 `can_hold` 方法，就可以运行示例 5-14 中的代码了：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -95,7 +95,7 @@ fn main() {
 
 <span class="caption">示例 5-14：展示还未实现的 `can_hold` 方法的应用</span>
 
-同时我们希望看到如下输出，因为 `rect2` 的宽高都小于 `rect1`，而 `rect3` 比 `rect1` 要宽：
+同时我们希望看到如下输出，因为 `rect2` 的两个维度都小于 `rect1`，而 `rect3` 比 `rect1` 要宽：
 
 ```text
 Can rect1 hold rect2? true
