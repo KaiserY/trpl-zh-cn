@@ -2,3 +2,4 @@ book/
 mdbook/
 
 .DS_Store
+.idea
