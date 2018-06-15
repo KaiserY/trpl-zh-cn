@@ -1,6 +1,6 @@
 # Rust 程序设计语言（2018版） 简体中文版
 
-[![Build Status](https://travis-ci.org/Turing/trpl-zh-cn.svg?branch=turing)](https://travis-ci.org/Turing/trpl-zh-cn)
+[![Build Status](https://travis-ci.org/Turing-Chu/trpl-zh-cn.svg?branch=turing)](https://travis-ci.org/Turing-Chu/trpl-zh-cn)
 
 本仓库包含了“Rust 程序设计语言（简体中文版）”第二版和2018版，并以2018版为主，同时同步更新第二版
 
