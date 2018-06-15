@@ -1,8 +1,11 @@
 # B - 运算符与符号
+> [appendix-02-operators.md](https://github.com/rust-lang/book/blob/master/2018-edition/src/appendix-02-operators.md)
+><br />
+> commit [c3e81dfc199b3d27d43164df3d4d5b898fc69740](https://github.com/rust-lang/book/commit/c3e81dfc199b3d27d43164df3d4d5b898fc69740)
 
 该附录包含了 Rust 语法的词汇表，包括运算符以及其他的符号，这些符号以其自身或者在路径、泛型、trait bounds、宏、属性、注释、元组以及大括号的上下文中出现。
 
-## 运算符 
+## 运算符
 
 表B-1包含了 Rust 中的运算符、运算符如何出现在上下文中的示例、简短解释以及该运算符是否可重载。如果一个运算符是可重载的，则该运算符上用于重载的相关 trait 也会列出。
 
@@ -11,7 +14,7 @@
 | 运算符 | 示例 | 解释 | 是否可重载 |
 |----------|---------|-------------|---------------|
 | `!` | `ident!(...)`, `ident!{...}`, `ident![...]` | 宏扩展 |  |
-| `!` | `!expr` | 按位非或逻辑非 | `Not` | 
+| `!` | `!expr` | 按位非或逻辑非 | `Not` |
 | `!=` | `var != expr` | 不等比较 | `PartialEq` |
 | `%` | `expr % expr` | 算术取模 | `Rem` |
 | `%=` | `var %= expr` | 算术取模与赋值 | `RemAssign` |
@@ -24,18 +27,18 @@
 | `*=` | `var *= expr` | 算术乘法与赋值 | `MulAssign` |
 | `*` | `*expr` | 解引用 | |
 | `*` | `*const type`, `*mut type` | 原生指针 | |
-| `+` | `trait + trait`, `'a + trait` | Compound type constraint | |
+| `+` | `trait + trait`, `'a + trait` | 复合类型限制 | |
 | `+` | `expr + expr` | 算术加法 | `Add` |
 | `+=` | `var += expr` | 算术加法与赋值 | `AddAssign` |
 | `,` | `expr, expr` | 参数以及元素分隔符 | |
 | `-` | `- expr` | 算术取负 | `Neg` |
 | `-` | `expr - expr` | 算术减法| `Sub` |
 | `-=` | `var -= expr` | 算术减法与赋值 | `SubAssign` |
-| `->` | `fn(...) -> type`, <code>\|...\| -> type</code> | Function and closure return type | |
+| `->` | `fn(...) -> type`, <code>\|...\| -> type</code> | 函数与闭包，返回类型 | |
 | `.` | `expr.ident` | 成员访问 | |
-| `..` | `..`, `expr..`, `..expr`, `expr..expr` | Right-exclusive range literal | |
-| `..` | `..expr` | Struct literal update syntax | |
-| `..` | `variant(x, ..)`, `struct_type { x, .. }` | “And the rest” pattern binding | |
+| `..` | `..`, `expr..`, `..expr`, `expr..expr` | 右排除范围 | |
+| `..` | `..expr` | 结构体更新语法 | |
+| `..` | `variant(x, ..)`, `struct_type { x, .. }` | “与剩余部分”的模式绑定 | |
 | `...` | `expr...expr` | 模式: 范围包含模式 | |
 | `/` | `expr / expr` | 算术除法 | `Div` |
 | `/=` | `var /= expr` | 算术除法与赋值 | `DivAssign` |
@@ -43,14 +46,14 @@
 | `:` | `ident: expr` | 结构体字段初始化 | |
 | `:` | `'a: loop {...}` | 循环标志 | |
 | `;` | `expr;` | 语句和语句结束符 | |
-| `;` | `[...; len]` | Part of fixed-size array syntax | |
+| `;` | `[...; len]` | 固定大小数组语法的部分 | |
 | `<<` | `expr << expr` |左移 | `Shl` |
 | `<<=` | `var <<= expr` | 左移与赋值| `ShlAssign` |
 | `<` | `expr < expr` | 小于比较 | `PartialOrd` |
 | `<=` | `expr <= expr` | 小于等于比较 | `PartialOrd` |
 | `=` | `var = expr`, `ident = type` | 赋值/等值 | |
 | `==` | `expr == expr` | 等于比较 | `PartialEq` |
-| `=>` | `pat => expr` | Part of match arm syntax | |
+| `=>` | `pat => expr` | 匹配准备语法的部分 | |
 | `>` | `expr > expr` | 大于比较 | `PartialOrd` |
 | `>=` | `expr >= expr` | 大于等于比较 | `PartialOrd` |
 | `>>` | `expr >> expr` | 右移 | `Shr` |
@@ -74,20 +77,17 @@
 
 | 符号 | 解释 |
 |--------|-------------|
-
-| `'ident` | Named lifetime or loop label |
-
-| `...u8`, `...i32`, `...f64`, `...usize`, 等 | 指定的数字类型 |
-| `"..."` | 字符串 |
-| `r"..."`, `r#"..."#`, `r##"..."##`, etc. | 原生字符串, 未处理的遗漏字符 |
-| `b"..."` | 字节字符串; constructs a `[u8]` instead of a string |
-
-| `br"..."`, `br#"..."#`, `br##"..."##`, 等 | 原生字节字符串， 原生字节和字节结合的字符串 |
-| `'...'` | 字符 |
-| `b'...'` | ASCII字节 |
+| `'ident` | 命名生命周期或循环标签 |
+| `...u8`, `...i32`, `...f64`, `...usize`, 等 | 指定类型的数值常量 |
+| `"..."` | 字符串常量 |
+| `r"..."`, `r#"..."#`, `r##"..."##`, etc. | 原生字符串常量, 未处理的遗漏字符 |
+| `b"..."` | 字节字符串; 构造一个 `[u8]` 类型而非字符串 |
+| `br"..."`, `br#"..."#`, `br##"..."##`, 等 | 原生字节字符串常量，原生字节和字节结合的字符串 |
+| `'...'` | 字符常量 |
+| `b'...'` | ASCII码字节常量 |
 | <code>\|...\| expr</code> | 结束 |
-| `!` | Always empty bottom type for diverging functions |
-| `_` | “Ignored” pattern binding; also used to make integer literals readable |
+| `!` | 对一个离散函数来说最后总是空类型 |
+| `_` | “忽略”模式绑定， 也用于整数常量的可读性 |
 
 <span  class="caption">表 B-3： 路径相关语法</span>
 
@@ -97,21 +97,22 @@
 
 | `ident::ident` | 命名空间路径 |
 
-| `::path` | Path relative to the crate root (i.e., an explicitly absolute path) |
+| `::path` | 与crate根相关的路径（如一个明确的绝对路径） |
 
-| `self::path` | 当前模块相关路径（如） (i.e., an explicitly relative path).
+| `self::path` | 当前模块相关路径（如一个明确相关路径）|
 
 | `super::path` | 父模块相关路径 |
 
-| `type::ident`, `<type as trait>::ident` | Associated constants, functions, and types |
+| `type::ident`, `<type as trait>::ident` | 相关常量、函数以及类型 |
 
-| `<type>::...` | Associated item for a type that cannot be directly named (e.g., `<&T>::...`, `<[T]>::...`, etc.) |
+| `<type>::...` | 不可以被直接命名的相关项类型（如 `<&T>::...`，`<[T]>::...`， 等） |
 
-| `trait::method(...)` | Disambiguating a method call by naming the trait that defines it |
+| `trait::method(...)` | 通过命名定义的 trait 来消除方法调用的二义性 |
 
-| `type::method(...)` | Disambiguating a method call by naming the type for which it’s defined |
+| `type::method(...)` | 通过命名定义的类型来消除方法调用的二义性 |
 
-| `<type as trait>::method(...)` | Disambiguating a method call by naming the trait and type |
+| `<type as trait>::method(...)` | 通过命名 trait 和类型来消除方法调用的二义性 |
+
 
 表 B-4 展示了出现在泛型类型参数上下文中的符号。
 
@@ -119,29 +120,29 @@
 
 | 符号 | 解释 |
 |--------|-------------|
-| `path<...>` | Specifies parameters to generic type in a type (e.g., `Vec<u8>`) |
-| `path::<...>`, `method::<...>` | Specifies parameters to generic type, function, or method in an expression; often referred to as turbofish (e.g., `"42".parse::<i32>()`) |
+| `path<...>` | 为一个类型中的泛型指定具体参数（如 `Vec<u8>`） |
+| `path::<...>`, `method::<...>` | 为一个泛型、函数或表达式中的方法指定具体参数，通常指 [turbofish](https://matematikaadit.github.io/posts/rust-turbofish.html) （如 `"42".parse::<i32>()`）|
 | `fn ident<...> ...` | 泛型函数定义 |
 | `struct ident<...> ...` | 泛型结构体定义 |
 | `enum ident<...> ...` | 泛型枚举定义 |
-| `impl<...> ...` | Define generic implementation |
-| `for<...> type` | Higher-ranked lifetime bounds |
-| `type<ident=type>` | A generic type where one or more associated types have specific assignments (e.g., `Iterator<Item=T>`) |
+| `impl<...> ...` | 定义泛型实现 |
+| `for<...> type` | 高级生命周期限制 |
+| `type<ident=type>` | 泛型，其一个或多个相关类型必须被指定为特定类型（如 `Iterator<Item=T>`）|
 
-Table B-5 shows symbols that appear in the context of constraining generic type parameters with trait bounds.
+Table B-5 展示了出现在使用 trait bounds 约束泛型参数上下文中的符号。
 
 <span  class="caption">表 B-5: Trait Bound 约束</span>
 
 | 符号 | 解释 |
 |--------|-------------|
-| `T: U` | Generic parameter `T` constrained to types that implement `U` |
-| `T: 'a` | Generic type `T` must outlive lifetime `'a` (meaning the type cannot transitively contain any references with lifetimes shorter than `'a`) |
-| `T : 'static` | Generic type `T` contains no borrowed references other than `'static` ones |
+| `T: U` | 泛型参数 `T` 约束于实现了 `U` 的类型 |
+| `T: 'a` | 泛型 `T` 的生命周期必须长于 `'a`（意味着该类型不能传递包含生命周期短于 `'a` 的任何引用）|
+| `T : 'static` | 泛型 `T` 包含了除 `'static` 之外的非借用引用 |
 | `'b: 'a` | 泛型 `'b` 生命周期必须长于泛型 `'a` |
 | `T: ?Sized` | 使用一个不定大小的泛型类型 |
-| `'a + trait`, `trait + trait` | Compound type constraint |
+| `'a + trait`, `trait + trait` | 复合类型限制 |
 
-Table B-6 shows symbols that appear in the context of calling or defining macros and specifying attributes on an item.
+Table B-6 展示了在调用或定义宏以及在其上指定属性时的上下文中出现的符号。
 
 <span  class="caption">表 B-6: 宏与属性</span>
 
@@ -149,9 +150,9 @@ Table B-6 shows symbols that appear in the context of calling or defining macros
 |--------|-------------|
 | `#[meta]` | 外部属性 |
 | `#![meta]` | 内部属性 |
-| `$ident` | Macro substitution |
-| `$ident:kind` | Macro capture |
-| `$(…)…` | Macro repetition |
+| `$ident` | 宏替换 |
+| `$ident:kind` | 宏捕获 |
+| `$(…)…` | 宏重复 |
 
 表 B-7 展示了写注释的符号。
 
@@ -168,10 +169,10 @@ Table B-6 shows symbols that appear in the context of calling or defining macros
 
 表 B-8 展示了出现在使用元组时上下文中的符号。
 
-| Symbol | Explanation |
+| 符号 | 解释 |
 |--------|-------------|
-| `()` | 空元祖（亦称单元）， 用于字面量值或类型中 |
-| `(expr)` | Parenthesized expression |
+| `()` | 空元祖（亦称单元）， 用于常量或类型中 |
+| `(expr)` | 括号表达式 |
 | `(expr,)` | 单一元素元组表达式 |
 | `(type,)` | 单一元素元组类型 |
 | `(expr, ...)` | 元组表达式 |
@@ -183,7 +184,6 @@ Table B-6 shows symbols that appear in the context of calling or defining macros
 表 B-9 使用大括号的符号。
 
 | 符号 | 解释 |
-
 |---------|-------------|
 | `{...}` | 块表达式 |
 | `Type {...}` | `struct`  |
@@ -193,15 +193,9 @@ Table B-6 shows symbols that appear in the context of calling or defining macros
 <span  class="caption">表 B-10: 方括号</span>
 
 | 符号 | 解释 |
-
 |---------|-------------|
-
 | `[...]` | 数组 |
-
 | `[expr; len]` | 复制了 `len`个 `expr`的数组 |
-
 | `[type; len]` | 包含 `len`个 `type` 类型的数组|
-
 | `expr[expr]` | 集合索引。 重载（`Index`, `IndexMut`） |
-
-| `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]` | Collection indexing pretending to be collection slicing, using `Range`, `RangeFrom`, `RangeTo`, or `RangeFull` as the “index” |
+| `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]` | 集合索引，使用 `Range`，`RangeFrom`，`RangeTo` 或 `RangeFull` 作为索引来代替集合切片 |
