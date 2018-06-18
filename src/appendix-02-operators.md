@@ -1,11 +1,13 @@
-# B - 运算符与符号
-> [appendix-02-operators.md](https://github.com/rust-lang/book/blob/master/2018-edition/src/appendix-02-operators.md)
+## B - 运算符与符号
+> [appendix-02-operators.md](https://github.com/rust-lang/book/blob/master/second-edition/src/appendix-02-operators.md)
 ><br />
-> commit [c3e81dfc199b3d27d43164df3d4d5b898fc69740](https://github.com/rust-lang/book/commit/c3e81dfc199b3d27d43164df3d4d5b898fc69740)
+> commit d50521fc08e51892cdf1edf5e35f3847a42f9432
+
+[commit]: https://github.com/rust-lang/book/commit/d50521fc08e51892cdf1edf5e35f3847a42f9432
 
 该附录包含了 Rust 语法的词汇表，包括运算符以及其他的符号，这些符号以其自身或者在路径、泛型、trait bounds、宏、属性、注释、元组以及大括号的上下文中出现。
 
-## 运算符
+### 运算符
 
 表B-1包含了 Rust 中的运算符、运算符如何出现在上下文中的示例、简短解释以及该运算符是否可重载。如果一个运算符是可重载的，则该运算符上用于重载的相关 trait 也会列出。
 
