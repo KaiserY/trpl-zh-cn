@@ -4,7 +4,8 @@
 ><br />
 > commit 32215c1d96c9046c0b553a05fa5ec3ede2e125c3
 
-[appendix-03]: https://github.com/rust-lang/book/blob/master/2018-edition/src/appendix-03-derivable-traits.md
+[appendix-03]: https://github.com/rust-lang/book/blob/master/second-edition/src/appendix-03-derivable-traits.md
+[commit]: https://github.com/rust-lang/book/commit/32215c1d96c9046c0b553a05fa5ec3ede2e125c3
 
 在本书的各个部分中，我们讨论了可应用于结构体和枚举的 `derive` 属性。`derive` 属性生成的代码在使用 `derive` 语法注释的类型之上实现了带有默认实现的 trait 。
 
@@ -13,7 +14,6 @@
 * 该 trait 将会派生什么样的操作符和方法
 * 由 `derive` 提供什么样的 trait 实现
 * 由什么来实现类型的 trait
-* What implementing the trait signifies about the type
 * 是否允许实现该 trait 的条件
 * 需要 trait 操作的例子
 

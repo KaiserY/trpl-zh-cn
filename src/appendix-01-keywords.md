@@ -2,10 +2,11 @@
 
 > [appendix-01-keywords.md](https://github.com/rust-lang/book/blob/master/second-edition/src/appendix-01-keywords.md)
 > <br>
-> commit 60f22d98fe8ee0ce04824a8536a95f12ba118027
+> commit 32215c1d96c9046c0b553a05fa5ec3ede2e125c3 
 
 下面的列表中是Rust正在使用或者以后会用关键字。因此，这些关键字不能被用作标识符，例如
-函数名、变量名、参数名、结构体、模块名、crates名、常量名、宏名、静态值的名字。
+函数、变量、参数、结构体、模块、crate、常量、宏、静态值、属性、类型、trait 或生命周期
+的名字。
 
 ### 目前正在使用的关键字
 
@@ -39,11 +40,13 @@
 * `super` - 表示当前模块的父模块
 * `trait` - 定义一个 **trait**
 * `true` - 布尔值 `true`
-* `type` - 定义一个类型别名或相关连的类型
+* `type` - 定义一个类型别名或相关联的类型
 * `unsafe` - 表示不安全的代码、函数、**traits** 或者方法实现
 * `use` - 引入外部空间的符号
-* `where` - 表示一个类型约束 [\[For example\]](ch13-01-closures.html#使用带有泛型和-fn-trait-的闭包)
+* `where` - 表示一个类型约束 [\[For example\]][ch13-01]
 * `while` - 基于一个表达式的结果判断是否进行循环
+
+[ch13-01]: ch13-01-closures.html#使用带有泛型和-fn-trait-的闭包
 
 <!-- we should make sure the definitions for each keyword are consistently
 phrased, so for example for enum we say "defining an enumeration" but for fn we
@@ -57,7 +60,7 @@ though. Please let me know if any still seem inconsistent /Carol -->
 
 ### 未使用的保留字
 
-这些关键字没有目前任何功能，但是它们是Rust未来会使用的保留字。
+这些关键字没有目前任何功能，但是它们是 Rust 未来会使用的保留字。
 
 * `abstract`
 * `alignof`
