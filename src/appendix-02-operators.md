@@ -94,25 +94,15 @@
 <span  class="caption">表 B-3： 路径相关语法</span>
 
 | 符号 | 解释 |
-
 |--------|-------------|
-
 | `ident::ident` | 命名空间路径 |
-
 | `::path` | 与crate根相关的路径（如一个明确的绝对路径） |
-
 | `self::path` | 当前模块相关路径（如一个明确相关路径）|
-
 | `super::path` | 父模块相关路径 |
-
 | `type::ident`, `<type as trait>::ident` | 相关常量、函数以及类型 |
-
 | `<type>::...` | 不可以被直接命名的相关项类型（如 `<&T>::...`，`<[T]>::...`， 等） |
-
 | `trait::method(...)` | 通过命名定义的 trait 来消除方法调用的二义性 |
-
 | `type::method(...)` | 通过命名定义的类型来消除方法调用的二义性 |
-
 | `<type as trait>::method(...)` | 通过命名 trait 和类型来消除方法调用的二义性 |
 
 
@@ -123,13 +113,15 @@
 | 符号 | 解释 |
 |--------|-------------|
 | `path<...>` | 为一个类型中的泛型指定具体参数（如 `Vec<u8>`） |
-| `path::<...>`, `method::<...>` | 为一个泛型、函数或表达式中的方法指定具体参数，通常指 [turbofish](https://matematikaadit.github.io/posts/rust-turbofish.html) （如 `"42".parse::<i32>()`）|
+| `path::<...>`, `method::<...>` | 为一个泛型、函数或表达式中的方法指定具体参数，通常指 [turbofish][turbofish] （如 `"42".parse::<i32>()`）|
 | `fn ident<...> ...` | 泛型函数定义 |
 | `struct ident<...> ...` | 泛型结构体定义 |
 | `enum ident<...> ...` | 泛型枚举定义 |
 | `impl<...> ...` | 定义泛型实现 |
 | `for<...> type` | 高级生命周期限制 |
 | `type<ident=type>` | 泛型，其一个或多个相关类型必须被指定为特定类型（如 `Iterator<Item=T>`）|
+
+[turbofish]: https://matematikaadit.github.io/posts/rust-turbofish.html
 
 Table B-5 展示了出现在使用 trait bounds 约束泛型参数上下文中的符号。
 
