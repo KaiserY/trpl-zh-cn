@@ -13,7 +13,7 @@ script:
   - mdbook build
 deploy:
   provider: pages
-  local-dir: mdbook
+  local-dir: book
   skip-cleanup: true
   github-token: $GITHUB_TOKEN
   keep-history: false
