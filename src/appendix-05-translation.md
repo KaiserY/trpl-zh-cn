@@ -1,10 +1,10 @@
-## 附录 E: 本书翻译
+## 附录E: 本书翻译
 
 > [appendix-05-translation.md](https://github.com/rust-lang/book/blob/master/second-edition/src/appendix-05-translation.md)
 > <br />
 > commit 9c3756a33e6c1aa07a762ffa853fcdfcffb48ddc
 
-一些非英语语言的资源。多数仍在翻译中；查阅[翻译标签][see]来帮助我们或使我们知道新的翻译！
+一些非英语语言的资源。多数仍在翻译中；查阅[翻译标签][label]来帮助我们或使我们知道新的翻译！
 
 [label]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 
