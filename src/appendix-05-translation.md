@@ -1,4 +1,4 @@
-## 附录 E: 本书翻译
+## 附录E: 本书翻译
 
 > [appendix-05-translation.md](https://github.com/rust-lang/book/blob/master/second-edition/src/appendix-05-translation.md)
 > <br />
