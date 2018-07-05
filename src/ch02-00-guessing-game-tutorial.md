@@ -292,7 +292,7 @@ $ cargo build
 
 [cratesio]: https://crates.io
 
-在更新完 registry 后，Cargo 检查 `[dependencies]` 段落并下载缺失的 create 。本例中，虽然只声明了 `rand` 一个依赖，然而 Cargo 还是额外获取了 `libc` 的拷贝，因为 `rand` 依赖 `libc` 来正常工作。下载完成后，Rust 编译依赖，然后使用这些依赖编译项目。
+在更新完 registry 后，Cargo 检查 `[dependencies]` 段落并下载缺失的 crate 。本例中，虽然只声明了 `rand` 一个依赖，然而 Cargo 还是额外获取了 `libc` 的拷贝，因为 `rand` 依赖 `libc` 来正常工作。下载完成后，Rust 编译依赖，然后使用这些依赖编译项目。
 
 如果不做任何修改，立刻再次运行 `cargo build`，则不会看到任何除了 `Finished` 完成提示之外的输出。Cargo 知道它已经下载并编译了依赖，同时 *Cargo.toml* 文件也没有变动。Cargo 还知道代码也没有任何修改，所以它不会重新编译代码。因为无事可做，它简单的退出了。
 
