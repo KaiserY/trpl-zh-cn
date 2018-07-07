@@ -125,7 +125,7 @@
 - [附录](appendix-00.md)
     - [A - 关键字](appendix-01-keywords.md)
     - [B - 运算符与符号](appendix-02-operators.md)
-    - [C - 可导出的 trait](appendix-03-derivable-traits.md)
+    - [C - 可派生的 trait](appendix-03-derivable-traits.md)
     - [D - 宏](appendix-04-macros.md)
     - [E - 本书翻译](appendix-05-translation.md)
     - [F - 最新功能](appendix-06-newest-features.md)

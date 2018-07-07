@@ -8,12 +8,12 @@ branches:
   only:
   - master
 before_script:
-  - (cargo install mdbook --vers 0.0.26 --force || true)
+  - (cargo install mdbook --vers 0.1.7 --force || true)
 script:
   - mdbook build
 deploy:
   provider: pages
-  local-dir: mdbook
+  local-dir: book
   skip-cleanup: true
   github-token: $GITHUB_TOKEN
   keep-history: false
