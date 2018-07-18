@@ -98,7 +98,7 @@
     - [共享状态](ch16-03-shared-state.md)
     - [可扩展的并发：`Sync` 与 `Send`](ch16-04-extensible-concurrency-sync-and-send.md)
 
-- [Rust 的面向对象编程特征](ch17-00-oop.md)
+- [Rust 的面向对象编程特性](ch17-00-oop.md)
     - [面向对象语言的特点](ch17-01-what-is-oo.md)
     - [为使用不同类型的值而设计的 trait 对象](ch17-02-trait-objects.md)
     - [面向对象设计模式的实现](ch17-03-oo-design-patterns.md)
