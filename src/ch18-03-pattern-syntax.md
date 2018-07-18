@@ -151,7 +151,7 @@ first use it -->
 
 示例 18-12 展示带有两个字段 `x` 和 `y` 的结构体 `Point`，可以通过带有模式的 `let` 语句将其分解：
 
-<span class="filename">文件名: src/main.rs
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 struct Point {
