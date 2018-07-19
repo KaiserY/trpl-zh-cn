@@ -14,7 +14,7 @@
 
 ### 构建
 
-你可以将本mdbook构建成一系列静态html页面。这里我们采用vuepress打包出静态网页。在这之前，你需要安装Nodejs。
+你可以将本mdbook构建成一系列静态html页面。这里我们采用[vuepress](https://vuepress.vuejs.org/zh/)打包出静态网页。在这之前，你需要安装[Nodejs](https://nodejs.org/zh-cn/)。
 
 全局安装vuepress
 
