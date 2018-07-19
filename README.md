@@ -8,6 +8,32 @@
 
 每章翻译开头都带有官方链接和 commit hash，若发现与官方不一致，欢迎 Issue 或 PR :)
 
+## 静态页面构建与文档撰写
+
+### 构建
+
+你可以将本mdbook构建成一系列静态html页面。这里我们采用vuepress打包出静态网页。在这之前，你需要安装Nodejs。
+
+全局安装vuepress
+
+``` bash
+npm i -g vuepress 
+```
+
+cd到项目目录，然后开始构建。构建好的静态文档会出现在"./src/.vuepress/dist"中
+
+```bash
+vuepress build ./src
+```
+
+### 文档撰写
+
+vuepress会启动一个本地服务器，并在浏览器对你保存的文档进行实时热更新。
+
+```bash
+vuepress dev ./src
+```
+
 ## 社区资源
 
 - Rust语言中文社区：[https://rust.cc/](https://rust.cc/)
