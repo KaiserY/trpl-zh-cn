@@ -10,6 +10,8 @@
 
 ## 静态页面构建与文档撰写
 
+![image](/vuepress_page.png)
+
 ### 构建
 
 你可以将本mdbook构建成一系列静态html页面。这里我们采用vuepress打包出静态网页。在这之前，你需要安装Nodejs。
