@@ -47,4 +47,6 @@ vuepress dev ./src
 
 本翻译主要采用 [mdBook](https://github.com/rust-lang-nursery/mdBook) 格式。同时支持 [GitBook](https://github.com/GitbookIO/gitbook)，但会缺失部分功能，如一些代码没有语法高亮。
 
+本翻译加速查看站点[上海站点http://rustdoc.saigao.fun](http://rustdoc.saigao.fun)
+
 [GitBook.com](https://www.gitbook.com/) 地址：[https://www.gitbook.com/book/kaisery/trpl-zh-cn/details](https://www.gitbook.com/book/kaisery/trpl-zh-cn/details)
