@@ -18,10 +18,6 @@ had this to say about it https://www.martinfowler.com/bliki/GangOfFour.html:
 
 `Design Patterns: Elements of Reusable Object-Oriented Software` 这本书被俗称为 `The Gang of Four book`，是面向对象编程模式的目录。它这样定义面向对象编程：
 
-> Object-oriented programs are made up of objects. An *object* packages both
-> data and the procedures that operate on that data. The procedures are
-> typically called *methods* or *operations*.
->
 > 面向对象的程序是由对象组成的。一个 **对象** 包含数据和操作这些数据的过程。这些过程通常被称为 **方法** 或 **操作**。
 
 在这个定义下，Rust 是面向对象的：结构体和枚举包含数据而 impl 块提供了在结构体和枚举之上的方法。虽然带有方法的结构体和枚举并不被 **称为** 对象，但是他们提供了与对象相同的功能，参考 Gang of Four 中对象的定义。
