@@ -1,4 +1,4 @@
-# 附录C - 可派生的 trait
+## 附录C - 可派生的 trait
 
 > [appendix-03-derivable-traits.md][appendix-03]
 > <br />
