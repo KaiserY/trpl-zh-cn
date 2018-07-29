@@ -18,7 +18,7 @@ $ cd minigrep
 $ cargo run searchstring example-filename.txt
 ```
 
-现在 `cargo new` 生成的程序忽略任何传递给它的参数。[Crates.io](https://crates.io/) 上有一些现成的库可以帮助我们接受命令行参数，不过因为正在学习，让我们自己来实现一个。
+现在 `cargo new` 生成的程序忽略任何传递给它的参数。[Crates.io](https://crates.io/) 上有一些现成的库可以帮助我们接受命令行参数，不过我们正在学习这些内容，让我们自己来实现一个。
 
 ### 读取参数值
 
