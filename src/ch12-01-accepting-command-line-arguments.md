@@ -4,7 +4,7 @@
 > <br>
 > commit 97e60b3cb623d4a5b85419212b085ade8a11cbe1
 
-一如之前使用 `cargo new` 新建一个项目。我们称之为 `minigrep` 以便与可能已经安装在系统上的`grep`工具相区别：
+一如之前使用 `cargo new` 新建一个项目，我们称之为 `minigrep` 以便与可能已经安装在系统上的`grep`工具相区别：
 
 ```text
 $ cargo new --bin minigrep
@@ -18,7 +18,7 @@ $ cd minigrep
 $ cargo run searchstring example-filename.txt
 ```
 
-现在 `cargo new` 生成的程序忽略任何传递给它的参数。[Crates.io](https://crates.io/) 上有一些现成的库可以帮助我们接受命令行参数，不过因为正在学习，让我们自己来实现一个。
+现在 `cargo new` 生成的程序忽略任何传递给它的参数。[Crates.io](https://crates.io/) 上有一些现成的库可以帮助我们接受命令行参数，不过我们正在学习这些内容，让我们自己来实现一个。
 
 ### 读取参数值
 
@@ -60,7 +60,7 @@ $ cargo run needle haystack
 ["target/debug/minigrep", "needle", "haystack"]
 ```
 
-注意 vector 的第一个值是 `"target/debug/minigrep"`，它是我们二进制文件的名称。这与 C 中的参数列表的行为相符合，并使得程序可以在执行过程中使用它的名字。能够访问程序名称在需要在信息中打印时，或者需要根据执行程序所使用的命令行别名来改变程序行为时显得很方便，不过考虑到本章的目的，我们将忽略它并只保存所需的两个参数。
+注意 vector 的第一个值是 `"target/debug/minigrep"`，它是我们二进制文件的名称。这与 C 中的参数列表的行为相匹配，让程序使用在执行时调用它们的名称。如果要在消息中打印它或者根据用于调用程序的命令行别名更改程序的行为，通常可以方便地访问程序名称，不过考虑到本章的目的，我们将忽略它并只保存所需的两个参数。
 
 ### 将参数值保存进变量
 
