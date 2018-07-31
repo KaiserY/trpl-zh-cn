@@ -49,7 +49,7 @@ caveats that the reader needs to be aware of when working with raw pointers.
 You'd choose to use raw pointers to do something that you can't do with smart
 pointers or references. I've tried to clarify above /Carol -->
 
-示例 19-1 展示了如如何从引用同时创建不可变和可变裸指针。
+示例 19-1 展示了如何从引用同时创建不可变和可变裸指针。
 
 ```rust
 let mut num = 5;
