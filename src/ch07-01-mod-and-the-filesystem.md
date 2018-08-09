@@ -6,7 +6,7 @@
 
 我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过这次不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章猜猜看游戏中作为依赖使用的 `rand` 就是这样的 crate。
 
-我们将创建一个库的框架，提供一些通用的网络功能；我们将专注于模块和函数的组织，而不担心函数体中的具体代码。这个项目叫做 `communicator`。若要创建一个库，应当使用 `--lib` 参数而不是之前所用的 `--bin` 参数：
+我们将创建一个库的框架，提供一些通用的网络功能；我们将专注于模块和函数的组织，而不必担心函数体中的具体代码。这个项目叫做 `communicator`。若要创建一个库，应当使用 `--lib` 参数而不是之前所用的 `--bin` 参数：
 
 ```text
 $ cargo new communicator --lib
@@ -183,7 +183,7 @@ fn connect() {
 
 Rust 默认只知道 *src/lib.rs* 中的内容。如果想要对项目加入更多文件，我们需要在 *src/lib.rs* 中告诉 Rust 去寻找其他文件；这就是为什么 `mod client` 需要被定义在 *src/lib.rs* 而不能在 *src/client.rs* 的原因。
 
-现在，一切应该能成功编译，虽然会有一些警告。记住使用 `cargo build` 而不是 `cargo run` 因为这是一个库 crate 而不是二进制 crate：
+现在，一切应该能成功编译，虽然会有一些警告。记住使用 `cargo build` 而不是 `cargo run`， 因为这是一个库 crate 而不是二进制 crate：
 
 ```text
 $ cargo build
