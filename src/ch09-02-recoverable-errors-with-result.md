@@ -2,7 +2,7 @@
 
 > [ch09-02-recoverable-errors-with-result.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch09-02-recoverable-errors-with-result.md)
 > <br>
-> commit a764530433720fe09ae2d97874c25341f8322573
+> commit 347a8bf6beaf34cef5c4e82c2171f498f081485e
 
 大部分错误并没有严重到需要程序完全停止执行。有时，一个函数会因为一个容易理解并做出反应的原因失败。例如，如果尝试打开一个文件不过由于文件并不存在而失败，此时我们可能想要创建这个文件而不是终止进程。
 
@@ -302,4 +302,4 @@ error[E0277]: the trait bound `(): std::ops::Try` is not satisfied
 
 错误指出只能在返回 `Result` 的函数中使用问号运算符。在不返回 `Result` 的函数中，当调用其他返回 `Result` 的函数时，需要使用 `match` 或 `Result` 的方法之一来处理，而不能用 `?` 将潜在的错误传播给调用者。
 
-现在我们讨论过了调用 `panic!` 或返回 `Result` 的细节，是时候返回他们各自适合哪些场景的话题了。
+现在我们讨论过了调用 `panic!` 或返回 `Result` 的细节，是时候回到他们各自适合哪些场景的话题了。
