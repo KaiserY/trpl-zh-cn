@@ -2,7 +2,7 @@
 
 > [ch07-02-controlling-visibility-with-pub.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-02-controlling-visibility-with-pub.md)
 > <br>
-> commit 478fa6f92b6e7975f5e4da8a84a498fb873b937d
+> commit a120c730714e07f8f32d905e9374a50b2e0ffdf5
 
 我们通过将 `network` 和 `network::server` 的代码分别移动到 *src/network/mod.rs* 和 *src/network/server.rs* 文件中解决了示例 7-5 中出现的错误信息。现在，`cargo build` 能够构建我们的项目，不过仍然有一些警告信息，表示 `client::connect`、`network::connect` 和`network::server::connect` 函数没有被使用：
 
@@ -45,7 +45,7 @@ fn main() {
 }
 ```
 
-使用 `extern crate` 指令将 `communicator` 库 crate 引入到作用域。我们的包现在包含 **两个** crate。Cargo 认为 *src/main.rs* 是一个二进制 crate 的根文件，与现存的以 *src/lib.rs* 为根文件的库 crate 相区分。这个模式在可执行项目中非常常见：大部分功能位于库 crate 中，而二进制 crate 使用这个库 crate。通过这种方式，其他程序也可以使用这个库 crate，这是一个很好的关注分离（separation of concerns）。
+使用 `extern crate` 指令将 `communicator` 库 crate 引入到作用域。我们的包现在包含 **两个** crate。Cargo 认为 *src/main.rs* 是一个二进制 crate 的根文件，与现存的以 *src/lib.rs* 为根文件的库 crate 相区分。这个模式在可执行项目中非常常见：大部分功能位于库 crate 中，而二进制 crate 使用该库 crate。通过这种方式，其他程序也可以使用这个库 crate，这是一个很好的关注分离（separation of concerns）。
 
 从一个外部 crate 的视角观察 `communicator` 库的内部，我们创建的所有模块都位于一个与 crate 同名的模块内部，`communicator`。这个顶层的模块被称为 crate 的 **根模块**（*root module*）。
 

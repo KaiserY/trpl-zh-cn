@@ -6,7 +6,7 @@
 
 我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过这次不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章猜猜看游戏中作为依赖使用的 `rand` 就是这样的 crate。
 
-我们将创建一个提供一些通用网络功能的项目的骨架结构；我们将专注于模块和函数的组织，而不担心函数体中的具体代码。这个项目叫做 `communicator`。若要创建一个库，应当使用 `--lib` 参数而不是之前所用的 `--bin` 参数：
+我们将创建一个库的框架，提供一些通用的网络功能；我们将专注于模块和函数的组织，而不必担心函数体中的具体代码。这个项目叫做 `communicator`。若要创建一个库，应当使用 `--lib` 参数而不是之前所用的 `--bin` 参数：
 
 ```text
 $ cargo new communicator --lib
@@ -29,7 +29,7 @@ mod tests {
 
 Cargo 创建了一个空的测试来帮助我们开始库项目，不像使用 `--bin` 参数那样创建一个 “Hello, world!” 二进制项目。在本章之后的 “使用 `super` 访问父模块” 部分会介绍 `#[]` 和 `mod tests` 语法，目前只需确保它们位于 *src/lib.rs* 底部即可。
 
-因为没有 *src/main.rs* 文件，所以没有可供 Cargo 的 `cargo run` 执行的东西。因此，我们将使用 `cargo build` 命令只是编译库 crate 的代码。
+因为没有 *src/main.rs* 文件，所以没有可供 Cargo 的 `cargo run` 执行的东西。因此，我们将只使用 `cargo build` 命令编译库 crate 的代码。
 
 我们将学习根据编写代码的意图来以不同方法组织库项目代码以适应多种情况。
 
@@ -183,7 +183,7 @@ fn connect() {
 
 Rust 默认只知道 *src/lib.rs* 中的内容。如果想要对项目加入更多文件，我们需要在 *src/lib.rs* 中告诉 Rust 去寻找其他文件；这就是为什么 `mod client` 需要被定义在 *src/lib.rs* 而不能在 *src/client.rs* 的原因。
 
-现在，一切应该能成功编译，虽然会有一些警告。记住使用 `cargo build` 而不是 `cargo run` 因为这是一个库 crate 而不是二进制 crate：
+现在，一切应该能成功编译，虽然会有一些警告。记住使用 `cargo build` 而不是 `cargo run`， 因为这是一个库 crate 而不是二进制 crate：
 
 ```text
 $ cargo build
