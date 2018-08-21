@@ -11,6 +11,7 @@ before_script:
   - (cargo install mdbook --vers 0.1.7 --force || true)
 script:
   - mdbook build
+  - touch .nojekyll
 deploy:
   provider: pages
   local-dir: book
