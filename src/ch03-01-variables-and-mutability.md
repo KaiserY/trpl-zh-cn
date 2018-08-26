@@ -38,13 +38,9 @@ error[E0384]: cannot assign twice to immutable variable `x`
 
 错误信息指出错误的原因是 `不能对不可变变量 x 二次赋值`（`cannot assign twice to immutable variable x`），因为你尝试对不可变变量 `x` 赋第二个值。
 
-在尝试改变预设为不可变的值时，产生编译时错误是很重要的，因为这种情况可能导致 bug。如果一部分代码假设一个值永远也不会改变，而另一部分代码改变了这个值，第一部分代码就有可能以不可预料的方式运行。不得不承认这种 bug 的起因难以跟踪，尤其是第二部分代码只是 **有时** 改变其值的时候。
+在尝试改变预设为不可变的值时，产生编译时错误是很重要的，因为这种情况可能导致 bug。如果一部分代码假设一个值永远也不会改变，而另一部分代码改变了这个值，第一部分代码就有可能以不可预料的方式运行。不得不承认这种 bug 的起因难以跟踪，尤其是第二部分代码只是 **有时** 会改变值。
 
 Rust 编译器保证，如果声明一个值不会变，它就真的不会变。这意味着当阅读和编写代码时，不需要追踪一个值如何以及哪里可能会被改变，从而使得代码易于推导。
-
-In addition to allowing this value to change, `mut` conveys
-intent to future readers of the code by indicating that other parts of the code
-will be changing this variable value.
 
 不过可变性也是非常有用的。变量只是默认不可变；正如在第二章所做的那样，你可以在变量名之前加 `mut` 来使其可变。除了允许改变值之外，`mut` 向读者表明了其他代码将会改变这个变量值的意图。
 
@@ -155,4 +151,4 @@ error[E0308]: mismatched types
              found type `usize`
 ```
 
-现在我们已经了解了变量如何工作，让我们再看看变量可以拥有的数据类型。
+现在我们已经了解了变量如何工作，让我们看看变量可以拥有的更多数据类型。
