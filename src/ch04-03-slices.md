@@ -229,16 +229,13 @@ let s = "Hello, world!";
 
 #### 字符串 slice 作为参数
 
-Knowing that you can take slices of literals and `String` values leads us to
-one more improvement on `first_word`, and that’s its signature:
-
 在知道了能够获取字面值和 `String` 的 slice 后，我们对 `first_word` 做了改进，这是它的签名：
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {
 ```
 
-而更有经验的 Rustacean 会编写示例 4-9 中的签名，因为它使得可以对 `String` 值和 `&str` 值使用相同的函数：
+而更有经验的 Rustacean 会编写出示例 4-9 中的签名，因为它使得可以对 `String` 值和 `&str` 值使用相同的函数：
 
 ```rust,ignore
 fn first_word(s: &str) -> &str {
