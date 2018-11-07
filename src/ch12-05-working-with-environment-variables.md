@@ -215,7 +215,7 @@ To an admiring bog!
 如果你使用 PowerShell，则需要用两句命令而不是一句来设置环境变量并运行程序：
 
 ```text
-$ $env.CASE_INSENSITIVE=1
+$ $env:CASE_INSENSITIVE=1
 $ cargo run to poem.txt
 ```
 
