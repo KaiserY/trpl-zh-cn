@@ -238,9 +238,7 @@ let slice = unsafe {
 <!-- Can you give a definition for FFI? -->
 <!-- Done /Carol -->
 
-示例 19-8 展示了如何集成 C 标准库中的 `abs` 函数。`extern` 块中声明的函数在 Rust 代码中总是不安全的，因为其他语言不会强制执行 Rust 的规则且 Rust 无法检查它们，所以确保其安全是程序员的责任：
-
-有时, 你的Rust代码需要与其它语言交互. Rust有一个`extern`关键字可以实现这个功能, 这有助于创建并使用*外部功能接口(Foreign Function Interface)* (FFI). 例19-8演示了如何与定义在一个非Rust语言编写的外部库中的`some_function`进行交互. 在Rust中调用`extern`声明的代码块永远都是不安全的:
+示例 19-8 展示了如何集成 C 标准库中的 `abs` 函数。`extern` 块中声明的函数在 Rust 代码中总是不安全的。因为其他语言不会强制执行 Rust 的规则且 Rust 无法检查它们，所以确保其安全是程序员的责任：
 
 <span class="filename">文件名: src/main.rs</span>
 
