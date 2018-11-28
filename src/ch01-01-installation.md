@@ -1,18 +1,18 @@
 ## 安装
 
-> [ch01-01-installation.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-01-installation.md)
+> [ch01-01-installation.md](https://github.com/rust-lang/book/blob/master/src/ch01-01-installation.md)
 > <br>
-> commit 7480e811ab5ad8d53a5b854d9b0c7a5a4f58499f
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 第一步是安装 Rust。我们通过 `rustup` 下载 Rust，这是一个管理 Rust 版本和相关工具的命令行工具。下载时需要联网。
 
-> 注意：如果出于某些理由你倾向于不使用 `rustup`，请到 [Rust 安装页面](https://www.rust-lang.org/install.html) 查看其它安装选项。
+> 注意：如果你出于某些理由倾向于不使用 `rustup`，请到 [Rust 安装页面](https://www.rust-lang.org/install.html) 查看其它安装选项。
 
-接下来的步骤会安装最新的稳定版 Rust 编译器。本书所有示例和输出采用稳定版 Rust 1.21.0。Rust 的稳定性确保本书所有示例在最新版本的 Rust 中能够继续编译。不同版本的输出可能略有不同，因为 Rust 经常改进错误信息和警告。也就是说，通过这些步骤安装的最新稳定版 Rust，能正常运行本书中的内容。
+接下来的步骤会安装最新的稳定版 Rust 编译器。Rust 的稳定性确保本书所有示例在最新版本的 Rust 中能够继续编译。不同版本的输出可能略有不同，因为 Rust 经常改进错误信息和警告。也就是说，任何通过这些步骤安装的最新稳定版 Rust，都应该能正常运行本书中的内容。
 
 > ### 命令行标记
 >
-> 本章和全书中，我们会展示在终端中使用的命令。所有需要输入到终端的行都以 `$` 开头。但无需输入`$`；它代表每行命令的起点。不以 `$` 起始的行通常展示之前命令的输出。另外，PowerShell 专用的示例会采用 `>` 而不是 `$`。
+> 本章和全书中，我们会展示一些在终端中使用的命令。所有需要输入到终端的行都以 `$` 开头。但无需输入`$`；它代表每行命令的起点。不以 `$` 起始的行通常展示之前命令的输出。另外，PowerShell 专用的示例会采用 `>` 而不是 `$`。
 
 ### 在 Linux 或 macOS 上安装 `rustup`
 
@@ -46,12 +46,12 @@ $ export PATH="$HOME/.cargo/bin:$PATH"
 
 ### 在 Windows 上安装 `rustup`
 
-在 Windows 上，前往 [https://www.rust-lang.org/install.html][install] 并按照说明安装 Rust。在安装过程的某个步骤，你会收到一个信息说明为什么需要安装 Visual Studio 2013 或之后版本的 C++ build tools。获取这些 build tools 最方便的方法是安装 [Build Tools for Visual Studio 2017][visualstudio]。这个工具在 “Other Tools and Frameworks” 部分。
+在 Windows 上，前往 [https://www.rust-lang.org/install.html][install] 并按照说明安装 Rust。在安装过程的某个步骤，你会收到一个信息说明为什么需要安装 Visual Studio 2013 或更新版本的 C++ build tools。获取这些 build tools 最方便的方法是安装 [Build Tools for Visual Studio 2017][visualstudio]。这个工具在 “Other Tools and Frameworks” 部分。
 
 [install]: https://www.rust-lang.org/install.html
 [visualstudio]: https://www.visualstudio.com/downloads/
 
-本书的余下部分，使用能同时运行于 *cmd.exe* 和 PowerShell 的命令。如果存在特定差异，我们会解释使用哪一个。
+本书的余下部分会使用能同时运行于 *cmd.exe* 和 PowerShell 的命令。如果存在特定差异，我们会解释使用哪一个。
 
 ### 更新和卸载
 
@@ -88,10 +88,10 @@ rustc x.y.z (abcabcabc yyyy-mm-dd)
 [users]: https://users.rust-lang.org/
 [stackoverflow]: http://stackoverflow.com/questions/tagged/rust
 
-恭喜入坑！（此处应该有掌声！）
+> 译者：恭喜入坑！（此处应该有掌声！）
 
 ### 本地文档
 
 安装程序也自带一份文档的本地拷贝，可以离线阅读。运行 `rustup doc` 在浏览器中查看本地文档。
 
-任何时候，如果你拿不准标准库中的类型或函数的用途和用法，请查看应用程序接口（application programming interface，API）文档！
+任何时候，如果你拿不准标准库中的类型或函数的用途和用法，请查阅应用程序接口（application programming interface，API）文档！

@@ -1,10 +1,10 @@
 ## Hello, World!
 
-> [ch01-02-hello-world.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-02-hello-world.md)
+> [ch01-02-hello-world.md](https://github.com/rust-lang/book/blob/master/src/ch01-02-hello-world.md)
 > <br>
-> commit 5dfa983aa8fca89f8b70cafe58ab8417491d2018
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
-既然安装好了 Rust，我们来编写第一个 Rust 程序。当学习一门新语言的时候，使用该语言在屏幕上打印 `Hello, world!` 是一项传统，这里我们将沿用这个传统！
+既然安装好了 Rust，我们来编写第一个 Rust 程序。当学习一门新语言的时候，使用该语言在屏幕上打印 `Hello, world!` 是一项传统，我们将沿用这一传统！
 
 > 注意：本书假设你熟悉基本的命令行操作。Rust 对于你的编辑器、工具，以及代码位于何处并没有特定的要求，如果你更倾向于使用集成开发环境（IDE），而不是命令行，请尽管使用你喜欢的 IDE。目前很多 IDE 已经不同程度的支持 Rust；查看 IDE 文档了解更多细节。最近，Rust 团队已经致力于提供强大的 IDE 支持，而且进展飞速！
 
@@ -89,7 +89,7 @@ fn main() {
 
 这几行定义了一个 Rust 函数。`main` 函数是一个特殊的函数：在可执行的 Rust 程序中，它总是最先运行的代码。第一行代码声明了一个叫做 `main` 的函数，它没有参数也没有返回值。如果有参数的话，它们的名称应该出现在小括号中，`()`。
 
-还须注意，函数体被包裹在花括号中，`{}`。Rust 要求所有函数体都要用花括号包裹起来（译者注：有些语言，当函数体只有一行时可以省略花括号，但在 Rust 中是不行的）。一般来说，将左花括号与函数声明置于同一行并以空格分隔，是良好的代码风格。
+还须注意，函数体被包裹在花括号中，`{}`。Rust 要求所有函数体都要用花括号包裹起来。一般来说，将左花括号与函数声明置于同一行并以空格分隔，是良好的代码风格。
 
 在编写本书的时候，一个叫做 `rustfmt` 的自动格式化工具正在开发中。如果你希望在 Rust 项目中保持一种标准风格，`rustfmt` 会将代码格式化为特定的风格。Rust 团队计划最终将该工具包含在标准 Rust 发行版中，就像 `rustc`。所以根据你阅读本书的时间，它可能已经安装到你的电脑中了！检查在线文档以了解更多细节。
 
@@ -101,7 +101,7 @@ fn main() {
 
 这行代码完成这个简单程序的所有工作：在屏幕上打印文本。这里有四个重要的细节需要注意。首先 Rust 的缩进风格使用 4 个空格，而不是 1 个制表符（tab）。
 
-第二，`println!` 调用了一个 Rust 宏（macro）。如果是调用函数，则应输入 `println`（没有`!`）。我们将在附录 D 中详细讨论宏。现在你只需记住，当看到符号 `!` 的时候，就意味着调用的是宏而不是普通函数。
+第二，`println!` 调用了一个 Rust 宏（macro）。如果是调用函数，则应输入 `println`（没有`!`）。我们将在第十九章详细讨论宏。现在你只需记住，当看到符号 `!` 的时候，就意味着调用的是宏而不是普通函数。
 
 第三，`"Hello, world!"` 是一个字符串。我们把这个字符串作为一个参数传递给 `println!`，字符串将被打印到屏幕上。
 
@@ -119,17 +119,26 @@ $ rustc main.rs
 
 如果你有 C 或 C++ 背景，就会发现这与 `gcc` 和 `clang` 类似。编译成功后，Rust 会输出一个二进制的可执行文件。
 
-在 Linux、macOS 或 Windows 的 PowerShell 上，在 shell 中输入 `ls` 命令就可看见这个可执行文件，如下：
+在 Linux、macOS 或 Windows 的 PowerShell 上，在 shell 中输入 `ls` 命令也可以看见这个可执行文件，如下：
 
 ```text
-$ ls
-main  main.rs
+> ls
+
+
+    Directory: Path:\to\the\project
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----         6/1/2018   7:31 AM         137728 main.exe
+-a----         6/1/2018   7:31 AM        1454080 main.pdb
+-a----         6/1/2018   7:31 AM             14 main.rs
 ```
 
 在 Windows 的 CMD 上，则输入如下内容：
 
 ```cmd
-> dir /B %= the /B option says to only show the file names =%
+> dir /B %= /B 参数表示只显示文件名 =%
 main.exe
 main.pdb
 main.rs
@@ -138,7 +147,7 @@ main.rs
 这展示了扩展名为 *.rs* 的源文件、可执行文件（在 Windows 下是 *main.exe*，其它平台是 *main*），以及当使用 CMD 时会有一个包含调试信息、扩展名为 *.pdb* 的文件。从这里开始运行 *main* 或 *main.exe* 文件，如下：
 
 ```text
-$ ./main # or .\main.exe on Windows
+$ ./main # Windows 是 .\main.exe
 ```
 
 如果 *main.rs* 是上文所述的 Hello, world! 程序，它将会在终端上打印 `Hello, world!`。
