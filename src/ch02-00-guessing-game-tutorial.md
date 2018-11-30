@@ -1,8 +1,8 @@
 # 编写 猜猜看 游戏
 
-> [ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch02-00-guessing-game-tutorial.md)
+> [ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/master/src/ch02-00-guessing-game-tutorial.md)
 > <br>
-> commit 7480e811ab5ad8d53a5b854d9b0c7a5a4f58499f
+> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
 
 让我们一起动手完成一个项目，来快速上手 Rust！本章将介绍 Rust 中一些常用概念，并通过真实的程序来展示如何运用它们。你将会学到 `let`、`match`、方法、关联函数、外部 crate 等知识！后续章节会深入探讨这些概念的细节。在这一章，我们将做基础练习。
 
@@ -13,11 +13,11 @@
 要创建一个新项目，进入第一章中创建的 *projects* 目录，使用 Cargo 新建一个项目，如下：
 
 ```text
-$ cargo new guessing_game --bin
+$ cargo new guessing_game
 $ cd guessing_game
 ```
 
-第一个命令，`cargo new`，它获取项目的名称（`guessing_game`）作为第一个参数。`--bin` 参数告诉 Cargo 创建一个二进制项目，与第一章类似。第二个命令进入到新创建的项目目录。
+第一个命令，`cargo new`，它获取项目的名称（`guessing_game`）作为第一个参数。第二个命令进入到新创建的项目目录。
 
 看看生成的 *Cargo.toml* 文件：
 
@@ -119,7 +119,7 @@ println!("Please input your guess.");
 let mut guess = String::new();
 ```
 
-现在程序开始变得有意思了！这一小行代码发生了很多事。注意这是一个 `let` 语句，用来创建 **变量**。这里是另外一个例子：
+现在程序开始变得有意思了！这一小行代码发生了很多事。注意这是一个 `let` 语句，用来创建 **变量**（*variable*）。这里是另外一个例子：
 
 ```rust,ignore
 let foo = bar;
@@ -128,11 +128,11 @@ let foo = bar;
 这行代码新建了一个叫做 `foo` 的变量并把它绑定到值 `bar` 上。在 Rust 中，变量默认是不可变的。我们将会在第三章的 “变量与可变性” 部分详细讨论这个概念。下面的例子展示了如何在变量名前使用 `mut` 来使一个变量可变：
 
 ```rust,ignore
-let foo = 5; // immutable
-let mut bar = 5; // mutable
+let foo = 5; // 不可变
+let mut bar = 5; // 可变
 ```
 
-> 注意：`//` 语法开始一个注释，持续到行尾。Rust 忽略注释中的所有内容，将在第三章中详细介绍注释。
+> 注意：`//` 语法开始一个注释，持续到行尾。Rust 忽略注释中的所有内容，第三章将会详细介绍注释。
 
 让我们回到猜猜看程序中。现在我们知道了 `let mut guess` 会引入一个叫做 `guess` 的可变变量。等号（`=`）的右边是 `guess` 所绑定的值，它是 `String::new` 的结果，这个函数会返回一个 `String` 的新实例。[`String`][string]<!-- ignore --> 是一个标准库提供的字符串类型，它是 UTF-8 编码的可增长文本块。
 
@@ -214,7 +214,7 @@ Rust 警告我们没有使用 `read_line` 的返回值 `Result`，说明有一�
 
 ### 使用 `println!` 占位符打印值
 
-除了位于结尾的大括号，目前为止就只有一行代码值得讨论一下了，就是这一行：
+除了位于结尾的大括号，目前为止就只有这一行代码值得讨论一下了，就是这一行：
 
 ```rust,ignore
 println!("You guessed: {}", guess);
@@ -295,9 +295,9 @@ $ cargo build
 
 在更新完 registry 后，Cargo 检查 `[dependencies]` 片段并下载缺失的 crate 。本例中，虽然只声明了 `rand` 一个依赖，然而 Cargo 还是额外获取了 `libc` 的拷贝，因为 `rand` 依赖 `libc` 来正常工作。下载完成后，Rust 编译依赖，然后使用这些依赖编译项目。
 
-如果不做任何修改，立刻再次运行 `cargo build`，则不会看到任何除了 `Finished` 完成提示之外的输出。Cargo 知道它已经下载并编译了依赖，同时 *Cargo.toml* 文件也没有变动。Cargo 还知道代码也没有任何修改，所以它不会重新编译代码。因为无事可做，它简单的退出了。
+如果不做任何修改，立刻再次运行 `cargo build`，则不会看到任何除了 `Finished` 行之外的输出。Cargo 知道它已经下载并编译了依赖，同时 *Cargo.toml* 文件也没有变动。Cargo 还知道代码也没有任何修改，所以它不会重新编译代码。因为无事可做，它简单的退出了。
 
-如果打开 *src/main.rs* 文件，做一些无关紧要的修改，保存并再次构建，只会出现两行输出：
+如果打开 *src/main.rs* 文件，做一些无关紧要的修改，保存并再次构建，则会出现两行输出：
 
 ```text
 $ cargo build
@@ -311,7 +311,7 @@ $ cargo build
 
 Cargo 有一个机制来确保任何人在任何时候重新构建代码，都会产生相同的结果：Cargo 只会使用你指定的依赖版本，除非你又手动指定了别的。例如，如果下周 `rand` crate 的 `0.3.15` 版本出来了，它修复了一个重要的 bug，同时也含有一个会破坏代码运行的缺陷，这时会发生什么呢？
 
-这个问题的答案是 *Cargo.lock* 文件。它在第一次运行 `cargo build` 时创建，并放在 *guessing_game* 目录。当第一次构建项目时，Cargo 计算出所有符合要求的依赖版本并写入 *Cargo.lock* 文件。当将来构建项目时，Cargo 会发现 *Cargo.lock* 已存在并使用其中指定的版本，而不是再次计算所有的版本。这使得你拥有了一个自动化的可重现的构建。换句话说，项目会持续使用 `0.3.14` 直到你显式升级，感谢 *Cargo.lock* 文件。
+这个问题的答案是 *Cargo.lock* 文件。它在第一次运行 `cargo build` 时创建，并放在 *guessing_game* 目录。当第一次构建项目时，Cargo 计算出所有符合要求的依赖版本并写入 *Cargo.lock* 文件。当将来构建项目时，Cargo 会发现 *Cargo.lock* 已存在并使用其中指定的版本，而不是再次计算所有的版本。这使得你拥有了一个自动化的可重现的构建。换句话说，项目会持续使用 `0.3.14` 直到你显式升级，多亏有了 *Cargo.lock* 文件。
 
 #### 更新 crate 到一个新版本
 
@@ -337,20 +337,18 @@ rand = "0.4.0"
 
 下一次运行 `cargo build` 时，Cargo 会从 registry 更新可用的 crate，并根据你指定的新版本重新计算。
 
-第十四章会讲到 [Cargo][doccargo]<!-- ignore --> 及其[生态系统][doccratesio]<!-- ignore -->的更多内容，不过目前你只需要了解这么多。通过 Cargo 复用库文件非常容易，因此 Rustacean 能够编写出由很多包组装而成的更轻巧的项目。
+第十四章会讲到 [Cargo][doccargo]<!-- ignore --> 及其[生态系统][doccratesio]<!-- ignore --> 的更多内容，不过目前你只需要了解这么多。通过 Cargo 复用库文件非常容易，因此 Rustacean 能够编写出由很多包组装而成的更轻巧的项目。
 
 [doccargo]: http://doc.crates.io
 [doccratesio]: http://doc.crates.io/crates-io.html
 
 ### 生成一个随机数
 
-你已经把 `rand` crate 添加到 *Cargo.toml* 了，让我们开始 **使用** `rand` 吧。下一步是更新 *src/main.rs*，如示例 2-3 所示：
+你已经把 `rand` crate 添加到 *Cargo.toml* 了，让我们开始 **使用** `rand` 吧。下一步是更新 *src/main.rs*，如示例 2-3 所示。
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-extern crate rand;
-
 use std::io;
 use rand::Rng;
 
@@ -378,11 +376,11 @@ fn main() {
 
 接下来增加了另一行 `use`：`use rand::Rng`。`Rng` 是一个 trait，它定义了随机数生成器应实现的方法，想使用这些方法的话，此 trait 必须在作用域中。第十章会详细介绍 trait。
 
-另外，中间还新增加了两行。`rand::thread_rng` 函数提供实际使用的随机数生成器：它位于当前执行线程本地，并从操作系统获取 seed。接下来，调用随机数生成器的 `gen_range` 方法。这个方法由刚才引入到作用域的 `Rng` trait 定义。`gen_range` 方法获取两个数字作为参数，并生成一个范围在两者之间的随机数。它包含下限但不包含上限，所以需要指定 `1` 和 `101` 来请求一个 1 和 100 之间的数。
+另外，中间还新增加了两行。`rand::thread_rng` 函数提供实际使用的随机数生成器：它位于当前执行线程的本地环境中，并从操作系统获取 seed。接下来，调用随机数生成器的 `gen_range` 方法。这个方法由刚才引入到作用域的 `Rng` trait 定义。`gen_range` 方法获取两个数字作为参数，并生成一个范围在两者之间的随机数。它包含下限但不包含上限，所以需要指定 `1` 和 `101` 来请求一个 1 和 100 之间的数。
 
 > 注意：你不可能凭空就知道应该 use 哪个 trait 以及该从 crate 中调用哪个方法。crate 的使用说明位于其文档中。Cargo 有一个很棒的功能是：运行 `cargo doc --open` 命令来构建所有本地依赖提供的文档，并在浏览器中打开。例如，假设你对 `rand` crate 中的其他功能感兴趣，你可以运行 `cargo doc --open` 并点击左侧导航栏中的 `rand`。
 
-新增加的第二行代码打印出了秘密数字。这在开发程序时很有用，因为可以测试它，不过在最终版本中会删掉它。游戏一开始就打印出结果就没什么可玩的了！
+新增加的第二行代码打印出了秘密数字。这在开发程序时很有用，因为可以测试它，不过在最终版本中会删掉它。如果游戏一开始就打印出结果就没什么可玩的了！
 
 尝试运行程序几次：
 
@@ -500,13 +498,13 @@ let guess: u32 = guess.trim().parse()
 
 这里创建了一个叫做 `guess` 的变量。不过等等，不是已经有了一个叫做 `guess` 的变量了吗？确实如此，不过 Rust 允许用一个新值来 **隐藏** （*shadow*） `guess` 之前的值。这个功能常用在需要转换值类型之类的场景。它允许我们复用 `guess` 变量的名字，而不是被迫创建两个不同变量，诸如 `guess_str` 和 `guess` 之类。（第三章会介绍 shadowing 的更多细节。）
 
-我们将 `guess` 绑定到 `guess.trim().parse()` 表达式上。表达式中的 `guess` 是包含输入的原始 `String` 类型。`String` 实例的 `trim` 方法会去除字符串开头和结尾的空白字符。`u32` 只能由数字字符转换，不过用户必须输入 <span class="keystroke">return</span> 键才能让 `read_line` 返回，然而用户按下 <span class="keystroke">return</span> 键时，会在字符串中增加一个换行（newline）符。例如，用户输入 <span class="keystroke">5</span> 并按下 <span class="keystroke">return</span>，`guess` 看起来像这样：`5\n`。`\n` 代表 “换行”，回车键。`trim` 方法消除 `\n`，只留下`5`。
+我们将 `guess` 绑定到 `guess.trim().parse()` 表达式上。表达式中的 `guess` 是包含输入的原始 `String` 类型。`String` 实例的 `trim` 方法会去除字符串开头和结尾的空白字符。`u32` 只能由数字字符转换，不过用户必须输入 <span class="keystroke">enter</span> 键才能让 `read_line` 返回，然而用户按下 <span class="keystroke">enter</span> 键时，会在字符串中增加一个换行（newline）符。例如，用户输入 <span class="keystroke">5</span> 并按下 <span class="keystroke">enter</span>，`guess` 看起来像这样：`5\n`。`\n` 代表 “换行”，回车键。`trim` 方法消除 `\n`，只留下 `5`。
 
 [字符串的 `parse` 方法][parse]<!-- ignore --> 将字符串解析成数字。因为这个方法可以解析多种数字类型，因此需要告诉 Rust 具体的数字类型，这里通过 `let guess: u32` 指定。`guess` 后面的冒号（`:`）告诉 Rust 我们指定了变量的类型。Rust 有一些内建的数字类型；`u32` 是一个无符号的 32 位整型。对于不大的正整数来说，它是不错的类型，第三章还会讲到其他数字类型。另外，程序中的 `u32` 注解以及与 `secret_number` 的比较，意味着 Rust 会推断出 `secret_number` 也是 `u32` 类型。现在可以使用相同类型比较两个值了！
 
 [parse]: https://doc.rust-lang.org/std/primitive.str.html#method.parse
 
-`parse` 调用很容易产生错误。例如，字符串中包含 `A👍%`，就无法将其转换为一个数字。因此，`parse` 方法返回一个 `Result` 类型。像之前 “使用 `Result` 类型来处理潜在的错误” 讨论的 `read_line` 方法那样，再次按部就班的用 `expect` 方法处理即可。如果 `parse` 不能从字符串生成一个数字，返回一个 `Result::Err` 时，`expect` 会使游戏崩溃并打印附带的信息。如果 `parse` 成功地将字符串转换为一个数字，它会返回 `Result::Ok`，然后 `expect` 会返回 `Ok` 中的数字。
+`parse` 调用很容易产生错误。例如，字符串中包含 `A👍%`，就无法将其转换为一个数字。因此，`parse` 方法返回一个 `Result` 类型。像之前 “使用 `Result` 类型来处理潜在的错误” 讨论的 `read_line` 方法那样，再次按部就班的用 `expect` 方法处理即可。如果 `parse` 不能从字符串生成一个数字，返回一个 `Result` 的 `Err` 成员时，`expect` 会使游戏崩溃并打印附带的信息。如果 `parse` 成功地将字符串转换为一个数字，它会返回 `Result` 的 `Ok` 成员，然后 `expect` 会返回 `Ok` 值中的数字。
 
 现在让我们运行程序！
 
@@ -552,7 +550,7 @@ Too big!
 }
 ```
 
-如上所示，我们将提示用户猜测之后的所有内容放入了循环。确保 loop 循环中的代码多缩进四个空格，再次运行程序。注意这里有一个新问题，因为程序忠实地执行了我们的要求：永远地请求另一个猜测，用户好像没法退出啊！
+如上所示，我们将提示用户猜测之后的所有内容放入了循环。确保 loop 循环中的代码多缩进四个空格，再次运行程序。注意这里有一个新问题，因为程序忠实地执行了我们的要求：永远地请求另一个猜测，用户好像无法退出啊！
 
 用户总能使用 <span class="keystroke">ctrl-c</span> 终止程序。不过还有另一个方法跳出无限循环，就是 “比较猜测与秘密数字” 部分提到的 `parse`：如果用户输入的答案不是一个数字，程序会崩溃。用户可以利用这一点来退出，如下所示：
 
@@ -666,8 +664,6 @@ You win!
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-extern crate rand;
-
 use std::io;
 use std::cmp::Ordering;
 use rand::Rng;
