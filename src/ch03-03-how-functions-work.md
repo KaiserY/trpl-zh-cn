@@ -1,8 +1,8 @@
 ## 函数
 
-> [ch03-03-how-functions-work.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch03-03-how-functions-work.md)
+> [ch03-03-how-functions-work.md](https://github.com/rust-lang/book/blob/master/src/ch03-03-how-functions-work.md)
 > <br>
-> commit f949ff883628db8ed2f2f5f19e146ebf19ed6a6f
+> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
 
 函数遍布于 Rust 代码中。你已经见过语言中最重要的函数之一：`main` 函数，它是很多程序的入口点。你也见过 `fn` 关键字，它用来声明新函数。
 
@@ -41,7 +41,7 @@ Another function.
 
 ### 函数参数
 
-函数也可以被定义为拥有 **参数**（*parameters*），参数是特殊变量，是函数签名的一部分。当函数拥有参数（形参）时，可以为这些参数提供具体的值（实参）。技术上讲，这些具体值被称为参数（*arguments*），但是在闲谈时，人们倾向于互换着使用 *parameter* 和 *argument* 来表示函数定义中的变量或调用函数时传入的具体值。
+函数也可以被定义为拥有 **参数**（*parameters*），参数是特殊变量，是函数签名的一部分。当函数拥有参数（形参）时，可以为这些参数提供具体的值（实参）。技术上讲，这些具体值被称为参数（*arguments*），但是在日常交流中，人们倾向于不区分使用 *parameter* 和 *argument* 来表示函数定义中的变量或调用函数时传入的具体值。
 
 下面被重写的 `another_function` 版本展示了 Rust 中参数是什么样的：
 
@@ -125,7 +125,7 @@ fn main() {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let x = (let y = 6);
 }
@@ -231,7 +231,7 @@ fn plus_one(x: i32) -> i32 {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let x = plus_one(5);
 

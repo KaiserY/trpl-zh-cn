@@ -1,8 +1,8 @@
 ## 控制流
 
-> [ch03-05-control-flow.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch03-05-control-flow.md)
+> [ch03-05-control-flow.md](https://github.com/rust-lang/book/blob/master/src/ch03-05-control-flow.md)
 > <br>
-> commit f949ff883628db8ed2f2f5f19e146ebf19ed6a6f
+> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
 
 根据条件是否为真来决定是否执行某些代码，以及根据条件是否为真来重复运行一段代码是大部分编程语言的基本组成部分。Rust 代码中最常见的用来控制执行流的结构是 `if` 表达式和循环。
 
@@ -62,7 +62,7 @@ condition was false
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let number = 3;
 
@@ -172,7 +172,7 @@ The value of number is: 5
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let condition = true;
 
@@ -246,6 +246,26 @@ again!
 
 幸运的是，Rust 提供了另一种更可靠的退出循环的方式。可以使用 `break` 关键字来告诉程序何时停止循环。回忆一下在第二章猜猜看游戏的 “猜测正确后退出” 部分使用过它来在用户猜对数字赢得游戏后退出程序。
 
+#### 从循环返回
+
+`loop` 的一个用例是重试可能会失败的操作，比如检查线程是否完成了任务。然而你可能会需要将操作的结果传递给其它的代码。如果将返回值加入你用来停止循环的 `break` 表达式，它会被停止的循环返回：
+
+```rust
+fn main() {
+    let mut counter = 0;
+
+    let result = loop {
+        counter += 1;
+
+        if counter == 10 {
+            break counter * 2;
+        }
+    };
+
+    assert_eq!(result, 20);
+}
+```
+
 #### `while` 条件循环
 
 在程序中计算循环的条件也很常见。当条件为真，执行循环。当条件不再为真，调用 `break` 停止循环。这个循环类型可以通过组合 `loop`、`if`、`else` 和 `break` 来实现；如果你喜欢的话，现在就可以在程序中试试。
@@ -270,7 +290,7 @@ fn main() {
 
 <span class="caption">示例 3-3: 当条件为真时，使用 `while` 循环运行代码</span>
 
-这种结构消除了使用 `loop`、`if`、`else` 和 `break` 时必须有的很多嵌套，代码更加清晰。当条件为真就执行，否则退出循环。
+这种结构消除了很多使用 `loop`、`if`、`else` 和 `break` 时所必须的嵌套，这样更加清晰。当条件为真就执行，否则退出循环。
 
 #### 使用 `for` 遍历集合
 
