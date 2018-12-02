@@ -1,8 +1,8 @@
 ## 什么是所有权
 
-> [ch04-01-what-is-ownership.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch04-01-what-is-ownership.md)
+> [ch04-01-what-is-ownership.md](https://github.com/rust-lang/book/blob/master/src/ch04-01-what-is-ownership.md)
 > <br>
-> commit f949ff883628db8ed2f2f5f19e146ebf19ed6a6f
+> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
 
 Rust 的核心功能（之一）是 **所有权**（*ownership*）。虽然该功能很容易解释，但它对语言的其他部分有着深刻的影响。
 
@@ -165,11 +165,11 @@ let s2 = s1;
 
 <span class="caption">图 4-3：另一个 `s2 = s1` 时可能的内存表现，如果 Rust 同时也拷贝了堆上的数据的话</span>
 
-之前，我们提到过当变量离开作用域后，Rust 自动调用 `drop` 函数并清理变量的堆内存。不过图 4-2 展示了两个数据指针指向了同一位置。这就有了一个问题：当 `s2` 和 `s1` 离开作用域，他们都会尝试释放相同的内存。这是一个叫做 **二次释放**（*double free*）的错误，也是之前提到过的内存安全性 bug 之一。两次释放（相同）内存会导致内存污染，它可能会导致潜在的安全漏洞。
+之前我们提到过当变量离开作用域后，Rust 自动调用 `drop` 函数并清理变量的堆内存。不过图 4-2 展示了两个数据指针指向了同一位置。这就有了一个问题：当 `s2` 和 `s1` 离开作用域，他们都会尝试释放相同的内存。这是一个叫做 **二次释放**（*double free*）的错误，也是之前提到过的内存安全性 bug 之一。两次释放（相同）内存会导致内存污染，它可能会导致潜在的安全漏洞。
 
-为了确保内存安全，这种场景下 Rust 的处理有另一个细节值得注意。与其尝试拷贝被分配的内存，Rust 则认为 `s1` 不再有效，因此 Rust 不需要在 `s1` 离开作用域后清理任何东西。看看在 `s2` 被创建之后尝试使用 `s1` 会发生什么；它不会工作：
+为了确保内存安全，这种场景下 Rust 的处理有另一个细节值得注意。与其尝试拷贝被分配的内存，Rust 则认为 `s1` 不再有效，因此 Rust 不需要在 `s1` 离开作用域后清理任何东西。看看在 `s2` 被创建之后尝试使用 `s1` 会发生什么；这段代码不能运行：
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let s1 = String::from("hello");
 let s2 = s1;
 
@@ -254,7 +254,7 @@ Rust 有一个叫做 `Copy` trait 的特殊注解，可以用在类似整型这�
 fn main() {
     let s = String::from("hello");  // s 进入作用域
 
-    takes_ownership(s);             // s 的值移动到函数里...
+    takes_ownership(s);             // s 的值移动到函数里 ...
                                     // ... 所以到这里不再有效
 
     let x = 5;                      // x 进入作用域

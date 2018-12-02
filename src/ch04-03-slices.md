@@ -1,8 +1,8 @@
 ## Slice 类型
 
-> [ch04-03-slices.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch04-03-slices.md)
+> [ch04-03-slices.md](https://github.com/rust-lang/book/blob/master/src/ch04-03-slices.md)
 > <br>
-> commit 729f1118332ddcf01138d284eac5db0e85f8c8ed
+> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
 
 另一个没有所有权的数据类型是 *slice*。slice 允许你引用集合中一段连续的元素序列，而不用引用整个集合。
 
@@ -115,9 +115,18 @@ let hello = &s[0..5];
 let world = &s[6..11];
 ```
 
-这类似于引用整个 `String` 不过带有额外的 `[0..5]` 部分。不是对整个 `String` 的引用，而是对部分 `String` 的引用。`start..end` 语法代表一个以 `start` 开头并一直持续到但不包含 `end` 的 range。
+这类似于引用整个 `String` 不过带有额外的 `[0..5]` 部分。它不是对整个 `String` 的引用，而是对部分 `String` 的引用。`start..end` 语法代表一个以 `start` 开头并一直持续到但不包含 `end` 的 range。如果需要包含 `end`，可以使用 `..=` 而不是 `..`：
 
-使用一个由中括号中的 `[starting_index..ending_index]` 指定的 range 创建一个 slice，其中 `starting_index` 是 slice 的第一个位置，`ending_index` 则是 slice 最后一个位置的后一个值。在其内部，slice 的数据结构存储了 slice 的开始位置和长度，长度对应于 `ending_index` 减去 `starting_index` 的值。所以对于 `let world = &s[6..11];` 的情况，`world` 将是一个包含指向 `s` 第 7 个字节的指针和长度值 5 的 slice。
+```rust
+let s = String::from("hello world");
+
+let hello = &s[0..=4];
+let world = &s[6..=10];
+```
+
+`=` 意味着包含最后的数字，这有助于你记住 `..` 与 `..=` 的区别
+
+可以使用一个由中括号中的 `[starting_index..ending_index]` 指定的 range 创建一个 slice，其中 `starting_index` 是 slice 的第一个位置，`ending_index` 则是 slice 最后一个位置的后一个值。在其内部，slice 的数据结构存储了 slice 的开始位置和长度，长度对应于 `ending_index` 减去 `starting_index` 的值。所以对于 `let world = &s[6..11];` 的情况，`world` 将是一个包含指向 `s` 第 7 个字节的指针和长度值 5 的 slice。
 
 图 4-6 展示了一个图例。
 
@@ -190,13 +199,15 @@ fn second_word(s: &String) -> &str {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let mut s = String::from("hello world");
 
     let word = first_word(&s);
 
     s.clear(); // error!
+
+    println!("the first word is: {}", word);
 }
 ```
 
@@ -204,15 +215,16 @@ fn main() {
 
 ```text
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
- --> src/main.rs:6:5
-  |
-4 |     let word = first_word(&s);
-  |                            - immutable borrow occurs here
-5 |
-6 |     s.clear(); // error!
-  |     ^ mutable borrow occurs here
-7 | }
-  | - immutable borrow ends here
+  --> src/main.rs:10:5
+   |
+8  |     let word = first_word(&s);
+   |                           -- immutable borrow occurs here
+9  |
+10 |     s.clear(); // error!
+   |     ^^^^^^^^^ mutable borrow occurs here
+11 |
+12 |     println!("the first word is: {}", word);
+   |                                       ---- borrow later used here
 ```
 
 回忆一下借用规则，当拥有某值的不可变引用时，就不能再获取一个可变引用。因为 `clear` 需要清空 `String`，它尝试获取一个可变引用，它失败了。Rust 不仅使得我们的 API 简单易用，也在编译时就消除了一整类的错误！
@@ -245,7 +257,7 @@ fn first_word(s: &str) -> &str {
 
 如果有一个字符串 slice，可以直接传递它。如果有一个 `String`，则可以传递整个 `String` 的 slice。定义一个获取字符串 slice 而不是 `String` 引用的函数使得我们的 API 更加通用并且不会丢失任何功能：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 # fn first_word(s: &str) -> &str {

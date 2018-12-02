@@ -1,8 +1,8 @@
 ## 引用与借用
 
-> [ch04-02-references-and-borrowing.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch04-02-references-and-borrowing.md)
+> [ch04-02-references-and-borrowing.md](https://github.com/rust-lang/book/blob/master/src/ch04-02-references-and-borrowing.md)
 > <br>
-> commit f949ff883628db8ed2f2f5f19e146ebf19ed6a6f
+> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
 
 示例 4-5 中的元组代码有这样一个问题：我们必须将 `String` 返回给调用函数，以便在调用 `calculate_length` 后仍能使用 `String`，因为 `String` 被移动到了 `calculate_length` 内。
 
@@ -64,7 +64,7 @@ fn calculate_length(s: &String) -> usize { // s 是对 String 的引用
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let s = String::from("hello");
 
@@ -114,25 +114,30 @@ fn change(some_string: &mut String) {
 
 不过可变引用有一个很大的限制：在特定作用域中的特定数据有且只有一个可变引用。这些代码会失败：
 
-```rust,ignore
+<span class="filename">文件名: src/main.rs</span>
+
+```rust,ignore,does_not_compile
 let mut s = String::from("hello");
 
 let r1 = &mut s;
 let r2 = &mut s;
+
+println!("{}, {}", r1, r2);
 ```
+
 
 错误如下：
 
 ```text
 error[E0499]: cannot borrow `s` as mutable more than once at a time
- --> borrow_twice.rs:5:19
+ --> src/main.rs:5:10
   |
-4 |     let r1 = &mut s;
-  |                   - first mutable borrow occurs here
-5 |     let r2 = &mut s;
-  |                   ^ second mutable borrow occurs here
-6 | }
-  | - first borrow ends here
+4 | let r1 = &mut s;
+  |          ------ first mutable borrow occurs here
+5 | let r2 = &mut s;
+  |          ^^^^^^ second mutable borrow occurs here
+6 | println!("{}, {}", r1, r2);
+  |                    -- borrow later used here
 ```
 
 这个限制允许可变性，不过是以一种受限制的方式允许。新 Rustacean 们经常与此作斗争，因为大部分语言中变量任何时候都是可变的。
@@ -160,28 +165,30 @@ let r2 = &mut s;
 
 类似的规则也存在于同时使用可变与不可变引用中。这些代码会导致一个错误：
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let mut s = String::from("hello");
 
 let r1 = &s; // no problem
 let r2 = &s; // no problem
 let r3 = &mut s; // BIG PROBLEM
+
+println!("{}, {}, and {}", r1, r2, r3);
 ```
 
 错误如下：
 
 ```text
-error[E0502]: cannot borrow `s` as mutable because it is also borrowed as
-immutable
- --> borrow_thrice.rs:6:19
+error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
+ --> src/main.rs:6:10
   |
-4 |     let r1 = &s; // no problem
-  |               - immutable borrow occurs here
-5 |     let r2 = &s; // no problem
-6 |     let r3 = &mut s; // BIG PROBLEM
-  |                   ^ mutable borrow occurs here
-7 | }
-  | - immutable borrow ends here
+4 | let r1 = &s; // no problem
+  |          -- immutable borrow occurs here
+5 | let r2 = &s; // no problem
+6 | let r3 = &mut s; // BIG PROBLEM
+  |          ^^^^^^ mutable borrow occurs here
+7 |
+8 | println!("{}, {}, and {}", r1, r2, r3);
+  |                            -- borrow later used here
 ```
 
 哇哦！我们 **也** 不能在拥有不可变引用的同时拥有可变引用。不可变引用的用户可不希望在他们的眼皮底下值就被意外的改变了！然而，多个不可变引用是可以的，因为没有哪个只能读取数据的人有能力影响其他人读取到的数据。
@@ -196,7 +203,7 @@ immutable
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let reference_to_nothing = dangle();
 }
@@ -231,15 +238,13 @@ for it to be borrowed from.
 
 让我们仔细看看我们的 `dangle` 代码的每一步到底发生了什么：
 
-<span class="filename">Filename: src/main.rs</span>
-
 ```rust,ignore
-fn dangle() -> &String { // dangle 返回一个 String 引用
+fn dangle() -> &String { // dangle 返回一个字符串的引用
 
-    let s = String::from("hello"); // s 是新创建的 String
+    let s = String::from("hello"); // s 是一个新字符串
 
-    &s // 我们返回 String 的引用，s
-} // 这里，s 移出了作用域，并被丢弃。它的内存被释放
+    &s // 返回字符串 s 的引用
+} // 这里 s 离开作用域并被丢弃。其内存被释放。
   // 危险！
 ```
 
