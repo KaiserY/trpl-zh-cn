@@ -349,8 +349,6 @@ rand = "0.4.0"
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-extern crate rand;
-
 use std::io;
 use rand::Rng;
 
@@ -374,7 +372,7 @@ fn main() {
 
 <span class="caption">示例 2-3：添加生成随机数的代码</span>
 
-首先，这里在顶部增加一行 `extern crate rand;` 通知 Rust 我们要使用外部依赖 `rand`。这也会调用相应的 `use rand`，所以现在可以使用 `rand::` 前缀来调用 `rand` crate 中的任何内容。
+首先，这里新增了一行通知 Rust 我们要使用外部依赖 `rand`。这等同于调用 `use rand`，所以现在可以使用 `rand::` 前缀来调用 `rand` crate 中的任何内容。
 
 接下来增加了另一行 `use`：`use rand::Rng`。`Rng` 是一个 trait，它定义了随机数生成器应实现的方法，想使用这些方法的话，此 trait 必须在作用域中。第十章会详细介绍 trait。
 
@@ -413,9 +411,7 @@ You guessed: 5
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
-extern crate rand;
-
+```rust,ignore,does_not_compile
 use std::io;
 use std::cmp::Ordering;
 use rand::Rng;
