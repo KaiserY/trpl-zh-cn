@@ -349,6 +349,8 @@ rand = "0.4.0"
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
+extern crate rand;
+
 use std::io;
 use rand::Rng;
 
