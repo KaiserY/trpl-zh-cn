@@ -1,8 +1,8 @@
 ## 定义并实例化结构体
 
-> [ch05-01-defining-structs.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch05-01-defining-structs.md)
+> [ch05-01-defining-structs.md](https://github.com/rust-lang/book/blob/master/src/ch05-01-defining-structs.md)
 > <br>
-> commit c560db1e0145d5a64b9415c9cfe463c7dac31ab8
+> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
 
 结构体和我们在第三章讨论过的元组类似。和元组一样，结构体的每一部分可以是不同类型。但不同于元组，结构体需要命名各部分数据以便能清楚的表明其值的意义。由于有了这些名字，结构体比元组更灵活：不需要依赖顺序来指定或访问实例中的值。
 
@@ -192,7 +192,7 @@ let origin = Point(0, 0, 0);
 
 我们也可以定义一个没有任何字段的结构体！它们被称为 **类单元结构体**（*unit-like structs*）因为它们类似于 `()`，即 unit 类型。类单元结构体常常在你想要在某个类型上实现 trait 但不需要在类型中存储数据的时候发挥作用。我们将在第十章介绍 trait。
 
-> ## 结构体数据的所有权
+> ### 结构体数据的所有权
 >
 > 在示例 5-1 中的 `User` 结构体的定义中，我们使用了自身拥有所有权的 `String` 类型而不是 `&str` 字符串 slice 类型。这是一个有意而为之的选择，因为我们想要这个结构体拥有它所有的数据，为此只要整个结构体是有效的话其数据也是有效的。
 >
@@ -200,7 +200,7 @@ let origin = Point(0, 0, 0);
 >
 > <span class="filename">文件名: src/main.rs</span>
 >
-> ```rust,ignore
+> ```rust,ignore,does_not_compile
 > struct User {
 >     username: &str,
 >     email: &str,

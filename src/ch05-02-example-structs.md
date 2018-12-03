@@ -1,8 +1,8 @@
 ## 一个使用结构体的示例程序
 
-> [ch05-02-example-structs.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch05-02-example-structs.md)
+> [ch05-02-example-structs.md](https://github.com/rust-lang/book/blob/master/src/ch05-02-example-structs.md)
 > <br>
-> commit c560db1e0145d5a64b9415c9cfe463c7dac31ab8
+> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
 
 为了理解何时会需要使用结构体，让我们编写一个计算长方形面积的程序。我们会从单独的变量开始，接着重构程序直到使用结构体替代他们为止。
 
@@ -111,7 +111,7 @@ fn area(rectangle: &Rectangle) -> u32 {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 struct Rectangle {
     width: u32,
     height: u32,
@@ -149,7 +149,7 @@ error[E0277]: the trait bound `Rectangle: std::fmt::Display` is not satisfied
 error[E0277]: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
 ```
 
-不过编译器又一次给出了一个有帮助的信息！
+不过编译器又一次给出了一个有帮助的信息：
 
 ```text
 `Rectangle` cannot be formatted using `:?`; if it is defined in your

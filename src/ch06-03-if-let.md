@@ -1,10 +1,10 @@
 ## `if let` 简单控制流
 
-> [ch06-03-if-let.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch06-03-if-let.md)
+> [ch06-03-if-let.md](https://github.com/rust-lang/book/blob/master/src/ch06-03-if-let.md)
 > <br>
-> commit 3f2a1bd8dbb19cc48b210fc4fb35c305c8d81b56
+> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
 
-`if let` 语法让我们以一种不那么冗长的方式结合 `if` 和 `let`，来处理只匹配一个模式的值而忽略其他模式的情况。考虑示例 6-6 中的程序，它匹配一个 `Option<u8>` 值并只希望当值为三时执行代码：
+`if let` 语法让我们以一种不那么冗长的方式结合 `if` 和 `let`，来处理只匹配一个模式的值而忽略其他模式的情况。考虑示例 6-6 中的程序，它匹配一个 `Option<u8>` 值并只希望当值为 3 时执行代码：
 
 ```rust
 let some_u8_value = Some(0u8);
@@ -27,7 +27,7 @@ if let Some(3) = some_u8_value {
 }
 ```
 
-`if let` 获取通过 `=` 分隔的一个模式和一个表达式。它的工作方式与 `match` 相同，这里的表达式对应 `match` 而模式则对应第一个分支。
+`if let` 获取通过等号分隔的一个模式和一个表达式。它的工作方式与 `match` 相同，这里的表达式对应 `match` 而模式则对应第一个分支。
 
 使用 `if let` 意味着编写更少代码，更少的缩进和更少的样板代码。然而，这样会失去 `match` 强制要求的穷尽性检查。`match` 和 `if let` 之间的选择依赖特定的环境以及增加简洁度和失去穷尽性检查的权衡取舍。
 
