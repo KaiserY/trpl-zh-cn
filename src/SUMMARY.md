@@ -36,10 +36,9 @@
 
 ## 基本 Rust 技能
 
-- [模块](ch07-00-modules.md)
-    - [`mod` 与文件系统](ch07-01-mod-and-the-filesystem.md)
-    - [使用 `pub` 控制可见性](ch07-02-controlling-visibility-with-pub.md)
-    - [在不同的模块中引用命名](ch07-03-importing-names-with-use.md)
+- [包、crate 与 模块](ch07-00-packages-crates-and-modules.md)
+    - [包和 crate 用来创建库和二进制项目](ch07-01-packages-and-crates-for-making-libraries-and-executables.md)
+    - [模块系统用来控制作用域和私有性](ch07-02-modules-and-use-to-control-scope-and-privacy.md)
 
 - [通用集合类型](ch08-00-common-collections.md)
     - [vector](ch08-01-vectors.md)
