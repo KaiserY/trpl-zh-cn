@@ -1,10 +1,10 @@
 # 泛型、trait 和生命周期
 
-> [ch10-00-generics.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch10-00-generics.md)
+> [ch10-00-generics.md](https://github.com/rust-lang/book/blob/master/src/ch10-00-generics.md)
 > <br>
-> commit 9e8d1ed7a1732d9cc09606a9b62ee8838998502f
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
-每一个编程语言都有高效的处理重复概念的工具；在 Rust 中其工具之一就是 **泛型**（*generics*）。泛型是具体类型或其他属性的抽象替代。我们可以表达泛型的属性，比如他们的行为或如何与其他泛型相关联，而不需要在编写和编译代码时知道他们在这里实际上代表什么。
+每一个编程语言都有高效的处理重复概念的工具.在 Rust 中其工具之一就是 **泛型**（*generics*）。泛型是具体类型或其他属性的抽象替代。我们可以表达泛型的属性，比如他们的行为或如何与其他泛型相关联，而不需要在编写和编译代码时知道他们在这里实际上代表什么。
 
 同理为了编写一份可以用于多种具体值的代码，函数并不知道其参数为何值，这时就可以让函数获取泛型而不是像 `i32` 或 `String` 这样的具体值。我们已经使用过第六章的 `Option<T>`，第八章的 `Vec<T>` 和 `HashMap<K, V>`，以及第九章的 `Result<T, E>` 这些泛型了。本章会探索如何使用泛型定义我们自己的类型、函数和方法！
 
@@ -45,7 +45,7 @@ fn main() {
 
 如果需要在两个不同的列表中寻找最大值，我们可以重复示例 10-1 中的代码，这样程序中就会存在两段相同逻辑的代码，如示例 10-2 所示：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -78,10 +78,6 @@ fn main() {
 <span class="caption">示例 10-2：寻找 **两个** 数字列表最大值的代码</span>
 
 虽然代码能够执行，但是重复的代码是冗余且容易出错的，并且意味着当更新逻辑时需要修改多处地方的代码。
-
-<!-- Are we safe assuming the reader will be familiar with the term
-"abstraction" in this context, or do we want to give a brief definition? -->
-<!-- Yes, our audience will be familiar with this term. /Carol -->
 
 为了消除重复，我们可以创建一层抽象，在这个例子中将表现为一个获取任意整型列表作为参数并对其进行处理的函数。这将增加代码的简洁性并让我们将表达和推导寻找列表中最大值的这个概念与使用这个概念的特定位置相互独立。
 
@@ -123,9 +119,9 @@ fn main() {
 
 从示例 10-2 到示例 10-3 中涉及的机制经历了如下几步：
 
-1. 我们注意到了重复代码。
-2. 我们将重复代码提取到了一个函数中，并在函数签名中指定了代码中的输入和返回值。
-3. 我们将重复代码的两个实例，改为调用函数。
+1. 找出重复代码。
+2. 将重复代码提取到了一个函数中，并在函数签名中指定了代码中的输入和返回值。
+3. 将重复代码的两个实例，改为调用函数。
 
 在不同的场景使用不同的方式，我们也可以利用相同的步骤和泛型来减少重复代码。与函数体可以在抽象`list`而不是特定值上操作的方式相同，泛型允许代码对抽象类型进行操作。
 

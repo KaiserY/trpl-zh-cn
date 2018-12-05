@@ -501,3 +501,201 @@ fn function2() -> IoResult<()> {
 ```
 
 <span class="caption">示例 7-20: 通过 `as` 关键字重命名引入作用域的类型</span>
+
+在第二个 `use` 语句中，我们选择 `IoResult` 作为 `std::io::Result` 的新名称，它与从 `std::fmt` 引入作用域的 `Result` 并不冲突。这样做也被认为是惯用的；示例 7-19 还是示例 7-20 全看你的选择。
+
+### 通过 `pub use` 重导出名称
+
+当使用 `use` 关键字将名称导入作用域时，在新作用域中可用的名称是私有的。如果希望调用你编写的代码的代码能够像你一样在其自己的作用域内引用这些类型，可以结合 `pub` 和 `use`。这个技术被称为 “重导出”（*re-exporting*），因为这样做将项引入作用域并同时使其可供其他代码引入自己的作用域。
+
+例如，示例 7-21 展示了示例 7-15 中的代码将 `performance_group` 的 `use` 变为 `pub use` 的版本。
+
+<span class="filename">文件名: src/main.rs</span>
+
+```rust
+mod sound {
+    pub mod instrument {
+        pub fn clarinet() {
+            // 函数体
+        }
+    }
+}
+
+mod performance_group {
+    pub use crate::sound::instrument;
+
+    pub fn clarinet_trio() {
+        instrument::clarinet();
+        instrument::clarinet();
+        instrument::clarinet();
+    }
+}
+
+fn main() {
+    performance_group::clarinet_trio();
+    performance_group::instrument::clarinet();
+}
+```
+
+<span class="caption">示例 7-21: 通过 `pub use` 使名称可引入任何代码的作用域中</span>
+
+通过 `pub use`，现在 `main` 函数可以通过新路径 `performance_group::instrument::clarinet` 来调用 `clarinet` 函数。如果没有指定 `pub use`，`clarinet_trio` 函数可以在其作用域中调用 `instrument::clarinet` 但 `main` 则不允许使用这个新路径。
+
+### 使用外部包
+
+在第二章中我们编写了一个猜猜看游戏。那个项目使用了一个外部包，`rand`，来生成随机数。为了在项目中使用 `rand`，在 *Cargo.toml* 中加入了如下行：
+
+<span class="filename">文件名: Cargo.toml</span>
+
+```toml
+[dependencies]
+rand = "0.5.5"
+```
+
+在 *Cargo.toml* 中加入 `rand` 依赖告诉了 Cargo 要从 *https://crates.io* 下载 `rand` 和其依赖，并使其可在项目代码中使用。
+
+接着，为了将 `rand` 定义引入项目包的作用域，加入一行 `use`，它以 `rand` 包名开头并列出了需要引入作用域的项。回忆一下第二章的 “生成一个随机数” 部分，我们曾将 `Rng` trait 引入作用域并调用了 `rand::thread_rng` 函数：
+
+```rust,ignore
+use rand::Rng;
+
+fn main() {
+    let secret_number = rand::thread_rng().gen_range(1, 101);
+}
+```
+
+*https://crates.io* 上有很多社区成员发布的包，将其引入你自己的项目涉及到相同的步骤：在 *Cargo.toml* 列出它们并通过 `use` 将其中定义的项引入项目包的作用域中。
+
+注意标准库（`std`）对于你的包来说也是外部 crate。因为标准库随 Rust 语言一同分发，无需修改 *Cargo.toml* 来引入 `std`，不过需要通过 `use` 将标准库中定义的项引入项目包的作用域中来引用它们，比如 `HashMap`：
+
+```rust
+use std::collections::HashMap;
+```
+
+这是一个以标注库 crate 名 `std` 开头的绝对路径。
+
+### 嵌套路径来消除大量的 `use` 行
+
+当需要引入很多定义于相同包或相同模块的项时，为每一项单独列出一行会占用源码很大的空间。例如猜猜看章节示例 2-4 中有两行 `use` 语句都从 `std` 引入项到作用域：
+
+<span class="filename">文件名: src/main.rs</span>
+
+```rust
+use std::cmp::Ordering;
+use std::io;
+// ---snip---
+```
+
+可以使用嵌套的路径将同样的项在一行中引入而不是两行，这么做需要指定路径的相同部分，接着是两个分号，接着是大括号中的各自不同的路径部分，如示例 7-22 所示。
+
+<span class="filename">文件名: src/main.rs</span>
+
+```rust
+use std::{cmp::Ordering, io};
+// ---snip---
+```
+
+<span class="caption">示例 7-22: 指定嵌套的路径在一行中将多个带有相同前缀的项引入作用域</span>
+
+在从相同包或模块中引入很多项的程序中，使用嵌套路径显著减少所需的单独 `use` 语句！
+
+也可以剔除掉完全包含在另一个路径中的路径。例如，示例 7-23 中展示了两个 `use` 语句：一个将 `std::io` 引入作用域，另一个将 `std::io::Write` 引入作用域：
+
+<span class="filename">文件名: src/lib.rs</span>
+
+```rust
+use std::io;
+use std::io::Write;
+```
+
+<span class="caption">示例 7-23: 通过两行 `use` 语句引入两个路径，其中一个是另一个的子路径</span>
+
+两个路径的相同部分是 `std::io`，这正是第一个路径。为了在一行 `use` 语句中引入这两个路径，可以在嵌套路径中使用 `self`，如示例 7-24 所示。
+
+<span class="filename">文件名: src/lib.rs</span>
+
+```rust
+use std::io::{self, Write};
+```
+
+<span class="caption">示例 7-24: 将示例 7-23 中部分重复的路径合并为一个 `use` 语句</span>
+
+这将 `std::io` 和 `std::io::Write` 同时引入作用域。
+
+### 通过 glob 运算符将所有的公有定义引入作用域
+
+如果希望将一个路径下 **所有** 公有项引入作用域，可以指定路径后跟 `*`，glob 运算符：
+
+```rust
+use std::collections::*;
+```
+
+这个 `use` 语句将 `std::collections` 中定义的所有公有项引入当前作用域。
+
+使用 glob 运算符时请多加小心！如此难以推导作用域中有什么名称和它们是在何处定义的。
+
+glob 运算符经常用于测试模块 `tests` 中，这时会将所有内容引入作用域；我们将在第十一章 “如何编写测试” 部分讲解。glob 运算符有时也用于 prelude 模式；查看 [标准库中的文档](https://doc.rust-lang.org/std/prelude/index.html#other-preludes) 了解这个模式的更多细节。
+
+### 将模块分割进不同文件
+
+目前本章所有的例子都在一个文件中定义多个模块。当模块变得更大时，你可能想要将它们的定义移动到一个单独的文件中使代码更容易阅读。
+
+例如从示例 7-8 的代码开始，我们可以通过修改 crate 根文件（这里是 *src/main.rs*）将 `sound` 模块移动到其自己的文件 *src/sound.rs* 中，如示例 7-25 所示。
+
+<span class="filename">文件名: src/main.rs</span>
+
+```rust,ignore
+mod sound;
+
+fn main() {
+    // 绝对路径
+    crate::sound::instrument::clarinet();
+
+    // 相对路径
+    sound::instrument::clarinet();
+}
+```
+
+<span class="caption">示例 7-25: 声明 `sound` 模块，其内容位于 *src/sound.rs* 文件</span>
+
+而 *src/sound.rs* 中会包含 `sound` 模块的内容，如示例 7-26 所示。
+
+<span class="filename">文件名: src/sound.rs</span>
+
+```rust
+pub mod instrument {
+    pub fn clarinet() {
+        // 函数体
+    }
+}
+```
+
+<span class="caption">示例 7-26: `sound` 模块中的定义位于 *src/sound.rs* 中</span>
+
+在 `mod sound` 后使用分号而不是代码块告诉 Rust 在另一个与模块同名的文件中加载模块的内容。
+
+继续重构我们例子，将 `instrument` 模块也提取到其自己的文件中，修改 *src/sound.rs* 只包含 `instrument` 模块的声明：
+
+<span class="filename">文件名: src/sound.rs</span>
+
+```rust
+pub mod instrument;
+```
+
+接着创建 *src/sound* 目录和 *src/sound/instrument.rs* 文件来包含 `instrument` 模块的定义：
+
+<span class="filename">文件名: src/sound/instrument.rs</span>
+
+```rust
+pub fn clarinet() {
+    // 函数体
+}
+```
+
+模块树依然保持相同，`main` 中的函数调用也无需修改继续保持有效，即使其定义存在于不同的文件中。这样随着代码增长可以将模块移动到新文件中。
+
+## 总结
+
+Rust 提供了将包组织进 crate、将 crate 组织进模块和通过指定绝对或相对路径从一个模块引用另一个模块中定义的项的方式。可以通过 `use` 语句将路径引入作用域，这样在多次使用时可以使用更短的路径。模块定义的代码默认时私有的，不过可以选择增加 `pub` 关键字使其定义变为公有。
+
+接下来，让我们看看一些标准库提供的集合数据类型，你可以利用它们编写出漂亮整洁的代码。
