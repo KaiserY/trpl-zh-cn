@@ -1,8 +1,8 @@
 ## 性能对比：循环 VS 迭代器
 
-> [ch13-04-performance.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch13-04-performance.md)
+> [ch13-04-performance.md](https://github.com/rust-lang/book/blob/master/src/ch13-04-performance.md)
 > <br>
-> commit 2bcb126815a381acc3d46b0d6fc382cb4c98fbc5
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 为了决定使用哪个实现，我们需要知道哪个版本的 `search` 函数更快：直接使用 `for` 循环的版本还是使用迭代器的版本。
 

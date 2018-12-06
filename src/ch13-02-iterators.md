@@ -1,8 +1,8 @@
 ## 使用迭代器处理元素序列
 
-> [ch13-02-iterators.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch13-02-iterators.md)
+> [ch13-02-iterators.md](https://github.com/rust-lang/book/blob/master/src/ch13-02-iterators.md)
 > <br>
-> commit ceb31210263d49994bbf09456a35a135da690f24
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 迭代器模式允许你对一个项的序列进行某些处理。**迭代器**（*iterator*）负责遍历序列中的每一项和决定序列何时结束的逻辑。当使用迭代器时，我们无需重新实现这些逻辑。
 
@@ -16,7 +16,7 @@ let v1_iter = v1.iter();
 
 <span class="caption">示例 13-13：创建一个迭代器</span>
 
-创建迭代器之后，可以选择用多种方式利用它。在示例 3-4 中，我们使用迭代器和 `for` 循环在每一个项上执行了一些代码，不过直到现在我们掩盖了 `iter` 调用做了什么。
+一旦创建迭代器之后，可以选择用多种方式利用它。在示例 3-4 中，我们使用迭代器和 `for` 循环在每一个项上执行了一些代码，虽然直到现在为止我们一直掩盖了 `iter` 调用做了什么。
 
 示例 13-14 中的例子将迭代器的创建和 `for` 循环中的使用分开。迭代器被储存在 `v1_iter` 变量中，而这时没有进行迭代。一旦 `for` 循环开始使用 `v1_iter`，接着迭代器中的每一个元素被用于循环的一次迭代，这会打印出其每一个值：
 
@@ -34,7 +34,7 @@ for val in v1_iter {
 
 在标准库中没有提供迭代器的语言中，我们可能会使用一个从 0 开始的索引变量，使用这个变量索引 vector 中的值，并循环增加其值直到达到 vector 的元素数量。
 
-迭代器为我们处理了所有这些逻辑，这减少了重复代码并潜在的消除了混乱。另外，迭代器的实现方式提供了对多种不同的序列使用相同逻辑的灵活性，而不仅仅是像 vector 这样可索引的数据结构.让我们看看迭代器是如何做到这些的。
+迭代器为我们处理了所有这些逻辑，这减少了重复代码并消除了潜在的混乱。另外，迭代器的实现方式提供了对多种不同的序列使用相同逻辑的灵活性，而不仅仅是像 vector 这样可索引的数据结构.让我们看看迭代器是如何做到这些的。
 
 ### `Iterator` trait 和 `next` 方法
 
@@ -46,17 +46,19 @@ trait Iterator {
 
     fn next(&mut self) -> Option<Self::Item>;
 
-    // methods with default implementations elided
+    // 此处省略了方法的默认实现
 }
 ```
 
 注意这里有一下我们还未讲到的新语法：`type Item` 和 `Self::Item`，他们定义了 trait 的 **关联类型**（*associated type*）。第十九章会深入讲解关联类型，不过现在只需知道这段代码表明实现 `Iterator` trait 要求同时定义一个 `Item` 类型，这个 `Item` 类型被用作 `next` 方法的返回值类型。换句话说，`Item` 类型将是迭代器返回元素的类型。
 
-`next` 是 `Iterator` 实现者被要求定义的唯一方法。`next` 一次返回迭代器中的一个项，封装在 `Some` 中，当迭代器结束时，它返回 `None`。如果你希望的话可以直接调用迭代器的 `next` 方法；示例 13-15 有一个测试展示了重复调用由 vector 创建的迭代器的 `next` 方法所得到的值：
+`next` 是 `Iterator` 实现者被要求定义的唯一方法。`next` 一次返回迭代器中的一个项，封装在 `Some` 中，当迭代器结束时，它返回 `None`。
+
+可以直接调用迭代器的 `next` 方法；示例 13-15 有一个测试展示了重复调用由 vector 创建的迭代器的 `next` 方法所得到的值：
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust,test_harness
+```rust
 #[test]
 fn iterator_demonstration() {
     let v1 = vec![1, 2, 3];
@@ -109,7 +111,7 @@ fn iterator_sum() {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust
+```rust,not_desired_behavior
 let v1: Vec<i32> = vec![1, 2, 3];
 
 v1.iter().map(|x| x + 1);
@@ -134,7 +136,7 @@ and do nothing unless consumed
 
 为了修复这个警告并消费迭代器获取有用的结果，我们将使用第十二章简要讲到的 `collect` 方法。这个方法消费迭代器并将结果收集到一个数据结构中。
 
-在示例 13-18 中，我们将遍历由 `map` 调用生成的迭代器的结果收集到一个 vector 中，它将会含有原始 vector 中每个元素加一的结果：
+在示例 13-18 中，我们将遍历由 `map` 调用生成的迭代器的结果收集到一个 vector 中，它将会含有原始 vector 中每个元素加 1 的结果：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -158,7 +160,7 @@ assert_eq!(v2, vec![2, 3, 4]);
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust,test_harness
+```rust
 #[derive(PartialEq, Debug)]
 struct Shoe {
     size: u32,
@@ -208,7 +210,6 @@ fn filters_by_size() {
 作为展示，让我们创建一个只会从 1 数到 5 的迭代器。首先，创建一个结构体来存放一些值，接着实现 `Iterator` trait 将这个结构体放入迭代器中并在此实现中使用其值。
 
 示例 13-20 有一个 `Counter` 结构体定义和一个创建 `Counter` 实例的关联函数 `new`：
-
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -350,4 +351,4 @@ fn using_other_iterator_trait_methods() {
 
 注意 `zip` 只产生四对值；理论上第五对值 `(5, None)` 从未被产生，因为 `zip` 在任一输入迭代器返回 `None` 时也返回 `None`。
 
-所有这些方法调用都是可能的，因为我们通过指定 `next` 如何工作来实现 `Iterator` trait 而标准库则提供其他调用 `next` 的默认方法实现。
+所有这些方法调用都是可能的，因为我们指定了 `next` 方法如何工作，而标准库则提供了其它调用 `next` 的方法的默认实现。
