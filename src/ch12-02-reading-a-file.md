@@ -1,18 +1,18 @@
 ## 读取文件
 
-> [ch12-02-reading-a-file.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-02-reading-a-file.md)
+> [ch12-02-reading-a-file.md](https://github.com/rust-lang/book/blob/master/src/ch12-02-reading-a-file.md)
 > <br>
-> commit 97e60b3cb623d4a5b85419212b085ade8a11cbe1
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
-接下来我们将读取由命令行文件名参数指定的文件。首先，需要一个用来测试的示例文件——用来确保 `minigrep` 正常工作的最好的文件是拥有多行少量文本且有一些重复单词的文件。示例 12-3 是一首艾米莉·狄金森（Emily Dickinson）的诗，它正适合这个工作！在项目根目录创建一个文件 `poem.txt`，并输入诗 "I'm nobody! Who are you?"：
+现在我们要增加读取由 `filename` 命令行参数指定的文件的功能。首先，需要一个用来测试的示例文件：用来确保 `minigrep` 正常工作的最好的文件是拥有多行少量文本且有一些重复单词的文件。示例 12-3 是一首艾米莉·狄金森（Emily Dickinson）的诗，它正适合这个工作！在项目根目录创建一个文件 `poem.txt`，并输入诗 "I'm nobody! Who are you?"：
 
 <span class="filename">文件名: poem.txt</span>
 
 ```text
-I’m nobody! Who are you?
+I'm nobody! Who are you?
 Are you nobody, too?
-Then there’s a pair of us — don’t tell!
-They’d banish us, you know.
+Then there's a pair of us - don't tell!
+They'd banish us, you know.
 
 How dreary to be somebody!
 How public, like a frog
@@ -28,8 +28,7 @@ To an admiring bog!
 
 ```rust,should_panic
 use std::env;
-use std::fs::File;
-use std::io::prelude::*;
+use std::fs;
 
 fn main() {
 #     let args: Vec<String> = env::args().collect();
@@ -41,11 +40,8 @@ fn main() {
     // --snip--
     println!("In file {}", filename);
 
-    let mut f = File::open(filename).expect("file not found");
-
-    let mut contents = String::new();
-    f.read_to_string(&mut contents)
-        .expect("something went wrong reading the file");
+    let contents = fs::read_to_string(filename)
+        .expect("Something went wrong reading the file");
 
     println!("With text:\n{}", contents);
 }
@@ -53,9 +49,9 @@ fn main() {
 
 <span class="caption">示例 12-4：读取第二个参数所指定的文件内容</span>
 
-首先，我们增加了更多的 `use` 语句来引入标准库中的相关部分：需要 `std::fs::File` 来处理文件，而 `std::io::prelude::*` 则包含许多对于 I/O（包括文件 I/O）有帮助的 trait。类似于 Rust 有一个通用的 prelude 来自动引入特定内容，`std::io` 也有其自己的 prelude 来引入处理 I/O 时所需的通用内容。不同于默认的 prelude，必须显式 `use` 位于 `std::io` 中的 prelude。
+首先，我们增加了更多的 `use` 语句来引入标准库中的相关部分：需要 `std::fs` 来处理文件。
 
-在 `main` 中，我们增加了三点内容：第一，通过传递变量 `filename` 的值调用 `File::open` 函数来获取文件的可变句柄。创建了叫做 `contents` 的变量并将其设置为一个可变的，空的 `String`。它将会存放之后读取的文件的内容。第三，对文件句柄调用 `read_to_string` 并传递 `contents` 的可变引用作为参数。
+在 `main` 中新增了一行语句：`fs::read_to_string` 接受 `filename`，打开文件，接着返回包含其内容的 `Result<String>`。
 
 在这些代码之后，我们再次增加了临时的 `println!` 打印出读取文件后 `contents` 的值，这样就可以检查目前为止的程序能否工作。
 

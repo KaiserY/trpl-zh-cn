@@ -1,13 +1,13 @@
 ## 接受命令行参数
 
-> [ch12-01-accepting-command-line-arguments.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-01-accepting-command-line-arguments.md)
+> [ch12-01-accepting-command-line-arguments.md](https://github.com/rust-lang/book/blob/master/src/ch12-01-accepting-command-line-arguments.md)
 > <br>
-> commit 97e60b3cb623d4a5b85419212b085ade8a11cbe1
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
-一如之前使用 `cargo new` 新建一个项目，我们称之为 `minigrep` 以便与可能已经安装在系统上的`grep`工具相区别：
+一如既往使用 `cargo new` 新建一个项目，我们称之为 `minigrep` 以便与可能已经安装在系统上的 `grep` 工具相区别：
 
 ```text
-$ cargo new --bin minigrep
+$ cargo new minigrep
      Created binary (application) `minigrep` project
 $ cd minigrep
 ```
@@ -36,7 +36,6 @@ fn main() {
     println!("{:?}", args);
 }
 ```
-
 
 <span class="caption">示例 12-1：将命令行参数收集到一个 vector 中并打印出来</span>
 
