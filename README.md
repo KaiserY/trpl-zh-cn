@@ -4,9 +4,13 @@
 
 ## 状态
 
-还在施工中。大部分章节已经可以阅读。具体状态请参见官方 [projects](https://github.com/rust-lang/book/projects/1)，`Frozen` 之后的内容应该较为稳定。
+目前正向 2018 edtion 过渡，目前官方仓库状已经不再分版本提供源码了，故本仓库准备与官方保持一致。
 
-每章翻译开头都带有官方链接和 commit hash，若发现与官方不一致，欢迎 Issue 或 PR :)
+PS:
+
+* 对照源码位置：https://github.com/rust-lang/book/tree/master/src
+* 官方仓库用于阅读的网页仍是之前的版本，与新版区别不大，最大的区别在于 2018 edtion 对模块功能做出较大修改，第七章基本重写。
+* 每章翻译开头都带有官方链接和 commit hash，若发现与官方不一致，欢迎 Issue 或 PR :)
 
 ## 静态页面构建与文档撰写
 
@@ -49,4 +53,4 @@ vuepress dev ./src
 
 本翻译加速查看站点[上海站点http://rustdoc.saigao.fun](http://rustdoc.saigao.fun)
 
-[GitBook.com](https://www.gitbook.com/) 地址：[https://www.gitbook.com/book/kaisery/trpl-zh-cn/details](https://www.gitbook.com/book/kaisery/trpl-zh-cn/details)
+[GitBook.com](https://www.gitbook.com/) 地址：[https://legacy.gitbook.com/book/kaisery/trpl-zh-cn/details](https://legacy.gitbook.com/book/kaisery/trpl-zh-cn/details)
