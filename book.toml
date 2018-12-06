@@ -5,3 +5,7 @@ description = "Rust 程序设计语言 简体中文版"
 
 [build-dir]
 destination = "mdbook"
+
+[output.html]
+additional-css = ["ferris.css"]
+additional-js = ["ferris.js"]
