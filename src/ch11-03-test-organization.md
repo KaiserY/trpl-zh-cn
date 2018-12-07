@@ -1,8 +1,8 @@
 ## 测试的组织结构
 
-> [ch11-03-test-organization.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch11-03-test-organization.md)
+> [ch11-03-test-organization.md](https://github.com/rust-lang/book/blob/master/src/ch11-03-test-organization.md)
 > <br>
-> commit b3eddb8edc0c3f83647143673d18efac0a44083a
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 本章一开始就提到，测试是一个复杂的概念，而且不同的开发者也采用不同的技术和组织。Rust 社区倾向于根据测试的两个主要分类来考虑问题：**单元测试**（*unit tests*）与 **集成测试**（*integration tests*）。单元测试倾向于更小而更集中，在隔离的环境中一次测试一个模块，或者是测试私有接口。而集成测试对于你的库来说则完全是外部的。它们与其他外部代码一样，通过相同的方式使用你的代码，只测试公有接口而且每个测试都有可能会测试多个模块。
 
@@ -16,7 +16,7 @@
 
 测试模块的 `#[cfg(test)]` 注解告诉 Rust 只在执行 `cargo test` 时才编译和运行测试代码，而在运行 `cargo build` 时不这么做。这在只希望构建库的时候可以节省编译时间，并且因为它们并没有包含测试，所以能减少编译产生的文件的大小。与之对应的集成测试因为位于另一个文件夹，所以它们并不需要 `#[cfg(test)]` 注解。然而单元测试位于与源码相同的文件中，所以你需要使用 `#[cfg(test)]` 来指定他们不应该被包含进编译结果中。
 
-还记得本章第一部分新建的 `adder` 项目吗？Cargo 为我们生成了如下代码：
+回忆本章第一部分新建的 `adder` 项目吗，Cargo 为我们生成了如下代码：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -39,6 +39,8 @@ mod tests {
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust
+# fn main() {}
+
 pub fn add_two(a: i32) -> i32 {
     internal_adder(a, 2)
 }
@@ -75,7 +77,7 @@ mod tests {
 <span class="filename">文件名: tests/integration_test.rs</span>
 
 ```rust,ignore
-extern crate adder;
+use adder;
 
 #[test]
 fn it_adds_two() {
@@ -147,7 +149,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
 ```rust
 pub fn setup() {
-    // setup code specific to your library's tests would go here
+    // 编写特定库测试所需的代码
 }
 ```
 
@@ -188,7 +190,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 <span class="filename">文件名: tests/integration_test.rs</span>
 
 ```rust,ignore
-extern crate adder;
+use adder;
 
 mod common;
 
@@ -199,7 +201,7 @@ fn it_adds_two() {
 }
 ```
 
-注意 `mod common;` 声明与示例 7-4 中展示的模块声明相同。接着在测试函数中就可以调用 `common::setup()` 了。
+注意 `mod common;` 声明与示例 7-25 中展示的模块声明相同。接着在测试函数中就可以调用 `common::setup()` 了。
 
 #### 二进制 crate 的集成测试
 

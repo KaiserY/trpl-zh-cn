@@ -1,8 +1,8 @@
 ## 控制测试如何运行
 
-> [ch11-02-running-tests.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch11-02-running-tests.md)
+> [ch11-02-running-tests.md](https://github.com/rust-lang/book/blob/master/src/ch11-02-running-tests.md)
 > <br>
-> commit 550c8ea6f74060ff1f7b67e7e1878c4da121682d
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 就像 `cargo run` 会编译代码并运行生成的二进制文件一样，`cargo test` 在测试模式下编译代码并运行生成的测试二进制文件。可以指定命令行参数来改变 `cargo test` 的默认行为。例如，`cargo test` 生成的二进制文件的默认行为是并行的运行所有测试，并截获测试运行过程中产生的输出，阻止他们被显示出来，使得阅读测试结果相关的内容变得更容易。
 
@@ -20,7 +20,7 @@
 $ cargo test -- --test-threads=1
 ```
 
-这里将测试线程设置为 1，告诉程序不要使用任何并行机制。这也会比并行运行花费更多时间，不过在有共享的状态时，测试就不会潜在的相互干扰了。
+这里将测试线程设置为 `1`，告诉程序不要使用任何并行机制。这也会比并行运行花费更多时间，不过在有共享的状态时，测试就不会潜在的相互干扰了。
 
 ### 显示函数输出
 
@@ -30,7 +30,7 @@ $ cargo test -- --test-threads=1
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
+```rust,panics
 fn prints_and_returns_10(a: i32) -> i32 {
     println!("I got the value {}", a);
     10

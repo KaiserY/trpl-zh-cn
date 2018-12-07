@@ -1,8 +1,8 @@
 ## 处理环境变量
 
-> [ch12-05-working-with-environment-variables.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-05-working-with-environment-variables.md)
+> [ch12-05-working-with-environment-variables.md](https://github.com/rust-lang/book/blob/master/src/ch12-05-working-with-environment-variables.md)
 > <br>
-> commit 1fe78a83f37ecc69b840fdc8dcfc727f88a3a3d4
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 我们将增加一个额外的功能来改进 `minigrep`：一个通过环境变量启用的大小写不敏感搜索的选项。可以将其设计为一个命令行参数并要求用户每次需要时都加上它，不过相反我们将使用环境变量。这允许用户设置环境变量一次之后在整个终端会话中所有的搜索都将是大小写不敏感的。
 
@@ -14,7 +14,7 @@
 
 ```rust
 #[cfg(test)]
-mod test {
+mod tests {
     use super::*;
 
     #[test]
@@ -51,9 +51,9 @@ Trust me.";
 
 <span class="caption">示例 12-20：为准备添加的大小写不敏感函数新增失败测试</span>
 
-注意我们也改变了老测试中 `contents` 的值。还新增了一个含有文本 "Duct tape" 的行，它有一个大写的 D，这在大小写敏感搜索时不应该匹配 "duct"。我们修改这个测试以确保不会意外破坏已经实现的大小写敏感搜索功能；这个测试现在应该能通过并在处理大小写不敏感搜索时应该能一直通过。
+注意我们也改变了老测试中 `contents` 的值。还新增了一个含有文本 `"Duct tape."` 的行，它有一个大写的 D，这在大小写敏感搜索时不应该匹配 "duct"。我们修改这个测试以确保不会意外破坏已经实现的大小写敏感搜索功能；这个测试现在应该能通过并在处理大小写不敏感搜索时应该能一直通过。
 
-大小写 **不敏感** 搜索的新测试使用 "rUsT" 作为其查询字符串。在我们将要增加的 `search_case_insensitive` 函数中，“rUsT” 查询应该包含 “Rust:” 包含一个大写的 R 还有 “Trust me.” 这两行，即便他们与查询的大小写都不同。这个测试现在会编译失败因为还没有定义 `search_case_insensitive` 函数。请随意增加一个总是返回空 vector 的骨架实现，正如示例 12-16 中 `search` 函数为了使测试编译并失败时所做的那样。
+大小写 **不敏感** 搜索的新测试使用 `"rUsT"` 作为其查询字符串。在我们将要增加的 `search_case_insensitive` 函数中，`"rUsT"` 查询应该包含带有一个大写 R 的 `"Rust:"` 还有 `"Trust me."` 这两行，即便他们与查询的大小写都不同。这个测试现在会编译失败因为还没有定义 `search_case_insensitive` 函数。请随意增加一个总是返回空 vector 的骨架实现，正如示例 12-16 中 `search` 函数为了使测试编译并失败时所做的那样。
 
 ### 实现 `search_case_insensitive` 函数
 
@@ -78,9 +78,9 @@ fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 <span class="caption">示例 12-21：定义 `search_case_insensitive` 函数，它在比较查询和每一行之前将他们都转换为小写</span>
 
-首先我们将 `query` 字符串转换为小写，并将其覆盖到同名的变量中。对查询字符串调用 `to_lowercase` 是必需的，这样不管用户的查询是 “rust”、“RUST”、“Rust” 或者 “rUsT”，我们都将其当作 “rust” 处理并对大小写不敏感。
+首先我们将 `query` 字符串转换为小写，并将其覆盖到同名的变量中。对查询字符串调用 `to_lowercase` 是必需的，这样不管用户的查询是 `"rust"`、`"RUST"`、`"Rust"` 或者 `"rUsT"`，我们都将其当作 `"rust"` 处理并对大小写不敏感。
 
-注意 `query` 现在是一个 `String` 而不是字符串 slice，因为调用 `to_lowercase` 是在创建新数据，而不是引用现有数据。如果查询字符串是 “rUsT”，这个字符串 slice 并不包含可供我们使用的小写的 “u” 或 “t”，所以必需分配一个包含 “rust” 的新 `String`。现在当我们将 `query` 作为一个参数传递给 `contains` 方法时，需要增加一个 & 因为 `contains` 的签名被定义为获取一个字符串 slice。
+注意 `query` 现在是一个 `String` 而不是字符串 slice，因为调用 `to_lowercase` 是在创建新数据，而不是引用现有数据。如果查询字符串是 `"rUsT"`，这个字符串 slice 并不包含可供我们使用的小写的 `u` 或 `t`，所以必需分配一个包含 `"rust"` 的新 `String`。现在当我们将 `query` 作为一个参数传递给 `contains` 方法时，需要增加一个 & 因为 `contains` 的签名被定义为获取一个字符串 slice。
 
 接下来在检查每个 `line` 是否包含 `search` 之前增加了一个 `to_lowercase` 调用将他们都变为小写。现在我们将 `line` 和 `query` 都转换成了小写，这样就可以不管查询的大小写进行匹配了。
 
@@ -88,13 +88,13 @@ fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 ```text
 running 2 tests
-test test::case_insensitive ... ok
-test test::case_sensitive ... ok
+test tests::case_insensitive ... ok
+test tests::case_sensitive ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-好的！现在，让我们在 `run` 函数中实际调用新 `search_case_insensitive` 函数。首先，我们将在 `Config` 结构体中增加一个配置项来切换大小写敏感和大小写不敏感搜索：
+好的！现在，让我们在 `run` 函数中实际调用新 `search_case_insensitive` 函数。首先，我们将在 `Config` 结构体中增加一个配置项来切换大小写敏感和大小写不敏感搜索。增加这些字段会导致编译错误，因为我们还没有在任何地方初始化这些字段：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -112,7 +112,7 @@ pub struct Config {
 
 ```rust
 # use std::error::Error;
-# use std::fs::File;
+# use std::fs::{self, File};
 # use std::io::prelude::*;
 #
 # fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
@@ -123,17 +123,14 @@ pub struct Config {
 #      vec![]
 # }
 #
-# struct Config {
+# pub struct Config {
 #     query: String,
 #     filename: String,
 #     case_sensitive: bool,
 # }
 #
-pub fn run(config: Config) -> Result<(), Box<Error>> {
-    let mut f = File::open(config.filename)?;
-
-    let mut contents = String::new();
-    f.read_to_string(&mut contents)?;
+pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    let contents = fs::read_to_string(config.filename)?;
 
     let results = if config.case_sensitive {
         search(&config.query, &contents)
@@ -189,7 +186,7 @@ impl Config {
 
 我们将变量 `case_sensitive` 的值传递给 `Config` 实例，这样 `run` 函数可以读取其值并决定是否调用 `search` 或者示例 12-22 中实现的 `search_case_insensitive`。
 
-让我们试一试吧！首先不设置环境变量并使用查询 “to” 运行程序，这应该会匹配任何全小写的单词 “to” 的行：
+让我们试一试吧！首先不设置环境变量并使用查询 `to` 运行程序，这应该会匹配任何全小写的单词 “to” 的行：
 
 ```text
 $ cargo run to poem.txt
@@ -200,7 +197,16 @@ Are you nobody, too?
 How dreary to be somebody!
 ```
 
-看起来程序仍然能够工作！现在将 `CASE_INSENSITIVE` 设置为 1 并仍使用相同的查询 “to”，这回应该得到包含可能有大写字母的 “to” 的行：
+看起来程序仍然能够工作！现在将 `CASE_INSENSITIVE` 设置为 `1` 并仍使用相同的查询 `to`。
+
+如果你使用 PowerShell，则需要用两句命令而不是一句来设置环境变量并运行程序：
+
+```text
+$ $env:CASE_INSENSITIVE=1
+$ cargo run to poem.txt
+```
+
+这回应该得到包含可能有大写字母的 “to” 的行：
 
 ```text
 $ CASE_INSENSITIVE=1 cargo run to poem.txt
@@ -210,13 +216,6 @@ Are you nobody, too?
 How dreary to be somebody!
 To tell your name the livelong day
 To an admiring bog!
-```
-
-如果你使用 PowerShell，则需要用两句命令而不是一句来设置环境变量并运行程序：
-
-```text
-$ $env:CASE_INSENSITIVE=1
-$ cargo run to poem.txt
 ```
 
 好极了，我们也得到了包含 “To” 的行！现在 `minigrep` 程序可以通过环境变量控制进行大小写不敏感搜索了。现在你知道了如何管理由命令行参数或环境变量设置的选项了！

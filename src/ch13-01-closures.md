@@ -1,8 +1,8 @@
 ## 闭包：可以捕获环境的匿名函数
 
-> [ch13-01-closures.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch13-01-closures.md)
+> [ch13-01-closures.md](https://github.com/rust-lang/book/blob/master/src/ch13-01-closures.md)
 > <br>
-> commit bdcba470e4a71d16242b1727bbf99b300c194c46
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 Rust 的 **闭包**（*closures*）是可以保存进变量或作为参数传递给其他函数的匿名函数。可以在一个地方创建闭包，然后在不同的上下文中执行闭包运算。不同于函数，闭包允许捕获调用者作用域中的值。我们将展示闭包的这些功能如何复用代码和自定义行为。
 
@@ -27,14 +27,14 @@ fn simulated_expensive_calculation(intensity: u32) -> u32 {
 }
 ```
 
-<span class="caption">示例 13-1：一个用来代替假象计算的函数，它大约会执行两秒钟</span>
+<span class="caption">示例 13-1：一个用来代替假想计算的函数，它大约会执行两秒钟</span>
 
 接下来，`main` 函数中将会包含本例的健身 app 中的重要部分。这代表当用户请求健身计划时 app 会调用的代码。因为与 app 前端的交互与闭包的使用并不相关，所以我们将硬编码代表程序输入的值并打印输出。
 
 所需的输入有这些：
 
-* **一个来自用户的 intensity 数字**，请求健身计划时指定，它代表用户喜好低强度还是高强度健身。
-* **一个随机数**，其会在健身计划中生成变化。
+* 一个来自用户的 intensity 数字，请求健身计划时指定，它代表用户喜好低强度还是高强度健身。
+* 一个随机数，其会在健身计划中生成变化。
 
 程序的输出将会是建议的锻炼计划。示例 13-2 展示了我们将要使用的 `main` 函数：
 
@@ -178,7 +178,7 @@ let expensive_closure = |num| {
 
 闭包定义是 `expensive_closure` 赋值的 `=` 之后的部分。闭包的定义以一对竖线（`|`）开始，在竖线中指定闭包的参数；之所以选择这个语法是因为它与 Smalltalk 和 Ruby 的闭包定义类似。这个闭包有一个参数 `num`；如果有多于一个参数，可以使用逗号分隔，比如 `|param1, param2|`。
 
-参数之后是存放闭包体的大括号 ———— 如果闭包体只有一行则大括号是可以省略的。大括号之后闭包的结尾，需要用于 `let` 语句的分号。闭包体的最后一行（`num`）返回的值将是调用闭包时返回的值，因为最后一行没有分号；正如函数体中的一样。
+参数之后是存放闭包体的大括号 —— 如果闭包体只有一行则大括号是可以省略的。大括号之后闭包的结尾，需要用于 `let` 语句的分号。闭包体的最后一行（`num`）返回的值将是调用闭包时返回的值，因为最后一行没有分号；正如函数体中的一样。
 
 注意这个 `let` 语句意味着 `expensive_closure` 包含一个匿名函数的 **定义**，不是调用匿名函数的 **返回值**。回忆一下使用闭包的原因是我们需要在一个位置定义代码，储存代码，并在之后的位置实际调用它；期望调用的代码现在储存在 `expensive_closure` 中。
 
@@ -223,7 +223,7 @@ fn generate_workout(intensity: u32, random_number: u32) {
 
 现在耗时的计算只在一个地方被调用，并只会在需要结果的时候执行改代码。
 
-然而，我们又重新引入了示例 13-3 中的问题：仍然在第一个 `if` 块中调用了闭包两次，这会调用慢计算两次并使用户多等待一倍的时间。可以通过在 `if` 块中创建一个本地变量存放闭包调用的结果来解决这个问题，不过正因为使用了闭包还有另一个解决方案。稍后会回到这个方案上；首先讨论一下为何闭包定义中和所涉及的 trait 中没有类型注解。
+然而，我们又重新引入了示例 13-3 中的问题：仍然在第一个 `if` 块中调用了闭包两次，这会调用慢计算两次并使用户多等待一倍的时间。可以通过在 `if` 块中创建一个本地变量存放闭包调用的结果来解决这个问题，不过正因为使用了闭包还有另一个解决方案。稍后会回到这个方案上。首先讨论一下为何闭包定义中和所涉及的 trait 中没有类型注解。
 
 ### 闭包类型推断和注解
 
@@ -265,7 +265,7 @@ let add_one_v4 = |x|               x + 1  ;
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let example_closure = |x| x;
 
 let s = example_closure(String::from("hello"));
@@ -446,7 +446,7 @@ fn generate_workout(intensity: u32, random_number: u32) {
 
 第一个问题是 `Cacher` 实例假设对于 `value` 方法的任何 `arg` 参数值总是会返回相同的值。也就是说，这个 `Cacher` 的测试会失败：
 
-```rust,ignore
+```rust,ignore,panics
 #[test]
 fn call_with_different_values() {
     let mut c = Cacher::new(|a| a);
@@ -472,7 +472,7 @@ thread 'call_with_different_values' panicked at 'assertion failed: `(left == rig
 
 尝试修改 `Cacher` 存放一个哈希 map 而不是单独一个值。哈希 map 的 key 将是传递进来的 `arg` 值，而 value 则是对应 key 调用闭包的结果值。相比之前检查 `self.value` 直接是 `Some` 还是 `None` 值，现在 `value` 会在哈希 map 中寻找 `arg`，如果存在就返回它。如果不存在，`Cacher` 会调用闭包并将结果值保存在哈希 map 对应 `arg` 值的位置。
 
-当前 `Cacher` 实现的另一个问题是它的应用被限制为只接受获取一个 `u32` 值并返回一个 `u32` 值的闭包。比如说，我们可能需要能够缓存一个获取字符串 slice 并返回 `usize` 值的闭包的结果。请尝试引入更多泛型参数来增加 `Cacher` 功能的灵活性。
+当前 `Cacher` 实现的第二个问题是它的应用被限制为只接受获取一个 `u32` 值并返回一个 `u32` 值的闭包。比如说，我们可能需要能够缓存一个获取字符串 slice 并返回 `usize` 值的闭包的结果。请尝试引入更多泛型参数来增加 `Cacher` 功能的灵活性。
 
 ### 闭包会捕获其环境
 
@@ -502,7 +502,7 @@ fn main() {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let x = 4;
 
@@ -543,7 +543,7 @@ error[E0434]: can't capture dynamic environment in a fn item; use the || { ...
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let x = vec![1, 2, 3];
 
