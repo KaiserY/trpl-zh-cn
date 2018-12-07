@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>控制流</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.8614bbde.css" as="style"><link rel="preload" href="/assets/js/app.b56e4aff.js" as="script"><link rel="preload" href="/assets/js/24.d59d9203.js" as="script"><link rel="prefetch" href="/assets/js/10.d41a3b84.js"><link rel="prefetch" href="/assets/js/100.22ca6861.js"><link rel="prefetch" href="/assets/js/101.80606dd4.js"><link rel="prefetch" href="/assets/js/102.75bf264b.js"><link rel="prefetch" href="/assets/js/103.7615fac4.js"><link rel="prefetch" href="/assets/js/104.a030e309.js"><link rel="prefetch" href="/assets/js/105.ceb5b0f7.js"><link rel="prefetch" href="/assets/js/106.53b25747.js"><link rel="prefetch" href="/assets/js/107.a6f25383.js"><link rel="prefetch" href="/assets/js/108.524846e6.js"><link rel="prefetch" href="/assets/js/109.5b3e8cc8.js"><link rel="prefetch" href="/assets/js/11.7f9bf643.js"><link rel="prefetch" href="/assets/js/110.a106958d.js"><link rel="prefetch" href="/assets/js/111.b1600e65.js"><link rel="prefetch" href="/assets/js/112.81bf40f0.js"><link rel="prefetch" href="/assets/js/12.c7e4d9a8.js"><link rel="prefetch" href="/assets/js/13.235bc06a.js"><link rel="prefetch" href="/assets/js/14.8b8a21b7.js"><link rel="prefetch" href="/assets/js/15.83a607fc.js"><link rel="prefetch" href="/assets/js/16.2bf746d6.js"><link rel="prefetch" href="/assets/js/17.36a5d5f3.js"><link rel="prefetch" href="/assets/js/18.82e00fba.js"><link rel="prefetch" href="/assets/js/19.1c2116c8.js"><link rel="prefetch" href="/assets/js/2.3505b190.js"><link rel="prefetch" href="/assets/js/20.1f4e3d0f.js"><link rel="prefetch" href="/assets/js/21.80dca6df.js"><link rel="prefetch" href="/assets/js/22.24977f4c.js"><link rel="prefetch" href="/assets/js/23.867b53ea.js"><link rel="prefetch" href="/assets/js/25.fae2b839.js"><link rel="prefetch" href="/assets/js/26.ba769edc.js"><link rel="prefetch" href="/assets/js/27.03216770.js"><link rel="prefetch" href="/assets/js/28.82b934bf.js"><link rel="prefetch" href="/assets/js/29.9bbe7e55.js"><link rel="prefetch" href="/assets/js/3.ba62e17c.js"><link rel="prefetch" href="/assets/js/30.ed75778f.js"><link rel="prefetch" href="/assets/js/31.247a3dbb.js"><link rel="prefetch" href="/assets/js/32.b1bb1e43.js"><link rel="prefetch" href="/assets/js/33.3656c740.js"><link rel="prefetch" href="/assets/js/34.03c1b47c.js"><link rel="prefetch" href="/assets/js/35.5af5d342.js"><link rel="prefetch" href="/assets/js/36.572a9496.js"><link rel="prefetch" href="/assets/js/37.319db1b7.js"><link rel="prefetch" href="/assets/js/38.19837e80.js"><link rel="prefetch" href="/assets/js/39.72675c02.js"><link rel="prefetch" href="/assets/js/4.f9a0ae28.js"><link rel="prefetch" href="/assets/js/40.d9f81c69.js"><link rel="prefetch" href="/assets/js/41.184751dc.js"><link rel="prefetch" href="/assets/js/42.9fa6eee5.js"><link rel="prefetch" href="/assets/js/43.b3333fb7.js"><link rel="prefetch" href="/assets/js/44.97c13303.js"><link rel="prefetch" href="/assets/js/45.8afb63d1.js"><link rel="prefetch" href="/assets/js/46.ac497cb6.js"><link rel="prefetch" href="/assets/js/47.dc1178aa.js"><link rel="prefetch" href="/assets/js/48.50b8e29c.js"><link rel="prefetch" href="/assets/js/49.385dc110.js"><link rel="prefetch" href="/assets/js/5.0204093a.js"><link rel="prefetch" href="/assets/js/50.cadce2ee.js"><link rel="prefetch" href="/assets/js/51.d4e57e23.js"><link rel="prefetch" href="/assets/js/52.323a010e.js"><link rel="prefetch" href="/assets/js/53.377c0582.js"><link rel="prefetch" href="/assets/js/54.8d06b2c9.js"><link rel="prefetch" href="/assets/js/55.f82d7ef0.js"><link rel="prefetch" href="/assets/js/56.c9db2b25.js"><link rel="prefetch" href="/assets/js/57.bc11287b.js"><link rel="prefetch" href="/assets/js/58.a1a44552.js"><link rel="prefetch" href="/assets/js/59.4afc94b7.js"><link rel="prefetch" href="/assets/js/6.4774d695.js"><link rel="prefetch" href="/assets/js/60.867aed26.js"><link rel="prefetch" href="/assets/js/61.74327fa7.js"><link rel="prefetch" href="/assets/js/62.177c0b30.js"><link rel="prefetch" href="/assets/js/63.3e0d51da.js"><link rel="prefetch" href="/assets/js/64.e8778b11.js"><link rel="prefetch" href="/assets/js/65.b0dde85a.js"><link rel="prefetch" href="/assets/js/66.3bba1132.js"><link rel="prefetch" href="/assets/js/67.fb2ec2e1.js"><link rel="prefetch" href="/assets/js/68.d8ef845b.js"><link rel="prefetch" href="/assets/js/69.5b80f65b.js"><link rel="prefetch" href="/assets/js/7.010146f6.js"><link rel="prefetch" href="/assets/js/70.e265a8a0.js"><link rel="prefetch" href="/assets/js/71.08e24461.js"><link rel="prefetch" href="/assets/js/72.9f1ed203.js"><link rel="prefetch" href="/assets/js/73.cf073a90.js"><link rel="prefetch" href="/assets/js/74.e5e6cb7a.js"><link rel="prefetch" href="/assets/js/75.12d311a9.js"><link rel="prefetch" href="/assets/js/76.27ceea65.js"><link rel="prefetch" href="/assets/js/77.2d04e2fc.js"><link rel="prefetch" href="/assets/js/78.cd7b5394.js"><link rel="prefetch" href="/assets/js/79.397902f7.js"><link rel="prefetch" href="/assets/js/8.de3fc0db.js"><link rel="prefetch" href="/assets/js/80.8f355347.js"><link rel="prefetch" href="/assets/js/81.9fcee337.js"><link rel="prefetch" href="/assets/js/82.67857b15.js"><link rel="prefetch" href="/assets/js/83.8638b011.js"><link rel="prefetch" href="/assets/js/84.77ee6a86.js"><link rel="prefetch" href="/assets/js/85.724ec824.js"><link rel="prefetch" href="/assets/js/86.e0caf86b.js"><link rel="prefetch" href="/assets/js/87.32cc9faa.js"><link rel="prefetch" href="/assets/js/88.8db036d0.js"><link rel="prefetch" href="/assets/js/89.63be6804.js"><link rel="prefetch" href="/assets/js/9.a240a747.js"><link rel="prefetch" href="/assets/js/90.23557c83.js"><link rel="prefetch" href="/assets/js/91.0fc26ad3.js"><link rel="prefetch" href="/assets/js/92.45cce200.js"><link rel="prefetch" href="/assets/js/93.2a7d9b35.js"><link rel="prefetch" href="/assets/js/94.25f7b020.js"><link rel="prefetch" href="/assets/js/95.3d28b93b.js"><link rel="prefetch" href="/assets/js/96.fb907808.js"><link rel="prefetch" href="/assets/js/97.e4875071.js"><link rel="prefetch" href="/assets/js/98.2859c908.js"><link rel="prefetch" href="/assets/js/99.ac5b7b90.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8614bbde.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <!----> </div> <div class="page"> <div class="content"><h2 id="控制流"><a href="#控制流" aria-hidden="true" class="header-anchor">#</a> 控制流</h2> <blockquote><p><a href="https://github.com/rust-lang/book/blob/master/src/ch03-05-control-flow.md" target="_blank" rel="noopener noreferrer">ch03-05-control-flow.md<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> <br>
+commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37</p></blockquote> <p>根据条件是否为真来决定是否执行某些代码，以及根据条件是否为真来重复运行一段代码是大部分编程语言的基本组成部分。Rust 代码中最常见的用来控制执行流的结构是 <code>if</code> 表达式和循环。</p> <h3 id="if-表达式"><a href="#if-表达式" aria-hidden="true" class="header-anchor">#</a> <code>if</code> 表达式</h3> <p><code>if</code> 表达式允许根据条件执行不同的代码分支。你提供一个条件并表示 “如果条件满足，运行这段代码；如果条件不满足，不运行这段代码。”</p> <p>在 <em>projects</em> 目录新建一个叫做 <em>branches</em> 的项目，来学习 <code>if</code> 表达式。在 <em>src/main.rs</em> 文件中，输入如下内容：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> number <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> number <span class="token operator">&lt;</span> <span class="token number">5</span> <span class="token punctuation">{</span>
+        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;condition was true&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;condition was false&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div> <p>所有的 <code>if</code> 表达式都以 <code>if</code> 关键字开头，其后跟一个条件。在这个例子中，条件检查变量 <code>number</code> 的值是否小于 5。在条件为真时希望执行的代码块位于紧跟条件之后的大括号中。<code>if</code> 表达式中与条件关联的代码块有时被叫做 <em>arms</em>，就像第二章 “比较猜测的数字和秘密数字” 部分中讨论到的 <code>match</code> 表达式中的分支一样。</p> <p>也可以包含一个可选的 <code>else</code> 表达式来提供一个在条件为假时应当执行的代码块，这里我们就这么做了。如果不提供 <code>else</code> 表达式并且条件为假时，程序会直接忽略 <code>if</code> 代码块并继续执行下面的代码。</p> <p>尝试运行代码，应该能看到如下输出：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo run
+   Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
+     Running `target/debug/branches`
+condition was true
+</code></pre></div><p>尝试改变 <code>number</code> 的值使条件为假时看看会发生什么：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>let number = 7;
+</code></pre></div><p>再次运行程序并查看输出：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo run
+   Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
+     Running `target/debug/branches`
+condition was false
+</code></pre></div><p>另外值得注意的是代码中的条件 <strong>必须</strong> 是 <code>bool</code> 值。如果条件不是 <code>bool</code> 值，我们将得到一个错误。例如，尝试运行以下代码：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,ignore,does_not_compile extra-class"><pre class="language-text"><code>fn main() {
+    let number = 3;
+
+    if number {
+        println!(&quot;number was three&quot;);
+    }
+}
+</code></pre></div><p>这里 <code>if</code> 条件的值是 <code>3</code>，Rust 抛出了一个错误：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0308]: mismatched types
+ --&gt; src/main.rs:4:8
+  |
+4 |     if number {
+  |        ^^^^^^ expected bool, found integral variable
+  |
+  = note: expected type `bool`
+             found type `{integer}`
+</code></pre></div><p>这个错误表明 Rust 期望一个 <code>bool</code> 却得到了一个整数。不像 Ruby 或 JavaScript 这样的语言，Rust 并不会尝试自动地将非布尔值转换为布尔值。必须总是显式地使用布尔值作为 <code>if</code> 的条件。例如，如果想要 <code>if</code> 代码块只在一个数字不等于 <code>0</code> 时执行，可以把 <code>if</code> 表达式修改成下面这样：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> number <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> number <span class="token operator">!=</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;number was something other than zero&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>运行代码会打印出 <code>number was something other than zero</code>。</p> <h4 id="使用-else-if-处理多重条件"><a href="#使用-else-if-处理多重条件" aria-hidden="true" class="header-anchor">#</a> 使用 <code>else if</code> 处理多重条件</h4> <p>可以将 <code>else if</code> 表达式与 <code>if</code> 和 <code>else</code> 组合来实现多重条件。例如：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> number <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> number <span class="token operator">%</span> <span class="token number">4</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;number is divisible by 4&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> number <span class="token operator">%</span> <span class="token number">3</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;number is divisible by 3&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> number <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;number is divisible by 2&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;number is not divisible by 4, 3, or 2&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>这个程序有四个可能的执行路径。运行后应该能看到如下输出：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo run
+   Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
+     Running `target/debug/branches`
+number is divisible by 3
+</code></pre></div><p>当执行这个程序时，它按顺序检查每个 <code>if</code> 表达式并执行第一个条件为真的代码块。注意即使 6 可以被 2 整除，也不会输出 <code>number is divisible by 2</code>，更不会输出 <code>else</code> 块中的 <code>number is not divisible by 4, 3, or 2</code>。原因是 Rust 只会执行第一个条件为真的代码块，并且一旦它找到一个以后，甚至都不会检查剩下的条件了。</p> <p>使用过多的 <code>else if</code> 表达式会使代码显得杂乱无章，所以如果有多于一个 <code>else if</code> 表达式，最好重构代码。为此，第六章会介绍一个强大的 Rust 分支结构（branching construct），叫做 <code>match</code>。</p> <h4 id="在-let-语句中使用-if"><a href="#在-let-语句中使用-if" aria-hidden="true" class="header-anchor">#</a> 在 <code>let</code> 语句中使用 <code>if</code></h4> <p>因为 <code>if</code> 是一个表达式，我们可以在 <code>let</code> 语句的右侧使用它，例如在示例 3-2 中：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> condition <span class="token operator">=</span> <span class="token keyword">true</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> number <span class="token operator">=</span> <span class="token keyword">if</span> condition <span class="token punctuation">{</span>
+        <span class="token number">5</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token number">6</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;The value of number is: {}&quot;</span><span class="token punctuation">,</span> number<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 3-2：将 <code>if</code> 表达式的返回值赋给一个变量</span></p> <p><code>number</code> 变量将会绑定到表示 <code>if</code> 表达式结果的值上。运行这段代码看看会出现什么：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo run
+   Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.30 secs
+     Running `target/debug/branches`
+The value of number is: 5
+</code></pre></div><p>记住，代码块的值是其最后一个表达式的值，而数字本身就是一个表达式。在这个例子中，整个 <code>if</code> 表达式的值取决于哪个代码块被执行。这意味着 <code>if</code> 的每个分支的可能的返回值都必须是相同类型；在示例 3-2 中，<code>if</code> 分支和 <code>else</code> 分支的结果都是 <code>i32</code> 整型。如果它们的类型不匹配，如下面这个例子，则会出现一个错误：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,ignore,does_not_compile extra-class"><pre class="language-text"><code>fn main() {
+    let condition = true;
+
+    let number = if condition {
+        5
+    } else {
+        &quot;six&quot;
+    };
+
+    println!(&quot;The value of number is: {}&quot;, number);
+}
+</code></pre></div><p>当编译这段代码时，会得到一个错误。<code>if</code> 和 <code>else</code> 分支的值类型是不相容的，同时 Rust 也准确地指出在程序中的何处发现的这个问题：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0308]: if and else have incompatible types
+ --&gt; src/main.rs:4:18
+  |
+4 |       let number = if condition {
+  |  __________________^
+5 | |         5
+6 | |     } else {
+7 | |         &quot;six&quot;
+8 | |     };
+  | |_____^ expected integral variable, found &amp;str
+  |
+  = note: expected type `{integer}`
+             found type `&amp;str`
+</code></pre></div><p><code>if</code> 代码块中的表达式返回一个整数，而 <code>else</code> 代码块中的表达式返回一个字符串。这不可行，因为变量必须只有一个类型。Rust 需要在编译时就确切的知道 <code>number</code> 变量的类型，这样它就可以在编译时验证在每处使用的 <code>number</code> 变量的类型是有效的。Rust 并不能够在 <code>number</code> 的类型只能在运行时确定的情况下工作；这样会使编译器变得更复杂而且只能为代码提供更少的保障，因为它不得不记录所有变量的多种可能的类型。</p> <h3 id="使用循环重复执行"><a href="#使用循环重复执行" aria-hidden="true" class="header-anchor">#</a> 使用循环重复执行</h3> <p>多次执行同一段代码是很常用的，Rust 为此提供了多种 <strong>循环</strong>（<em>loops</em>）。一个循环执行循环体中的代码直到结尾并紧接着回到开头继续执行。为了实验一下循环，让我们新建一个叫做 <em>loops</em> 的项目。</p> <p>Rust 有三种循环：<code>loop</code>、<code>while</code> 和 <code>for</code>。我们每一个都试试。</p> <h4 id="使用-loop-重复执行代码"><a href="#使用-loop-重复执行代码" aria-hidden="true" class="header-anchor">#</a> 使用 <code>loop</code> 重复执行代码</h4> <p><code>loop</code> 关键字告诉 Rust 一遍又一遍地执行一段代码直到你明确要求停止。</p> <p>作为一个例子，将 <em>loops</em> 目录中的 <em>src/main.rs</em> 文件修改为如下：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>fn main() {
+    loop {
+        println!(&quot;again!&quot;);
+    }
+}
+</code></pre></div><p>当运行这个程序时，我们会看到连续的反复打印 <code>again!</code>，直到我们手动停止程序。大部分终端都支持一个快捷键，<span class="keystroke">ctrl-c</span>，来终止一个陷入无限循环的程序。尝试一下：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo run
+   Compiling loops v0.1.0 (file:///projects/loops)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.29 secs
+     Running `target/debug/loops`
+again!
+again!
+again!
+again!
+^Cagain!
+</code></pre></div><p>符号 <code>^C</code> 代表你在这按下了<span class="keystroke">ctrl-c</span>。在 <code>^C</code> 之后你可能看到也可能看不到 <code>again!</code> ，这取决于在接收到终止信号时代码执行到了循环的何处。</p> <p>幸运的是，Rust 提供了另一种更可靠的退出循环的方式。可以使用 <code>break</code> 关键字来告诉程序何时停止循环。回忆一下在第二章猜猜看游戏的 “猜测正确后退出” 部分使用过它来在用户猜对数字赢得游戏后退出程序。</p> <h4 id="从循环返回"><a href="#从循环返回" aria-hidden="true" class="header-anchor">#</a> 从循环返回</h4> <p><code>loop</code> 的一个用例是重试可能会失败的操作，比如检查线程是否完成了任务。然而你可能会需要将操作的结果传递给其它的代码。如果将返回值加入你用来停止循环的 <code>break</code> 表达式，它会被停止的循环返回：</p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> counter <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">let</span> result <span class="token operator">=</span> <span class="token keyword">loop</span> <span class="token punctuation">{</span>
+        counter <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> counter <span class="token operator">==</span> <span class="token number">10</span> <span class="token punctuation">{</span>
+            <span class="token keyword">break</span> counter <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token function">assert_eq!</span><span class="token punctuation">(</span>result<span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h4 id="while-条件循环"><a href="#while-条件循环" aria-hidden="true" class="header-anchor">#</a> <code>while</code> 条件循环</h4> <p>在程序中计算循环的条件也很常见。当条件为真，执行循环。当条件不再为真，调用 <code>break</code> 停止循环。这个循环类型可以通过组合 <code>loop</code>、<code>if</code>、<code>else</code> 和 <code>break</code> 来实现；如果你喜欢的话，现在就可以在程序中试试。</p> <p>然而，这个模式太常用了，Rust 为此内置了一个语言结构，它被称为 <code>while</code> 循环。示例 3-3 使用了 <code>while</code>：程序循环三次，每次数字都减一。接着，在循环结束后，打印出另一个信息并退出。</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> number <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">while</span> number <span class="token operator">!=</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;{}!&quot;</span><span class="token punctuation">,</span> number<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        number <span class="token operator">=</span> number <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;LIFTOFF!!!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 3-3: 当条件为真时，使用 <code>while</code> 循环运行代码</span></p> <p>这种结构消除了很多使用 <code>loop</code>、<code>if</code>、<code>else</code> 和 <code>break</code> 时所必须的嵌套，这样更加清晰。当条件为真就执行，否则退出循环。</p> <h4 id="使用-for-遍历集合"><a href="#使用-for-遍历集合" aria-hidden="true" class="header-anchor">#</a> 使用 <code>for</code> 遍历集合</h4> <p>可以使用 <code>while</code> 结构来遍历集合中的元素，比如数组。例如，看看示例 3-4。</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> a <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">,</span> <span class="token number">40</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> index <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">while</span> index <span class="token operator">&lt;</span> <span class="token number">5</span> <span class="token punctuation">{</span>
+        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;the value is: {}&quot;</span><span class="token punctuation">,</span> a<span class="token punctuation">[</span>index<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        index <span class="token operator">=</span> index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 3-4：使用 <code>while</code> 循环遍历集合中的元素</span></p> <p>这里，代码对数组中的元素进行计数。它从索引 <code>0</code> 开始，并接着循环直到遇到数组的最后一个索引（这时，<code>index &lt; 5</code> 不再为真）。运行这段代码会打印出数组中的每一个元素：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo run
+   Compiling loops v0.1.0 (file:///projects/loops)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
+     Running `target/debug/loops`
+the value is: 10
+the value is: 20
+the value is: 30
+the value is: 40
+the value is: 50
+</code></pre></div><p>数组中的所有五个元素都如期被打印出来。尽管 <code>index</code> 在某一时刻会到达值 <code>5</code>，不过循环在其尝试从数组获取第六个值（会越界）之前就停止了。</p> <p>但这个过程很容易出错；如果索引长度不正确会导致程序 panic。这也使程序更慢，因为编译器增加了运行时代码来对每次循环的每个元素进行条件检查。</p> <p>作为更简洁的替代方案，可以使用 <code>for</code> 循环来对一个集合的每个元素执行一些代码。<code>for</code> 循环看起来如示例 3-5 所示：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> a <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">,</span> <span class="token number">40</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> element <span class="token keyword">in</span> a<span class="token punctuation">.</span><span class="token function">iter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;the value is: {}&quot;</span><span class="token punctuation">,</span> element<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 3-5：使用 <code>for</code> 循环遍历集合中的元素</span></p> <p>当运行这段代码时，将看到与示例 3-4 一样的输出。更为重要的是，我们增强了代码安全性，并消除了可能由于超出数组的结尾或遍历长度不够而缺少一些元素而导致的 bug。</p> <p>例如，在示例 3-4 的代码中，如果从数组 <code>a</code> 中移除一个元素但忘记将条件更新为 <code>while index &lt; 4</code>，代码将会 panic。使用 <code>for</code> 循环的话，就不需要惦记着在改变数组元素个数时修改其他的代码了。</p> <p><code>for</code> 循环的安全性和简洁性使得它成为 Rust 中使用最多的循环结构。即使是在想要循环执行代码特定次数时，例如示例 3-3 中使用 <code>while</code> 循环的倒计时例子，大部分 Rustacean 也会使用 <code>for</code> 循环。这么做的方式是使用 <code>Range</code>，它是标准库提供的类型，用来生成从一个数字开始到另一个数字之前结束的所有数字的序列。</p> <p>下面是一个使用 <code>for</code> 循环来倒计时的例子，它还使用了一个我们还未讲到的方法，<code>rev</code>，用来反转 range：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> number <span class="token keyword">in</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">..</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">rev</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;{}!&quot;</span><span class="token punctuation">,</span> number<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;LIFTOFF!!!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>这段代码看起来更帅气不是吗？</p> <h2 id="总结"><a href="#总结" aria-hidden="true" class="header-anchor">#</a> 总结</h2> <p>你做到了！这是一个大章节：你学习了变量、标量和复合数据类型、函数、注释、 <code>if</code> 表达式和循环！如果你想要实践本章讨论的概念，尝试构建如下程序：</p> <ul><li>相互转换摄氏与华氏温度。</li> <li>生成 n 阶斐波那契数列。</li> <li>打印圣诞颂歌 “The Twelve Days of Christmas” 的歌词，并利用歌曲中的重复部分（编写循环）。</li></ul> <p>当你准备好继续的时候，让我们讨论一个其他语言中 <em>并不</em> 常见的概念：所有权（ownership）。</p></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/assets/js/24.d59d9203.js" defer></script><script src="/assets/js/app.b56e4aff.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>mod 和文件系统</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.8614bbde.css" as="style"><link rel="preload" href="/assets/js/app.b56e4aff.js" as="script"><link rel="preload" href="/assets/js/38.19837e80.js" as="script"><link rel="prefetch" href="/assets/js/10.d41a3b84.js"><link rel="prefetch" href="/assets/js/100.22ca6861.js"><link rel="prefetch" href="/assets/js/101.80606dd4.js"><link rel="prefetch" href="/assets/js/102.75bf264b.js"><link rel="prefetch" href="/assets/js/103.7615fac4.js"><link rel="prefetch" href="/assets/js/104.a030e309.js"><link rel="prefetch" href="/assets/js/105.ceb5b0f7.js"><link rel="prefetch" href="/assets/js/106.53b25747.js"><link rel="prefetch" href="/assets/js/107.a6f25383.js"><link rel="prefetch" href="/assets/js/108.524846e6.js"><link rel="prefetch" href="/assets/js/109.5b3e8cc8.js"><link rel="prefetch" href="/assets/js/11.7f9bf643.js"><link rel="prefetch" href="/assets/js/110.a106958d.js"><link rel="prefetch" href="/assets/js/111.b1600e65.js"><link rel="prefetch" href="/assets/js/112.81bf40f0.js"><link rel="prefetch" href="/assets/js/12.c7e4d9a8.js"><link rel="prefetch" href="/assets/js/13.235bc06a.js"><link rel="prefetch" href="/assets/js/14.8b8a21b7.js"><link rel="prefetch" href="/assets/js/15.83a607fc.js"><link rel="prefetch" href="/assets/js/16.2bf746d6.js"><link rel="prefetch" href="/assets/js/17.36a5d5f3.js"><link rel="prefetch" href="/assets/js/18.82e00fba.js"><link rel="prefetch" href="/assets/js/19.1c2116c8.js"><link rel="prefetch" href="/assets/js/2.3505b190.js"><link rel="prefetch" href="/assets/js/20.1f4e3d0f.js"><link rel="prefetch" href="/assets/js/21.80dca6df.js"><link rel="prefetch" href="/assets/js/22.24977f4c.js"><link rel="prefetch" href="/assets/js/23.867b53ea.js"><link rel="prefetch" href="/assets/js/24.d59d9203.js"><link rel="prefetch" href="/assets/js/25.fae2b839.js"><link rel="prefetch" href="/assets/js/26.ba769edc.js"><link rel="prefetch" href="/assets/js/27.03216770.js"><link rel="prefetch" href="/assets/js/28.82b934bf.js"><link rel="prefetch" href="/assets/js/29.9bbe7e55.js"><link rel="prefetch" href="/assets/js/3.ba62e17c.js"><link rel="prefetch" href="/assets/js/30.ed75778f.js"><link rel="prefetch" href="/assets/js/31.247a3dbb.js"><link rel="prefetch" href="/assets/js/32.b1bb1e43.js"><link rel="prefetch" href="/assets/js/33.3656c740.js"><link rel="prefetch" href="/assets/js/34.03c1b47c.js"><link rel="prefetch" href="/assets/js/35.5af5d342.js"><link rel="prefetch" href="/assets/js/36.572a9496.js"><link rel="prefetch" href="/assets/js/37.319db1b7.js"><link rel="prefetch" href="/assets/js/39.72675c02.js"><link rel="prefetch" href="/assets/js/4.f9a0ae28.js"><link rel="prefetch" href="/assets/js/40.d9f81c69.js"><link rel="prefetch" href="/assets/js/41.184751dc.js"><link rel="prefetch" href="/assets/js/42.9fa6eee5.js"><link rel="prefetch" href="/assets/js/43.b3333fb7.js"><link rel="prefetch" href="/assets/js/44.97c13303.js"><link rel="prefetch" href="/assets/js/45.8afb63d1.js"><link rel="prefetch" href="/assets/js/46.ac497cb6.js"><link rel="prefetch" href="/assets/js/47.dc1178aa.js"><link rel="prefetch" href="/assets/js/48.50b8e29c.js"><link rel="prefetch" href="/assets/js/49.385dc110.js"><link rel="prefetch" href="/assets/js/5.0204093a.js"><link rel="prefetch" href="/assets/js/50.cadce2ee.js"><link rel="prefetch" href="/assets/js/51.d4e57e23.js"><link rel="prefetch" href="/assets/js/52.323a010e.js"><link rel="prefetch" href="/assets/js/53.377c0582.js"><link rel="prefetch" href="/assets/js/54.8d06b2c9.js"><link rel="prefetch" href="/assets/js/55.f82d7ef0.js"><link rel="prefetch" href="/assets/js/56.c9db2b25.js"><link rel="prefetch" href="/assets/js/57.bc11287b.js"><link rel="prefetch" href="/assets/js/58.a1a44552.js"><link rel="prefetch" href="/assets/js/59.4afc94b7.js"><link rel="prefetch" href="/assets/js/6.4774d695.js"><link rel="prefetch" href="/assets/js/60.867aed26.js"><link rel="prefetch" href="/assets/js/61.74327fa7.js"><link rel="prefetch" href="/assets/js/62.177c0b30.js"><link rel="prefetch" href="/assets/js/63.3e0d51da.js"><link rel="prefetch" href="/assets/js/64.e8778b11.js"><link rel="prefetch" href="/assets/js/65.b0dde85a.js"><link rel="prefetch" href="/assets/js/66.3bba1132.js"><link rel="prefetch" href="/assets/js/67.fb2ec2e1.js"><link rel="prefetch" href="/assets/js/68.d8ef845b.js"><link rel="prefetch" href="/assets/js/69.5b80f65b.js"><link rel="prefetch" href="/assets/js/7.010146f6.js"><link rel="prefetch" href="/assets/js/70.e265a8a0.js"><link rel="prefetch" href="/assets/js/71.08e24461.js"><link rel="prefetch" href="/assets/js/72.9f1ed203.js"><link rel="prefetch" href="/assets/js/73.cf073a90.js"><link rel="prefetch" href="/assets/js/74.e5e6cb7a.js"><link rel="prefetch" href="/assets/js/75.12d311a9.js"><link rel="prefetch" href="/assets/js/76.27ceea65.js"><link rel="prefetch" href="/assets/js/77.2d04e2fc.js"><link rel="prefetch" href="/assets/js/78.cd7b5394.js"><link rel="prefetch" href="/assets/js/79.397902f7.js"><link rel="prefetch" href="/assets/js/8.de3fc0db.js"><link rel="prefetch" href="/assets/js/80.8f355347.js"><link rel="prefetch" href="/assets/js/81.9fcee337.js"><link rel="prefetch" href="/assets/js/82.67857b15.js"><link rel="prefetch" href="/assets/js/83.8638b011.js"><link rel="prefetch" href="/assets/js/84.77ee6a86.js"><link rel="prefetch" href="/assets/js/85.724ec824.js"><link rel="prefetch" href="/assets/js/86.e0caf86b.js"><link rel="prefetch" href="/assets/js/87.32cc9faa.js"><link rel="prefetch" href="/assets/js/88.8db036d0.js"><link rel="prefetch" href="/assets/js/89.63be6804.js"><link rel="prefetch" href="/assets/js/9.a240a747.js"><link rel="prefetch" href="/assets/js/90.23557c83.js"><link rel="prefetch" href="/assets/js/91.0fc26ad3.js"><link rel="prefetch" href="/assets/js/92.45cce200.js"><link rel="prefetch" href="/assets/js/93.2a7d9b35.js"><link rel="prefetch" href="/assets/js/94.25f7b020.js"><link rel="prefetch" href="/assets/js/95.3d28b93b.js"><link rel="prefetch" href="/assets/js/96.fb907808.js"><link rel="prefetch" href="/assets/js/97.e4875071.js"><link rel="prefetch" href="/assets/js/98.2859c908.js"><link rel="prefetch" href="/assets/js/99.ac5b7b90.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8614bbde.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <!----> </div> <div class="page"> <div class="content"><h2 id="mod-和文件系统"><a href="#mod-和文件系统" aria-hidden="true" class="header-anchor">#</a> <code>mod</code> 和文件系统</h2> <blockquote><p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch07-01-mod-and-the-filesystem.md" target="_blank" rel="noopener noreferrer">ch07-01-mod-and-the-filesystem.md<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> <br>
+commit a120c730714e07f8f32d905e9374a50b2e0ffdf5</p></blockquote> <p>我们将通过使用 Cargo 创建一个新项目来开始我们的模块之旅，不过这次不再创建一个二进制 crate，而是创建一个库 crate：一个其他人可以作为依赖导入的项目。第二章猜猜看游戏中作为依赖使用的 <code>rand</code> 就是这样的 crate。</p> <p>我们将创建一个库的框架，提供一些通用的网络功能；我们将专注于模块和函数的组织，而不必担心函数体中的具体代码。这个项目叫做 <code>communicator</code>。若要创建一个库，应当使用 <code>--lib</code> 参数而不是之前所用的 <code>--bin</code> 参数：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo new communicator --lib
+$ cd communicator
+</code></pre></div><p>注意 Cargo 生成了 <em>src/lib.rs</em> 而不是 <em>src/main.rs</em>。在 <em>src/lib.rs</em> 中我们会找到这些：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token attribute attr-name">#[cfg(test)]</span>
+<span class="token keyword">mod</span> tests <span class="token punctuation">{</span>
+    <span class="token attribute attr-name">#[test]</span>
+    <span class="token keyword">fn</span> <span class="token function">it_works</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">assert_eq!</span><span class="token punctuation">(</span><span class="token number">2</span> <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Cargo 创建了一个空的测试来帮助我们开始库项目，不像使用 <code>--bin</code> 参数那样创建一个 “Hello, world!” 二进制项目。在本章之后的 “使用 <code>super</code> 访问父模块” 部分会介绍 <code>#[]</code> 和 <code>mod tests</code> 语法，目前只需确保它们位于 <em>src/lib.rs</em> 底部即可。</p> <p>因为没有 <em>src/main.rs</em> 文件，所以没有可供 Cargo 的 <code>cargo run</code> 执行的东西。因此，我们将只使用 <code>cargo build</code> 命令编译库 crate 的代码。</p> <p>我们将学习根据编写代码的意图来以不同方法组织库项目代码以适应多种情况。</p> <h3 id="模块定义"><a href="#模块定义" aria-hidden="true" class="header-anchor">#</a> 模块定义</h3> <p>对于 <code>communicator</code> 网络库，首先要定义一个叫做 <code>network</code> 的模块，它包含一个叫做 <code>connect</code> 的函数定义。Rust 中所有模块的定义都以关键字 <code>mod</code> 开始。在 <em>src/lib.rs</em> 文件的开头在测试代码的上面增加这些代码：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">mod</span> network <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><code>mod</code> 关键字的后面是模块的名字，<code>network</code>，接着是位于大括号中的代码块。代码块中的一切都位于 <code>network</code> 命名空间中。在这个例子中，只有一个函数，<code>connect</code>。如果想要在 <code>network</code> 模块外面的代码中调用这个函数，需要指定模块名并使用命名空间语法 <code>::</code>，像这样：<code>network::connect()</code>。</p> <p>也可以在 <em>src/lib.rs</em> 文件中同时存在多个模块。例如，再拥有一个 <code>client</code> 模块，它也有一个叫做 <code>connect</code> 的函数，如示例 7-1 中所示那样增加这个模块：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">mod</span> network <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">mod</span> client <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-1：<code>network</code> 模块和 <code>client</code> 一同定义于 <em>src/lib.rs</em></span></p> <p>现在我们有了 <code>network::connect</code> 函数和 <code>client::connect</code> 函数。它们可能有着完全不同的功能，同时它们也不会彼此冲突，因为它们位于不同的模块。</p> <p>在这个例子中，因为我们构建的是一个库，作为库入口点的文件是 <em>src/lib.rs</em>。然而，对于创建模块来说，<em>src/lib.rs</em> 并没有什么特殊意义。也可以在二进制 crate 的 <em>src/main.rs</em> 中创建模块，正如在库 crate 的 <em>src/lib.rs</em> 创建模块一样。事实上，也可以将模块放入其他模块中。这有助于随着模块的增长，将相关的功能组织在一起并又保持各自独立。选择组织代码的方式取决于如何考虑代码各部分之间的关系。例如，对于库的用户来说，<code>client</code> 模块和它的函数 <code>connect</code> 可能放在 <code>network</code> 命名空间里显得更有道理，如示例 7-2 所示：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">mod</span> network <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">mod</span> client <span class="token punctuation">{</span>
+        <span class="token keyword">fn</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-2：将 <code>client</code> 模块移动到 <code>network</code> 模块中</span></p> <p>在 <em>src/lib.rs</em> 文件中，将现有的 <code>mod network</code> 和 <code>mod client</code> 的定义替换为示例 7-2 中的定义，这里将 <code>client</code> 模块作为 <code>network</code> 的一个内部模块。现在我们有了 <code>network::connect</code> 和 <code>network::client::connect</code> 函数：它们都叫 <code>connect</code> ，但它们并不互相冲突，因为它们在不同的命名空间中。</p> <p>这样，模块之间形成了一个层次结构。<em>src/lib.rs</em> 的内容位于最顶层，而其子模块位于较低的层次。如下是示例 7-1 中的例子以层次的方式考虑的结构：</p> <div class="language-text extra-class"><pre class="language-text"><code>communicator
+ ├── network
+ └── client
+</code></pre></div><p>而这是示例 7-2 中例子的层次结构：</p> <div class="language-text extra-class"><pre class="language-text"><code>communicator
+ └── network
+     └── client
+</code></pre></div><p>可以看到示例 7-2 中，<code>client</code> 是 <code>network</code> 的子模块，而不是它的同级模块。更为复杂的项目可以有很多的模块，所以它们需要符合逻辑地组合在一起以便记录它们。在项目中 “符合逻辑” 的意义全凭你的理解和库的用户对你项目领域的认识。利用我们这里讲到的技术来创建同级模块和嵌套的模块，总有一个会是你会喜欢的结构。</p> <h3 id="将模块移动到其他文件"><a href="#将模块移动到其他文件" aria-hidden="true" class="header-anchor">#</a> 将模块移动到其他文件</h3> <p>位于层级结构中的模块，非常类似计算机领域的另一个我们非常熟悉的结构：文件系统！我们可以利用 Rust 的模块系统连同多个文件一起分解 Rust 项目，这样就不会是所有的内容都落到 <em>src/lib.rs</em> 或 <em>src/main.rs</em> 中了。为了举例，我们将从示例 7-3 中的代码开始：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">mod</span> client <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">mod</span> network <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">mod</span> server <span class="token punctuation">{</span>
+        <span class="token keyword">fn</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-3：三个模块，<code>client</code>、<code>network</code> 和 <code>network::server</code>，它们都定义于 <em>src/lib.rs</em></span></p> <p><em>src/lib.rs</em> 文件有如下层次结构：</p> <div class="language-text extra-class"><pre class="language-text"><code>communicator
+ ├── client
+ └── network
+     └── server
+</code></pre></div><p>如果这些模块有很多函数，而这些函数又很长，将难以在文件中寻找我们需要的代码。因为这些函数被嵌套进一个或多个 <code>mod</code> 块中，同时函数中的代码也会开始变长。这就有充分的理由将 <code>client</code>、<code>network</code> 和 <code>server</code> 每一个模块从 <em>src/lib.rs</em> 抽出并放入它们自己的文件中。</p> <p>首先，将 <code>client</code> 模块的代码替换为只有 <code>client</code> 模块声明，这样 <em>src/lib.rs</em> 看起来应该像如示例 7-4 所示：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>mod client;
+
+mod network {
+    fn connect() {
+    }
+
+    mod server {
+        fn connect() {
+        }
+    }
+}
+</code></pre></div><p><span class="caption">示例 7-4：提取出 <code>client</code> 模块的内容但仍将其声明留在 <em>src/lib.rs</em></span></p> <p>这里我们仍然 <strong>声明</strong> 了 <code>client</code> 模块，不过将代码块替换为了分号，这告诉了 Rust 在 <code>client</code> 模块的作用域中寻找另一个定义代码的位置。换句话说，<code>mod client;</code> 行意味着：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>mod client {
+    // contents of client.rs
+}
+</code></pre></div><p>那么现在需要创建对应模块名的外部文件。在 <em>src/</em> 目录创建一个 <em>client.rs</em> 文件，接着打开它并输入如下内容，它是上一步被去掉的 <code>client</code> 模块中的 <code>connect</code> 函数：</p> <p><span class="filename">文件名: src/client.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>注意这个文件中并不需要一个 <code>mod</code> 声明；因为已经在 <em>src/lib.rs</em> 中已经使用 <code>mod</code> 声明了 <code>client</code> 模块。这个文件仅仅提供 <code>client</code> 模块的 <strong>内容</strong>。如果在这里加上一个 <code>mod client</code>，那么就等于给 <code>client</code> 模块增加了一个叫做 <code>client</code> 的子模块了！</p> <p>Rust 默认只知道 <em>src/lib.rs</em> 中的内容。如果想要对项目加入更多文件，我们需要在 <em>src/lib.rs</em> 中告诉 Rust 去寻找其他文件；这就是为什么 <code>mod client</code> 需要被定义在 <em>src/lib.rs</em> 而不能在 <em>src/client.rs</em> 的原因。</p> <p>现在，一切应该能成功编译，虽然会有一些警告。记住使用 <code>cargo build</code> 而不是 <code>cargo run</code>， 因为这是一个库 crate 而不是二进制 crate：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo build
+   Compiling communicator v0.1.0 (file:///projects/communicator)
+warning: function is never used: `connect`
+ --&gt; src/client.rs:1:1
+  |
+1 | / fn connect() {
+2 | | }
+  | |_^
+  |
+  = note: #[warn(dead_code)] on by default
+
+warning: function is never used: `connect`
+ --&gt; src/lib.rs:4:5
+  |
+4 | /     fn connect() {
+5 | |     }
+  | |_____^
+
+warning: function is never used: `connect`
+ --&gt; src/lib.rs:8:9
+  |
+8 | /         fn connect() {
+9 | |         }
+  | |_________^
+</code></pre></div><p>这些警告提醒我们有从未被使用的函数。目前不用担心这些警告，在本章后面的 “使用 <code>pub</code> 控制可见性” 部分会解决它们。好消息是，它们仅仅是警告，我们的项目能够成功编译。</p> <p>下面使用相同的模式将 <code>network</code> 模块提取到自己的文件中。删除 <em>src/lib.rs</em> 中 <code>network</code> 模块的内容并在声明后加上一个分号，像这样：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>mod client;
+
+mod network;
+</code></pre></div><p>接着新建 <em>src/network.rs</em> 文件并输入如下内容：</p> <p><span class="filename">文件名: src/network.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">mod</span> server <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>注意这个模块文件中我们也使用了一个 <code>mod</code> 声明；这是因为我们希望 <code>server</code> 成为 <code>network</code> 的一个子模块。</p> <p>现在再次运行 <code>cargo build</code>。成功！不过我们还需要再提取出另一个模块：<code>server</code>。因为这是一个子模块——也就是模块中的模块——目前的将模块提取到对应名字的文件中的策略就不管用了。如果我们仍这么尝试则会出现错误。对 <em>src/network.rs</em> 的第一个修改是用 <code>mod server;</code> 替换 <code>server</code> 模块的内容：</p> <p><span class="filename">文件名: src/network.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>fn connect() {
+}
+
+mod server;
+</code></pre></div><p>接着创建 <em>src/server.rs</em> 文件并输入需要提取的 <code>server</code> 模块的内容：</p> <p><span class="filename">文件名: src/server.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>当尝试运行 <code>cargo build</code> 时，会出现如示例 7-5 中所示的错误：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo build
+   Compiling communicator v0.1.0 (file:///projects/communicator)
+error: cannot declare a new module at this location
+ --&gt; src/network.rs:4:5
+  |
+4 | mod server;
+  |     ^^^^^^
+  |
+note: maybe move this module `src/network.rs` to its own directory via `src/network/mod.rs`
+ --&gt; src/network.rs:4:5
+  |
+4 | mod server;
+  |     ^^^^^^
+note: ... or maybe `use` the module `server` instead of possibly redeclaring it
+ --&gt; src/network.rs:4:5
+  |
+4 | mod server;
+  |     ^^^^^^
+</code></pre></div><p><span class="caption">示例 7-5：尝试将 <code>server</code> 子模块提取到 <em>src/server.rs</em> 时出现的错误</span></p> <p>这个错误说明 “不能在这个位置新声明一个模块” 并指出 <em>src/network.rs</em> 中的 <code>mod server;</code> 这一行。看来 <em>src/network.rs</em> 与 <em>src/lib.rs</em> 在某些方面是不同的；继续阅读以理解这是为什么。</p> <p>示例 7-5 中间的 note 事实上是非常有帮助的，因为它指出了一些我们还未讲到的操作：</p> <div class="language-text extra-class"><pre class="language-text"><code>note: maybe move this module `network` to its own directory via
+`network/mod.rs`
+</code></pre></div><p>我们可以按照记录所建议的去操作，而不是继续使用之前的与模块同名文件的模式：</p> <ol><li>新建一个叫做 <em>network</em> 的 <strong>目录</strong>，这是父模块的名字</li> <li>将 <em>src/network.rs</em> 移动到新建的 <em>network</em> 目录中并重命名为 <em>src/network/mod.rs</em></li> <li>将子模块文件 <em>src/server.rs</em> 移动到 <em>network</em> 目录中</li></ol> <p>如下是执行这些步骤的命令：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ mkdir src/network
+$ mv src/network.rs src/network/mod.rs
+$ mv src/server.rs src/network
+</code></pre></div><p>现在如果运行 <code>cargo build</code> 的话将顺利编译（虽然仍有警告）。现在模块的布局看起来仍然与示例 7-3 中所有代码都在 <em>src/lib.rs</em> 中时完全一样：</p> <div class="language-text extra-class"><pre class="language-text"><code>communicator
+ ├── client
+ └── network
+     └── server
+</code></pre></div><p>对应的文件布局现在看起来像这样：</p> <div class="language-text extra-class"><pre class="language-text"><code>└── src
+    ├── client.rs
+    ├── lib.rs
+    └── network
+        ├── mod.rs
+        └── server.rs
+</code></pre></div><p>那么，当我们想要提取 <code>network::server</code> 模块时，为什么也必须将 <em>src/network.rs</em> 文件改名成 <em>src/network/mod.rs</em> 文件呢，还有为什么要将 <code>network::server</code> 的代码放入 <em>network</em> 目录的 <em>src/network/server.rs</em> 文件中呢？原因是如果 <em>server.rs</em> 文件在 <em>src</em> 目录中那么 Rust 就不能知道 <code>server</code> 应当是 <code>network</code> 的子模块。为了阐明这里 Rust 的行为，让我们考虑一下有着如下层级的另一个例子，其所有定义都位于 <em>src/lib.rs</em> 中：</p> <div class="language-text extra-class"><pre class="language-text"><code>communicator
+ ├── client
+ └── network
+     └── client
+</code></pre></div><p>在这个例子中，仍然有这三个模块，<code>client</code>、<code>network</code> 和 <code>network::client</code>。如果按照与上面最开始将模块提取到文件中相同的步骤来操作，对于 <code>client</code> 模块会创建 <em>src/client.rs</em>。对于 <code>network</code> 模块，会创建 <em>src/network.rs</em>。但是接下来不能将 <code>network::client</code> 模块提取到 <em>src/client.rs</em> 文件中，因为它已经存在了，对应顶层的 <code>client</code> 模块！如果将 <code>client</code> 和 <code>network::client</code> 的代码都放入 <em>src/client.rs</em> 文件，Rust 将无从可知这些代码是属于 <code>client</code> 还是 <code>network::client</code> 的。</p> <p>因此，为了将 <code>network</code> 模块的子模块 <code>network::client</code> 提取到一个文件中，需要为 <code>network</code> 模块新建一个目录替代 <em>src/network.rs</em> 文件。接着 <code>network</code> 模块的代码将进入 <em>src/network/mod.rs</em> 文件，而子模块 <code>network::client</code> 将拥有其自己的文件 <em>src/network/client.rs</em>。现在顶层的 <em>src/client.rs</em> 中的代码毫无疑问的都属于 <code>client</code> 模块。</p> <h3 id="模块文件系统的规则"><a href="#模块文件系统的规则" aria-hidden="true" class="header-anchor">#</a> 模块文件系统的规则</h3> <p>让我们总结一下与文件有关的模块规则：</p> <ul><li>如果一个叫做 <code>foo</code> 的模块没有子模块，应该将 <code>foo</code> 的声明放入叫做 <em>foo.rs</em> 的文件中。</li> <li>如果一个叫做 <code>foo</code> 的模块有子模块，应该将 <code>foo</code> 的声明放入叫做 <em>foo/mod.rs</em> 的文件中。</li></ul> <p>这些规则适用于递归（嵌套），所以如果 <code>foo</code> 模块有一个子模块 <code>bar</code> 而 <code>bar</code> 没有子模块，则 <em>src</em> 目录中应该有如下文件：</p> <div class="language-text extra-class"><pre class="language-text"><code>└── foo
+    ├── bar.rs (contains the declarations in `foo::bar`)
+    └── mod.rs (contains the declarations in `foo`, including `mod bar`)
+</code></pre></div><p>模块自身则应该使用 <code>mod</code> 关键字定义于父模块的文件中。</p> <p>接下来，我们讨论一下 <code>pub</code> 关键字，并除掉那些警告！</p></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/assets/js/38.19837e80.js" defer></script><script src="/assets/js/app.b56e4aff.js" defer></script>
+  </body>
+</html>

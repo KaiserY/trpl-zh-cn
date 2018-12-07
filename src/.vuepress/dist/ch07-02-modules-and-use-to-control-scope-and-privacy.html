@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>模块系统用来控制作用域和私有性</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.8614bbde.css" as="style"><link rel="preload" href="/assets/js/app.b56e4aff.js" as="script"><link rel="preload" href="/assets/js/41.184751dc.js" as="script"><link rel="prefetch" href="/assets/js/10.d41a3b84.js"><link rel="prefetch" href="/assets/js/100.22ca6861.js"><link rel="prefetch" href="/assets/js/101.80606dd4.js"><link rel="prefetch" href="/assets/js/102.75bf264b.js"><link rel="prefetch" href="/assets/js/103.7615fac4.js"><link rel="prefetch" href="/assets/js/104.a030e309.js"><link rel="prefetch" href="/assets/js/105.ceb5b0f7.js"><link rel="prefetch" href="/assets/js/106.53b25747.js"><link rel="prefetch" href="/assets/js/107.a6f25383.js"><link rel="prefetch" href="/assets/js/108.524846e6.js"><link rel="prefetch" href="/assets/js/109.5b3e8cc8.js"><link rel="prefetch" href="/assets/js/11.7f9bf643.js"><link rel="prefetch" href="/assets/js/110.a106958d.js"><link rel="prefetch" href="/assets/js/111.b1600e65.js"><link rel="prefetch" href="/assets/js/112.81bf40f0.js"><link rel="prefetch" href="/assets/js/12.c7e4d9a8.js"><link rel="prefetch" href="/assets/js/13.235bc06a.js"><link rel="prefetch" href="/assets/js/14.8b8a21b7.js"><link rel="prefetch" href="/assets/js/15.83a607fc.js"><link rel="prefetch" href="/assets/js/16.2bf746d6.js"><link rel="prefetch" href="/assets/js/17.36a5d5f3.js"><link rel="prefetch" href="/assets/js/18.82e00fba.js"><link rel="prefetch" href="/assets/js/19.1c2116c8.js"><link rel="prefetch" href="/assets/js/2.3505b190.js"><link rel="prefetch" href="/assets/js/20.1f4e3d0f.js"><link rel="prefetch" href="/assets/js/21.80dca6df.js"><link rel="prefetch" href="/assets/js/22.24977f4c.js"><link rel="prefetch" href="/assets/js/23.867b53ea.js"><link rel="prefetch" href="/assets/js/24.d59d9203.js"><link rel="prefetch" href="/assets/js/25.fae2b839.js"><link rel="prefetch" href="/assets/js/26.ba769edc.js"><link rel="prefetch" href="/assets/js/27.03216770.js"><link rel="prefetch" href="/assets/js/28.82b934bf.js"><link rel="prefetch" href="/assets/js/29.9bbe7e55.js"><link rel="prefetch" href="/assets/js/3.ba62e17c.js"><link rel="prefetch" href="/assets/js/30.ed75778f.js"><link rel="prefetch" href="/assets/js/31.247a3dbb.js"><link rel="prefetch" href="/assets/js/32.b1bb1e43.js"><link rel="prefetch" href="/assets/js/33.3656c740.js"><link rel="prefetch" href="/assets/js/34.03c1b47c.js"><link rel="prefetch" href="/assets/js/35.5af5d342.js"><link rel="prefetch" href="/assets/js/36.572a9496.js"><link rel="prefetch" href="/assets/js/37.319db1b7.js"><link rel="prefetch" href="/assets/js/38.19837e80.js"><link rel="prefetch" href="/assets/js/39.72675c02.js"><link rel="prefetch" href="/assets/js/4.f9a0ae28.js"><link rel="prefetch" href="/assets/js/40.d9f81c69.js"><link rel="prefetch" href="/assets/js/42.9fa6eee5.js"><link rel="prefetch" href="/assets/js/43.b3333fb7.js"><link rel="prefetch" href="/assets/js/44.97c13303.js"><link rel="prefetch" href="/assets/js/45.8afb63d1.js"><link rel="prefetch" href="/assets/js/46.ac497cb6.js"><link rel="prefetch" href="/assets/js/47.dc1178aa.js"><link rel="prefetch" href="/assets/js/48.50b8e29c.js"><link rel="prefetch" href="/assets/js/49.385dc110.js"><link rel="prefetch" href="/assets/js/5.0204093a.js"><link rel="prefetch" href="/assets/js/50.cadce2ee.js"><link rel="prefetch" href="/assets/js/51.d4e57e23.js"><link rel="prefetch" href="/assets/js/52.323a010e.js"><link rel="prefetch" href="/assets/js/53.377c0582.js"><link rel="prefetch" href="/assets/js/54.8d06b2c9.js"><link rel="prefetch" href="/assets/js/55.f82d7ef0.js"><link rel="prefetch" href="/assets/js/56.c9db2b25.js"><link rel="prefetch" href="/assets/js/57.bc11287b.js"><link rel="prefetch" href="/assets/js/58.a1a44552.js"><link rel="prefetch" href="/assets/js/59.4afc94b7.js"><link rel="prefetch" href="/assets/js/6.4774d695.js"><link rel="prefetch" href="/assets/js/60.867aed26.js"><link rel="prefetch" href="/assets/js/61.74327fa7.js"><link rel="prefetch" href="/assets/js/62.177c0b30.js"><link rel="prefetch" href="/assets/js/63.3e0d51da.js"><link rel="prefetch" href="/assets/js/64.e8778b11.js"><link rel="prefetch" href="/assets/js/65.b0dde85a.js"><link rel="prefetch" href="/assets/js/66.3bba1132.js"><link rel="prefetch" href="/assets/js/67.fb2ec2e1.js"><link rel="prefetch" href="/assets/js/68.d8ef845b.js"><link rel="prefetch" href="/assets/js/69.5b80f65b.js"><link rel="prefetch" href="/assets/js/7.010146f6.js"><link rel="prefetch" href="/assets/js/70.e265a8a0.js"><link rel="prefetch" href="/assets/js/71.08e24461.js"><link rel="prefetch" href="/assets/js/72.9f1ed203.js"><link rel="prefetch" href="/assets/js/73.cf073a90.js"><link rel="prefetch" href="/assets/js/74.e5e6cb7a.js"><link rel="prefetch" href="/assets/js/75.12d311a9.js"><link rel="prefetch" href="/assets/js/76.27ceea65.js"><link rel="prefetch" href="/assets/js/77.2d04e2fc.js"><link rel="prefetch" href="/assets/js/78.cd7b5394.js"><link rel="prefetch" href="/assets/js/79.397902f7.js"><link rel="prefetch" href="/assets/js/8.de3fc0db.js"><link rel="prefetch" href="/assets/js/80.8f355347.js"><link rel="prefetch" href="/assets/js/81.9fcee337.js"><link rel="prefetch" href="/assets/js/82.67857b15.js"><link rel="prefetch" href="/assets/js/83.8638b011.js"><link rel="prefetch" href="/assets/js/84.77ee6a86.js"><link rel="prefetch" href="/assets/js/85.724ec824.js"><link rel="prefetch" href="/assets/js/86.e0caf86b.js"><link rel="prefetch" href="/assets/js/87.32cc9faa.js"><link rel="prefetch" href="/assets/js/88.8db036d0.js"><link rel="prefetch" href="/assets/js/89.63be6804.js"><link rel="prefetch" href="/assets/js/9.a240a747.js"><link rel="prefetch" href="/assets/js/90.23557c83.js"><link rel="prefetch" href="/assets/js/91.0fc26ad3.js"><link rel="prefetch" href="/assets/js/92.45cce200.js"><link rel="prefetch" href="/assets/js/93.2a7d9b35.js"><link rel="prefetch" href="/assets/js/94.25f7b020.js"><link rel="prefetch" href="/assets/js/95.3d28b93b.js"><link rel="prefetch" href="/assets/js/96.fb907808.js"><link rel="prefetch" href="/assets/js/97.e4875071.js"><link rel="prefetch" href="/assets/js/98.2859c908.js"><link rel="prefetch" href="/assets/js/99.ac5b7b90.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8614bbde.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <!----> </div> <div class="page"> <div class="content"><h2 id="模块系统用来控制作用域和私有性"><a href="#模块系统用来控制作用域和私有性" aria-hidden="true" class="header-anchor">#</a> 模块系统用来控制作用域和私有性</h2> <blockquote><p><a href="https://github.com/rust-lang/book/blob/master/src/ch07-02-modules-and-use-to-control-scope-and-privacy.md" target="_blank" rel="noopener noreferrer">ch07-01-mod-and-the-filesystem.md<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> <br>
+commit 820ac357f6cf0e866e5a8e7a9c57dd3e17e9f8ca</p></blockquote> <p>Rust 的此部分功能通常被引用为 “模块系统”（“the module system”），不过其包括了一些除模块之外的功能。在本部分我们会讨论：</p> <ul><li>模块，一个组织代码和控制路径私有性的方式</li> <li>路径，一个命名项（item）的方式</li> <li><code>use</code> 关键字用来将路径引入作用域</li> <li><code>pub</code> 关键字使项变为公有</li> <li><code>as</code> 关键字用于将项引入作用域时进行重命名</li> <li>使用外部包</li> <li>嵌套路径用来消除大量的 <code>use</code> 语句</li> <li>使用 glob 运算符将模块的所有内容引入作用域</li> <li>如何将不同模块分割到单独的文件中</li></ul> <p>首先讲讲模块。模块允许我们将代码组织起来。示例 7-1 是一个例子，这些代码定义了名为 <code>sound</code> 的模块，其包含名为 <code>guitar</code> 的函数。</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">mod</span> sound <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">guitar</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 函数体</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-1: 包含 <code>guitar</code> 函数和 <code>main</code> 函数的 <code>sound</code> 模块</span></p> <p>这里定义了两个函数，<code>guitar</code> 和 <code>main</code>。<code>guitar</code> 函数定义于 <code>mod</code> 块中。这个块定义了 <code>sound</code> 模块。</p> <p>为了将代码组织到模块层次体系中，可以将模块嵌套进其他模块，如示例 7-2 所示：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">mod</span> sound <span class="token punctuation">{</span>
+    <span class="token keyword">mod</span> instrument <span class="token punctuation">{</span>
+        <span class="token keyword">mod</span> woodwind <span class="token punctuation">{</span>
+            <span class="token keyword">fn</span> <span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment">// 函数体</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">mod</span> voice <span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-2: 模块中的模块</span></p> <p>在这个例子中，我们像示例 7-1 一样定义了 <code>sound</code> 模块。接着在 <code>sound</code> 模块中定义了 <code>instrument</code> 和 <code>voice</code> 模块。<code>instrument</code> 模块中定义了另一个模块 <code>woodwind</code>，这个模块包含一个函数 <code>clarinet</code>。</p> <p>在 “包和 crate 用来创建库和二进制项目” 部分提到 <em>src/main.rs</em> 和 <em>src/lib.rs</em> 被称为 <strong>crate 根</strong>。他们被称为 crate 根是因为这两个文件在 crate 模块树的根组成了名为 <code>crate</code> 模块。所以示例 7-2 中，有如示例 7-3 所示的模块树：</p> <div class="language-text extra-class"><pre class="language-text"><code>crate
+ └── sound
+     └── instrument
+        └── woodwind
+     └── voice
+</code></pre></div><p><span class="caption">示例 7-3: 示例 7-2 中代码的模块树</span></p> <p>这个树展示了模块如何嵌套在其他模块中（比如 <code>woodwind</code> 嵌套在 <code>instrument</code> 中）以及模块如何作为其他模块的子模块的（<code>instrument</code> 和 <code>voice</code> 都定义在 <code>sound</code> 中）。整个模块树都位于名为 <code>crate</code> 这个隐式模块的根下。</p> <p>这个树可能会令你想起电脑上文件系统的目录树；这是一个非常恰当的比喻！就像文件系统的目录，将代码放入任意模块也将创建对应的组织结构体。另一个相似点是为了引用文件系统或模块树中的项，需要使用 <strong>路径</strong>（<em>path</em>）。</p> <h3 id="路径用来引用模块树中的项"><a href="#路径用来引用模块树中的项" aria-hidden="true" class="header-anchor">#</a> 路径用来引用模块树中的项</h3> <p>如果想要调用函数，需要知道其 <strong>路径</strong>。“路径” 是 “名称”（“name”） 的同义词，不过它用于文件系统语境。另外，函数、结构体和其他项可能会有多个指向相同项的路径，所以 “名称” 这个概念不太准确。</p> <p><strong>路径</strong> 可以有两种形式：</p> <ul><li><strong>绝对路径</strong>（<em>absolute path</em>）从 crate 根开始，以 crate 名或者字面值 <code>crate</code> 开头。</li> <li><strong>相对路径</strong>（<em>relative path</em>）从当前模块开始，以 <code>self</code>、<code>super</code> 或当前模块的标识符开头。</li></ul> <p>绝对路径和相对路径都后跟一个或多个由双分号（<code>::</code>）分割的标识符。</p> <p>如何在示例 7-2 的 <code>main</code> 函数中调用 <code>clarinet</code> 函数呢？也就是说，<code>clarinet</code> 函数的路径是什么呢？在示例 7-4 中稍微简化了代码，移除了一些模块，并展示了两种在 <code>main</code> 中调用 <code>clarinet</code> 函数的方式。这个例子还不能编译，我们会解释为什么。</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,ignore,does_not_compile extra-class"><pre class="language-text"><code>mod sound {
+    mod instrument {
+        fn clarinet() {
+            // 函数体
+        }
+    }
+}
+
+fn main() {
+    // 绝对路径
+    crate::sound::instrument::clarinet();
+
+    // Relative path
+    sound::instrument::clarinet();
+}
+</code></pre></div><p><span class="caption">示例 7-4: 在简化的模块树中，分别使用绝对路径和相对路径在 <code>main</code> 中调用 <code>clarinet</code> 函数</span></p> <p>第一种从 <code>main</code> 函数中调用 <code>clarinet</code> 函数的方式使用绝对路径。因为 <code>clarinet</code> 与 <code>main</code> 定义于同一 crate 中，我们使用 <code>crate</code> 关键字来开始绝对路径。接着包含每一个模块直到 <code>clarinet</code>。这类似于指定 <code>/sound/instrument/clarinet</code> 来运行电脑上这个位置的程序；使用 <code>crate</code> 从 crate 根开始就类似于在 shell 中使用 <code>/</code> 从文件系统根开始。</p> <p>第二种从 <code>main</code> 函数中调用 <code>clarinet</code> 函数的方式使用相对路径。该路径以 <code>sound</code> 开始，它是定义于与 <code>main</code> 函数相同模块树级别的模块。这类似于指定 <code>sound/instrument/clarinet</code> 来运行电脑上这个位置的程序；以名称开头意味着路径是相对的。</p> <p>示例 7-4 提到了它并不能编译，让我们尝试编译并看看为什么不行！示例 7-5 展示了错误。</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo build
+   Compiling sampleproject v0.1.0 (file:///projects/sampleproject)
+error[E0603]: module `instrument` is private
+  --&gt; src/main.rs:11:19
+   |
+11 |     crate::sound::instrument::clarinet();
+   |                   ^^^^^^^^^^
+
+error[E0603]: module `instrument` is private
+  --&gt; src/main.rs:14:12
+   |
+14 |     sound::instrument::clarinet();
+   |            ^^^^^^^^^^
+</code></pre></div><p><span class="caption">示例 7-5: 构建示例 7-4 出现的编译器错误</span></p> <p>错误信息说 <code>instrument</code> 模块是私有的。可以看到 <code>instrument</code> 模块和 <code>clarinet</code> 函数的路径是正确的，不过 Rust 不让我们使用，因为他们是私有的。现在是学习 <code>pub</code> 关键字的时候了！</p> <h3 id="模块作为私有性的边界"><a href="#模块作为私有性的边界" aria-hidden="true" class="header-anchor">#</a> 模块作为私有性的边界</h3> <p>之前我们讨论到模块的语法和组织代码的用途。Rust 采用模块还有另一个原因：模块是 Rust 中的 <strong>私有性边界</strong>（<em>privacy boundary</em>）。如果你希望函数或结构体是私有的，将其放入模块。私有性规则有如下：</p> <ul><li>所有项（函数、方法、结构体、枚举、模块和常量）默认是私有的。</li> <li>可以使用 <code>pub</code> 关键字使项变为共有。</li> <li>不允许使用定义于当前模块的子模块中的私有代码。</li> <li>允许使用任何定义于父模块或当前模块中的代码。</li></ul> <p>换句话说，对于没有 <code>pub</code> 关键字的项，当你从当前模块向 “下” 看时是私有的，不过当你向 “上” 看时是公有的。再一次想象一下文件系统：如果你没有某个目录的权限，则无法从父目录中查看其内容。如果有该目录的权限，则可以查看其中的目录和任何父目录。</p> <h3 id="使用-pub-关键字使项变为公有"><a href="#使用-pub-关键字使项变为公有" aria-hidden="true" class="header-anchor">#</a> 使用 <code>pub</code> 关键字使项变为公有</h3> <p>示例 7-5 中的错误说 <code>instrument</code> 模块使私有的。让我们使用 <code>pub</code> 关键字标记 <code>instrument</code> 模块使其可以在 <code>main</code> 函数中使用。这些改变如示例 7-6 所示，它仍然不能编译，不过会产生一个不同的错误：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,ignore,does_not_compile extra-class"><pre class="language-text"><code>mod sound {
+    pub mod instrument {
+        fn clarinet() {
+            // 函数体
+        }
+    }
+}
+
+fn main() {
+    // Absolute path
+    crate::sound::instrument::clarinet();
+
+    // Relative path
+    sound::instrument::clarinet();
+}
+</code></pre></div><p><span class="caption">示例 7-6: 将 <code>instrument</code> 模块声明为 <code>pub</code> 以便可以在 <code>main</code> 中使用</span></p> <p>在 <code>mod instrument</code> 之前增加 <code>pub</code> 关键字使得模块变为公有。通过这个改变如果允许访问 <code>sound</code> 的话，我们就可以访问 <code>instrument</code>。<code>instrument</code> 的内容仍然是私有的；使得模块公有并不使其内容也是公有的。模块上的 <code>pub</code> 关键字允许其父模块引用它。</p> <p>不过示例 7-6 中的代码仍然产生错误，如示例 7-7 所示：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo build
+   Compiling sampleproject v0.1.0 (file:///projects/sampleproject)
+error[E0603]: function `clarinet` is private
+  --&gt; src/main.rs:11:31
+   |
+11 |     crate::sound::instrument::clarinet();
+   |                               ^^^^^^^^
+
+error[E0603]: function `clarinet` is private
+  --&gt; src/main.rs:14:24
+   |
+14 |     sound::instrument::clarinet();
+   |                        ^^^^^^^^
+</code></pre></div><p><span class="caption">示例 7-7: 构建示例 7-6 时产生的编译器错误</span></p> <p>现在的错误表明 <code>clarinet</code> 函数是私有的。私有性规则适用于结构体、枚举、函数和方法以及模块。</p> <p>在 <code>clarinet</code> 函数前增加 <code>pub</code> 关键字使其变为公有，如示例 7-8 所示：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">mod</span> sound <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">mod</span> instrument <span class="token punctuation">{</span>
+        <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// 函数体</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 绝对路径</span>
+    <span class="token keyword">crate</span><span class="token punctuation">:</span><span class="token punctuation">:</span>sound<span class="token punctuation">:</span><span class="token punctuation">:</span>instrument<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 相对路径</span>
+    sound<span class="token punctuation">:</span><span class="token punctuation">:</span>instrument<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-8: 在 <code>mod instrument</code> 和 <code>fn clarinet</code> 之前都增加 <code>pub</code> 关键字使我们可以在 <code>main</code> 中调用此函数</span></p> <p>现在可以编译了！让我们看看绝对路径和相对路径再次检查为什么增加 <code>pub</code> 关键字使得我们可以在 <code>main</code> 中调用这些路径。</p> <p>在绝对路径的情况下，我们从 <code>crate</code>，也就是 crate 根开始。从这开始有 <code>sound</code>，这是一个定义于 crate 根中的模块。<code>sound</code> 模块不是公有的，不过因为 <code>main</code> 函数与 <code>sound</code> 定义于同一模块中，可以从 <code>main</code> 中引用 <code>sound</code>。接下来是 <code>instrument</code>，这个模块标记为 <code>pub</code>。我们可以访问 <code>instrument</code> 的父模块，所以可以访问 <code>instrument</code>。最后，<code>clarinet</code> 函数被标记为 <code>pub</code> 所以可以访问其父模块，所以这个函数调用是有效的！</p> <p>在相对路径的情况下，其逻辑与绝对路径相同，除了第一步。不同于从 crate 根开始，路径从 <code>sound</code> 开始。<code>sound</code> 模块与 <code>main</code> 定义于同一模块，所以从 <code>main</code> 所在模块开始定义的路径是有效的。接下来因为 <code>instrument</code> 和 <code>clarinet</code> 被标记为 <code>pub</code>，路径其余的部分也是有效的，因此函数调用也是有效的！</p> <h3 id="使用-super-开始相对路径"><a href="#使用-super-开始相对路径" aria-hidden="true" class="header-anchor">#</a> 使用 <code>super</code> 开始相对路径</h3> <p>也可以使用 <code>super</code> 开头来构建相对路径。这么做类似于文件系统中以 <code>..</code> 开头：该路径从 <strong>父</strong> 模块开始而不是当前模块。这在例如示例 7-9 这样的情况下有用处，在这里 <code>clarinet</code> 函数通过指定以 <code>super</code> 开头的路径调用 <code>breathe_in</code> 函数：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+#
+<span class="token keyword">mod</span> instrument <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">breathe_in</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">fn</span> <span class="token function">breathe_in</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 函数体</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-9: 使用以 <code>super</code> 开头的路径从父目录开始调用函数</span></p> <p><code>clarinet</code> 函数位于 <code>instrument</code> 模块中，所以可以使用 <code>super</code> 进入 <code>instrument</code> 的父模块，也就是根 <code>crate</code>。从这里可以找到 <code>breathe_in</code>。成功！</p> <p>你可能想要使用 <code>super</code> 开头的相对路而不是以 <code>crate</code> 开头的绝对路径的原因是  <code>super</code> 可能会使修改有着不同模块层级结构的代码变得更容易，如果定义项和调用项的代码被一同移动的话。例如，如果我们决定将 <code>instrument</code> 模块和 <code>breathe_in</code> 函数放入 <code>sound</code> 模块中，这时我们只需增加 <code>sound</code> 模块即可，如示例 7-10 所示。</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">mod</span> sound <span class="token punctuation">{</span>
+    <span class="token keyword">mod</span> instrument <span class="token punctuation">{</span>
+        <span class="token keyword">fn</span> <span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">super</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">breathe_in</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">fn</span> <span class="token function">breathe_in</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Function body code goes here</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-10: 增加一个名为 <code>sound</code> 的父模块并不影响相对路径 <code>super::breathe_in</code></span></p> <p>示例 7-10 在 <code>clarinet</code> 函数中调用 <code>super::breathe_in</code> 将如示例 7-9 一样继续有效，无需更新路径。如果在 <code>clarinet</code> 函数不使用 <code>super::breathe_in</code> 而是使用 <code>crate::breathe_in</code> 的话，当增加父模块 <code>sound</code> 后，则需要更新 <code>clarinet</code> 函数使用 <code>crate::sound::breathe_in</code> 路径。使用相对路径可能意味着重新布局模块时需要更少的必要修改。</p> <h3 id="对结构体和枚举使用-pub"><a href="#对结构体和枚举使用-pub" aria-hidden="true" class="header-anchor">#</a> 对结构体和枚举使用 <code>pub</code></h3> <p>可以以模块与函数相同的方式来设计公有的结构体和枚举，不过有一些额外的细节。</p> <p>如果在结构体定义中使用 <code>pub</code>，可以使结构体公有。然而结构体的字段仍是私有的。可以在每一个字段的基准上选择其是否公有。在示例 7-11 中定义了一个公有结构体 <code>plant::Vegetable</code>，其包含公有的 <code>name</code> 字段和私有的 <code>id</code> 字段。</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">mod</span> plant <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">struct</span> Vegetable <span class="token punctuation">{</span>
+        <span class="token keyword">pub</span> name<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+        id<span class="token punctuation">:</span> i32<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">impl</span> Vegetable <span class="token punctuation">{</span>
+        <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">new</span><span class="token punctuation">(</span>name<span class="token punctuation">:</span> <span class="token operator">&amp;</span>str<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Vegetable <span class="token punctuation">{</span>
+            Vegetable <span class="token punctuation">{</span>
+                name<span class="token punctuation">:</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">,</span>
+                id<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> v <span class="token operator">=</span> plant<span class="token punctuation">:</span><span class="token punctuation">:</span>Vegetable<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token string">&quot;squash&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    v<span class="token punctuation">.</span>name <span class="token operator">=</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;butternut squash&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;{} are delicious&quot;</span><span class="token punctuation">,</span> v<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 如果将如下行取消注释代码将无法编译:</span>
+    <span class="token comment">// println!(&quot;The ID is {}&quot;, v.id);</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-11: 结构体带有公有和私有的字段</span></p> <p>因为 <code>plant::Vegetable</code> 结构体的 <code>name</code> 字段使公有的，在 <code>main</code> 中可以使用点号读写 <code>name</code> 字段。不允许在 <code>main</code> 中使用 <code>id</code> 字段因为其使私有的。尝试取消注释的行来打印 <code>id</code> 字段的值来看看会出现什么错误！另外注意因为 <code>plant::Vegetable</code> 有私有字段，需要提供一个公有的关联函数来构建 <code>Vegetable</code> 的实例（这里使用了传统的名称 <code>new</code>）。如果 <code>Vegetable</code> 没有提供这么一个函数，我们就不能在 <code>main</code> 中创建 <code>Vegetable</code> 的实例，因为在 <code>main</code> 中不允许设置私有字段 <code>id</code> 的值。</p> <p>相反，如果有一个公有枚举，其所有成员都是公有。只需在 <code>enum</code> 关键词前加上 <code>pub</code>，如示例 7-12 所示。</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">mod</span> menu <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">enum</span> Appetizer <span class="token punctuation">{</span>
+        Soup<span class="token punctuation">,</span>
+        Salad<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> order1 <span class="token operator">=</span> menu<span class="token punctuation">:</span><span class="token punctuation">:</span>Appetizer<span class="token punctuation">:</span><span class="token punctuation">:</span>Soup<span class="token punctuation">;</span>
+    <span class="token keyword">let</span> order2 <span class="token operator">=</span> menu<span class="token punctuation">:</span><span class="token punctuation">:</span>Appetizer<span class="token punctuation">:</span><span class="token punctuation">:</span>Salad<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-12: 将枚举设计为公有会使其所有成员公有</span></p> <p>因为 <code>Appetizer</code> 枚举是公有的，可以在 <code>main</code> 中使用 <code>Soup</code> and <code>Salad</code> 成员。</p> <p>还有一种使用 <code>pub</code> 的场景我们还没有涉及到，而这是我们最后要讲的模块功能：<code>use</code> 关键字。我们先单独介绍 <code>use</code>，然后展示如何结合使用 <code>pub</code> 和 <code>use</code>。</p> <h3 id="使用-use-关键字将名称引入作用域"><a href="#使用-use-关键字将名称引入作用域" aria-hidden="true" class="header-anchor">#</a> 使用 <code>use</code> 关键字将名称引入作用域</h3> <p>你可能考虑过本章很多的函数调用的路径是冗长和重复的。例如示例 7-8 中，当我们选择 <code>clarinet</code> 函数的绝对或相对路径时，每次想要调用 <code>clarinet</code> 时都不得不也指定 <code>sound</code> 和 <code>instrument</code>。幸运的是，有一次性将路径引入作用域然后就像调用本地项那样的方法：使用 <code>use</code> 关键字。在示例 7-13 中将 <code>crate::sound::instrument</code> 模块引入了 <code>main</code> 函数的作用域，以便只需指定 <code>instrument::clarinet</code> 来调用 <code>clarinet</code> 函数。</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">mod</span> sound <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">mod</span> instrument <span class="token punctuation">{</span>
+        <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// 函数体</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">:</span><span class="token punctuation">:</span>sound<span class="token punctuation">:</span><span class="token punctuation">:</span>instrument<span class="token punctuation">;</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    instrument<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    instrument<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    instrument<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-13: 使用 <code>use</code> 将模块引入作用域并使用绝对路径来缩短在模块中调用项所必须的路径</span></p> <p>当指定 <code>use</code> 后以 <code>self</code> 开头的相对路径在未来可能不是必须的；这是一个开发者正在尽力消除的语言中的不一致。</p> <p>如果调用项目的代码移动到模块树的不同位置但是定义项目的代码却没有，那么选择使用 <code>use</code> 指定绝对路径可以使更新更轻松，这与示例 7-10 中同时移动的情况相对。例如，如果我们决定采用示例 7-13 的代码，将 <code>main</code> 函数的行为提取到函数 <code>clarinet_trio</code> 中，并将该函数移动到模块 <code>performance_group</code> 中，这时 <code>use</code> 所指定的路径无需变化，如示例 7-15 所示。</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">mod</span> sound <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">mod</span> instrument <span class="token punctuation">{</span>
+        <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// 函数体</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">mod</span> performance_group <span class="token punctuation">{</span>
+    <span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">:</span><span class="token punctuation">:</span>sound<span class="token punctuation">:</span><span class="token punctuation">:</span>instrument<span class="token punctuation">;</span>
+
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">clarinet_trio</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        instrument<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        instrument<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        instrument<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    performance_group<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clarinet_trio</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-15: 移动调用项的代码时绝对路径无需移动</span></p> <p>相反，如果对示例 7-14 中指定了相对路径的代码做同样的修改，则需要将 <code>use self::sound::instrument</code> 变为 <code>use super::sound::instrument</code>。如果你不确定将来模块树会如何变化，那么选择采用相对或绝对路径是否会减少修改可能全靠猜测，不过本书的作者倾向于通过 <code>crate</code> 指定绝对路径，因为定义和调用项的代码更有可能相互独立的在模块树中移动，而不是像示例 7-10 那样一同移动。</p> <h3 id="use-函数路径使用习惯-vs-其他项"><a href="#use-函数路径使用习惯-vs-其他项" aria-hidden="true" class="header-anchor">#</a> <code>use</code> 函数路径使用习惯 VS 其他项</h3> <p>示例 7-13 中，你可能会好奇为什么指定 <code>use crate::sound::instrument</code> 接着在 <code>main</code> 中调用 <code>instrument::clarinet</code>，而不是如示例 7-16 所示的有相同行为的代码：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">mod</span> sound <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">mod</span> instrument <span class="token punctuation">{</span>
+        <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// 函数体</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">:</span><span class="token punctuation">:</span>sound<span class="token punctuation">:</span><span class="token punctuation">:</span>instrument<span class="token punctuation">:</span><span class="token punctuation">:</span>clarinet<span class="token punctuation">;</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-16: 通过 <code>use</code> 将 <code>clarinet</code> 函数引入作用域，这是不推荐的</span></p> <p>对于函数来说，通过 <code>use</code> 指定函数的父模块接着指定父模块来调用方法被认为是习惯用法。这么做而不是像示例 7-16 那样通过 <code>use</code> 指定函数的路径，清楚的表明了函数不是本地定义的，同时仍最小化了指定全路径时的重复。</p> <p>对于结构体、枚举和其它项，通过 <code>use</code> 指定项的全路径是习惯用法。例如，示例 7-17 展示了将标准库中 <code>HashMap</code> 结构体引入作用域的习惯用法。</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>collections<span class="token punctuation">:</span><span class="token punctuation">:</span>HashMap<span class="token punctuation">;</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> map <span class="token operator">=</span> HashMap<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    map<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-17: 将 <code>HashMap</code> 引入作用域的习惯用法</span></p> <p>相反，示例 7-18 中的代码将 <code>HashMap</code> 的父模块引入作用域不被认为是习惯用法。这个习惯并没有很强制的理由；这是慢慢形成的习惯同时人们习惯于这么读写。</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>collections<span class="token punctuation">;</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> map <span class="token operator">=</span> collections<span class="token punctuation">:</span><span class="token punctuation">:</span>HashMap<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    map<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-18: 将 <code>HashMap</code> 引入作用域的非习惯方法</span></p> <p>这个习惯的一个例外是如果 <code>use</code> 语句会将两个同名的项引入作用域时，这是不允许的。示例 7-19 展示了如何将两个不同父模块的 <code>Result</code> 类型引入作用域并引用它们。</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>fmt<span class="token punctuation">;</span>
+<span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>io<span class="token punctuation">;</span>
+
+<span class="token keyword">fn</span> <span class="token function">function1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> fmt<span class="token punctuation">:</span><span class="token punctuation">:</span>Result <span class="token punctuation">{</span>
+#     <span class="token function">Ok</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">fn</span> <span class="token function">function2</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> io<span class="token punctuation">:</span><span class="token punctuation">:</span>Result<span class="token operator">&lt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+#     <span class="token function">Ok</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-19: 将两个同名类型引入作用域必须使用父模块</span></p> <p>因为如果我们指定 <code>use std::fmt::Result</code> 和 <code>use std::io::Result</code>，则作用域中会有两个 <code>Result</code> 类型，Rust 无法知道我们想用哪个 <code>Result</code>。尝试这么做并看看编译器错误！</p> <h3 id="通过-as-关键字重命名引入作用域的类型"><a href="#通过-as-关键字重命名引入作用域的类型" aria-hidden="true" class="header-anchor">#</a> 通过 <code>as</code> 关键字重命名引入作用域的类型</h3> <p>将两个同名类型引入同一作用域这个问题还有另一个解决办法：可以通过在 <code>use</code> 后加上 <code>as</code> 和一个新名称来为此类型指定一个新的本地名称。示例 7-20 展示了另一个编写示例 7-19 中代码的方法，通过 <code>as</code> 重命名了其中一个 <code>Result</code> 类型。</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>fmt<span class="token punctuation">:</span><span class="token punctuation">:</span>Result<span class="token punctuation">;</span>
+<span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>io<span class="token punctuation">:</span><span class="token punctuation">:</span>Result <span class="token keyword">as</span> IoResult<span class="token punctuation">;</span>
+
+<span class="token keyword">fn</span> <span class="token function">function1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Result <span class="token punctuation">{</span>
+#     <span class="token function">Ok</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">fn</span> <span class="token function">function2</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> IoResult<span class="token operator">&lt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+#     <span class="token function">Ok</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-20: 通过 <code>as</code> 关键字重命名引入作用域的类型</span></p> <p>在第二个 <code>use</code> 语句中，我们选择 <code>IoResult</code> 作为 <code>std::io::Result</code> 的新名称，它与从 <code>std::fmt</code> 引入作用域的 <code>Result</code> 并不冲突。这样做也被认为是惯用的；示例 7-19 还是示例 7-20 全看你的选择。</p> <h3 id="通过-pub-use-重导出名称"><a href="#通过-pub-use-重导出名称" aria-hidden="true" class="header-anchor">#</a> 通过 <code>pub use</code> 重导出名称</h3> <p>当使用 <code>use</code> 关键字将名称导入作用域时，在新作用域中可用的名称是私有的。如果希望调用你编写的代码的代码能够像你一样在其自己的作用域内引用这些类型，可以结合 <code>pub</code> 和 <code>use</code>。这个技术被称为 “重导出”（<em>re-exporting</em>），因为这样做将项引入作用域并同时使其可供其他代码引入自己的作用域。</p> <p>例如，示例 7-21 展示了示例 7-15 中的代码将 <code>performance_group</code> 的 <code>use</code> 变为 <code>pub use</code> 的版本。</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">mod</span> sound <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">mod</span> instrument <span class="token punctuation">{</span>
+        <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// 函数体</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">mod</span> performance_group <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">use</span> <span class="token keyword">crate</span><span class="token punctuation">:</span><span class="token punctuation">:</span>sound<span class="token punctuation">:</span><span class="token punctuation">:</span>instrument<span class="token punctuation">;</span>
+
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">clarinet_trio</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        instrument<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        instrument<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        instrument<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    performance_group<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clarinet_trio</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    performance_group<span class="token punctuation">:</span><span class="token punctuation">:</span>instrument<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-21: 通过 <code>pub use</code> 使名称可引入任何代码的作用域中</span></p> <p>通过 <code>pub use</code>，现在 <code>main</code> 函数可以通过新路径 <code>performance_group::instrument::clarinet</code> 来调用 <code>clarinet</code> 函数。如果没有指定 <code>pub use</code>，<code>clarinet_trio</code> 函数可以在其作用域中调用 <code>instrument::clarinet</code> 但 <code>main</code> 则不允许使用这个新路径。</p> <h3 id="使用外部包"><a href="#使用外部包" aria-hidden="true" class="header-anchor">#</a> 使用外部包</h3> <p>在第二章中我们编写了一个猜猜看游戏。那个项目使用了一个外部包，<code>rand</code>，来生成随机数。为了在项目中使用 <code>rand</code>，在 <em>Cargo.toml</em> 中加入了如下行：</p> <p><span class="filename">文件名: Cargo.toml</span></p> <div class="language-toml extra-class"><pre class="language-text"><code>[dependencies]
+rand = &quot;0.5.5&quot;
+</code></pre></div><p>在 <em>Cargo.toml</em> 中加入 <code>rand</code> 依赖告诉了 Cargo 要从 <em>https://crates.io</em> 下载 <code>rand</code> 和其依赖，并使其可在项目代码中使用。</p> <p>接着，为了将 <code>rand</code> 定义引入项目包的作用域，加入一行 <code>use</code>，它以 <code>rand</code> 包名开头并列出了需要引入作用域的项。回忆一下第二章的 “生成一个随机数” 部分，我们曾将 <code>Rng</code> trait 引入作用域并调用了 <code>rand::thread_rng</code> 函数：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>use rand::Rng;
+
+fn main() {
+    let secret_number = rand::thread_rng().gen_range(1, 101);
+}
+</code></pre></div><p><em>https://crates.io</em> 上有很多社区成员发布的包，将其引入你自己的项目涉及到相同的步骤：在 <em>Cargo.toml</em> 列出它们并通过 <code>use</code> 将其中定义的项引入项目包的作用域中。</p> <p>注意标准库（<code>std</code>）对于你的包来说也是外部 crate。因为标准库随 Rust 语言一同分发，无需修改 <em>Cargo.toml</em> 来引入 <code>std</code>，不过需要通过 <code>use</code> 将标准库中定义的项引入项目包的作用域中来引用它们，比如 <code>HashMap</code>：</p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>collections<span class="token punctuation">:</span><span class="token punctuation">:</span>HashMap<span class="token punctuation">;</span>
+</code></pre></div><p>这是一个以标注库 crate 名 <code>std</code> 开头的绝对路径。</p> <h3 id="嵌套路径来消除大量的-use-行"><a href="#嵌套路径来消除大量的-use-行" aria-hidden="true" class="header-anchor">#</a> 嵌套路径来消除大量的 <code>use</code> 行</h3> <p>当需要引入很多定义于相同包或相同模块的项时，为每一项单独列出一行会占用源码很大的空间。例如猜猜看章节示例 2-4 中有两行 <code>use</code> 语句都从 <code>std</code> 引入项到作用域：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>cmp<span class="token punctuation">:</span><span class="token punctuation">:</span>Ordering<span class="token punctuation">;</span>
+<span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>io<span class="token punctuation">;</span>
+<span class="token comment">// ---snip---</span>
+</code></pre></div><p>可以使用嵌套的路径将同样的项在一行中引入而不是两行，这么做需要指定路径的相同部分，接着是两个分号，接着是大括号中的各自不同的路径部分，如示例 7-22 所示。</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token punctuation">{</span>cmp<span class="token punctuation">:</span><span class="token punctuation">:</span>Ordering<span class="token punctuation">,</span> io<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token comment">// ---snip---</span>
+</code></pre></div><p><span class="caption">示例 7-22: 指定嵌套的路径在一行中将多个带有相同前缀的项引入作用域</span></p> <p>在从相同包或模块中引入很多项的程序中，使用嵌套路径显著减少所需的单独 <code>use</code> 语句！</p> <p>也可以剔除掉完全包含在另一个路径中的路径。例如，示例 7-23 中展示了两个 <code>use</code> 语句：一个将 <code>std::io</code> 引入作用域，另一个将 <code>std::io::Write</code> 引入作用域：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>io<span class="token punctuation">;</span>
+<span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>io<span class="token punctuation">:</span><span class="token punctuation">:</span>Write<span class="token punctuation">;</span>
+</code></pre></div><p><span class="caption">示例 7-23: 通过两行 <code>use</code> 语句引入两个路径，其中一个是另一个的子路径</span></p> <p>两个路径的相同部分是 <code>std::io</code>，这正是第一个路径。为了在一行 <code>use</code> 语句中引入这两个路径，可以在嵌套路径中使用 <code>self</code>，如示例 7-24 所示。</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>io<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token punctuation">{</span><span class="token keyword">self</span><span class="token punctuation">,</span> Write<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><p><span class="caption">示例 7-24: 将示例 7-23 中部分重复的路径合并为一个 <code>use</code> 语句</span></p> <p>这将 <code>std::io</code> 和 <code>std::io::Write</code> 同时引入作用域。</p> <h3 id="通过-glob-运算符将所有的公有定义引入作用域"><a href="#通过-glob-运算符将所有的公有定义引入作用域" aria-hidden="true" class="header-anchor">#</a> 通过 glob 运算符将所有的公有定义引入作用域</h3> <p>如果希望将一个路径下 <strong>所有</strong> 公有项引入作用域，可以指定路径后跟 <code>*</code>，glob 运算符：</p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>collections<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token operator">*</span><span class="token punctuation">;</span>
+</code></pre></div><p>这个 <code>use</code> 语句将 <code>std::collections</code> 中定义的所有公有项引入当前作用域。</p> <p>使用 glob 运算符时请多加小心！如此难以推导作用域中有什么名称和它们是在何处定义的。</p> <p>glob 运算符经常用于测试模块 <code>tests</code> 中，这时会将所有内容引入作用域；我们将在第十一章 “如何编写测试” 部分讲解。glob 运算符有时也用于 prelude 模式；查看 <a href="https://doc.rust-lang.org/std/prelude/index.html#other-preludes" target="_blank" rel="noopener noreferrer">标准库中的文档<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> 了解这个模式的更多细节。</p> <h3 id="将模块分割进不同文件"><a href="#将模块分割进不同文件" aria-hidden="true" class="header-anchor">#</a> 将模块分割进不同文件</h3> <p>目前本章所有的例子都在一个文件中定义多个模块。当模块变得更大时，你可能想要将它们的定义移动到一个单独的文件中使代码更容易阅读。</p> <p>例如从示例 7-8 的代码开始，我们可以通过修改 crate 根文件（这里是 <em>src/main.rs</em>）将 <code>sound</code> 模块移动到其自己的文件 <em>src/sound.rs</em> 中，如示例 7-25 所示。</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>mod sound;
+
+fn main() {
+    // 绝对路径
+    crate::sound::instrument::clarinet();
+
+    // 相对路径
+    sound::instrument::clarinet();
+}
+</code></pre></div><p><span class="caption">示例 7-25: 声明 <code>sound</code> 模块，其内容位于 <em>src/sound.rs</em> 文件</span></p> <p>而 <em>src/sound.rs</em> 中会包含 <code>sound</code> 模块的内容，如示例 7-26 所示。</p> <p><span class="filename">文件名: src/sound.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">pub</span> <span class="token keyword">mod</span> instrument <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 函数体</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 7-26: <code>sound</code> 模块中的定义位于 <em>src/sound.rs</em> 中</span></p> <p>在 <code>mod sound</code> 后使用分号而不是代码块告诉 Rust 在另一个与模块同名的文件中加载模块的内容。</p> <p>继续重构我们例子，将 <code>instrument</code> 模块也提取到其自己的文件中，修改 <em>src/sound.rs</em> 只包含 <code>instrument</code> 模块的声明：</p> <p><span class="filename">文件名: src/sound.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">pub</span> <span class="token keyword">mod</span> instrument<span class="token punctuation">;</span>
+</code></pre></div><p>接着创建 <em>src/sound</em> 目录和 <em>src/sound/instrument.rs</em> 文件来包含 <code>instrument</code> 模块的定义：</p> <p><span class="filename">文件名: src/sound/instrument.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">clarinet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 函数体</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>模块树依然保持相同，<code>main</code> 中的函数调用也无需修改继续保持有效，即使其定义存在于不同的文件中。这样随着代码增长可以将模块移动到新文件中。</p> <h2 id="总结"><a href="#总结" aria-hidden="true" class="header-anchor">#</a> 总结</h2> <p>Rust 提供了将包组织进 crate、将 crate 组织进模块和通过指定绝对或相对路径从一个模块引用另一个模块中定义的项的方式。可以通过 <code>use</code> 语句将路径引入作用域，这样在多次使用时可以使用更短的路径。模块定义的代码默认时私有的，不过可以选择增加 <code>pub</code> 关键字使其定义变为公有。</p> <p>接下来，让我们看看一些标准库提供的集合数据类型，你可以利用它们编写出漂亮整洁的代码。</p></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/assets/js/41.184751dc.js" defer></script><script src="/assets/js/app.b56e4aff.js" defer></script>
+  </body>
+</html>

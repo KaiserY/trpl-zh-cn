@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>panic! 与不可恢复的错误</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.8614bbde.css" as="style"><link rel="preload" href="/assets/js/app.b56e4aff.js" as="script"><link rel="preload" href="/assets/js/48.50b8e29c.js" as="script"><link rel="prefetch" href="/assets/js/10.d41a3b84.js"><link rel="prefetch" href="/assets/js/100.22ca6861.js"><link rel="prefetch" href="/assets/js/101.80606dd4.js"><link rel="prefetch" href="/assets/js/102.75bf264b.js"><link rel="prefetch" href="/assets/js/103.7615fac4.js"><link rel="prefetch" href="/assets/js/104.a030e309.js"><link rel="prefetch" href="/assets/js/105.ceb5b0f7.js"><link rel="prefetch" href="/assets/js/106.53b25747.js"><link rel="prefetch" href="/assets/js/107.a6f25383.js"><link rel="prefetch" href="/assets/js/108.524846e6.js"><link rel="prefetch" href="/assets/js/109.5b3e8cc8.js"><link rel="prefetch" href="/assets/js/11.7f9bf643.js"><link rel="prefetch" href="/assets/js/110.a106958d.js"><link rel="prefetch" href="/assets/js/111.b1600e65.js"><link rel="prefetch" href="/assets/js/112.81bf40f0.js"><link rel="prefetch" href="/assets/js/12.c7e4d9a8.js"><link rel="prefetch" href="/assets/js/13.235bc06a.js"><link rel="prefetch" href="/assets/js/14.8b8a21b7.js"><link rel="prefetch" href="/assets/js/15.83a607fc.js"><link rel="prefetch" href="/assets/js/16.2bf746d6.js"><link rel="prefetch" href="/assets/js/17.36a5d5f3.js"><link rel="prefetch" href="/assets/js/18.82e00fba.js"><link rel="prefetch" href="/assets/js/19.1c2116c8.js"><link rel="prefetch" href="/assets/js/2.3505b190.js"><link rel="prefetch" href="/assets/js/20.1f4e3d0f.js"><link rel="prefetch" href="/assets/js/21.80dca6df.js"><link rel="prefetch" href="/assets/js/22.24977f4c.js"><link rel="prefetch" href="/assets/js/23.867b53ea.js"><link rel="prefetch" href="/assets/js/24.d59d9203.js"><link rel="prefetch" href="/assets/js/25.fae2b839.js"><link rel="prefetch" href="/assets/js/26.ba769edc.js"><link rel="prefetch" href="/assets/js/27.03216770.js"><link rel="prefetch" href="/assets/js/28.82b934bf.js"><link rel="prefetch" href="/assets/js/29.9bbe7e55.js"><link rel="prefetch" href="/assets/js/3.ba62e17c.js"><link rel="prefetch" href="/assets/js/30.ed75778f.js"><link rel="prefetch" href="/assets/js/31.247a3dbb.js"><link rel="prefetch" href="/assets/js/32.b1bb1e43.js"><link rel="prefetch" href="/assets/js/33.3656c740.js"><link rel="prefetch" href="/assets/js/34.03c1b47c.js"><link rel="prefetch" href="/assets/js/35.5af5d342.js"><link rel="prefetch" href="/assets/js/36.572a9496.js"><link rel="prefetch" href="/assets/js/37.319db1b7.js"><link rel="prefetch" href="/assets/js/38.19837e80.js"><link rel="prefetch" href="/assets/js/39.72675c02.js"><link rel="prefetch" href="/assets/js/4.f9a0ae28.js"><link rel="prefetch" href="/assets/js/40.d9f81c69.js"><link rel="prefetch" href="/assets/js/41.184751dc.js"><link rel="prefetch" href="/assets/js/42.9fa6eee5.js"><link rel="prefetch" href="/assets/js/43.b3333fb7.js"><link rel="prefetch" href="/assets/js/44.97c13303.js"><link rel="prefetch" href="/assets/js/45.8afb63d1.js"><link rel="prefetch" href="/assets/js/46.ac497cb6.js"><link rel="prefetch" href="/assets/js/47.dc1178aa.js"><link rel="prefetch" href="/assets/js/49.385dc110.js"><link rel="prefetch" href="/assets/js/5.0204093a.js"><link rel="prefetch" href="/assets/js/50.cadce2ee.js"><link rel="prefetch" href="/assets/js/51.d4e57e23.js"><link rel="prefetch" href="/assets/js/52.323a010e.js"><link rel="prefetch" href="/assets/js/53.377c0582.js"><link rel="prefetch" href="/assets/js/54.8d06b2c9.js"><link rel="prefetch" href="/assets/js/55.f82d7ef0.js"><link rel="prefetch" href="/assets/js/56.c9db2b25.js"><link rel="prefetch" href="/assets/js/57.bc11287b.js"><link rel="prefetch" href="/assets/js/58.a1a44552.js"><link rel="prefetch" href="/assets/js/59.4afc94b7.js"><link rel="prefetch" href="/assets/js/6.4774d695.js"><link rel="prefetch" href="/assets/js/60.867aed26.js"><link rel="prefetch" href="/assets/js/61.74327fa7.js"><link rel="prefetch" href="/assets/js/62.177c0b30.js"><link rel="prefetch" href="/assets/js/63.3e0d51da.js"><link rel="prefetch" href="/assets/js/64.e8778b11.js"><link rel="prefetch" href="/assets/js/65.b0dde85a.js"><link rel="prefetch" href="/assets/js/66.3bba1132.js"><link rel="prefetch" href="/assets/js/67.fb2ec2e1.js"><link rel="prefetch" href="/assets/js/68.d8ef845b.js"><link rel="prefetch" href="/assets/js/69.5b80f65b.js"><link rel="prefetch" href="/assets/js/7.010146f6.js"><link rel="prefetch" href="/assets/js/70.e265a8a0.js"><link rel="prefetch" href="/assets/js/71.08e24461.js"><link rel="prefetch" href="/assets/js/72.9f1ed203.js"><link rel="prefetch" href="/assets/js/73.cf073a90.js"><link rel="prefetch" href="/assets/js/74.e5e6cb7a.js"><link rel="prefetch" href="/assets/js/75.12d311a9.js"><link rel="prefetch" href="/assets/js/76.27ceea65.js"><link rel="prefetch" href="/assets/js/77.2d04e2fc.js"><link rel="prefetch" href="/assets/js/78.cd7b5394.js"><link rel="prefetch" href="/assets/js/79.397902f7.js"><link rel="prefetch" href="/assets/js/8.de3fc0db.js"><link rel="prefetch" href="/assets/js/80.8f355347.js"><link rel="prefetch" href="/assets/js/81.9fcee337.js"><link rel="prefetch" href="/assets/js/82.67857b15.js"><link rel="prefetch" href="/assets/js/83.8638b011.js"><link rel="prefetch" href="/assets/js/84.77ee6a86.js"><link rel="prefetch" href="/assets/js/85.724ec824.js"><link rel="prefetch" href="/assets/js/86.e0caf86b.js"><link rel="prefetch" href="/assets/js/87.32cc9faa.js"><link rel="prefetch" href="/assets/js/88.8db036d0.js"><link rel="prefetch" href="/assets/js/89.63be6804.js"><link rel="prefetch" href="/assets/js/9.a240a747.js"><link rel="prefetch" href="/assets/js/90.23557c83.js"><link rel="prefetch" href="/assets/js/91.0fc26ad3.js"><link rel="prefetch" href="/assets/js/92.45cce200.js"><link rel="prefetch" href="/assets/js/93.2a7d9b35.js"><link rel="prefetch" href="/assets/js/94.25f7b020.js"><link rel="prefetch" href="/assets/js/95.3d28b93b.js"><link rel="prefetch" href="/assets/js/96.fb907808.js"><link rel="prefetch" href="/assets/js/97.e4875071.js"><link rel="prefetch" href="/assets/js/98.2859c908.js"><link rel="prefetch" href="/assets/js/99.ac5b7b90.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8614bbde.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <!----> </div> <div class="page"> <div class="content"><h2 id="panic-与不可恢复的错误"><a href="#panic-与不可恢复的错误" aria-hidden="true" class="header-anchor">#</a> <code>panic!</code> 与不可恢复的错误</h2> <blockquote><p><a href="https://github.com/rust-lang/book/blob/master/src/ch09-01-unrecoverable-errors-with-panic.md" target="_blank" rel="noopener noreferrer">ch09-01-unrecoverable-errors-with-panic.md<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> <br>
+commit d073ece693e880b69412e645e4eabe99e74e7590</p></blockquote> <p>突然有一天，代码出问题了，而你对此束手无策。对于这种情况，Rust 有 <code>panic!</code>宏。当执行这个宏时，程序会打印出一个错误信息，展开并清理栈数据，然后接着退出。出现这种情况的场景通常是检测到一些类型的 bug 而且程序员并不清楚该如何处理它。</p> <blockquote><h3 id="对应-panic-时的栈展开或终止"><a href="#对应-panic-时的栈展开或终止" aria-hidden="true" class="header-anchor">#</a> 对应 panic 时的栈展开或终止</h3> <p>当出现 panic 时，程序默认会开始 <strong>展开</strong>（<em>unwinding</em>），这意味着 Rust 会回溯栈并清理它遇到的每一个函数的数据，不过这个回溯并清理的过程有很多工作。另一种选择是直接 <strong>终止</strong>（<em>abort</em>），这会不清理数据就退出程序。那么程序所使用的内存需要由操作系统来清理。如果你需要项目的最终二进制文件越小越好，panic 时通过在  <em>Cargo.toml</em> 的 <code>[profile]</code> 部分增加 <code>panic = 'abort'</code>，可以由展开切换为终止。例如，如果你想要在release模式中 panic 时直接终止：</p> <div class="language-toml extra-class"><pre class="language-text"><code>[profile.release]
+panic = 'abort'
+</code></pre></div></blockquote> <p>让我们在一个简单的程序中调用 <code>panic!</code>：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,should_panic,panics extra-class"><pre class="language-text"><code>fn main() {
+    panic!(&quot;crash and burn&quot;);
+}
+</code></pre></div><p>运行程序将会出现类似这样的输出：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo run
+   Compiling panic v0.1.0 (file:///projects/panic)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.25 secs
+     Running `target/debug/panic`
+thread 'main' panicked at 'crash and burn', src/main.rs:2:4
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+</code></pre></div><p>最后两行包含 <code>panic!</code> 调用造成的错误信息。第一行显示了 panic 提供的信息并指明了源码中 panic 出现的位置：<em>src/main.rs:2:4</em> 表明这是 <em>src/main.rs</em> 文件的第二行第四个字符。</p> <p>在这个例子中，被指明的那一行是我们代码的一部分，而且查看这一行的话就会发现 <code>panic!</code> 宏的调用。在其他情况下，<code>panic!</code> 可能会出现在我们的代码调用的代码中。错误信息报告的文件名和行号可能指向别人代码中的 <code>panic!</code> 宏调用，而不是我们代码中最终导致 <code>panic!</code> 的那一行。可以使用 <code>panic!</code> 被调用的函数的 backtrace 来寻找（我们代码中出问题的地方）。下面我们会详细介绍 backtrace 是什么。</p> <h3 id="使用-panic-的-backtrace"><a href="#使用-panic-的-backtrace" aria-hidden="true" class="header-anchor">#</a> 使用 <code>panic!</code> 的 backtrace</h3> <p>让我们来看看另一个因为我们代码中的 bug 引起的别的库中 <code>panic!</code> 的例子，而不是直接的宏调用。示例 9-1 有一些尝试通过索引访问 vector 中元素的例子：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,should_panic,panics extra-class"><pre class="language-text"><code>fn main() {
+    let v = vec![1, 2, 3];
+
+    v[99];
+}
+</code></pre></div><p><span class="caption">示例 9-1：尝试访问超越 vector 结尾的元素，这会造成 <code>panic!</code></span></p> <p>这里尝试访问 vector 的第一百个元素（这里的索引是 99 因为索引从 0 开始），不过它只有三个元素。这种情况下 Rust 会 panic。<code>[]</code> 应当返回一个元素，不过如果传递了一个无效索引，就没有可供 Rust 返回的正确的元素。</p> <p>这种情况下其他像 C 这样语言会尝试直接提供所要求的值，即便这可能不是你期望的：你会得到任何对应 vector 中这个元素的内存位置的值，甚至是这些内存并不属于 vector 的情况。这被称为 <strong>缓冲区溢出</strong>（<em>buffer overread</em>），并可能会导致安全漏洞，比如攻击者可以像这样操作索引来读取储存在数组后面不被允许的数据。</p> <p>为了使程序远离这类漏洞，如果尝试读取一个索引不存在的元素，Rust 会停止执行并拒绝继续。尝试运行上面的程序会出现如下：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo run
+   Compiling panic v0.1.0 (file:///projects/panic)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.27 secs
+     Running `target/debug/panic`
+thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
+99', /checkout/src/liballoc/vec.rs:1555:10
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+</code></pre></div><p>这指向了一个不是我们编写的文件，<em>vec.rs</em>。这是标准库中 <code>Vec&lt;T&gt;</code> 的实现。这是当对 vector <code>v</code> 使用 <code>[]</code> 时 <em>vec.rs</em> 中会执行的代码，也是真正出现 <code>panic!</code> 的地方。</p> <p>接下来的几行提醒我们可以设置 <code>RUST_BACKTRACE</code> 环境变量来得到一个 backtrace <em>backtrace</em> 是一个执行到目前位置所有被调用的函数的列表。Rust 的 backtrace 跟其他语言中的一样：阅读 backtrace 的关键是从头开始读直到发现你编写的文件。这就是问题的发源地。这一行往上是你的代码调用的代码；往下则是调用你的代码的代码。这些行可能包含核心 Rust 代码，标准库代码或用到的 crate 代码。让我们将 <code>RUST_BACKTRACE</code> 环境变量设置为任何不是 0 的值来获取 backtrace 看看。示例 9-2 展示了与你看到类似的输出：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ RUST_BACKTRACE=1 cargo run
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/panic`
+thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', /checkout/src/liballoc/vec.rs:1555:10
+stack backtrace:
+   0: std::sys::imp::backtrace::tracing::imp::unwind_backtrace
+             at /checkout/src/libstd/sys/unix/backtrace/tracing/gcc_s.rs:49
+   1: std::sys_common::backtrace::_print
+             at /checkout/src/libstd/sys_common/backtrace.rs:71
+   2: std::panicking::default_hook::{{closure}}
+             at /checkout/src/libstd/sys_common/backtrace.rs:60
+             at /checkout/src/libstd/panicking.rs:381
+   3: std::panicking::default_hook
+             at /checkout/src/libstd/panicking.rs:397
+   4: std::panicking::rust_panic_with_hook
+             at /checkout/src/libstd/panicking.rs:611
+   5: std::panicking::begin_panic
+             at /checkout/src/libstd/panicking.rs:572
+   6: std::panicking::begin_panic_fmt
+             at /checkout/src/libstd/panicking.rs:522
+   7: rust_begin_unwind
+             at /checkout/src/libstd/panicking.rs:498
+   8: core::panicking::panic_fmt
+             at /checkout/src/libcore/panicking.rs:71
+   9: core::panicking::panic_bounds_check
+             at /checkout/src/libcore/panicking.rs:58
+  10: &lt;alloc::vec::Vec&lt;T&gt; as core::ops::index::Index&lt;usize&gt;&gt;::index
+             at /checkout/src/liballoc/vec.rs:1555
+  11: panic::main
+             at src/main.rs:4
+  12: __rust_maybe_catch_panic
+             at /checkout/src/libpanic_unwind/lib.rs:99
+  13: std::rt::lang_start
+             at /checkout/src/libstd/panicking.rs:459
+             at /checkout/src/libstd/panic.rs:361
+             at /checkout/src/libstd/rt.rs:61
+  14: main
+  15: __libc_start_main
+  16: &lt;unknown&gt;
+</code></pre></div><p><span class="caption">示例 9-2：当设置 <code>RUST_BACKTRACE</code> 环境变量时 <code>panic!</code> 调用所生成的 backtrace 信息</span></p> <p>这里有大量的输出！你实际看到的输出可能因不同的操作系统和 Rust 版本而有所不同。为了获取带有这些信息的 backtrace，必须启用 debug 标识。当不使用 <code>--release</code> 参数运行 cargo build 或 cargo run 时 debug 标识会默认启用，就像这里一样。</p> <p>示例 9-2 的输出中，backtrace 的 11 行指向了我们项目中造成问题的行：<em>src/main.rs</em> 的第 4 行。如果你不希望程序 panic，第一个提到我们编写的代码行的位置是你应该开始调查的，以便查明是什么值如何在这个地方引起了 panic。在示例 9-1 中，我们故意编写会 panic 的代码来演示如何使用 backtrace，修复这个 panic 的方法就是不要尝试在一个只包含三个项的 vector 中请求索引是 100 的元素。当将来你的代码出现了 panic，你需要搞清楚在这特定的场景下代码中执行了什么操作和什么值导致了 panic，以及应当如何处理才能避免这个问题。</p> <p>本章后面的小节 “panic! 还是不 panic!”会再次回到 <code>panic!</code> 会回到 <code>panic!</code> 并讲解何时应该何时不应该使用 <code>panic!</code> 来处理错误情况。接下来，我们来看看如何使用 <code>Result</code> 来从错误中恢复。</p></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/assets/js/48.50b8e29c.js" defer></script><script src="/assets/js/app.b56e4aff.js" defer></script>
+  </body>
+</html>

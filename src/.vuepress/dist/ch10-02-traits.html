@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>trait：定义共享的行为</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.8614bbde.css" as="style"><link rel="preload" href="/assets/js/app.b56e4aff.js" as="script"><link rel="preload" href="/assets/js/53.377c0582.js" as="script"><link rel="prefetch" href="/assets/js/10.d41a3b84.js"><link rel="prefetch" href="/assets/js/100.22ca6861.js"><link rel="prefetch" href="/assets/js/101.80606dd4.js"><link rel="prefetch" href="/assets/js/102.75bf264b.js"><link rel="prefetch" href="/assets/js/103.7615fac4.js"><link rel="prefetch" href="/assets/js/104.a030e309.js"><link rel="prefetch" href="/assets/js/105.ceb5b0f7.js"><link rel="prefetch" href="/assets/js/106.53b25747.js"><link rel="prefetch" href="/assets/js/107.a6f25383.js"><link rel="prefetch" href="/assets/js/108.524846e6.js"><link rel="prefetch" href="/assets/js/109.5b3e8cc8.js"><link rel="prefetch" href="/assets/js/11.7f9bf643.js"><link rel="prefetch" href="/assets/js/110.a106958d.js"><link rel="prefetch" href="/assets/js/111.b1600e65.js"><link rel="prefetch" href="/assets/js/112.81bf40f0.js"><link rel="prefetch" href="/assets/js/12.c7e4d9a8.js"><link rel="prefetch" href="/assets/js/13.235bc06a.js"><link rel="prefetch" href="/assets/js/14.8b8a21b7.js"><link rel="prefetch" href="/assets/js/15.83a607fc.js"><link rel="prefetch" href="/assets/js/16.2bf746d6.js"><link rel="prefetch" href="/assets/js/17.36a5d5f3.js"><link rel="prefetch" href="/assets/js/18.82e00fba.js"><link rel="prefetch" href="/assets/js/19.1c2116c8.js"><link rel="prefetch" href="/assets/js/2.3505b190.js"><link rel="prefetch" href="/assets/js/20.1f4e3d0f.js"><link rel="prefetch" href="/assets/js/21.80dca6df.js"><link rel="prefetch" href="/assets/js/22.24977f4c.js"><link rel="prefetch" href="/assets/js/23.867b53ea.js"><link rel="prefetch" href="/assets/js/24.d59d9203.js"><link rel="prefetch" href="/assets/js/25.fae2b839.js"><link rel="prefetch" href="/assets/js/26.ba769edc.js"><link rel="prefetch" href="/assets/js/27.03216770.js"><link rel="prefetch" href="/assets/js/28.82b934bf.js"><link rel="prefetch" href="/assets/js/29.9bbe7e55.js"><link rel="prefetch" href="/assets/js/3.ba62e17c.js"><link rel="prefetch" href="/assets/js/30.ed75778f.js"><link rel="prefetch" href="/assets/js/31.247a3dbb.js"><link rel="prefetch" href="/assets/js/32.b1bb1e43.js"><link rel="prefetch" href="/assets/js/33.3656c740.js"><link rel="prefetch" href="/assets/js/34.03c1b47c.js"><link rel="prefetch" href="/assets/js/35.5af5d342.js"><link rel="prefetch" href="/assets/js/36.572a9496.js"><link rel="prefetch" href="/assets/js/37.319db1b7.js"><link rel="prefetch" href="/assets/js/38.19837e80.js"><link rel="prefetch" href="/assets/js/39.72675c02.js"><link rel="prefetch" href="/assets/js/4.f9a0ae28.js"><link rel="prefetch" href="/assets/js/40.d9f81c69.js"><link rel="prefetch" href="/assets/js/41.184751dc.js"><link rel="prefetch" href="/assets/js/42.9fa6eee5.js"><link rel="prefetch" href="/assets/js/43.b3333fb7.js"><link rel="prefetch" href="/assets/js/44.97c13303.js"><link rel="prefetch" href="/assets/js/45.8afb63d1.js"><link rel="prefetch" href="/assets/js/46.ac497cb6.js"><link rel="prefetch" href="/assets/js/47.dc1178aa.js"><link rel="prefetch" href="/assets/js/48.50b8e29c.js"><link rel="prefetch" href="/assets/js/49.385dc110.js"><link rel="prefetch" href="/assets/js/5.0204093a.js"><link rel="prefetch" href="/assets/js/50.cadce2ee.js"><link rel="prefetch" href="/assets/js/51.d4e57e23.js"><link rel="prefetch" href="/assets/js/52.323a010e.js"><link rel="prefetch" href="/assets/js/54.8d06b2c9.js"><link rel="prefetch" href="/assets/js/55.f82d7ef0.js"><link rel="prefetch" href="/assets/js/56.c9db2b25.js"><link rel="prefetch" href="/assets/js/57.bc11287b.js"><link rel="prefetch" href="/assets/js/58.a1a44552.js"><link rel="prefetch" href="/assets/js/59.4afc94b7.js"><link rel="prefetch" href="/assets/js/6.4774d695.js"><link rel="prefetch" href="/assets/js/60.867aed26.js"><link rel="prefetch" href="/assets/js/61.74327fa7.js"><link rel="prefetch" href="/assets/js/62.177c0b30.js"><link rel="prefetch" href="/assets/js/63.3e0d51da.js"><link rel="prefetch" href="/assets/js/64.e8778b11.js"><link rel="prefetch" href="/assets/js/65.b0dde85a.js"><link rel="prefetch" href="/assets/js/66.3bba1132.js"><link rel="prefetch" href="/assets/js/67.fb2ec2e1.js"><link rel="prefetch" href="/assets/js/68.d8ef845b.js"><link rel="prefetch" href="/assets/js/69.5b80f65b.js"><link rel="prefetch" href="/assets/js/7.010146f6.js"><link rel="prefetch" href="/assets/js/70.e265a8a0.js"><link rel="prefetch" href="/assets/js/71.08e24461.js"><link rel="prefetch" href="/assets/js/72.9f1ed203.js"><link rel="prefetch" href="/assets/js/73.cf073a90.js"><link rel="prefetch" href="/assets/js/74.e5e6cb7a.js"><link rel="prefetch" href="/assets/js/75.12d311a9.js"><link rel="prefetch" href="/assets/js/76.27ceea65.js"><link rel="prefetch" href="/assets/js/77.2d04e2fc.js"><link rel="prefetch" href="/assets/js/78.cd7b5394.js"><link rel="prefetch" href="/assets/js/79.397902f7.js"><link rel="prefetch" href="/assets/js/8.de3fc0db.js"><link rel="prefetch" href="/assets/js/80.8f355347.js"><link rel="prefetch" href="/assets/js/81.9fcee337.js"><link rel="prefetch" href="/assets/js/82.67857b15.js"><link rel="prefetch" href="/assets/js/83.8638b011.js"><link rel="prefetch" href="/assets/js/84.77ee6a86.js"><link rel="prefetch" href="/assets/js/85.724ec824.js"><link rel="prefetch" href="/assets/js/86.e0caf86b.js"><link rel="prefetch" href="/assets/js/87.32cc9faa.js"><link rel="prefetch" href="/assets/js/88.8db036d0.js"><link rel="prefetch" href="/assets/js/89.63be6804.js"><link rel="prefetch" href="/assets/js/9.a240a747.js"><link rel="prefetch" href="/assets/js/90.23557c83.js"><link rel="prefetch" href="/assets/js/91.0fc26ad3.js"><link rel="prefetch" href="/assets/js/92.45cce200.js"><link rel="prefetch" href="/assets/js/93.2a7d9b35.js"><link rel="prefetch" href="/assets/js/94.25f7b020.js"><link rel="prefetch" href="/assets/js/95.3d28b93b.js"><link rel="prefetch" href="/assets/js/96.fb907808.js"><link rel="prefetch" href="/assets/js/97.e4875071.js"><link rel="prefetch" href="/assets/js/98.2859c908.js"><link rel="prefetch" href="/assets/js/99.ac5b7b90.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8614bbde.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <!----> </div> <div class="page"> <div class="content"><h2 id="trait：定义共享的行为"><a href="#trait：定义共享的行为" aria-hidden="true" class="header-anchor">#</a> trait：定义共享的行为</h2> <blockquote><p><a href="https://github.com/rust-lang/book/blob/master/src/ch10-02-traits.md" target="_blank" rel="noopener noreferrer">ch10-02-traits.md<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> <br>
+commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f</p></blockquote> <p><em>trait</em> 告诉 Rust 编译器某个特定类型拥有可能与其他类型共享的功能。可以通过 trait 以一种抽象的方式定义共享的行为。可以使用 <em>trait bounds</em> 指定泛型是任何拥有特定行为的类型。</p> <blockquote><p>注意：<em>trait</em> 类似于其他语言中的常被称为 <strong>接口</strong>（<em>interfaces</em>）的功能，虽然有一些不同。</p></blockquote> <h3 id="定义-trait"><a href="#定义-trait" aria-hidden="true" class="header-anchor">#</a> 定义 trait</h3> <p>一个类型的行为由其可供调用的方法构成。如果可以对不同类型调用相同的方法的话，这些类型就可以共享相同的行为了。trait 定义是一种将方法签名组合起来的方法，目的是定义一个实现某些目的所必需的行为的集合。</p> <p>例如，这里有多个存放了不同类型和属性文本的结构体：结构体 <code>NewsArticle</code> 用于存放发生于世界各地的新闻故事，而结构体 <code>Tweet</code> 最多只能存放 280 个字符的内容，以及像是否转推或是否是对推友的回复这样的元数据。</p> <p>我们想要创建一个多媒体聚合库用来显示可能储存在 <code>NewsArticle</code> 或 <code>Tweet</code> 实例中的数据的总结。每一个结构体都需要的行为是他们是能够被总结的，这样的话就可以调用实例的 <code>summarize</code> 方法来请求总结。示例 10-12 中展示了一个表现这个概念的 <code>Summary</code> trait 的定义：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">pub</span> <span class="token keyword">trait</span> Summary <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">summarize</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> String<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 10-12：<code>Summarizable</code> trait 定义，它包含由 <code>summarize</code> 方法提供的行为</span></p> <p>这里使用 <code>trait</code> 关键字来声明一个 trait，后面是 trait 的名字，在这个例子中是 <code>Summary</code>。在大括号中声明描述实现这个 trait 的类型所需要的行为的方法签名，在这个例子中是 <code>fn summarize(&amp;self) -&gt; String</code>。</p> <p>在方法签名后跟分号，而不是在大括号中提供其实现。接着每一个实现这个 trait 的类型都需要提供其自定义行为的方法体，编译器也会确保任何实现 <code>Summary</code> trait 的类型都拥有与这个签名的定义完全一致的 <code>summarize</code> 方法。</p> <p>trait 体中可以有多个方法：一行一个方法签名且都以分号结尾。</p> <h3 id="为类型实现-trait"><a href="#为类型实现-trait" aria-hidden="true" class="header-anchor">#</a> 为类型实现 trait</h3> <p>现在我们定义了 <code>Summary</code> trait，接着就可以在多媒体聚合库中需要拥有这个行为的类型上实现它了。示例 10-13 中展示了 <code>NewsArticle</code> 结构体上 <code>Summary</code> trait 的一个实现，它使用标题、作者和创建的位置作为 <code>summarize</code> 的返回值。对于 <code>Tweet</code> 结构体，我们选择将 <code>summarize</code> 定义为用户名后跟推文的全部文本作为返回值，并假设推文内容已经被限制为 280 字符以内。</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">pub</span> <span class="token keyword">trait</span> Summary <span class="token punctuation">{</span>
+#     <span class="token keyword">fn</span> <span class="token function">summarize</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> String<span class="token punctuation">;</span>
+# <span class="token punctuation">}</span>
+#
+<span class="token keyword">pub</span> <span class="token keyword">struct</span> NewsArticle <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> headline<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+    <span class="token keyword">pub</span> location<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+    <span class="token keyword">pub</span> author<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+    <span class="token keyword">pub</span> content<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">impl</span> Summary <span class="token keyword">for</span> NewsArticle <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">summarize</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> String <span class="token punctuation">{</span>
+        <span class="token function">format!</span><span class="token punctuation">(</span><span class="token string">&quot;{}, by {} ({})&quot;</span><span class="token punctuation">,</span> <span class="token keyword">self</span><span class="token punctuation">.</span>headline<span class="token punctuation">,</span> <span class="token keyword">self</span><span class="token punctuation">.</span>author<span class="token punctuation">,</span> <span class="token keyword">self</span><span class="token punctuation">.</span>location<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">struct</span> Tweet <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> username<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+    <span class="token keyword">pub</span> content<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+    <span class="token keyword">pub</span> reply<span class="token punctuation">:</span> bool<span class="token punctuation">,</span>
+    <span class="token keyword">pub</span> retweet<span class="token punctuation">:</span> bool<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">impl</span> Summary <span class="token keyword">for</span> Tweet <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">summarize</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> String <span class="token punctuation">{</span>
+        <span class="token function">format!</span><span class="token punctuation">(</span><span class="token string">&quot;{}: {}&quot;</span><span class="token punctuation">,</span> <span class="token keyword">self</span><span class="token punctuation">.</span>username<span class="token punctuation">,</span> <span class="token keyword">self</span><span class="token punctuation">.</span>content<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 10-13：在 <code>NewsArticle</code> 和 <code>Tweet</code> 类型上实现 <code>Summary</code> trait</span></p> <p>在类型上实现 trait 类似于实现与 trait 无关的方法。区别在于 <code>impl</code> 关键字之后，我们提供需要实现 trait 的名称，接着是 <code>for</code> 和需要实现 trait 的类型的名称。在 <code>impl</code> 块中，使用 trait 定义中的方法签名，不过不再后跟分号，而是需要在大括号中编写函数体来为特定类型实现 trait 方法所拥有的行为。</p> <p>一旦实现了 trait，我们就可以用与 <code>NewsArticle</code> 和 <code>Tweet</code> 实例的非 trait 方法一样的方式调用 trait 方法了：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>let tweet = Tweet {
+    username: String::from(&quot;horse_ebooks&quot;),
+    content: String::from(&quot;of course, as you probably already know, people&quot;),
+    reply: false,
+    retweet: false,
+};
+
+println!(&quot;1 new tweet: {}&quot;, tweet.summarize());
+</code></pre></div><p>这会打印出 <code>1 new tweet: horse_ebooks: of course, as you probably already know, people</code>。</p> <p>注意因为示例 10-13 中我们在相同的 <em>lib.rs</em> 里定义了 <code>Summary</code> trait 和 <code>NewsArticle</code> 与 <code>Tweet</code> 类型，所以他们是位于同一作用域的。如果这个 <em>lib.rs</em> 是对应 <code>aggregator</code> crate 的，而别人想要利用我们 crate 的功能为其自己的库作用域中的结构体实现 <code>Summary</code> trait。首先他们需要将 trait 引入作用域。这可以通过指定 <code>use aggregator::Summary;</code> 实现，这样就可以为其类型实现 <code>Summary</code> trait 了。<code>Summary</code> 还必须是公有 trait 使得其他 crate 可以实现它，这也是为什么实例 10-12 中将 <code>pub</code> 置于 <code>trait</code> 之前。</p> <p>一个实现 trait 时需要注意的限制是只有要么 tait 或者类型是位于 crate 作用域本地时才能为其实现该 trait。例如，可以为像 <code>aggregator</code> crate 的 <code>Tweet</code> 这样的自定义类型实现如标准库中的 <code>Display</code> 这样 trait，因为 <code>Tweet</code> 类型位于 <code>aggregator</code> crate 本地。也可以在 <code>aggregator</code> crate 中为 <code>Vec&lt;T&gt;</code> 实现 <code>Summary</code>，因为 <code>Summary</code> trait 位于 <code>aggregator</code> crate 本地。</p> <p>但是不能在外部类型上实现外部 trait。例如，不能在 <code>aggregator</code> crate 中为 <code>Vec&lt;T&gt;</code> 实现 <code>Display</code> trait。因为 <code>Display</code> 和 <code>Vec&lt;T&gt;</code> 都定义于标准库并不位于 <code>aggregator</code> crate 本地。这个限制是被称为 <strong>相干性</strong>（<em>coherence</em>） 的程序属性的一部分，或者更具体的说是 <strong>孤儿规则</strong>（<em>orphan rule</em>），其得名于不存在父类型。这条规则确保了其他人编写的代码不会破坏你代码，反之亦然。没有这条规则的话，两个 crate 可以分别对相同类型实现相同的 trait，而Rust 将无从得知应该使用哪一个实现。</p> <h3 id="默认实现"><a href="#默认实现" aria-hidden="true" class="header-anchor">#</a> 默认实现</h3> <p>有时为 trait 中的某些或全部方法提供默认的行为，而不是在每个类型的每个实现中都定义自己的行为是很有用的。这样当为某个特定类型实现 trait 时，可以选择保留或重载每个方法的默认行为。</p> <p>示例 10-14 中展示了如何为 <code>Summary</code> trait 的 <code>summarize</code> 方法指定一个默认的字符串值，而不是像示例 10-12 中那样只是定义方法签名：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">pub</span> <span class="token keyword">trait</span> Summary <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">summarize</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> String <span class="token punctuation">{</span>
+        String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;(Read more...)&quot;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 10-14：<code>Summary</code> trait 的定义，带有一个 <code>summarize</code> 方法的默认实现</span></p> <p>如果想要对 <code>NewsArticle</code> 实例使用这个默认实现，而不是定义一个自己的实现，则可以通过 impl Summary for NewsArticle {} 指定一个空的 <code>impl</code> 块。</p> <p>即便选择不再直接为 <code>NewsArticle</code> 定义 <code>summarize</code> 方法了，因为我们提供了一个默认实现而且 <code>NewsArticle</code> 被指定为实现了 <code>Summary</code> trait。为此我们仍然可以像这样对 <code>NewsArticle</code> 的实例调用 <code>summarize</code> 方法：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>let article = NewsArticle {
+    headline: String::from(&quot;Penguins win the Stanley Cup Championship!&quot;),
+    location: String::from(&quot;Pittsburgh, PA, USA&quot;),
+    author: String::from(&quot;Iceburgh&quot;),
+    content: String::from(&quot;The Pittsburgh Penguins once again are the best
+    hockey team in the NHL.&quot;),
+};
+
+println!(&quot;New article available! {}&quot;, article.summarize());
+</code></pre></div><p>这段代码会打印 <code>New article available! (Read more...)</code>。</p> <p>为 <code>summarize</code> 创建默认实现并不要求对示例 10-13 中 <code>Tweet</code> 上的 <code>Summary</code> 实现做任何改变。其原因是重载一个默认实现的语法与实现没有默认实现的 trait 方法一样。</p> <p>将 <code>Summarizable</code> trait 改变为拥有默认 <code>summary</code> 实现并不要求对示例 10-13 中 <code>Tweet</code> 和示例 10-14 中 <code>WeatherForecast</code> 的 <code>Summarizable</code> 实现做任何改变：重载一个默认实现的语法与实现没有默认实现的 trait 方法时完全一样的。</p> <p>默认实现允许调用相同 trait 中的其他方法，哪怕这些方法没有默认实现。如此，trait 可以实现很多有用的功能而只需实现一小部分特定内容。我们可以选择让<code>Summary</code> trait 也拥有一个要求实现的<code>summarize_author</code> 方法，接着 <code>summarize</code> 方法则提供默认实现并调用 <code>summarize_author</code> 方法：</p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">pub</span> <span class="token keyword">trait</span> Summary <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">summarize_author</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> String<span class="token punctuation">;</span>
+
+    <span class="token keyword">fn</span> <span class="token function">summarize</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> String <span class="token punctuation">{</span>
+        <span class="token function">format!</span><span class="token punctuation">(</span><span class="token string">&quot;(Read more from {}...)&quot;</span><span class="token punctuation">,</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">summarize_author</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>为了使用这个版本的 <code>Summary</code>，只需在实现 trait 时定义 <code>summarize_author</code> 即可：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>impl Summary for Tweet {
+    fn summarize_author(&amp;self) -&gt; String {
+        format!(&quot;@{}&quot;, self.username)
+    }
+}
+</code></pre></div><p>一旦定义了 <code>summarize_author</code>，我们就可以对 <code>Tweet</code> 结构体的实例调用 <code>summarize</code> 了，而 <code>summary</code> 的默认实现会调用我们提供的 <code>summarize_author</code> 定义。因为实现了 <code>summarize_author</code>，<code>Summary</code> trait 就提供了 <code>summarize</code> 方法的功能，且无需编写更多的代码。</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>let tweet = Tweet {
+    username: String::from(&quot;horse_ebooks&quot;),
+    content: String::from(&quot;of course, as you probably already know, people&quot;),
+    reply: false,
+    retweet: false,
+};
+
+println!(&quot;1 new tweet: {}&quot;, tweet.summarize());
+</code></pre></div><p>这会打印出 <code>1 new tweet: (Read more from @horse_ebooks...)</code>。</p> <p>注意无法从相同方法的重载实现中调用默认方法。</p> <h3 id="trait-作为参数"><a href="#trait-作为参数" aria-hidden="true" class="header-anchor">#</a> trait 作为参数</h3> <p>知道了如何定义 trait 和在类型上实现这些 trait 之后，我们可以探索一下如何使用 trait 来接受多种不同类型的参数。</p> <p>例如在示例 10-13 中为 <code>NewsArticle</code> 和 <code>Tweet</code> 类型实现了 <code>Summary</code> trait。我们可以定义一个函数 <code>notify</code> 来调用其参数 <code>item</code> 上的 <code>summarize</code> 方法，该参数为一些实现了 <code>Summary</code> trait 的方法。为此可以使用 ‘<code>impl Trait</code>’ 语法，像这样：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>pub fn notify(item: impl Summary) {
+    println!(&quot;Breaking news! {}&quot;, item.summarize());
+}
+</code></pre></div><p>在 <code>notify</code> 函数体中，可以调用任何来自 <code>Summary</code> trait 的方法，比如 <code>summarize</code>。</p> <h4 id="trait-bounds"><a href="#trait-bounds" aria-hidden="true" class="header-anchor">#</a> Trait Bounds</h4> <p><code>impl Trait</code> 语法适用于短小的例子，它不过是一个较长形式的语法糖。这被称为 <em>trait bound</em>，这看起来像：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>pub fn notify&lt;T: Summary&gt;(item: T) {
+    println!(&quot;Breaking news! {}&quot;, item.summarize());
+}
+</code></pre></div><p>这与之前的例子相同，不过稍微冗长了一些。trait bound 与泛型参数声明在一起，位于尖括号中分号的后面。因为 <code>T</code> 的 trait bound，我们可以传递任何 <code>NewsArticle</code> 或 <code>Tweet</code> 的实例调用 <code>notify</code>。用任何其他类型，比如 <code>String</code> 或 <code>i32</code>，调用该函数的代码将不能编译，因为这些类型没有实现 <code>Summary</code>。</p> <p>何时应该使用这种形式而不是 <code>impl Trait</code> 呢？虽然 <code>impl Trait</code> 适用于短小的例子，trait bound 则适用于更复杂的场景。例如，比如需要获取两个实现了 <code>Summary</code> 的类型：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>pub fn notify(item1: impl Summary, item2: impl Summary) {
+</code></pre></div><p>这适用于 <code>item1</code> 和 <code>item2</code> 允许是不同类型的情况（只要它们都实现了 <code>Summary</code>）。不过如果你希望强制它们都是相同类型呢？这只有在使用 trait bound 时才有可能：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>pub fn notify&lt;T: Summary&gt;(item1: T, item2: T) {
+</code></pre></div><h4 id="通过-指定多个-trait"><a href="#通过-指定多个-trait" aria-hidden="true" class="header-anchor">#</a> 通过 <code>+</code> 指定多个 trait</h4> <p>如果 <code>notify</code> 需要显示 <code>item</code> 的格式化形式，同时也要使用 <code>summarize</code> 方法，那么 <code>item</code> 就需要同时实现两个不同的 trait：<code>Display</code> 和 <code>Summary</code>。这可以通过 <code>+</code> 语法实现：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>pub fn notify(item: impl Summary + Display) {
+</code></pre></div><p>这个语法也适用于泛型的 trait bound：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>pub fn notify&lt;T: Summary + Display&gt;(item: T) {
+</code></pre></div><h4 id="通过-where-简化代码"><a href="#通过-where-简化代码" aria-hidden="true" class="header-anchor">#</a> 通过 <code>where</code> 简化代码</h4> <p>然而，使用过多的 trait bound 也有缺点。每个泛型有其自己的 trait bound，所以有多个泛型参数的函数在名称和参数列表之间会有很长的 trait bound 信息，这使得函数签名难以阅读。为此，Rust 有另一个在函数签名之后的 <code>where</code> 从句中指定 trait bound 的语法。所以除了这么写：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>fn some_function&lt;T: Display + Clone, U: Clone + Debug&gt;(t: T, u: U) -&gt; i32 {
+</code></pre></div><p>还可以像这样使用 <code>where</code> 从句：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>fn some_function&lt;T, U&gt;(t: T, u: U) -&gt; i32
+    where T: Display + Clone,
+          U: Clone + Debug
+{
+</code></pre></div><p>这个函数签名就显得不那么杂乱，函数名、参数列表和返回值类型都离得很近，看起来类似没有很多 trait bounds 的函数。</p> <h3 id="返回-trait"><a href="#返回-trait" aria-hidden="true" class="header-anchor">#</a> 返回 trait</h3> <p>也可以在返回值中使用 <code>impl Trait</code> 语法，来返回实现了某个 trait 的类型：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>fn returns_summarizable() -&gt; impl Summary {
+    Tweet {
+        username: String::from(&quot;horse_ebooks&quot;),
+        content: String::from(&quot;of course, as you probably already know, people&quot;),
+        reply: false,
+        retweet: false,
+    }
+}
+</code></pre></div><p>这个签名表明，“我要返回某个实现了 <code>Summary</code> trait 的类型，但是不确定其具体的类型”。在例子中返回了一个 <code>Tweet</code>，不过调用方并不知情。</p> <p>这有什么用呢？在第十三章中，我们会学些两个大量依赖 trait 的功能：闭包和迭代器。这些功能创建只有编译器知道的类型，或者是非常非常长的类型。<code>impl Trait</code> 允许你简单的说 “返回一个 <code>Iterator</code>” 而无需写出实际的冗长的类型。</p> <p>不过这只适用于返回单一类型的情况。例如，这样就 <strong>不行</strong>：</p> <div class="language-rust,ignore,does_not_compile extra-class"><pre class="language-text"><code>fn returns_summarizable(switch: bool) -&gt; impl Summary {
+    if switch {
+        NewsArticle {
+            headline: String::from(&quot;Penguins win the Stanley Cup Championship!&quot;),
+            location: String::from(&quot;Pittsburgh, PA, USA&quot;),
+            author: String::from(&quot;Iceburgh&quot;),
+            content: String::from(&quot;The Pittsburgh Penguins once again are the best
+            hockey team in the NHL.&quot;),
+        }
+    } else {
+        Tweet {
+            username: String::from(&quot;horse_ebooks&quot;),
+            content: String::from(&quot;of course, as you probably already know, people&quot;),
+            reply: false,
+            retweet: false,
+        }
+    }
+}
+</code></pre></div><p>这里尝试返回 <code>NewsArticle</code> 或 <code>Tweet</code>。这不能编译，因为 <code>impl Trait</code> 工作方式的限制。为了编写这样的代码，你不得不等到第十七章的 “为使用不同类型的值而设计的 trait 对象” 部分。</p> <h3 id="使用-trait-bounds-来修复-largest-函数"><a href="#使用-trait-bounds-来修复-largest-函数" aria-hidden="true" class="header-anchor">#</a> 使用 trait bounds 来修复 <code>largest</code> 函数</h3> <p>现在你知道了如何使用泛型参数 trait bound 来指定所需的行为。让我们回到实例 10-5 修复使用泛型类型参数的 <code>largest</code> 函数定义！最后尝试代时出现的错误是：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0369]: binary operation `&gt;` cannot be applied to type `T`
+ --&gt; src/main.rs:5:12
+  |
+5 |         if item &gt; largest {
+  |            ^^^^^^^^^^^^^^
+  |
+  = note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
+</code></pre></div><p>在 <code>largest</code> 函数体中我们想要使用大于运算符（<code>&gt;</code>）比较两个 <code>T</code> 类型的值。这个运算符被定义为标准库中 trait <code>std::cmp::PartialOrd</code> 的一个默认方法。所以需要在 <code>T</code> 的 trait bound 中指定 <code>PartialOrd</code>，这样 <code>largest</code> 函数可以用于任何可以比较大小的类型的 slice。因为 <code>PartialOrd</code> 位于 prelude 中所以并不需要手动将其引入作用域。将 <code>largest</code> 的签名修改为如下：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>fn largest&lt;T: PartialOrd&gt;(list: &amp;[T]) -&gt; T {
+</code></pre></div><p>但是如果编译代码的话，会出现一些不同的错误：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0508]: cannot move out of type `[T]`, a non-copy slice
+ --&gt; src/main.rs:2:23
+  |
+2 |     let mut largest = list[0];
+  |                       ^^^^^^^
+  |                       |
+  |                       cannot move out of here
+  |                       help: consider using a reference instead: `&amp;list[0]`
+
+error[E0507]: cannot move out of borrowed content
+ --&gt; src/main.rs:4:9
+  |
+4 |     for &amp;item in list.iter() {
+  |         ^----
+  |         ||
+  |         |hint: to prevent move, use `ref item` or `ref mut item`
+  |         cannot move out of borrowed content
+</code></pre></div><p>错误的核心是 <code>cannot move out of type [T], a non-copy slice</code>，对于非泛型版本的 <code>largest</code> 函数，我们只尝试了寻找最大的 <code>i32</code> 和 <code>char</code>。正如第四章 “只在栈上的数据：拷贝” 部分讨论过的，像 <code>i32</code> 和 <code>char</code> 这样的类型是已知大小的并可以储存在栈上，所以他们实现了 <code>Copy</code> trait。当我们将 <code>largest</code> 函数改成使用泛型后，现在 <code>list</code> 参数的类型就有可能是没有实现 <code>Copy</code> trait 的。这意味着我们可能不能将 <code>list[0]</code> 的值移动到 <code>largest</code> 变量中，这导致了上面的错误。</p> <p>为了只对实现了 <code>Copy</code> 的类型调用这些代码，可以在 <code>T</code> 的 trait bounds 中增加 <code>Copy</code>！示例 10-15 中展示了一个可以编译的泛型版本的 <code>largest</code> 函数的完整代码，只要传递给 <code>largest</code> 的 slice 值的类型实现了 <code>PartialOrd</code> <strong>和</strong> <code>Copy</code> 这两个 trait，例如 <code>i32</code> 和 <code>char</code>：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> largest<span class="token operator">&lt;</span>T<span class="token punctuation">:</span> PartialOrd <span class="token operator">+</span> Copy<span class="token operator">&gt;</span><span class="token punctuation">(</span>list<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token punctuation">[</span>T<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> T <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> largest <span class="token operator">=</span> list<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> <span class="token operator">&amp;</span>item <span class="token keyword">in</span> list<span class="token punctuation">.</span><span class="token function">iter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> item <span class="token operator">&gt;</span> largest <span class="token punctuation">{</span>
+            largest <span class="token operator">=</span> item<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    largest
+<span class="token punctuation">}</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> number_list <span class="token operator">=</span> <span class="token function">vec!</span><span class="token punctuation">[</span><span class="token number">34</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">25</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">65</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">let</span> result <span class="token operator">=</span> <span class="token function">largest</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>number_list<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;The largest number is {}&quot;</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">let</span> char_list <span class="token operator">=</span> <span class="token function">vec!</span><span class="token punctuation">[</span><span class="token char string">'y'</span><span class="token punctuation">,</span> <span class="token char string">'m'</span><span class="token punctuation">,</span> <span class="token char string">'a'</span><span class="token punctuation">,</span> <span class="token char string">'q'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">let</span> result <span class="token operator">=</span> <span class="token function">largest</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>char_list<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;The largest char is {}&quot;</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 10-15：一个可以用于任何实现了 <code>PartialOrd</code> 和 <code>Copy</code> trait 的泛型的 <code>largest</code> 函数</span></p> <p>如果并不希望限制 <code>largest</code> 函数只能用于实现了 <code>Copy</code> trait 的类型，我们可以在 <code>T</code> 的 trait bounds 中指定 <code>Clone</code> 而不是 <code>Copy</code>。并克隆 slice 的每一个值使得 <code>largest</code> 函数拥有其所有权。使用 <code>clone</code> 函数意味着对于类似 <code>String</code> 这样拥有堆上数据的类型，会潜在的分配更多堆上空间，而堆分配在涉及大量数据时可能会相当缓慢。</p> <p>另一种 <code>largest</code> 的实现方式是返回在 slice 中 <code>T</code> 值的引用。如果我们将函数返回值从 <code>T</code> 改为 <code>&amp;T</code> 并改变函数体使其能够返回一个引用，我们将不需要任何 <code>Clone</code> 或 <code>Copy</code> 的 trait bounds 而且也不会有任何的堆分配。尝试自己实现这种替代解决方式吧！</p> <h3 id="使用-trait-bound-有条件的实现方法"><a href="#使用-trait-bound-有条件的实现方法" aria-hidden="true" class="header-anchor">#</a> 使用 trait bound 有条件的实现方法</h3> <p>通过使用带有 trait bound 的泛型参数的 <code>impl</code> 块，可以有条件的只为实现了特定 trait 的类型实现方法。例如，示例 10-16 中的类型 <code>Pair&lt;T&gt;</code> 总是实现了 <code>new</code> 方法，不过只有 <code>Pair&lt;T&gt;</code> 内部的 <code>T</code> 类型实现了 <code>PartialOrd</code> trait 来允许比较 <strong>和</strong> <code>Display</code> trait 来启用打印，才会实现 <code>cmp_display</code> 方法：</p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>fmt<span class="token punctuation">:</span><span class="token punctuation">:</span>Display<span class="token punctuation">;</span>
+
+<span class="token keyword">struct</span> Pair<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    x<span class="token punctuation">:</span> T<span class="token punctuation">,</span>
+    y<span class="token punctuation">:</span> T<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">impl</span><span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> Pair<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">new</span><span class="token punctuation">(</span>x<span class="token punctuation">:</span> T<span class="token punctuation">,</span> y<span class="token punctuation">:</span> T<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Self <span class="token punctuation">{</span>
+        Self <span class="token punctuation">{</span>
+            x<span class="token punctuation">,</span>
+            y<span class="token punctuation">,</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">impl</span><span class="token operator">&lt;</span>T<span class="token punctuation">:</span> Display <span class="token operator">+</span> PartialOrd<span class="token operator">&gt;</span> Pair<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">cmp_display</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token keyword">self</span><span class="token punctuation">.</span>x <span class="token operator">&gt;=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>y <span class="token punctuation">{</span>
+            <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;The largest member is x = {}&quot;</span><span class="token punctuation">,</span> <span class="token keyword">self</span><span class="token punctuation">.</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;The largest member is y = {}&quot;</span><span class="token punctuation">,</span> <span class="token keyword">self</span><span class="token punctuation">.</span>y<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 10-17：根据 trait bound 在泛型上有条件的实现方法</span></p> <p>也可以对任何实现了特定 trait 的类型有条件的实现 trait。对任何满足特定 trait bound 的类型实现 trait 被称为 <em>blanket implementations</em>，他们被广泛的用于 Rust 标准库中。例如，标准库为任何实现了 <code>Display</code> trait 的类型实现了 <code>ToString</code> trait。这个 <code>impl</code> 块看起来像这样：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>impl&lt;T: Display&gt; ToString for T {
+    // --snip--
+}
+</code></pre></div><p>因为标准库有了这些 blanket implementation，我们可以对任何实现了 <code>Display</code> trait 的类型调用由 <code>ToString</code> 定义的 <code>to_string</code> 方法。例如，可以将整型转换为对应的 <code>String</code> 值，因为整型实现了 <code>Display</code>：</p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">let</span> s <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">.</span><span class="token function">to_string</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>blanket implementation 会出现在 trait 文档的 “Implementers” 部分。</p> <p>trait 和 trait bound 让我们使用泛型类型参数来减少重复，并仍然能够向编译器明确指定泛型类型需要拥有哪些行为。因为我们向编译器提供了 trait bound 信息，它就可以检查代码中所用到的具体类型是否提供了正确的行为。在动态类型语言中，如果我们尝试调用一个类型并没有实现的方法，会在运行时出现错误。Rust 将这些错误移动到了编译时，甚至在代码能够运行之前就强迫我们修复错误。另外，我们也无需编写运行时检查行为的代码，因为在编译时就已经检查过了，这样相比其他那些不愿放弃泛型灵活性的语言有更好的性能。</p> <p>这里还有一种泛型，我们一直在使用它甚至都没有察觉它的存在，这就是 <strong>生命周期</strong>（<em>lifetimes</em>）。不同于其他泛型帮助我们确保类型拥有期望的行为，生命周期则有助于确保引用在我们需要他们的时候一直有效。让我们学习生命周期是如何做到这些的。</p></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/assets/js/53.377c0582.js" defer></script><script src="/assets/js/app.b56e4aff.js" defer></script>
+  </body>
+</html>

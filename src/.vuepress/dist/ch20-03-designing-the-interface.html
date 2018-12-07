@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>设计线程池接口</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.8614bbde.css" as="style"><link rel="preload" href="/assets/js/app.b56e4aff.js" as="script"><link rel="preload" href="/assets/js/107.a6f25383.js" as="script"><link rel="prefetch" href="/assets/js/10.d41a3b84.js"><link rel="prefetch" href="/assets/js/100.22ca6861.js"><link rel="prefetch" href="/assets/js/101.80606dd4.js"><link rel="prefetch" href="/assets/js/102.75bf264b.js"><link rel="prefetch" href="/assets/js/103.7615fac4.js"><link rel="prefetch" href="/assets/js/104.a030e309.js"><link rel="prefetch" href="/assets/js/105.ceb5b0f7.js"><link rel="prefetch" href="/assets/js/106.53b25747.js"><link rel="prefetch" href="/assets/js/108.524846e6.js"><link rel="prefetch" href="/assets/js/109.5b3e8cc8.js"><link rel="prefetch" href="/assets/js/11.7f9bf643.js"><link rel="prefetch" href="/assets/js/110.a106958d.js"><link rel="prefetch" href="/assets/js/111.b1600e65.js"><link rel="prefetch" href="/assets/js/112.81bf40f0.js"><link rel="prefetch" href="/assets/js/12.c7e4d9a8.js"><link rel="prefetch" href="/assets/js/13.235bc06a.js"><link rel="prefetch" href="/assets/js/14.8b8a21b7.js"><link rel="prefetch" href="/assets/js/15.83a607fc.js"><link rel="prefetch" href="/assets/js/16.2bf746d6.js"><link rel="prefetch" href="/assets/js/17.36a5d5f3.js"><link rel="prefetch" href="/assets/js/18.82e00fba.js"><link rel="prefetch" href="/assets/js/19.1c2116c8.js"><link rel="prefetch" href="/assets/js/2.3505b190.js"><link rel="prefetch" href="/assets/js/20.1f4e3d0f.js"><link rel="prefetch" href="/assets/js/21.80dca6df.js"><link rel="prefetch" href="/assets/js/22.24977f4c.js"><link rel="prefetch" href="/assets/js/23.867b53ea.js"><link rel="prefetch" href="/assets/js/24.d59d9203.js"><link rel="prefetch" href="/assets/js/25.fae2b839.js"><link rel="prefetch" href="/assets/js/26.ba769edc.js"><link rel="prefetch" href="/assets/js/27.03216770.js"><link rel="prefetch" href="/assets/js/28.82b934bf.js"><link rel="prefetch" href="/assets/js/29.9bbe7e55.js"><link rel="prefetch" href="/assets/js/3.ba62e17c.js"><link rel="prefetch" href="/assets/js/30.ed75778f.js"><link rel="prefetch" href="/assets/js/31.247a3dbb.js"><link rel="prefetch" href="/assets/js/32.b1bb1e43.js"><link rel="prefetch" href="/assets/js/33.3656c740.js"><link rel="prefetch" href="/assets/js/34.03c1b47c.js"><link rel="prefetch" href="/assets/js/35.5af5d342.js"><link rel="prefetch" href="/assets/js/36.572a9496.js"><link rel="prefetch" href="/assets/js/37.319db1b7.js"><link rel="prefetch" href="/assets/js/38.19837e80.js"><link rel="prefetch" href="/assets/js/39.72675c02.js"><link rel="prefetch" href="/assets/js/4.f9a0ae28.js"><link rel="prefetch" href="/assets/js/40.d9f81c69.js"><link rel="prefetch" href="/assets/js/41.184751dc.js"><link rel="prefetch" href="/assets/js/42.9fa6eee5.js"><link rel="prefetch" href="/assets/js/43.b3333fb7.js"><link rel="prefetch" href="/assets/js/44.97c13303.js"><link rel="prefetch" href="/assets/js/45.8afb63d1.js"><link rel="prefetch" href="/assets/js/46.ac497cb6.js"><link rel="prefetch" href="/assets/js/47.dc1178aa.js"><link rel="prefetch" href="/assets/js/48.50b8e29c.js"><link rel="prefetch" href="/assets/js/49.385dc110.js"><link rel="prefetch" href="/assets/js/5.0204093a.js"><link rel="prefetch" href="/assets/js/50.cadce2ee.js"><link rel="prefetch" href="/assets/js/51.d4e57e23.js"><link rel="prefetch" href="/assets/js/52.323a010e.js"><link rel="prefetch" href="/assets/js/53.377c0582.js"><link rel="prefetch" href="/assets/js/54.8d06b2c9.js"><link rel="prefetch" href="/assets/js/55.f82d7ef0.js"><link rel="prefetch" href="/assets/js/56.c9db2b25.js"><link rel="prefetch" href="/assets/js/57.bc11287b.js"><link rel="prefetch" href="/assets/js/58.a1a44552.js"><link rel="prefetch" href="/assets/js/59.4afc94b7.js"><link rel="prefetch" href="/assets/js/6.4774d695.js"><link rel="prefetch" href="/assets/js/60.867aed26.js"><link rel="prefetch" href="/assets/js/61.74327fa7.js"><link rel="prefetch" href="/assets/js/62.177c0b30.js"><link rel="prefetch" href="/assets/js/63.3e0d51da.js"><link rel="prefetch" href="/assets/js/64.e8778b11.js"><link rel="prefetch" href="/assets/js/65.b0dde85a.js"><link rel="prefetch" href="/assets/js/66.3bba1132.js"><link rel="prefetch" href="/assets/js/67.fb2ec2e1.js"><link rel="prefetch" href="/assets/js/68.d8ef845b.js"><link rel="prefetch" href="/assets/js/69.5b80f65b.js"><link rel="prefetch" href="/assets/js/7.010146f6.js"><link rel="prefetch" href="/assets/js/70.e265a8a0.js"><link rel="prefetch" href="/assets/js/71.08e24461.js"><link rel="prefetch" href="/assets/js/72.9f1ed203.js"><link rel="prefetch" href="/assets/js/73.cf073a90.js"><link rel="prefetch" href="/assets/js/74.e5e6cb7a.js"><link rel="prefetch" href="/assets/js/75.12d311a9.js"><link rel="prefetch" href="/assets/js/76.27ceea65.js"><link rel="prefetch" href="/assets/js/77.2d04e2fc.js"><link rel="prefetch" href="/assets/js/78.cd7b5394.js"><link rel="prefetch" href="/assets/js/79.397902f7.js"><link rel="prefetch" href="/assets/js/8.de3fc0db.js"><link rel="prefetch" href="/assets/js/80.8f355347.js"><link rel="prefetch" href="/assets/js/81.9fcee337.js"><link rel="prefetch" href="/assets/js/82.67857b15.js"><link rel="prefetch" href="/assets/js/83.8638b011.js"><link rel="prefetch" href="/assets/js/84.77ee6a86.js"><link rel="prefetch" href="/assets/js/85.724ec824.js"><link rel="prefetch" href="/assets/js/86.e0caf86b.js"><link rel="prefetch" href="/assets/js/87.32cc9faa.js"><link rel="prefetch" href="/assets/js/88.8db036d0.js"><link rel="prefetch" href="/assets/js/89.63be6804.js"><link rel="prefetch" href="/assets/js/9.a240a747.js"><link rel="prefetch" href="/assets/js/90.23557c83.js"><link rel="prefetch" href="/assets/js/91.0fc26ad3.js"><link rel="prefetch" href="/assets/js/92.45cce200.js"><link rel="prefetch" href="/assets/js/93.2a7d9b35.js"><link rel="prefetch" href="/assets/js/94.25f7b020.js"><link rel="prefetch" href="/assets/js/95.3d28b93b.js"><link rel="prefetch" href="/assets/js/96.fb907808.js"><link rel="prefetch" href="/assets/js/97.e4875071.js"><link rel="prefetch" href="/assets/js/98.2859c908.js"><link rel="prefetch" href="/assets/js/99.ac5b7b90.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8614bbde.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <!----> </div> <div class="page"> <div class="content"><h2 id="设计线程池接口"><a href="#设计线程池接口" aria-hidden="true" class="header-anchor">#</a> 设计线程池接口</h2> <blockquote><p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch20-03-designing-the-interface.md" target="_blank" rel="noopener noreferrer">ch20-03-designing-the-interface.md<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> <br>
+commit d06a6a181fd61704cbf7feb55bc61d518c6469f9</p></blockquote> <p>让我们讨论一下线程池看起来怎样。库作者们经常会发现，当尝试设计一些代码时，首先编写客户端接口确实有助于指导代码设计。以期望的调用方式来构建 API 代码的结构，接着在这个结构之内实现功能，而不是先实现功能再设计公有 API。</p> <p>类似于第十二章项目中使用的测试驱动开发。这里将要使用编译器驱动开发（Compiler Driven Development）。我们将编写调用所期望的函数的代码，接着依靠编译器告诉我们接下来需要修改什么。编译器错误信息会指导我们的实现。</p> <h3 id="如果使用-thread-spawn-的代码结构"><a href="#如果使用-thread-spawn-的代码结构" aria-hidden="true" class="header-anchor">#</a> 如果使用 <code>thread::spawn</code> 的代码结构</h3> <p>首先，让我们探索一下为每一个连接都创建一个线程看起来如何。这并不是最终方案，因为正如之前讲到的它会潜在的分配无限的线程，不过这是一个开始。列表 20-11 展示了 <code>main</code> 的改变，它在 <code>for</code> 循环中为每一个流分配了一个新线程进行处理：</p> <p><span class="filename">Filename: src/main.rs</span></p> <div class="language-rust,no_run extra-class"><pre class="language-text"><code># use std::thread;
+# use std::io::prelude::*;
+# use std::net::TcpListener;
+# use std::net::TcpStream;
+#
+fn main() {
+    let listener = TcpListener::bind(&quot;127.0.0.1:8080&quot;).unwrap();
+
+    for stream in listener.incoming() {
+        let stream = stream.unwrap();
+
+        thread::spawn(|| {
+            handle_connection(stream);
+        });
+    }
+}
+# fn handle_connection(mut stream: TcpStream) {}
+</code></pre></div><p><span class="caption">列表 20-11：为每一个流新建一个线程</span></p> <p>正如第十六章讲到的，<code>thread::spawn</code> 会创建一个新线程并运行闭包中的代码。如果运行这段代码并在两个浏览器标签页中加载 <code>/sleep</code> 和 <code>/</code>，确实会发现 <code>/</code> 请求并没有等待 <code>/sleep</code> 结束。不过正如之前提到的，这最终会使系统崩溃因为我们无限制的创建新线程。</p> <h3 id="为-threadpool-创建一个类似的接口"><a href="#为-threadpool-创建一个类似的接口" aria-hidden="true" class="header-anchor">#</a> 为 <code>ThreadPool</code> 创建一个类似的接口</h3> <p>我们期望线程池以类似且熟悉的方式工作，以便从线程切换到线程池并不会对运行于线程池中的代码做出较大的修改。列表 20-12 展示我们希望用来替换 <code>thread::spawn</code> 的 <code>ThreadPool</code> 结构体的假想接口：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,no_run extra-class"><pre class="language-text"><code># use std::thread;
+# use std::io::prelude::*;
+# use std::net::TcpListener;
+# use std::net::TcpStream;
+# struct ThreadPool;
+# impl ThreadPool {
+#    fn new(size: u32) -&gt; ThreadPool { ThreadPool }
+#    fn execute&lt;F&gt;(&amp;self, f: F)
+#        where F: FnOnce() + Send + 'static {}
+# }
+#
+fn main() {
+    let listener = TcpListener::bind(&quot;127.0.0.1:8080&quot;).unwrap();
+    let pool = ThreadPool::new(4);
+
+    for stream in listener.incoming() {
+        let stream = stream.unwrap();
+
+        pool.execute(|| {
+            handle_connection(stream);
+        });
+    }
+}
+# fn handle_connection(mut stream: TcpStream) {}
+</code></pre></div><p><span class="caption">列表 20-12：如何使用我们将要实现的 <code>ThreadPool</code></span></p> <p>这里使用 <code>ThreadPool::new</code> 来创建一个新的线程池，它有一个可配置的线程数的参数，在这里是四。这样在 <code>for</code> 循环中，<code>pool.execute</code> 将会以类似 <code>thread::spawn</code> 的方式工作。</p> <h3 id="采用编译器驱动开发来驱动-api-的编译"><a href="#采用编译器驱动开发来驱动-api-的编译" aria-hidden="true" class="header-anchor">#</a> 采用编译器驱动开发来驱动 API 的编译</h3> <p>继续并对列表 20-12 中的 <em>src/main.rs</em> 做出修改，并利用编译器错误来驱动开发。下面是我们得到的第一个错误：</p> <div class="language- extra-class"><pre class="language-text"><code>$ cargo check
+   Compiling hello v0.1.0 (file:///projects/hello)
+error[E0433]: failed to resolve. Use of undeclared type or module `ThreadPool`
+  --&gt; src\main.rs:10:16
+   |
+10 |     let pool = ThreadPool::new(4);
+   |                ^^^^^^^^^^^^^^^ Use of undeclared type or module
+   `ThreadPool`
+
+error: aborting due to previous error
+</code></pre></div><p>好的，我们需要一个 <code>ThreadPool</code>。将 <code>hello</code> crate 从二进制 crate 转换为库 crate 来存放 <code>ThreadPool</code> 实现，因为线程池实现与我们的 web server 的特定工作相独立。一旦写完了线程池库，就可以在任何工作中使用这个功能，而不仅仅是处理网络请求。</p> <p>创建 <em>src/lib.rs</em> 文件，它包含了目前可用的最简单的 <code>ThreadPool</code> 定义：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">pub</span> <span class="token keyword">struct</span> ThreadPool<span class="token punctuation">;</span>
+</code></pre></div><p>接着创建一个新目录，<em>src/bin</em>，并将二进制 crate 根文件从 <em>src/main.rs</em> 移动到 <em>src/bin/main.rs</em>。这使得库 crate 成为 <em>hello</em> 目录的主要 crate；不过仍然可以使用 <code>cargo run</code> 运行 <em>src/bin/main.rs</em> 二进制文件。移动了 <em>main.rs</em> 文件之后，修改文件开头加入如下代码来引入库 crate 并将 <code>ThreadPool</code> 引入作用域：</p> <p><span class="filename">文件名: src/bin/main.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>extern crate hello;
+use hello::ThreadPool;
+</code></pre></div><p>再次尝试运行来得到下一个需要解决的错误：</p> <div class="language- extra-class"><pre class="language-text"><code>$ cargo check
+   Compiling hello v0.1.0 (file:///projects/hello)
+error: no associated item named `new` found for type `hello::ThreadPool` in the
+current scope
+  --&gt; src\main.rs:13:16
+   |
+13 |     let pool = ThreadPool::new(4);
+   |                ^^^^^^^^^^^^^^^
+   |
+</code></pre></div><p>好的，下一步是为 <code>ThreadPool</code> 创建一个叫做 <code>new</code> 的关联函数。我们还知道 <code>new</code> 需要有一个参数可以接受 <code>4</code>，而且 <code>new</code> 应该返回 <code>ThreadPool</code> 实例。让我们实现拥有此特征的最小化 <code>new</code> 函数：</p> <p><span class="filename">文件夹: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">pub</span> <span class="token keyword">struct</span> ThreadPool<span class="token punctuation">;</span>
+
+<span class="token keyword">impl</span> ThreadPool <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">new</span><span class="token punctuation">(</span>size<span class="token punctuation">:</span> u32<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> ThreadPool <span class="token punctuation">{</span>
+        ThreadPool
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>这里的 <code>size</code> 参数是 <code>u32</code> 类型，因为我们知道为负的线程数没有意义。<code>u32</code> 是一个很好的默认值。一旦真正实现了 <code>new</code>，我们将考虑实现需要选择什么类型，目前我们仅仅处理编译器错误。</p> <p>再次编译检查这段代码：</p> <div class="language- extra-class"><pre class="language-text"><code>$ cargo check
+   Compiling hello v0.1.0 (file:///projects/hello)
+warning: unused variable: `size`, #[warn(unused_variables)] on by default
+ --&gt; src/lib.rs:4:16
+  |
+4 |     pub fn new(size: u32) -&gt; ThreadPool {
+  |                ^^^^
+
+error: no method named `execute` found for type `hello::ThreadPool` in the
+current scope
+  --&gt; src/main.rs:18:14
+   |
+18 |         pool.execute(|| {
+   |              ^^^^^^^
+</code></pre></div><p>好的，一个警告和一个错误。暂时先忽略警告，错误是因为并没有 <code>ThreadPool</code> 上的 <code>execute</code> 方法。让我们来定义一个，它应该能接受一个闭包。如果你还记得第十三章，闭包作为参数时可以使用三个不同的 trait：<code>Fn</code>、<code>FnMut</code> 和 <code>FnOnce</code>。那么应该用哪一种闭包呢？好吧，最终需要实现的类似于 <code>thread::spawn</code>；<code>thread::spawn</code> 的签名在其参数中使用了何种 bound 呢？查看文档会发现：</p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">pub</span> <span class="token keyword">fn</span> spawn<span class="token operator">&lt;</span>F<span class="token punctuation">,</span> T<span class="token operator">&gt;</span><span class="token punctuation">(</span>f<span class="token punctuation">:</span> F<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> JoinHandle<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span>
+    <span class="token keyword">where</span>
+        F<span class="token punctuation">:</span> <span class="token function">FnOnce</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> T <span class="token operator">+</span> Send <span class="token operator">+</span> <span class="token lifetime-annotation symbol">'static,</span>
+        T<span class="token punctuation">:</span> Send <span class="token operator">+</span> <span class="token lifetime-annotation symbol">'static</span>
+</code></pre></div><p><code>F</code> 是这里我们关心的参数；<code>T</code> 与返回值有关所以我们并不关心。考虑到 <code>spawn</code> 使用 <code>FnOnce</code> 作为 <code>F</code> 的 trait bound，这可能也是我们需要的，因为最终会将传递给 <code>execute</code> 的参数传给 <code>spawn</code>。因为处理请求的线程只会执行闭包一次，这也进一步确认了 <code>FnOnce</code> 是我们需要的 trait。</p> <p><code>F</code> 还有 trait bound <code>Send</code> 和生命周期绑定 <code>'static</code>，这对我们的情况也是有意义的：需要 <code>Send</code> 来将闭包从一个线程转移到另一个线程，而 <code>'static</code> 是因为并不知道线程会执行多久。让我们编写一个使用这些 bound 的泛型参数 <code>F</code> 的 <code>ThreadPool</code> 的 <code>execute</code> 方法：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">pub</span> <span class="token keyword">struct</span> ThreadPool<span class="token punctuation">;</span>
+<span class="token keyword">impl</span> ThreadPool <span class="token punctuation">{</span>
+    <span class="token comment">// ...snip...</span>
+
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> execute<span class="token operator">&lt;</span>F<span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">,</span> f<span class="token punctuation">:</span> F<span class="token punctuation">)</span>
+        <span class="token keyword">where</span>
+            F<span class="token punctuation">:</span> <span class="token function">FnOnce</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> Send <span class="token operator">+</span> <span class="token lifetime-annotation symbol">'static</span>
+    <span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><code>FnOnce</code> trait 仍然需要之后的 <code>()</code>，因为这里的 <code>FnOnce</code> 代表一个没有参数也没有返回值的闭包。正如函数的定义，返回值类型可以从签名中省略，不过即便没有参数也需要括号。</p> <p>因为我们仍在努力使接口能够编译，这里增加了 <code>execute</code> 方法的最小化实现，它没有做任何工作。再次进行检查：</p> <div class="language- extra-class"><pre class="language-text"><code>$ cargo check
+   Compiling hello v0.1.0 (file:///projects/hello)
+warning: unused variable: `size`, #[warn(unused_variables)] on by default
+ --&gt; src/lib.rs:4:16
+  |
+4 |     pub fn new(size: u32) -&gt; ThreadPool {
+  |                ^^^^
+
+warning: unused variable: `f`, #[warn(unused_variables)] on by default
+ --&gt; src/lib.rs:8:30
+  |
+8 |     pub fn execute&lt;F&gt;(&amp;self, f: F)
+  |                              ^
+</code></pre></div><p>现在就只有警告了！能够编译了！注意如果尝试 <code>cargo run</code> 运行程序并在浏览器中发起请求，仍会在浏览器中出现在本章开始时那样的错误。这个库实际上还没有调用传递给 <code>execute</code> 的闭包！</p> <blockquote><p>一个你可能听说过的关于像 Haskell 和 Rust 这样有严格编译器的语言的说法是“如果代码能够编译，它就能工作”。这是一个提醒大家的好时机，这只是一个说法和一种有时存在的感觉，实际上并不是完全正确的。我们的项目可以编译，不过它绝对没有做任何工作！如果构建一个真实且功能完整的项目，则需花费大量的时间来开始编写单元测试来检查代码能否编译<strong>并且</strong>拥有期望的行为。</p></blockquote></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/assets/js/107.a6f25383.js" defer></script><script src="/assets/js/app.b56e4aff.js" defer></script>
+  </body>
+</html>

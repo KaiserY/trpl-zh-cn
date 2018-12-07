@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>采用测试驱动开发完善库的功能</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.8614bbde.css" as="style"><link rel="preload" href="/assets/js/app.b56e4aff.js" as="script"><link rel="preload" href="/assets/js/63.3e0d51da.js" as="script"><link rel="prefetch" href="/assets/js/10.d41a3b84.js"><link rel="prefetch" href="/assets/js/100.22ca6861.js"><link rel="prefetch" href="/assets/js/101.80606dd4.js"><link rel="prefetch" href="/assets/js/102.75bf264b.js"><link rel="prefetch" href="/assets/js/103.7615fac4.js"><link rel="prefetch" href="/assets/js/104.a030e309.js"><link rel="prefetch" href="/assets/js/105.ceb5b0f7.js"><link rel="prefetch" href="/assets/js/106.53b25747.js"><link rel="prefetch" href="/assets/js/107.a6f25383.js"><link rel="prefetch" href="/assets/js/108.524846e6.js"><link rel="prefetch" href="/assets/js/109.5b3e8cc8.js"><link rel="prefetch" href="/assets/js/11.7f9bf643.js"><link rel="prefetch" href="/assets/js/110.a106958d.js"><link rel="prefetch" href="/assets/js/111.b1600e65.js"><link rel="prefetch" href="/assets/js/112.81bf40f0.js"><link rel="prefetch" href="/assets/js/12.c7e4d9a8.js"><link rel="prefetch" href="/assets/js/13.235bc06a.js"><link rel="prefetch" href="/assets/js/14.8b8a21b7.js"><link rel="prefetch" href="/assets/js/15.83a607fc.js"><link rel="prefetch" href="/assets/js/16.2bf746d6.js"><link rel="prefetch" href="/assets/js/17.36a5d5f3.js"><link rel="prefetch" href="/assets/js/18.82e00fba.js"><link rel="prefetch" href="/assets/js/19.1c2116c8.js"><link rel="prefetch" href="/assets/js/2.3505b190.js"><link rel="prefetch" href="/assets/js/20.1f4e3d0f.js"><link rel="prefetch" href="/assets/js/21.80dca6df.js"><link rel="prefetch" href="/assets/js/22.24977f4c.js"><link rel="prefetch" href="/assets/js/23.867b53ea.js"><link rel="prefetch" href="/assets/js/24.d59d9203.js"><link rel="prefetch" href="/assets/js/25.fae2b839.js"><link rel="prefetch" href="/assets/js/26.ba769edc.js"><link rel="prefetch" href="/assets/js/27.03216770.js"><link rel="prefetch" href="/assets/js/28.82b934bf.js"><link rel="prefetch" href="/assets/js/29.9bbe7e55.js"><link rel="prefetch" href="/assets/js/3.ba62e17c.js"><link rel="prefetch" href="/assets/js/30.ed75778f.js"><link rel="prefetch" href="/assets/js/31.247a3dbb.js"><link rel="prefetch" href="/assets/js/32.b1bb1e43.js"><link rel="prefetch" href="/assets/js/33.3656c740.js"><link rel="prefetch" href="/assets/js/34.03c1b47c.js"><link rel="prefetch" href="/assets/js/35.5af5d342.js"><link rel="prefetch" href="/assets/js/36.572a9496.js"><link rel="prefetch" href="/assets/js/37.319db1b7.js"><link rel="prefetch" href="/assets/js/38.19837e80.js"><link rel="prefetch" href="/assets/js/39.72675c02.js"><link rel="prefetch" href="/assets/js/4.f9a0ae28.js"><link rel="prefetch" href="/assets/js/40.d9f81c69.js"><link rel="prefetch" href="/assets/js/41.184751dc.js"><link rel="prefetch" href="/assets/js/42.9fa6eee5.js"><link rel="prefetch" href="/assets/js/43.b3333fb7.js"><link rel="prefetch" href="/assets/js/44.97c13303.js"><link rel="prefetch" href="/assets/js/45.8afb63d1.js"><link rel="prefetch" href="/assets/js/46.ac497cb6.js"><link rel="prefetch" href="/assets/js/47.dc1178aa.js"><link rel="prefetch" href="/assets/js/48.50b8e29c.js"><link rel="prefetch" href="/assets/js/49.385dc110.js"><link rel="prefetch" href="/assets/js/5.0204093a.js"><link rel="prefetch" href="/assets/js/50.cadce2ee.js"><link rel="prefetch" href="/assets/js/51.d4e57e23.js"><link rel="prefetch" href="/assets/js/52.323a010e.js"><link rel="prefetch" href="/assets/js/53.377c0582.js"><link rel="prefetch" href="/assets/js/54.8d06b2c9.js"><link rel="prefetch" href="/assets/js/55.f82d7ef0.js"><link rel="prefetch" href="/assets/js/56.c9db2b25.js"><link rel="prefetch" href="/assets/js/57.bc11287b.js"><link rel="prefetch" href="/assets/js/58.a1a44552.js"><link rel="prefetch" href="/assets/js/59.4afc94b7.js"><link rel="prefetch" href="/assets/js/6.4774d695.js"><link rel="prefetch" href="/assets/js/60.867aed26.js"><link rel="prefetch" href="/assets/js/61.74327fa7.js"><link rel="prefetch" href="/assets/js/62.177c0b30.js"><link rel="prefetch" href="/assets/js/64.e8778b11.js"><link rel="prefetch" href="/assets/js/65.b0dde85a.js"><link rel="prefetch" href="/assets/js/66.3bba1132.js"><link rel="prefetch" href="/assets/js/67.fb2ec2e1.js"><link rel="prefetch" href="/assets/js/68.d8ef845b.js"><link rel="prefetch" href="/assets/js/69.5b80f65b.js"><link rel="prefetch" href="/assets/js/7.010146f6.js"><link rel="prefetch" href="/assets/js/70.e265a8a0.js"><link rel="prefetch" href="/assets/js/71.08e24461.js"><link rel="prefetch" href="/assets/js/72.9f1ed203.js"><link rel="prefetch" href="/assets/js/73.cf073a90.js"><link rel="prefetch" href="/assets/js/74.e5e6cb7a.js"><link rel="prefetch" href="/assets/js/75.12d311a9.js"><link rel="prefetch" href="/assets/js/76.27ceea65.js"><link rel="prefetch" href="/assets/js/77.2d04e2fc.js"><link rel="prefetch" href="/assets/js/78.cd7b5394.js"><link rel="prefetch" href="/assets/js/79.397902f7.js"><link rel="prefetch" href="/assets/js/8.de3fc0db.js"><link rel="prefetch" href="/assets/js/80.8f355347.js"><link rel="prefetch" href="/assets/js/81.9fcee337.js"><link rel="prefetch" href="/assets/js/82.67857b15.js"><link rel="prefetch" href="/assets/js/83.8638b011.js"><link rel="prefetch" href="/assets/js/84.77ee6a86.js"><link rel="prefetch" href="/assets/js/85.724ec824.js"><link rel="prefetch" href="/assets/js/86.e0caf86b.js"><link rel="prefetch" href="/assets/js/87.32cc9faa.js"><link rel="prefetch" href="/assets/js/88.8db036d0.js"><link rel="prefetch" href="/assets/js/89.63be6804.js"><link rel="prefetch" href="/assets/js/9.a240a747.js"><link rel="prefetch" href="/assets/js/90.23557c83.js"><link rel="prefetch" href="/assets/js/91.0fc26ad3.js"><link rel="prefetch" href="/assets/js/92.45cce200.js"><link rel="prefetch" href="/assets/js/93.2a7d9b35.js"><link rel="prefetch" href="/assets/js/94.25f7b020.js"><link rel="prefetch" href="/assets/js/95.3d28b93b.js"><link rel="prefetch" href="/assets/js/96.fb907808.js"><link rel="prefetch" href="/assets/js/97.e4875071.js"><link rel="prefetch" href="/assets/js/98.2859c908.js"><link rel="prefetch" href="/assets/js/99.ac5b7b90.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8614bbde.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <!----> </div> <div class="page"> <div class="content"><h2 id="采用测试驱动开发完善库的功能"><a href="#采用测试驱动开发完善库的功能" aria-hidden="true" class="header-anchor">#</a> 采用测试驱动开发完善库的功能</h2> <blockquote><p><a href="https://github.com/rust-lang/book/blob/master/src/ch12-04-testing-the-librarys-functionality.md" target="_blank" rel="noopener noreferrer">ch12-04-testing-the-librarys-functionality.md<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> <br>
+commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f</p></blockquote> <p>现在我们将逻辑提取到了 <em>src/lib.rs</em> 并将所有的参数解析和错误处理留在了 <em>src/main.rs</em> 中，为代码的核心功能编写测试将更加容易。我们可以直接使用多种参数调用函数并检查返回值而无需从命令行运行二进制文件了。如果你愿意的话，请自行为 <code>Config::new</code> 和 <code>run</code> 函数的功能编写一些测试。</p> <p>在这一部分，我们将遵循测试驱动开发（Test Driven Development, TDD）的模式来逐步增加 <code>minigrep</code> 的搜索逻辑。这是一个软件开发技术，它遵循如下步骤：</p> <ol><li>编写一个会失败的测试，并运行它以确保其因为你期望的原因失败。</li> <li>编写或修改刚好足够的代码来使得新的测试通过。</li> <li>重构刚刚增加或修改的代码，并确保测试仍然能通过。</li> <li>从步骤 1 开始重复！</li></ol> <p>这只是众多编写软件的方法之一，不过 TDD 有助于驱动代码的设计。在编写能使测试通过的代码之前编写测试有助于在开发过程中保持高测试覆盖率。</p> <p>我们将测试驱动实现实际在文件内容中搜索查询字符串并返回匹配的行示例的功能。我们将在一个叫做 <code>search</code> 的函数中增加这些功能。</p> <h3 id="编写失败测试"><a href="#编写失败测试" aria-hidden="true" class="header-anchor">#</a> 编写失败测试</h3> <p>去掉 <em>src/lib.rs</em> 和 <em>src/main.rs</em> 中用于检查程序行为的 <code>println!</code> 语句，因为不再真正需要他们了。接着我们会像第十一章那样增加一个 <code>test</code> 模块和一个测试函数。测试函数指定了 <code>search</code> 函数期望拥有的行为：它会获取一个需要查询的字符串和用来查询的文本，并只会返回包含请求的文本行。示例 12-15 展示了这个测试，它还不能编译：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">fn</span> search<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span><span class="token punctuation">(</span>query<span class="token punctuation">:</span> <span class="token operator">&amp;</span>str<span class="token punctuation">,</span> contents<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> str<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Vec<span class="token operator">&lt;</span><span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> str<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+#      <span class="token function">vec!</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+# <span class="token punctuation">}</span>
+#
+<span class="token attribute attr-name">#[cfg(test)]</span>
+<span class="token keyword">mod</span> tests <span class="token punctuation">{</span>
+    <span class="token keyword">use</span> <span class="token keyword">super</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token operator">*</span><span class="token punctuation">;</span>
+
+    <span class="token attribute attr-name">#[test]</span>
+    <span class="token keyword">fn</span> <span class="token function">one_result</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> query <span class="token operator">=</span> <span class="token string">&quot;duct&quot;</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> contents <span class="token operator">=</span> &quot;\
+Rust<span class="token punctuation">:</span>
+safe<span class="token punctuation">,</span> fast<span class="token punctuation">,</span> productive<span class="token punctuation">.</span>
+Pick three<span class="token punctuation">.</span>&quot;<span class="token punctuation">;</span>
+
+        <span class="token function">assert_eq!</span><span class="token punctuation">(</span>
+            <span class="token function">vec!</span><span class="token punctuation">[</span><span class="token string">&quot;safe, fast, productive.&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token function">search</span><span class="token punctuation">(</span>query<span class="token punctuation">,</span> contents<span class="token punctuation">)</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 12-15：创建一个我们期望的 <code>search</code> 函数的失败测试</span></p> <p>这里选择使用 <code>&quot;duct&quot;</code> 作为这个测试中需要搜索的字符串。用来搜索的文本有三行，其中只有一行包含 <code>&quot;duct&quot;</code>。我们断言 <code>search</code> 函数的返回值只包含期望的那一行。</p> <p>我们还不能运行这个测试并看到它失败，因为它甚至都还不能编译：<code>search</code> 函数还不存在呢！我们将增加足够的代码来使其能够编译：一个总是会返回空 vector 的 <code>search</code> 函数定义，如示例 12-16 所示。然后这个测试应该能够编译并因为空 vector 并不匹配一个包含一行 <code>&quot;safe, fast, productive.&quot;</code> 的 vector 而失败。</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> search<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span><span class="token punctuation">(</span>query<span class="token punctuation">:</span> <span class="token operator">&amp;</span>str<span class="token punctuation">,</span> contents<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> str<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Vec<span class="token operator">&lt;</span><span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> str<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token function">vec!</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 12-16：刚好足够使测试通过编译的 <code>search</code> 函数定义</span></p> <p>注意需要在 <code>search</code> 的签名中定义一个显式生命周期 <code>'a</code> 并用于 <code>contents</code> 参数和返回值。回忆一下第十章中讲到生命周期参数指定哪个参数的生命周期与返回值的生命周期相关联。在这个例子中，我们表明返回的 vector 中应该包含引用参数 <code>contents</code>（而不是参数<code>query</code>） slice 的字符串 slice。</p> <p>换句话说，我们告诉 Rust 函数 <code>search</code> 返回的数据将与 <code>search</code> 函数中的参数 <code>contents</code> 的数据存在的一样久。这是非常重要的！为了使这个引用有效那么 <strong>被</strong> slice 引用的数据也需要保持有效；如果编译器认为我们是在创建 <code>query</code> 而不是 <code>contents</code> 的字符串 slice，那么安全检查将是不正确的。</p> <p>如果尝试不用生命周期编译的话，我们将得到如下错误：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0106]: missing lifetime specifier
+ --&gt; src/lib.rs:5:51
+  |
+5 | fn search(query: &amp;str, contents: &amp;str) -&gt; Vec&lt;&amp;str&gt; {
+  |                                                   ^ expected lifetime
+parameter
+  |
+  = help: this function's return type contains a borrowed value, but the
+  signature does not say whether it is borrowed from `query` or `contents`
+</code></pre></div><p>Rust 不可能知道我们需要的是哪一个参数，所以需要告诉它。因为参数 <code>contents</code> 包含了所有的文本而且我们希望返回匹配的那部分文本，所以我们知道 <code>contents</code> 是应该要使用生命周期语法来与返回值相关联的参数。</p> <p>其他语言中并不需要你在函数签名中将参数与返回值相关联。所以这么做可能仍然感觉有些陌生，随着时间的推移这将会变得越来越容易。你可能想要将这个例子与第十章中生命 “生命周期与引用有效性” 部分做对比。</p> <p>现在运行测试：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo test
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+--warnings--
+    Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
+     Running target/debug/deps/minigrep-abcabcabc
+
+running 1 test
+test tests::one_result ... FAILED
+
+failures:
+
+---- tests::one_result stdout ----
+        thread 'tests::one_result' panicked at 'assertion failed: `(left ==
+right)`
+left: `[&quot;safe, fast, productive.&quot;]`,
+right: `[]`)', src/lib.rs:48:8
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+
+failures:
+    tests::one_result
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
+
+error: test failed, to rerun pass '--lib'
+</code></pre></div><p>好的，测试失败了，这正是我们所期望的。修改代码来让测试通过吧！</p> <h3 id="编写使测试通过的代码"><a href="#编写使测试通过的代码" aria-hidden="true" class="header-anchor">#</a> 编写使测试通过的代码</h3> <p>目前测试之所以会失败是因为我们总是返回一个空的 vector。为了修复并实现 <code>search</code>，我们的程序需要遵循如下步骤：</p> <ul><li>遍历内容的每一行文本。</li> <li>查看这一行是否包含要搜索的字符串。</li> <li>如果有，将这一行加入列表返回值中。</li> <li>如果没有，什么也不做。</li> <li>返回匹配到的结果列表</li></ul> <p>让我们一步一步的来，从遍历每行开始。</p> <h4 id="使用-lines-方法遍历每一行"><a href="#使用-lines-方法遍历每一行" aria-hidden="true" class="header-anchor">#</a> 使用 <code>lines</code> 方法遍历每一行</h4> <p>Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被命名为 <code>lines</code>，它如示例 12-17 这样工作。注意这还不能编译：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    for line in contents.lines() {
+        // do something with line
+    }
+}
+</code></pre></div><p><span class="caption">示例 12-17：遍历 <code>contents</code> 的每一行</span></p> <p><code>lines</code> 方法返回一个迭代器。第十三章会深入了解迭代器，不过我们已经在示例 3-5 中见过使用迭代器的方法了，在那里使用了一个 <code>for</code> 循环和迭代器在一个集合的每一项上运行了一些代码。</p> <h4 id="用查询字符串搜索每一行"><a href="#用查询字符串搜索每一行" aria-hidden="true" class="header-anchor">#</a> 用查询字符串搜索每一行</h4> <p>接下来将会增加检查当前行是否包含查询字符串的功能。幸运的是，字符串类型为此也有一个叫做 <code>contains</code> 的实用方法！如示例 12-18 所示在 <code>search</code> 函数中加入 <code>contains</code> 方法调用。注意这仍然不能编译：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    for line in contents.lines() {
+        if line.contains(query) {
+            // do something with line
+        }
+    }
+}
+</code></pre></div><p><span class="caption">示例 12-18：增加检查文本行是否包含 <code>query</code> 中字符串的功能</span></p> <h4 id="存储匹配的行"><a href="#存储匹配的行" aria-hidden="true" class="header-anchor">#</a> 存储匹配的行</h4> <p>我们还需要一个方法来存储包含查询字符串的行。为此可以在 <code>for</code> 循环之前创建一个可变的 vector 并调用 <code>push</code> 方法在 vector 中存放一个 <code>line</code>。在 <code>for</code> 循环之后，返回这个 vector，如示例 12-19 所示：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    let mut results = Vec::new();
+
+    for line in contents.lines() {
+        if line.contains(query) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+</code></pre></div><p><span class="caption">示例 12-19：储存匹配的行以便可以返回他们</span></p> <p>现在 <code>search</code> 函数应该返回只包含 <code>query</code> 的那些行，而测试应该会通过。让我们运行测试：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo test
+--snip--
+running 1 test
+test tests::one_result ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+</code></pre></div><p>测试通过了，它可以工作了！</p> <p>到此为止，我们可以考虑一下重构 <code>search</code> 的实现并时刻保持测试通过来保持其功能不变的机会了。<code>search</code> 函数中的代码并不坏，不过并没有利用迭代器的一些实用功能。第十三章将回到这个例子并深入探索迭代器并看看如何改进代码。</p> <h4 id="在-run-函数中使用-search-函数"><a href="#在-run-函数中使用-search-函数" aria-hidden="true" class="header-anchor">#</a> 在 <code>run</code> 函数中使用 <code>search</code> 函数</h4> <p>现在 <code>search</code> 函数是可以工作并测试通过了的，我们需要实际在 <code>run</code> 函数中调用 <code>search</code>。需要将 <code>config.query</code> 值和 <code>run</code> 从文件中读取的 <code>contents</code> 传递给 <code>search</code> 函数。接着 <code>run</code> 会打印出 <code>search</code> 返回的每一行：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
+    let contents = fs::read_to_string(config.filename)?;
+
+    for line in search(&amp;config.query, &amp;contents) {
+        println!(&quot;{}&quot;, line);
+    }
+
+    Ok(())
+}
+</code></pre></div><p>这里仍然使用了 <code>for</code> 循环获取了 <code>search</code> 返回的每一行并打印出来。</p> <p>现在整个程序应该可以工作了！让我们试一试，首先使用一个只会在艾米莉·狄金森的诗中返回一行的单词 “frog”：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo run frog poem.txt
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.38 secs
+     Running `target/debug/minigrep frog poem.txt`
+How public, like a frog
+</code></pre></div><p>好的！现在试试一个会匹配多行的单词，比如 “body”：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo run body poem.txt
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/minigrep body poem.txt`
+I’m nobody! Who are you?
+Are you nobody, too?
+How dreary to be somebody!
+</code></pre></div><p>最后，让我们确保搜索一个在诗中哪里都没有的单词时不会得到任何行，比如 &quot;monomorphization&quot;：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo run monomorphization poem.txt
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/minigrep monomorphization poem.txt`
+</code></pre></div><p>非常好！我们创建了一个属于自己的迷你版经典工具，并学习了很多如何组织程序的知识。我们还学习了一些文件输入输出、生命周期、测试和命令行解析的内容。</p> <p>为了使这个项目更丰满，我们将简要的展示如何处理环境变量和打印到标准错误，这两者在编写命令行程序时都很有用。</p></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/assets/js/63.3e0d51da.js" defer></script><script src="/assets/js/app.b56e4aff.js" defer></script>
+  </body>
+</html>

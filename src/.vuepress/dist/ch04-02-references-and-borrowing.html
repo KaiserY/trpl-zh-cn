@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>引用与借用</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.8614bbde.css" as="style"><link rel="preload" href="/assets/js/app.b56e4aff.js" as="script"><link rel="preload" href="/assets/js/27.03216770.js" as="script"><link rel="prefetch" href="/assets/js/10.d41a3b84.js"><link rel="prefetch" href="/assets/js/100.22ca6861.js"><link rel="prefetch" href="/assets/js/101.80606dd4.js"><link rel="prefetch" href="/assets/js/102.75bf264b.js"><link rel="prefetch" href="/assets/js/103.7615fac4.js"><link rel="prefetch" href="/assets/js/104.a030e309.js"><link rel="prefetch" href="/assets/js/105.ceb5b0f7.js"><link rel="prefetch" href="/assets/js/106.53b25747.js"><link rel="prefetch" href="/assets/js/107.a6f25383.js"><link rel="prefetch" href="/assets/js/108.524846e6.js"><link rel="prefetch" href="/assets/js/109.5b3e8cc8.js"><link rel="prefetch" href="/assets/js/11.7f9bf643.js"><link rel="prefetch" href="/assets/js/110.a106958d.js"><link rel="prefetch" href="/assets/js/111.b1600e65.js"><link rel="prefetch" href="/assets/js/112.81bf40f0.js"><link rel="prefetch" href="/assets/js/12.c7e4d9a8.js"><link rel="prefetch" href="/assets/js/13.235bc06a.js"><link rel="prefetch" href="/assets/js/14.8b8a21b7.js"><link rel="prefetch" href="/assets/js/15.83a607fc.js"><link rel="prefetch" href="/assets/js/16.2bf746d6.js"><link rel="prefetch" href="/assets/js/17.36a5d5f3.js"><link rel="prefetch" href="/assets/js/18.82e00fba.js"><link rel="prefetch" href="/assets/js/19.1c2116c8.js"><link rel="prefetch" href="/assets/js/2.3505b190.js"><link rel="prefetch" href="/assets/js/20.1f4e3d0f.js"><link rel="prefetch" href="/assets/js/21.80dca6df.js"><link rel="prefetch" href="/assets/js/22.24977f4c.js"><link rel="prefetch" href="/assets/js/23.867b53ea.js"><link rel="prefetch" href="/assets/js/24.d59d9203.js"><link rel="prefetch" href="/assets/js/25.fae2b839.js"><link rel="prefetch" href="/assets/js/26.ba769edc.js"><link rel="prefetch" href="/assets/js/28.82b934bf.js"><link rel="prefetch" href="/assets/js/29.9bbe7e55.js"><link rel="prefetch" href="/assets/js/3.ba62e17c.js"><link rel="prefetch" href="/assets/js/30.ed75778f.js"><link rel="prefetch" href="/assets/js/31.247a3dbb.js"><link rel="prefetch" href="/assets/js/32.b1bb1e43.js"><link rel="prefetch" href="/assets/js/33.3656c740.js"><link rel="prefetch" href="/assets/js/34.03c1b47c.js"><link rel="prefetch" href="/assets/js/35.5af5d342.js"><link rel="prefetch" href="/assets/js/36.572a9496.js"><link rel="prefetch" href="/assets/js/37.319db1b7.js"><link rel="prefetch" href="/assets/js/38.19837e80.js"><link rel="prefetch" href="/assets/js/39.72675c02.js"><link rel="prefetch" href="/assets/js/4.f9a0ae28.js"><link rel="prefetch" href="/assets/js/40.d9f81c69.js"><link rel="prefetch" href="/assets/js/41.184751dc.js"><link rel="prefetch" href="/assets/js/42.9fa6eee5.js"><link rel="prefetch" href="/assets/js/43.b3333fb7.js"><link rel="prefetch" href="/assets/js/44.97c13303.js"><link rel="prefetch" href="/assets/js/45.8afb63d1.js"><link rel="prefetch" href="/assets/js/46.ac497cb6.js"><link rel="prefetch" href="/assets/js/47.dc1178aa.js"><link rel="prefetch" href="/assets/js/48.50b8e29c.js"><link rel="prefetch" href="/assets/js/49.385dc110.js"><link rel="prefetch" href="/assets/js/5.0204093a.js"><link rel="prefetch" href="/assets/js/50.cadce2ee.js"><link rel="prefetch" href="/assets/js/51.d4e57e23.js"><link rel="prefetch" href="/assets/js/52.323a010e.js"><link rel="prefetch" href="/assets/js/53.377c0582.js"><link rel="prefetch" href="/assets/js/54.8d06b2c9.js"><link rel="prefetch" href="/assets/js/55.f82d7ef0.js"><link rel="prefetch" href="/assets/js/56.c9db2b25.js"><link rel="prefetch" href="/assets/js/57.bc11287b.js"><link rel="prefetch" href="/assets/js/58.a1a44552.js"><link rel="prefetch" href="/assets/js/59.4afc94b7.js"><link rel="prefetch" href="/assets/js/6.4774d695.js"><link rel="prefetch" href="/assets/js/60.867aed26.js"><link rel="prefetch" href="/assets/js/61.74327fa7.js"><link rel="prefetch" href="/assets/js/62.177c0b30.js"><link rel="prefetch" href="/assets/js/63.3e0d51da.js"><link rel="prefetch" href="/assets/js/64.e8778b11.js"><link rel="prefetch" href="/assets/js/65.b0dde85a.js"><link rel="prefetch" href="/assets/js/66.3bba1132.js"><link rel="prefetch" href="/assets/js/67.fb2ec2e1.js"><link rel="prefetch" href="/assets/js/68.d8ef845b.js"><link rel="prefetch" href="/assets/js/69.5b80f65b.js"><link rel="prefetch" href="/assets/js/7.010146f6.js"><link rel="prefetch" href="/assets/js/70.e265a8a0.js"><link rel="prefetch" href="/assets/js/71.08e24461.js"><link rel="prefetch" href="/assets/js/72.9f1ed203.js"><link rel="prefetch" href="/assets/js/73.cf073a90.js"><link rel="prefetch" href="/assets/js/74.e5e6cb7a.js"><link rel="prefetch" href="/assets/js/75.12d311a9.js"><link rel="prefetch" href="/assets/js/76.27ceea65.js"><link rel="prefetch" href="/assets/js/77.2d04e2fc.js"><link rel="prefetch" href="/assets/js/78.cd7b5394.js"><link rel="prefetch" href="/assets/js/79.397902f7.js"><link rel="prefetch" href="/assets/js/8.de3fc0db.js"><link rel="prefetch" href="/assets/js/80.8f355347.js"><link rel="prefetch" href="/assets/js/81.9fcee337.js"><link rel="prefetch" href="/assets/js/82.67857b15.js"><link rel="prefetch" href="/assets/js/83.8638b011.js"><link rel="prefetch" href="/assets/js/84.77ee6a86.js"><link rel="prefetch" href="/assets/js/85.724ec824.js"><link rel="prefetch" href="/assets/js/86.e0caf86b.js"><link rel="prefetch" href="/assets/js/87.32cc9faa.js"><link rel="prefetch" href="/assets/js/88.8db036d0.js"><link rel="prefetch" href="/assets/js/89.63be6804.js"><link rel="prefetch" href="/assets/js/9.a240a747.js"><link rel="prefetch" href="/assets/js/90.23557c83.js"><link rel="prefetch" href="/assets/js/91.0fc26ad3.js"><link rel="prefetch" href="/assets/js/92.45cce200.js"><link rel="prefetch" href="/assets/js/93.2a7d9b35.js"><link rel="prefetch" href="/assets/js/94.25f7b020.js"><link rel="prefetch" href="/assets/js/95.3d28b93b.js"><link rel="prefetch" href="/assets/js/96.fb907808.js"><link rel="prefetch" href="/assets/js/97.e4875071.js"><link rel="prefetch" href="/assets/js/98.2859c908.js"><link rel="prefetch" href="/assets/js/99.ac5b7b90.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8614bbde.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <!----> </div> <div class="page"> <div class="content"><h2 id="引用与借用"><a href="#引用与借用" aria-hidden="true" class="header-anchor">#</a> 引用与借用</h2> <blockquote><p><a href="https://github.com/rust-lang/book/blob/master/src/ch04-02-references-and-borrowing.md" target="_blank" rel="noopener noreferrer">ch04-02-references-and-borrowing.md<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> <br>
+commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37</p></blockquote> <p>示例 4-5 中的元组代码有这样一个问题：我们必须将 <code>String</code> 返回给调用函数，以便在调用 <code>calculate_length</code> 后仍能使用 <code>String</code>，因为 <code>String</code> 被移动到了 <code>calculate_length</code> 内。</p> <p>下面是如何定义并使用一个（新的）<code>calculate_length</code> 函数，它以一个对象的引用作为参数而不是获取值的所有权：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> s1 <span class="token operator">=</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">let</span> len <span class="token operator">=</span> <span class="token function">calculate_length</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>s1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;The length of '{}' is {}.&quot;</span><span class="token punctuation">,</span> s1<span class="token punctuation">,</span> len<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">fn</span> <span class="token function">calculate_length</span><span class="token punctuation">(</span>s<span class="token punctuation">:</span> <span class="token operator">&amp;</span>String<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span>
+    s<span class="token punctuation">.</span><span class="token function">len</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>首先，注意变量声明和函数返回值中的所有元组代码都消失了。其次，注意我们传递 <code>&amp;s1</code> 给 <code>calculate_length</code>，同时在函数定义中，我们获取 <code>&amp;String</code> 而不是 <code>String</code>。</p> <p>这些 &amp; 符号就是 <strong>引用</strong>，它们允许你使用值但不获取其所有权。图 4-5 展示了一张示意图。</p> <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center"> <p><span class="caption">图 4-5：<code>&amp;String s</code> 指向 <code>String s1</code> 示意图</span></p> <blockquote><p>注意：与使用 <code>&amp;</code> 引用相反的操作是 <strong>解引用</strong>（<em>dereferencing</em>），它使用解引用运算符，<code>*</code>。我们将会在第八章遇到一些解引用运算符，并在第十五章详细讨论解引用。</p></blockquote> <p>仔细看看这个函数调用：</p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">fn</span> <span class="token function">calculate_length</span><span class="token punctuation">(</span>s<span class="token punctuation">:</span> <span class="token operator">&amp;</span>String<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span>
+#     s<span class="token punctuation">.</span><span class="token function">len</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+# <span class="token punctuation">}</span>
+<span class="token keyword">let</span> s1 <span class="token operator">=</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">let</span> len <span class="token operator">=</span> <span class="token function">calculate_length</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>s1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p><code>&amp;s1</code> 语法让我们创建一个 <strong>指向</strong> 值 <code>s1</code> 的引用，但是并不拥有它。因为并不拥有这个值，当引用离开作用域时其指向的值也不会被丢弃。</p> <p>同理，函数签名使用 <code>&amp;</code> 来表明参数 <code>s</code> 的类型是一个引用。让我们增加一些解释性的注释：</p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">calculate_length</span><span class="token punctuation">(</span>s<span class="token punctuation">:</span> <span class="token operator">&amp;</span>String<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> usize <span class="token punctuation">{</span> <span class="token comment">// s 是对 String 的引用</span>
+    s<span class="token punctuation">.</span><span class="token function">len</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span> <span class="token comment">// 这里，s 离开了作用域。但因为它并不拥有引用值的所有权，</span>
+  <span class="token comment">// 所以什么也不会发生</span>
+</code></pre></div><p>变量 <code>s</code> 有效的作用域与函数参数的作用域一样，不过当引用离开作用域后并不丢弃它指向的数据，因为我们没有所有权。当函数使用引用而不是实际值作为参数，无需返回值来交还所有权，因为就不曾拥有所有权。</p> <p>我们将获取引用作为函数参数称为 <strong>借用</strong>（<em>borrowing</em>）。正如现实生活中，如果一个人拥有某样东西，你可以从他那里借来。当你使用完毕，必须还回去。</p> <p>如果我们尝试修改借用的变量呢？尝试示例 4-6 中的代码。剧透：这行不通！</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,ignore,does_not_compile extra-class"><pre class="language-text"><code>fn main() {
+    let s = String::from(&quot;hello&quot;);
+
+    change(&amp;s);
+}
+
+fn change(some_string: &amp;String) {
+    some_string.push_str(&quot;, world&quot;);
+}
+</code></pre></div><p><span class="caption">示例 4-6：尝试修改借用的值</span></p> <p>这里是错误：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0596]: cannot borrow immutable borrowed content `*some_string` as mutable
+ --&gt; error.rs:8:5
+  |
+7 | fn change(some_string: &amp;String) {
+  |                        ------- use `&amp;mut String` here to make mutable
+8 |     some_string.push_str(&quot;, world&quot;);
+  |     ^^^^^^^^^^^ cannot borrow as mutable
+</code></pre></div><p>正如变量默认是不可变的，引用也一样。（默认）不允许修改引用的值。</p> <h3 id="可变引用"><a href="#可变引用" aria-hidden="true" class="header-anchor">#</a> 可变引用</h3> <p>我们通过一个小调整就能修复示例 4-6 代码中的错误：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> s <span class="token operator">=</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">change</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">fn</span> <span class="token function">change</span><span class="token punctuation">(</span>some_string<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> String<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    some_string<span class="token punctuation">.</span><span class="token function">push_str</span><span class="token punctuation">(</span><span class="token string">&quot;, world&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>首先，必须将 <code>s</code> 改为 <code>mut</code>。然后必须创建一个可变引用 <code>&amp;mut s</code> 和接受一个可变引用 <code>some_string: &amp;mut String</code>。</p> <p>不过可变引用有一个很大的限制：在特定作用域中的特定数据有且只有一个可变引用。这些代码会失败：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,ignore,does_not_compile extra-class"><pre class="language-text"><code>let mut s = String::from(&quot;hello&quot;);
+
+let r1 = &amp;mut s;
+let r2 = &amp;mut s;
+
+println!(&quot;{}, {}&quot;, r1, r2);
+</code></pre></div><p>错误如下：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0499]: cannot borrow `s` as mutable more than once at a time
+ --&gt; src/main.rs:5:10
+  |
+4 | let r1 = &amp;mut s;
+  |          ------ first mutable borrow occurs here
+5 | let r2 = &amp;mut s;
+  |          ^^^^^^ second mutable borrow occurs here
+6 | println!(&quot;{}, {}&quot;, r1, r2);
+  |                    -- borrow later used here
+</code></pre></div><p>这个限制允许可变性，不过是以一种受限制的方式允许。新 Rustacean 们经常与此作斗争，因为大部分语言中变量任何时候都是可变的。</p> <p>这个限制的好处是 Rust 可以在编译时就避免数据竞争。<strong>数据竞争</strong>（<em>data race</em>）类似于竞态条件，它可由这三个行为造成：</p> <ul><li>两个或更多指针同时访问同一数据。</li> <li>至少有一个指针被用来写入数据。</li> <li>没有同步数据访问的机制。</li></ul> <p>数据竞争会导致未定义行为，难以在运行时追踪，并且难以诊断和修复；Rust 避免了这种情况的发生，因为它甚至不会编译存在数据竞争的代码！</p> <p>一如既往，可以使用大括号来创建一个新的作用域，以允许拥有多个可变引用，只是不能 <strong>同时</strong> 拥有：</p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">let</span> <span class="token keyword">mut</span> s <span class="token operator">=</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">{</span>
+    <span class="token keyword">let</span> r1 <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> s<span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span> <span class="token comment">// r1 在这里离开了作用域，所以我们完全可以创建一个新的引用</span>
+
+<span class="token keyword">let</span> r2 <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> s<span class="token punctuation">;</span>
+</code></pre></div><p>类似的规则也存在于同时使用可变与不可变引用中。这些代码会导致一个错误：</p> <div class="language-rust,ignore,does_not_compile extra-class"><pre class="language-text"><code>let mut s = String::from(&quot;hello&quot;);
+
+let r1 = &amp;s; // no problem
+let r2 = &amp;s; // no problem
+let r3 = &amp;mut s; // BIG PROBLEM
+
+println!(&quot;{}, {}, and {}&quot;, r1, r2, r3);
+</code></pre></div><p>错误如下：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
+ --&gt; src/main.rs:6:10
+  |
+4 | let r1 = &amp;s; // no problem
+  |          -- immutable borrow occurs here
+5 | let r2 = &amp;s; // no problem
+6 | let r3 = &amp;mut s; // BIG PROBLEM
+  |          ^^^^^^ mutable borrow occurs here
+7 |
+8 | println!(&quot;{}, {}, and {}&quot;, r1, r2, r3);
+  |                            -- borrow later used here
+</code></pre></div><p>哇哦！我们 <strong>也</strong> 不能在拥有不可变引用的同时拥有可变引用。不可变引用的用户可不希望在他们的眼皮底下值就被意外的改变了！然而，多个不可变引用是可以的，因为没有哪个只能读取数据的人有能力影响其他人读取到的数据。</p> <p>尽管这些错误有时使人沮丧，但请牢记这是 Rust 编译器在提前指出一个潜在的 bug（在编译时而不是在运行时）并精准显示问题所在。这样你就不必去跟踪为何数据并不是你想象中的那样。</p> <h3 id="悬垂引用（dangling-references）"><a href="#悬垂引用（dangling-references）" aria-hidden="true" class="header-anchor">#</a> 悬垂引用（Dangling References）</h3> <p>在具有指针的语言中，很容易通过释放内存时保留指向它的指针而错误地生成一个 <strong>悬垂指针</strong>（<em>dangling pointer</em>），所谓悬垂指针是其指向的内存可能已经被分配给其它持有者。相比之下，在 Rust 中编译器确保引用永远也不会变成悬垂状态：当你拥有一些数据的引用，编译器确保数据不会在其引用之前离开作用域。</p> <p>让我们尝试创建一个悬垂引用，Rust 会通过一个编译时错误来避免：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,ignore,does_not_compile extra-class"><pre class="language-text"><code>fn main() {
+    let reference_to_nothing = dangle();
+}
+
+fn dangle() -&gt; &amp;String {
+    let s = String::from(&quot;hello&quot;);
+
+    &amp;s
+}
+</code></pre></div><p>这里是错误：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0106]: missing lifetime specifier
+ --&gt; main.rs:5:16
+  |
+5 | fn dangle() -&gt; &amp;String {
+  |                ^ expected lifetime parameter
+  |
+  = help: this function's return type contains a borrowed value, but there is
+  no value for it to be borrowed from
+  = help: consider giving it a 'static lifetime
+</code></pre></div><p>错误信息引用了一个我们还未介绍的功能：生命周期（lifetimes）。第十章会详细介绍生命周期。不过，如果你不理会生命周期部分，错误信息中确实包含了为什么这段代码有问题的关键信息：</p> <div class="language-text extra-class"><pre class="language-text"><code>this function's return type contains a borrowed value, but there is no value
+for it to be borrowed from.
+</code></pre></div><p>让我们仔细看看我们的 <code>dangle</code> 代码的每一步到底发生了什么：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>fn dangle() -&gt; &amp;String { // dangle 返回一个字符串的引用
+
+    let s = String::from(&quot;hello&quot;); // s 是一个新字符串
+
+    &amp;s // 返回字符串 s 的引用
+} // 这里 s 离开作用域并被丢弃。其内存被释放。
+  // 危险！
+</code></pre></div><p>因为 <code>s</code> 是在 <code>dangle</code> 函数内创建的，当 <code>dangle</code> 的代码执行完毕后，<code>s</code> 将被释放。不过我们尝试返回它的引用。这意味着这个引用会指向一个无效的 <code>String</code>，这可不对！Rust 不会允许我们这么做。</p> <p>这里的解决方法是直接返回 <code>String</code>：</p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">fn</span> <span class="token function">no_dangle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> String <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> s <span class="token operator">=</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    s
+<span class="token punctuation">}</span>
+</code></pre></div><p>这样就没有任何错误了。所有权被移动出去，所以没有值被释放。</p> <h3 id="引用的规则"><a href="#引用的规则" aria-hidden="true" class="header-anchor">#</a> 引用的规则</h3> <p>让我们概括一下之前对引用的讨论：</p> <ul><li>在任意给定时间，<strong>要么</strong> 只能有一个可变引用，<strong>要么</strong> 只能有多个不可变引用。</li> <li>引用必须总是有效。</li></ul> <p>接下来，我们来看看另一种不同类型的引用：slice。</p></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/assets/js/27.03216770.js" defer></script><script src="/assets/js/app.b56e4aff.js" defer></script>
+  </body>
+</html>

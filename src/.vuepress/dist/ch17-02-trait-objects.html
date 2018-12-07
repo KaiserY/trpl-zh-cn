@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>为使用不同类型的值而设计的 trait 对象</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.8614bbde.css" as="style"><link rel="preload" href="/assets/js/app.b56e4aff.js" as="script"><link rel="preload" href="/assets/js/91.0fc26ad3.js" as="script"><link rel="prefetch" href="/assets/js/10.d41a3b84.js"><link rel="prefetch" href="/assets/js/100.22ca6861.js"><link rel="prefetch" href="/assets/js/101.80606dd4.js"><link rel="prefetch" href="/assets/js/102.75bf264b.js"><link rel="prefetch" href="/assets/js/103.7615fac4.js"><link rel="prefetch" href="/assets/js/104.a030e309.js"><link rel="prefetch" href="/assets/js/105.ceb5b0f7.js"><link rel="prefetch" href="/assets/js/106.53b25747.js"><link rel="prefetch" href="/assets/js/107.a6f25383.js"><link rel="prefetch" href="/assets/js/108.524846e6.js"><link rel="prefetch" href="/assets/js/109.5b3e8cc8.js"><link rel="prefetch" href="/assets/js/11.7f9bf643.js"><link rel="prefetch" href="/assets/js/110.a106958d.js"><link rel="prefetch" href="/assets/js/111.b1600e65.js"><link rel="prefetch" href="/assets/js/112.81bf40f0.js"><link rel="prefetch" href="/assets/js/12.c7e4d9a8.js"><link rel="prefetch" href="/assets/js/13.235bc06a.js"><link rel="prefetch" href="/assets/js/14.8b8a21b7.js"><link rel="prefetch" href="/assets/js/15.83a607fc.js"><link rel="prefetch" href="/assets/js/16.2bf746d6.js"><link rel="prefetch" href="/assets/js/17.36a5d5f3.js"><link rel="prefetch" href="/assets/js/18.82e00fba.js"><link rel="prefetch" href="/assets/js/19.1c2116c8.js"><link rel="prefetch" href="/assets/js/2.3505b190.js"><link rel="prefetch" href="/assets/js/20.1f4e3d0f.js"><link rel="prefetch" href="/assets/js/21.80dca6df.js"><link rel="prefetch" href="/assets/js/22.24977f4c.js"><link rel="prefetch" href="/assets/js/23.867b53ea.js"><link rel="prefetch" href="/assets/js/24.d59d9203.js"><link rel="prefetch" href="/assets/js/25.fae2b839.js"><link rel="prefetch" href="/assets/js/26.ba769edc.js"><link rel="prefetch" href="/assets/js/27.03216770.js"><link rel="prefetch" href="/assets/js/28.82b934bf.js"><link rel="prefetch" href="/assets/js/29.9bbe7e55.js"><link rel="prefetch" href="/assets/js/3.ba62e17c.js"><link rel="prefetch" href="/assets/js/30.ed75778f.js"><link rel="prefetch" href="/assets/js/31.247a3dbb.js"><link rel="prefetch" href="/assets/js/32.b1bb1e43.js"><link rel="prefetch" href="/assets/js/33.3656c740.js"><link rel="prefetch" href="/assets/js/34.03c1b47c.js"><link rel="prefetch" href="/assets/js/35.5af5d342.js"><link rel="prefetch" href="/assets/js/36.572a9496.js"><link rel="prefetch" href="/assets/js/37.319db1b7.js"><link rel="prefetch" href="/assets/js/38.19837e80.js"><link rel="prefetch" href="/assets/js/39.72675c02.js"><link rel="prefetch" href="/assets/js/4.f9a0ae28.js"><link rel="prefetch" href="/assets/js/40.d9f81c69.js"><link rel="prefetch" href="/assets/js/41.184751dc.js"><link rel="prefetch" href="/assets/js/42.9fa6eee5.js"><link rel="prefetch" href="/assets/js/43.b3333fb7.js"><link rel="prefetch" href="/assets/js/44.97c13303.js"><link rel="prefetch" href="/assets/js/45.8afb63d1.js"><link rel="prefetch" href="/assets/js/46.ac497cb6.js"><link rel="prefetch" href="/assets/js/47.dc1178aa.js"><link rel="prefetch" href="/assets/js/48.50b8e29c.js"><link rel="prefetch" href="/assets/js/49.385dc110.js"><link rel="prefetch" href="/assets/js/5.0204093a.js"><link rel="prefetch" href="/assets/js/50.cadce2ee.js"><link rel="prefetch" href="/assets/js/51.d4e57e23.js"><link rel="prefetch" href="/assets/js/52.323a010e.js"><link rel="prefetch" href="/assets/js/53.377c0582.js"><link rel="prefetch" href="/assets/js/54.8d06b2c9.js"><link rel="prefetch" href="/assets/js/55.f82d7ef0.js"><link rel="prefetch" href="/assets/js/56.c9db2b25.js"><link rel="prefetch" href="/assets/js/57.bc11287b.js"><link rel="prefetch" href="/assets/js/58.a1a44552.js"><link rel="prefetch" href="/assets/js/59.4afc94b7.js"><link rel="prefetch" href="/assets/js/6.4774d695.js"><link rel="prefetch" href="/assets/js/60.867aed26.js"><link rel="prefetch" href="/assets/js/61.74327fa7.js"><link rel="prefetch" href="/assets/js/62.177c0b30.js"><link rel="prefetch" href="/assets/js/63.3e0d51da.js"><link rel="prefetch" href="/assets/js/64.e8778b11.js"><link rel="prefetch" href="/assets/js/65.b0dde85a.js"><link rel="prefetch" href="/assets/js/66.3bba1132.js"><link rel="prefetch" href="/assets/js/67.fb2ec2e1.js"><link rel="prefetch" href="/assets/js/68.d8ef845b.js"><link rel="prefetch" href="/assets/js/69.5b80f65b.js"><link rel="prefetch" href="/assets/js/7.010146f6.js"><link rel="prefetch" href="/assets/js/70.e265a8a0.js"><link rel="prefetch" href="/assets/js/71.08e24461.js"><link rel="prefetch" href="/assets/js/72.9f1ed203.js"><link rel="prefetch" href="/assets/js/73.cf073a90.js"><link rel="prefetch" href="/assets/js/74.e5e6cb7a.js"><link rel="prefetch" href="/assets/js/75.12d311a9.js"><link rel="prefetch" href="/assets/js/76.27ceea65.js"><link rel="prefetch" href="/assets/js/77.2d04e2fc.js"><link rel="prefetch" href="/assets/js/78.cd7b5394.js"><link rel="prefetch" href="/assets/js/79.397902f7.js"><link rel="prefetch" href="/assets/js/8.de3fc0db.js"><link rel="prefetch" href="/assets/js/80.8f355347.js"><link rel="prefetch" href="/assets/js/81.9fcee337.js"><link rel="prefetch" href="/assets/js/82.67857b15.js"><link rel="prefetch" href="/assets/js/83.8638b011.js"><link rel="prefetch" href="/assets/js/84.77ee6a86.js"><link rel="prefetch" href="/assets/js/85.724ec824.js"><link rel="prefetch" href="/assets/js/86.e0caf86b.js"><link rel="prefetch" href="/assets/js/87.32cc9faa.js"><link rel="prefetch" href="/assets/js/88.8db036d0.js"><link rel="prefetch" href="/assets/js/89.63be6804.js"><link rel="prefetch" href="/assets/js/9.a240a747.js"><link rel="prefetch" href="/assets/js/90.23557c83.js"><link rel="prefetch" href="/assets/js/92.45cce200.js"><link rel="prefetch" href="/assets/js/93.2a7d9b35.js"><link rel="prefetch" href="/assets/js/94.25f7b020.js"><link rel="prefetch" href="/assets/js/95.3d28b93b.js"><link rel="prefetch" href="/assets/js/96.fb907808.js"><link rel="prefetch" href="/assets/js/97.e4875071.js"><link rel="prefetch" href="/assets/js/98.2859c908.js"><link rel="prefetch" href="/assets/js/99.ac5b7b90.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8614bbde.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <!----> </div> <div class="page"> <div class="content"><h2 id="为使用不同类型的值而设计的-trait-对象"><a href="#为使用不同类型的值而设计的-trait-对象" aria-hidden="true" class="header-anchor">#</a> 为使用不同类型的值而设计的 trait 对象</h2> <blockquote><p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch17-02-trait-objects.md" target="_blank" rel="noopener noreferrer">ch17-02-trait-objects.md<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> <br>
+commit ccdd9ca7aacea4cefeb6a96e7ffb9ea91a923abd</p></blockquote> <p>在第八章中，我们谈到了 vector 只能存储同种类型元素的局限。示例 8-10 中提供了一个定义 <code>SpreadsheetCell</code> 枚举来储存整型，浮点型和文本成员的替代方案。这意味着可以在每个单元中储存不同类型的数据，并仍能拥有一个代表一排单元的 vector。这在当编译代码时就知道希望可以交替使用的类型为固定集合的情况下是完全可行的。</p> <p>然而有时，我们希望库用户在特定情况下能够扩展有效的类型集合。为了展示如何实现这一点，这里将创建一个图形用户接口（Graphical User Interface， GUI）工具的例子，其它通过遍历列表并调用每一个项目的 <code>draw</code> 方法来将其绘制到屏幕上；此乃一个 GUI 工具的常见技术。我们将要创建一个叫做 <code>rust_gui</code> 的库 crate，它含一个 GUI 库的结构。这个 GUI 库包含一些可供开发者使用的类型，比如 <code>Button</code> 或 <code>TextField</code>。在此之上，<code>rust_gui</code> 的用户希望创建自定义的可以绘制于屏幕上的类型：比如，一个程序员可能会增加 <code>Image</code>，另一个可能会增加 <code>SelectBox</code>。</p> <p>这个例子中并不会实现一个功能完善的 GUI 库，不过会展示其中各个部分是如何结合在一起的。编写库的时候，我们不可能知晓并定义所有其他程序员希望创建的类型。我们所知晓的是 <code>rust_gui</code> 需要记录一系列不同类型的值，并需要能够对其中每一个值调用 <code>draw</code> 方法。这里无需知道调用 <code>draw</code> 方法时具体会发生什么，只需提供可供这些值调用的方法即可。</p> <p>在拥有继承的语言中，可以定义一个名为 <code>Component</code> 的类，该类上有一个 <code>draw</code> 方法。其他的类比如 <code>Button</code>、<code>Image</code> 和 <code>SelectBox</code> 会从 <code>Component</code> 派生并因此继承 <code>draw</code> 方法。它们各自都可以覆盖 <code>draw</code> 方法来定义自己的行为，但是框架会把所有这些类型当作是 <code>Component</code> 的实例，并在其上调用 <code>draw</code>。不过 Rust 并没有继承，我们得另寻出路。</p> <h3 id="定义通用行为的-trait"><a href="#定义通用行为的-trait" aria-hidden="true" class="header-anchor">#</a> 定义通用行为的 trait</h3> <p>为了实现 <code>rust_gui</code> 所期望拥有的行为，定义一个 <code>Draw</code> trait，其包含名为 <code>draw</code> 的方法。接着可以定义一个存放 <strong>trait 对象</strong>（<em>trait object</em>） 的 vector。trait 对象指向一个实现了我们指定 trait 的类型实例。我们通过指定某些指针，比如 <code>&amp;</code> 引用或  <code>Box&lt;T&gt;</code> 智能指针，接着指定相关的 trait（第十九章动态大小类型部分会介绍 trait 对象必须使用指针的原因）。我们可以使用 trait 对象代替泛型或具体类型。任何使用 trait 对象的位置，Rust 的类型系统会在编译时确保任何在此上下文中使用的值会实现其 trait 对象的 trait。如此便无需在编译时就知晓所有可能的类型。</p> <p>之前提到过，Rust 刻意不将结构体与枚举称为 “对象”，以便与其他语言中的对象相区别。在结构体或枚举中，结构体字段中的数据和 <code>impl</code> 块中的行为是分开的，不同于其他语言中将数据和行为组合进一个称为对象的概念中。trait 对象将数据和行为两者相结合，从这种意义上说 <strong>则</strong> 其更类似其他语言中的对象。不过 trait 对象不同于传统的对象，因为不能向 trait 对象增加数据。trait 对象并不像其他语言中的对象那么通用：其（trait 对象）具体的作用是允许对通用行为的抽象。</p> <p>示例 17-3 展示了如何定义一个带有 <code>draw</code> 方法的 trait <code>Draw</code>：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">pub</span> <span class="token keyword">trait</span> Draw <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 17-3：<code>Draw</code> trait 的定义</span></p> <p>因为第十章已经讨论过如何定义 trait，这看起来应该比较眼熟。接下来就是新内容了：实例 17-4 定义了一个存放了名叫 <code>components</code> 的 vector 的结构体 <code>Screen</code>。这个 vector 的类型是 <code>Box&lt;Draw&gt;</code>，此为一个 trait 对象：它是 <code>Box</code> 中任何实现了 <code>Draw</code> trait 的类型的替身。</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">pub</span> <span class="token keyword">trait</span> Draw <span class="token punctuation">{</span>
+#     <span class="token keyword">fn</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+# <span class="token punctuation">}</span>
+#
+<span class="token keyword">pub</span> <span class="token keyword">struct</span> Screen <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> components<span class="token punctuation">:</span> Vec<span class="token operator">&lt;</span>Box<span class="token operator">&lt;</span>Draw<span class="token operator">&gt;&gt;</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 17-4: 一个 <code>Screen</code> 结构体的定义，它带有一个字段<code>components</code>，其包含实现了 <code>Draw</code> trait 的 trait 对象的 vector</span></p> <p>在 <code>Screen</code> 结构体上，我们将定义一个 <code>run</code> 方法，该方法会对其 <code>components</code> 上的每一个组件调用 <code>draw</code> 方法，如示例 17-5 所示：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">pub</span> <span class="token keyword">trait</span> Draw <span class="token punctuation">{</span>
+#     <span class="token keyword">fn</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+# <span class="token punctuation">}</span>
+#
+# <span class="token keyword">pub</span> <span class="token keyword">struct</span> Screen <span class="token punctuation">{</span>
+#     <span class="token keyword">pub</span> components<span class="token punctuation">:</span> Vec<span class="token operator">&lt;</span>Box<span class="token operator">&lt;</span>Draw<span class="token operator">&gt;&gt;</span><span class="token punctuation">,</span>
+# <span class="token punctuation">}</span>
+#
+<span class="token keyword">impl</span> Screen <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> component <span class="token keyword">in</span> <span class="token keyword">self</span><span class="token punctuation">.</span>components<span class="token punctuation">.</span><span class="token function">iter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            component<span class="token punctuation">.</span><span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 17-5：在 <code>Screen</code> 上实现一个 <code>run</code> 方法，该方法在每个 component 上调用 <code>draw</code> 方法</span></p> <p>这与定义使用了带有 trait bound 的泛型类型参数的结构体不同。泛型类型参数一次只能替代一个具体类型，而 trait 对象则允许在运行时替代多种具体类型。例如，可以定义 <code>Screen</code> 结构体来使用泛型和 trait bound，如示例 17-6 所示：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">pub</span> <span class="token keyword">trait</span> Draw <span class="token punctuation">{</span>
+#     <span class="token keyword">fn</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+# <span class="token punctuation">}</span>
+#
+<span class="token keyword">pub</span> <span class="token keyword">struct</span> Screen<span class="token operator">&lt;</span>T<span class="token punctuation">:</span> Draw<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> components<span class="token punctuation">:</span> Vec<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">impl</span><span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> Screen<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span>
+    <span class="token keyword">where</span> T<span class="token punctuation">:</span> Draw <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> component <span class="token keyword">in</span> <span class="token keyword">self</span><span class="token punctuation">.</span>components<span class="token punctuation">.</span><span class="token function">iter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            component<span class="token punctuation">.</span><span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 17-6: 一种 <code>Screen</code> 结构体的替代实现，其 <code>run</code> 方法使用泛型和 trait bound</span></p> <p>这限制了 <code>Screen</code> 实例必须拥有一个全是 <code>Button</code> 类型或者全是 <code>TextField</code> 类型的组件列表。如果只需要同质（相同类型）集合，则倾向于使用泛型和 trait bound，因为其定义会在编译时采用具体类型进行单态化。</p> <p>另一方面，通过使用 trait 对象的方法，一个 <code>Screen</code> 实例可以存放一个既能包含 <code>Box&lt;Button&gt;</code>，也能包含 <code>Box&lt;TextField&gt;</code> 的 <code>Vec</code>。让我们看看它是如何工作的，接着会讲到其运行时性能影响。</p> <h3 id="实现-trait"><a href="#实现-trait" aria-hidden="true" class="header-anchor">#</a> 实现 trait</h3> <p>现在来增加一些实现了 <code>Draw</code> trait 的类型。我们将提供 <code>Button</code> 类型。再一次重申，真正实现 GUI 库超出了本书的范畴，所以 <code>draw</code> 方法体中不会有任何有意义的实现。为了想象一下这个实现看起来像什么，一个 <code>Button</code> 结构体可能会拥有 <code>width</code>、<code>height</code> 和 <code>label</code> 字段，如示例 17-7 所示：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">pub</span> <span class="token keyword">trait</span> Draw <span class="token punctuation">{</span>
+#     <span class="token keyword">fn</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+# <span class="token punctuation">}</span>
+#
+<span class="token keyword">pub</span> <span class="token keyword">struct</span> Button <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> width<span class="token punctuation">:</span> u32<span class="token punctuation">,</span>
+    <span class="token keyword">pub</span> height<span class="token punctuation">:</span> u32<span class="token punctuation">,</span>
+    <span class="token keyword">pub</span> label<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">impl</span> Draw <span class="token keyword">for</span> Button <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Code to actually draw a button</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 17-7: 一个实现了 <code>Draw</code> trait 的 <code>Button</code> 结构体</span></p> <p>在 <code>Button</code> 上的 <code>width</code>、<code>height</code> 和 <code>label</code> 字段会和其他组件不同，比如 <code>TextField</code> 可能有 <code>width</code>、<code>height</code>、<code>label</code> 以及 <code>placeholder</code> 字段。每一个我们希望能在屏幕上绘制的类型都会使用不同的代码来实现 <code>Draw</code> trait 的 <code>draw</code> 方法来定义如何绘制特定的类型，像这里的 <code>Button</code> 类型（并不包含任何实际的 GUI 代码，这超出了本章的范畴）。除了实现 <code>Draw</code> trait 之外，比如 <code>Button</code> 还可能有另一个包含按钮点击如何响应的方法的 <code>impl</code> 块。这类方法并不适用于像 <code>TextField</code> 这样的类型。</p> <p>一些库的使用者决定实现一个包含 <code>width</code>、<code>height</code> 和 <code>options</code> 字段的结构体 <code>SelectBox</code>。并也为其实现了 <code>Draw</code> trait，如示例 17-8 所示：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>extern crate rust_gui;
+use rust_gui::Draw;
+
+struct SelectBox {
+    width: u32,
+    height: u32,
+    options: Vec&lt;String&gt;,
+}
+
+impl Draw for SelectBox {
+    fn draw(&amp;self) {
+        // Code to actually draw a select box
+    }
+}
+</code></pre></div><p><span class="caption">示例 17-8: 另一个使用 <code>rust_gui</code> 的 crate 中，在 <code>SelectBox</code> 结构体上实现 <code>Draw</code> trait</span></p> <p>库使用者现在可以在他们的 <code>main</code> 函数中创建一个 <code>Screen</code> 实例。至此可以通过将 <code>SelectBox</code> 和 <code>Button</code> 放入 <code>Box&lt;T&gt;</code> 转变为 trait 对象来增加组件。接着可以调用 <code>Screen</code> 的 <code>run</code> 方法，它会调用每个组件的 <code>draw</code> 方法。示例 17-9 展示了这个实现：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>use rust_gui::{Screen, Button};
+
+fn main() {
+    let screen = Screen {
+        components: vec![
+            Box::new(SelectBox {
+                width: 75,
+                height: 10,
+                options: vec![
+                    String::from(&quot;Yes&quot;),
+                    String::from(&quot;Maybe&quot;),
+                    String::from(&quot;No&quot;)
+                ],
+            }),
+            Box::new(Button {
+                width: 50,
+                height: 10,
+                label: String::from(&quot;OK&quot;),
+            }),
+        ],
+    };
+
+    screen.run();
+}
+</code></pre></div><p><span class="caption">示例 17-9: 使用 trait 对象来存储实现了相同 trait 的不同类型的值</span></p> <p>当编写库的时候，我们不知道何人会在何时增加 <code>SelectBox</code> 类型，不过 <code>Screen</code> 的实现能够操作并绘制这个新类型，因为 <code>SelectBox</code> 实现了 <code>Draw</code> trait，这意味着它实现了 <code>draw</code> 方法。</p> <p>这个概念 ———— 只关心值所反映的信息而不是其具体类型 ———— 类似于动态类型语言中称为 <strong>鸭子类型</strong>（<em>duck typing</em>）的概念：如果它走起来像一只鸭子，叫起来像一只鸭子，那么它就是一只鸭子！在示例 17-5 中 <code>Screen</code> 上的 <code>run</code> 实现中，<code>run</code> 并不需要知道各个组件的具体类型是什么。它并不检查组件是 <code>Button</code> 或者 <code>SelectBox</code> 的实例。通过指定 <code>Box&lt;Draw&gt;</code> 作为 <code>components</code> vector 中值的类型，我们就定义了 <code>Screen</code> 需要可以在其上调用 <code>draw</code> 方法的值。</p> <p>使用 trait 对象和 Rust 类型系统来进行类似鸭子类型操作的优势是无需在运行时检查一个值是否实现了特定方法或者担心在调用时因为值没有实现方法而产生错误。如果值没有实现 trait 对象所需的 trait 则 Rust 不会编译这些代码。</p> <p>例如，示例 17-10 展示了当创建一个使用 <code>String</code> 做为其组件的 <code>Screen</code> 时发生的情况：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>extern crate rust_gui;
+use rust_gui::Screen;
+
+fn main() {
+    let screen = Screen {
+        components: vec![
+            Box::new(String::from(&quot;Hi&quot;)),
+        ],
+    };
+
+    screen.run();
+}
+</code></pre></div><p><span class="caption">示例 17-10: 尝试使用一种没有实现 trait 对象的 trait 的类型</span></p> <p>我们会遇到这个错误，因为 <code>String</code> 没有实现 <code>rust_gui::Draw</code> trait：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0277]: the trait bound `std::string::String: rust_gui::Draw` is not satisfied
+  --&gt;
+   |
+ 4 |             Box::new(String::from(&quot;Hi&quot;)),
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `rust_gui::Draw` is not
+   implemented for `std::string::String`
+   |
+   = note: required for the cast to the object type `rust_gui::Draw`
+</code></pre></div><p>这告诉了我们，要么是我们传递了并不希望传递给 <code>Screen</code> 的类型并应该提供其他类型，要么应该在 <code>String</code> 上实现 <code>Draw</code> 以便 <code>Screen</code> 可以调用其上的 <code>draw</code>。</p> <h3 id="trait-对象执行动态分发"><a href="#trait-对象执行动态分发" aria-hidden="true" class="header-anchor">#</a> trait 对象执行动态分发</h3> <p>回忆一下第十章讨论过的，当对泛型使用 trait bound 时编译器所进行单态化处理：编译器为每一个被泛型类型参数代替的具体类型生成了非泛型的函数和方法实现。单态化所产生的代码进行 <strong>静态分发</strong>（<em>static dispatch</em>）。静态分发发生于编译器在编译时就知晓调用了什么方法的时候。这与 <strong>动态分发</strong> （<em>dynamic dispatch</em>）相对，这时编译器在编译时无法知晓调用了什么方法。在这种情况下，编译器会生成在运行时确定调用了什么方法的代码。</p> <p>当使用 trait 对象时，Rust 必须使用动态分发。编译器无法知晓所有可能用于 trait 对象代码的类型，所以它也不知道应该调用哪个类型的哪个方法实现。为此，Rust 在运行时使用 trait 对象中的指针来知晓需要调用哪个方法。动态分发也阻止编译器有选择的内联方法代码，这会相应的禁用一些优化。尽管在编写和支持代码的过程中确实获得了额外的灵活性，但仍然需要权衡取舍。</p> <h3 id="trait-对象要求对象安全"><a href="#trait-对象要求对象安全" aria-hidden="true" class="header-anchor">#</a> Trait 对象要求对象安全</h3> <p>只有 <strong>对象安全</strong>（<em>object safe</em>）的 trait 才可以组成 trait 对象。围绕所有使得 trait 对象安全的属性存在一些复杂的规则，不过在实践中，只涉及到两条规则。如果一个 trait 中所有的方法有如下属性时，则该 trait 是对象安全的：</p> <ul><li>返回值类型不为 <code>Self</code></li> <li>方法没有任何泛型类型参数</li></ul> <p><code>Self</code> 关键字是我们要实现 trait 或方法的类型的别名。对象安全对于 trait 对象是必须的，因为一旦有了 trait 对象，就不再知晓实现该 trait 的具体类型是什么了。如果 trait 方法返回具体的 <code>Self</code> 类型，但是 trait 对象忘记了其真正的类型，那么方法不可能使用已经忘却的原始具体类型。同理对于泛型类型参数来说，当使用 trait 时其会放入具体的类型参数：此具体类型变成了实现该 trait 的类型的一部分。当使用 trait 对象时其具体类型被抹去了，故无从得知放入泛型参数类型的类型是什么。</p> <p>一个 trait 的方法不是对象安全的例子是标准库中的 <code>Clone</code> trait。<code>Clone</code> trait 的 <code>clone</code> 方法的参数签名看起来像这样：</p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">pub</span> <span class="token keyword">trait</span> Clone <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">clone</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Self<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><code>String</code> 实现了 <code>Clone</code> trait，当在 <code>String</code> 实例上调用 <code>clone</code> 方法时会得到一个 <code>String</code> 实例。类似的，当调用 <code>Vec</code> 实例的 <code>clone</code> 方法会得到一个 <code>Vec</code> 实例。<code>clone</code> 的签名需要知道什么类型会代替 <code>Self</code>，因为这是它的返回值。</p> <p>如果尝试做一些违反有关 trait 对象的对象安全规则的事情，编译器会提示你。例如，如果尝试实现示例 17-4 中的 <code>Screen</code> 结构体来存放实现了 <code>Clone</code> trait 而不是 <code>Draw</code> trait 的类型，像这样：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>pub struct Screen {
+    pub components: Vec&lt;Box&lt;Clone&gt;&gt;,
+}
+</code></pre></div><p>将会得到如下错误：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0038]: the trait `std::clone::Clone` cannot be made into an object
+ --&gt;
+  |
+2 |     pub components: Vec&lt;Box&lt;Clone&gt;&gt;,
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::clone::Clone` cannot be
+  made into an object
+  |
+  = note: the trait cannot require that `Self : Sized`
+</code></pre></div><p>这意味着不能以这种方式使用此 trait 作为 trait 对象。如果你对对象安全的更多细节感兴趣，请查看 <a href="https://github.com/rust-lang/rfcs/blob/master/text/0255-object-safety.md" target="_blank" rel="noopener noreferrer">Rust RFC 255<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>。</p></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/assets/js/91.0fc26ad3.js" defer></script><script src="/assets/js/app.b56e4aff.js" defer></script>
+  </body>
+</html>

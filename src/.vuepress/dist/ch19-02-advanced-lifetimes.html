@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>高级生命周期</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.8614bbde.css" as="style"><link rel="preload" href="/assets/js/app.b56e4aff.js" as="script"><link rel="preload" href="/assets/js/99.ac5b7b90.js" as="script"><link rel="prefetch" href="/assets/js/10.d41a3b84.js"><link rel="prefetch" href="/assets/js/100.22ca6861.js"><link rel="prefetch" href="/assets/js/101.80606dd4.js"><link rel="prefetch" href="/assets/js/102.75bf264b.js"><link rel="prefetch" href="/assets/js/103.7615fac4.js"><link rel="prefetch" href="/assets/js/104.a030e309.js"><link rel="prefetch" href="/assets/js/105.ceb5b0f7.js"><link rel="prefetch" href="/assets/js/106.53b25747.js"><link rel="prefetch" href="/assets/js/107.a6f25383.js"><link rel="prefetch" href="/assets/js/108.524846e6.js"><link rel="prefetch" href="/assets/js/109.5b3e8cc8.js"><link rel="prefetch" href="/assets/js/11.7f9bf643.js"><link rel="prefetch" href="/assets/js/110.a106958d.js"><link rel="prefetch" href="/assets/js/111.b1600e65.js"><link rel="prefetch" href="/assets/js/112.81bf40f0.js"><link rel="prefetch" href="/assets/js/12.c7e4d9a8.js"><link rel="prefetch" href="/assets/js/13.235bc06a.js"><link rel="prefetch" href="/assets/js/14.8b8a21b7.js"><link rel="prefetch" href="/assets/js/15.83a607fc.js"><link rel="prefetch" href="/assets/js/16.2bf746d6.js"><link rel="prefetch" href="/assets/js/17.36a5d5f3.js"><link rel="prefetch" href="/assets/js/18.82e00fba.js"><link rel="prefetch" href="/assets/js/19.1c2116c8.js"><link rel="prefetch" href="/assets/js/2.3505b190.js"><link rel="prefetch" href="/assets/js/20.1f4e3d0f.js"><link rel="prefetch" href="/assets/js/21.80dca6df.js"><link rel="prefetch" href="/assets/js/22.24977f4c.js"><link rel="prefetch" href="/assets/js/23.867b53ea.js"><link rel="prefetch" href="/assets/js/24.d59d9203.js"><link rel="prefetch" href="/assets/js/25.fae2b839.js"><link rel="prefetch" href="/assets/js/26.ba769edc.js"><link rel="prefetch" href="/assets/js/27.03216770.js"><link rel="prefetch" href="/assets/js/28.82b934bf.js"><link rel="prefetch" href="/assets/js/29.9bbe7e55.js"><link rel="prefetch" href="/assets/js/3.ba62e17c.js"><link rel="prefetch" href="/assets/js/30.ed75778f.js"><link rel="prefetch" href="/assets/js/31.247a3dbb.js"><link rel="prefetch" href="/assets/js/32.b1bb1e43.js"><link rel="prefetch" href="/assets/js/33.3656c740.js"><link rel="prefetch" href="/assets/js/34.03c1b47c.js"><link rel="prefetch" href="/assets/js/35.5af5d342.js"><link rel="prefetch" href="/assets/js/36.572a9496.js"><link rel="prefetch" href="/assets/js/37.319db1b7.js"><link rel="prefetch" href="/assets/js/38.19837e80.js"><link rel="prefetch" href="/assets/js/39.72675c02.js"><link rel="prefetch" href="/assets/js/4.f9a0ae28.js"><link rel="prefetch" href="/assets/js/40.d9f81c69.js"><link rel="prefetch" href="/assets/js/41.184751dc.js"><link rel="prefetch" href="/assets/js/42.9fa6eee5.js"><link rel="prefetch" href="/assets/js/43.b3333fb7.js"><link rel="prefetch" href="/assets/js/44.97c13303.js"><link rel="prefetch" href="/assets/js/45.8afb63d1.js"><link rel="prefetch" href="/assets/js/46.ac497cb6.js"><link rel="prefetch" href="/assets/js/47.dc1178aa.js"><link rel="prefetch" href="/assets/js/48.50b8e29c.js"><link rel="prefetch" href="/assets/js/49.385dc110.js"><link rel="prefetch" href="/assets/js/5.0204093a.js"><link rel="prefetch" href="/assets/js/50.cadce2ee.js"><link rel="prefetch" href="/assets/js/51.d4e57e23.js"><link rel="prefetch" href="/assets/js/52.323a010e.js"><link rel="prefetch" href="/assets/js/53.377c0582.js"><link rel="prefetch" href="/assets/js/54.8d06b2c9.js"><link rel="prefetch" href="/assets/js/55.f82d7ef0.js"><link rel="prefetch" href="/assets/js/56.c9db2b25.js"><link rel="prefetch" href="/assets/js/57.bc11287b.js"><link rel="prefetch" href="/assets/js/58.a1a44552.js"><link rel="prefetch" href="/assets/js/59.4afc94b7.js"><link rel="prefetch" href="/assets/js/6.4774d695.js"><link rel="prefetch" href="/assets/js/60.867aed26.js"><link rel="prefetch" href="/assets/js/61.74327fa7.js"><link rel="prefetch" href="/assets/js/62.177c0b30.js"><link rel="prefetch" href="/assets/js/63.3e0d51da.js"><link rel="prefetch" href="/assets/js/64.e8778b11.js"><link rel="prefetch" href="/assets/js/65.b0dde85a.js"><link rel="prefetch" href="/assets/js/66.3bba1132.js"><link rel="prefetch" href="/assets/js/67.fb2ec2e1.js"><link rel="prefetch" href="/assets/js/68.d8ef845b.js"><link rel="prefetch" href="/assets/js/69.5b80f65b.js"><link rel="prefetch" href="/assets/js/7.010146f6.js"><link rel="prefetch" href="/assets/js/70.e265a8a0.js"><link rel="prefetch" href="/assets/js/71.08e24461.js"><link rel="prefetch" href="/assets/js/72.9f1ed203.js"><link rel="prefetch" href="/assets/js/73.cf073a90.js"><link rel="prefetch" href="/assets/js/74.e5e6cb7a.js"><link rel="prefetch" href="/assets/js/75.12d311a9.js"><link rel="prefetch" href="/assets/js/76.27ceea65.js"><link rel="prefetch" href="/assets/js/77.2d04e2fc.js"><link rel="prefetch" href="/assets/js/78.cd7b5394.js"><link rel="prefetch" href="/assets/js/79.397902f7.js"><link rel="prefetch" href="/assets/js/8.de3fc0db.js"><link rel="prefetch" href="/assets/js/80.8f355347.js"><link rel="prefetch" href="/assets/js/81.9fcee337.js"><link rel="prefetch" href="/assets/js/82.67857b15.js"><link rel="prefetch" href="/assets/js/83.8638b011.js"><link rel="prefetch" href="/assets/js/84.77ee6a86.js"><link rel="prefetch" href="/assets/js/85.724ec824.js"><link rel="prefetch" href="/assets/js/86.e0caf86b.js"><link rel="prefetch" href="/assets/js/87.32cc9faa.js"><link rel="prefetch" href="/assets/js/88.8db036d0.js"><link rel="prefetch" href="/assets/js/89.63be6804.js"><link rel="prefetch" href="/assets/js/9.a240a747.js"><link rel="prefetch" href="/assets/js/90.23557c83.js"><link rel="prefetch" href="/assets/js/91.0fc26ad3.js"><link rel="prefetch" href="/assets/js/92.45cce200.js"><link rel="prefetch" href="/assets/js/93.2a7d9b35.js"><link rel="prefetch" href="/assets/js/94.25f7b020.js"><link rel="prefetch" href="/assets/js/95.3d28b93b.js"><link rel="prefetch" href="/assets/js/96.fb907808.js"><link rel="prefetch" href="/assets/js/97.e4875071.js"><link rel="prefetch" href="/assets/js/98.2859c908.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8614bbde.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <!----> </div> <div class="page"> <div class="content"><h2 id="高级生命周期"><a href="#高级生命周期" aria-hidden="true" class="header-anchor">#</a> 高级生命周期</h2> <blockquote><p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch19-02-advanced-lifetimes.md" target="_blank" rel="noopener noreferrer">ch19-02-advanced-lifetimes.md<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> <br>
+commit f7f5e4835c1c4f8ddb502a1dd09a1584ed6f4b6f</p></blockquote> <p>回顾第十章 “生命周期与引用有效性” 部分，我们学习了怎样使用生命周期参数注解引用来帮助 Rust 理解不同引用的生命周期如何相互联系。我们理解了每一个引用都有生命周期，不过大部分情况 Rust 允许我们省略生命周期。这里我们会看到三个还未涉及到的生命周期高级特征：</p> <ul><li>生命周期子类型（lifetime subtyping），一个确保某个生命周期长于另一个生命周期的方式</li> <li>生命周期 bound（lifetime bounds），用于指定泛型引用的生命周期</li> <li>trait 对象生命周期（trait object lifetimes），以及他们是如何推断的，以及何时需要指定</li></ul> <h3 id="生命周期子类型确保某个生命周期长于另一个生命周期"><a href="#生命周期子类型确保某个生命周期长于另一个生命周期" aria-hidden="true" class="header-anchor">#</a> 生命周期子类型确保某个生命周期长于另一个生命周期</h3> <p>生命周期子类型是一个指定某个生命周期应该长于另一个生命周期的方式。为了探索生命周期子类型，想象一下我们想要编写一个解析器。为此会有一个储存了需要解析的字符串的引用的结构体 <code>Context</code>。解析器将会解析字符串并返回成功或失败。其实现看起来像示例 19-12 中的代码，除了缺少了必须的生命周期注解，所以这还不能编译：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>struct Context(&amp;str);
+
+struct Parser {
+    context: &amp;Context,
+}
+
+impl Parser {
+    fn parse(&amp;self) -&gt; Result&lt;(), &amp;str&gt; {
+        Err(&amp;self.context.0[1..])
+    }
+}
+</code></pre></div><p><span class="caption">示例 19-12: 定义一个不带生命周期注解的解析器</span></p> <p>编译代码会导致一个表明 Rust 期望 <code>Context</code> 中字符串 slice 和 <code>Parser</code> 中 <code>Context</code> 的引用的生命周期的错误。</p> <p>为了简单起见，<code>parse</code> 方法返回 <code>Result&lt;(), &amp;str&gt;</code>。也就是说，成功时不做任何操作，失败时则返回字符串 slice 没有正确解析的部分。真实的实现将会包含比这更多的错误信息，并将会在解析成功时返回实际结果，不过我们将去掉这些部分的实现，因为他们与这个例子的生命周期部分并不相关。</p> <p>为了保持代码简单，我们不准备实际编写任何解析逻辑。解析逻辑的某处非常有可能通过返回引用输入中无效部分的错误来处理无效输入，而考虑到生命周期，这个引用是使得这个例子有趣的地方。所以我们将假设解析器的逻辑为输入的第一个字节之后是无效的。注意如果第一个字节并不位于一个有效的字符范围内（比如 Unicode）代码将会 panic；这里又一次简化了例子以专注于涉及到的生命周期。</p> <p>为了使代码能够编译，我们需要放入 <code>Context</code> 中字符串 slice 和 <code>Parser</code> 中 <code>Context</code> 引用的生命周期参数。最直接的方法是在每处都使用相同的生命周期，如示例 19-13 所示：</p> <p>那么我们如何为 <code>Context</code> 中的字符串 slice 和 <code>Parser</code> 中 <code>Context</code> 的引用放入生命周期参数呢？最直接的方法是在每处都使用相同的生命周期，如列表 19-13 所示：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">struct</span> Context<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">struct</span> Parser<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    context<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> Context<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">impl</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span> Parser<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">parse</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> Result<span class="token operator">&lt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>str<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+        <span class="token function">Err</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">.</span>context<span class="token number">.0</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">..</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 19-13: 将所有 <code>Context</code> 和 <code>Parser</code> 中的引用标注为相同的生命周期参数</span></p> <p>这次可以编译了，并告诉了 Rust <code>Parser</code> 存放了一个 <code>Context</code> 的引用，拥有生命周期 <code>'a</code>，且 <code>Context</code> 存放了一个字符串 slice，它也与 <code>Parser</code> 中 <code>Context</code> 的引用存在的一样久。Rust 编译器的错误信息表明这些引用需要生命周期参数，现在我们增加了这些生命周期参数。</p> <p>接下来，在示例 19-14 中，让我们编写一个获取 <code>Context</code> 的实例，使用 <code>Parser</code> 来解析其内容，并返回 <code>parse</code> 的返回值的函数。这还不能运行：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>fn parse_context(context: Context) -&gt; Result&lt;(), &amp;str&gt; {
+    Parser { context: &amp;context }.parse()
+}
+</code></pre></div><p><span class="caption">示例 19-14: 一个增加获取 <code>Context</code> 并使用 <code>Parser</code> 的函数 <code>parse_context</code> 的尝试</span></p> <p>当尝试编译这段额外带有 <code>parse_context</code> 函数的代码时会得到两个相当冗长的错误：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0597]: borrowed value does not live long enough
+  --&gt; src/lib.rs:14:5
+   |
+14 |     Parser { context: &amp;context }.parse()
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ does not live long enough
+15 | }
+   | - temporary value only lives until here
+   |
+note: borrowed value must be valid for the anonymous lifetime #1 defined on the function body at 13:1...
+  --&gt; src/lib.rs:13:1
+   |
+13 | / fn parse_context(context: Context) -&gt; Result&lt;(), &amp;str&gt; {
+14 | |     Parser { context: &amp;context }.parse()
+15 | | }
+   | |_^
+
+error[E0597]: `context` does not live long enough
+  --&gt; src/lib.rs:14:24
+   |
+14 |     Parser { context: &amp;context }.parse()
+   |                        ^^^^^^^ does not live long enough
+15 | }
+   | - borrowed value only lives until here
+   |
+note: borrowed value must be valid for the anonymous lifetime #1 defined on the function body at 13:1...
+  --&gt; src/lib.rs:13:1
+   |
+13 | / fn parse_context(context: Context) -&gt; Result&lt;(), &amp;str&gt; {
+14 | |     Parser { context: &amp;context }.parse()
+15 | | }
+   | |_^
+</code></pre></div><p>这些错误表明我们创建的两个 <code>Parser</code> 实例和 <code>context</code> 参数从 <code>Parser</code> 被创建开始一直存活到 <code>parse_context</code> 函数结束，不过他们都需要在整个函数的生命周期中都有效。</p> <p>换句话说，<code>Parser</code> 和 <code>context</code> 需要比整个函数 <strong>长寿</strong>（<em>outlive</em>）并在函数开始之前和结束之后都有效以确保代码中的所有引用始终是有效的。虽然我们创建的两个 <code>Parser</code> 和 <code>context</code> 参数在函数的结尾就离开了作用域（因为 <code>parse_context</code> 获取了 <code>context</code> 的所有权）。</p> <p>为了理解为什么会得到这些错误，让我们再次看看示例 19-13 中的定义，特别是 <code>parse</code> 方法的签名中的引用：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>    fn parse(&amp;self) -&gt; Result&lt;(), &amp;str&gt; {
+</code></pre></div> <p>还记得（生命周期）省略规则吗？如果标注了引用生命周期而不加以省略，签名看起来应该是这样：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>    fn parse&lt;'a&gt;(&amp;'a self) -&gt; Result&lt;(), &amp;'a str&gt; {
+</code></pre></div><p>正是如此，<code>parse</code> 返回值的错误部分的生命周期与 <code>Parser</code> 实例的生命周期（<code>parse</code> 方法签名中的 <code>&amp;self</code>）相绑定。这就可以理解了：因为返回的字符串 slice 引用了 <code>Parser</code> 存放的 <code>Context</code> 实例中的字符串 slice，同时在 <code>Parser</code> 结构体的定义中指定了 <code>Parser</code> 中存放的 <code>Context</code> 引用的生命周期和 <code>Context</code> 中存放的字符串 slice 的生命周期应该一致。</p> <p>问题是 <code>parse_context</code> 函数返回 <code>parse</code> 的返回值，所以 <code>parse_context</code> 返回值的生命周期也与 <code>Parser</code> 的生命周期相联系。不过 <code>parse_context</code> 函数中创建的 <code>Parser</code> 实例并不能存活到函数结束之后（它是临时的），同时 <code>context</code> 将会在函数的结尾离开作用域（<code>parse_context</code> 获取了它的所有权）。</p> <p>Rust 认为我们尝试返回一个在函数结尾离开作用域的值，因为我们将所有的生命周期都标注为相同的生命周期参数。这告诉了 Rust <code>Context</code> 中存放的字符串 slice 的生命周期与 <code>Parser</code> 中存放的 <code>Context</code> 引用的生命周期一致。</p> <p><code>parse_context</code> 函数并不知道 <code>parse</code> 函数里面是什么，返回的字符串 slice 将比 <code>Context</code> 和 <code>Parser</code> 都存活的更久，同时 <code>parse_context</code> 返回的引用指向字符串 slice，而不是 <code>Context</code> 或 <code>Parser</code>。</p> <p>通过了解 <code>parse</code> 实现所做的工作，可以知道 <code>parse</code> 的返回值（的生命周期）与 <code>Parser</code> 相联系的唯一理由是它引用了 <code>Parser</code> 的 <code>Context</code>，也就是引用了这个字符串 slice，这正是 <code>parse_context</code> 所需要关心的生命周期。需要一个方法来告诉 Rust <code>Context</code> 中的字符串 slice 与 <code>Parser</code> 中 <code>Context</code> 的引用有着不同的生命周期，而且 <code>parse_context</code> 返回值与 <code>Context</code> 中字符串 slice 的生命周期相联系。</p> <p>首先尝试像示例 19-15 那样给予 <code>Parser</code> 和 <code>Context</code> 不同的生命周期参数。这里选择了生命周期参数名 <code>'s</code> 和 <code>'c</code> 是为了使得 <code>Context</code> 中字符串 slice 与 <code>Parser</code> 中 <code>Context</code> 引用的生命周期显得更明了（英文首字母）。注意这并不能完全解决问题，不过这是一个开始，我们将看看为什么这还不足以能够编译代码。</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>struct Context&lt;'s&gt;(&amp;'s str);
+
+struct Parser&lt;'c, 's&gt; {
+    context: &amp;'c Context&lt;'s&gt;,
+}
+
+impl&lt;'c, 's&gt; Parser&lt;'c, 's&gt; {
+    fn parse(&amp;self) -&gt; Result&lt;(), &amp;'s str&gt; {
+        Err(&amp;self.context.0[1..])
+    }
+}
+
+fn parse_context(context: Context) -&gt; Result&lt;(), &amp;str&gt; {
+    Parser { context: &amp;context }.parse()
+}
+</code></pre></div><p><span class="caption">示例 19-15: 为字符串 slice 和 <code>Context</code> 的引用指定不同的生命周期参数</span></p> <p>这里在与示例 19-13 完全相同的地方标注了引用的生命周期，不过根据引用是字符串 slice 或 <code>Context</code> 与否使用了不同的参数。另外还在 <code>parse</code> 返回值的字符串 slice 部分增加了注解来表明它与 <code>Context</code> 中字符串 slice 的生命周期相关联。</p> <p>这里是现在尝试编译时得到的错误：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0491]: in type `&amp;'c Context&lt;'s&gt;`, reference has a longer lifetime than the data it references
+ --&gt; src/lib.rs:4:5
+  |
+4 |     context: &amp;'c Context&lt;'s&gt;,
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+note: the pointer is valid for the lifetime 'c as defined on the struct at 3:1
+ --&gt; src/lib.rs:3:1
+  |
+3 | / struct Parser&lt;'c, 's&gt; {
+4 | |     context: &amp;'c Context&lt;'s&gt;,
+5 | | }
+  | |_^
+note: but the referenced data is only valid for the lifetime 's as defined on the struct at 3:1
+ --&gt; src/lib.rs:3:1
+  |
+3 | / struct Parser&lt;'c, 's&gt; {
+4 | |     context: &amp;'c Context&lt;'s&gt;,
+5 | | }
+  | |_^
+</code></pre></div><p>Rust 并不知道 <code>'c</code> 与 <code>'s</code> 之间的任何联系。为了保证有效性，<code>Context</code> 中引用的带有生命周期 <code>'s</code> 的数据需要遵守它比带有生命周期 <code>'c</code> 的 <code>Context</code> 的引用存活得更久的保证。如果 <code>'s</code> 不比 <code>'c</code> 更长久，那么 <code>Context</code> 的引用可能不再有效。</p> <p>这就引出了本部分的要点：Rust 的 <strong>生命周期子类型</strong>（<em>lifetime subtyping</em>）功能，这是一个指定一个生命周期不会短于另一个的方法。在声明生命周期参数的尖括号中，可以照常声明一个生命周期 <code>'a</code>，并通过语法 <code>'b: 'a</code> 声明一个不短于 <code>'a</code> 的生命周期 <code>'b</code>。</p> <p>在 <code>Parser</code> 的定义中，为了表明 <code>'s</code>（字符串 slice 的生命周期）保证至少与 <code>'c</code>（<code>Context</code> 引用的生命周期）一样长，需将生命周期声明改为如此：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">struct</span> Context<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+#
+<span class="token keyword">struct</span> Parser<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'c,</span> <span class="token lifetime-annotation symbol">'s:</span> <span class="token lifetime-annotation symbol">'c</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    context<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'c</span> Context<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'s</span><span class="token operator">&gt;</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>现在 <code>Parser</code> 中 <code>Context</code> 的引用与 <code>Context</code> 中字符串 slice 就有了不同的生命周期，并且保证了字符串 slice 的生命周期比 <code>Context</code> 引用的要长。</p> <p>这是一个非常冗长的例子，不过正如本章的开头所提到的，这类功能是很小众的。你并不会经常需要这个语法，不过当出现类似这样的情形时，却还是有地方可以参考的。</p> <h3 id="生命周期-bound-用于泛型的引用"><a href="#生命周期-bound-用于泛型的引用" aria-hidden="true" class="header-anchor">#</a> 生命周期 bound 用于泛型的引用</h3> <p>在第十章 “trait bound” 部分，我们讨论了如何在泛型类型上使用 trait bound。也可以像泛型那样为生命周期参数增加限制，这被称为 <strong>生命周期 bound</strong>（<em>lifetime bounds</em>）。生命周期 bound 帮助 Rust 验证泛型的引用不会存在的比其引用的数据更久。</p> <p>例如，考虑一下一个封装了引用的类型。回忆一下第十五章 “<code>RefCell&lt;T&gt;</code> 和内部可变性模式” 部分的 <code>RefCell&lt;T&gt;</code> 类型：其 <code>borrow</code> 和 <code>borrow_mut</code> 方法分别返回 <code>Ref</code> 和 <code>RefMut</code> 类型。这些类型是引用的封装，他们在运行时记录检查借用规则。<code>Ref</code> 结构体的定义如示例 19-16 所示，目前还不带有生命周期 bound：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>struct Ref&lt;'a, T&gt;(&amp;'a T);
+</code></pre></div><p><span class="caption">示例 19-16: 定义结构体来封装泛型的引用；开始时没有生命周期约束</span></p> <p>若不显式限制生命周期 <code>'a</code> 为与泛型参数 <code>T</code> 有关，会得到一个错误因为 Rust 不知道泛型 <code>T</code> 会存活多久：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0309]: the parameter type `T` may not live long enough
+ --&gt; src/lib.rs:1:19
+  |
+1 | struct Ref&lt;'a, T&gt;(&amp;'a T);
+  |                   ^^^^^^
+  |
+  = help: consider adding an explicit lifetime bound `T: 'a`...
+note: ...so that the reference type `&amp;'a T` does not outlive the data it points at
+ --&gt; src/lib.rs:1:19
+  |
+1 | struct Ref&lt;'a, T&gt;(&amp;'a T);
+  |                   ^^^^^^
+</code></pre></div><p>因为 <code>T</code> 可以是任意类型，<code>T</code> 自身也可能是一个引用，或者是一个存放了一个或多个引用的类型，而他们各自可能有着不同的生命周期。Rust 不能确认 <code>T</code> 会与 <code>'a</code> 存活的一样久。</p> <p>幸运的是，Rust 提供了这个情况下如何指定生命周期 bound 的有用建议：</p> <div class="language-text extra-class"><pre class="language-text"><code>consider adding an explicit lifetime bound `T: 'a` so that the reference type
+`&amp;'a T` does not outlive the data it points at
+</code></pre></div><p>示例 19-17 展示了如何按照这个建议，在声明泛型 <code>T</code> 时指定生命周期 bound。。</p> <p>列表 19-17 展示了按照这个建议，在声明泛型 <code>T</code> 时指定生命周期约束。</p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">struct</span> Ref<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a,</span> T<span class="token punctuation">:</span> <span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> T<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p><span class="caption">示例 19-17: 为 <code>T</code> 增加生命周期 bound 来指定 <code>T</code> 中的任何引用需至少与 <code>'a</code> 存活的一样久</span></p> <p>现在代码可以编译了，因为 <code>T: 'a</code> 语法指定了 <code>T</code> 可以为任意类型，不过如果它包含任何引用的话，其生命周期必须至少与 <code>'a</code> 一样长。</p> <p>我们可以选择不同的方法来解决这个问题，如示例 19-18 中 <code>StaticRef</code> 的结构体定义所示，通过在 <code>T</code> 上增加 <code>'static</code> 生命周期约束。这意味着如果 <code>T</code> 包含任何引用，他们必须有 <code>'static</code> 生命周期：</p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">struct</span> StaticRef<span class="token operator">&lt;</span>T<span class="token punctuation">:</span> <span class="token lifetime-annotation symbol">'static</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'static</span> T<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p><span class="caption">示例 19-18: 在 <code>T</code> 上增加 <code>'static</code> 生命周期 bound，来限制 <code>T</code> 为只拥有 <code>'static</code> 生命周期的引用或没有引用的类型</span></p> <p>因为 <code>'static</code> 意味着引用必须同整个程序存活的一样长，一个不包含引用的类型满足所有引用都与整个程序存活的一样长的标准（因为他们没有引用）。对于借用检查器来说它关心的是引用是否存活的足够久，没有引用的类型与有永远存在的引用的类型并没有真正的区别；对于确定引用是否比其所引用的值存活得较短的目的来说两者是一样的。</p> <h3 id="trait-对象生命周期的推断"><a href="#trait-对象生命周期的推断" aria-hidden="true" class="header-anchor">#</a> trait 对象生命周期的推断</h3> <p>在第十七章的 “为使用不同类型的值而设计的 trait 对象” 部分，我们讨论了 trait 对象，它包含一个位于引用之后的 trait，这允许我们进行动态分发。我们所没有讨论的是如果 trait 对象中实现 trait 的类型带有生命周期时会发生什么。考虑一下示例 19-19，其中有 trait <code>Red</code> 和结构体 <code>Ball</code>。<code>Ball</code> 存放了一个引用（因此有一个生命周期参数）并实现了 trait <code>Red</code>。我们希望使用一个作为 trait 对象 <code>Box&lt;Red&gt;</code> 的 <code>Ball</code> 实例：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">trait</span> Red <span class="token punctuation">{</span> <span class="token punctuation">}</span>
+
+<span class="token keyword">struct</span> Ball<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    diameter<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> i32<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">impl</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span> Red <span class="token keyword">for</span> Ball<span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> num <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">let</span> obj <span class="token operator">=</span> Box<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">new</span><span class="token punctuation">(</span>Ball <span class="token punctuation">{</span> diameter<span class="token punctuation">:</span> <span class="token operator">&amp;</span>num <span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token keyword">as</span> Box<span class="token operator">&lt;</span>Red<span class="token operator">&gt;</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 19-19: 使用一个带有生命周期的类型用于 trait 对象</span></p> <p>这段代码能没有任何错误的编译，即便并没有明确指出 <code>obj</code> 中涉及的任何生命周期。这是因为有如下生命周期与 trait 对象必须遵守的规则：</p> <ul><li>trait 对象的默认生命周期是 <code>'static</code>。</li> <li>如果有 <code>&amp;'a X</code> 或 <code>&amp;'a mut X</code>，则默认生命周期是 <code>'a</code>。</li> <li>如果只有 <code>T: 'a</code> 从句， 则默认生命周期是 <code>'a</code>。</li> <li>如果有多个类似 <code>T: 'a</code> 的从句，则没有默认生命周期；必须明确指定。</li></ul> <p>当必须明确指定时，可以为像 <code>Box&lt;Red&gt;</code> 这样的 trait 对象增加生命周期 bound，根据需要使用语法 <code>Box&lt;Foo + 'a&gt;</code> 或 <code>Box&lt;Foo + 'static&gt;</code>。正如其他的 bound，这意味着任何 <code>Red</code> trait 的实现如果在内部包含有引用, 这些引用就必须拥有与 trait 对象 bound 中所指定的相同的生命周期。</p> <p>接下来，让我们看看一些其他处理 trait 的高级功能吧！</p></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/assets/js/99.ac5b7b90.js" defer></script><script src="/assets/js/app.b56e4aff.js" defer></script>
+  </body>
+</html>

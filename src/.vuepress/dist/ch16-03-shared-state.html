@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>共享状态并发</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.8614bbde.css" as="style"><link rel="preload" href="/assets/js/app.b56e4aff.js" as="script"><link rel="preload" href="/assets/js/87.32cc9faa.js" as="script"><link rel="prefetch" href="/assets/js/10.d41a3b84.js"><link rel="prefetch" href="/assets/js/100.22ca6861.js"><link rel="prefetch" href="/assets/js/101.80606dd4.js"><link rel="prefetch" href="/assets/js/102.75bf264b.js"><link rel="prefetch" href="/assets/js/103.7615fac4.js"><link rel="prefetch" href="/assets/js/104.a030e309.js"><link rel="prefetch" href="/assets/js/105.ceb5b0f7.js"><link rel="prefetch" href="/assets/js/106.53b25747.js"><link rel="prefetch" href="/assets/js/107.a6f25383.js"><link rel="prefetch" href="/assets/js/108.524846e6.js"><link rel="prefetch" href="/assets/js/109.5b3e8cc8.js"><link rel="prefetch" href="/assets/js/11.7f9bf643.js"><link rel="prefetch" href="/assets/js/110.a106958d.js"><link rel="prefetch" href="/assets/js/111.b1600e65.js"><link rel="prefetch" href="/assets/js/112.81bf40f0.js"><link rel="prefetch" href="/assets/js/12.c7e4d9a8.js"><link rel="prefetch" href="/assets/js/13.235bc06a.js"><link rel="prefetch" href="/assets/js/14.8b8a21b7.js"><link rel="prefetch" href="/assets/js/15.83a607fc.js"><link rel="prefetch" href="/assets/js/16.2bf746d6.js"><link rel="prefetch" href="/assets/js/17.36a5d5f3.js"><link rel="prefetch" href="/assets/js/18.82e00fba.js"><link rel="prefetch" href="/assets/js/19.1c2116c8.js"><link rel="prefetch" href="/assets/js/2.3505b190.js"><link rel="prefetch" href="/assets/js/20.1f4e3d0f.js"><link rel="prefetch" href="/assets/js/21.80dca6df.js"><link rel="prefetch" href="/assets/js/22.24977f4c.js"><link rel="prefetch" href="/assets/js/23.867b53ea.js"><link rel="prefetch" href="/assets/js/24.d59d9203.js"><link rel="prefetch" href="/assets/js/25.fae2b839.js"><link rel="prefetch" href="/assets/js/26.ba769edc.js"><link rel="prefetch" href="/assets/js/27.03216770.js"><link rel="prefetch" href="/assets/js/28.82b934bf.js"><link rel="prefetch" href="/assets/js/29.9bbe7e55.js"><link rel="prefetch" href="/assets/js/3.ba62e17c.js"><link rel="prefetch" href="/assets/js/30.ed75778f.js"><link rel="prefetch" href="/assets/js/31.247a3dbb.js"><link rel="prefetch" href="/assets/js/32.b1bb1e43.js"><link rel="prefetch" href="/assets/js/33.3656c740.js"><link rel="prefetch" href="/assets/js/34.03c1b47c.js"><link rel="prefetch" href="/assets/js/35.5af5d342.js"><link rel="prefetch" href="/assets/js/36.572a9496.js"><link rel="prefetch" href="/assets/js/37.319db1b7.js"><link rel="prefetch" href="/assets/js/38.19837e80.js"><link rel="prefetch" href="/assets/js/39.72675c02.js"><link rel="prefetch" href="/assets/js/4.f9a0ae28.js"><link rel="prefetch" href="/assets/js/40.d9f81c69.js"><link rel="prefetch" href="/assets/js/41.184751dc.js"><link rel="prefetch" href="/assets/js/42.9fa6eee5.js"><link rel="prefetch" href="/assets/js/43.b3333fb7.js"><link rel="prefetch" href="/assets/js/44.97c13303.js"><link rel="prefetch" href="/assets/js/45.8afb63d1.js"><link rel="prefetch" href="/assets/js/46.ac497cb6.js"><link rel="prefetch" href="/assets/js/47.dc1178aa.js"><link rel="prefetch" href="/assets/js/48.50b8e29c.js"><link rel="prefetch" href="/assets/js/49.385dc110.js"><link rel="prefetch" href="/assets/js/5.0204093a.js"><link rel="prefetch" href="/assets/js/50.cadce2ee.js"><link rel="prefetch" href="/assets/js/51.d4e57e23.js"><link rel="prefetch" href="/assets/js/52.323a010e.js"><link rel="prefetch" href="/assets/js/53.377c0582.js"><link rel="prefetch" href="/assets/js/54.8d06b2c9.js"><link rel="prefetch" href="/assets/js/55.f82d7ef0.js"><link rel="prefetch" href="/assets/js/56.c9db2b25.js"><link rel="prefetch" href="/assets/js/57.bc11287b.js"><link rel="prefetch" href="/assets/js/58.a1a44552.js"><link rel="prefetch" href="/assets/js/59.4afc94b7.js"><link rel="prefetch" href="/assets/js/6.4774d695.js"><link rel="prefetch" href="/assets/js/60.867aed26.js"><link rel="prefetch" href="/assets/js/61.74327fa7.js"><link rel="prefetch" href="/assets/js/62.177c0b30.js"><link rel="prefetch" href="/assets/js/63.3e0d51da.js"><link rel="prefetch" href="/assets/js/64.e8778b11.js"><link rel="prefetch" href="/assets/js/65.b0dde85a.js"><link rel="prefetch" href="/assets/js/66.3bba1132.js"><link rel="prefetch" href="/assets/js/67.fb2ec2e1.js"><link rel="prefetch" href="/assets/js/68.d8ef845b.js"><link rel="prefetch" href="/assets/js/69.5b80f65b.js"><link rel="prefetch" href="/assets/js/7.010146f6.js"><link rel="prefetch" href="/assets/js/70.e265a8a0.js"><link rel="prefetch" href="/assets/js/71.08e24461.js"><link rel="prefetch" href="/assets/js/72.9f1ed203.js"><link rel="prefetch" href="/assets/js/73.cf073a90.js"><link rel="prefetch" href="/assets/js/74.e5e6cb7a.js"><link rel="prefetch" href="/assets/js/75.12d311a9.js"><link rel="prefetch" href="/assets/js/76.27ceea65.js"><link rel="prefetch" href="/assets/js/77.2d04e2fc.js"><link rel="prefetch" href="/assets/js/78.cd7b5394.js"><link rel="prefetch" href="/assets/js/79.397902f7.js"><link rel="prefetch" href="/assets/js/8.de3fc0db.js"><link rel="prefetch" href="/assets/js/80.8f355347.js"><link rel="prefetch" href="/assets/js/81.9fcee337.js"><link rel="prefetch" href="/assets/js/82.67857b15.js"><link rel="prefetch" href="/assets/js/83.8638b011.js"><link rel="prefetch" href="/assets/js/84.77ee6a86.js"><link rel="prefetch" href="/assets/js/85.724ec824.js"><link rel="prefetch" href="/assets/js/86.e0caf86b.js"><link rel="prefetch" href="/assets/js/88.8db036d0.js"><link rel="prefetch" href="/assets/js/89.63be6804.js"><link rel="prefetch" href="/assets/js/9.a240a747.js"><link rel="prefetch" href="/assets/js/90.23557c83.js"><link rel="prefetch" href="/assets/js/91.0fc26ad3.js"><link rel="prefetch" href="/assets/js/92.45cce200.js"><link rel="prefetch" href="/assets/js/93.2a7d9b35.js"><link rel="prefetch" href="/assets/js/94.25f7b020.js"><link rel="prefetch" href="/assets/js/95.3d28b93b.js"><link rel="prefetch" href="/assets/js/96.fb907808.js"><link rel="prefetch" href="/assets/js/97.e4875071.js"><link rel="prefetch" href="/assets/js/98.2859c908.js"><link rel="prefetch" href="/assets/js/99.ac5b7b90.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8614bbde.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <!----> </div> <div class="page"> <div class="content"><h2 id="共享状态并发"><a href="#共享状态并发" aria-hidden="true" class="header-anchor">#</a> 共享状态并发</h2> <blockquote><p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch16-03-shared-state.md" target="_blank" rel="noopener noreferrer">ch16-03-shared-state.md<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> <br>
+commit 90406bd5a4cd4447b46cd7e03d33f34a651e9bb7</p></blockquote> <p>虽然消息传递是一个很好的处理并发的方式，但并不是唯一一个。再一次思考一下 Go 编程语言文档中口号的这一部分：“通过共享内存通讯”：</p> <blockquote><p>What would communicating by sharing memory look like? In addition, why would message passing enthusiasts not use it and do the opposite instead?</p> <p>通过共享内存通讯看起来如何？除此之外，为何消息传递的拥护者并不使用它并反其道而行之呢？</p></blockquote> <p>在某种程度上，任何编程语言中的通道都类似于单所有权，因为一旦将一个值传送到通道中，将无法再使用这个值。共享内存类似于多所有权：多个线程可以同时访问相同的内存位置。第十五章介绍了智能指针如何使得多所有权成为可能，然而这会增加额外的复杂性，因为需要以某种方式管理这些不同的所有者。作为一个例子，让我们看看互斥器，一个更为常见的共享内存并发原语。</p> <h3 id="互斥器一次只允许一个线程访问数据"><a href="#互斥器一次只允许一个线程访问数据" aria-hidden="true" class="header-anchor">#</a> 互斥器一次只允许一个线程访问数据</h3> <p><strong>互斥器</strong>（<em>mutex</em>）是 “mutual exclusion” 的缩写，也就是说，任意时刻，其只允许一个线程访问某些数据。为了访问互斥器中的数据，线程首先需要通过获取互斥器的 <strong>锁</strong>（<em>lock</em>）来表明其希望访问数据。锁是一个作为互斥器一部分的数据结构，它记录谁有数据的排他访问权。因此，我们描述互斥器为通过锁系统 <strong>保护</strong>（<em>guarding</em>）其数据。</p> <p>互斥器以难以使用著称，因为你不得不记住：</p> <ol><li>在使用数据之前尝试获取锁。</li> <li>处理完被互斥器所保护的数据之后，必须解锁数据，这样其他线程才能够获取锁。</li></ol> <p>作为一个现实中互斥器的例子，想象一下在某个会议的一次小组座谈会中，只有一个麦克风。如果一位成员要发言，他必须请求或表示希望使用麦克风。一旦得到了麦克风，他可以畅所欲言，然后将麦克风交给下一位希望讲话的成员。如果一位成员结束发言后忘记将麦克风交还，其他人将无法发言。如果对共享麦克风的管理出现了问题，座谈会将无法如期进行！</p> <p>正确的管理互斥器异常复杂，这也是许多人之所以热衷于通道的原因。然而，在 Rust 中，得益于类型系统和所有权，我们不会在锁和解锁上出错。</p> <h3 id="mutex-t-的-api"><a href="#mutex-t-的-api" aria-hidden="true" class="header-anchor">#</a> <code>Mutex&lt;T&gt;</code>的 API</h3> <p>作为展示如何使用互斥器的例子，让我们从在单线程上下文使用互斥器开始，如示例 16-12 所示：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>sync<span class="token punctuation">:</span><span class="token punctuation">:</span>Mutex<span class="token punctuation">;</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> m <span class="token operator">=</span> Mutex<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> <span class="token keyword">mut</span> num <span class="token operator">=</span> m<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">*</span>num <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;m = {:?}&quot;</span><span class="token punctuation">,</span> m<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 16-12: 出于简单的考虑，在一个单线程上下文中探索 <code>Mutex&lt;T&gt;</code> 的 API</span></p> <p>像很多类型一样，我们使用关联函数 <code>new</code> 来创建一个 <code>Mutex&lt;T&gt;</code>。使用 <code>lock</code> 方法获取锁，以访问互斥器中的数据。这个调用会阻塞当前线程，直到我们拥有锁为止。</p> <p>如果另一个线程拥有锁，并且那个线程 panic 了，则 <code>lock</code> 调用会失败。在这种情况下，没人能够再获取锁，所以这里选择 <code>unwrap</code> 并在遇到这种情况时使线程 panic。</p> <p>一旦获取了锁，就可以将返回值（在这里是<code>num</code>）视为一个其内部数据的可变引用了。类型系统确保了我们在使用 <code>m</code> 中的值之前获取锁：<code>Mutex&lt;i32&gt;</code> 并不是一个 <code>i32</code>，所以 <strong>必须</strong> 获取锁才能使用这个 <code>i32</code> 值。我们是不会忘记这么做的，因为反之类型系统不允许访问内部的 <code>i32</code> 值。</p> <p>正如你所怀疑的，<code>Mutex&lt;T&gt;</code> 是一个智能指针。更准确的说，<code>lock</code> 调用 <strong>返回</strong> 一个叫做 <code>MutexGuard</code> 的智能指针。这个智能指针实现了 <code>Deref</code> 来指向其内部数据；其也提供了一个 <code>Drop</code> 实现当 <code>MutexGuard</code> 离开作用域时自动释放锁，这正发生于示例 16-12 内部作用域的结尾。为此，我们不会冒忘记释放锁并阻塞互斥器为其它线程所用的风险，因为锁的释放是自动发生的。</p> <p>丢弃了锁之后，可以打印出互斥器的值，并发现能够将其内部的 <code>i32</code> 改为 6。</p> <h4 id="在线程间共享-mutex-t"><a href="#在线程间共享-mutex-t" aria-hidden="true" class="header-anchor">#</a> 在线程间共享 <code>Mutex&lt;T&gt;</code></h4> <p>现在让我们尝试使用 <code>Mutex&lt;T&gt;</code> 在多个线程间共享值。我们将启动十个线程，并在各个线程中对同一个计数器值加一，这样计数器将从 0 变为 10。注意，接下来的几个例子会出现编译错误，而我们将通过这些错误来学习如何使用 <code>Mutex&lt;T&gt;</code>，以及 Rust 又是如何帮助我们正确使用的。示例 16-13 是最开始的例子：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>use std::sync::Mutex;
+use std::thread;
+
+fn main() {
+    let counter = Mutex::new(0);
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!(&quot;Result: {}&quot;, *counter.lock().unwrap());
+}
+</code></pre></div><p><span class="caption">示例 16-13: 程序启动了 10 个线程，每个线程都通过 <code>Mutex&lt;T&gt;</code> 来增加计数器的值</span></p> <p>这里创建了一个 <code>counter</code> 变量来存放内含 <code>i32</code> 的 <code>Mutex&lt;T&gt;</code>，类似示例 16-12 那样。接下来遍历 range 创建了 10 个线程。使用了 <code>thread::spawn</code> 并对所有线程使用了相同的闭包：他们每一个都将调用 <code>lock</code> 方法来获取 <code>Mutex&lt;T&gt;</code> 上的锁，接着将互斥器中的值加一。当一个线程结束执行，<code>num</code> 会离开闭包作用域并释放锁，这样另一个线程就可以获取它了。</p> <p>在主线程中，我们像示例 16-2 那样收集了所有的 join 句柄，调用它们的 <code>join</code> 方法来确保所有线程都会结束。之后，主线程会获取锁并打印出程序的结果。</p> <p>之前提示过这个例子不能编译，让我们看看为什么！</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0382]: capture of moved value: `counter`
+  --&gt; src/main.rs:10:27
+   |
+9  |         let handle = thread::spawn(move || {
+   |                                    ------- value moved (into closure) here
+10 |             let mut num = counter.lock().unwrap();
+   |                           ^^^^^^^ value captured here after move
+   |
+   = note: move occurs because `counter` has type `std::sync::Mutex&lt;i32&gt;`,
+   which does not implement the `Copy` trait
+
+error[E0382]: use of moved value: `counter`
+  --&gt; src/main.rs:21:29
+   |
+9  |         let handle = thread::spawn(move || {
+   |                                    ------- value moved (into closure) here
+...
+21 |     println!(&quot;Result: {}&quot;, *counter.lock().unwrap());
+   |                             ^^^^^^^ value used here after move
+   |
+   = note: move occurs because `counter` has type `std::sync::Mutex&lt;i32&gt;`,
+   which does not implement the `Copy` trait
+
+error: aborting due to 2 previous errors
+</code></pre></div><p>错误信息表明 <code>counter</code> 值被移动进了闭包并当调用 <code>lock</code> 时被捕获。这听起来正是我们需要的，但是这是不允许的！</p> <p>让我们简化程序来进行分析。不同于在 <code>for</code> 循环中创建 10 个线程，仅仅创建两个线程来观察发生了什么。将示例 16-13 中第一个 <code>for</code> 循环替换为如下代码：</p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>let handle = thread::spawn(move || {
+    let mut num = counter.lock().unwrap();
+
+    *num += 1;
+});
+handles.push(handle);
+
+let handle2 = thread::spawn(move || {
+    let mut num2 = counter.lock().unwrap();
+
+    *num2 += 1;
+});
+handles.push(handle2);
+</code></pre></div><p>这里创建了两个线程并将用于第二个线程的变量名改为 <code>handle2</code> 和 <code>num2</code>。这一次当运行代码时，编译会给出如下错误：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0382]: capture of moved value: `counter`
+  --&gt; src/main.rs:16:24
+   |
+8  |     let handle = thread::spawn(move || {
+   |                                ------- value moved (into closure) here
+...
+16 |         let mut num2 = counter.lock().unwrap();
+   |                        ^^^^^^^ value captured here after move
+   |
+   = note: move occurs because `counter` has type `std::sync::Mutex&lt;i32&gt;`,
+   which does not implement the `Copy` trait
+
+error[E0382]: use of moved value: `counter`
+  --&gt; src/main.rs:26:29
+   |
+8  |     let handle = thread::spawn(move || {
+   |                                ------- value moved (into closure) here
+...
+26 |     println!(&quot;Result: {}&quot;, *counter.lock().unwrap());
+   |                             ^^^^^^^ value used here after move
+   |
+   = note: move occurs because `counter` has type `std::sync::Mutex&lt;i32&gt;`,
+   which does not implement the `Copy` trait
+
+error: aborting due to 2 previous errors
+</code></pre></div><p>啊哈！第一个错误信息中说，<code>counter</code> 被移动进了 <code>handle</code> 所代表线程的闭包中。因此我们无法在第二个线程中对其调用 <code>lock</code>，并将结果储存在 <code>num2</code> 中时捕获<code>counter</code>！所以 Rust 告诉我们不能将 <code>counter</code> 的所有权移动到多个线程中。这在之前很难看出，因为我们在循环中创建了多个线程，而 Rust 无法在每次迭代中指明不同的线程。让我们通过一个第十五章讨论过的多所有权手段来修复这个编译错误。</p> <h4 id="多线程和多所有权"><a href="#多线程和多所有权" aria-hidden="true" class="header-anchor">#</a> 多线程和多所有权</h4> <p>在第十五章中，通过使用智能指针 <code>Rc&lt;T&gt;</code> 来创建引用计数的值，以便拥有多所有者。让我们在这也这么做看看会发生什么。将示例 16-14 中的 <code>Mutex&lt;T&gt;</code> 封装进 <code>Rc&lt;T&gt;</code> 中并在将所有权移入线程之前克隆了 <code>Rc&lt;T&gt;</code>。现在我们理解了所发生的错误，同时也将代码改回使用 <code>for</code> 循环，并保留闭包的 <code>move</code> 关键字：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>use std::rc::Rc;
+use std::sync::Mutex;
+use std::thread;
+
+fn main() {
+    let counter = Rc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = Rc::clone(&amp;counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!(&quot;Result: {}&quot;, *counter.lock().unwrap());
+}
+</code></pre></div><p><span class="caption">示例 16-14: 尝试使用 <code>Rc&lt;T&gt;</code> 来允许多个线程拥有 <code>Mutex&lt;T&gt;</code></span></p> <p>再一次编译并...出现了不同的错误！编译器真是教会了我们很多！</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0277]: the trait bound `std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;:
+std::marker::Send` is not satisfied in `[closure@src/main.rs:11:36:
+15:10
+counter:std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;]`
+  --&gt; src/main.rs:11:22
+   |
+11 |         let handle = thread::spawn(move || {
+   |                      ^^^^^^^^^^^^^ `std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;`
+cannot be sent between threads safely
+   |
+   = help: within `[closure@src/main.rs:11:36: 15:10
+counter:std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;]`, the trait `std::marker::Send` is
+not implemented for `std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;`
+   = note: required because it appears within the type
+`[closure@src/main.rs:11:36: 15:10
+counter:std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;]`
+   = note: required by `std::thread::spawn`
+</code></pre></div><p>哇哦，错误信息太长不看！这里是一些需要注意的重要部分：第一行错误表明 <code>`std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;` cannot be sent between threads safely</code>。其原因是另一个值得注意的部分，经过提炼的错误信息表明 <code>the trait bound `Send` is not satisfied</code>。下一部分会讲到 <code>Send</code>：这是确保所使用的类型意在用于并发环境的 trait 之一。</p> <p>不幸的是，<code>Rc&lt;T&gt;</code> 并不能安全的在线程间共享。当 <code>Rc&lt;T&gt;</code> 管理引用计数时，它必须在每一个 <code>clone</code> 调用时增加计数，并在每一个克隆被丢弃时减少计数。<code>Rc&lt;T&gt;</code> 并没有使用任何并发原语，来确保改变计数的操作不会被其他线程打断。在计数出错时可能会导致诡异的 bug，比如可能会造成内存泄漏，或在使用结束之前就丢弃一个值。我们所需要的是一个完全类似 <code>Rc&lt;T&gt;</code>，又以一种线程安全的方式改变引用计数的类型。</p> <h4 id="原子引用计数-arc-t"><a href="#原子引用计数-arc-t" aria-hidden="true" class="header-anchor">#</a> 原子引用计数 <code>Arc&lt;T&gt;</code></h4> <p>所幸 <code>Arc&lt;T&gt;</code> <strong>正是</strong> 这么一个类似 <code>Rc&lt;T&gt;</code> 并可以安全的用于并发环境的类型。字母 “a” 代表 <strong>原子性</strong>（<em>atomic</em>），所以这是一个<strong>原子引用计数</strong>（<em>atomically reference counted</em>）类型。原子性是另一类这里还未涉及到的并发原语：请查看标准库中 <code>std::sync::atomic</code> 的文档来获取更多细节。其中的要点就是：原子性类型工作起来类似原始类型，不过可以安全的在线程间共享。</p> <p>你可能会好奇为什么不是所有的原始类型都是原子性的？为什么不是所有标准库中的类型都默认使用 <code>Arc&lt;T&gt;</code> 实现？原因在于线程安全带有性能惩罚，我们希望只在必要时才为此买单。如果只是在单线程中对值进行操作，原子性提供的保证并无必要，代码可以因此运行的更快。</p> <p>回到之前的例子：<code>Arc&lt;T&gt;</code> 和 <code>Rc&lt;T&gt;</code> 有着相同的 API，所以修改程序中的 <code>use</code> 行和 <code>new</code> 调用。示例 16-15 中的代码最终可以编译和运行：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>sync<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token punctuation">{</span>Mutex<span class="token punctuation">,</span> Arc<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>thread<span class="token punctuation">;</span>
+
+<span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> counter <span class="token operator">=</span> Arc<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">new</span><span class="token punctuation">(</span>Mutex<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> handles <span class="token operator">=</span> <span class="token function">vec!</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> _ <span class="token keyword">in</span> <span class="token number">0</span><span class="token punctuation">..</span><span class="token number">10</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> counter <span class="token operator">=</span> Arc<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>counter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> handle <span class="token operator">=</span> thread<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">spawn</span><span class="token punctuation">(</span><span class="token keyword">move</span> <span class="token closure-params"><span class="token punctuation">|</span><span class="token punctuation">|</span></span> <span class="token punctuation">{</span>
+            <span class="token keyword">let</span> <span class="token keyword">mut</span> num <span class="token operator">=</span> counter<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token operator">*</span>num <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        handles<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>handle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">for</span> handle <span class="token keyword">in</span> handles <span class="token punctuation">{</span>
+        handle<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;Result: {}&quot;</span><span class="token punctuation">,</span> <span class="token operator">*</span>counter<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 16-15: 使用 <code>Arc&lt;T&gt;</code> 包装一个 <code>Mutex&lt;T&gt;</code> 能够实现在多线程之间共享所有权</span></p> <p>这会打印出：</p> <div class="language-text extra-class"><pre class="language-text"><code>Result: 10
+</code></pre></div><p>成功了！我们从 0 数到了 10，这可能并不是很显眼，不过一路上我们确实学习了很多关于 <code>Mutex&lt;T&gt;</code> 和线程安全的内容！这个例子中构建的结构可以用于比增加计数更为复杂的操作。使用这个策略，可将计算分成独立的部分，分散到多个线程中，接着使用 <code>Mutex&lt;T&gt;</code> 使用各自的结算结果更新最终的结果。</p> <h3 id="refcell-t-rc-t-与-mutex-t-arc-t-的相似性"><a href="#refcell-t-rc-t-与-mutex-t-arc-t-的相似性" aria-hidden="true" class="header-anchor">#</a> <code>RefCell&lt;T&gt;</code>/<code>Rc&lt;T&gt;</code> 与 <code>Mutex&lt;T&gt;</code>/<code>Arc&lt;T&gt;</code> 的相似性</h3> <p>你可能注意到了，因为 <code>counter</code> 是不可变的，不过可以获取其内部值的可变引用；这意味着 <code>Mutex&lt;T&gt;</code> 提供了内部可变性，就像 <code>Cell</code> 系列类型那样。正如第十五章中使用 <code>RefCell&lt;T&gt;</code> 可以改变 <code>Rc&lt;T&gt;</code> 中的内容那样，同样的可以使用 <code>Mutex&lt;T&gt;</code> 来改变 <code>Arc&lt;T&gt;</code> 中的内容。</p> <p>另一个值得注意的细节是 Rust 不能避免使用 <code>Mutex&lt;T&gt;</code> 的全部逻辑错误。回忆一下第十五章使用 <code>Rc&lt;T&gt;</code> 就有造成引用循环的风险，这时两个 <code>Rc&lt;T&gt;</code> 值相互引用，造成内存泄露。同理，<code>Mutex&lt;T&gt;</code> 也有造成 <strong>死锁</strong>（<em>deadlock</em>） 的风险。这发生于当一个操作需要锁住两个资源而两个线程各持一个锁，这会造成它们永远相互等待。如果你对这个主题感兴趣，尝试编写一个带有死锁的 Rust 程序，接着研究任何其他语言中使用互斥器的死锁规避策略并尝试在 Rust 中实现他们。标准库中 <code>Mutex&lt;T&gt;</code> 和 <code>MutexGuard</code> 的 API 文档会提供有用的信息。</p> <p>接下来，为了丰富本章的内容，让我们讨论一下 <code>Send</code>和 <code>Sync</code> trait 以及如何对自定义类型使用他们。</p></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/assets/js/87.32cc9faa.js" defer></script><script src="/assets/js/app.b56e4aff.js" defer></script>
+  </body>
+</html>

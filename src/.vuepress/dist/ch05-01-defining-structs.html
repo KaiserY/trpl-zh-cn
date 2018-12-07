@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>定义并实例化结构体</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.8614bbde.css" as="style"><link rel="preload" href="/assets/js/app.b56e4aff.js" as="script"><link rel="preload" href="/assets/js/30.ed75778f.js" as="script"><link rel="prefetch" href="/assets/js/10.d41a3b84.js"><link rel="prefetch" href="/assets/js/100.22ca6861.js"><link rel="prefetch" href="/assets/js/101.80606dd4.js"><link rel="prefetch" href="/assets/js/102.75bf264b.js"><link rel="prefetch" href="/assets/js/103.7615fac4.js"><link rel="prefetch" href="/assets/js/104.a030e309.js"><link rel="prefetch" href="/assets/js/105.ceb5b0f7.js"><link rel="prefetch" href="/assets/js/106.53b25747.js"><link rel="prefetch" href="/assets/js/107.a6f25383.js"><link rel="prefetch" href="/assets/js/108.524846e6.js"><link rel="prefetch" href="/assets/js/109.5b3e8cc8.js"><link rel="prefetch" href="/assets/js/11.7f9bf643.js"><link rel="prefetch" href="/assets/js/110.a106958d.js"><link rel="prefetch" href="/assets/js/111.b1600e65.js"><link rel="prefetch" href="/assets/js/112.81bf40f0.js"><link rel="prefetch" href="/assets/js/12.c7e4d9a8.js"><link rel="prefetch" href="/assets/js/13.235bc06a.js"><link rel="prefetch" href="/assets/js/14.8b8a21b7.js"><link rel="prefetch" href="/assets/js/15.83a607fc.js"><link rel="prefetch" href="/assets/js/16.2bf746d6.js"><link rel="prefetch" href="/assets/js/17.36a5d5f3.js"><link rel="prefetch" href="/assets/js/18.82e00fba.js"><link rel="prefetch" href="/assets/js/19.1c2116c8.js"><link rel="prefetch" href="/assets/js/2.3505b190.js"><link rel="prefetch" href="/assets/js/20.1f4e3d0f.js"><link rel="prefetch" href="/assets/js/21.80dca6df.js"><link rel="prefetch" href="/assets/js/22.24977f4c.js"><link rel="prefetch" href="/assets/js/23.867b53ea.js"><link rel="prefetch" href="/assets/js/24.d59d9203.js"><link rel="prefetch" href="/assets/js/25.fae2b839.js"><link rel="prefetch" href="/assets/js/26.ba769edc.js"><link rel="prefetch" href="/assets/js/27.03216770.js"><link rel="prefetch" href="/assets/js/28.82b934bf.js"><link rel="prefetch" href="/assets/js/29.9bbe7e55.js"><link rel="prefetch" href="/assets/js/3.ba62e17c.js"><link rel="prefetch" href="/assets/js/31.247a3dbb.js"><link rel="prefetch" href="/assets/js/32.b1bb1e43.js"><link rel="prefetch" href="/assets/js/33.3656c740.js"><link rel="prefetch" href="/assets/js/34.03c1b47c.js"><link rel="prefetch" href="/assets/js/35.5af5d342.js"><link rel="prefetch" href="/assets/js/36.572a9496.js"><link rel="prefetch" href="/assets/js/37.319db1b7.js"><link rel="prefetch" href="/assets/js/38.19837e80.js"><link rel="prefetch" href="/assets/js/39.72675c02.js"><link rel="prefetch" href="/assets/js/4.f9a0ae28.js"><link rel="prefetch" href="/assets/js/40.d9f81c69.js"><link rel="prefetch" href="/assets/js/41.184751dc.js"><link rel="prefetch" href="/assets/js/42.9fa6eee5.js"><link rel="prefetch" href="/assets/js/43.b3333fb7.js"><link rel="prefetch" href="/assets/js/44.97c13303.js"><link rel="prefetch" href="/assets/js/45.8afb63d1.js"><link rel="prefetch" href="/assets/js/46.ac497cb6.js"><link rel="prefetch" href="/assets/js/47.dc1178aa.js"><link rel="prefetch" href="/assets/js/48.50b8e29c.js"><link rel="prefetch" href="/assets/js/49.385dc110.js"><link rel="prefetch" href="/assets/js/5.0204093a.js"><link rel="prefetch" href="/assets/js/50.cadce2ee.js"><link rel="prefetch" href="/assets/js/51.d4e57e23.js"><link rel="prefetch" href="/assets/js/52.323a010e.js"><link rel="prefetch" href="/assets/js/53.377c0582.js"><link rel="prefetch" href="/assets/js/54.8d06b2c9.js"><link rel="prefetch" href="/assets/js/55.f82d7ef0.js"><link rel="prefetch" href="/assets/js/56.c9db2b25.js"><link rel="prefetch" href="/assets/js/57.bc11287b.js"><link rel="prefetch" href="/assets/js/58.a1a44552.js"><link rel="prefetch" href="/assets/js/59.4afc94b7.js"><link rel="prefetch" href="/assets/js/6.4774d695.js"><link rel="prefetch" href="/assets/js/60.867aed26.js"><link rel="prefetch" href="/assets/js/61.74327fa7.js"><link rel="prefetch" href="/assets/js/62.177c0b30.js"><link rel="prefetch" href="/assets/js/63.3e0d51da.js"><link rel="prefetch" href="/assets/js/64.e8778b11.js"><link rel="prefetch" href="/assets/js/65.b0dde85a.js"><link rel="prefetch" href="/assets/js/66.3bba1132.js"><link rel="prefetch" href="/assets/js/67.fb2ec2e1.js"><link rel="prefetch" href="/assets/js/68.d8ef845b.js"><link rel="prefetch" href="/assets/js/69.5b80f65b.js"><link rel="prefetch" href="/assets/js/7.010146f6.js"><link rel="prefetch" href="/assets/js/70.e265a8a0.js"><link rel="prefetch" href="/assets/js/71.08e24461.js"><link rel="prefetch" href="/assets/js/72.9f1ed203.js"><link rel="prefetch" href="/assets/js/73.cf073a90.js"><link rel="prefetch" href="/assets/js/74.e5e6cb7a.js"><link rel="prefetch" href="/assets/js/75.12d311a9.js"><link rel="prefetch" href="/assets/js/76.27ceea65.js"><link rel="prefetch" href="/assets/js/77.2d04e2fc.js"><link rel="prefetch" href="/assets/js/78.cd7b5394.js"><link rel="prefetch" href="/assets/js/79.397902f7.js"><link rel="prefetch" href="/assets/js/8.de3fc0db.js"><link rel="prefetch" href="/assets/js/80.8f355347.js"><link rel="prefetch" href="/assets/js/81.9fcee337.js"><link rel="prefetch" href="/assets/js/82.67857b15.js"><link rel="prefetch" href="/assets/js/83.8638b011.js"><link rel="prefetch" href="/assets/js/84.77ee6a86.js"><link rel="prefetch" href="/assets/js/85.724ec824.js"><link rel="prefetch" href="/assets/js/86.e0caf86b.js"><link rel="prefetch" href="/assets/js/87.32cc9faa.js"><link rel="prefetch" href="/assets/js/88.8db036d0.js"><link rel="prefetch" href="/assets/js/89.63be6804.js"><link rel="prefetch" href="/assets/js/9.a240a747.js"><link rel="prefetch" href="/assets/js/90.23557c83.js"><link rel="prefetch" href="/assets/js/91.0fc26ad3.js"><link rel="prefetch" href="/assets/js/92.45cce200.js"><link rel="prefetch" href="/assets/js/93.2a7d9b35.js"><link rel="prefetch" href="/assets/js/94.25f7b020.js"><link rel="prefetch" href="/assets/js/95.3d28b93b.js"><link rel="prefetch" href="/assets/js/96.fb907808.js"><link rel="prefetch" href="/assets/js/97.e4875071.js"><link rel="prefetch" href="/assets/js/98.2859c908.js"><link rel="prefetch" href="/assets/js/99.ac5b7b90.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8614bbde.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <!----> </div> <div class="page"> <div class="content"><h2 id="定义并实例化结构体"><a href="#定义并实例化结构体" aria-hidden="true" class="header-anchor">#</a> 定义并实例化结构体</h2> <blockquote><p><a href="https://github.com/rust-lang/book/blob/master/src/ch05-01-defining-structs.md" target="_blank" rel="noopener noreferrer">ch05-01-defining-structs.md<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> <br>
+commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37</p></blockquote> <p>结构体和我们在第三章讨论过的元组类似。和元组一样，结构体的每一部分可以是不同类型。但不同于元组，结构体需要命名各部分数据以便能清楚的表明其值的意义。由于有了这些名字，结构体比元组更灵活：不需要依赖顺序来指定或访问实例中的值。</p> <p>定义结构体，需要使用 <code>struct</code> 关键字并为整个结构体提供一个名字。结构体的名字需要描述它所组合的数据的意义。接着，在大括号中，定义每一部分数据的名字和类型，我们称为 <strong>字段</strong>（<em>field</em>）。例如，示例 5-1 展示了一个存储用户账号信息的结构体：</p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">struct</span> User <span class="token punctuation">{</span>
+    username<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+    email<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+    sign_in_count<span class="token punctuation">:</span> u64<span class="token punctuation">,</span>
+    active<span class="token punctuation">:</span> bool<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 5-1：<code>User</code> 结构体定义</span></p> <p>一旦定义了结构体后，为了使用它，通过为每个字段指定具体值来创建这个结构体的 <strong>实例</strong>。创建一个实例需要以结构体的名字开头，接着在大括号中使用 <code>key: value</code> 键-值对的形式提供字段，其中 key 是字段的名字，value 是需要存储在字段中的数据值。实例中字段的顺序不需要和它们在结构体中声明的顺序一致。换句话说，结构体的定义就像一个类型的通用模板，而实例则会在这个模板中放入特定数据来创建这个类型的值。例如，可以像示例 5-2 这样来声明一个特定的用户：</p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">struct</span> User <span class="token punctuation">{</span>
+#     username<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+#     email<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+#     sign_in_count<span class="token punctuation">:</span> u64<span class="token punctuation">,</span>
+#     active<span class="token punctuation">:</span> bool<span class="token punctuation">,</span>
+# <span class="token punctuation">}</span>
+#
+<span class="token keyword">let</span> user1 <span class="token operator">=</span> User <span class="token punctuation">{</span>
+    email<span class="token punctuation">:</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;someone@example.com&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    username<span class="token punctuation">:</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;someusername123&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    active<span class="token punctuation">:</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+    sign_in_count<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><p><span class="caption">示例 5-2：创建 <code>User</code> 结构体的实例</span></p> <p>为了从结构体中获取某个特定的值，可以使用点号。如果我们只想要用户的邮箱地址，可以用 <code>user1.email</code>。要更改结构体中的值，如果结构体的实例是可变的，我们可以使用点号并为对应的字段赋值。示例 5-3 展示了如何改变一个可变的 <code>User</code> 实例 <code>email</code> 字段的值：</p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">struct</span> User <span class="token punctuation">{</span>
+#     username<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+#     email<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+#     sign_in_count<span class="token punctuation">:</span> u64<span class="token punctuation">,</span>
+#     active<span class="token punctuation">:</span> bool<span class="token punctuation">,</span>
+# <span class="token punctuation">}</span>
+#
+<span class="token keyword">let</span> <span class="token keyword">mut</span> user1 <span class="token operator">=</span> User <span class="token punctuation">{</span>
+    email<span class="token punctuation">:</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;someone@example.com&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    username<span class="token punctuation">:</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;someusername123&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    active<span class="token punctuation">:</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+    sign_in_count<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+user1<span class="token punctuation">.</span>email <span class="token operator">=</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;anotheremail@example.com&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p><span class="caption">示例 5-3：改变 <code>User</code> 实例 <code>email</code> 字段的值</span></p> <p>注意整个实例必须是可变的；Rust 并不允许只将某个字段标记为可变。另外需要注意同其他任何表达式一样，我们可以在函数体的最后一个表达式中构造一个结构体的新实例，来隐式地返回这个实例。</p> <p>示例 5-4 显示了一个 <code>build_user</code> 函数，它返回一个带有给定的 email 和用户名的 <code>User</code> 结构体实例。<code>active</code> 字段的值为 <code>true</code>，并且 <code>sign_in_count</code> 的值为 <code>1</code>。</p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">struct</span> User <span class="token punctuation">{</span>
+#     username<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+#     email<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+#     sign_in_count<span class="token punctuation">:</span> u64<span class="token punctuation">,</span>
+#     active<span class="token punctuation">:</span> bool<span class="token punctuation">,</span>
+# <span class="token punctuation">}</span>
+#
+<span class="token keyword">fn</span> <span class="token function">build_user</span><span class="token punctuation">(</span>email<span class="token punctuation">:</span> String<span class="token punctuation">,</span> username<span class="token punctuation">:</span> String<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> User <span class="token punctuation">{</span>
+    User <span class="token punctuation">{</span>
+        email<span class="token punctuation">:</span> email<span class="token punctuation">,</span>
+        username<span class="token punctuation">:</span> username<span class="token punctuation">,</span>
+        active<span class="token punctuation">:</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+        sign_in_count<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 5-4：<code>build_user</code> 函数获取 email 和用户名并返回 <code>User</code> 实例</span></p> <p>为函数参数起与结构体字段相同的名字是可以理解的，但是不得不重复 <code>email</code> 和 <code>username</code> 字段名称与变量有些啰嗦。如果结构体有更多字段，重复每个名称就更加烦人了。幸运的是，有一个方便的简写语法！</p> <h3 id="变量与字段同名时的字段初始化简写语法"><a href="#变量与字段同名时的字段初始化简写语法" aria-hidden="true" class="header-anchor">#</a> 变量与字段同名时的字段初始化简写语法</h3> <p>因为示例 5-4 中的参数名与字段名都完全相同，我们可以使用 <strong>字段初始化简写语法</strong>（<em>field init shorthand</em>）来重写 <code>build_user</code>，这样其行为与之前完全相同，不过无需重复 <code>email</code> 和 <code>username</code> 了，如示例 5-5 所示。</p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">struct</span> User <span class="token punctuation">{</span>
+#     username<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+#     email<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+#     sign_in_count<span class="token punctuation">:</span> u64<span class="token punctuation">,</span>
+#     active<span class="token punctuation">:</span> bool<span class="token punctuation">,</span>
+# <span class="token punctuation">}</span>
+#
+<span class="token keyword">fn</span> <span class="token function">build_user</span><span class="token punctuation">(</span>email<span class="token punctuation">:</span> String<span class="token punctuation">,</span> username<span class="token punctuation">:</span> String<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> User <span class="token punctuation">{</span>
+    User <span class="token punctuation">{</span>
+        email<span class="token punctuation">,</span>
+        username<span class="token punctuation">,</span>
+        active<span class="token punctuation">:</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+        sign_in_count<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><span class="caption">示例 5-5：<code>build_user</code> 函数使用了字段初始化简写语法，因为 <code>email</code> 和 <code>username</code> 参数与结构体字段同名</span></p> <p>这里我们创建了一个新的 <code>User</code> 结构体实例，它有一个叫做 <code>email</code> 的字段。我们想要将 <code>email</code> 字段的值设置为 <code>build_user</code> 函数 <code>email</code> 参数的值。因为 <code>email</code> 字段与 <code>email</code> 参数有着相同的名称，则只需编写 <code>email</code> 而不是 <code>email: email</code>。</p> <h3 id="使用结构体更新语法从其他实例创建实例"><a href="#使用结构体更新语法从其他实例创建实例" aria-hidden="true" class="header-anchor">#</a> 使用结构体更新语法从其他实例创建实例</h3> <p>使用旧实例的大部分值但改变其部分值来创建一个新的结构体实例通常是很有帮助的。这可以通过 <strong>结构体更新语法</strong>（<em>struct update syntax</em>）实现。</p> <p>首先，示例 5-6 展示了不使用更新语法时，如何在 <code>user2</code> 中创建一个新 <code>User</code> 实例。我们为 <code>email</code> 和 <code>username</code> 设置了新的值，其他值则使用了实例 5-2 中创建的 <code>user1</code> 中的同名值：</p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">struct</span> User <span class="token punctuation">{</span>
+#     username<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+#     email<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+#     sign_in_count<span class="token punctuation">:</span> u64<span class="token punctuation">,</span>
+#     active<span class="token punctuation">:</span> bool<span class="token punctuation">,</span>
+# <span class="token punctuation">}</span>
+#
+# <span class="token keyword">let</span> user1 <span class="token operator">=</span> User <span class="token punctuation">{</span>
+#     email<span class="token punctuation">:</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;someone@example.com&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+#     username<span class="token punctuation">:</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;someusername123&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+#     active<span class="token punctuation">:</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+#     sign_in_count<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+# <span class="token punctuation">}</span><span class="token punctuation">;</span>
+#
+<span class="token keyword">let</span> user2 <span class="token operator">=</span> User <span class="token punctuation">{</span>
+    email<span class="token punctuation">:</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;another@example.com&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    username<span class="token punctuation">:</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;anotherusername567&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    active<span class="token punctuation">:</span> user1<span class="token punctuation">.</span>active<span class="token punctuation">,</span>
+    sign_in_count<span class="token punctuation">:</span> user1<span class="token punctuation">.</span>sign_in_count<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><p><span class="caption">示例 5-6：创建 <code>User</code> 新实例，其使用了一些来自 <code>user1</code> 的值</span></p> <p>使用结构体更新语法，我们可以通过更少的代码来达到相同的效果，如示例 5-7 所示。<code>..</code> 语法指定了剩余未显式设置值的字段应有与给定实例对应字段相同的值。</p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">struct</span> User <span class="token punctuation">{</span>
+#     username<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+#     email<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+#     sign_in_count<span class="token punctuation">:</span> u64<span class="token punctuation">,</span>
+#     active<span class="token punctuation">:</span> bool<span class="token punctuation">,</span>
+# <span class="token punctuation">}</span>
+#
+# <span class="token keyword">let</span> user1 <span class="token operator">=</span> User <span class="token punctuation">{</span>
+#     email<span class="token punctuation">:</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;someone@example.com&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+#     username<span class="token punctuation">:</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;someusername123&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+#     active<span class="token punctuation">:</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+#     sign_in_count<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+# <span class="token punctuation">}</span><span class="token punctuation">;</span>
+#
+<span class="token keyword">let</span> user2 <span class="token operator">=</span> User <span class="token punctuation">{</span>
+    email<span class="token punctuation">:</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;another@example.com&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    username<span class="token punctuation">:</span> String<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">&quot;anotherusername567&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">..</span>user1
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><p><span class="caption">示例 5-7：使用结构体更新语法为一个 <code>User</code> 实例设置新的 <code>email</code> 和 <code>username</code> 值，不过其余值来自 <code>user1</code> 变量中实例的字段</span></p> <p>示例 5-7 中的代码也在 <code>user2</code> 中创建了一个新实例，其有不同的 <code>email</code> 和 <code>username</code> 值不过 <code>active</code> 和 <code>sign_in_count</code> 字段的值与 <code>user1</code> 相同。</p> <h3 id="使用没有命名字段的元组结构体来创建不同的类型"><a href="#使用没有命名字段的元组结构体来创建不同的类型" aria-hidden="true" class="header-anchor">#</a> 使用没有命名字段的元组结构体来创建不同的类型</h3> <p>也可以定义与元组（在第三章讨论过）类似的结构体，称为 <strong>元组结构体</strong>（<em>tuple structs</em>）。元组结构体有着结构体名称提供的含义，但没有具体的字段名，只有字段的类型。当你想给整个元组取一个名字，并使元组成为与其他元组不同的类型时，元组结构体是很有用的，这时像常规结构体那样为每个字段命名就显得多余和形式化了。</p> <p>定义元组结构体，以 <code>struct</code> 关键字和结构体名开头并后跟元组中的类型。例如，下面是两个分别叫做 <code>Color</code> 和 <code>Point</code> 元组结构体的定义和用法：</p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">struct</span> <span class="token function">Color</span><span class="token punctuation">(</span>i32<span class="token punctuation">,</span> i32<span class="token punctuation">,</span> i32<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">struct</span> <span class="token function">Point</span><span class="token punctuation">(</span>i32<span class="token punctuation">,</span> i32<span class="token punctuation">,</span> i32<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">let</span> black <span class="token operator">=</span> <span class="token function">Color</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> origin <span class="token operator">=</span> <span class="token function">Point</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>注意 <code>black</code> 和 <code>origin</code> 值的类型不同，因为它们是不同的元组结构体的实例。你定义的每一个结构体有其自己的类型，即使结构体中的字段有着相同的类型。例如，一个获取 <code>Color</code> 类型参数的函数不能接受 <code>Point</code> 作为参数，即便这两个类型都由三个 <code>i32</code> 值组成。在其他方面，元组结构体实例类似于元组：可以将其解构为单独的部分，也可以使用 <code>.</code> 后跟索引来访问单独的值，等等。</p> <h3 id="没有任何字段的类单元结构体"><a href="#没有任何字段的类单元结构体" aria-hidden="true" class="header-anchor">#</a> 没有任何字段的类单元结构体</h3> <p>我们也可以定义一个没有任何字段的结构体！它们被称为 <strong>类单元结构体</strong>（<em>unit-like structs</em>）因为它们类似于 <code>()</code>，即 unit 类型。类单元结构体常常在你想要在某个类型上实现 trait 但不需要在类型中存储数据的时候发挥作用。我们将在第十章介绍 trait。</p> <blockquote><h3 id="结构体数据的所有权"><a href="#结构体数据的所有权" aria-hidden="true" class="header-anchor">#</a> 结构体数据的所有权</h3> <p>在示例 5-1 中的 <code>User</code> 结构体的定义中，我们使用了自身拥有所有权的 <code>String</code> 类型而不是 <code>&amp;str</code> 字符串 slice 类型。这是一个有意而为之的选择，因为我们想要这个结构体拥有它所有的数据，为此只要整个结构体是有效的话其数据也是有效的。</p> <p>可以使结构体存储被其他对象拥有的数据的引用，不过这么做的话需要用上 <strong>生命周期</strong>（<em>lifetimes</em>），这是一个第十章会讨论的 Rust 功能。生命周期确保结构体引用的数据有效性跟结构体本身保持一致。如果你尝试在结构体中存储一个引用而不指定生命周期将是无效的，比如这样：</p> <p><span class="filename">文件名: src/main.rs</span></p> <div class="language-rust,ignore,does_not_compile extra-class"><pre class="language-text"><code>struct User {
+    username: &amp;str,
+    email: &amp;str,
+    sign_in_count: u64,
+    active: bool,
+}
+
+fn main() {
+    let user1 = User {
+        email: &quot;someone@example.com&quot;,
+        username: &quot;someusername123&quot;,
+        active: true,
+        sign_in_count: 1,
+    };
+}
+</code></pre></div><p>编译器会抱怨它需要生命周期标识符：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0106]: missing lifetime specifier
+ --&gt;
+  |
+2 |     username: &amp;str,
+  |               ^ expected lifetime parameter
+
+error[E0106]: missing lifetime specifier
+ --&gt;
+  |
+3 |     email: &amp;str,
+  |            ^ expected lifetime parameter
+</code></pre></div><p>第十章会讲到如何修复这个问题以便在结构体中存储引用，不过现在，我们会使用像 <code>String</code> 这类拥有所有权的类型来替代 <code>&amp;str</code> 这样的引用以修正这个错误。</p></blockquote></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/assets/js/30.ed75778f.js" defer></script><script src="/assets/js/app.b56e4aff.js" defer></script>
+  </body>
+</html>

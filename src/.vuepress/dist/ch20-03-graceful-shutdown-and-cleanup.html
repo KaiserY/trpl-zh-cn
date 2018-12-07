@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>优雅停机与清理</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.8614bbde.css" as="style"><link rel="preload" href="/assets/js/app.b56e4aff.js" as="script"><link rel="preload" href="/assets/js/108.524846e6.js" as="script"><link rel="prefetch" href="/assets/js/10.d41a3b84.js"><link rel="prefetch" href="/assets/js/100.22ca6861.js"><link rel="prefetch" href="/assets/js/101.80606dd4.js"><link rel="prefetch" href="/assets/js/102.75bf264b.js"><link rel="prefetch" href="/assets/js/103.7615fac4.js"><link rel="prefetch" href="/assets/js/104.a030e309.js"><link rel="prefetch" href="/assets/js/105.ceb5b0f7.js"><link rel="prefetch" href="/assets/js/106.53b25747.js"><link rel="prefetch" href="/assets/js/107.a6f25383.js"><link rel="prefetch" href="/assets/js/109.5b3e8cc8.js"><link rel="prefetch" href="/assets/js/11.7f9bf643.js"><link rel="prefetch" href="/assets/js/110.a106958d.js"><link rel="prefetch" href="/assets/js/111.b1600e65.js"><link rel="prefetch" href="/assets/js/112.81bf40f0.js"><link rel="prefetch" href="/assets/js/12.c7e4d9a8.js"><link rel="prefetch" href="/assets/js/13.235bc06a.js"><link rel="prefetch" href="/assets/js/14.8b8a21b7.js"><link rel="prefetch" href="/assets/js/15.83a607fc.js"><link rel="prefetch" href="/assets/js/16.2bf746d6.js"><link rel="prefetch" href="/assets/js/17.36a5d5f3.js"><link rel="prefetch" href="/assets/js/18.82e00fba.js"><link rel="prefetch" href="/assets/js/19.1c2116c8.js"><link rel="prefetch" href="/assets/js/2.3505b190.js"><link rel="prefetch" href="/assets/js/20.1f4e3d0f.js"><link rel="prefetch" href="/assets/js/21.80dca6df.js"><link rel="prefetch" href="/assets/js/22.24977f4c.js"><link rel="prefetch" href="/assets/js/23.867b53ea.js"><link rel="prefetch" href="/assets/js/24.d59d9203.js"><link rel="prefetch" href="/assets/js/25.fae2b839.js"><link rel="prefetch" href="/assets/js/26.ba769edc.js"><link rel="prefetch" href="/assets/js/27.03216770.js"><link rel="prefetch" href="/assets/js/28.82b934bf.js"><link rel="prefetch" href="/assets/js/29.9bbe7e55.js"><link rel="prefetch" href="/assets/js/3.ba62e17c.js"><link rel="prefetch" href="/assets/js/30.ed75778f.js"><link rel="prefetch" href="/assets/js/31.247a3dbb.js"><link rel="prefetch" href="/assets/js/32.b1bb1e43.js"><link rel="prefetch" href="/assets/js/33.3656c740.js"><link rel="prefetch" href="/assets/js/34.03c1b47c.js"><link rel="prefetch" href="/assets/js/35.5af5d342.js"><link rel="prefetch" href="/assets/js/36.572a9496.js"><link rel="prefetch" href="/assets/js/37.319db1b7.js"><link rel="prefetch" href="/assets/js/38.19837e80.js"><link rel="prefetch" href="/assets/js/39.72675c02.js"><link rel="prefetch" href="/assets/js/4.f9a0ae28.js"><link rel="prefetch" href="/assets/js/40.d9f81c69.js"><link rel="prefetch" href="/assets/js/41.184751dc.js"><link rel="prefetch" href="/assets/js/42.9fa6eee5.js"><link rel="prefetch" href="/assets/js/43.b3333fb7.js"><link rel="prefetch" href="/assets/js/44.97c13303.js"><link rel="prefetch" href="/assets/js/45.8afb63d1.js"><link rel="prefetch" href="/assets/js/46.ac497cb6.js"><link rel="prefetch" href="/assets/js/47.dc1178aa.js"><link rel="prefetch" href="/assets/js/48.50b8e29c.js"><link rel="prefetch" href="/assets/js/49.385dc110.js"><link rel="prefetch" href="/assets/js/5.0204093a.js"><link rel="prefetch" href="/assets/js/50.cadce2ee.js"><link rel="prefetch" href="/assets/js/51.d4e57e23.js"><link rel="prefetch" href="/assets/js/52.323a010e.js"><link rel="prefetch" href="/assets/js/53.377c0582.js"><link rel="prefetch" href="/assets/js/54.8d06b2c9.js"><link rel="prefetch" href="/assets/js/55.f82d7ef0.js"><link rel="prefetch" href="/assets/js/56.c9db2b25.js"><link rel="prefetch" href="/assets/js/57.bc11287b.js"><link rel="prefetch" href="/assets/js/58.a1a44552.js"><link rel="prefetch" href="/assets/js/59.4afc94b7.js"><link rel="prefetch" href="/assets/js/6.4774d695.js"><link rel="prefetch" href="/assets/js/60.867aed26.js"><link rel="prefetch" href="/assets/js/61.74327fa7.js"><link rel="prefetch" href="/assets/js/62.177c0b30.js"><link rel="prefetch" href="/assets/js/63.3e0d51da.js"><link rel="prefetch" href="/assets/js/64.e8778b11.js"><link rel="prefetch" href="/assets/js/65.b0dde85a.js"><link rel="prefetch" href="/assets/js/66.3bba1132.js"><link rel="prefetch" href="/assets/js/67.fb2ec2e1.js"><link rel="prefetch" href="/assets/js/68.d8ef845b.js"><link rel="prefetch" href="/assets/js/69.5b80f65b.js"><link rel="prefetch" href="/assets/js/7.010146f6.js"><link rel="prefetch" href="/assets/js/70.e265a8a0.js"><link rel="prefetch" href="/assets/js/71.08e24461.js"><link rel="prefetch" href="/assets/js/72.9f1ed203.js"><link rel="prefetch" href="/assets/js/73.cf073a90.js"><link rel="prefetch" href="/assets/js/74.e5e6cb7a.js"><link rel="prefetch" href="/assets/js/75.12d311a9.js"><link rel="prefetch" href="/assets/js/76.27ceea65.js"><link rel="prefetch" href="/assets/js/77.2d04e2fc.js"><link rel="prefetch" href="/assets/js/78.cd7b5394.js"><link rel="prefetch" href="/assets/js/79.397902f7.js"><link rel="prefetch" href="/assets/js/8.de3fc0db.js"><link rel="prefetch" href="/assets/js/80.8f355347.js"><link rel="prefetch" href="/assets/js/81.9fcee337.js"><link rel="prefetch" href="/assets/js/82.67857b15.js"><link rel="prefetch" href="/assets/js/83.8638b011.js"><link rel="prefetch" href="/assets/js/84.77ee6a86.js"><link rel="prefetch" href="/assets/js/85.724ec824.js"><link rel="prefetch" href="/assets/js/86.e0caf86b.js"><link rel="prefetch" href="/assets/js/87.32cc9faa.js"><link rel="prefetch" href="/assets/js/88.8db036d0.js"><link rel="prefetch" href="/assets/js/89.63be6804.js"><link rel="prefetch" href="/assets/js/9.a240a747.js"><link rel="prefetch" href="/assets/js/90.23557c83.js"><link rel="prefetch" href="/assets/js/91.0fc26ad3.js"><link rel="prefetch" href="/assets/js/92.45cce200.js"><link rel="prefetch" href="/assets/js/93.2a7d9b35.js"><link rel="prefetch" href="/assets/js/94.25f7b020.js"><link rel="prefetch" href="/assets/js/95.3d28b93b.js"><link rel="prefetch" href="/assets/js/96.fb907808.js"><link rel="prefetch" href="/assets/js/97.e4875071.js"><link rel="prefetch" href="/assets/js/98.2859c908.js"><link rel="prefetch" href="/assets/js/99.ac5b7b90.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8614bbde.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <!----> </div> <div class="page"> <div class="content"><h2 id="优雅停机与清理"><a href="#优雅停机与清理" aria-hidden="true" class="header-anchor">#</a> 优雅停机与清理</h2> <blockquote><p><a href="https://github.com/rust-lang/book/blob/master/second-edition/src/ch20-03-graceful-shutdown-and-cleanup.md" target="_blank" rel="noopener noreferrer">ch20-03-graceful-shutdown-and-cleanup.md<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> <br>
+commit 1f0136399ba2f5540ecc301fab04bd36492e5554</p></blockquote> <p>示例 20-21 中的代码如期通过使用线程池异步的响应请求。这里有一些警告说 <code>workers</code>、<code>id</code> 和 <code>thread</code> 字段没有直接被使用，这提醒了我们并没有清理所有的内容。当使用不那么优雅的 <span class="keystroke">ctrl-C</span> 终止主线程时，所有其他线程也会立刻停止，即便它们正处于处理请求的过程中。</p> <p>现在我们要为 <code>ThreadPool</code> 实现 <code>Drop</code> trait 对线程池中的每一个线程调用 <code>join</code>，这样这些线程将会执行完他们的请求。接着会为 <code>ThreadPool</code> 实现一个告诉线程他们应该停止接收新请求并结束的方式。为了实践这些代码，修改 server 在优雅停机（graceful shutdown）之前只接受两个请求。</p> <h3 id="为-threadpool-实现-drop-trait"><a href="#为-threadpool-实现-drop-trait" aria-hidden="true" class="header-anchor">#</a> 为 <code>ThreadPool</code> 实现 <code>Drop</code> Trait</h3> <p>现在开始为线程池实现 <code>Drop</code>。当线程池被丢弃时，应该 join 所有线程以确保他们完成其操作。示例 20-23 展示了 <code>Drop</code> 实现的第一次尝试；这些代码还不能够编译：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>impl Drop for ThreadPool {
+    fn drop(&amp;mut self) {
+        for worker in &amp;mut self.workers {
+            println!(&quot;Shutting down worker {}&quot;, worker.id);
+
+            worker.thread.join().unwrap();
+        }
+    }
+}
+</code></pre></div><p><span class="caption">示例 20-23: 当线程池离开作用域时 join 每个线程</span></p> <p>这里首先遍历线程池中的每个 <code>workers</code>。这里使用了 <code>&amp;mut</code> 因为 <code>self</code> 本身是一个可变引用而且也需要能够修改 <code>worker</code>。对于每一个线程，会打印出说明信息表明此特定 worker 正在关闭，接着在 worker 线程上调用 <code>join</code>。如果 <code>join</code> 调用失败，通过 <code>unwrap</code> 使得 panic 并进行不优雅的关闭。</p> <p>如下是尝试编译代码时得到的错误：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0507]: cannot move out of borrowed content
+  --&gt; src/lib.rs:65:13
+   |
+65 |             worker.thread.join().unwrap();
+   |             ^^^^^^ cannot move out of borrowed content
+</code></pre></div><p>这告诉我们并不能调用 <code>join</code>，因为只有每一个 <code>worker</code> 的可变借用，而 <code>join</code> 获取其参数的所有权。为了解决这个问题，需要一个方法将 <code>thread</code> 移动出拥有其所有权的 <code>Worker</code> 实例以便 <code>join</code> 可以消费这个线程。示例 17-15 中我们曾见过这么做的方法：如果 <code>Worker</code> 存放的是 <code>Option&lt;thread::JoinHandle&lt;()&gt;</code>，就可以在 <code>Option</code> 上调用 <code>take</code> 方法将值从 <code>Some</code> 成员中移动出来而对 <code>None</code> 成员不做处理。换句话说，正在运行的 <code>Worker</code> 的 <code>thread</code> 将是 <code>Some</code> 成员值，而当需要清理 worker 时，将 <code>Some</code> 替换为 <code>None</code>，这样 worker 就没有可以运行的线程了。</p> <p>为此需要更新 <code>Worker</code> 的定义为如下：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>thread<span class="token punctuation">;</span>
+<span class="token keyword">struct</span> Worker <span class="token punctuation">{</span>
+    id<span class="token punctuation">:</span> usize<span class="token punctuation">,</span>
+    thread<span class="token punctuation">:</span> Option<span class="token operator">&lt;</span>thread<span class="token punctuation">:</span><span class="token punctuation">:</span>JoinHandle<span class="token operator">&lt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&gt;&gt;</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>现在依靠编译器来找出其他需要修改的地方。check 代码会得到两个错误：</p> <div class="language-text extra-class"><pre class="language-text"><code>error[E0599]: no method named `join` found for type
+`std::option::Option&lt;std::thread::JoinHandle&lt;()&gt;&gt;` in the current scope
+  --&gt; src/lib.rs:65:27
+   |
+65 |             worker.thread.join().unwrap();
+   |                           ^^^^
+
+error[E0308]: mismatched types
+  --&gt; src/lib.rs:89:13
+   |
+89 |             thread,
+   |             ^^^^^^
+   |             |
+   |             expected enum `std::option::Option`, found struct
+   `std::thread::JoinHandle`
+   |             help: try using a variant of the expected type: `Some(thread)`
+   |
+   = note: expected type `std::option::Option&lt;std::thread::JoinHandle&lt;()&gt;&gt;`
+              found type `std::thread::JoinHandle&lt;_&gt;`
+</code></pre></div><p>让我们修复第二个错误，它指向 <code>Worker::new</code> 结尾的代码；当新建 <code>Worker</code> 时需要将 <code>thread</code> 值封装进 <code>Some</code>。做出如下改变以修复问题：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>impl Worker {
+    fn new(id: usize, receiver: Arc&lt;Mutex&lt;mpsc::Receiver&lt;Job&gt;&gt;&gt;) -&gt; Worker {
+        // --snip--
+
+        Worker {
+            id,
+            thread: Some(thread),
+        }
+    }
+}
+</code></pre></div><p>第一个错误位于 <code>Drop</code> 实现中。之前提到过要调用 <code>Option</code> 上的 <code>take</code> 将 <code>thread</code> 移动出 <code>worker</code>。如下改变会修复问题：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>impl Drop for ThreadPool {
+    fn drop(&amp;mut self) {
+        for worker in &amp;mut self.workers {
+            println!(&quot;Shutting down worker {}&quot;, worker.id);
+
+            if let Some(thread) = worker.thread.take() {
+                thread.join().unwrap();
+            }
+        }
+    }
+}
+</code></pre></div><p>如第十七章我们见过的，<code>Option</code> 上的 <code>take</code> 方法会取出 <code>Some</code> 而留下 <code>None</code>。使用 <code>if let</code> 解构 <code>Some</code> 并得到线程，接着在线程上调用 <code>join</code>。如果 worker 的线程已然是 <code>None</code>，就知道此时这个 worker 已经清理了其线程所以无需做任何操作。</p> <h3 id="向线程发送信号使其停止接收任务"><a href="#向线程发送信号使其停止接收任务" aria-hidden="true" class="header-anchor">#</a> 向线程发送信号使其停止接收任务</h3> <p>有了这些修改，代码就能编译且没有任何警告。不过也有坏消息，这些代码还不能以我们期望的方式运行。问题的关键在于 <code>Worker</code> 中分配的线程所运行的闭包中的逻辑：调用 <code>join</code> 并不会关闭线程，因为他们一直 <code>loop</code> 来寻找任务。如果采用这个实现来尝试丢弃 <code>ThreadPool</code> ，则主线程会永远阻塞在等待第一个线程结束上。</p> <p>为了修复这个问题，修改线程既监听是否有 <code>Job</code> 运行也要监听一个应该停止监听并退出无限循环的信号。所以通道将发送这个枚举的两个成员之一而不是 <code>Job</code> 实例：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code># <span class="token keyword">struct</span> Job<span class="token punctuation">;</span>
+<span class="token keyword">enum</span> Message <span class="token punctuation">{</span>
+    <span class="token function">NewJob</span><span class="token punctuation">(</span>Job<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    Terminate<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><code>Message</code> 枚举要么是存放了线程需要运行的 <code>Job</code> 的 <code>NewJob</code> 成员，要么是会导致线程退出循环并终止的 <code>Terminate</code> 成员。</p> <p>同时需要修改通道来使用 <code>Message</code> 类型值而不是 <code>Job</code>，如示例 20-24 所示：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>pub struct ThreadPool {
+    workers: Vec&lt;Worker&gt;,
+    sender: mpsc::Sender&lt;Message&gt;,
+}
+
+// --snip--
+
+impl ThreadPool {
+    // --snip--
+
+    pub fn execute&lt;F&gt;(&amp;self, f: F)
+        where
+            F: FnOnce() + Send + 'static
+    {
+        let job = Box::new(f);
+
+        self.sender.send(Message::NewJob(job)).unwrap();
+    }
+}
+
+// --snip--
+
+impl Worker {
+    fn new(id: usize, receiver: Arc&lt;Mutex&lt;mpsc::Receiver&lt;Message&gt;&gt;&gt;) -&gt;
+        Worker {
+
+        let thread = thread::spawn(move ||{
+            loop {
+                let message = receiver.lock().unwrap().recv().unwrap();
+
+                match message {
+                    Message::NewJob(job) =&gt; {
+                        println!(&quot;Worker {} got a job; executing.&quot;, id);
+
+                        job.call_box();
+                    },
+                    Message::Terminate =&gt; {
+                        println!(&quot;Worker {} was told to terminate.&quot;, id);
+
+                        break;
+                    },
+                }
+            }
+        });
+
+        Worker {
+            id,
+            thread: Some(thread),
+        }
+    }
+}
+</code></pre></div><p><span class="caption">示例 20-24: 收发 <code>Message</code> 值并在 <code>Worker</code> 收到 <code>Message::Terminate</code> 时退出循环</span></p> <p>为了适用 <code>Message</code> 枚举需要将两个地方的 <code>Job</code> 修改为 <code>Message</code>：<code>ThreadPool</code> 的定义和 <code>Worker::new</code> 的签名。<code>ThreadPool</code> 的 <code>execute</code> 方法需要发送封装进 <code>Message::NewJob</code> 成员的任务。然后，在 <code>Worker::new</code> 中当从通道接收 <code>Message</code> 时，当获取到 <code>NewJob</code>成员会处理任务而收到 <code>Terminate</code> 成员则会退出循环。</p> <p>通过这些修改，代码再次能够编译并继续按照期望的行为运行。不过还是会得到一个警告，因为并没有创建任何 <code>Terminate</code> 成员的消息。如示例 20-25 所示修改 <code>Drop</code> 实现来修复此问题：</p> <p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>impl Drop for ThreadPool {
+    fn drop(&amp;mut self) {
+        println!(&quot;Sending terminate message to all workers.&quot;);
+
+        for _ in &amp;mut self.workers {
+            self.sender.send(Message::Terminate).unwrap();
+        }
+
+        println!(&quot;Shutting down all workers.&quot;);
+
+        for worker in &amp;mut self.workers {
+            println!(&quot;Shutting down worker {}&quot;, worker.id);
+
+            if let Some(thread) = worker.thread.take() {
+                thread.join().unwrap();
+            }
+        }
+    }
+}
+</code></pre></div><p><span class="caption">示例 20-25：在对每个 worker 线程调用 <code>join</code> 之前向 worker 发送 <code>Message::Terminate</code></span></p> <p>现在遍历了 worker 两次，一次向每个 worker 发送一个 <code>Terminate</code> 消息，一个调用每个 worker 线程上的  <code>join</code>。如果尝试在同一循环中发送消息并立即 join 线程，则无法保证当前迭代的 worker 是从通道收到终止消息的 worker。</p> <p>为了更好的理解为什么需要两个分开的循环，想象一下只有两个 worker 的场景。如果在一个单独的循环中遍历每个 worker，在第一次迭代中向通道发出终止消息并对第一个 worker 线程调用 <code>join</code>。我们会一直等待第一个 worker 结束，不过它永远也不会结束因为第二个线程接收了终止消息。死锁！</p> <p>为了避免此情况，首先在一个循环中向通道发出所有的 <code>Terminate</code> 消息，接着在另一个循环中 join 所有的线程。每个 worker 一旦收到终止消息即会停止从通道接收消息，意味着可以确保如果发送同 worker 数相同的终止消息，在 join 之前每个线程都会收到一个终止消息。</p> <p>为了实践这些代码，如示例 20-26 所示修改 <code>main</code> 在优雅停机 server 之前只接受两个请求：</p> <p><span class="filename">文件名: src/bin/main.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>fn main() {
+    let listener = TcpListener::bind(&quot;127.0.0.1:7878&quot;).unwrap();
+    let pool = ThreadPool::new(4);
+
+    for stream in listener.incoming().take(2) {
+        let stream = stream.unwrap();
+
+        pool.execute(|| {
+            handle_connection(stream);
+        });
+    }
+
+    println!(&quot;Shutting down.&quot;);
+}
+</code></pre></div><p><span class="caption">示例 20-26: 在处理两个请求之后通过退出循环来停止 server</span></p> <p>你不会希望真实世界的 web server 只处理两次请求就停机了，这只是为了展示优雅停机和清理处于正常工作状态。</p> <p><code>take</code> 方法定义于 <code>Iterator</code> trait，这里限制循环最多头 2 次。<code>ThreadPool</code> 会在 <code>main</code> 的结尾离开作用域，而且还会看到 <code>drop</code> 实现的运行。</p> <p>使用 <code>cargo run</code> 启动 server，并发起三个请求。第三个请求应该会失败，而终端的输出应该看起来像这样：</p> <div class="language-text extra-class"><pre class="language-text"><code>$ cargo run
+   Compiling hello v0.1.0 (file:///projects/hello)
+    Finished dev [unoptimized + debuginfo] target(s) in 1.0 secs
+     Running `target/debug/hello`
+Worker 0 got a job; executing.
+Worker 3 got a job; executing.
+Shutting down.
+Sending terminate message to all workers.
+Shutting down all workers.
+Shutting down worker 0
+Worker 1 was told to terminate.
+Worker 2 was told to terminate.
+Worker 0 was told to terminate.
+Worker 3 was told to terminate.
+Shutting down worker 1
+Shutting down worker 2
+Shutting down worker 3
+</code></pre></div><p>可能会出现不同顺序的 worker 和信息输出。可以从信息中看到服务是如何运行的： worker 0 和 worker 3 获取了头两个请求，接着在第三个请求时，我们停止接收连接。当 <code>ThreadPool</code> 在 <code>main</code> 的结尾离开作用域时，其 <code>Drop</code> 实现开始工作，线程池通知所有线程终止。每个 worker 在收到终止消息时会打印出一个信息，接着线程池调用 <code>join</code> 来终止每一个 worker 线程。</p> <p>这个特定的运行过程中一个有趣的地方在于：注意我们向通道中发出终止消息，而在任何线程收到消息之前，就尝试 join worker 0 了。worker 0 还没有收到终止消息，所以主线程阻塞直到 worker 0 结束。与此同时，每一个线程都收到了终止消息。一旦 worker 0 结束，主线程就等待其他 worker 结束，此时他们都已经收到终止消息并能够停止了。</p> <p>恭喜！现在我们完成了这个项目，也有了一个使用线程池异步响应请求的基础 web server。我们能对 server 执行优雅停机，它会清理线程池中的所有线程。如下是完整的代码参考：</p> <p><span class="filename">文件名: src/bin/main.rs</span></p> <div class="language-rust,ignore extra-class"><pre class="language-text"><code>extern crate hello;
+use hello::ThreadPool;
+
+use std::io::prelude::*;
+use std::net::TcpListener;
+use std::net::TcpStream;
+use std::fs::File;
+use std::thread;
+use std::time::Duration;
+
+fn main() {
+    let listener = TcpListener::bind(&quot;127.0.0.1:7878&quot;).unwrap();
+    let pool = ThreadPool::new(4);
+
+    for stream in listener.incoming().take(2) {
+        let stream = stream.unwrap();
+
+        pool.execute(|| {
+            handle_connection(stream);
+        });
+    }
+
+    println!(&quot;Shutting down.&quot;);
+}
+
+fn handle_connection(mut stream: TcpStream) {
+    let mut buffer = [0; 512];
+    stream.read(&amp;mut buffer).unwrap();
+
+    let get = b&quot;GET / HTTP/1.1\r\n&quot;;
+    let sleep = b&quot;GET /sleep HTTP/1.1\r\n&quot;;
+
+    let (status_line, filename) = if buffer.starts_with(get) {
+        (&quot;HTTP/1.1 200 OK\r\n\r\n&quot;, &quot;hello.html&quot;)
+    } else if buffer.starts_with(sleep) {
+        thread::sleep(Duration::from_secs(5));
+        (&quot;HTTP/1.1 200 OK\r\n\r\n&quot;, &quot;hello.html&quot;)
+    } else {
+        (&quot;HTTP/1.1 404 NOT FOUND\r\n\r\n&quot;, &quot;404.html&quot;)
+    };
+
+     let mut file = File::open(filename).unwrap();
+     let mut contents = String::new();
+
+     file.read_to_string(&amp;mut contents).unwrap();
+
+     let response = format!(&quot;{}{}&quot;, status_line, contents);
+
+     stream.write(response.as_bytes()).unwrap();
+     stream.flush().unwrap();
+}
+</code></pre></div><p><span class="filename">文件名: src/lib.rs</span></p> <div class="language-rust extra-class"><pre class="language-rust"><code><span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>thread<span class="token punctuation">;</span>
+<span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>sync<span class="token punctuation">:</span><span class="token punctuation">:</span>mpsc<span class="token punctuation">;</span>
+<span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>sync<span class="token punctuation">:</span><span class="token punctuation">:</span>Arc<span class="token punctuation">;</span>
+<span class="token keyword">use</span> std<span class="token punctuation">:</span><span class="token punctuation">:</span>sync<span class="token punctuation">:</span><span class="token punctuation">:</span>Mutex<span class="token punctuation">;</span>
+
+<span class="token keyword">enum</span> Message <span class="token punctuation">{</span>
+    <span class="token function">NewJob</span><span class="token punctuation">(</span>Job<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    Terminate<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">pub</span> <span class="token keyword">struct</span> ThreadPool <span class="token punctuation">{</span>
+    workers<span class="token punctuation">:</span> Vec<span class="token operator">&lt;</span>Worker<span class="token operator">&gt;</span><span class="token punctuation">,</span>
+    sender<span class="token punctuation">:</span> mpsc<span class="token punctuation">:</span><span class="token punctuation">:</span>Sender<span class="token operator">&lt;</span>Message<span class="token operator">&gt;</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">trait</span> FnBox <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">call_box</span><span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">:</span> Box<span class="token operator">&lt;</span>Self<span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">impl</span><span class="token operator">&lt;</span>F<span class="token punctuation">:</span> <span class="token function">FnOnce</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&gt;</span> FnBox <span class="token keyword">for</span> F <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">call_box</span><span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">:</span> Box<span class="token operator">&lt;</span>F<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">(</span><span class="token operator">*</span><span class="token keyword">self</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> Job <span class="token operator">=</span> Box<span class="token operator">&lt;</span>FnBox <span class="token operator">+</span> Send <span class="token operator">+</span> <span class="token lifetime-annotation symbol">'static</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">impl</span> ThreadPool <span class="token punctuation">{</span>
+    <span class="token comment">/// Create a new ThreadPool.</span>
+    <span class="token comment">///</span>
+    <span class="token comment">/// The size is the number of threads in the pool.</span>
+    <span class="token comment">///</span>
+    <span class="token comment">/// # Panics</span>
+    <span class="token comment">///</span>
+    <span class="token comment">/// The `new` function will panic if the size is zero.</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">new</span><span class="token punctuation">(</span>size<span class="token punctuation">:</span> usize<span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> ThreadPool <span class="token punctuation">{</span>
+        <span class="token function">assert!</span><span class="token punctuation">(</span>size <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">let</span> <span class="token punctuation">(</span>sender<span class="token punctuation">,</span> receiver<span class="token punctuation">)</span> <span class="token operator">=</span> mpsc<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">channel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">let</span> receiver <span class="token operator">=</span> Arc<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">new</span><span class="token punctuation">(</span>Mutex<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">new</span><span class="token punctuation">(</span>receiver<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">let</span> <span class="token keyword">mut</span> workers <span class="token operator">=</span> Vec<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">with_capacity</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">for</span> id <span class="token keyword">in</span> <span class="token number">0</span><span class="token punctuation">..</span>size <span class="token punctuation">{</span>
+            workers<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>Worker<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">new</span><span class="token punctuation">(</span>id<span class="token punctuation">,</span> Arc<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>receiver<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        ThreadPool <span class="token punctuation">{</span>
+            workers<span class="token punctuation">,</span>
+            sender<span class="token punctuation">,</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> execute<span class="token operator">&lt;</span>F<span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">self</span><span class="token punctuation">,</span> f<span class="token punctuation">:</span> F<span class="token punctuation">)</span>
+        <span class="token keyword">where</span>
+            F<span class="token punctuation">:</span> <span class="token function">FnOnce</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> Send <span class="token operator">+</span> <span class="token lifetime-annotation symbol">'static</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> job <span class="token operator">=</span> Box<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">new</span><span class="token punctuation">(</span>f<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">self</span><span class="token punctuation">.</span>sender<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>Message<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">NewJob</span><span class="token punctuation">(</span>job<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">impl</span> Drop <span class="token keyword">for</span> ThreadPool <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">drop</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;Sending terminate message to all workers.&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">for</span> _ <span class="token keyword">in</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">.</span>workers <span class="token punctuation">{</span>
+            <span class="token keyword">self</span><span class="token punctuation">.</span>sender<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>Message<span class="token punctuation">:</span><span class="token punctuation">:</span>Terminate<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;Shutting down all workers.&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">for</span> worker <span class="token keyword">in</span> <span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">.</span>workers <span class="token punctuation">{</span>
+            <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;Shutting down worker {}&quot;</span><span class="token punctuation">,</span> worker<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">if</span> <span class="token keyword">let</span> <span class="token function">Some</span><span class="token punctuation">(</span>thread<span class="token punctuation">)</span> <span class="token operator">=</span> worker<span class="token punctuation">.</span>thread<span class="token punctuation">.</span><span class="token function">take</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                thread<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">struct</span> Worker <span class="token punctuation">{</span>
+    id<span class="token punctuation">:</span> usize<span class="token punctuation">,</span>
+    thread<span class="token punctuation">:</span> Option<span class="token operator">&lt;</span>thread<span class="token punctuation">:</span><span class="token punctuation">:</span>JoinHandle<span class="token operator">&lt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&gt;&gt;</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">impl</span> Worker <span class="token punctuation">{</span>
+    <span class="token keyword">fn</span> <span class="token function">new</span><span class="token punctuation">(</span>id<span class="token punctuation">:</span> usize<span class="token punctuation">,</span> receiver<span class="token punctuation">:</span> Arc<span class="token operator">&lt;</span>Mutex<span class="token operator">&lt;</span>mpsc<span class="token punctuation">:</span><span class="token punctuation">:</span>Receiver<span class="token operator">&lt;</span>Message<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span>
+        Worker <span class="token punctuation">{</span>
+
+        <span class="token keyword">let</span> thread <span class="token operator">=</span> thread<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">spawn</span><span class="token punctuation">(</span><span class="token keyword">move</span> <span class="token closure-params"><span class="token punctuation">|</span><span class="token punctuation">|</span></span><span class="token punctuation">{</span>
+            <span class="token keyword">loop</span> <span class="token punctuation">{</span>
+                <span class="token keyword">let</span> message <span class="token operator">=</span> receiver<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">recv</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token keyword">match</span> message <span class="token punctuation">{</span>
+                    Message<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">NewJob</span><span class="token punctuation">(</span>job<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+                        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;Worker {} got a job; executing.&quot;</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                        job<span class="token punctuation">.</span><span class="token function">call_box</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+                    Message<span class="token punctuation">:</span><span class="token punctuation">:</span>Terminate <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+                        <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">&quot;Worker {} was told to terminate.&quot;</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                        <span class="token keyword">break</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        Worker <span class="token punctuation">{</span>
+            id<span class="token punctuation">,</span>
+            thread<span class="token punctuation">:</span> <span class="token function">Some</span><span class="token punctuation">(</span>thread<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>这里还有很多可以做的事！如果你希望继续增强这个项目，如下是一些点子：</p> <ul><li>为 <code>ThreadPool</code> 和其公有方法增加更多文档</li> <li>为库的功能增加测试</li> <li>将 <code>unwrap</code> 调用改为更健壮的错误处理</li> <li>使用 <code>ThreadPool</code> 进行其他不同于处理网络请求的任务</li> <li>在 crates.io 寻找一个线程池 crate 并使用它实现一个类似的 web server，将其 API 和鲁棒性与我们的实现做对比</li></ul> <h2 id="总结"><a href="#总结" aria-hidden="true" class="header-anchor">#</a> 总结</h2> <p>好极了！你结束了本书的学习！由衷感谢你与我们一道加入这次 Rust 之旅。现在你已经准备好出发并实现自己的 Rust 项目并帮助他人了。请不要忘记我们的社区，这里有其他 Rustaceans 正乐于帮助你迎接 Rust 之路上的任何挑战。</p></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/assets/js/108.524846e6.js" defer></script><script src="/assets/js/app.b56e4aff.js" defer></script>
+  </body>
+</html>
