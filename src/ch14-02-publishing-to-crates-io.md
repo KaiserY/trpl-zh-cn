@@ -1,24 +1,23 @@
 ## 将 crate 发布到 Crates.io
 
-> [ch14-02-publishing-to-crates-io.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch14-02-publishing-to-crates-io.md)
+> [ch14-02-publishing-to-crates-io.md](https://github.com/rust-lang/book/blob/master/src/ch14-02-publishing-to-crates-io.md)
 > <br>
-> commit ff93f82ff63ade5a352d9ccc430945d4ec804cdf
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 我们曾经在项目中使用 [crates.io](https://crates.io)<!-- ignore --> 上的包作为依赖，不过你也可以通过发布自己的包来向它人分享代码。[crates.io](https://crates.io)<!-- ignore --> 用来分发包的源代码，所以它主要托管开源代码。
 
 Rust 和 Cargo 有一些帮助它人更方便找到和使用你发布的包的功能。我们将介绍一些这样的功能，接着讲到如何发布一个包。
 
-
 ### 编写有用的文档注释
 
-准确的包文档有助于其他用户理解如何以及何时使用他们，所以花一些时间编写文档是值得的。第三章中我们讨论了如何使用 `//` 注释 Rust 代码。Rust 也有特定的用于文档的注释类型，通常被称为 **文档注释**（*documentation comments*），他们会生成 HTML 文档。这些 HTML 展示公有 API 文档注释的内容，他们意在让对库感兴趣的程序员理解如何 **使用** 这个 crate，而不是它是如何被 **实现** 的。
+准确的包文档有助于其他用户理解如何以及何时使用他们，所以花一些时间编写文档是值得的。第三章中我们讨论了如何使用两斜杠 `//` 注释 Rust 代码。Rust 也有特定的用于文档的注释类型，通常被称为 **文档注释**（*documentation comments*），他们会生成 HTML 文档。这些 HTML 展示公有 API 文档注释的内容，他们意在让对库感兴趣的程序员理解如何 **使用** 这个 crate，而不是它是如何被 **实现** 的。
 
-文档注释使用 `///` 而不是 `//` 并支持 Markdown 注解来格式化文本。文档注释就位于需要文档的项的之前。示例 14-1 展示了一个 `my_crate` crate 中 `add_one` 函数的文档注释：
+文档注释使用三斜杠 `///` 而不是两斜杆并支持 Markdown 注解来格式化文本。文档注释就位于需要文档的项的之前。示例 14-1 展示了一个 `my_crate` crate 中 `add_one` 函数的文档注释：
 
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
-/// Adds one to the number given.
+/// 将给定的数字加一
 ///
 /// # Examples
 ///
@@ -34,7 +33,7 @@ pub fn add_one(x: i32) -> i32 {
 
 <span class="caption">示例 14-1：一个函数的文档注释</span>
 
-这里，我们提供了一个 `add_one` 函数工作的描述，接着开始了一个标题为 “Examples” 的部分，和展示如何使用 `add_one` 函数的代码。可以运行 `cargo doc` 来生成这个文档注释的 HTML 文档。这个命令运行由 Rust 分发的工具 `rustdoc` 并将生成的 HTML 文档放入 *target/doc* 目录。
+这里，我们提供了一个 `add_one` 函数工作的描述，接着开始了一个标题为 `Examples` 的部分，和展示如何使用 `add_one` 函数的代码。可以运行 `cargo doc` 来生成这个文档注释的 HTML 文档。这个命令运行由 Rust 分发的工具 `rustdoc` 并将生成的 HTML 文档放入 *target/doc* 目录。
 
 为了方便起见，运行 `cargo doc --open` 会构建当前 crate 文档（同时还有所有 crate 依赖的文档）的 HTML 并在浏览器中打开。导航到 `add_one` 函数将会发现文档注释的文本是如何渲染的，如图 14-1 所示：
 
@@ -78,10 +77,10 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```rust,ignore
 //! # My Crate
 //!
-//! `my_crate` is a collection of utilities to make performing certain
-//! calculations more convenient.
+//! `my_crate` 是一个使得特定计算更方便的
+//! 工具集合
 
-/// Adds one to the number given.
+/// 将给定的数字加一。
 // --snip--
 ```
 
@@ -99,30 +98,30 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
 ### 使用 `pub use` 导出合适的公有 API
 
-第七章介绍了如何使用 `mod` 关键字来将代码组织进模块中，如何使用 `pub` 关键字将项变为公有，和如何使用 `use` 关键字将项引入作用域。然而对你开发来说很有道理的结果可能对用户来说就不太方便了。你可能希望将结构组织进有多个层次的层级中，不过想要使用被定义在很深层级中的类型的人可能很难发现这些类型是否存在。他们也可能会厌烦 `use my_crate::some_module::another_module::UsefulType;` 而不是 `use my_crate::UsefulType;` 来使用类型。
+第七章介绍了如何使用 `mod` 关键字来将代码组织进模块中，如何使用 `pub` 关键字将项变为公有，和如何使用 `use` 关键字将项引入作用域。然而对你开发来说很有道理的结果可能对用户来说就不太方便了。你可能希望将结构组织进有多个层次的层级中，不过想要使用被定义在很深层级中的类型的人可能很难发现这些类型是否存在。他们也可能会厌烦使用 `use my_crate::some_module::another_module::UsefulType;` 而不是 `use my_crate::UsefulType;` 来使用类型。
 
 公有 API 的结构是你发布 crate 时主要需要考虑的。crate 用户没有你那么熟悉其结构，并且如果模块层级过大他们可能会难以找到所需的部分。
 
 好消息是，如果结果对于用户来说 **不是** 很方便，你也无需重新安排内部组织：你可以选择使用 `pub use` 重导出（re-export）项来使公有结构不同于私有结构。重导出获取位于一个位置的公有项并将其公开到另一个位置，好像它就定义在这个新位置一样。
 
-例如，假设我们创建了一个模块化了充满艺术化气息的库 `art`。在这个库中是一个包含两个枚举 `PrimaryColor` 和 `SecondaryColor` 的模块 `kinds`，以及一个包含函数 `mix` 的模块 `utils`，如示例 14-3 所示：
+例如，假设我们创建了一个模块化的充满艺术化气息的库 `art`。在这个库中是一个包含两个枚举 `PrimaryColor` 和 `SecondaryColor` 的模块 `kinds`，以及一个包含函数 `mix` 的模块 `utils`，如示例 14-3 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
 //! # Art
 //!
-//! A library for modeling artistic concepts.
+//! 一个模块化的充满艺术化气息的库。
 
 pub mod kinds {
-    /// The primary colors according to the RYB color model.
+    /// 采用 RGB 色彩模式的主要颜色。
     pub enum PrimaryColor {
         Red,
         Yellow,
         Blue,
     }
 
-    /// The secondary colors according to the RYB color model.
+    /// 采用 RGB 色彩模式的次要颜色。
     pub enum SecondaryColor {
         Orange,
         Green,
@@ -133,8 +132,8 @@ pub mod kinds {
 pub mod utils {
     use kinds::*;
 
-    /// Combines two primary colors in equal amounts to create
-    /// a secondary color.
+    /// 等量的混合两个主要颜色
+    /// 来创建一个次要颜色。
     pub fn mix(c1: PrimaryColor, c2: PrimaryColor) -> SecondaryColor {
         // --snip--
     }
@@ -149,15 +148,13 @@ pub mod utils {
 
 <span class="caption">图 14-3：包含 `kinds` 和 `utils` 模块的库 `art` 的文档首页</span>
 
-注意 `PrimaryColor` 和 `SecondaryColor` 类型没有在首页中列出，`mix` 函数也是。必须点击 `kinds` 或 `utils` 才能看到他们。
+注意 `PrimaryColor` 和 `SecondaryColor` 类型没有在首页中列出，`mix` 函数也没有。必须点击 `kinds` 或 `utils` 才能看到他们。
 
 另一个依赖这个库的 crate 需要 `use` 语句来导入 `art` 中的项，这包含指定其当前定义的模块结构。示例 14-4 展示了一个使用 `art` crate 中 `PrimaryColor` 和 `mix` 项的 crate 的例子：
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-extern crate art;
-
 use art::kinds::PrimaryColor;
 use art::utils::mix;
 
@@ -179,7 +176,7 @@ fn main() {
 ```rust,ignore
 //! # Art
 //!
-//! A library for modeling artistic concepts.
+//! 一个模块化的充满艺术化气息的库。
 
 pub use kinds::PrimaryColor;
 pub use kinds::SecondaryColor;
@@ -202,13 +199,11 @@ pub mod utils {
 
 <span class="caption">图 14-10：`art` 文档的首页，这里列出了重导出的项</span>
 
-`art` crate 的用户仍然可以看见和选择使用示例 14-3 中的内部结构，或者可以使用示例 14-4 中更为方便的结构，如示例 14-6 所示：
+`art` crate 的用户仍然可以看见和选择使用示例 14-4 中的内部结构，或者可以使用示例 14-5 中更为方便的结构，如示例 14-6 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-extern crate art;
-
 use art::PrimaryColor;
 use art::mix;
 
@@ -225,7 +220,7 @@ fn main() {
 
 ### 创建 Crates.io 账号
 
-在你可以发布任何 crate 之前，需要在 [crates.io](https://crates.io)<!-- ignore --> 上注册账号并获取一个 API token。为此，访问位于 [crates.io](https://crates.io)<!-- ignore --> 的首页并使用 GitHub 账号登陆————目前 GitHub 账号是必须的，不过将来该网站可能会支持其他创建账号的方法。一旦登陆之后，查看位于 [https://crates.io/me/](https://crates.io/me/)<!-- ignore --> 的账户设置页面并获取 API token。接着使用该 API token 运行 `cargo login` 命令，像这样：
+在你可以发布任何 crate 之前，需要在 [crates.io](https://crates.io)<!-- ignore --> 上注册账号并获取一个 API token。为此，访问位于 [crates.io](https://crates.io)<!-- ignore --> 的首页并使用 GitHub 账号登陆。（目前 GitHub 账号是必须的，不过将来该网站可能会支持其他创建账号的方法）一旦登陆之后，查看位于 [https://crates.io/me/](https://crates.io/me/)<!-- ignore --> 的账户设置页面并获取 API token。接着使用该 API token 运行 `cargo login` 命令，像这样：
 
 ```text
 $ cargo login abcdefghijklmnopqrstuvwxyz012345
@@ -259,7 +254,10 @@ error: api errors: missing or empty metadata fields: description, license.
 
 这是因为我们缺少一些关键信息：关于该 crate 用途的描述和用户可能在何种条款下使用该 crate 的 license。为了修正这个错误，需要在 *Cargo.toml* 中引入这些信息。
 
-描述通常是一两句话，因为它会出现在 crate 的搜索结果中和 crate 页面里。对于 `license` 字段，你需要一个 **license 标识符值**（*license identifier value*）。Linux 基金会位于 *http://spdx.org/licenses/* 的 Software Package Data Exchange (SPDX) 列出了可以使用的标识符。例如，为了指定 crate 使用 MIT License，增加 `MIT` 标识符：
+描述通常是一两句话，因为它会出现在 crate 的搜索结果中和 crate 页面里。对于 `license` 字段，你需要一个 **license 标识符值**（*license identifier value*）。[Linux 基金会 的 Software Package Data
+Exchange (SPDX)][spdx] 列出了可以使用的标识符。例如，为了指定 crate 使用 MIT License，增加 `MIT` 标识符：
+
+[spdx]: http://spdx.org/licenses/
 
 <span class="filename">文件名: Cargo.toml</span>
 
@@ -271,7 +269,7 @@ license = "MIT"
 
 如果你希望使用不存在于 SPDX 的 license，则需要将 license 文本放入一个文件，将该文件包含进项目中，接着使用 `license-file` 来指定文件名而不是使用 `license` 字段。
 
-关于项目所适用的 license 指导超出了本书的范畴。很多 Rust 社区成员选择与 Rust 自身相同的 license，这是一个双许可的 `MIT OR Apache-2.0` ———— 这展示了也可以通过 `OR` 来分隔来为项目指定多个 license 标识符。
+关于项目所适用的 license 指导超出了本书的范畴。很多 Rust 社区成员选择与 Rust 自身相同的 license，这是一个双许可的 `MIT OR Apache-2.0`。这个实践展示了也可以通过 `OR` 分隔为项目指定多个 license 标识符。
 
 那么，有了唯一的名称、版本号、由 `cargo new` 新建项目时增加的作者信息、描述和所选择的 license，已经准备好发布的项目的 *Cargo.toml* 文件可能看起来像这样：
 
