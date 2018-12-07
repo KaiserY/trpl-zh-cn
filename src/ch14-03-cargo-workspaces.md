@@ -1,12 +1,14 @@
 ## Cargo 工作空间
 
-> [ch14-03-cargo-workspaces.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch14-03-cargo-workspaces.md)
+> [ch14-03-cargo-workspaces.md](https://github.com/rust-lang/book/blob/master/src/ch14-03-cargo-workspaces.md)
 > <br>
-> commit a59537604248f2970e0831d5ead9f6fac2cdef84
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 第十二章中，我们构建一个包含二进制 crate 和库 crate 的包。你可能会发现，随着项目开发的深入，库 crate 持续增大，而你希望将其进一步拆分成多个库 crate。对于这种情况，Cargo 提供了一个叫 **工作空间**（*workspaces*）的功能，它可以帮助我们管理多个相关的协同开发的包。
 
-**工作空间** 是一系列共享同样的 *Cargo.lock* 和输出目录的包。让我们使用工作空间创建一个项目，这里采用常见的代码这样就可以关注工作空间的结构了。有多种组织工作空间的方式；我们将展示一个常用方法。我们的工作空间有一个二进制项目和两个库。二进制项目会提供作为命令行工具的主要功能，它会依赖另两个库。一个库会提供 `add_one` 方法而第二个会提供 `add_two` 方法。这三个 crate 将会是相同工作空间的一部分。让我们以新建工作空间目录开始：
+### 创建工作空间
+
+**工作空间** 是一系列共享同样的 *Cargo.lock* 和输出目录的包。让我们使用工作空间创建一个项目 —— 这里采用常见的代码以便可以关注工作空间的结构。有多种组织工作空间的方式；我们将展示一个常用方法。我们的工作空间有一个二进制项目和两个库。二进制项目会提供主要功能，并会依赖另两个库。一个库会提供 `add_one` 方法而第二个会提供 `add_two` 方法。这三个 crate 将会是相同工作空间的一部分。让我们以新建工作空间目录开始：
 
 ```text
 $ mkdir add
@@ -28,7 +30,7 @@ members = [
 接下来，在 *add* 目录运行 `cargo new` 新建 `adder` 二进制 crate：
 
 ```text
-$ cargo new --bin adder
+$ cargo new adder
      Created binary (application) `adder` project
 ```
 
@@ -64,7 +66,7 @@ members = [
 接着新生成一个叫做 `add-one` 的库：
 
 ```text
-$ cargo new add-one
+$ cargo new add-one --lib
      Created library `add-one` project
 ```
 
@@ -111,7 +113,7 @@ add-one = { path = "../add-one" }
 <span class="filename">文件名: adder/src/main.rs</span>
 
 ```rust,ignore
-extern crate add_one;
+use add_one;
 
 fn main() {
     let num = 10;
@@ -154,7 +156,7 @@ Hello, world! 10 plus one is 11!
 rand = "0.3.14"
 ```
 
-现在就可以在 *add-one/src/lib.rs* 中增加 `extern crate rand;` 了，接着在 *add* 目录运行 `cargo build` 构建整个工作空间就会引入并编译 `rand` crate：
+现在就可以在 *add-one/src/lib.rs* 中增加 `use rand;` 了，接着在 *add* 目录运行 `cargo build` 构建整个工作空间就会引入并编译 `rand` crate：
 
 ```text
 $ cargo build
@@ -167,7 +169,7 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 10.18 secs
 ```
 
-现在顶级的 *Cargo.lock* 包含了 `add-one` 的 `rand` 依赖的信息。然而，即使 `rand` 被用于工作空间的某处，也不能在其他 crate 中使用它，除非也在他们的 *Cargo.toml* 中加入 `rand`。例如，如果在顶级的 `adder` crate 的 *adder/src/main.rs* 中增加 `extern crate rand;`，会得到一个错误：
+现在顶级的 *Cargo.lock* 包含了 `add-one` 的 `rand` 依赖的信息。然而，即使 `rand` 被用于工作空间的某处，也不能在其他 crate 中使用它，除非也在他们的 *Cargo.toml* 中加入 `rand`。例如，如果在顶级的 `adder` crate 的 *adder/src/main.rs* 中增加 `use rand;`，会得到一个错误：
 
 ```text
 $ cargo build
@@ -176,7 +178,7 @@ error: use of unstable library feature 'rand': use `rand` from crates.io (see
 issue #27703)
  --> adder/src/main.rs:1:1
   |
-1 | extern crate rand;
+1 | use rand;
 ```
 
 为了修复这个错误，修改顶级 `adder` crate 的 *Cargo.toml* 来表明 `rand` 也是这个 crate 的依赖。构建 `adder` crate 会将 `rand` 加入到 *Cargo.lock* 中 `adder` 的依赖列表中，但是这并不会下载 `rand` 的额外拷贝。Cargo 确保了工作空间中任何使用 `rand` 的 crate 都采用相同的版本。在整个工作空间中使用相同版本的 `rand` 节省了空间，因为这样就无需多个拷贝并确保了工作空间中的 crate 将是相互兼容的。
@@ -257,4 +259,4 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
 现在尝试以类似 `add-one` crate 的方式向工作空间增加 `add-two` crate 来作为更多的练习！
 
-随着项目增长，考虑使用工作空间：每一个更小的组件比一大块代码要容易理解。将 crate 保持在工作空间中更易于协调他们的改变，如果他们一起运行并经常需要同时被修改的话。
+随着项目增长，考虑使用工作空间：每一个更小的组件比一大块代码要容易理解。如果它们经常需要同时被修改的话，将 crate 保持在工作空间中更易于协调他们的改变。
