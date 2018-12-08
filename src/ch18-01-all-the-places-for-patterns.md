@@ -1,8 +1,8 @@
 ## 所有可能会用到模式的位置
 
-> [ch18-01-all-the-places-for-patterns.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch18-01-all-the-places-for-patterns.md)
+> [ch18-01-all-the-places-for-patterns.md](https://github.com/rust-lang/book/blob/master/src/ch18-01-all-the-places-for-patterns.md)
 > <br>
-> commit b1de391964190a0cec101ecfc86e05c9351af565
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 模式出现在 Rust 的很多地方。你已经在不经意间使用了很多模式！本部分是一个所有有效模式位置的参考。
 
@@ -18,25 +18,17 @@ match VALUE {
 }
 ```
 
-`match` 表达式必须是 **穷尽**（*exhaustive*）的，意为 `match` 表达式所有可能的值都必须被考虑到。一个确保覆盖每个可能值的方法是在最后一个分支使用捕获所有的模式 —— 比如，一个匹配任何值的名称永远也不会失败，因此可以覆盖所有匹配剩下的情况。
+`match` 表达式必须是 **穷尽**（*exhaustive*）的，意为 `match` 表达式所有可能的值都必须被考虑到。一个确保覆盖每个可能值的方法是在最后一个分支使用捕获所有的模式：比如，一个匹配任何值的名称永远也不会失败，因此可以覆盖所有匹配剩下的情况。
 
-有一个特定的模式 `_` 可以匹配所有情况，不过它从不绑定任何变量。这在例如希望忽略任何未指定值的情况很有用。本章之后会详细讲解。
+有一个特定的模式 `_` 可以匹配所有情况，不过它从不绑定任何变量。这在例如希望忽略任何未指定值的情况很有用。本章之后的 “在模式中忽略值” 部分会详细介绍 `_` 模式的更多细节。
 
 ### `if let` 条件表达式
 
 第六章讨论过了 `if let` 表达式，以及它是如何主要用于编写等同于只关心一个情况的 `match` 语句简写的。`if let` 可以对应一个可选的带有代码的 `else` 在 `if let` 中的模式不匹配时运行。
 
-<!-- Can you say up front why we'd use this, and not just a match? I've just
-added something here, not sure if it's right -->
-<!-- The first sentence says why-- it's a shorter way to write a `match` when
-there's only one case we care about. Can you elaborate on why that's not clear
-or up front? /Carol -->
-
-示例 18-1 展示了也可以组合并匹配 `if let`、`else if` 和 `else if let` 表达式。这相比 `match` 表达式一次只能将一个值与模式比较提供了更多灵活性；一系列 `if let`/`else if`/`else if let` 分支并不要求其条件相互关联。
+示例 18-1 展示了也可以组合并匹配 `if let`、`else if` 和 `else if let` 表达式。这相比 `match` 表达式一次只能将一个值与模式比较提供了更多灵活性；一系列 `if let`、`else if`、`else if let` 分支并不要求其条件相互关联。
 
 示例 18-1 中的代码展示了一系列针对不同条件的检查来决定背景颜色应该是什么。为了达到这个例子的目的，我们创建了硬编码值的变量，在真实程序中则可能由询问用户获得。
-
-如果用户指定了中意的颜色，将使用其作为背景颜色。如果今天是星期二，背景颜色将是绿色。如果用户指定了他们的年龄字符串并能够成功将其解析为数字的话，我们将根据这个数字使用紫色或者橙色。最后，如果没有一个条件符合，背景颜色将是蓝色：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -64,15 +56,13 @@ fn main() {
 
 <span class="caption">示例 18-1: 结合 `if let`、`else if`、`else if let` 以及 `else`</span>
 
+如果用户指定了中意的颜色，将使用其作为背景颜色。如果今天是星期二，背景颜色将是绿色。如果用户指定了他们的年龄字符串并能够成功将其解析为数字的话，我们将根据这个数字使用紫色或者橙色。最后，如果没有一个条件符合，背景颜色将是蓝色：
+
 这个条件结构允许我们支持复杂的需求。使用这里硬编码的值，例子会打印出 `Using purple as the background color`。
 
 注意 `if let` 也可以像 `match` 分支那样引入覆盖变量：`if let Ok(age) = age` 引入了一个新的覆盖变量 `age`，它包含 `Ok` 成员中的值。这意味着 `if age > 30` 条件需要位于这个代码块内部；不能将两个条件组合为 `if let Ok(age) = age && age > 30`，因为我们希望与 30 进行比较的被覆盖的 `age` 直到大括号开始的新作用域才是有效的。
 
 `if let` 表达式的缺点在于其穷尽性没有为编译器所检查，而 `match` 表达式则检查了。如果去掉最后的 `else` 块而遗漏处理一些情况，编译器也不会警告这类可能的逻辑错误。
-
-<!-- So what would happen, we'd just end up with a program that wasn't correct,
-in the Rust sense? -->
-<!-- Yes, we would have a logic bug. /Carol -->
 
 ### `while let` 条件循环
 
@@ -92,26 +82,13 @@ while let Some(top) = stack.pop() {
 
 <span class="caption">列表 18-2: 使用 `while let` 循环只要 `stack.pop()` 返回 `Some` 就打印出其值</span>
 
-<!-- Some lovely simple, but edifying, examples in this chapter!-->
-
 这个例子会打印出 3、2 接着是 1。`pop` 方法取出 vector 的最后一个元素并返回 `Some(value)`。如果 vector 是空的，它返回 `None`。`while` 循环只要 `pop` 返回 `Some` 就会一直运行其块中的代码。一旦其返回 `None`，`while` 循环停止。我们可以使用 `while let` 来弹出栈中的每一个元素。
 
 ### `for` 循环
 
 如同第三章所讲的，`for` 循环是 Rust 中最常见的循环结构，不过还没有讲到的是 `for` 可以获取一个模式。在 `for` 循环中，模式是 `for` 关键字直接跟随的值，正如 `for x in y` 中的 `x`。
 
-<!-- Can you check the line I added above? I think it'd help to point out the
-pattern section of a for loop straight away -->
-<!-- Yep, looks good! /Carol -->
-
 示例 18-3 中展示了如何使用 `for` 循环来解构，或拆开一个元组作为 `for` 循环的一部分：
-
-<!-- Liz: We've been using the word "destructure" throughout the book in
-chapters 3, 4, 5, and 16. In chapter 3, in the "Grouping Values into Tuples"
-section, we said "This is called *destructuring*, because it breaks the single
-tuple into three parts.". So I don't think we need to define destructure again
-in this chapter, but I've added a small parenthetical here in case the reader
-forgets. /Carol -->
 
 ```rust
 let v = vec!['a', 'b', 'c'];
@@ -123,7 +100,7 @@ for (index, value) in v.iter().enumerate() {
 
 <span class="caption">列表 18-3: 在 `for` 循环中使用模式来解构元组</span>
 
-这会打印出：
+示例 18-3 的代码会打印出：
 
 ```text
 a is at index 0
@@ -131,7 +108,7 @@ b is at index 1
 c is at index 2
 ```
 
-这里使用 `enumerate` 方法适配一个迭代器来产生一个值和其在迭代器中的索引，他们位于一个元组中。第一个 `enumerate` 调用会产生元组 `(0, 'a')`。当这个值匹配模式 `(index, value)`，`index` 将会是 0 而 `value` 将会是 'a'，并打印出第一行输出。
+这里使用 `enumerate` 方法适配一个迭代器来产生一个值和其在迭代器中的索引，他们位于一个元组中。第一个 `enumerate` 调用会产生元组 `(0, 'a')`。当这个值匹配模式 `(index, value)`，`index` 将会是 0 而 `value` 将会是  `'a'`，并打印出第一行输出。
 
 ### `let` 语句
 
@@ -159,14 +136,9 @@ let (x, y, z) = (1, 2, 3);
 
 这里将一个元组与模式匹配。Rust 会比较值 `(1, 2, 3)` 与模式 `(x, y, z)` 并发现此值匹配这个模式。在这个例子中，将会把 `1` 绑定到 `x`，`2` 绑定到 `y` 并将 `3` 绑定到 `z`。你可以将这个元组模式看作是将三个独立的变量模式结合在一起。
 
-<!-- so if we have a pattern of four elements, say (w, x, y, z), but only three
-values, would the values would not bind at all? -->
-<!-- Either too many or too few elements in the pattern is a type error. I've
-added a small example below to illustrate. /Carol -->
-
 如果模式中元素的数量不匹配元组中元素的数量，则整个类型不匹配，并会得到一个编译时错误。例如，示例 18-5 展示了尝试用两个变量解构三个元素的元组，这是不行的：
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let (x, y) = (1, 2, 3);
 ```
 
@@ -193,7 +165,7 @@ error[E0308]: mismatched types
 
 ```rust
 fn foo(x: i32) {
-    // code goes here
+    // 代码
 }
 ```
 
@@ -216,8 +188,8 @@ fn main() {
 
 <span class="caption">列表 18-7: 一个在参数中解构元组的函数</span>
 
-这会打印出 `Current location: (3, 5)`。值 `&(3, 5)` 会匹配模式 `&(x, y)`，如此 `x` 得到了值 3，而 `y`得到了值 5。
+这会打印出 `Current location: (3, 5)`。值 `&(3, 5)` 会匹配模式 `&(x, y)`，如此 `x` 得到了值 `3`，而 `y`得到了值 `5`。
 
-因为如第十三章所讲闭包类似于函数，也可以在闭包参数中使用模式。
+因为如第十三章所讲闭包类似于函数，也可以在闭包参数列表中使用模式。
 
-现在我们见过了很多使用模式的方式了，不过模式在每个使用它的地方并不以相同的方式工作；在一些地方，模式必须是 *irrefutable* 的，意味着他们必须匹配所提供的任何值。在另一些情况，他们则可以是 refutable 的。接下来让我们讨论这个。
+现在我们见过了很多使用模式的方式了，不过模式在每个使用它的地方并不以相同的方式工作；在一些地方，模式必须是 *irrefutable* 的，意味着他们必须匹配所提供的任何值。在另一些情况，他们则可以是 refutable 的。接下来让我们讨论这两个概念。
