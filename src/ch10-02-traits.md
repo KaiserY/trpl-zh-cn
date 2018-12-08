@@ -91,9 +91,9 @@ println!("1 new tweet: {}", tweet.summarize());
 
 注意因为示例 10-13 中我们在相同的 *lib.rs* 里定义了 `Summary` trait 和 `NewsArticle` 与 `Tweet` 类型，所以他们是位于同一作用域的。如果这个 *lib.rs* 是对应 `aggregator` crate 的，而别人想要利用我们 crate 的功能为其自己的库作用域中的结构体实现 `Summary` trait。首先他们需要将 trait 引入作用域。这可以通过指定 `use aggregator::Summary;` 实现，这样就可以为其类型实现 `Summary` trait 了。`Summary` 还必须是公有 trait 使得其他 crate 可以实现它，这也是为什么实例 10-12 中将 `pub` 置于 `trait` 之前。
 
-一个实现 trait 时需要注意的限制是只有要么 tait 或者类型是位于 crate 作用域本地时才能为其实现该 trait。例如，可以为像 `aggregator` crate 的 `Tweet` 这样的自定义类型实现如标准库中的 `Display` 这样 trait，因为 `Tweet` 类型位于 `aggregator` crate 本地。也可以在 `aggregator` crate 中为 `Vec<T>` 实现 `Summary`，因为 `Summary` trait 位于 `aggregator` crate 本地。
+实现 trait 时需要注意的是，只有当 trait 或者要实现 trait 的类型位于 crate 的本地作用域时，才能为该类型实现 trait。例如，可以为多媒体聚合库 crate 的自定义类型 `Tweet` 实现如标准库中的 `Display` trait，这是因为 `Tweet` 类型位于多媒体聚合库 crate 本地的作用域中。类似地，也可以在多媒体聚合库 crate 中为 `Vec<T>` 实现 `Summary`，这是因为 `Summary` trait 位于多媒体聚合库 crate 本地作用域中。
 
-但是不能在外部类型上实现外部 trait。例如，不能在 `aggregator` crate 中为 `Vec<T>` 实现 `Display` trait。因为 `Display` 和 `Vec<T>` 都定义于标准库并不位于 `aggregator` crate 本地。这个限制是被称为 **相干性**（*coherence*） 的程序属性的一部分，或者更具体的说是 **孤儿规则**（*orphan rule*），其得名于不存在父类型。这条规则确保了其他人编写的代码不会破坏你代码，反之亦然。没有这条规则的话，两个 crate 可以分别对相同类型实现相同的 trait，而Rust 将无从得知应该使用哪一个实现。
+但是不能为外部类型实现外部 trait。例如，不能在多媒体聚合库 crate 中为 `Vec<T>` 实现 `Display` trait。这是因为 `Display` 和 `Vec<T>` 都定义于标准库中，它们并不位于多媒体聚合库的 crate 本地作用域中。这个限制是被称为 **相干性**（*coherence*） 的程序属性的一部分，或者更具体的说是 **孤儿规则**（*orphan rule*），其得名于不存在父类型。这条规则确保了其他人编写的代码不会破坏你代码，反之亦然。没有这条规则的话，两个 crate 可以分别对相同类型实现相同的 trait，而 Rust 将无从得知应该使用哪一个实现。
 
 ### 默认实现
 
@@ -291,7 +291,7 @@ fn returns_summarizable(switch: bool) -> impl Summary {
 
 ### 使用 trait bounds 来修复 `largest` 函数
 
-现在你知道了如何使用泛型参数 trait bound 来指定所需的行为。让我们回到实例 10-5 修复使用泛型类型参数的 `largest` 函数定义！最后尝试代时出现的错误是：
+现在你知道了如何使用泛型参数 trait bound 来指定所需的行为。让我们回到实例 10-5 修复使用泛型类型参数的 `largest` 函数定义！回顾一下，最后尝试编译代码时出现的错误是：
 
 ```text
 error[E0369]: binary operation `>` cannot be applied to type `T`
@@ -369,9 +369,9 @@ fn main() {
 
 另一种 `largest` 的实现方式是返回在 slice 中 `T` 值的引用。如果我们将函数返回值从 `T` 改为 `&T` 并改变函数体使其能够返回一个引用，我们将不需要任何 `Clone` 或 `Copy` 的 trait bounds 而且也不会有任何的堆分配。尝试自己实现这种替代解决方式吧！
 
-### 使用 trait bound 有条件的实现方法
+### 使用 trait bound 有条件地实现方法
 
-通过使用带有 trait bound 的泛型参数的 `impl` 块，可以有条件的只为实现了特定 trait 的类型实现方法。例如，示例 10-16 中的类型 `Pair<T>` 总是实现了 `new` 方法，不过只有 `Pair<T>` 内部的 `T` 类型实现了 `PartialOrd` trait 来允许比较 **和** `Display` trait 来启用打印，才会实现 `cmp_display` 方法：
+通过使用带有 trait bound 的泛型参数的 `impl` 块，可以有条件地只为那些实现了特定 trait 的类型实现方法。例如，示例 10-16 中的类型 `Pair<T>` 总是实现了 `new` 方法，不过只有那些为 `T` 类型实现了 `PartialOrd` trait （来允许比较） **和** `Display` trait （来启用打印）的 `Pair<T>` 才会实现 `cmp_display` 方法：
 
 ```rust
 use std::fmt::Display;
@@ -403,7 +403,7 @@ impl<T: Display + PartialOrd> Pair<T> {
 
 <span class="caption">示例 10-17：根据 trait bound 在泛型上有条件的实现方法</span>
 
-也可以对任何实现了特定 trait 的类型有条件的实现 trait。对任何满足特定 trait bound 的类型实现 trait 被称为 *blanket implementations*，他们被广泛的用于 Rust 标准库中。例如，标准库为任何实现了 `Display` trait 的类型实现了 `ToString` trait。这个 `impl` 块看起来像这样：
+也可以对任何实现了特定 trait 的类型有条件地实现 trait。对任何满足特定 trait bound 的类型实现 trait 被称为 *blanket implementations*，他们被广泛的用于 Rust 标准库中。例如，标准库为任何实现了 `Display` trait 的类型实现了 `ToString` trait。这个 `impl` 块看起来像这样：
 
 ```rust,ignore
 impl<T: Display> ToString for T {
