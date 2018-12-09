@@ -115,6 +115,7 @@
     - [高级 trait](ch19-03-advanced-traits.md)
     - [高级类型](ch19-04-advanced-types.md)
     - [高级函数与闭包](ch19-05-advanced-functions-and-closures.md)
+    - [宏](ch19-06-macros.md)
 
 - [最后的项目: 构建多线程 web server](ch20-00-final-project-a-web-server.md)
     - [单线程 web server](ch20-01-single-threaded.md)
@@ -125,7 +126,7 @@
     - [A - 关键字](appendix-01-keywords.md)
     - [B - 运算符与符号](appendix-02-operators.md)
     - [C - 可派生的 trait](appendix-03-derivable-traits.md)
-    - [D - 宏](appendix-04-macros.md)
-    - [E - 本书翻译](appendix-05-translation.md)
-    - [F - 最新功能](appendix-06-newest-features.md)
+    - [D - 实用开发工具](appendix-04-useful-development-tools.md)
+    - [E - 版本](appendix-05-editions.md)
+    - [F - 本书译本](appendix-06-translation.md)
     - [G - Rust 是如何开发的与 “Nightly Rust”](appendix-07-nightly-rust.md)

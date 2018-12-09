@@ -1,10 +1,10 @@
-# Rust 程序设计语言（第二版） 简体中文版
+# Rust 程序设计语言（第二版 & 2018 edition） 简体中文版
 
 [![Build Status](https://travis-ci.org/KaiserY/trpl-zh-cn.svg?branch=master)](https://travis-ci.org/KaiserY/trpl-zh-cn)
 
 ## 状态
 
-目前正向 2018 edtion 过渡，目前官方仓库状已经不再分版本提供源码了，故本仓库准备与官方保持一致。已更新到第十七章。
+2018 edition 的翻译迁移已基本完成，欢迎阅读学习！
 
 PS:
 
@@ -17,15 +17,15 @@ PS:
 
 ### 构建
 
-你可以将本mdbook构建成一系列静态html页面。这里我们采用[vuepress](https://vuepress.vuejs.org/zh/)打包出静态网页。在这之前，你需要安装[Nodejs](https://nodejs.org/zh-cn/)。
+你可以将本 mdbook 构建成一系列静态 html 页面。这里我们采用 [vuepress](https://vuepress.vuejs.org/zh/) 打包出静态网页。在这之前，你需要安装 [Nodejs](https://nodejs.org/zh-cn/)。
 
-全局安装vuepress
+全局安装 vuepress
 
 ``` bash
 npm i -g vuepress 
 ```
 
-cd到项目目录，然后开始构建。构建好的静态文档会出现在"./src/.vuepress/dist"中
+cd 到项目目录，然后开始构建。构建好的静态文档会出现在 "./src/.vuepress/dist" 中
 
 ```bash
 vuepress build ./src
@@ -33,7 +33,7 @@ vuepress build ./src
 
 ### 文档撰写
 
-vuepress会启动一个本地服务器，并在浏览器对你保存的文档进行实时热更新。
+vuepress 会启动一个本地服务器，并在浏览器对你保存的文档进行实时热更新。
 
 ```bash
 vuepress dev ./src
