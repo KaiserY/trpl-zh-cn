@@ -1,10 +1,10 @@
-## 处理环境变量
+﻿## 处理环境变量
 
 > [ch12-05-working-with-environment-variables.md](https://github.com/rust-lang/book/blob/master/src/ch12-05-working-with-environment-variables.md)
 > <br>
 > commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
-我们将增加一个额外的功能来改进 `minigrep`：一个通过环境变量启用的大小写不敏感搜索的选项。可以将其设计为一个命令行参数并要求用户每次需要时都加上它，不过相反我们将使用环境变量。这允许用户设置环境变量一次之后在整个终端会话中所有的搜索都将是大小写不敏感的。
+我们将增加一个额外的功能来改进 `minigrep`：用户可以通过设置环境变量来设置搜索是否是大小写敏感的 。当然，我们也可以将其设计为一个命令行参数并要求用户每次需要时都加上它，不过在这里我们将使用环境变量。这允许用户设置环境变量一次之后在整个终端会话中所有的搜索都将是大小写不敏感的。
 
 ### 编写一个大小写不敏感 `search` 函数的失败测试
 
@@ -199,7 +199,7 @@ How dreary to be somebody!
 
 看起来程序仍然能够工作！现在将 `CASE_INSENSITIVE` 设置为 `1` 并仍使用相同的查询 `to`。
 
-如果你使用 PowerShell，则需要用两句命令而不是一句来设置环境变量并运行程序：
+如果你使用 PowerShell，则需要用两个命令来设置环境变量并运行程序：
 
 ```text
 $ $env:CASE_INSENSITIVE=1
