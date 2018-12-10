@@ -1,4 +1,4 @@
-## 采用测试驱动开发完善库的功能
+﻿## 采用测试驱动开发完善库的功能
 
 > [ch12-04-testing-the-librarys-functionality.md](https://github.com/rust-lang/book/blob/master/src/ch12-04-testing-the-librarys-functionality.md)
 > <br>

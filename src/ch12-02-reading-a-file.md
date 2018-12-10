@@ -1,4 +1,4 @@
-## 读取文件
+﻿## 读取文件
 
 > [ch12-02-reading-a-file.md](https://github.com/rust-lang/book/blob/master/src/ch12-02-reading-a-file.md)
 > <br>
@@ -49,11 +49,11 @@ fn main() {
 
 <span class="caption">示例 12-4：读取第二个参数所指定的文件内容</span>
 
-首先，我们增加了更多的 `use` 语句来引入标准库中的相关部分：需要 `std::fs` 来处理文件。
+首先，我们增加了一个 `use` 语句来引入标准库中的相关部分：我们需要 `std::fs` 来处理文件。
 
 在 `main` 中新增了一行语句：`fs::read_to_string` 接受 `filename`，打开文件，接着返回包含其内容的 `Result<String>`。
 
-在这些代码之后，我们再次增加了临时的 `println!` 打印出读取文件后 `contents` 的值，这样就可以检查目前为止的程序能否工作。
+在这些代码之后，我们再次增加了临时的 `println!` 打印出读取文件之后 `contents` 的值，这样就可以检查目前为止的程序能否工作。
 
 尝试运行这些代码，随意指定一个字符串作为第一个命令行参数（因为还未实现搜索功能的部分）而将 *poem.txt* 文件将作为第二个参数：
 
