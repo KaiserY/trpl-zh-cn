@@ -108,7 +108,7 @@ add-one = { path = "../add-one" }
 
 工作空间中的 crate 不必相互依赖，所以仍需显式地表明工作空间中 crate 的依赖关系。
 
-接下来，在 `adder` crate 中使用 `add-one` crate 的函数 `add_one`。打开 *adder/src/main.rs* 在顶部增加一行 `extern crate` 将新 `add-one` 库 crate 引入作用域。接着修改 `main` 函数来调用 `add_one` 函数，如示例 14-7 所示：
+接下来，在 `adder` crate 中使用 `add-one` crate 的函数 `add_one`。打开 *adder/src/main.rs* 在顶部增加一行 `use` 将新 `add-one` 库 crate 引入作用域。接着修改 `main` 函数来调用 `add_one` 函数，如示例 14-7 所示：
 
 <span class="filename">文件名: adder/src/main.rs</span>
 

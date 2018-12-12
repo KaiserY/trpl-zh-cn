@@ -12,4 +12,4 @@
 * 从 [crates.io](https://crates.io)<!-- ignore --> 安装二进制文件
 * 使用自定义的命令来扩展 Cargo
 
-相比本章能够涉及的工作 Cargo 甚至还可以做到更多，关于其功能的全部解释，请查看 [文档](http://doc.rust-lang.org/cargo/)
+Cargo 的功能不止本章所介绍的，关于其功能的全部解释，请查看 [文档](http://doc.rust-lang.org/cargo/)
