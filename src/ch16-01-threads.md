@@ -1,6 +1,6 @@
 ## 使用线程同时运行代码
 
-> [ch16-01-threads.md](https://github.com/rust-lang/book/blob/master/src/ch16-00-concurrency.md)
+> [ch16-01-threads.md](https://github.com/rust-lang/book/blob/master/src/ch16-01-threads.md)
 > <br>
 > commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
