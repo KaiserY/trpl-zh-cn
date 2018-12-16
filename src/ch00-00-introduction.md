@@ -84,7 +84,7 @@ Rust 语言也希望能支持很多其他用户，这里提及的只是最大的
 |------------------------------------------------------------------------|--------------------------------------------------|
 | <img src="img/ferris/does_not_compile.svg" class="ferris-explain">     | 这些代码不能编译！                      |
 | <img src="img/ferris/panics.svg" class="ferris-explain">               | 这些代码会 panic！                                |
-| <img src="img/ferris/unsafe.svg" class="ferris-explain">               | 这些代码块包含不安全（unsafe）代码            |
+| <img src="img/ferris/unsafe.svg" class="ferris-explain">               | 这些代码块包含不安全（unsafe）代码。            |
 | <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain"> | 这些代码不会产生期望的行为。 |
 
 在大部分情况，我们会指引你将任何不能编译的代码纠正为正确版本。
