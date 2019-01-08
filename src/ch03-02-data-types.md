@@ -1,10 +1,10 @@
 ## 数据类型
 
-> [ch03-02-data-types.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch03-02-data-types.md)
+> [ch03-02-data-types.md](https://github.com/rust-lang/book/blob/master/src/ch03-02-data-types.md)
 > <br>
-> commit f949ff883628db8ed2f2f5f19e146ebf19ed6a6f
+> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
 
-在 Rust 中，每一个值都属于某一个 **数据类型**（*data type*），这告诉 Rust 它被指定为何种数据，以便明确数据处理方式。我们将看到两类数据类型：标量（scalar）和复合（compound）。
+在 Rust 中，每一个值都属于某一个 **数据类型**（*data type*），这告诉 Rust 它被指定为何种数据，以便明确数据处理方式。我们将看到两类数据类型子集：标量（scalar）和复合（compound）。
 
 记住，Rust 是 **静态类型**（*statically typed*）语言，也就是说在编译时就必须知道所有变量的类型。根据值及其使用方式，编译器通常可以推断出我们想要用的类型。当多种类型均有可能时，比如第二章的 “比较猜测的数字和秘密数字” 使用 `parse` 将 `String` 转换为数字时，必须增加类型注解，像这样：
 
@@ -64,6 +64,12 @@ error[E0282]: type annotations needed
 | Byte (`u8` only) | `b'A'`        |
 
 那么该使用哪种类型的数字呢？如果拿不定主意，Rust 的默认类型通常就很好，数字类型默认是 `i32`：它通常是最快的，甚至在 64 位系统上也是。`isize` 或 `usize` 主要作为某些集合的索引。
+
+##### 整型溢出
+
+比方说有一个 `u8` ，它可以存放从零到 `255` 的值。那么当你将其修改为 `256` 时会发生什么呢？这被称为 “整型溢出”（“integer overflow” ），关于这一行为 Rust 有一些有趣的规则。当在 debug 模式编译时，Rust 检查这类问题并使程序 *panic*，这个术语被 Rust 用来表明程序因错误而退出。第九章会详细介绍 panic。
+
+在 release 构建中，Rust 不检测溢出，相反会进行一种被称为 “two’s complement wrapping” 的操作。简而言之，`256` 变成 `0`，`257` 变成 `1`，依此类推。依赖溢出被认为是一种错误，即便可能出现这种行为。如果你确实需要这种行为，标准库中有一个类型显式提供此功能，`Wrapping`。
 
 #### 浮点型
 
@@ -216,6 +222,14 @@ fn main() {
 let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
+
+数组的类型比较有趣；它看起来像 `[type; number]`。例如：
+
+```rust
+let a: [i32; 5] = [1, 2, 3, 4, 5];
+```
+
+首先是方括号；这看起来像创建数组的语法。其中有两部分由分号分割的信息。第一部分是数组中每个元素的类型。因为所有元素都是相同类型的，所以只需列出一次。分号之后，是一个表示数组长度的数字。因为数组是固定长度的，该数字也一直保持不变，即便数组的元素被修改，它也不会增长或缩小。
 
 ##### 访问数组元素
 

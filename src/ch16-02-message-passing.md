@@ -1,27 +1,19 @@
 ## 使用消息传递在线程间传送数据
 
-> [ch16-02-message-passing.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch16-02-message-passing.md)
+> [ch16-02-message-passing.md](https://github.com/rust-lang/book/blob/master/src/ch16-02-message-passing.md)
 > <br>
-> commit 90406bd5a4cd4447b46cd7e03d33f34a651e9bb7
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
-一个人气正在上升的确保安全并发的方式是 **消息传递**（*message passing*），这里线程或 actor 通过发送包含数据的消息来相互沟通。这个思想来源于 Go 编程语言文档中的口号：
-
-> Do not communicate by sharing memory; instead, share memory by
-> communicating.
->
-> 不要共享内存来通讯；而是要通讯来共享内存。
->
-> --[Effective Go](http://golang.org/doc/effective_go.html)
+一个人气正在上升的确保安全并发的方式是 **消息传递**（*message passing*），这里线程或 actor 通过发送包含数据的消息来相互沟通。这个思想来源于 [Go 编程语言文档中](http://golang.org/doc/effective_go.html) 的口号：“不要共享内存来通讯；而是要通讯来共享内存。”（“Do not communicate by
+sharing memory; instead, share memory by communicating.”）
 
 Rust 中一个实现消息传递并发的主要工具是 **通道**（*channel*），一个 Rust 标准库提供了其实现的编程概念。你可以将其想象为一个水流的通道，比如河流或小溪。如果你将诸如橡皮鸭或小船之类的东西放入其中，它们会顺流而下到达下游。
-
 
 编程中的通道有两部分组成，一个发送者（transmitter）和一个接收者（receiver）。发送者一端位于上游位置，在这里可以将橡皮鸭放入河中，接收者部分则位于下游，橡皮鸭最终会漂流至此。代码中的一部分调用发送者的方法以及希望发送的数据，另一部分则检查接收端收到到达的消息。当发送者或接收者任一被丢弃时可以认为通道被 **关闭**（*closed*）了
 
 这里，我们将开发一个程序，它会在一个线程生成值向通道发送，而在另一个线程会接收值并打印出来。这里会通过通道在线程间发送简单值来演示这个功能。一旦你熟悉了这项技术，就能使用通道来实现聊天系统或利用很多线程进行分布式计算并将部分计算结果发送给一个线程进行聚合。
 
 首先，在示例 16-6 中，创建了一个通道但没有做任何事。注意这还不能编译，因为 Rust 不知道我们想要在通道中发送什么类型：
-
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -37,7 +29,6 @@ fn main() {
 <span class="caption">示例 16-6: 创建一个通道，并将其两端赋值给 `tx` 和 `rx`</span>
 
 这里使用 `mpsc::channel` 函数创建一个新的通道；`mpsc` 是 **多个生产者，单个消费者**（*multiple producer, single consumer*）的缩写。简而言之，Rust 标准库实现通道的方式意味着一个通道可以有多个产生值的 **发送**（*sending*）端，但只能有一个消费这些值的 **接收**（*receiving*）端。想象一下多条小河小溪最终汇聚成大河：所有通过这些小河发出的东西最后都会来到大河的下游。目前我们以单个生产者开始，但是当示例可以工作后会增加多个生产者。
-
 
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 
@@ -108,11 +99,11 @@ Got: hi
 
 所有权规则在消息传递中扮演了重要角色，其有助于我们编写安全的并发代码。在并发编程中避免错误是在整个 Rust 程序中必须思考所有权所换来的一大优势。
 
-现在让我们做一个试验来看看通道与所有权如何一同协作以避免产生问题：我们将尝试在新建线程中的通道中发送完 `val` 值 **之后** 再使用它。尝试编译示例 16-9 中的代码：
+现在让我们做一个试验来看看通道与所有权如何一同协作以避免产生问题：我们将尝试在新建线程中的通道中发送完 `val` 值 **之后** 再使用它。尝试编译示例 16-9 中的代码并看看为何这是不允许的：
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 use std::thread;
 use std::sync::mpsc;
 
@@ -132,9 +123,7 @@ fn main() {
 
 <span class="caption">示例 16-9: 在我们已经发送到通道中后，尝试使用 `val` 引用</span>
 
-这里尝试在通过 `tx.send` 发送 `val` 到通道中之后将其打印出来。允许这么做是一个坏主意：一旦将值发送到另一个线程后，那个线程可能会在我们再次使用它之前就将其修改或者丢弃。这会由于不一致或不存在的数据而导致错误或意外的结果。
-
-这是一个坏主意：一旦将值发送到另一个线程后，那个线程可能会在我们再次使用它之前就将其修改或者丢弃。其他线程对值可能的修改会由于不一致或不存在的数据而导致错误或意外的结果。然而，尝试编译示例 16-9 的代码时，Rust 会给出一个错误：
+这里尝试在通过 `tx.send` 发送 `val` 到通道中之后将其打印出来。允许这么做是一个坏主意：一旦将值发送到另一个线程后，那个线程可能会在我们再次使用它之前就将其修改或者丢弃。其他线程对值可能的修改会由于不一致或不存在的数据而导致错误或意外的结果。然而，尝试编译示例 16-9 的代码时，Rust 会给出一个错误：
 
 ```text
 error[E0382]: use of moved value: `val`
@@ -207,7 +196,6 @@ Got: thread
 之前我们提到了`mpsc`是 *multiple producer, single consumer* 的缩写。可以运用 `mpsc` 来扩展示例 16-11 中的代码来以创建都向同一接收者发送值的多个线程。这可以通过克隆通道的发送端在来做到，如示例 16-11 所示：
 
 <span class="filename">文件名: src/main.rs</span>
-
 
 ```rust
 # use std::thread;

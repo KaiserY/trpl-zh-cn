@@ -1,14 +1,14 @@
 ## 哈希 map 储存键值对
 
-> [ch08-03-hash-maps.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch08-03-hash-maps.md)
+> [ch08-03-hash-maps.md](https://github.com/rust-lang/book/blob/master/src/ch08-03-hash-maps.md)
 > <br>
-> commit c2fd7b2d39c4130dd17bb99c101ac94af83d1a44
+> commit d073ece693e880b69412e645e4eabe99e74e7590
 
 最后介绍的常用集合类型是 **哈希 map**（*hash map*）。`HashMap<K, V>` 类型储存了一个键类型 `K` 对应一个值类型 `V` 的映射。它通过一个 **哈希函数**（*hashing function*）来实现映射，决定如何将键和值放入内存中。很多编程语言支持这种数据结构，不过通常有不同的名字：哈希、map、对象、哈希表或者关联数组，仅举几例。
 
-哈希 map 可以用于需要任何类型作为键来寻找数据的情况，而不是像 vector 那样通过索引。例如，在一个游戏中，你可以将每个团队的分数记录到哈希 map 中，其中键是队伍的名字而值是每个队伍的分数。给出一个队名，就能得到它们的得分。
+哈希 map 可以用于需要任何类型作为键来寻找数据的情况，而不是像 vector 那样通过索引。例如，在一个游戏中，你可以将每个团队的分数记录到哈希 map 中，其中键是队伍的名字而值是每个队伍的分数。给出一个队名，就能得到他们的得分。
 
-本章我们会介绍哈希 map 的基本 API，不过还有更多吸引人的功能隐藏于标准库中 `HashMap` 定义的函数中。请一如既往地查看标准库文档来了解更多信息。
+本章我们会介绍哈希 map 的基本 API，不过还有更多吸引人的功能隐藏于标准库中 `HashMap<K, V>` 定义的函数中。一如既往请查看标准库文档来了解更多信息。
 
 ### 新建一个哈希 map
 
@@ -56,8 +56,8 @@ let field_value = String::from("Blue");
 
 let mut map = HashMap::new();
 map.insert(field_name, field_value);
-// field_name and field_value are invalid at this point, try using them and
-// see what compiler error you get!
+// 这里 field_name 和 field_value 不再有效，
+// 尝试使用它们看看会出现什么编译错误！
 ```
 
 <span class="caption">示例 8-22：展示一旦键值对被插入后就为哈希 map 所拥有</span>
@@ -178,7 +178,9 @@ println!("{:?}", map);
 
 ### 哈希函数
 
-`HashMap` 默认使用一种密码学安全的哈希函数，它可以抵抗拒绝服务（Denial of Service, DoS）攻击。然而这并不是可用的最快的算法，不过为了更高的安全性值得付出一些性能的代价。如果性能监测显示此哈希函数非常慢，以致于你无法接受，你可以指定一个不同的 *hasher* 来切换为其它函数。hasher 是一个实现了 `BuildHasher` trait 的类型。第十章会讨论 trait 和如何实现它们。你并不需要从头开始实现你自己的 hasher；crates.io 有其他人分享的实现了许多常用哈希算法的 hasher 的库。
+`HashMap` 默认使用一种 “密码学安全的”（“cryptographically strong” ）[^siphash] 哈希函数，它可以抵抗拒绝服务（Denial of Service, DoS）攻击。然而这并不是可用的最快的算法，不过为了更高的安全性值得付出一些性能的代价。如果性能监测显示此哈希函数非常慢，以致于你无法接受，你可以指定一个不同的 *hasher* 来切换为其它函数。hasher 是一个实现了 `BuildHasher` trait 的类型。第十章会讨论 trait 和如何实现它们。你并不需要从头开始实现你自己的 hasher；[crates.io](https://crates.io) 有其他人分享的实现了许多常用哈希算法的 hasher 的库。
+
+[^siphash]: [https://www.131002.net/siphash/siphash.pdf](https://www.131002.net/siphash/siphash.pdf)
 
 ## 总结
 

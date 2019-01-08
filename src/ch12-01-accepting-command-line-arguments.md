@@ -1,13 +1,13 @@
-## 接受命令行参数
+﻿## 接受命令行参数
 
-> [ch12-01-accepting-command-line-arguments.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-01-accepting-command-line-arguments.md)
+> [ch12-01-accepting-command-line-arguments.md](https://github.com/rust-lang/book/blob/master/src/ch12-01-accepting-command-line-arguments.md)
 > <br>
-> commit 97e60b3cb623d4a5b85419212b085ade8a11cbe1
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
-一如之前使用 `cargo new` 新建一个项目，我们称之为 `minigrep` 以便与可能已经安装在系统上的`grep`工具相区别：
+一如既往使用 `cargo new` 新建一个项目，我们称之为 `minigrep` 以便与可能已经安装在系统上的 `grep` 工具相区别：
 
 ```text
-$ cargo new --bin minigrep
+$ cargo new minigrep
      Created binary (application) `minigrep` project
 $ cd minigrep
 ```
@@ -37,7 +37,6 @@ fn main() {
 }
 ```
 
-
 <span class="caption">示例 12-1：将命令行参数收集到一个 vector 中并打印出来</span>
 
 首先使用 `use` 语句来将 `std::env` 模块引入作用域以便可以使用它的 `args` 函数。注意 `std::env::args` 函数被嵌套进了两层模块中。正如第七章讲到的，当所需函数嵌套了多于一层模块时，通常将父模块引入作用域，而不是其自身。这便于我们利用 `std::env` 中的其他函数。这比增加了 `use std::env::args;` 后仅仅使用 `args` 调用函数要更明确一些，因为 `args` 容易被错认成一个定义于当前模块的函数。
@@ -46,9 +45,9 @@ fn main() {
 >
 > 注意 `std::env::args` 在其任何参数包含无效 Unicode 字符时会 panic。如果你需要接受包含无效 Unicode 字符的参数，使用 `std::env::args_os` 代替。这个函数返回 `OsString` 值而不是 `String` 值。这里出于简单考虑使用了 `std::env::args`，因为 `OsString` 值每个平台都不一样而且比 `String` 值处理起来更为复杂。
 
-在 `main` 函数的第一行，我们调用了 `env::args`，并立即使用 `collect` 来创建了一个包含迭代器所有值的 vector。`collect` 可以被用来创建很多类型的集合，所以这里显式注明 `args` 的类型来指定我们需要一个字符串 vector。虽然在 Rust 中我们很少会需要注明类型，`collect` 就是一个经常需要注明类型的函数，因为 Rust 不能推断出你想要什么类型的集合。
+在 `main` 函数的第一行，我们调用了 `env::args`，并立即使用 `collect` 来创建了一个包含迭代器所有值的 vector。`collect` 可以被用来创建很多类型的集合，所以这里显式注明 `args` 的类型来指定我们需要一个字符串 vector。虽然在 Rust 中我们很少会需要注明类型，然而 `collect` 是一个经常需要注明类型的函数，因为 Rust 不能推断出你想要什么类型的集合。
 
-最后，我们使用调试格式 `:?` 打印出 vector。让我们尝试不用参数运行代码，接着用两个参数：
+最后，我们使用调试格式 `:?` 打印出 vector。让我们尝试分别用两种方式（不包含参数和包含参数）运行代码：
 
 ```text
 $ cargo run

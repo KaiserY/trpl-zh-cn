@@ -1,8 +1,8 @@
-## 将错误信息输出到标准错误而不是标准输出
+﻿## 将错误信息输出到标准错误而不是标准输出
 
-> [ch12-06-writing-to-stderr-instead-of-stdout.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-06-writing-to-stderr-instead-of-stdout.md)
+> [ch12-06-writing-to-stderr-instead-of-stdout.md](https://github.com/rust-lang/book/blob/master/src/ch12-06-writing-to-stderr-instead-of-stdout.md)
 > <br>
-> commit 1fe78a83f37ecc69b840fdc8dcfc727f88a3a3d4
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 目前为止，我们将所有的输出都 `println!` 到了终端。大部分终端都提供了两种输出：**标准输出**（*standard output*，`stdout`）对应通用信息，**标准错误**（*standard error*，`stderr`）则用于错误信息。这种区别允许用户选择将程序正常输出定向到一个文件中并仍将错误信息打印到屏幕上。
 
@@ -10,11 +10,11 @@
 
 ### 检查错误应该写入何处
 
-首先，让我们观察一下目前 `minigrep` 打印的所有内容都被写入了标准输出，包括应该被写入标准错误的错误信息。可以通过将标准输出流重定向到一个文件同时有意产生一个错误来做到这一点。我们没有重定向标准错误流，所以任何发送到标准错误的内容将会继续显示在屏幕上。
+首先，让我们观察一下目前 `minigrep` 打印的所有内容是如何被写入标准输出的，包括那些应该被写入标准错误的错误信息。可以通过将标准输出流重定向到一个文件同时有意产生一个错误来做到这一点。我们没有重定向标准错误流，所以任何发送到标准错误的内容将会继续显示在屏幕上。
 
 命令行程序被期望将错误信息发送到标准错误流，这样即便选择将标准输出流重定向到文件中时仍然能看到错误信息。目前我们的程序并不符合期望；相反我们将看到它将错误信息输出保存到了文件中。
 
-展示这种行为的方式是通过 `>` 和文件名 *output.txt* 来与运行程序，这个文件是期望重定向标准输出流的位置。并不传递任何参数应该会产生一个错误：
+我们通过 `>` 和文件名 *output.txt* 来运行程序，我们期望重定向标准输出流到该文件中。在这里，我们没有传递任何参数，所以会产生一个错误：
 
 ```text
 $ cargo run > output.txt
@@ -26,7 +26,7 @@ $ cargo run > output.txt
 Problem parsing arguments: not enough arguments
 ```
 
-是的，错误信息被打印到了标准输出中。像这样的错误信息被打印到标准错误中将有用的多，并在重定向标准输出时只将成功运行的信息写入文件。我们将改变他们。
+是的，错误信息被打印到了标准输出中。像这样的错误信息被打印到标准错误中将会有用的多，并且只将成功运行的信息写入文件。接下来我们将对程序进行修改从而以这种方式进行输出。
 
 ### 将错误打印到标准错误
 
@@ -60,7 +60,7 @@ $ cargo run > output.txt
 Problem parsing arguments: not enough arguments
 ```
 
-现在我们看到了屏幕上的错误信息，同时 `output.txt` 里什么也没有，这正是命令行程序所期望的行为。
+现在我们看到了屏幕上的错误信息，同时 *output.txt* 里什么也没有，这正是命令行程序所期望的行为。
 
 如果使用不会造成错误的参数再次运行程序，不过仍然将标准输出重定向到一个文件，像这样：
 

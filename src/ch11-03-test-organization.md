@@ -1,8 +1,8 @@
 ## 测试的组织结构
 
-> [ch11-03-test-organization.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch11-03-test-organization.md)
+> [ch11-03-test-organization.md](https://github.com/rust-lang/book/blob/master/src/ch11-03-test-organization.md)
 > <br>
-> commit b3eddb8edc0c3f83647143673d18efac0a44083a
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 本章一开始就提到，测试是一个复杂的概念，而且不同的开发者也采用不同的技术和组织。Rust 社区倾向于根据测试的两个主要分类来考虑问题：**单元测试**（*unit tests*）与 **集成测试**（*integration tests*）。单元测试倾向于更小而更集中，在隔离的环境中一次测试一个模块，或者是测试私有接口。而集成测试对于你的库来说则完全是外部的。它们与其他外部代码一样，通过相同的方式使用你的代码，只测试公有接口而且每个测试都有可能会测试多个模块。
 
@@ -16,7 +16,7 @@
 
 测试模块的 `#[cfg(test)]` 注解告诉 Rust 只在执行 `cargo test` 时才编译和运行测试代码，而在运行 `cargo build` 时不这么做。这在只希望构建库的时候可以节省编译时间，并且因为它们并没有包含测试，所以能减少编译产生的文件的大小。与之对应的集成测试因为位于另一个文件夹，所以它们并不需要 `#[cfg(test)]` 注解。然而单元测试位于与源码相同的文件中，所以你需要使用 `#[cfg(test)]` 来指定他们不应该被包含进编译结果中。
 
-还记得本章第一部分新建的 `adder` 项目吗？Cargo 为我们生成了如下代码：
+回忆本章第一部分新建的 `adder` 项目吗，Cargo 为我们生成了如下代码：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -39,6 +39,8 @@ mod tests {
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust
+# fn main() {}
+
 pub fn add_two(a: i32) -> i32 {
     internal_adder(a, 2)
 }
@@ -75,7 +77,7 @@ mod tests {
 <span class="filename">文件名: tests/integration_test.rs</span>
 
 ```rust,ignore
-extern crate adder;
+use adder;
 
 #[test]
 fn it_adds_two() {
@@ -85,9 +87,9 @@ fn it_adds_two() {
 
 <span class="caption">示例 11-13：一个 `adder` crate 中函数的集成测试</span>
 
-我们在顶部增加了 `extern crate adder`，这在单元测试中是不需要的。这是因为每一个 `tests` 目录中的测试文件都是完全独立的 crate，所以需要在每一个文件中导入库。
+与单元测试不同，我们需要在文件顶部添加 `use adder`。这是因为每一个 `tests` 目录中的测试文件都是完全独立的 crate，所以需要在每一个文件中导入库。
 
-并不需要将 *tests/integration_test.rs* 中的任何代码标注为 `#[cfg(test)]`。Cargo 对 `tests` 文件夹特殊处理并只会在运行 `cargo test` 时编译这个目录中的文件。现在就运行 `cargo test` 试试：
+并不需要将 *tests/integration_test.rs* 中的任何代码标注为 `#[cfg(test)]`。 `tests` 文件夹在 Cargo 中是一个特殊的文件夹， Cargo 只会在运行 `cargo test` 时编译这个目录中的文件。现在就运行 `cargo test` 试试：
 
 ```text
 $ cargo test
@@ -141,13 +143,13 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
 将每个集成测试文件当作其自己的 crate 来对待，这更有助于创建单独的作用域，这种单独的作用域能提供更类似与最终使用者使用 crate 的环境。然而，正如你在第七章中学习的如何将代码分为模块和文件的知识，*tests* 目录中的文件不能像 *src* 中的文件那样共享相同的行为。
 
-当你有一些在多个集成测试文件都会用到的帮助函数，而你尝试按照第七章 “将模块移动到其他文件” 部分的步骤将他们提取到一个通用的模块中时， *tests* 目录中不同文件的行为就会显得很明显。例如，如果我们创建了 *tests/common.rs* 文件并将一个名叫 `setup` 的函数放入其中，这里将放入一些我们希望能够在多个测试文件的多个测试函数中调用的代码：
+当你有一些在多个集成测试文件都会用到的帮助函数，而你尝试按照第七章 “将模块移动到其他文件” 部分的步骤将他们提取到一个通用的模块中时， *tests* 目录中不同文件的行为就会显得很明显。例如，如果我们可以创建 一个*tests/common.rs* 文件并创建一个名叫 `setup` 的函数，我们希望这个函数能被多个测试文件的测试函数调用：
 
 <span class="filename">文件名: tests/common.rs</span>
 
 ```rust
 pub fn setup() {
-    // setup code specific to your library's tests would go here
+    // 编写特定库测试所需的代码
 }
 ```
 
@@ -179,16 +181,16 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-我们并不希望 `common` 出现在测试结果中并显示 `running 0 tests` 。我们只是希望能够在其他集成测试文件中分享一些代码罢了。
+我们并不想要`common` 出现在测试结果中显示 `running 0 tests` 。我们只是希望其能被其他多个集成测试文件中调用罢了。
 
-为了避免 `common` 出现在测试输出中，我们将创建 *tests/common/mod.rs* ，而不是创建 *tests/common.rs* 。在第七章的 “模块文件系统规则” 部分，对于拥有子模块的模块文件使用了 *module_name/mod.rs* 命名规范，虽然这里 `common` 并没有子模块，但是这样命名告诉 Rust 不要将 `common` 看作一个集成测试文件。当将 `setup` 函数代码移动到 *tests/common/mod.rs* 并删除 *tests/common.rs* 文件之后，测试输出中将不会出现这一部分。*tests* 目录中的子目录不会被作为单独的 crate 编译或作为一个测试结果部分出现在测试输出中。
+为了不让 `common` 出现在测试输出中，我们将创建 *tests/common/mod.rs* ，而不是创建 *tests/common.rs* 。这是一种 Rust 的命名规范，这样命名告诉 Rust 不要将 `common` 看作一个集成测试文件。将 `setup` 函数代码移动到 *tests/common/mod.rs* 并删除 *tests/common.rs* 文件之后，测试输出中将不会出现这一部分。*tests* 目录中的子目录不会被作为单独的 crate 编译或作为一个测试结果部分出现在测试输出中。
 
 一旦拥有了 *tests/common/mod.rs*，就可以将其作为模块以便在任何集成测试文件中使用。这里是一个 *tests/integration_test.rs* 中调用 `setup` 函数的 `it_adds_two` 测试的例子：
 
 <span class="filename">文件名: tests/integration_test.rs</span>
 
 ```rust,ignore
-extern crate adder;
+use adder;
 
 mod common;
 
@@ -199,7 +201,7 @@ fn it_adds_two() {
 }
 ```
 
-注意 `mod common;` 声明与示例 7-4 中展示的模块声明相同。接着在测试函数中就可以调用 `common::setup()` 了。
+注意 `mod common;` 声明与示例 7-25 中展示的模块声明相同。接着在测试函数中就可以调用 `common::setup()` 了。
 
 #### 二进制 crate 的集成测试
 

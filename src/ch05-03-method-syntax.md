@@ -1,8 +1,8 @@
 ## 方法语法
 
-> [ch05-03-method-syntax.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch05-03-method-syntax.md)
+> [ch05-03-method-syntax.md](https://github.com/rust-lang/book/blob/master/src/ch05-03-method-syntax.md)
 > <br>
-> commit c560db1e0145d5a64b9415c9cfe463c7dac31ab8
+> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
 
 **方法** 与函数类似：它们使用 `fn` 关键字和名称声明，可以拥有参数和返回值，同时包含在某处调用该方法时会执行的代码。不过方法与函数是不同的，因为它们在结构体的上下文中被定义（或者是枚举或 trait 对象的上下文，将分别在第六章和第十七章讲解），并且它们第一个参数总是 `self`，它代表调用该方法的结构体实例。
 

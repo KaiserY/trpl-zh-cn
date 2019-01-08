@@ -1,18 +1,12 @@
 ## 面向对象设计模式的实现
 
-> [ch17-03-oo-design-patterns.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch17-03-oo-design-patterns.md)
+> [ch17-03-oo-design-patterns.md](https://github.com/rust-lang/book/blob/master/src/ch17-03-oo-design-patterns.md)
 > <br>
-> commit b18f90970ab7223ee8af18ef466a5ba6ff8482ef
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
-**状态模式**（*state pattern*）是一个面向对象设计模式。该模式的关键在于一个值有某些内部状态，体现为一系列的 **状态对象**，同时值的行为随着其内部状态而改变。状态对象共享功能 —— 当然，在 Rust 中使用结构体和 trait 而不是对象和继承。每一个状态对象代表负责其自身的行为和当需要改变为另一个状态时的规则的状态。持有任何一个这种状态对象的值对于不同状态的行为以及何时状态转移毫不知情。
-
-<!-- Below -- requirements for what, for what we need the value for? -->
-<!-- I've clarified /Carol -->
+**状态模式**（*state pattern*）是一个面向对象设计模式。该模式的关键在于一个值有某些内部状态，体现为一系列的 **状态对象**，同时值的行为随着其内部状态而改变。状态对象共享功能：当然，在 Rust 中使用结构体和 trait 而不是对象和继承。每一个状态对象代表负责其自身的行为和当需要改变为另一个状态时的规则的状态。持有任何一个这种状态对象的值对于不同状态的行为以及何时状态转移毫不知情。
 
 使用状态模式意味着当程序的业务需求改变时，无需改变值持有状态或者使用值的代码。我们只需更新某个状态对象中的代码来改变其规则，或者是增加更多的状态对象。让我们看看一个有关状态模式和如何在 Rust 中使用它的例子。
-
-
-让我们看看一个状态设计模式的例子以及如何在 Rust 中使用他们。**状态模式**（*state pattern*）是指一个值有某些内部状态，而它的行为随着其内部状态而改变。内部状态由一系列继承了共享功能的对象表现（我们使用结构体和 trait 因为 Rust 没有对象和继承）。每一个状态对象负责它自身的行为和当需要改变为另一个状态时的规则。持有任何一个这种状态对象的值对于不同状态的行为以及何时状态转移毫不知情。当将来需求改变时，无需改变值持有状态或者使用值的代码。我们只需更新某个状态对象中的代码来改变它的规则，或者是增加更多的状态对象。
 
 为了探索这个概念，我们将实现一个增量式的发布博文的工作流。这个博客的最终功能看起来像这样：
 
@@ -23,12 +17,11 @@
 
 任何其他对博文的修改尝试都是没有作用的。例如，如果尝试在请求审核之前通过一个草案博文，博文应该保持未发布的状态。
 
-示例 17-11 展示这个工作流的代码形式。这是一个我们将要在一个叫做 `blog` 的库 crate 中实现的 API 的示例：
+示例 17-11 展示这个工作流的代码形式：这是一个我们将要在一个叫做 `blog` 的库 crate 中实现的 API 的示例。这段代码还不能编译，因为还未实现 `blog`。
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-extern crate blog;
 use blog::Post;
 
 fn main() {
@@ -51,26 +44,17 @@ fn main() {
 
 接下来，我们希望能够请求审核博文，而在等待审核的阶段 `content` 应该仍然返回空字符串。最后当博文审核通过，它应该被发表，这意味着当调用 `content` 时博文的文本将被返回。
 
-
-<!-- Below -- so this is where we'll implement the state pattern? If so, can
-you make that explicit, just to be clear! I've added some text to the second
-line, not sure if that's accurate though -->
-<!-- Yes, the state pattern will be implemented within the `Post` type. I've
-tweaked the wording a bit but you've pretty much got it! /Carol-->
-
 注意我们与 crate 交互的唯一的类型是 `Post`。这个类型会使用状态模式并会存放处于三种博文所可能的状态之一的值 —— 草案，等待审核和发布。状态上的改变由 `Post` 类型内部进行管理。状态依库用户对 `Post` 实例调用的方法而改变，但是不能直接管理状态变化。这也意味着用户不会在状态上犯错，比如在过审前发布博文。
 
 ### 定义 `Post` 并新建一个草案状态的实例
 
 让我们开始实现这个库吧！我们知道需要一个公有 `Post` 结构体来存放一些文本，所以让我们从结构体的定义和一个创建 `Post` 实例的公有关联函数 `new` 开始，如示例 17-12 所示。还需定义一个私有 trait `State`。`Post` 将在私有字段 `state` 中存放一个 `Option` 类型的 trait 对象 `Box<State>`。稍后将会看到为何 `Option` 是必须的。
 
-`State` trait 定义了所有不同状态的博文所共享的行为，同时 `Draft`、`PendingReview` 和 `Published` 状态都会实现 `State` 状态。现在这个 trait 并没有任何方法，同时开始将只定义 `Draft` 状态因为这是我们希望博文的初始状态：
-
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust
 pub struct Post {
-    state: Option<Box<State>>,
+    state: Option<Box<dyn State>>,
     content: String,
 }
 
@@ -90,13 +74,16 @@ struct Draft {}
 impl State for Draft {}
 ```
 
-<span class="caption">示例 17-12: `Post` 结构体的定义和新建 `Post` 实例的  `new` 函数，`State` trait 和结构体 `Draft`</span>
 
-当创建新的 `Post` 时，我们将其 `state` 字段设置为一个存放了 `Box` 的 `Some` 值。这个 `Box` 指向一个 `Draft` 结构体新实例。这确保了无论何时新建一个 `Post` 实例，它都会从草案开始。因为 `Post` 的 `state` 字段是私有的，也就无法创建任何其他状态的 `Post` 了！。
+<span class="caption">示例 17-12: `Post` 结构体的定义和新建 `Post` 实例的 `new` 函数，`State` trait 和结构体 `Draft`</span>
+
+`State` trait 定义了所有不同状态的博文所共享的行为，同时 `Draft`、`PendingReview` 和 `Published` 状态都会实现 `State` 状态。现在这个 trait 并没有任何方法，同时开始将只定义 `Draft` 状态因为这是我们希望博文的初始状态。
+
+当创建新的 `Post` 时，我们将其 `state` 字段设置为一个存放了 `Box` 的 `Some` 值。这个 `Box` 指向一个 `Draft` 结构体新实例。这确保了无论何时新建一个 `Post` 实例，它都会从草案开始。因为 `Post` 的 `state` 字段是私有的，也就无法创建任何其他状态的 `Post` 了！。`Post::new` 函数中将 `content` 设置为新建的空 `String`。
 
 ### 存放博文内容的文本
 
-在 `Post::new` 函数中，我们设置 `content` 字段为新的空 `String`。在示例 17-11 中，展示了我们希望能够调用一个叫做 `add_text` 的方法并向其传递一个 `&str` 来将文本增加到博文的内容中。选择实现为一个方法而不是将 `content` 字段暴露为 `pub` 。这意味着之后可以实现一个方法来控制 `content` 字段如何被读取。`add_text` 方法是非常直观的，让我们在示例 17-13 的 `impl Post` 块中增加一个实现：
+在示例 17-11 中，展示了我们希望能够调用一个叫做 `add_text` 的方法并向其传递一个 `&str` 来将文本增加到博文的内容中。选择实现为一个方法而不是将 `content` 字段暴露为 `pub` 。这意味着之后可以实现一个方法来控制 `content` 字段如何被读取。`add_text` 方法是非常直观的，让我们在示例 17-13 的 `impl Post` 块中增加一个实现：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -117,7 +104,7 @@ impl Post {
 
 `add_text` 获取一个 `self` 的可变引用，因为需要改变调用 `add_text` 的 `Post` 实例。接着调用 `content` 中的 `String` 的 `push_str` 并传递 `text` 参数来保存到 `content` 中。这不是状态模式的一部分，因为它的行为并不依赖博文所处的状态。`add_text` 方法完全不与 `state` 状态交互，不过这是我们希望支持的行为的一部分。
 
-### 博文草案的内容是空的
+### 确保博文草案的内容是空的
 
 即使调用 `add_text` 并向博文增加一些内容之后，我们仍然希望 `content` 方法返回一个空字符串 slice，因为博文仍然处于草案状态，如示例 17-11 的第 8 行所示。现在让我们使用能满足要求的最简单的方式来实现 `content` 方法：总是返回一个空字符串 slice。当实现了将博文状态改为发布的能力之后将改变这一做法。但是目前博文只能是草案状态，这意味着其内容应该总是空的。示例 17-14 展示了这个占位符实现：
 
@@ -142,19 +129,13 @@ impl Post {
 
 ### 请求审核博文来改变其状态
 
-接下来需要增加请求审核博文的功能，这应当将其状态由 `Draft` 改为 `PendingReview`。我们希望为 `Post` 增加一个获取 `self` 可变引用的公有方法 `request_review`。接着将 `Post` 当前状态内部的 `request_review` 方法而这第二个 `request_review` 方法会消费当前的状态并返回一个新状态。示例 17-15 展示了这个代码：
-
-<!-- NOTE TO DE/AU: We might want to move this explanation to after the code if
-you want to add wingdings, we can see once we transfer it to Word -->
-<!-- I decided to move some of this explanation after the code for this reason
-and because we got some questions about this example that I wanted to expand
-upon /Carol -->
+接下来需要增加请求审核博文的功能，这应当将其状态由 `Draft` 改为 `PendingReview`。示例 17-15 展示了这个代码：
 
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust
 # pub struct Post {
-#     state: Option<Box<State>>,
+#     state: Option<Box<dyn State>>,
 #     content: String,
 # }
 #
@@ -168,13 +149,13 @@ impl Post {
 }
 
 trait State {
-    fn request_review(self: Box<Self>) -> Box<State>;
+    fn request_review(self: Box<Self>) -> Box<dyn State>;
 }
 
 struct Draft {}
 
 impl State for Draft {
-    fn request_review(self: Box<Self>) -> Box<State> {
+    fn request_review(self: Box<Self>) -> Box<dyn State> {
         Box::new(PendingReview {})
     }
 }
@@ -182,7 +163,7 @@ impl State for Draft {
 struct PendingReview {}
 
 impl State for PendingReview {
-    fn request_review(self: Box<Self>) -> Box<State> {
+    fn request_review(self: Box<Self>) -> Box<dyn State> {
         self
     }
 }
@@ -190,11 +171,9 @@ impl State for PendingReview {
 
 <span class="caption">示例 17-15: 实现 `Post` 和 `State` trait 的 `request_review` 方法</span>
 
-这里给 `State` trait 增加了 `request_review` 方法；所有实现了这个 trait 的类型现在都需要实现 `request_review` 方法。注意不同于使用 `self`、 `&self` 或者 `&mut self` 作为方法的第一个参数，这里使用了 `self: Box<Self>`。这个语法意味着这个方法调用只对这个类型的 `Box` 有效。这个语法获取了 `Box<Self>` 的所有权，使老状态无效化以便 `Post` 的状态值可以将自身转换为新状态。
+这里为 `Post` 增加一个获取 `self` 可变引用的公有方法 `request_review`。接着将 `Post` 当前状态内部的 `request_review` 方法而这第二个 `request_review` 方法会消费当前的状态并返回一个新状态。
 
-<!-- Above -- so Post can transform, or so Draft can transform? -->
-<!-- Technically it's so the Draft value can transform into another value,
-which changes the state of Post-- I've tried to clarify. /Carol -->
+这里给 `State` trait 增加了 `request_review` 方法；所有实现了这个 trait 的类型现在都需要实现 `request_review` 方法。注意不同于使用 `self`、 `&self` 或者 `&mut self` 作为方法的第一个参数，这里使用了 `self: Box<Self>`。这个语法意味着这个方法调用只对这个类型的 `Box` 有效。这个语法获取了 `Box<Self>` 的所有权，使老状态无效化以便 `Post` 的状态值可以将自身转换为新状态。
 
 为了消费老状态，`request_review` 方法需要获取状态值的所有权。这也就是 `Post` 的 `state` 字段中 `Option` 的来历：调用 `take` 方法将 `state` 字段中的 `Some` 值取出并留下一个 `None`，因为 Rust 不允许在结构体中存在空的字段。这使得我们将 `state` 值移动出 `Post` 而不是借用它。接着将博文的 `state` 值设置为这个操作的结果。
 
@@ -214,7 +193,7 @@ which changes the state of Post-- I've tried to clarify. /Carol -->
 
 ```rust
 # pub struct Post {
-#     state: Option<Box<State>>,
+#     state: Option<Box<dyn State>>,
 #     content: String,
 # }
 #
@@ -228,19 +207,19 @@ impl Post {
 }
 
 trait State {
-    fn request_review(self: Box<Self>) -> Box<State>;
-    fn approve(self: Box<Self>) -> Box<State>;
+    fn request_review(self: Box<Self>) -> Box<dyn State>;
+    fn approve(self: Box<Self>) -> Box<dyn State>;
 }
 
 struct Draft {}
 
 impl State for Draft {
-#     fn request_review(self: Box<Self>) -> Box<State> {
+#     fn request_review(self: Box<Self>) -> Box<dyn State> {
 #         Box::new(PendingReview {})
 #     }
 #
     // --snip--
-    fn approve(self: Box<Self>) -> Box<State> {
+    fn approve(self: Box<Self>) -> Box<dyn State> {
         self
     }
 }
@@ -248,12 +227,12 @@ impl State for Draft {
 struct PendingReview {}
 
 impl State for PendingReview {
-#     fn request_review(self: Box<Self>) -> Box<State> {
+#     fn request_review(self: Box<Self>) -> Box<dyn State> {
 #         self
 #     }
 #
     // --snip--
-    fn approve(self: Box<Self>) -> Box<State> {
+    fn approve(self: Box<Self>) -> Box<dyn State> {
         Box::new(Published {})
     }
 }
@@ -261,11 +240,11 @@ impl State for PendingReview {
 struct Published {}
 
 impl State for Published {
-    fn request_review(self: Box<Self>) -> Box<State> {
+    fn request_review(self: Box<Self>) -> Box<dyn State> {
         self
     }
 
-    fn approve(self: Box<Self>) -> Box<State> {
+    fn approve(self: Box<Self>) -> Box<dyn State> {
         self
     }
 }
@@ -286,7 +265,7 @@ impl State for Published {
 #     fn content<'a>(&self, post: &'a Post) -> &'a str;
 # }
 # pub struct Post {
-#     state: Option<Box<State>>,
+#     state: Option<Box<dyn State>>,
 #     content: String,
 # }
 #
@@ -305,11 +284,9 @@ impl Post {
 
 这里调用 `Option` 的 `as_ref` 方法是因为需要 `Option` 中值的引用而不是获取其所有权。因为 `state` 是一个 `Option<Box<State>>`，调用 `as_ref` 会返回一个 `Option<&Box<State>>`。如果不调用 `as_ref`，怎会得到一个错误，因为不能将 `state` 移动出借用的 `&self` 函数参数。
 
-接着调用 `unwrap` 方法，这里我们知道它永远也不会 panic，因为 `Post` 的所有方法都确保在他们返回时 `state` 会有一个 `Some` 值。这就是一个第十二章讨论过的我们知道 `None` 是不可能的而编译器却不能理解的情况。
+接着调用 `unwrap` 方法，这里我们知道它永远也不会 panic，因为 `Post` 的所有方法都确保在他们返回时 `state` 会有一个 `Some` 值。这就是一个第十二章 “当我们比编译器知道更多的情况” 部分讨论过的我们知道 `None` 是不可能的而编译器却不能理解的情况。
 
-接着我们就有了一个 `&Box<State>`，当调用其 `content` 时，解引用强制多态会作用于 `&` 和 `Box` 这样最终会调用实现了 `State` trait 的类型的 `content` 方法。
-
-这意味着需要为 `State` trait 定义增加 `content`，这也是放置根据所处状态返回什么内容的逻辑的地方，如示例 17-18 所示：
+接着我们就有了一个 `&Box<State>`，当调用其 `content` 时，解引用强制多态会作用于 `&` 和 `Box` 这样最终会调用实现了 `State` trait 的类型的 `content` 方法。这意味着需要为 `State` trait 定义增加 `content`，这也是放置根据所处状态返回什么内容的逻辑的地方，如示例 17-18 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -339,15 +316,9 @@ impl State for Published {
 
 这里增加了一个 `content` 方法的默认实现来返回一个空字符串 slice。这意味着无需为 `Draft` 和 `PendingReview` 结构体实现 `content` 了。`Published` 结构体会覆盖 `content` 方法并会返回 `post.content` 的值。
 
-
 注意这个方法需要生命周期注解，如第十章所讨论的。这里获取 `post` 的引用作为参数，并返回 `post` 一部分的引用，所以返回的引用的生命周期与 `post` 参数相关。
 
-<!-- Is this it finished, without the touch up we make to get rid of the empty
-string? That's pretty awesome coding, maybe give it some ceremony here. Does
-all of 17-11 now work? -->
-<!-- Yep! Good point, so added! /Carol -->
-
-现在示例完成了 ———— 现在示例 17-11 中所有的代码都能工作！我们通过发布博文工作流的规则实现了状态模式。围绕这些规则的逻辑都存在于状态对象中而不是分散在 `Post` 之中。
+现在示例完成了 —— 现在示例 17-11 中所有的代码都能工作！我们通过发布博文工作流的规则实现了状态模式。围绕这些规则的逻辑都存在于状态对象中而不是分散在 `Post` 之中。
 
 ### 状态模式的权衡取舍
 
@@ -367,7 +338,7 @@ all of 17-11 now work? -->
 
 另一个缺点是我们会发现一些重复的逻辑。为了消除他们，可以尝试为 `State` trait 中返回 `self` 的 `request_review` 和 `approve` 方法增加默认实现，不过这会违反对象安全性，因为 trait 不知道 `self` 具体是什么。我们希望能够将 `State` 作为一个 trait 对象，所以需要其方法是对象安全的。
 
-另一个重复是 `Post` 中 `request_review` 和 `approve` 这两个类似的实现。他们都委托调用了 `state` 字段中 `Option` 值的同一方法，并在结果中为 `state` 字段设置了新值。如果 `Post` 中的很多方法都遵循这个模式，我们可能会考虑定义一个宏来消除重复（查看附录 D 以了解宏）。
+另一个重复是 `Post` 中 `request_review` 和 `approve` 这两个类似的实现。他们都委托调用了 `state` 字段中 `Option` 值的同一方法，并在结果中为 `state` 字段设置了新值。如果 `Post` 中的很多方法都遵循这个模式，我们可能会考虑定义一个宏来消除重复（查看第十九章的 “宏” 部分）。
 
 完全按照面向对象语言的定义实现这个模式并没有没有尽可能的利用 Rust 的优势。让我们看看一些代码中可以做出的修改，来将无效的状态和状态转移变为编译时错误。
 
@@ -380,6 +351,8 @@ all of 17-11 now work? -->
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
+# use blog::Post;
+
 fn main() {
     let mut post = Post::new();
 
@@ -409,7 +382,7 @@ impl Post {
     }
 
     pub fn content(&self) -> &str {
-       &self.content
+        &self.content
     }
 }
 
@@ -475,7 +448,6 @@ impl PendingReviewPost {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-extern crate blog;
 use blog::Post;
 
 fn main() {
@@ -495,7 +467,7 @@ fn main() {
 
 不得不修改 `main` 来重新赋值 `post` 使得这个实现不再完全遵守面向对象的状态模式：状态间的转换不再完全封装在 `Post` 实现中。然而，得益于类型系统和编译时类型检查我们得到了不可能拥有无效状态的属性！这确保了特定的 bug，比如显示未发布博文的内容，将在部署到生产环境之前被发现。
 
-尝试在这一部分开始所建议的增加额外需求的任务来体会使用这个版本的代码是何感觉。
+尝试为示例 17-20 之后的 `blog` crate 实现这一部分开始所建议的增加额外需求的任务来体会使用这个版本的代码是何感觉。注意在这个设计中一些需求可能已经完成了。
 
 即便 Rust 能够实现面向对象设计模式，也有其他像将状态编码进类型这样的模式存在。这些模式有着不同的权衡取舍。虽然你可能非常熟悉面向对象模式，重新思考这些问题来利用 Rust 提供的像在编译时避免一些 bug 这样有益功能。在 Rust 中面向对象模式并不总是最好的解决方案，因为 Rust 拥有像所有权这样的面向对象语言所没有的功能。
 

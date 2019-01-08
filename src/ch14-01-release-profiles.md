@@ -1,14 +1,14 @@
 ## 采用发布配置自定义构建
 
-> [ch14-01-release-profiles.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch14-01-release-profiles.md)
+> [ch14-01-release-profiles.md](https://github.com/rust-lang/book/blob/master/src/ch14-01-release-profiles.md)
 > <br>
-> commit ff93f82ff63ade5a352d9ccc430945d4ec804cdf
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
-在 Rust 中 **发布配置**（*release profiles*）是预定义的、可定制的带有不同选项的配置，他们允许程序员更多的控制代码编译的多种选项。每一个配置都彼此相互独立。
+在 Rust 中 **发布配置**（*release profiles*）是预定义的、可定制的带有不同选项的配置，他们允许程序员更灵活地控制代码编译的多种选项。每一个配置都彼此相互独立。
 
 Cargo 有两个主要的配置：运行 `cargo build` 时采用的 `dev` 配置和运行 `cargo build --release` 的 `release` 配置。`dev` 配置被定义为开发时的好的默认配置，`release` 配置则有着良好的发布构建的默认配置。
 
-我们应该很熟悉这些配置名称因为他们出现在构建的输出中，这会展示构建所使用的配置：
+这些配置名称可能很眼熟，因为它们出现在构建的输出中：
 
 ```text
 $ cargo build
@@ -19,7 +19,7 @@ $ cargo build --release
 
 构建输出中的 `dev` 和 `release` 表明编译器在使用不同的配置。
 
-Cargo 对每一个配置都有默认设置，当项目的 *Cargo.toml* 文件中没有任何 `[profile.*]` 部分的时候。通过增加任何希望定制的配置对应的 `[profile.*]` 部分，我们可以选择覆盖任意默认设置的子集。例如，如下是 `dev` 和 `release` 配置的 `opt-level` 设置的默认值：
+当项目的 *Cargo.toml* 文件中没有任何 `[profile.*]` 部分的时候，Cargo 会对每一个配置都采用默认设置。通过增加任何希望定制的配置对应的 `[profile.*]` 部分，我们可以选择覆盖任意默认设置的子集。例如，如下是 `dev` 和 `release` 配置的 `opt-level` 设置的默认值：
 
 <span class="filename">文件名: Cargo.toml</span>
 

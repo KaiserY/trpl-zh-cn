@@ -1,8 +1,8 @@
 ## `match` 控制流运算符
 
-> [ch06-02-match.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch06-02-match.md)
+> [ch06-02-match.md](https://github.com/rust-lang/book/blob/master/src/ch06-02-match.md)
 > <br>
-> commit 18fd30d70f4d6ee67e0a808710bf7a3135ef7ed6
+> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
 
 Rust 有一个叫做 `match` 的极为强大的控制流运算符，它允许我们将一个值与一系列的模式相比较并根据相匹配的模式执行相应代码。模式可由字面值、变量、通配符和许多其他内容构成；第十八章会涉及到所有不同种类的模式以及它们的作用。`match` 的力量来源于模式的表现力以及编译器检查，它确保了所有可能的情况都得到处理。
 
@@ -30,11 +30,11 @@ fn value_in_cents(coin: Coin) -> u32 {
 
 <span class="caption">示例 6-3：一个枚举和一个以枚举成员作为模式的 `match` 表达式</span>
 
-拆开 `value_in_cents` 函数中的 `match` 来看。首先，我们列出 `match` 关键字后跟一个表达式，在这个例子中是 `coin` 的值。这看起来非常像 `if` 使用的表达式，不过这里有一个非常大的区别：对于 `if`，表达式必须返回一个布尔值。而这里它可以是任何类型的。例子中的 `coin` 的类型是示例 6-3 中定义的 `Coin` 枚举。
+拆开 `value_in_cents` 函数中的 `match` 来看。首先，我们列出 `match` 关键字后跟一个表达式，在这个例子中是 `coin` 的值。这看起来非常像 `if` 使用的表达式，不过这里有一个非常大的区别：对于 `if`，表达式必须返回一个布尔值，而这里它可以是任何类型的。例子中的 `coin` 的类型是示例 6-3 中定义的 `Coin` 枚举。
 
 接下来是 `match` 的分支。一个分支有两个部分：一个模式和一些代码。第一个分支的模式是值 `Coin::Penny` 而之后的 `=>` 运算符将模式和将要运行的代码分开。这里的代码就仅仅是值 `1`。每一个分支之间使用逗号分隔。
 
-当 `match` 表达式执行时，它将结果值按顺序与每一个分支的模式相比较，如果模式匹配了这个值，这个模式相关联的代码将被执行。如果模式并不匹配这个值，将继续执行下一个分支，非常类似一个硬币分类器。可以拥有任意多的分支：示例 6-3 中的 `match` 有四个分支。
+当 `match` 表达式执行时，它将结果值按顺序与每一个分支的模式相比较。如果模式匹配了这个值，这个模式相关联的代码将被执行。如果模式并不匹配这个值，将继续执行下一个分支，非常类似一个硬币分类器。可以拥有任意多的分支：示例 6-3 中的 `match` 有四个分支。
 
 每个分支相关联的代码是一个表达式，而表达式的结果值将作为整个 `match` 表达式的返回值。
 
@@ -68,11 +68,11 @@ fn value_in_cents(coin: Coin) -> u32 {
 作为一个例子，让我们修改枚举的一个成员来存放数据。1999 年到 2008 年间，美帝在 25 美分的硬币的一侧为 50 个州的每一个都印刷了不同的设计。其他的硬币都没有这种区分州的设计，所以只有这些 25 美分硬币有特殊的价值。可以将这些信息加入我们的 `enum`，通过改变 `Quarter` 成员来包含一个 `State` 值，示例 6-4 中完成了这些修改：
 
 ```rust
-#[derive(Debug)] // So we can inspect the state in a minute
+#[derive(Debug)] // 这样可以可以立刻看到州的名称
 enum UsState {
     Alabama,
     Alaska,
-    // ... etc
+    // --snip--
 }
 
 enum Coin {
@@ -120,7 +120,7 @@ fn value_in_cents(coin: Coin) -> u32 {
 
 ### 匹配 `Option<T>`
 
-在之前的部分在使用 `Option<T>` 时我们想要从 `Some` 中取出其内部的 `T` 值；也可以像处理 `Coin` 枚举那样使用 `match` 处理 `Option<T>`！与其直接比较硬币，我们将比较 `Option<T>` 的成员，不过 `match` 表达式的工作方式保持不变。
+我们在之前的部分中使用 `Option<T>` 时，是为了从 `Some` 中取出其内部的 `T` 值；我们还可以像处理 `Coin` 枚举那样使用 `match` 处理 `Option<T>`！与其直接比较硬币，我们将比较 `Option<T>` 的成员，不过 `match` 表达式的工作方式保持不变。
 
 比如我们想要编写一个函数，它获取一个 `Option<i32>` 并且如果其中有一个值，将其加一。如果其中没有值，函数应该返回 `None` 值并不尝试执行任何操作。
 
@@ -143,7 +143,7 @@ let none = plus_one(None);
 
 #### 匹配 `Some(T)`
 
-让我们更仔细的检查 `plus_one` 的第一行操作。当调用 `plus_one(five)` 时，`plus_one` 函数体中的 `x` 将会是值 `Some(5)`。接着将其与每个分支比较。
+让我们更仔细地检查 `plus_one` 的第一行操作。当调用 `plus_one(five)` 时，`plus_one` 函数体中的 `x` 将会是值 `Some(5)`。接着将其与每个分支比较。
 
 ```rust,ignore
 None => None,
@@ -157,8 +157,6 @@ Some(i) => Some(i + 1),
 
 `Some(5)` 与 `Some(i)` 匹配吗？当然匹配！它们是相同的成员。`i` 绑定了 `Some` 中包含的值，所以 `i` 的值是 `5`。接着匹配分支的代码被执行，所以我们将 `i` 的值加一并返回一个含有值 `6` 的新 `Some`。
 
-#### 匹配 `None`
-
 接着考虑下示例 6-5 中 `plus_one` 的第二个调用，这里 `x` 是 `None`。我们进入 `match` 并与第一个分支相比较。
 
 ```rust,ignore
@@ -171,9 +169,9 @@ None => None,
 
 ### 匹配是穷尽的
 
-`match` 还有另一方面需要讨论。考虑一下 `plus_one` 函数的这个版本：
+`match` 还有另一方面需要讨论。考虑一下 `plus_one` 函数的这个版本，它有一个 bug 并不能编译：
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn plus_one(x: Option<i32>) -> Option<i32> {
     match x {
         Some(i) => Some(i + 1),
@@ -191,7 +189,7 @@ error[E0004]: non-exhaustive patterns: `None` not covered
   |               ^ pattern `None` not covered
 ```
 
-Rust 知道我们没有覆盖所有可能的情况甚至知道那些模式被忘记了！Rust 中的匹配是 **穷尽的**（*exhaustive*）：必须穷举到最后的可能性来使代码有效。特别的在这个 `Option<T>` 的例子中，Rust 防止我们忘记明确的处理 `None` 的情况，这使我们免于假设拥有一个实际上为空的值，这造成了之前提到过的价值亿万的错误。
+Rust 知道我们没有覆盖所有可能的情况甚至知道哪些模式被忘记了！Rust 中的匹配是 **穷尽的**（*exhaustive*）：必须穷举到最后的可能性来使代码有效。特别的在这个 `Option<T>` 的例子中，Rust 防止我们忘记明确的处理 `None` 的情况，这使我们免于假设拥有一个实际上为空的值，这造成了之前提到过的价值亿万的错误。
 
 ### `_` 通配符
 

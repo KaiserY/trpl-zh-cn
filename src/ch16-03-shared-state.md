@@ -1,8 +1,8 @@
 ## 共享状态并发
 
-> [ch16-03-shared-state.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch16-03-shared-state.md)
+> [ch16-03-shared-state.md](https://github.com/rust-lang/book/blob/master/src/ch16-03-shared-state.md)
 > <br>
-> commit 90406bd5a4cd4447b46cd7e03d33f34a651e9bb7
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 虽然消息传递是一个很好的处理并发的方式，但并不是唯一一个。再一次思考一下 Go 编程语言文档中口号的这一部分：“通过共享内存通讯”：
 
@@ -10,7 +10,7 @@
 >
 > 通过共享内存通讯看起来如何？除此之外，为何消息传递的拥护者并不使用它并反其道而行之呢？
 
-在某种程度上，任何编程语言中的通道都类似于单所有权，因为一旦将一个值传送到通道中，将无法再使用这个值。共享内存类似于多所有权：多个线程可以同时访问相同的内存位置。第十五章介绍了智能指针如何使得多所有权成为可能，然而这会增加额外的复杂性，因为需要以某种方式管理这些不同的所有者。作为一个例子，让我们看看互斥器，一个更为常见的共享内存并发原语。
+在某种程度上，任何编程语言中的通道都类似于单所有权，因为一旦将一个值传送到通道中，将无法再使用这个值。共享内存类似于多所有权：多个线程可以同时访问相同的内存位置。第十五章介绍了智能指针如何使得多所有权成为可能，然而这会增加额外的复杂性，因为需要以某种方式管理这些不同的所有者。Rust 的类型系统和所有权规则极大的协助了正确地管理这些所有权。作为一个例子，让我们看看互斥器，一个更为常见的共享内存并发原语。
 
 ### 互斥器一次只允许一个线程访问数据
 
@@ -52,7 +52,6 @@ fn main() {
 
 如果另一个线程拥有锁，并且那个线程 panic 了，则 `lock` 调用会失败。在这种情况下，没人能够再获取锁，所以这里选择 `unwrap` 并在遇到这种情况时使线程 panic。
 
-
 一旦获取了锁，就可以将返回值（在这里是`num`）视为一个其内部数据的可变引用了。类型系统确保了我们在使用 `m` 中的值之前获取锁：`Mutex<i32>` 并不是一个 `i32`，所以 **必须** 获取锁才能使用这个 `i32` 值。我们是不会忘记这么做的，因为反之类型系统不允许访问内部的 `i32` 值。
 
 正如你所怀疑的，`Mutex<T>` 是一个智能指针。更准确的说，`lock` 调用 **返回** 一个叫做 `MutexGuard` 的智能指针。这个智能指针实现了 `Deref` 来指向其内部数据；其也提供了一个 `Drop` 实现当 `MutexGuard` 离开作用域时自动释放锁，这正发生于示例 16-12 内部作用域的结尾。为此，我们不会冒忘记释放锁并阻塞互斥器为其它线程所用的风险，因为锁的释放是自动发生的。
@@ -65,7 +64,7 @@ fn main() {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 use std::sync::Mutex;
 use std::thread;
 
@@ -94,10 +93,9 @@ fn main() {
 
 这里创建了一个 `counter` 变量来存放内含 `i32` 的 `Mutex<T>`，类似示例 16-12 那样。接下来遍历 range 创建了 10 个线程。使用了 `thread::spawn` 并对所有线程使用了相同的闭包：他们每一个都将调用 `lock` 方法来获取 `Mutex<T>` 上的锁，接着将互斥器中的值加一。当一个线程结束执行，`num` 会离开闭包作用域并释放锁，这样另一个线程就可以获取它了。
 
-在主线程中，我们像示例 16-2 那样收集了所有的 join 句柄，调用它们的 `join` 方法来确保所有线程都会结束。之后，主线程会获取锁并打印出程序的结果。
+在主线程中，我们像示例 16-2 那样收集了所有的 join 句柄，调用它们的 `join` 方法来确保所有线程都会结束。这时，主线程会获取锁并打印出程序的结果。
 
 之前提示过这个例子不能编译，让我们看看为什么！
-
 
 ```text
 error[E0382]: capture of moved value: `counter`
@@ -130,20 +128,34 @@ error: aborting due to 2 previous errors
 
 让我们简化程序来进行分析。不同于在 `for` 循环中创建 10 个线程，仅仅创建两个线程来观察发生了什么。将示例 16-13 中第一个 `for` 循环替换为如下代码：
 
-```rust,ignore
-let handle = thread::spawn(move || {
-    let mut num = counter.lock().unwrap();
+```rust,ignore,does_not_compile
+use std::sync::Mutex;
+use std::thread;
 
-    *num += 1;
-});
-handles.push(handle);
+fn main() {
+    let counter = Mutex::new(0);
+    let mut handles = vec![];
 
-let handle2 = thread::spawn(move || {
-    let mut num2 = counter.lock().unwrap();
+    let handle = thread::spawn(move || {
+        let mut num = counter.lock().unwrap();
 
-    *num2 += 1;
-});
-handles.push(handle2);
+        *num += 1;
+    });
+    handles.push(handle);
+
+    let handle2 = thread::spawn(move || {
+        let mut num2 = counter.lock().unwrap();
+
+        *num2 += 1;
+    });
+    handles.push(handle2);
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Result: {}", *counter.lock().unwrap());
+}
 ```
 
 这里创建了两个线程并将用于第二个线程的变量名改为 `handle2` 和 `num2`。这一次当运行代码时，编译会给出如下错误：
@@ -184,7 +196,7 @@ error: aborting due to 2 previous errors
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 use std::rc::Rc;
 use std::sync::Mutex;
 use std::thread;
@@ -218,8 +230,7 @@ fn main() {
 ```text
 error[E0277]: the trait bound `std::rc::Rc<std::sync::Mutex<i32>>:
 std::marker::Send` is not satisfied in `[closure@src/main.rs:11:36:
-15:10
-counter:std::rc::Rc<std::sync::Mutex<i32>>]`
+15:10 counter:std::rc::Rc<std::sync::Mutex<i32>>]`
   --> src/main.rs:11:22
    |
 11 |         let handle = thread::spawn(move || {
@@ -230,8 +241,7 @@ cannot be sent between threads safely
 counter:std::rc::Rc<std::sync::Mutex<i32>>]`, the trait `std::marker::Send` is
 not implemented for `std::rc::Rc<std::sync::Mutex<i32>>`
    = note: required because it appears within the type
-`[closure@src/main.rs:11:36: 15:10
-counter:std::rc::Rc<std::sync::Mutex<i32>>]`
+`[closure@src/main.rs:11:36: 15:10 counter:std::rc::Rc<std::sync::Mutex<i32>>]`
    = note: required by `std::thread::spawn`
 ```
 

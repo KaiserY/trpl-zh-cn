@@ -1,14 +1,14 @@
 ## Hello, Cargo!
 
-> [ch01-03-hello-cargo.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch01-03-hello-cargo.md)
+> [ch01-03-hello-cargo.md](https://github.com/rust-lang/book/blob/master/src/ch01-03-hello-cargo.md)
 > <br>
-> commit 7480e811ab5ad8d53a5b854d9b0c7a5a4f58499f
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 Cargo 是 Rust 的构建系统和包管理器。大多数 Rustacean 们使用 Cargo 来管理他们的 Rust 项目，因为它可以为你处理很多任务，比如构建代码、下载依赖库并编译这些库。（我们把代码所需要的库叫做 **依赖**（*dependencies*））。
 
-最简单的 Rust 程序，比如我们刚刚编写的，没有任何依赖。所以如果使用 Cargo 来构建 Hello, world! 项目，将只会用到 Cargo 的构建代码那部分功能。随着编写的 Rust 程序更加复杂，你会添加依赖，如果你一开始就使用 Cargo 的话，添加依赖将会变得简单许多。
+最简单的 Rust 程序，比如我们刚刚编写的，没有任何依赖。所以如果使用 Cargo 来构建 Hello, world! 项目，将只会用到 Cargo 的构建代码那部分功能。如果编写更为复杂的 Rust 程序，你会添加依赖，这样如果你一开始就使用 Cargo 的话，添加依赖将会变得简单许多。
 
-由于绝大多数 Rust 项目使用 Cargo，本书接下来的部分假设你也使用 Cargo。如果使用 “安装” 章节介绍的官方安装包的话，则自带了 Cargo。如果通过其他方式安装的话，可以在终端输入如下命令检查是否安装了 Cargo：
+由于绝大多数 Rust 项目使用 Cargo，本书接下来的部分假设你也使用 Cargo。如果使用 “安装” 部分介绍的官方安装包的话，则自带了 Cargo。如果通过其他方式安装的话，可以在终端输入如下命令检查是否安装了 Cargo：
 
 ```text
 $ cargo --version
@@ -21,17 +21,17 @@ $ cargo --version
 我们使用 Cargo 创建一个新项目，然后看看与上面的 Hello, world! 项目有什么不同。回到 *projects* 目录（或者你存放代码的目录）。接着，可在任何操作系统下运行以下命令：
 
 ```text
-$ cargo new hello_cargo --bin
+$ cargo new hello_cargo
 $ cd hello_cargo
 ```
 
-第一行命令新建了名为 *hello_cargo* 的二进制可执行程序。为 `cargo new` 传入 `--bin` 参数会生成一个可执行程序（通常就叫做 **二进制文件**，*binary*），而不是一个库。项目被命名为 `hello_cargo`，同时 Cargo 在一个同名目录中创建项目文件。
+第一行命令新建了名为 *hello_cargo* 的目录。我们将项目命名为 *hello_cargo*，同时 Cargo 在一个同名目录中创建项目文件。
 
 进入 *hello_cargo* 目录并列出文件。将会看到 Cargo 生成了两个文件和一个目录：一个 *Cargo.toml* 文件，一个 *src* 目录，以及位于 *src* 目录中 *main.rs* 文件。它也在 *hello_cargo* 目录初始化了一个 git 仓库，以及一个 *.gitignore* 文件。
 
 > 注意：Git 是一个常用的版本控制系统（version control system， VCS）。可以通过 `--vcs` 参数使 `cargo new` 切换到其它版本控制系统（VCS），或者不使用 VCS。运行 `cargo new --help` 参看可用的选项。
 
-请选用文本编辑器打开 *Cargo.toml* 文件。它应该看起来如示例 1-2 所示：
+请自行选用文本编辑器打开 *Cargo.toml* 文件。它应该看起来如示例 1-2 所示：
 
 <span class="filename">文件名: Cargo.toml</span>
 
@@ -40,6 +40,7 @@ $ cd hello_cargo
 name = "hello_cargo"
 version = "0.1.0"
 authors = ["Your Name <you@example.com>"]
+edition = "2018"
 
 [dependencies]
 ```
@@ -52,9 +53,9 @@ authors = ["Your Name <you@example.com>"]
 
 第一行，`[package]`，是一个片段（section）标题，表明下面的语句用来配置一个包。随着我们在这个文件增加更多的信息，还将增加其他片段（section）。
 
-接下来的三行设置了 Cargo 编译程序所需的配置：项目的名称、版本和作者。Cargo 从环境中获取你的名字和 email 信息，所以如果这些信息不正确，请修改并保存此文件。
+接下来的四行设置了 Cargo 编译程序所需的配置：项目的名称、版本和作者。Cargo 从环境中获取你的名字和 email 信息，所以如果这些信息不正确，请修改并保存此文件。附录 E 会介绍 `edition` 的值。
 
-最后一行，`[dependencies]`，是罗列项目依赖的片段。在 Rust 中，代码包被称为 *crates*。这个项目并不需要其他的 crate，不过在第二章的第一个项目会用到依赖，那时会用得上这个片段。
+最后一行，`[dependencies]`，是罗列项目依赖的片段的开始。在 Rust 中，代码包被称为 *crates*。这个项目并不需要其他的 crate，不过在第二章的第一个项目会用到依赖，那时会用得上这个片段。
 
 现在打开 *src/main.rs* 看看：
 
@@ -85,7 +86,7 @@ $ cargo build
 这个命令会创建一个可执行文件 *target/debug/hello_cargo* （在 Windows 上是 *target\debug\hello_cargo.exe*），而不是放在目前目录下。可以通过这个命令运行可执行文件：
 
 ```text
-$ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
+$ ./target/debug/hello_cargo # 或者在 Windows 下为 .\target\debug\hello_cargo.exe
 Hello, world!
 ```
 
@@ -109,15 +110,16 @@ $ cargo run
      Running `target/debug/hello_cargo`
 Hello, world!
 ```
+
 Cargo 还提供了一个叫 `cargo check` 的命令。该命令快速检查代码确保其可以编译，但并不产生可执行文件：
 
 ```text
 $ cargo check
-   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
+   Checking hello_cargo v0.1.0 (file:///projects/hello_cargo)
     Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
 ```
 
-为什么你会不需要可执行文件呢？通常 `cargo check` 要比 `cargo build` 快得多，因为它省略了生成可执行文件的步骤。如果编写代码时持续的进行检查，`cargo check` 会加速开发！为此很多 Rustaceans 编写代码时定期运行 `cargo check` 确保它们可以编译。当准备好使用可执行文件时才运行 `cargo build`。
+为什么你会不需要可执行文件呢？通常 `cargo check` 要比 `cargo build` 快得多，因为它省略了生成可执行文件的步骤。如果你在编写代码时持续的进行检查，`cargo check` 会加速开发！为此很多 Rustaceans 编写代码时定期运行 `cargo check` 确保它们可以编译。当准备好使用可执行文件时才运行 `cargo build`。
 
 我们回顾下已学习的 Cargo 内容：
 
@@ -125,7 +127,7 @@ $ cargo check
 * 可以使用 `cargo run` 一步构建并运行项目。
 * 有别于将构建结果放在与源码相同的目录，Cargo 会将其放到 *target/debug* 目录。
 
-使用 Cargo 的一个额外的优点是，不管你使用什么操作系统，其命令都是一样的。所以从此以后本书将不再为 Linux 和 macOS 以及 Windows 提供相应的命令。
+使用 Cargo 的一个额外的优点是，不管你使用什么操作系统，其命令都是一样的。所以从现在开始本书将不再为 Linux 和 macOS 以及 Windows 提供相应的命令。
 
 ### 发布（release）构建
 
@@ -149,7 +151,7 @@ $ cargo build
 
 ## 总结
 
-你已经踏上了 Rust 之旅！在本章中，你学习了如何：
+你已经准备好开启 Rust 之旅了！在本章中，你学习了如何：
 
 * 使用 `rustup` 安装最新稳定版的 Rust
 * 更新到新版的 Rust
@@ -157,4 +159,4 @@ $ cargo build
 * 直接通过 `rustc` 编写并运行 Hello, world! 程序
 * 使用 Cargo 创建并运行新项目
 
-是时候通过构建更真实的程序来熟悉读写 Rust 代码了。所以在下一章，我们会构建一个猜猜看游戏程序。如果你更愿意从学习 Rust 常用的编程概念开始，请阅读第三章，接着再回到第二章。
+是时候通过构建更实质性的程序来熟悉读写 Rust 代码了。所以在第二章我们会构建一个猜猜看游戏程序。如果你更愿意从学习 Rust 常用的编程概念开始，请阅读第三章，接着再回到第二章。

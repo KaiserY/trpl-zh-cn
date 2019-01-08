@@ -1,8 +1,8 @@
-## 采用测试驱动开发完善库的功能
+﻿## 采用测试驱动开发完善库的功能
 
-> [ch12-04-testing-the-librarys-functionality.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch12-04-testing-the-librarys-functionality.md)
+> [ch12-04-testing-the-librarys-functionality.md](https://github.com/rust-lang/book/blob/master/src/ch12-04-testing-the-librarys-functionality.md)
 > <br>
-> commit 1fe78a83f37ecc69b840fdc8dcfc727f88a3a3d4
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 现在我们将逻辑提取到了 *src/lib.rs* 并将所有的参数解析和错误处理留在了 *src/main.rs* 中，为代码的核心功能编写测试将更加容易。我们可以直接使用多种参数调用函数并检查返回值而无需从命令行运行二进制文件了。如果你愿意的话，请自行为 `Config::new` 和 `run` 函数的功能编写一些测试。
 
@@ -29,7 +29,7 @@
 # }
 #
 #[cfg(test)]
-mod test {
+mod tests {
     use super::*;
 
     #[test]
@@ -50,14 +50,14 @@ Pick three.";
 
 <span class="caption">示例 12-15：创建一个我们期望的 `search` 函数的失败测试</span>
 
-这里选择使用 "duct" 作为这个测试中需要搜索的字符串。用来搜索的文本有三行，其中只有一行包含 "duct"。我们断言 `search` 函数的返回值只包含期望的那一行。
+这里选择使用 `"duct"` 作为这个测试中需要搜索的字符串。用来搜索的文本有三行，其中只有一行包含 `"duct"`。我们断言 `search` 函数的返回值只包含期望的那一行。
 
-我们还不能运行这个测试并看到它失败，因为它甚至都还不能编译！我们将增加足够的代码来使其能够编译：一个总是会返回空 vector 的 `search` 函数定义，如示例 12-16 所示。然后这个测试应该能够编译并因为空 vector 并不匹配一个包含一行 `"safe, fast, productive."` 的 vector 而失败。
+我们还不能运行这个测试并看到它失败，因为它甚至都还不能编译：`search` 函数还不存在呢！我们将增加足够的代码来使其能够编译：一个总是会返回空 vector 的 `search` 函数定义，如示例 12-16 所示。然后这个测试应该能够编译并因为空 vector 并不匹配一个包含一行 `"safe, fast, productive."` 的 vector 而失败。
 
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     vec![]
 }
 ```
@@ -74,7 +74,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 error[E0106]: missing lifetime specifier
  --> src/lib.rs:5:51
   |
-5 | pub fn search(query: &str, contents: &str) -> Vec<&str> {
+5 | fn search(query: &str, contents: &str) -> Vec<&str> {
   |                                                   ^ expected lifetime
 parameter
   |
@@ -84,7 +84,7 @@ parameter
 
 Rust 不可能知道我们需要的是哪一个参数，所以需要告诉它。因为参数 `contents` 包含了所有的文本而且我们希望返回匹配的那部分文本，所以我们知道 `contents` 是应该要使用生命周期语法来与返回值相关联的参数。
 
-其他语言中并不需要你在函数签名中将参数与返回值相关联，所以这么做可能仍然感觉有些陌生，随着时间的推移这将会变得越来越容易。你可能想要将这个例子与第十章中生命周期语法部分做对比。
+其他语言中并不需要你在函数签名中将参数与返回值相关联。所以这么做可能仍然感觉有些陌生，随着时间的推移这将会变得越来越容易。你可能想要将这个例子与第十章中生命 “生命周期与引用有效性” 部分做对比。
 
 现在运行测试：
 
@@ -96,12 +96,12 @@ $ cargo test
      Running target/debug/deps/minigrep-abcabcabc
 
 running 1 test
-test test::one_result ... FAILED
+test tests::one_result ... FAILED
 
 failures:
 
----- test::one_result stdout ----
-        thread 'test::one_result' panicked at 'assertion failed: `(left ==
+---- tests::one_result stdout ----
+        thread 'tests::one_result' panicked at 'assertion failed: `(left ==
 right)`
 left: `["safe, fast, productive."]`,
 right: `[]`)', src/lib.rs:48:8
@@ -109,7 +109,7 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 
 failures:
-    test::one_result
+    tests::one_result
 
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 
@@ -137,7 +137,7 @@ Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     for line in contents.lines() {
         // do something with line
     }
@@ -146,7 +146,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 <span class="caption">示例 12-17：遍历 `contents` 的每一行</span>
 
-`lines` 方法返回一个迭代器。第十三章会深入了解迭代器，不过我们已经在示例 3-4 中见过使用迭代器的方法了，在那里使用了一个 `for` 循环和迭代器在一个集合的每一项上运行了一些代码。
+`lines` 方法返回一个迭代器。第十三章会深入了解迭代器，不过我们已经在示例 3-5 中见过使用迭代器的方法了，在那里使用了一个 `for` 循环和迭代器在一个集合的每一项上运行了一些代码。
 
 #### 用查询字符串搜索每一行
 
@@ -155,7 +155,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     for line in contents.lines() {
         if line.contains(query) {
             // do something with line
@@ -173,7 +173,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
 
     for line in contents.lines() {
@@ -194,7 +194,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 $ cargo test
 --snip--
 running 1 test
-test test::one_result ... ok
+test tests::one_result ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
@@ -210,11 +210,8 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
-pub fn run(config: Config) -> Result<(), Box<Error>> {
-    let mut f = File::open(config.filename)?;
-
-    let mut contents = String::new();
-    f.read_to_string(&mut contents)?;
+pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    let contents = fs::read_to_string(config.filename)?;
 
     for line in search(&config.query, &contents) {
         println!("{}", line);

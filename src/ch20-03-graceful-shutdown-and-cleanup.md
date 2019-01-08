@@ -1,8 +1,8 @@
 ## 优雅停机与清理
 
-> [ch20-03-graceful-shutdown-and-cleanup.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch20-03-graceful-shutdown-and-cleanup.md)
+> [ch20-03-graceful-shutdown-and-cleanup.md](https://github.com/rust-lang/book/blob/master/src/ch20-03-graceful-shutdown-and-cleanup.md)
 > <br>
-> commit 1f0136399ba2f5540ecc301fab04bd36492e5554
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 示例 20-21 中的代码如期通过使用线程池异步的响应请求。这里有一些警告说 `workers`、`id` 和 `thread` 字段没有直接被使用，这提醒了我们并没有清理所有的内容。当使用不那么优雅的 <span class="keystroke">ctrl-C</span> 终止主线程时，所有其他线程也会立刻停止，即便它们正处于处理请求的过程中。
 
@@ -14,7 +14,7 @@
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 impl Drop for ThreadPool {
     fn drop(&mut self) {
         for worker in &mut self.workers {
@@ -223,7 +223,7 @@ impl Drop for ThreadPool {
 
 <span class="caption">示例 20-25：在对每个 worker 线程调用 `join` 之前向 worker 发送 `Message::Terminate`</span>
 
-现在遍历了 worker 两次，一次向每个 worker 发送一个 `Terminate` 消息，一个调用每个 worker 线程上的  `join`。如果尝试在同一循环中发送消息并立即 join 线程，则无法保证当前迭代的 worker 是从通道收到终止消息的 worker。
+现在遍历了 worker 两次，一次向每个 worker 发送一个 `Terminate` 消息，一个调用每个 worker 线程上的 `join`。如果尝试在同一循环中发送消息并立即 join 线程，则无法保证当前迭代的 worker 是从通道收到终止消息的 worker。
 
 为了更好的理解为什么需要两个分开的循环，想象一下只有两个 worker 的场景。如果在一个单独的循环中遍历每个 worker，在第一次迭代中向通道发出终止消息并对第一个 worker 线程调用 `join`。我们会一直等待第一个 worker 结束，不过它永远也不会结束因为第二个线程接收了终止消息。死锁！
 
@@ -282,7 +282,9 @@ Shutting down worker 3
 
 这个特定的运行过程中一个有趣的地方在于：注意我们向通道中发出终止消息，而在任何线程收到消息之前，就尝试 join worker 0 了。worker 0 还没有收到终止消息，所以主线程阻塞直到 worker 0 结束。与此同时，每一个线程都收到了终止消息。一旦 worker 0 结束，主线程就等待其他 worker 结束，此时他们都已经收到终止消息并能够停止了。
 
-恭喜！现在我们完成了这个项目，也有了一个使用线程池异步响应请求的基础 web server。我们能对 server 执行优雅停机，它会清理线程池中的所有线程。如下是完整的代码参考：
+恭喜！现在我们完成了这个项目，也有了一个使用线程池异步响应请求的基础 web server。我们能对 server 执行优雅停机，它会清理线程池中的所有线程。
+
+如下是完整的代码参考：
 
 <span class="filename">文件名: src/bin/main.rs</span>
 
@@ -368,16 +370,16 @@ impl<F: FnOnce()> FnBox for F {
     }
 }
 
-type Job = Box<FnBox + Send + 'static>;
+type Job = Box<dyn FnBox + Send + 'static>;
 
 impl ThreadPool {
-    /// Create a new ThreadPool.
+    /// 创建线程池。
     ///
-    /// The size is the number of threads in the pool.
+    /// 线程池中线程的数量。
     ///
     /// # Panics
     ///
-    /// The `new` function will panic if the size is zero.
+    /// `new` 函数在 size 为 0 时会 panic。
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
@@ -469,8 +471,8 @@ impl Worker {
 - 为库的功能增加测试
 - 将 `unwrap` 调用改为更健壮的错误处理
 - 使用 `ThreadPool` 进行其他不同于处理网络请求的任务
-- 在 crates.io 寻找一个线程池 crate 并使用它实现一个类似的 web server，将其 API 和鲁棒性与我们的实现做对比
+- 在 *https://crates.io/* 寻找一个线程池 crate 并使用它实现一个类似的 web server，将其 API 和鲁棒性与我们的实现做对比
 
 ## 总结
 
-好极了！你结束了本书的学习！由衷感谢你与我们一道加入这次 Rust 之旅。现在你已经准备好出发并实现自己的 Rust 项目并帮助他人了。请不要忘记我们的社区，这里有其他 Rustaceans 正乐于帮助你迎接 Rust 之路上的任何挑战。
+好极了！你结束了本书的学习！由衷感谢你同我们一道加入这次 Rust 之旅。现在你已经准备好出发并实现自己的 Rust 项目并帮助他人了。请不要忘记我们的社区，这里有其他 Rustaceans 正乐于帮助你迎接 Rust 之路上的任何挑战。

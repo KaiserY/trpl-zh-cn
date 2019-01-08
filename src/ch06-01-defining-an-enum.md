@@ -1,8 +1,8 @@
 # 定义枚举
 
-> [ch06-01-defining-an-enum.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch06-01-defining-an-enum.md)
+> [ch06-01-defining-an-enum.md](https://github.com/rust-lang/book/blob/master/src/ch06-01-defining-an-enum.md)
 > <br>
-> commit 923201d5117c45bf78ce433422b50e4de9bd9b11
+> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
 
 让我们看看一个需要诉诸于代码的场景，来考虑为何此时使用枚举更为合适且实用。假设我们要处理 IP 地址。目前被广泛使用的两个主要 IP 标准：IPv4（version four）和 IPv6（version six）。这是我们的程序可能会遇到的所有可能的 IP 地址类型：所以可以 **枚举** 出所有可能的值，这也正是此枚举名字的由来。
 
@@ -157,7 +157,7 @@ enum Message {
 * `Write` 包含单独一个 `String`。
 * `ChangeColor` 包含三个 `i32`。
 
-定义一个如示例 6-2 中所示那样的有关联值的枚举的方式和定义多个不同类型的结构体的方式很相像——除了枚举不使用 `struct` 关键字以及其所有成员都被组合在一起位于 `Message` 类型下。如下这些结构体可以包含与之前枚举成员中相同的数据：
+定义一个如示例 6-2 中所示那样的有关联值的枚举的方式和定义多个不同类型的结构体的方式很相像，除了枚举不使用 `struct` 关键字以及其所有成员都被组合在一起位于 `Message` 类型下。如下这些结构体可以包含与之前枚举成员中相同的数据：
 
 ```rust
 struct QuitMessage; // 类单元结构体
@@ -169,7 +169,7 @@ struct WriteMessage(String); // 元组结构体
 struct ChangeColorMessage(i32, i32, i32); // 元组结构体
 ```
 
-不过，如果我们使用不同的结构体，由于它们都有不同的类型，我们将不能像使用示例 6-2 中定义的 `Message` 枚举那样，轻易的定义一个能够处理这些不同类型的结构体的函数。因为使用枚举的情况下，“它们”是一个类型。
+不过，如果我们使用不同的结构体，由于它们都有不同的类型，我们将不能像使用示例 6-2 中定义的 `Message` 枚举那样，轻易的定义一个能够处理这些不同类型的结构体的函数，因为枚举是单独一个类型。
 
 结构体和枚举还有另一个相似点：就像可以使用 `impl` 来为结构体定义方法那样，也可以在枚举上定义方法。这是一个定义于我们 `Message` 枚举上的叫做 `call` 的方法：
 

@@ -1,18 +1,18 @@
 ## 变量和可变性
 
-> [ch03-01-variables-and-mutability.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch03-01-variables-and-mutability.md)
+> [ch03-01-variables-and-mutability.md](https://github.com/rust-lang/book/blob/master/src/ch03-01-variables-and-mutability.md)
 > <br>
-> commit f949ff883628db8ed2f2f5f19e146ebf19ed6a6f
+> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
 
-第二章中提到过，变量默认是不可改变的（immutable）。这是推动你以充分利用 Rust 提供的安全性和简单并发性编写代码的众多方式之一。不过，你仍然可以使用可变变量。让我们探讨一下 Rust 拥抱不可变性的原因及方法，以及何时你不想使用不可变性。
+第二章中提到过，变量默认是不可改变的（immutable）。这是推动你以充分利用 Rust 提供的安全性和简单并发性来编写代码的众多方式之一。不过，你仍然可以使用可变变量。让我们探讨一下 Rust 拥抱不可变性的原因及方法，以及何时你不想使用不可变性。
 
-当变量不可变时，一旦值被绑定一个名称上，你就不能改变这个值。为了对此进行说明，使用 `cargo new --bin variables` 命令在 *projects* 目录生成一个叫做 *variables* 的新项目。
+当变量不可变时，一旦值被绑定一个名称上，你就不能改变这个值。为了对此进行说明，使用 `cargo new variables` 命令在 *projects* 目录生成一个叫做 *variables* 的新项目。
 
 接着，在新建的 *variables* 目录，打开 *src/main.rs* 并将代码替换为如下代码，这些代码还不能编译：
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let x = 5;
     println!("The value of x is: {}", x);
@@ -40,7 +40,7 @@ error[E0384]: cannot assign twice to immutable variable `x`
 
 在尝试改变预设为不可变的值时，产生编译时错误是很重要的，因为这种情况可能导致 bug。如果一部分代码假设一个值永远也不会改变，而另一部分代码改变了这个值，第一部分代码就有可能以不可预料的方式运行。不得不承认这种 bug 的起因难以跟踪，尤其是第二部分代码只是 **有时** 会改变值。
 
-Rust 编译器保证，如果声明一个值不会变，它就真的不会变。这意味着当阅读和编写代码时，不需要追踪一个值如何以及哪里可能会被改变，从而使得代码易于推导。
+Rust 编译器保证，如果声明一个值不会变，它就真的不会变。这意味着当阅读和编写代码时，不需要追踪一个值如何和在哪可能会被改变，从而使得代码易于推导。
 
 不过可变性也是非常有用的。变量只是默认不可变；正如在第二章所做的那样，你可以在变量名之前加 `mut` 来使其可变。除了允许改变值之外，`mut` 向读者表明了其他代码将会改变这个变量值的意图。
 
@@ -84,7 +84,7 @@ The value of x is: 6
 
 最后一个区别是，常量只能被设置为常量表达式，而不能是函数调用的结果，或任何其他只能在运行时计算出的值。
 
-这是一个声明常量的例子，它的名称是 `MAX_POINTS`，值是 100,000。（Rust 常量的命名规范是使用下划线分隔的大写字母）：
+这是一个声明常量的例子，它的名称是 `MAX_POINTS`，值是 100,000。（Rust 常量的命名规范是使用下划线分隔的大写字母单词，并且可以在数字字面值中插入下划线来提升可读性）：
 
 ```rust
 const MAX_POINTS: u32 = 100_000;
@@ -133,7 +133,7 @@ let spaces = spaces.len();
 
 这里允许第一个 `spaces` 变量是字符串类型，而第二个 `spaces` 变量，它是一个恰巧与第一个变量同名的崭新变量，是数字类型。隐藏使我们不必使用不同的名字，如 `spaces_str` 和 `spaces_num`；相反，我们可以复用 `spaces` 这个更简单的名字。然而，如果尝试使用 `mut`，将会得到一个编译时错误，如下所示：
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let mut spaces = "   ";
 spaces = spaces.len();
 ```
