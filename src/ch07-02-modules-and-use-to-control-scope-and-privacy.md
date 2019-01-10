@@ -2,7 +2,7 @@
 
 > [ch07-01-mod-and-the-filesystem.md](https://github.com/rust-lang/book/blob/master/src/ch07-02-modules-and-use-to-control-scope-and-privacy.md)
 > <br>
-> commit 820ac357f6cf0e866e5a8e7a9c57dd3e17e9f8ca
+> commit 9d431b25ca6c7200eafe4107eb0765c088923027
 
 Rust 的此部分功能通常被引用为 “模块系统”（“the module system”），不过其包括了一些除模块之外的功能。在本部分我们会讨论：
 
@@ -68,10 +68,10 @@ fn main() {
 
 ```text
 crate
- └── sound
-     └── instrument
-        └── woodwind
-     └── voice
+└── sound
+    ├── instrument
+    │   └── woodwind
+    └── voice
 ```
 
 <span class="caption">示例 7-3: 示例 7-2 中代码的模块树</span>
@@ -270,7 +270,7 @@ mod sound {
     }
 
     fn breathe_in() {
-        // Function body code goes here
+        // 函数体
     }
 }
 ```
@@ -368,6 +368,32 @@ fn main() {
 ```
 
 <span class="caption">示例 7-13: 使用 `use` 将模块引入作用域并使用绝对路径来缩短在模块中调用项所必须的路径</span>
+
+在作用域中增加 `use` 和路径类似于在文件系统中创建软连接（符号连接，symbolic link）。通过在 crate 根增加 `use crate::sound::instrument`，现在 `instrument` 在作用域中就是有效的名称了，如同它被定义于 crate 根一样。现在，既可以使用老的全路径方式取得 `instrument` 模块的项，也可以使用新的通过 `use` 创建的更短的路径。通过 `use` 引入作用域的路径也会检查私有性，同其它路径一样。
+
+如果希望通过 `use` 和相对路径来将项引入作用域，则与直接通过相对路径调用项有些小的区别：不同于从当前作用域的名称开始，`use` 中的路径必须以 `self` 示例 7-14 展示了如何指定相对路径来取得与示例 7-13 中使用绝对路径一样的行为。
+
+<span class="filename">文件名: src/main.rs</span>
+
+```rust
+mod sound {
+    pub mod instrument {
+        pub fn clarinet() {
+            // 函数体
+        }
+    }
+}
+
+use self::sound::instrument;
+
+fn main() {
+    instrument::clarinet();
+    instrument::clarinet();
+    instrument::clarinet();
+}
+```
+
+<span class="caption">示例 7-14: 通过 `use` 和相对路径将模块引入作用域</span>
 
 当指定 `use` 后以 `self` 开头的相对路径在未来可能不是必须的；这是一个开发者正在尽力消除的语言中的不一致。
 
