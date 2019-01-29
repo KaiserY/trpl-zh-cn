@@ -2,7 +2,7 @@
 
 > [ch03-00-common-programming-concepts.md](https://github.com/rust-lang/book/blob/master/src/ch03-00-common-programming-concepts.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 1f49356cb21cbc27bc5359bfe655d26757d4b137
 
 本章介绍一些几乎所有编程语言都有的概念，以及它们在 Rust 中是如何工作的。很多编程语言的核心概念都是共通的，本章中展示的概念都不是 Rust 所特有的，不过我们会在 Rust 上下文中讨论它们，并解释使用这些概念的惯例。
 
