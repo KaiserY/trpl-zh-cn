@@ -2,7 +2,7 @@
 
 > [appendix-01-keywords.md](https://raw.githubusercontent.com/rust-lang/book/master/src/appendix-01-keywords.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f 
+> commit 0e9061cbaf95adfb9f3ed36c6cef4c046f282e86 
 
 下面的列表包含 Rust 中正在使用或者以后会用到的关键字。因此，这些关键字不能被用作标识符（除了 [原始标识符][raw-identifiers]），这包括函数、变量、参数、结构体字段、模块、crate、常量、宏、静态值、属性、类型、trait 或生命周期
 的名字。
@@ -90,7 +90,7 @@ error: expected identifier, found keyword `match`
   |    ^^^^^ expected identifier, found keyword
 ```
 
-可以通过原始标识符编写：
+该错误表示你不能将关键字`match`用作函数标识符。 你可以使用原始标识符将`match`作为函数名称使用：
 
 ```rust
 fn r#match(needle: &str, haystack: &str) -> bool {
@@ -102,8 +102,6 @@ fn main() {
 }
 ```
 
-注意 `r#` 前缀需同时用于函数名和调用。
+此代码编译没有任何错误。注意 `r#` 前缀需同时用于函数名和调用。
 
-#### 动机
-
-出于一些原因这个功能是实用的，不过其主要动机是解决跨版本问题。比如，`try` 在 2015 edition 中不是关键字，而在 2018 edition 则是。所以如果如果用 2015 edition 编写的库中带有 `try` 函数，在 2018 edition 中调用时就需要使用原始标识符。
+原始标识符允许使用你选择的任何单词作为标识符，即使该单词恰好是保留关键字。 此外，原始标识符允许你使用以不同于你的crate使用的Rust版本编写的库。比如，`try` 在 2015 edition 中不是关键字，而在 2018 edition 则是。所以如果如果用 2015 edition 编写的库中带有 `try` 函数，在 2018 edition 中调用时就需要使用原始标识符。有关版本的更多信息，请参见[附录E](https://github.com/KaiserY/trpl-zh-cn/blob/master/src/appendix-05-editions.md).
