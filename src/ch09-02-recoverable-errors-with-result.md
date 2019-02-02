@@ -253,7 +253,7 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<span class="caption">示例 9-6：一个使用 `?` 向调用者返回错误的函数</span>
+<span class="caption">示例 9-7：一个使用 `?` 向调用者返回错误的函数</span>
 
 `Result` 值之后的 `?` 被定义为与示例 9-6 中定义的处理 `Result` 值的 `match` 表达式有着完全相同的工作方式。如果 `Result` 的值是 `Ok`，这个表达式将会返回 `Ok` 中的值而程序将继续执行。如果值是 `Err`，`Err` 中的值将作为整个函数的返回值，就好像使用了 `return` 关键字一样，这样错误值就被传播给了调用者。
 
