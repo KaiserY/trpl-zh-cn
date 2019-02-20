@@ -19,7 +19,7 @@ doc tests do; the `use List` fails if this listing is put within a main -->
 # fn main() {}
 use std::rc::Rc;
 use std::cell::RefCell;
-use List::{Cons, Nil};
+use crate::List::{Cons, Nil};
 
 #[derive(Debug)]
 enum List {
@@ -46,7 +46,7 @@ impl List {
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# use List::{Cons, Nil};
+# use crate::List::{Cons, Nil};
 # use std::rc::Rc;
 # use std::cell::RefCell;
 # #[derive(Debug)]
