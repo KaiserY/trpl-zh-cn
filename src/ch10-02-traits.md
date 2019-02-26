@@ -24,7 +24,7 @@ pub trait Summary {
 }
 ```
 
-<span class="caption">示例 10-12：`Summarizable` trait 定义，它包含由 `summarize` 方法提供的行为</span>
+<span class="caption">示例 10-12：`Summary` trait 定义，它包含由 `summarize` 方法提供的行为</span>
 
 这里使用 `trait` 关键字来声明一个 trait，后面是 trait 的名字，在这个例子中是 `Summary`。在大括号中声明描述实现这个 trait 的类型所需要的行为的方法签名，在这个例子中是 `fn summarize(&self) -> String`。
 
