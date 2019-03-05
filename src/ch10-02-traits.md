@@ -115,7 +115,7 @@ pub trait Summary {
 
 如果想要对 `NewsArticle` 实例使用这个默认实现，而不是定义一个自己的实现，则可以通过 impl Summary for NewsArticle {} 指定一个空的 `impl` 块。
 
-即便选择不再直接为 `NewsArticle` 定义 `summarize` 方法了，因为我们提供了一个默认实现而且 `NewsArticle` 被指定为实现了 `Summary` trait。为此我们仍然可以像这样对 `NewsArticle` 的实例调用 `summarize` 方法：
+虽然我们不再直接为 `NewsArticle` 定义 `summarize` 方法了，但是我们提供了一个默认实现并且指定 `NewsArticle` 实现 `Summary` trait。因此，我们仍然可以对 `NewsArticle` 实例调用 `summarize` 方法，如下所示：
 
 ```rust,ignore
 let article = NewsArticle {
