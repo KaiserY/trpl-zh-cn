@@ -131,11 +131,9 @@ println!("New article available! {}", article.summarize());
 
 这段代码会打印 `New article available! (Read more...)`。
 
-为 `summarize` 创建默认实现并不要求对示例 10-13 中 `Tweet` 上的 `Summary` 实现做任何改变。其原因是重载一个默认实现的语法与实现没有默认实现的 trait 方法一样。
+为 `summarize` 创建默认实现并不要求对示例 10-13 中 `Tweet` 上的 `Summary` 实现做任何改变。其原因是重载一个默认实现的语法与实现没有默认实现的 trait 方法的语法一样。
 
-将 `Summarizable` trait 改变为拥有默认 `summary` 实现并不要求对示例 10-13 中 `Tweet` 和示例 10-14 中 `WeatherForecast` 的 `Summarizable` 实现做任何改变：重载一个默认实现的语法与实现没有默认实现的 trait 方法时完全一样的。
-
-默认实现允许调用相同 trait 中的其他方法，哪怕这些方法没有默认实现。如此，trait 可以实现很多有用的功能而只需实现一小部分特定内容。我们可以选择让`Summary` trait 也拥有一个要求实现的`summarize_author` 方法，接着 `summarize` 方法则提供默认实现并调用 `summarize_author` 方法：
+默认实现允许调用相同 trait 中的其他方法，哪怕这些方法没有默认实现。如此，trait 可以提供很多有用的功能而只需要实现指定一小部分内容。例如，我们可以定义 `Summary` trait，使其具有一个需要实现的 `summarize_author` 方法，然后定义一个 `summarize` 方法，此方法的默认实现调用 `summarize_author` 方法：  
 
 ```rust
 pub trait Summary {
