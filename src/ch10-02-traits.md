@@ -176,7 +176,7 @@ println!("1 new tweet: {}", tweet.summarize());
 
 知道了如何定义 trait 和在类型上实现这些 trait 之后，我们可以探索一下如何使用 trait 来接受多种不同类型的参数。
 
-例如在示例 10-13 中为 `NewsArticle` 和 `Tweet` 类型实现了 `Summary` trait。我们可以定义一个函数 `notify` 来调用其参数 `item` 上的 `summarize` 方法，该参数为一些实现了 `Summary` trait 的方法。为此可以使用 ‘`impl Trait`’ 语法，像这样：
+例如在示例 10-13 中为 `NewsArticle` 和 `Tweet` 类型实现了 `Summary` trait。我们可以定义一个函数 `notify` 来调用其参数 `item` 上的 `summarize` 方法，该参数是实现了 `Summary` trait 的某种类型。为此可以使用 `impl Trait` 语法，像这样：
 
 ```rust,ignore
 pub fn notify(item: impl Summary) {
