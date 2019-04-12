@@ -54,7 +54,7 @@ beta:                * - - - - - - - - *
 stable:                                *
 ```
 
-好的！Rust 1.5 发布了！然而，我们忘了些东西：因为又过了 6 周，我们还需发布 **新版** Rust 的 beta 版，Rust 1.6。所以从 `stable` 生成 `beta` 分支后，新版的 `beta` 分之也再次从 `nightly` 生成：
+好的！Rust 1.5 发布了！然而，我们忘了些东西：因为又过了 6 周，我们还需发布 **新版** Rust 的 beta 版，Rust 1.6。所以从 `beta` 生成 `stable` 分支后，新版的 `beta` 分之也再次从 `nightly` 生成：
 
 ```text
 nightly: * - - * - - * - - * - - * - - * - * - *
