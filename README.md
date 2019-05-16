@@ -8,12 +8,14 @@
 
 PS:
 
-* 对照源码位置：https://github.com/rust-lang/book/tree/master/src
+* 对照源码位置：[https://github.com/rust-lang/book/tree/master/src][source]
 * 每章翻译开头都带有官方链接和 commit hash，若发现与官方不一致，欢迎 Issue 或 PR :)
+
+[source]: https://github.com/rust-lang/book/tree/master/src
 
 ## 静态页面构建与文档撰写
 
-![image](/vuepress_page.png)
+![image](./vuepress_page.png)
 
 ### 构建
 
