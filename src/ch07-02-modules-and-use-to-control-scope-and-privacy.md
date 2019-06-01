@@ -598,7 +598,7 @@ fn main() {
 use std::collections::HashMap;
 ```
 
-这是一个以标注库 crate 名 `std` 开头的绝对路径。
+这是一个以标准库 crate 名 `std` 开头的绝对路径。
 
 ### 嵌套路径来消除大量的 `use` 行
 
