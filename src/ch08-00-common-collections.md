@@ -1,4 +1,4 @@
-# 通用集合类型
+# 常见集合
 
 > [ch08-00-common-collections.md](https://github.com/rust-lang/book/blob/master/src/ch08-00-common-collections.md)
 > <br>
