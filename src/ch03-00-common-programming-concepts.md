@@ -1,4 +1,4 @@
-# 通用编程概念
+# 常见编程概念
 
 > [ch03-00-common-programming-concepts.md](https://github.com/rust-lang/book/blob/master/src/ch03-00-common-programming-concepts.md)
 > <br>

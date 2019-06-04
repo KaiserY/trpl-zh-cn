@@ -12,7 +12,7 @@
 
 - [猜猜看游戏教程](ch02-00-guessing-game-tutorial.md)
 
-- [通用编程概念](ch03-00-common-programming-concepts.md)
+- [常见编程概念](ch03-00-common-programming-concepts.md)
     - [变量与可变性](ch03-01-variables-and-mutability.md)
     - [数据类型](ch03-02-data-types.md)
     - [函数如何工作](ch03-03-how-functions-work.md)
@@ -36,11 +36,11 @@
 
 ## 基本 Rust 技能
 
-- [包、crate 与 模块](ch07-00-packages-crates-and-modules.md)
+- [包、crate 与模块](ch07-00-packages-crates-and-modules.md)
     - [包和 crate 用来创建库和二进制项目](ch07-01-packages-and-crates-for-making-libraries-and-executables.md)
     - [模块系统用来控制作用域和私有性](ch07-02-modules-and-use-to-control-scope-and-privacy.md)
 
-- [通用集合类型](ch08-00-common-collections.md)
+- [常见集合](ch08-00-common-collections.md)
     - [vector](ch08-01-vectors.md)
     - [字符串](ch08-02-strings.md)
     - [哈希 map](ch08-03-hash-maps.md)
