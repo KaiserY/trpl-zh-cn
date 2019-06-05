@@ -196,7 +196,7 @@ pub fn notify<T: Summary>(item: T) {
 }
 ```
 
-这与之前的例子相同，不过稍微冗长了一些。trait bound 与泛型参数声明在一起，位于尖括号中分号的后面。因为 `T` 的 trait bound，我们可以传递任何 `NewsArticle` 或 `Tweet` 的实例调用 `notify`。用任何其他类型，比如 `String` 或 `i32`，调用该函数的代码将不能编译，因为这些类型没有实现 `Summary`。
+这与之前的例子相同，不过稍微冗长了一些。trait bound 与泛型参数声明在一起，位于尖括号中的冒号后面。因为 `T` 的 trait bound，我们可以传递任何 `NewsArticle` 或 `Tweet` 的实例调用 `notify`。用任何其他类型，比如 `String` 或 `i32`，调用该函数的代码将不能编译，因为这些类型没有实现 `Summary`。
 
 何时应该使用这种形式而不是 `impl Trait` 呢？虽然 `impl Trait` 适用于短小的例子，trait bound 则适用于更复杂的场景。例如，比如需要获取两个实现了 `Summary` 的类型：
 
