@@ -257,7 +257,7 @@ fn breathe_in() {
 
 `clarinet` 函数位于 `instrument` 模块中，所以可以使用 `super` 进入 `instrument` 的父模块，也就是根 `crate`。从这里可以找到 `breathe_in`。成功！
 
-你可能想要使用 `super` 开头的相对路而不是以 `crate` 开头的绝对路径的原因是  `super` 可能会使修改有着不同模块层级结构的代码变得更容易，如果定义项和调用项的代码被一同移动的话。例如，如果我们决定将 `instrument` 模块和 `breathe_in` 函数放入 `sound` 模块中，这时我们只需增加 `sound` 模块即可，如示例 7-10 所示。
+你可能想要使用 `super` 开头的相对路径而不是以 `crate` 开头的绝对路径的原因是  `super` 可能会使修改有着不同模块层级结构的代码变得更容易，如果定义项和调用项的代码被一同移动的话。例如，如果我们决定将 `instrument` 模块和 `breathe_in` 函数放入 `sound` 模块中，这时我们只需增加 `sound` 模块即可，如示例 7-10 所示。
 
 <span class="filename">文件名: src/lib.rs</span>
 
