@@ -142,7 +142,7 @@ message-body
 
 请求行接下来的部分是 */*，它代表客户端请求的 **统一资源标识符**（*Uniform Resource Identifier*，*URI*） —— URI 大体上类似，但也不完全类似于 URL（**统一资源定位符**，*Uniform Resource Locators*）。URI 和 URL 之间的区别对于本章的目的来说并不重要，不过 HTTP 规范使用术语 URI，所以这里可以简单的将 URL 理解为 URI。
 
-最后，是客户端使用的 HTTP 版本，接着请求行以一个 **CRLF 序列**（CRLF 是**回车**，*carriage return* 和 **换行**，*line feed* 的缩写，这些术语来自打字机时代！）结尾。结尾。CRLF 序列也可以写作 `\r\n`：`\r` 是回车而 `\n` 是换行。CRLF 序列将请求行与其余的请求数据分开。注意当 CRLF 被打印时，会看到开始了一个新行而不是 `\r\n`。
+最后一部分是客户端使用的HTTP版本，然后请求行以 **CRLF序列** （CRLF代表回车和换行，*carriage return line feed*，这是打字机时代的术语！）结束。CRLF序列也可以写成`\r\n`，其中`\r`是回车符，`\n`是换行符。 CRLF序列将请求行与其余请求数据分开。 请注意，打印CRLF时，我们会看到一个新行，而不是`\r\n`。
 
 观察目前运行程序所接收到的数据的请求行，可以看到 `GET` 是 method，*/* 是请求 URI，而 `HTTP/1.1` 是版本。
 
