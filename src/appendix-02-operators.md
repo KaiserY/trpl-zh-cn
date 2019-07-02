@@ -22,7 +22,7 @@
 | `&` | `&expr`, `&mut expr` | 借用 | |
 | `&` | `&type`, `&mut type`, `&'a type`, `&'a mut type` | 借用指针类型 |  |
 | `&` | `expr & expr` | 按位与 | `BitAnd` |
-| `&=` | `var &= expr` | 按位与与及赋值 | `BitAndAssign` |
+| `&=` | `var &= expr` | 按位与及赋值 | `BitAndAssign` |
 | `&&` | `expr && expr` | 逻辑与 |  |
 | `*` | `expr * expr` | 算术乘法 | `Mul` |
 | `*=` | `var *= expr` | 算术乘法与赋值 | `MulAssign` |
