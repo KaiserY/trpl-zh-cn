@@ -2,7 +2,7 @@
 
 > [ch14-03-cargo-workspaces.md](https://github.com/rust-lang/book/blob/master/src/ch14-03-cargo-workspaces.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit c084bdd9ee328e7e774df19882ccc139532e53d8
 
 第十二章中，我们构建一个包含二进制 crate 和库 crate 的包。你可能会发现，随着项目开发的深入，库 crate 持续增大，而你希望将其进一步拆分成多个库 crate。对于这种情况，Cargo 提供了一个叫 **工作空间**（*workspaces*）的功能，它可以帮助我们管理多个相关的协同开发的包。
 
@@ -106,7 +106,7 @@ pub fn add_one(x: i32) -> i32 {
 add-one = { path = "../add-one" }
 ```
 
-工作空间中的 crate 不必相互依赖，所以仍需显式地表明工作空间中 crate 的依赖关系。
+cargo并不假定工作空间中的Crates会相互依赖，所以需要明确表明工作空间中 crate 的依赖关系。
 
 接下来，在 `adder` crate 中使用 `add-one` crate 的函数 `add_one`。打开 *adder/src/main.rs* 在顶部增加一行 `use` 将新 `add-one` 库 crate 引入作用域。接着修改 `main` 函数来调用 `add_one` 函数，如示例 14-7 所示：
 
@@ -169,7 +169,7 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 10.18 secs
 ```
 
-现在顶级的 *Cargo.lock* 包含了 `add-one` 的 `rand` 依赖的信息。然而，即使 `rand` 被用于工作空间的某处，也不能在其他 crate 中使用它，除非也在他们的 *Cargo.toml* 中加入 `rand`。例如，如果在顶级的 `adder` crate 的 *adder/src/main.rs* 中增加 `use rand;`，会得到一个错误：
+现在顶级的 *Cargo.lock* 包含了 `add-one` 的 `rand` 依赖的信息。然而，即使 `rand` 被用于工作空间的某处，也不能在其他 crate 中使用它，除非也在他们的 *Cargo.toml* 中加入 `rand`。例如，如果在顶级的 `adder` crate 的 *adder/src/main.rs* 中添加 `extern crate rand;`，会得到一个错误：
 
 ```text
 $ cargo build
@@ -255,7 +255,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
 输出显示了 `cargo test` 只运行了 `add-one` crate 的测试而没有运行 `adder` crate 的测试。
 
-如果你选择向 *https://crates.io/* 发布工作空间中的 crate，每一个工作空间中的 crate 将会单独发布。`cargo publish` 命令并没有 `--all` 或者 `-p` 参数，所以必须进入每一个 crate 的目录并运行 `cargo publish` 来发布工作空间中的每一个 crate。
+如果你选择向 *https://crates.io/* 发布工作空间中的 crate，每一个工作空间中的 crate 需要单独发布。`cargo publish` 命令并没有 `--all` 或者 `-p` 参数，所以必须进入每一个 crate 的目录并运行 `cargo publish` 来发布工作空间中的每一个 crate。
 
 现在尝试以类似 `add-one` crate 的方式向工作空间增加 `add-two` crate 来作为更多的练习！
 
