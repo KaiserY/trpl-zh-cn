@@ -46,10 +46,10 @@ $ export PATH="$HOME/.cargo/bin:$PATH"
 
 ### 在 Windows 上安装 `rustup`
 
-在 Windows 上，前往 [https://www.rust-lang.org/install.html][install] 并按照说明安装 Rust。在安装过程的某个步骤，你会收到一个信息说明为什么需要安装 Visual Studio 2013 或更新版本的 C++ build tools。获取这些 build tools 最方便的方法是安装 [Build Tools for Visual Studio 2017][visualstudio]。这个工具在 “Other Tools and Frameworks” 部分。
+在 Windows 上，前往 [https://www.rust-lang.org/install.html][install] 并按照说明安装 Rust。在安装过程的某个步骤，你会收到一个信息说明为什么需要安装 Visual Studio 2013 或更新版本的 C++ build tools。获取这些 build tools 最方便的方法是安装 [Build Tools for Visual Studio 2019][visualstudio]。这个工具在 “Other Tools and Frameworks” 部分。
 
 [install]: https://www.rust-lang.org/install.html
-[visualstudio]: https://www.visualstudio.com/downloads/
+[visualstudio]: https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2019
 
 本书的余下部分会使用能同时运行于 *cmd.exe* 和 PowerShell 的命令。如果存在特定差异，我们会解释使用哪一个。
 
