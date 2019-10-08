@@ -262,7 +262,7 @@ fn main() {
         }
     };
 
-    assert_eq!(result, 20);
+    println!("The result is {}", result);
 }
 ```
 
