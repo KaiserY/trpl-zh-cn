@@ -2,7 +2,7 @@
 
 > [ch04-03-slices.md](https://github.com/rust-lang/book/blob/master/src/ch04-03-slices.md)
 > <br>
-> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
+> commit 6678e8221a9e7d79bffe47749bf63978b071c709
 
 另一个没有所有权的数据类型是 *slice*。slice 允许你引用集合中一段连续的元素序列，而不用引用整个集合。
 
@@ -227,7 +227,7 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
    |                                       ---- borrow later used here
 ```
 
-回忆一下借用规则，当拥有某值的不可变引用时，就不能再获取一个可变引用。因为 `clear` 需要清空 `String`，它尝试获取一个可变引用，它失败了。Rust 不仅使得我们的 API 简单易用，也在编译时就消除了一整类的错误！
+回忆一下借用规则，当拥有某值的不可变引用时，就不能再获取一个可变引用。因为 `clear` 需要清空 `String`，它尝试获取一个可变引用。Rust不允许这样做，因而编译失败。Rust 不仅使得我们的 API 简单易用，也在编译时就消除了一整类的错误！
 
 #### 字符串字面值就是 slice
 
