@@ -1,4 +1,4 @@
-# 路径来引用模块树中的项
+## 路径来引用模块树中的项
 
 > [ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md](https://github.com/rust-lang/book/blob/master/src/ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md)
 > <br>
@@ -71,7 +71,7 @@ Rust中默认所有项（函数、方法、结构体、枚举、模块和常量�
 
 Rust 选择以这种方式来实现模块系统功能，因此默认隐藏内部实现细节。这样一来，你您就知道可以更改内部代码的哪些部分而不会破坏外部代码。你还可以通过使用`pub`关键字来创建公共项，使子模块的内部部分暴露给上级模块。
 
-## 使用`pub`关键字暴露路径
+### 使用`pub`关键字暴露路径
 
 让我们回头看一下示例 7-4 的错误，它告诉我们`hosting`模块是私有的。我们想让父模块中的`eat_at_restaurant`函数可以访问子模块中的`add_to_waitlist`函数，因此我们使用`pub`关键字来标记`hosting`模块，如示例 7-5 所示。
 
@@ -150,7 +150,7 @@ pub fn eat_at_restaurant() {
 
 在相对路径，其逻辑与绝对路径相同，除了第一步：不同于从 crate 根开始，路径从 `front_of_house` 开始。`front_of_house` 模块与 `eat_at_restaurant` 定义于同一模块，所以从 `eat_at_restaurant` 中开始定义的该模块相对路径是有效的。接下来因为 `hosting` 和 `add_to_waitlist` 被标记为 `pub`，路径其余的部分也是有效的，因此函数调用也是有效的！
 
-## 使用 `super` 起始的相对路径
+### 使用 `super` 起始的相对路径
 
 我们还可以使用 `super` 开头来构建从父模块开始的相对路径。这么做类似于文件系统中以 `..` 开头的语法。我们为什么要这样做呢？
 
@@ -176,7 +176,7 @@ mod back_of_house {
 
 `fix_incorrect_order` 函数在 `back_of_house` 模块中，所以我们可以使用 `super` 进入 `back_of_house` 父模块，也就是本例中的 `crate` 根。在这里，我们可以找到`serve_order`。成功！我们认为`back_of_house`模块和`server_order`函数之间可能具有某种关联关系，并且，如果我们要重新组织这个 crate 的模块树，需要一起移动它们。因此，我们使用 `super` ，这样一来，如果这些代码被移动到了其他模块，我们只需要更新很少的代码。
 
-## 创建公有的结构体和枚举
+### 创建公有的结构体和枚举
 
 我们还可以使用 `pub` 来设计公有的结构体和枚举，不过有一些额外的细节需要注意。如果我们在一个结构体定义的前面使用了 `pub` ，这个结构体会变成公有的，但是这个结构体的字段仍然是私有的。我们可以根据情况决定每个字段是否公有。在示例 7-9 中，我们定义了一个公有结构体 `back_of_hous:Breakfast`，其中有一个公有字段 `toast` 和私有字段 `seasonal_fruit`。这个例子模拟的情况是，在一家餐馆中，顾客可以选择随餐附赠的面包类型，但是厨师会根据季节和库存情况来决定随餐搭配的水果。餐馆可用的水果变化是很快的，所以顾客不能选择水果，甚至无法看到他们将会得到什么水果。
 
