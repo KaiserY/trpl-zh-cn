@@ -1,4 +1,4 @@
-# 定义模块来控制作用域与私有性
+## 定义模块来控制作用域与私有性
 
 > [ch07-02-defining-modules-to-control-scope-and-privacy.md](https://github.com/rust-lang/book/blob/master/src/ch07-02-defining-modules-to-control-scope-and-privacy.md)
 > <br>

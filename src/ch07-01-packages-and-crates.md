@@ -1,4 +1,4 @@
-# 包和 crate
+## 包和 crate
 
 > [ch07-01-packages-and-crates.md](https://github.com/rust-lang/book/blob/master/src/ch07-01-packages-and-crates.md)
 > <br>
