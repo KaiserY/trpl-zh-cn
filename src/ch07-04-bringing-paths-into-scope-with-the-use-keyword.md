@@ -1,6 +1,6 @@
 ## 使用 `use` 关键字将名称引入作用域
 
-> [使用 `use` 关键字将名称引入作用域](https://github.com/rust-lang/book/blob/master/src/ch07-04-bringing-paths-into-scope-with-the-use-keyword.md)
+> [ch07-04-bringing-paths-into-scope-with-the-use-keyword.md](https://github.com/rust-lang/book/blob/master/src/ch07-04-bringing-paths-into-scope-with-the-use-keyword.md)
 > <br>
 > commit 6d3e76820418f2d2bb203233c61d90390b5690f1
 
