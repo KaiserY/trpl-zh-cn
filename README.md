@@ -43,8 +43,8 @@ vuepress dev ./src
 
 ## 社区资源
 
-- Rust语言中文社区：[https://rust.cc/](https://rust.cc/)
-- Rust 中文 Wiki：[https://wiki.rust-china.org/](https://wiki.rust-china.org/)
+- Rust语言中文社区：<https://rust.cc/>
+- Rust 中文 Wiki：<https://wiki.rust-china.org/>
 - Rust编程语言社区主群：303838735
 - Rust 水群：253849562
 
@@ -52,6 +52,7 @@ vuepress dev ./src
 
 本翻译主要采用 [mdBook](https://github.com/rust-lang-nursery/mdBook) 格式。同时支持 [GitBook](https://github.com/GitbookIO/gitbook)，但会缺失部分功能，如一些代码没有语法高亮。
 
-本翻译加速查看站点[上海站点http://rustdoc.saigao.fun](http://rustdoc.saigao.fun)（已失效），[深圳站点http://120.78.128.153/rustbook](http://120.78.128.153/rustbook)
+本翻译加速查看站点有：
+ - 深圳站点：<http://120.78.128.153/rustbook>
 
-[GitBook.com](https://www.gitbook.com/) 地址：[https://legacy.gitbook.com/book/kaisery/trpl-zh-cn/details](https://legacy.gitbook.com/book/kaisery/trpl-zh-cn/details)
+[GitBook.com](https://www.gitbook.com/) 地址：<https://legacy.gitbook.com/book/kaisery/trpl-zh-cn/details>
