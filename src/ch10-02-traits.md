@@ -243,7 +243,7 @@ fn some_function<T, U>(t: T, u: U) -> i32
 
 这个函数签名就显得不那么杂乱，函数名、参数列表和返回值类型都离得很近，看起来类似没有很多 trait bounds 的函数。
 
-### 返回 trait
+### 返回实现了 trait 的类型
 
 也可以在返回值中使用 `impl Trait` 语法，来返回实现了某个 trait 的类型：
 
