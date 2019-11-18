@@ -2,7 +2,7 @@
 
 > [ch01-02-hello-world.md](https://github.com/rust-lang/book/blob/master/src/ch01-02-hello-world.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit f63a103270ec8416899675a9cdb1c5cf6d77a498
 
 既然安装好了 Rust，我们来编写第一个 Rust 程序。当学习一门新语言的时候，使用该语言在屏幕上打印 `Hello, world!` 是一项传统，我们将沿用这一传统！
 
@@ -12,9 +12,9 @@
 
 首先创建一个存放 Rust 代码的目录。Rust 并不关心代码的存放位置，不过对于本书的练习和项目来说，我们建议你在 home 目录中创建 *projects* 目录，并将你的所有项目存放在这里。
 
-打开终端并输入如下命令创建 *projects* 目录，并在 *projects* 目录中为 Hello, world! 项目创建一个目录。
+打开终端并输入如下命令创建 *projects* 目录，并在 *projects* 目录中为 “Hello, world!” 项目创建一个目录。
 
-对于 Linux 和 macOS，输入：
+对于 Linux、macOS 和 Windows PowerShell，输入：
 
 ```text
 $ mkdir ~/projects
@@ -28,15 +28,6 @@ $ cd hello_world
 ```cmd
 > mkdir "%USERPROFILE%\projects"
 > cd /d "%USERPROFILE%\projects"
-> mkdir hello_world
-> cd hello_world
-```
-
-对于 Windows PowerShell，输入：
-
-```powershell
-> mkdir $env:USERPROFILE\projects
-> cd $env:USERPROFILE\projects
 > mkdir hello_world
 > cd hello_world
 ```
@@ -73,13 +64,13 @@ Hello, world!
 Hello, world!
 ```
 
-不管使用何种操作系统，终端应该打印字符串 `Hello, world!`。如果没有看到这些输出，回到 “故障排除” 部分查找寻求帮助的方法。
+不管使用何种操作系统，终端应该打印字符串 `Hello, world!`。如果没有看到这些输出，回到安装部分的 [“故障排除”][troubleshooting] 小节查找有帮助的方法。
 
 如果 `Hello, world!` 出现了，恭喜你！你已经正式编写了一个 Rust 程序。现在你成为一名 Rust 程序员，欢迎！
 
-### 分析 Rust 程序
+### 分析这个 Rust 程序
 
-现在，让我们回过头来仔细看看 Hello, world! 程序中到底发生了什么。这是第一块拼图：
+现在，让我们回过头来仔细看看 “Hello, world!” 程序中到底发生了什么。这是第一块拼图：
 
 ```rust
 fn main() {
@@ -119,26 +110,17 @@ $ rustc main.rs
 
 如果你有 C 或 C++ 背景，就会发现这与 `gcc` 和 `clang` 类似。编译成功后，Rust 会输出一个二进制的可执行文件。
 
-在 Linux、macOS 或 Windows 的 PowerShell 上，在 shell 中输入 `ls` 命令也可以看见这个可执行文件，如下：
+在 Linux、macOS 或 Windows 的 PowerShell 上，在 shell 中输入 `ls` 命令可以看见这个可执行文件。在 Linux 和 macOS，你会看到两个文件。在 Windows PowerShell 中，你会看到同使用 CMD 相同的三个文件。
 
 ```text
-> ls
-
-
-    Directory: Path:\to\the\project
-
-
-Mode                LastWriteTime         Length Name
-----                -------------         ------ ----
--a----         6/1/2018   7:31 AM         137728 main.exe
--a----         6/1/2018   7:31 AM        1454080 main.pdb
--a----         6/1/2018   7:31 AM             14 main.rs
+$ ls
+main  main.rs
 ```
 
 在 Windows 的 CMD 上，则输入如下内容：
 
 ```cmd
-> dir /B %= /B 参数表示只显示文件名 =%
+> dir /B %= the /B option says to only show the file names =%
 main.exe
 main.pdb
 main.rs
@@ -150,8 +132,10 @@ main.rs
 $ ./main # Windows 是 .\main.exe
 ```
 
-如果 *main.rs* 是上文所述的 Hello, world! 程序，它将会在终端上打印 `Hello, world!`。
+如果 *main.rs* 是上文所述的 “Hello, world!” 程序，它将会在终端上打印 `Hello, world!`。
 
 如果你更熟悉动态语言，如 Ruby、Python 或 JavaScript，则可能不习惯将编译和运行分为两个单独的步骤。Rust 是一种 **预编译静态类型**（*ahead-of-time compiled*）语言，这意味着你可以编译程序，并将可执行文件送给其他人，他们甚至不需要安装 Rust 就可以运行。如果你给他人一个 *.rb*、*.py* 或 *.js* 文件，他们需要先分别安装 Ruby，Python，JavaScript 实现（运行时环境，VM）。不过在这些语言中，只需要一句命令就可以编译和运行程序。这一切都是语言设计上的权衡取舍。
 
 仅仅使用 `rustc` 编译简单程序是没问题的，不过随着项目的增长，你可能需要管理你项目的方方面面，并让代码易于分享。接下来，我们要介绍一个叫做 Cargo 的工具，它会帮助你编写真实世界中的 Rust 程序。
+
+[troubleshooting]: ch01-01-installation.html#troubleshooting
