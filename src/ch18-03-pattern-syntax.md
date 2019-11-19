@@ -2,7 +2,7 @@
 
 > [ch18-03-pattern-syntax.md](https://github.com/rust-lang/book/blob/master/src/ch18-03-pattern-syntax.md)
 > <br>
-> commit c231bf7e49446e78b147a814323d8f25013a605b
+> commit 158c5eb79750d497fe92298a8bee8351c7f3606a
 
 通过本书我们已领略过许多不同类型模式的例子。本节会统一列出所有在模式中有效的语法并且会阐述你为什么可能会希望使用其中的每一个。
 
