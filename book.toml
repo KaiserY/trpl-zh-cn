@@ -1,6 +1,6 @@
 [book]
 title = "Rust 程序设计语言 简体中文版"
-author = "Steve Klabnik 和 Carol Nichols，以及来自 Rust 社区的贡献，KaiserY 以及 Rust 中文社区翻译"
+author = "Steve Klabnik 和 Carol Nichols，以及来自 Rust 社区的贡献（Rust 中文社区翻译）"
 description = "Rust 程序设计语言 简体中文版"
 
 [build-dir]

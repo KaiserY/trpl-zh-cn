@@ -2,7 +2,7 @@
 
 > [ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/master/src/ch02-00-guessing-game-tutorial.md)
 > <br>
-> commit 6d3e76820418f2d2bb203233c61d90390b5690f1
+> commit c427a676393d001edc82f1a54a3b8026abcf9690
 
 让我们一起动手完成一个项目，来快速上手 Rust！本章将介绍 Rust 中一些常用概念，并通过真实的程序来展示如何运用它们。你将会学到 `let`、`match`、方法、关联函数、外部 crate 等知识！后续章节会深入探讨这些概念的细节。在这一章，我们将做基础练习。
 
@@ -126,7 +126,7 @@ let mut guess = String::new();
 let foo = bar;
 ```
 
-这行代码新建了一个叫做 `foo` 的变量并把它绑定到值 `bar` 上。在 Rust 中，变量默认是不可变的。我们将会在第三章的 “变量与可变性” 部分详细讨论这个概念。下面的例子展示了如何在变量名前使用 `mut` 来使一个变量可变：
+这行代码新建了一个叫做 `foo` 的变量并把它绑定到值 `bar` 上。在 Rust 中，变量默认是不可变的。我们将会在第三章的 [“变量与可变性”][variables-and-mutability] 部分详细讨论这个概念。下面的例子展示了如何在变量名前使用 `mut` 来使一个变量可变：
 
 ```rust,ignore
 let foo = 5; // 不可变
@@ -351,7 +351,7 @@ rand = "0.6.0"
 
 ### 生成一个随机数
 
-你已经把 `rand` crate 添加到 *Cargo.toml* 了，让我们开始 **使用** `rand` 吧。下一步是更新 *src/main.rs*，如示例 2-3 所示。
+你已经把 `rand` crate 添加到 *Cargo.toml* 了，让我们开始使用 `rand`。下一步是更新 *src/main.rs*，如示例 2-3 所示。
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -456,7 +456,7 @@ error[E0308]: mismatched types
   --> src/main.rs:23:21
    |
 23 |     match guess.cmp(&secret_number) {
-   |                     ^^^^^^^^^^^^^^ expected struct `std::string::String`, found integral variable
+   |                     ^^^^^^^^^^^^^^ expected struct `std::string::String`, found integer
    |
    = note: expected type `&std::string::String`
    = note:    found type `&{integer}`
@@ -507,7 +507,7 @@ let guess: u32 = guess.trim().parse()
 
 [parse]: https://doc.rust-lang.org/std/primitive.str.html#method.parse
 
-`parse` 调用很容易产生错误。例如，字符串中包含 `A👍%`，就无法将其转换为一个数字。因此，`parse` 方法返回一个 `Result` 类型。像之前 “使用 `Result` 类型来处理潜在的错误” 讨论的 `read_line` 方法那样，再次按部就班的用 `expect` 方法处理即可。如果 `parse` 不能从字符串生成一个数字，返回一个 `Result` 的 `Err` 成员时，`expect` 会使游戏崩溃并打印附带的信息。如果 `parse` 成功地将字符串转换为一个数字，它会返回 `Result` 的 `Ok` 成员，然后 `expect` 会返回 `Ok` 值中的数字。
+`parse` 调用很容易产生错误。例如，字符串中包含 `A👍%`，就无法将其转换为一个数字。因此，`parse` 方法返回一个 `Result` 类型。像之前 [“使用 `Result` 类型来处理潜在的错误”](#handling-potential-failure-with-the-result-type) 讨论的 `read_line` 方法那样，再次按部就班的用 `expect` 方法处理即可。如果 `parse` 不能从字符串生成一个数字，返回一个 `Result` 的 `Err` 成员时，`expect` 会使游戏崩溃并打印附带的信息。如果 `parse` 成功地将字符串转换为一个数字，它会返回 `Result` 的 `Ok` 成员，然后 `expect` 会返回 `Ok` 值中的数字。
 
 现在让我们运行程序！
 
@@ -555,7 +555,7 @@ Too big!
 
 如上所示，我们将提示用户猜测之后的所有内容放入了循环。确保 loop 循环中的代码多缩进四个空格，再次运行程序。注意这里有一个新问题，因为程序忠实地执行了我们的要求：永远地请求另一个猜测，用户好像无法退出啊！
 
-用户总能使用 <span class="keystroke">ctrl-c</span> 终止程序。不过还有另一个方法跳出无限循环，就是 “比较猜测与秘密数字” 部分提到的 `parse`：如果用户输入的答案不是一个数字，程序会崩溃。用户可以利用这一点来退出，如下所示：
+用户总能使用 <span class="keystroke">ctrl-c</span> 终止程序。不过还有另一个方法跳出无限循环，就是 [“比较猜测与秘密数字”](#comparing-the-guess-to-the-secret-number) 部分提到的 `parse`：如果用户输入的答案不是一个数字，程序会崩溃。用户可以利用这一点来退出，如下所示：
 
 ```text
 $ cargo run
@@ -587,7 +587,7 @@ error: Process didn't exit successfully: `target/debug/guess` (exit code: 101)
 
 ### 猜测正确后退出
 
-让我们增加一个 `break`，在用户猜对时退出游戏：
+让我们增加一个 `break` 语句，在用户猜对时退出游戏：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -710,3 +710,6 @@ fn main() {
 此时此刻，你顺利完成了猜猜看游戏。恭喜！
 
 本项目通过动手实践，向你介绍了 Rust 新概念：`let`、`match`、方法、关联函数、使用外部 crate 等等，接下来的几章，你会继续深入学习这些概念。第三章介绍大部分编程语言都有的概念，比如变量、数据类型和函数，以及如何在 Rust 中使用它们。第四章探索所有权（ownership），这是一个 Rust 同其他语言大不相同的功能。第五章讨论结构体和方法的语法，而第六章侧重解释枚举。
+
+[variables-and-mutability]:
+ch03-01-variables-and-mutability.html#variables-and-mutability

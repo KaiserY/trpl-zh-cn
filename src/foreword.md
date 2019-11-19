@@ -1,8 +1,8 @@
 # 前言
 
-> [foreword.md](https://github.com/rust-lang/book/blob/master/second-edition/src/foreword.md)
+> [foreword.md](https://github.com/rust-lang/book/blob/master/src/foreword.md)
 > <br>
-> commit 5e085bd1add34aec03416e891751552b439dde52
+> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 虽然不是那么明显，但 Rust 程序设计语言的本质在于 **赋能**（*empowerment*）：无论你现在编写的是何种代码，Rust 能让你在更为广泛的编程领域走得更远，写出自信。
 
