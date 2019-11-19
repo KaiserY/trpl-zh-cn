@@ -40,7 +40,7 @@
 - [使用包、Crate 和模块管理不断增长的项目](ch07-00-managing-growing-projects-with-packages-crates-and-modules.md)
     - [包和 crate](ch07-01-packages-and-crates.md)
     - [定义模块来控制作用域与私有性](ch07-02-defining-modules-to-control-scope-and-privacy.md)
-    - [路径来引用模块树中的项](ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md)
+    - [路径用于引用模块树中的项](ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md)
     - [使用 `use` 关键字将名称引入作用域](ch07-04-bringing-paths-into-scope-with-the-use-keyword.md)
     - [将模块分割进不同文件](ch07-05-separating-modules-into-different-files.md)
 

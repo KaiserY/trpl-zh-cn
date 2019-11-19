@@ -2,7 +2,7 @@
 
 > [ch03-01-variables-and-mutability.md](https://github.com/rust-lang/book/blob/master/src/ch03-01-variables-and-mutability.md)
 > <br>
-> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
+> commit d69b1058c660abfe1d274c58d39c06ebd5c96c47
 
 第二章中提到过，变量默认是不可改变的（immutable）。这是推动你以充分利用 Rust 提供的安全性和简单并发性来编写代码的众多方式之一。不过，你仍然可以使用可变变量。让我们探讨一下 Rust 拥抱不可变性的原因及方法，以及何时你不想使用不可变性。
 
@@ -78,7 +78,7 @@ The value of x is: 6
 
 首先，不允许对常量使用 `mut`。常量不光默认不能变，它总是不能变。
 
-声明常量使用 `const` 关键字而不是 `let`，并且 *必须* 注明值的类型。在下一部分，“数据类型” 中会介绍类型和类型注解，现在无需关心这些细节，记住总是标注类型即可。
+声明常量使用 `const` 关键字而不是 `let`，并且 *必须* 注明值的类型。在下一部分，[“数据类型”][data-types] 中会介绍类型和类型注解，现在无需关心这些细节，记住总是标注类型即可。
 
 常量可以在任何作用域中声明，包括全局作用域，这在一个值需要被很多部分的代码用到时很有用。
 
@@ -96,7 +96,7 @@ const MAX_POINTS: u32 = 100_000;
 
 ### 隐藏（Shadowing）
 
-正如在第二章猜猜看游戏的 “比较猜测的数字和秘密数字” 中所讲，我们可以定义一个与之前变量同名的新变量，而新变量会 **隐藏** 之前的变量。Rustacean 们称之为第一个变量被第二个 **隐藏** 了，这意味着使用这个变量时会看到第二个值。可以用相同变量名称来隐藏一个变量，以及重复使用 `let` 关键字来多次隐藏，如下所示：
+正如在第二章猜猜看游戏的 [“比较猜测的数字和秘密数字”][comparing-the-guess-to-the-secret-number] 中所讲，我们可以定义一个与之前变量同名的新变量，而新变量会 **隐藏** 之前的变量。Rustacean 们称之为第一个变量被第二个 **隐藏** 了，这意味着使用这个变量时会看到第二个值。可以用相同变量名称来隐藏一个变量，以及重复使用 `let` 关键字来多次隐藏，如下所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -152,3 +152,7 @@ error[E0308]: mismatched types
 ```
 
 现在我们已经了解了变量如何工作，让我们看看变量可以拥有的更多数据类型。
+
+[comparing-the-guess-to-the-secret-number]:
+ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
+[data-types]: ch03-02-data-types.html#data-types

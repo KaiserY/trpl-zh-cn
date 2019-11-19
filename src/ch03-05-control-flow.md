@@ -2,7 +2,7 @@
 
 > [ch03-05-control-flow.md](https://github.com/rust-lang/book/blob/master/src/ch03-05-control-flow.md)
 > <br>
-> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
+> commit af34ac954a6bd7fc4a8bbcc5c9685e23c5af87da
 
 根据条件是否为真来决定是否执行某些代码，以及根据条件是否为真来重复运行一段代码是大部分编程语言的基本组成部分。Rust 代码中最常见的用来控制执行流的结构是 `if` 表达式和循环。
 
@@ -28,7 +28,7 @@ fn main() {
 
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 
-所有的 `if` 表达式都以 `if` 关键字开头，其后跟一个条件。在这个例子中，条件检查变量 `number` 的值是否小于 5。在条件为真时希望执行的代码块位于紧跟条件之后的大括号中。`if` 表达式中与条件关联的代码块有时被叫做 *arms*，就像第二章 “比较猜测的数字和秘密数字” 部分中讨论到的 `match` 表达式中的分支一样。
+所有的 `if` 表达式都以 `if` 关键字开头，其后跟一个条件。在这个例子中，条件检查变量 `number` 的值是否小于 5。在条件为真时希望执行的代码块位于紧跟条件之后的大括号中。`if` 表达式中与条件关联的代码块有时被叫做 *arms*，就像第二章 [“比较猜测的数字和秘密数字”][comparing-the-guess-to-the-secret-number] 部分中讨论到的 `match` 表达式中的分支一样。
 
 也可以包含一个可选的 `else` 表达式来提供一个在条件为假时应当执行的代码块，这里我们就这么做了。如果不提供 `else` 表达式并且条件为假时，程序会直接忽略 `if` 代码块并继续执行下面的代码。
 
@@ -42,7 +42,7 @@ $ cargo run
 condition was true
 ```
 
-尝试改变 `number` 的值使条件为假时看看会发生什么：
+尝试改变 `number` 的值使条件为 `false` 时看看会发生什么：
 
 ```rust,ignore
 let number = 7;
@@ -79,7 +79,7 @@ error[E0308]: mismatched types
  --> src/main.rs:4:8
   |
 4 |     if number {
-  |        ^^^^^^ expected bool, found integral variable
+  |        ^^^^^^ expected bool, found integer
   |
   = note: expected type `bool`
              found type `{integer}`
@@ -198,7 +198,7 @@ error[E0308]: if and else have incompatible types
 6 | |     } else {
 7 | |         "six"
 8 | |     };
-  | |_____^ expected integral variable, found &str
+  | |_____^ expected integer, found &str
   |
   = note: expected type `{integer}`
              found type `&str`
@@ -244,7 +244,7 @@ again!
 
 符号 `^C` 代表你在这按下了<span class="keystroke">ctrl-c</span>。在 `^C` 之后你可能看到也可能看不到 `again!` ，这取决于在接收到终止信号时代码执行到了循环的何处。
 
-幸运的是，Rust 提供了另一种更可靠的退出循环的方式。可以使用 `break` 关键字来告诉程序何时停止循环。回忆一下在第二章猜猜看游戏的 “猜测正确后退出” 部分使用过它来在用户猜对数字赢得游戏后退出程序。
+幸运的是，Rust 提供了另一种更可靠的退出循环的方式。可以使用 `break` 关键字来告诉程序何时停止循环。回忆一下在第二章猜猜看游戏的 [“猜测正确后退出”][quitting-after-a-correct-guess] 部分使用过它来在用户猜对数字赢得游戏后退出程序。
 
 #### 从循环返回
 
@@ -265,6 +265,8 @@ fn main() {
     println!("The result is {}", result);
 }
 ```
+
+在循环之前，我们声明了一个名为 `counter` 的变量并初始化为 `0`。接着声明了一个名为 `result` 来存放循环的返回值。在循环的每一次迭代中，我们将 `counter` 变量加 `1`，接着检查计数是否等于 `10`。当相等时，使用 `break` 关键字返回值 `counter * 2`。循环之后，我们通过分号结束赋值给 `result` 的语句。最后打印出 `result` 的值，也就是 20。
 
 #### `while` 条件循环
 
@@ -376,4 +378,9 @@ fn main() {
 * 生成 n 阶斐波那契数列。
 * 打印圣诞颂歌 “The Twelve Days of Christmas” 的歌词，并利用歌曲中的重复部分（编写循环）。
 
-当你准备好继续的时候，让我们讨论一个其他语言中 *并不* 常见的概念：所有权（ownership）。
+当你准备好继续的时候，让我们讨论一个其他语言中 **并不** 常见的概念：所有权（ownership）。
+
+[comparing-the-guess-to-the-secret-number]:
+ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
+[quitting-after-a-correct-guess]:
+ch02-00-guessing-game-tutorial.html#quitting-after-a-correct-guess

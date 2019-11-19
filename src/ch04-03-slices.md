@@ -2,7 +2,7 @@
 
 > [ch04-03-slices.md](https://github.com/rust-lang/book/blob/master/src/ch04-03-slices.md)
 > <br>
-> commit 6678e8221a9e7d79bffe47749bf63978b071c709
+> commit 9fcebe6e1b0b5e842285015dbf093f97cd5b3803
 
 另一个没有所有权的数据类型是 *slice*。slice 允许你引用集合中一段连续的元素序列，而不用引用整个集合。
 
@@ -115,18 +115,9 @@ let hello = &s[0..5];
 let world = &s[6..11];
 ```
 
-这类似于引用整个 `String` 不过带有额外的 `[0..5]` 部分。它不是对整个 `String` 的引用，而是对部分 `String` 的引用。`start..end` 语法代表一个以 `start` 开头并一直持续到但不包含 `end` 的 range。如果需要包含 `end`，可以使用 `..=` 而不是 `..`：
+这类似于引用整个 `String` 不过带有额外的 `[0..5]` 部分。它不是对整个 `String` 的引用，而是对部分 `String` 的引用。
 
-```rust
-let s = String::from("hello world");
-
-let hello = &s[0..=4];
-let world = &s[6..=10];
-```
-
-`=` 意味着包含最后的数字，这有助于你记住 `..` 与 `..=` 的区别
-
-可以使用一个由中括号中的 `[starting_index..ending_index]` 指定的 range 创建一个 slice，其中 `starting_index` 是 slice 的第一个位置，`ending_index` 则是 slice 最后一个位置的后一个值。在其内部，slice 的数据结构存储了 slice 的开始位置和长度，长度对应于 `ending_index` 减去 `starting_index` 的值。所以对于 `let world = &s[6..11];` 的情况，`world` 将是一个包含指向 `s` 第 7 个字节的指针和长度值 5 的 slice。
+可以使用一个由中括号中的 `[starting_index..ending_index]` 指定的 range 创建一个 slice，其中 `starting_index` 是 slice 的第一个位置，`ending_index` 则是 slice 最后一个位置的后一个值。在其内部，slice 的数据结构存储了 slice 的开始位置和长度，长度对应于 `ending_index` 减去 `starting_index` 的值。所以对于 `let world = &s[6..11];` 的情况，`world` 将是一个包含指向 `s` 第 7 个字节（从 1 开始）的指针和长度值 5 的 slice。
 
 图 4-6 展示了一个图例。
 
@@ -143,7 +134,7 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-由此类推，如果 slice 包含 `String` 的最后一个字节，也可以舍弃尾部的数字。这意味着如下也是相同的：
+依此类推，如果 slice 包含 `String` 的最后一个字节，也可以舍弃尾部的数字。这意味着如下也是相同的：
 
 ```rust
 let s = String::from("hello");
@@ -165,7 +156,7 @@ let slice = &s[0..len];
 let slice = &s[..];
 ```
 
-> 注意：字符串 slice range 的索引必须位于有效的 UTF-8 字符边界内，如果尝试从一个多字节字符的中间位置创建字符串 slice，则程序将会因错误而退出。出于介绍字符串 slice 的目的，本部分假设只使用 ASCII 字符集；第八章的 “使用字符串存储 UTF-8 编码的文本” 部分会更加全面的讨论 UTF-8 处理问题。
+> 注意：字符串 slice range 的索引必须位于有效的 UTF-8 字符边界内，如果尝试从一个多字节字符的中间位置创建字符串 slice，则程序将会因错误而退出。出于介绍字符串 slice 的目的，本部分假设只使用 ASCII 字符集；第八章的 [“使用字符串存储 UTF-8 编码的文本”][strings] 部分会更加全面的讨论 UTF-8 处理问题。
 
 在记住所有这些知识后，让我们重写 `first_word` 来返回一个 slice。“字符串 slice” 的类型声明写作 `&str`：
 
@@ -205,7 +196,7 @@ fn main() {
 
     let word = first_word(&s);
 
-    s.clear(); // error!
+    s.clear(); // 错误!
 
     println!("the first word is: {}", word);
 }
@@ -215,16 +206,16 @@ fn main() {
 
 ```text
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
-  --> src/main.rs:10:5
+  --> src/main.rs:18:5
    |
-8  |     let word = first_word(&s);
+16 |     let word = first_word(&s);
    |                           -- immutable borrow occurs here
-9  |
-10 |     s.clear(); // error!
+17 |
+18 |     s.clear(); // error!
    |     ^^^^^^^^^ mutable borrow occurs here
-11 |
-12 |     println!("the first word is: {}", word);
-   |                                       ---- borrow later used here
+19 |
+20 |     println!("the first word is: {}", word);
+   |                                       ---- immutable borrow later used here
 ```
 
 回忆一下借用规则，当拥有某值的不可变引用时，就不能再获取一个可变引用。因为 `clear` 需要清空 `String`，它尝试获取一个可变引用。Rust不允许这样做，因而编译失败。Rust 不仅使得我们的 API 简单易用，也在编译时就消除了一整类的错误！
@@ -311,3 +302,5 @@ let slice = &a[1..3];
 所有权、借用和 slice 这些概念让 Rust 程序在编译时确保内存安全。Rust 语言提供了跟其他系统编程语言相同的方式来控制你使用的内存，但拥有数据所有者在离开作用域后自动清除其数据的功能意味着你无须额外编写和调试相关的控制代码。
 
 所有权系统影响了 Rust 中很多其他部分的工作方式，所以我们还会继续讲到这些概念，这将贯穿本书的余下内容。让我们开始第五章，来看看如何将多份数据组合进一个 `struct` 中。
+
+[strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
