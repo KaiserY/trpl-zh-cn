@@ -2,7 +2,7 @@
 
 > [ch18-03-pattern-syntax.md](https://github.com/rust-lang/book/blob/master/src/ch18-03-pattern-syntax.md)
 > <br>
-> commit c231bf7e49446e78b147a814323d8f25013a605b
+> commit 158c5eb79750d497fe92298a8bee8351c7f3606a
 
 通过本书我们已领略过许多不同类型模式的例子。本节会统一列出所有在模式中有效的语法并且会阐述你为什么可能会希望使用其中的每一个。
 
@@ -72,20 +72,20 @@ match x {
 
 上面的代码会打印 `one or two`。
 
-### 通过 `...` 匹配值的范围
+### 通过 `..=` 匹配值的范围
 
-`...` 语法允许你匹配一个闭区间范围内的值。在如下代码中，当模式匹配任何在此范围内的值时，该分支会执行：
+`..=` 语法允许你匹配一个闭区间范围内的值。在如下代码中，当模式匹配任何在此范围内的值时，该分支会执行：
 
 ```rust
 let x = 5;
 
 match x {
-    1 ... 5 => println!("one through five"),
+    1..=5 => println!("one through five"),
     _ => println!("something else"),
 }
 ```
 
-如果 `x` 是 1、2、3、4 或 5，第一个分支就会匹配。这相比使用 `|` 运算符表达相同的意思更为方便；相比 `1 ... 5`，使用 `|` 则不得不指定 `1 | 2 | 3 | 4 | 5`。相反指定范围就简短的多，特别是在希望匹配比如从 1 到 1000 的数字的时候！
+如果 `x` 是 1、2、3、4 或 5，第一个分支就会匹配。这相比使用 `|` 运算符表达相同的意思更为方便；相比 `1..=5`，使用 `|` 则不得不指定 `1 | 2 | 3 | 4 | 5`。相反指定范围就简短的多，特别是在希望匹配比如从 1 到 1000 的数字的时候！
 
 范围只允许用于数字或 `char` 值，因为编译器会在编译时检查范围不为空。`char` 和 数字值是 Rust 仅有的可以判断范围是否为空的类型。
 
@@ -95,8 +95,8 @@ match x {
 let x = 'c';
 
 match x {
-    'a' ... 'j' => println!("early ASCII letter"),
-    'k' ... 'z' => println!("late ASCII letter"),
+    'a'..='j' => println!("early ASCII letter"),
+    'k'..='z' => println!("late ASCII letter"),
     _ => println!("something else"),
 }
 ```
@@ -599,53 +599,6 @@ match msg {
 最后一个分支指定了一个没有范围的变量，此时确实拥有可以用于分支代码的变量 `id`，因为这里使用了结构体字段简写语法。不过此分支中没有像头两个分支那样对 `id` 字段的值进行测试：任何值都会匹配此分支。
 
 使用 `@` 可以在一个模式中同时测试和保存变量值。
-
-### 遗留模式： `ref` 和 `ref mut`
-
-在老版本的 Rust 中，`match` 会假设你希望移动匹配到的值。不过有时并不希望如此。例如：
-
-```rust
-let robot_name = &Some(String::from("Bors"));
-
-match robot_name {
-    Some(name) => println!("Found a name: {}", name),
-    None => (),
-}
-
-println!("robot_name is: {:?}", robot_name);
-```
-
-这里 `robot_name` 是一个 `&Option<String>`。Rust 会抱怨 `Some(name)` 不匹配 `&Option<T>`，所以不得不这么写：
-
-```rust,ignore
-let robot_name = &Some(String::from("Bors"));
-
-match robot_name {
-    &Some(name) => println!("Found a name: {}", name),
-    None => (),
-}
-
-println!("robot_name is: {:?}", robot_name);
-```
-
-接着 Rust 会说 `name` 尝试将 `String` 从 option 中移出，不过因为这是一个引用的 option，所以是借用的，因此不能被移动。这就是 `ref` 出场的地方：
-
-```rust
-let robot_name = &Some(String::from("Bors"));
-
-match robot_name {
-    &Some(ref name) => println!("Found a name: {}", name),
-    None => (),
-}
-
-println!("robot_name is: {:?}", robot_name);
-```
-
-`ref` 关键字就像模式中 `&` 的对立面；它表明 “请将 `ref` 绑定到一个 `&String` 上，不要尝试移动”。换句话说，`&Some` 中的 `&` 匹配的是一个引用，而 `ref` **创建** 了一个引用。`ref mut` 类似 `ref` 不过对应的是可变引用。
-
-无论如何，今天的 Rust 不再这样工作。如果尝试 `match` 某些借用的值，那么所有创建的绑定也都会尝试借用。这也意味着之前的代码也能正常工作。
-
-因为 Rust 是后向兼容的（backwards compatible），所以不会移除 `ref` 和 `ref mut`，同时它们在一些不明确的场景还有用，比如希望可变地借用结构体的部分值而可变地借用另一部分的情况。你可能会在老的 Rust 代码中看到它们，所以请记住它们仍有价值。
 
 ## 总结
 
