@@ -115,7 +115,6 @@
 
 - [高级特征](ch19-00-advanced-features.md)
     - [不安全的 Rust](ch19-01-unsafe-rust.md)
-    - [高级生命周期](ch19-02-advanced-lifetimes.md)
     - [高级 trait](ch19-03-advanced-traits.md)
     - [高级类型](ch19-04-advanced-types.md)
     - [高级函数与闭包](ch19-05-advanced-functions-and-closures.md)
