@@ -1,5 +1,6 @@
 _book/
 mdbook/
 book/
+**/.vuepress
 
 .DS_Store
