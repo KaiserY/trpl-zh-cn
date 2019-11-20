@@ -2,13 +2,13 @@
 
 > [ch06-02-match.md](https://github.com/rust-lang/book/blob/master/src/ch06-02-match.md)
 > <br>
-> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
+> commit b374e75f1d7b743c84a6bb1ef72579a6588bcb8a
 
 Rust 有一个叫做 `match` 的极为强大的控制流运算符，它允许我们将一个值与一系列的模式相比较并根据相匹配的模式执行相应代码。模式可由字面值、变量、通配符和许多其他内容构成；第十八章会涉及到所有不同种类的模式以及它们的作用。`match` 的力量来源于模式的表现力以及编译器检查，它确保了所有可能的情况都得到处理。
 
 可以把 `match` 表达式想象成某种硬币分类器：硬币滑入有着不同大小孔洞的轨道，每一个硬币都会掉入符合它大小的孔洞。同样地，值也会通过 `match` 的每一个模式，并且在遇到第一个 “符合” 的模式时，值会进入相关联的代码块并在执行中被使用。
 
-因为刚刚提到了硬币，让我们用它们来作为一个使用 `match` 的例子！我们可以编写一个函数来获取一个未知的（美帝）硬币，并以一种类似验钞机的方式，确定它是何种硬币并返回它的美分值，如示例 6-3 中所示：
+因为刚刚提到了硬币，让我们用它们来作为一个使用 `match` 的例子！我们可以编写一个函数来获取一个未知的（美帝）硬币，并以一种类似验钞机的方式，确定它是何种硬币并返回它的美分值，如示例 6-3 中所示。
 
 ```rust
 enum Coin {
@@ -18,7 +18,7 @@ enum Coin {
     Quarter,
 }
 
-fn value_in_cents(coin: Coin) -> u32 {
+fn value_in_cents(coin: Coin) -> u8 {
     match coin {
         Coin::Penny => 1,
         Coin::Nickel => 5,
@@ -48,7 +48,7 @@ fn value_in_cents(coin: Coin) -> u32 {
 #    Quarter,
 # }
 #
-fn value_in_cents(coin: Coin) -> u32 {
+fn value_in_cents(coin: Coin) -> u8 {
     match coin {
         Coin::Penny => {
             println!("Lucky penny!");
@@ -103,7 +103,7 @@ enum Coin {
 #    Quarter(UsState),
 # }
 #
-fn value_in_cents(coin: Coin) -> u32 {
+fn value_in_cents(coin: Coin) -> u8 {
     match coin {
         Coin::Penny => 1,
         Coin::Nickel => 5,

@@ -2,11 +2,11 @@
 
 > [ch09-02-recoverable-errors-with-result.md](https://github.com/rust-lang/book/blob/master/src/ch09-02-recoverable-errors-with-result.md)
 > <br>
-> commit db53e2e3cdf77beac853df6f29db4b3b86ea598c
+> commit aa339f78da31c330ede3f1b52b4bbfb62d7814cb
 
 大部分错误并没有严重到需要程序完全停止执行。有时，一个函数会因为一个容易理解并做出反应的原因失败。例如，如果尝试打开一个文件不过由于文件并不存在而失败，此时我们可能想要创建这个文件而不是终止进程。
 
-回忆一下第二章 “使用 `Result` 类型来处理潜在的错误” 部分中的那个 `Result` 枚举，它定义有如下两个成员，`Ok` 和 `Err`：
+回忆一下第二章 [“使用 `Result` 类型来处理潜在的错误”][handle_failure] 部分中的那个 `Result` 枚举，它定义有如下两个成员，`Ok` 和 `Err`：
 
 [handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-the-result-type
 
@@ -35,7 +35,7 @@ fn main() {
 
 如何知道 `File::open` 返回一个 `Result` 呢？我们可以查看 [标准库 API 文档](https://doc.rust-lang.org/std/index.html)<!-- ignore -->，或者可以直接问编译器！如果给 `f` 某个我们知道 **不是** 函数返回值类型的类型注解，接着尝试编译代码，编译器会告诉我们类型不匹配。然后错误信息会告诉我们 `f` 的类型 **应该** 是什么。让我们试试！我们知道 `File::open` 的返回值不是 `u32` 类型的，所以将 `let f` 语句改为如下：
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let f: u32 = File::open("hello.txt");
 ```
 
@@ -72,13 +72,13 @@ fn main() {
     let f = match f {
         Ok(file) => file,
         Err(error) => {
-            panic!("There was a problem opening the file: {:?}", error)
+            panic!("Problem opening the file: {:?}", error)
         },
     };
 }
 ```
 
-<span class="caption">示例 9-4：使用 `match` 表达式处理可能的 `Result` 成员</span>
+<span class="caption">示例 9-4：使用 `match` 表达式处理可能会返回的 `Result` 成员</span>
 
 注意与 `Option` 枚举一样，`Result` 枚举和其成员也被导入到了 prelude 中，所以就不需要在 `match` 分支中的 `Ok` 和 `Err` 之前指定 `Result::`。
 
@@ -87,20 +87,17 @@ fn main() {
 `match` 的另一个分支处理从 `File::open` 得到 `Err` 值的情况。在这种情况下，我们选择调用 `panic!` 宏。如果当前目录没有一个叫做 *hello.txt* 的文件，当运行这段代码时会看到如下来自 `panic!` 宏的输出：
 
 ```text
-thread 'main' panicked at 'There was a problem opening the file: Error { repr:
+thread 'main' panicked at 'Problem opening the file: Error { repr:
 Os { code: 2, message: "No such file or directory" } }', src/main.rs:9:12
 ```
 
-输出一如既往告诉了我们到底出了什么错。
+一如既往输出告诉了我们到底出了什么错。
 
 ### 匹配不同的错误
 
 示例 9-4 中的代码不管 `File::open` 是因为什么原因失败都会 `panic!`。我们真正希望的是对不同的错误原因采取不同的行为：如果 `File::open `因为文件不存在而失败，我们希望创建这个文件并返回新文件的句柄。如果 `File::open` 因为任何其他原因失败，例如没有打开文件的权限，我们仍然希望像示例 9-4 那样 `panic!`。让我们看看示例 9-5，其中 `match` 增加了另一个分支：
 
 <span class="filename">文件名: src/main.rs</span>
-
-<!-- ignore this test because otherwise it creates hello.txt which causes other
-tests to fail lol -->
 
 ```rust,ignore
 use std::fs::File;
@@ -114,9 +111,9 @@ fn main() {
         Err(error) => match error.kind() {
             ErrorKind::NotFound => match File::create("hello.txt") {
                 Ok(fc) => fc,
-                Err(e) => panic!("Tried to create file but there was a problem: {:?}", e),
+                Err(e) => panic!("Problem creating the file: {:?}", e),
             },
-            other_error => panic!("There was a problem opening the file: {:?}", other_error),
+            other_error => panic!("Problem opening the file: {:?}", other_error),
         },
     };
 }
@@ -147,7 +144,7 @@ fn main() {
 }
 ```
 
-在阅读完第十三章后再回到这个例子，并查看标准库文档 `unwrap_or_else` 方法都做了什么操作。在处理错误时，还有很多这类技巧可以消除大量嵌套的 `match` 表达式。
+虽然这段代码有着如示例 9-5 一样的行为，但并没有包好任何 `match` 表达式且更容易阅读。在阅读完第十三章后再回到这个例子，并查看标准库文档 `unwrap_or_else` 方法都做了什么操作。在处理错误时，还有很多这类方法可以消除大量嵌套的 `match` 表达式。
 
 ### 失败时 panic 的简写：`unwrap` 和 `expect`
 
@@ -232,11 +229,11 @@ fn read_username_from_file() -> Result<String, io::Error> {
 
 调用这个函数的代码最终会得到一个包含用户名的 `Ok` 值，或者一个包含 `io::Error` 的 `Err` 值。我们无从得知调用者会如何处理这些值。例如，如果他们得到了一个 `Err` 值，他们可能会选择 `panic!` 并使程序崩溃、使用一个默认的用户名或者从文件之外的地方寻找用户名。我们没有足够的信息知晓调用者具体会如何尝试，所以将所有的成功或失败信息向上传播，让他们选择合适的处理方法。
 
-这种传播错误的模式在 Rust 是如此的常见，以至于有一个更简便的专用语法：`?`。
+这种传播错误的模式在 Rust 是如此的常见，以至于 Rust 提供了 `?` 问号运算符来使其更易于处理。
 
-### 传播错误的简写：`?`
+### 传播错误的简写：`?` 运算符
 
-示例 9-7 展示了一个 `read_username_from_file` 的实现，它实现了与示例 9-6 中的代码相同的功能，不过这个实现使用了问号运算符：
+示例 9-7 展示了一个 `read_username_from_file` 的实现，它实现了与示例 9-6 中的代码相同的功能，不过这个实现使用了 `?` 运算符：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -253,15 +250,15 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<span class="caption">示例 9-7：一个使用 `?` 向调用者返回错误的函数</span>
+<span class="caption">示例 9-7：一个使用 `?` 运算符向调用者返回错误的函数</span>
 
 `Result` 值之后的 `?` 被定义为与示例 9-6 中定义的处理 `Result` 值的 `match` 表达式有着完全相同的工作方式。如果 `Result` 的值是 `Ok`，这个表达式将会返回 `Ok` 中的值而程序将继续执行。如果值是 `Err`，`Err` 中的值将作为整个函数的返回值，就好像使用了 `return` 关键字一样，这样错误值就被传播给了调用者。
 
-示例 9-6 中的 `match` 表达式与问号运算符所做的有一点不同：`?` 所使用的错误值被传递给了 `from` 函数，它定义于标准库的 `From` trait 中，其用来将错误从一种类型转换为另一种类型。当 `?` 调用 `from` 函数时，收到的错误类型被转换为定义为当前函数返回的错误类型。这在当一个函数返回一个错误类型来代表所有可能失败的方式时很有用，即使其可能会因很多种原因失败。只要每一个错误类型都实现了 `from` 函数来定义如将其转换为返回的错误类型，`?` 会自动处理这些转换。
+示例 9-6 中的 `match` 表达式与问号运算符所做的有一点不同：`?` 运算符所使用的错误值被传递给了 `from` 函数，它定义于标准库的 `From` trait 中，其用来将错误从一种类型转换为另一种类型。当 `?` 运算符调用 `from` 函数时，收到的错误类型被转换为定义为当前函数返回的错误类型。这在当一个函数返回一个错误类型来代表所有可能失败的方式时很有用，即使其可能会因很多种原因失败。只要每一个错误类型都实现了 `from` 函数来定义如将其转换为返回的错误类型，`?` 运算符会自动处理这些转换。
 
-在示例 9-7 的上下文中，`File::open` 调用结尾的 `?` 将会把 `Ok` 中的值返回给变量 `f`。如果出现了错误，`?` 会提早返回整个函数并将一些 `Err` 值传播给调用者。同理也适用于 `read_to_string` 调用结尾的 `?`。
+在示例 9-7 的上下文中，`File::open` 调用结尾的 `?` 将会把 `Ok` 中的值返回给变量 `f`。如果出现了错误，`?` 运算符会提早返回整个函数并将一些 `Err` 值传播给调用者。同理也适用于 `read_to_string` 调用结尾的 `?`。
 
-`?` 消除了大量样板代码并使得函数的实现更简单。我们甚至可以在 `?` 之后直接使用链式方法调用来进一步缩短代码，如示例 9-8 所示：
+`?` 运算符消除了大量样板代码并使得函数的实现更简单。我们甚至可以在 `?` 之后直接使用链式方法调用来进一步缩短代码，如示例 9-8 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -300,13 +297,13 @@ fn read_username_from_file() -> Result<String, io::Error> {
 
 将文件读取到一个字符串是相当常见的操作，所以 Rust 提供了名为 `fs::read_to_string` 的函数，它会打开文件、新建一个 `String`、读取文件的内容，并将内容放入 `String`，接着返回它。当然，这样做就没有展示所有这些错误处理的机会了，所以我们最初就选择了艰苦的道路。
 
-### `?` 只能被用于返回 `Result` 的函数
+### `?` 运算符可被用于返回 `Result` 的函数
 
-`?` 只能被用于返回值类型为 `Result` 的函数，因为他被定义为与示例 9-6 中的 `match` 表达式有着完全相同的工作方式。`match` 的 `return Err(e)` 部分要求返回值类型是 `Result`，所以函数的返回值必须是 `Result` 才能与这个 `return` 相兼容。
+`?` 运算符可被用于返回值类型为 `Result` 的函数，因为他被定义为与示例 9-6 中的 `match` 表达式有着完全相同的工作方式。`match` 的 `return Err(e)` 部分要求返回值类型是 `Result`，所以函数的返回值必须是 `Result` 才能与这个 `return` 相兼容。
 
-让我们看看在 `main` 函数中使用 `?` 会发生什么，如果你还记得的话其返回值类型是`()`：
+让我们看看在 `main` 函数中使用 `?` 运算符会发生什么，如果你还记得的话其返回值类型是`()`：
 
-```rust,ignore
+```rust,ignore,does_not_compile
 use std::fs::File;
 
 fn main() {
@@ -317,19 +314,21 @@ fn main() {
 当编译这些代码，会得到如下错误信息：
 
 ```text
-error[E0277]: the `?` operator can only be used in a function that returns `Result` or `Option` (or another type that implements `std::ops::Try`)
+error[E0277]: the `?` operator can only be used in a function that returns
+`Result` or `Option` (or another type that implements `std::ops::Try`)
  --> src/main.rs:4:13
   |
 4 |     let f = File::open("hello.txt")?;
-  |             ^^^^^^^^^^^^^^^^^^^^^^^^ cannot use the `?` operator in a function that returns `()`
+  |             ^^^^^^^^^^^^^^^^^^^^^^^^ cannot use the `?` operator in a
+  function that returns `()`
   |
   = help: the trait `std::ops::Try` is not implemented for `()`
   = note: required by `std::ops::Try::from_error`
 ```
 
-错误指出只能在返回 `Result` 的函数中使用 `?`。在不返回 `Result` 的函数中，当调用其他返回 `Result` 的函数时，需要使用 `match` 或 `Result` 的方法之一来处理，而不能用 `?` 将潜在的错误传播给代码调用方。
+错误指出只能在返回 `Result` 或者其它实现了 `std::ops::Try` 的类型的函数中使用 `?` 运算符。当你期望在不返回 `Result` 的函数中调用其他返回 `Result` 的函数时使用 `?` 的话，有两种方法修复这个问题。一种技巧是将函数返回值类型修改为 `Result<T, E>`，如果没有其它限制组织你这么做的话。另一种技巧是通过合适的方法使用 `match` 或 `Result` 的方法之一来处理 `Result<T, E>`。
 
-不过 `main` 函数可以返回一个 `Result<T, E>`：
+`main` 函数是特殊的，其必须返回什么类型是有限制的。`main` 函数的一个有效的返回值是 `()`，同时出于方便，另一个有效的返回值是 `Result<T, E>`，如下所示：
 
 ```rust,ignore
 use std::error::Error;
@@ -342,6 +341,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 ```
 
-`Box<dyn Error>` 被称为 “trait 对象”（“trait object”），第十七章会介绍。目前可以理解 `Box<dyn Error>` 为 “任何类型的错误”。
+`Box<dyn Error>` 被称为 “trait 对象”（“trait object”），第十七章 [“为使用不同类型的值而设计的 trait 对象”][trait-objects] 部分会做介绍。目前可以理解 `Box<dyn Error>` 为使用 `?` 时 `main` 允许返回的 “任何类型的错误”。
 
 现在我们讨论过了调用 `panic!` 或返回 `Result` 的细节，是时候回到他们各自适合哪些场景的话题了。
+
+[trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types

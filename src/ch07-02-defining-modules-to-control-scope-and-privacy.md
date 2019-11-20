@@ -2,7 +2,7 @@
 
 > [ch07-02-defining-modules-to-control-scope-and-privacy.md](https://github.com/rust-lang/book/blob/master/src/ch07-02-defining-modules-to-control-scope-and-privacy.md)
 > <br>
-> commit 879fef2345bf32751a83a9e779e0cb84e79b6d3d
+> commit 34b089627cca09a73ce92a052222304bff0056e3
 
 在本节，我们将讨论模块和其它一些关于模块系统的部分，如允许你命名项的 *路径*（*paths*）；用来将路径引入作用域的 `use` 关键字；以及使项变为公有的 `pub` 关键字。我们还将讨论 `as` 关键字、外部包和 glob 运算符。现在，让我们把注意力放在模块上！
 

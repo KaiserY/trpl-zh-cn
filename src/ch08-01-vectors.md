@@ -2,7 +2,7 @@
 
 > [ch08-01-vectors.md](https://github.com/rust-lang/book/blob/master/src/ch08-01-vectors.md)
 > <br>
-> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
+> commit 76df60bccead5f3de96db23d97b69597cd8a2b82
 
 我们要讲到的第一个类型是 `Vec<T>`，也被称为 *vector*。vector 允许我们在一个单独的数据结构中储存多于一个的值，它在内存中彼此相邻地排列所有的值。vector 只能储存相同类型的值。它们在拥有一系列项的场景下非常实用，例如文件中的文本行或是购物车中商品的价格。
 
@@ -117,21 +117,21 @@ println!("The first element is: {}", first);
 
 ```text
 error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immutable
-  --> src/main.rs:10:5
-   |
-8  |     let first = &v[0];
-   |                  - immutable borrow occurs here
-9  |
-10 |     v.push(6);
-   |     ^^^^^^^^^ mutable borrow occurs here
-11 |
-12 |     println!("The first element is: {}", first);
-   |                                          ----- borrow later used here
+ --> src/main.rs:6:5
+  |
+4 |     let first = &v[0];
+  |                  - immutable borrow occurs here
+5 |
+6 |     v.push(6);
+  |     ^^^^^^^^^ mutable borrow occurs here
+7 |
+8 |     println!("The first element is: {}", first);
+  |                                          ----- immutable borrow later used here
 ```
 
 示例 8-7 中的代码看起来应该能够运行：为什么第一个元素的引用会关心 vector 结尾的变化？不能这么做的原因是由于 vector 的工作方式：在 vector 的结尾增加新元素时，在没有足够空间将所有所有元素依次相邻存放的情况下，可能会要求分配新内存并将老的元素拷贝到新的空间中。这时，第一个元素的引用就指向了被释放的内存。借用规则阻止程序陷入这种状况。
 
-> 注意：关于 `Vec<T>` 类型的更多实现细节，在 *https://doc.rust-lang.org/stable/nomicon/vec.html* 查看 “The Nomicon”
+> 注意：关于 `Vec<T>` 类型的更多实现细节，在 https://doc.rust-lang.org/stable/nomicon/vec.html 查看 “The Nomicon”
 
 ### 遍历 vector 中的元素
 
@@ -157,7 +157,7 @@ for i in &mut v {
 
 <span class="caption">示例8-9：遍历 vector 中元素的可变引用</span>
 
-为了修改可变引用所指向的值，在使用 `+=` 运算符之前必须使用解引用运算符（`*`）获取 `i` 中的值。第十五章会详细介绍 `*`。
+为了修改可变引用所指向的值，在使用 `+=` 运算符之前必须使用解引用运算符（`*`）获取 `i` 中的值。第十五章的 [“通过解引用运算符追踪指针的值”][deref] 部分会详细介绍解引用运算符。
 
 ### 使用枚举来储存多种类型
 
@@ -186,3 +186,5 @@ Rust 在编译时就必须准确的知道 vector 中类型的原因在于它需�
 如果在编写程序时不能确切无遗地知道运行时会储存进 vector 的所有类型，枚举技术就行不通了。相反，你可以使用 trait 对象，第十七章会讲到它。
 
 现在我们了解了一些使用 vector 的最常见的方式，请一定去看看标准库中 `Vec` 定义的很多其他实用方法的 API 文档。例如，除了 `push` 之外还有一个 `pop` 方法，它会移除并返回 vector 的最后一个元素。让我们继续下一个集合类型：`String`！
+
+[deref]: ch15-02-deref.html#following-the-pointer-to-the-value-with-the-dereference-operator

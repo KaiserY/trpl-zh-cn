@@ -2,7 +2,7 @@
 
 > [ch09-01-unrecoverable-errors-with-panic.md](https://github.com/rust-lang/book/blob/master/src/ch09-01-unrecoverable-errors-with-panic.md)
 > <br>
-> commit d073ece693e880b69412e645e4eabe99e74e7590
+> commit 426f3e4ec17e539ae9905ba559411169d303a031
 
 突然有一天，代码出问题了，而你对此束手无策。对于这种情况，Rust 有 `panic!`宏。当执行这个宏时，程序会打印出一个错误信息，展开并清理栈数据，然后接着退出。出现这种情况的场景通常是检测到一些类型的 bug 而且程序员并不清楚该如何处理它。
 
@@ -30,15 +30,15 @@ fn main() {
 ```text
 $ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.25 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.25s
      Running `target/debug/panic`
-thread 'main' panicked at 'crash and burn', src/main.rs:2:4
+thread 'main' panicked at 'crash and burn', src/main.rs:2:5
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-最后两行包含 `panic!` 调用造成的错误信息。第一行显示了 panic 提供的信息并指明了源码中 panic 出现的位置：*src/main.rs:2:4* 表明这是 *src/main.rs* 文件的第二行第四个字符。
+最后两行包含 `panic!` 调用造成的错误信息。第一行显示了 panic 提供的信息并指明了源码中 panic 出现的位置：*src/main.rs:2:5* 表明这是 *src/main.rs* 文件的第二行第五个字符。
 
-在这个例子中，被指明的那一行是我们代码的一部分，而且查看这一行的话就会发现 `panic!` 宏的调用。在其他情况下，`panic!` 可能会出现在我们的代码调用的代码中。错误信息报告的文件名和行号可能指向别人代码中的 `panic!` 宏调用，而不是我们代码中最终导致 `panic!` 的那一行。可以使用 `panic!` 被调用的函数的 backtrace 来寻找（我们代码中出问题的地方）。下面我们会详细介绍 backtrace 是什么。
+在这个例子中，被指明的那一行是我们代码的一部分，而且查看这一行的话就会发现 `panic!` 宏的调用。在其他情况下，`panic!` 可能会出现在我们的代码调用的代码中。错误信息报告的文件名和行号可能指向别人代码中的 `panic!` 宏调用，而不是我们代码中最终导致 `panic!` 的那一行。我们可以使用 `panic!` 被调用的函数的 backtrace 来寻找代码中出问题的地方。下面我们会详细介绍 backtrace 是什么。
 
 ### 使用 `panic!` 的 backtrace
 
@@ -65,10 +65,9 @@ fn main() {
 ```text
 $ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.27 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.27s
      Running `target/debug/panic`
-thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
-99', /checkout/src/liballoc/vec.rs:1555:10
+thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', libcore/slice/mod.rs:2448:10
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
@@ -78,50 +77,60 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 ```text
 $ RUST_BACKTRACE=1 cargo run
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
      Running `target/debug/panic`
-thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', /checkout/src/liballoc/vec.rs:1555:10
+thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', libcore/slice/mod.rs:2448:10
 stack backtrace:
-   0: std::sys::imp::backtrace::tracing::imp::unwind_backtrace
-             at /checkout/src/libstd/sys/unix/backtrace/tracing/gcc_s.rs:49
-   1: std::sys_common::backtrace::_print
-             at /checkout/src/libstd/sys_common/backtrace.rs:71
+   0: std::sys::unix::backtrace::tracing::imp::unwind_backtrace
+             at libstd/sys/unix/backtrace/tracing/gcc_s.rs:49
+   1: std::sys_common::backtrace::print
+             at libstd/sys_common/backtrace.rs:71
+             at libstd/sys_common/backtrace.rs:59
    2: std::panicking::default_hook::{{closure}}
-             at /checkout/src/libstd/sys_common/backtrace.rs:60
-             at /checkout/src/libstd/panicking.rs:381
+             at libstd/panicking.rs:211
    3: std::panicking::default_hook
-             at /checkout/src/libstd/panicking.rs:397
-   4: std::panicking::rust_panic_with_hook
-             at /checkout/src/libstd/panicking.rs:611
-   5: std::panicking::begin_panic
-             at /checkout/src/libstd/panicking.rs:572
-   6: std::panicking::begin_panic_fmt
-             at /checkout/src/libstd/panicking.rs:522
-   7: rust_begin_unwind
-             at /checkout/src/libstd/panicking.rs:498
-   8: core::panicking::panic_fmt
-             at /checkout/src/libcore/panicking.rs:71
-   9: core::panicking::panic_bounds_check
-             at /checkout/src/libcore/panicking.rs:58
-  10: <alloc::vec::Vec<T> as core::ops::index::Index<usize>>::index
-             at /checkout/src/liballoc/vec.rs:1555
-  11: panic::main
+             at libstd/panicking.rs:227
+   4: <std::panicking::begin_panic::PanicPayload<A> as core::panic::BoxMeUp>::get
+             at libstd/panicking.rs:476
+   5: std::panicking::continue_panic_fmt
+             at libstd/panicking.rs:390
+   6: std::panicking::try::do_call
+             at libstd/panicking.rs:325
+   7: core::ptr::drop_in_place
+             at libcore/panicking.rs:77
+   8: core::ptr::drop_in_place
+             at libcore/panicking.rs:59
+   9: <usize as core::slice::SliceIndex<[T]>>::index
+             at libcore/slice/mod.rs:2448
+  10: core::slice::<impl core::ops::index::Index<I> for [T]>::index
+             at libcore/slice/mod.rs:2316
+  11: <alloc::vec::Vec<T> as core::ops::index::Index<I>>::index
+             at liballoc/vec.rs:1653
+  12: panic::main
              at src/main.rs:4
-  12: __rust_maybe_catch_panic
-             at /checkout/src/libpanic_unwind/lib.rs:99
-  13: std::rt::lang_start
-             at /checkout/src/libstd/panicking.rs:459
-             at /checkout/src/libstd/panic.rs:361
-             at /checkout/src/libstd/rt.rs:61
-  14: main
-  15: __libc_start_main
-  16: <unknown>
+  13: std::rt::lang_start::{{closure}}
+             at libstd/rt.rs:74
+  14: std::panicking::try::do_call
+             at libstd/rt.rs:59
+             at libstd/panicking.rs:310
+  15: macho_symbol_search
+             at libpanic_unwind/lib.rs:102
+  16: std::alloc::default_alloc_error_hook
+             at libstd/panicking.rs:289
+             at libstd/panic.rs:392
+             at libstd/rt.rs:58
+  17: std::rt::lang_start
+             at libstd/rt.rs:74
+  18: panic::main
 ```
 
 <span class="caption">示例 9-2：当设置 `RUST_BACKTRACE` 环境变量时 `panic!` 调用所生成的 backtrace 信息</span>
 
 这里有大量的输出！你实际看到的输出可能因不同的操作系统和 Rust 版本而有所不同。为了获取带有这些信息的 backtrace，必须启用 debug 标识。当不使用 `--release` 参数运行 cargo build 或 cargo run 时 debug 标识会默认启用，就像这里一样。
 
-示例 9-2 的输出中，backtrace 的 11 行指向了我们项目中造成问题的行：*src/main.rs* 的第 4 行。如果你不希望程序 panic，第一个提到我们编写的代码行的位置是你应该开始调查的，以便查明是什么值如何在这个地方引起了 panic。在示例 9-1 中，我们故意编写会 panic 的代码来演示如何使用 backtrace，修复这个 panic 的方法就是不要尝试在一个只包含三个项的 vector 中请求索引是 100 的元素。当将来你的代码出现了 panic，你需要搞清楚在这特定的场景下代码中执行了什么操作和什么值导致了 panic，以及应当如何处理才能避免这个问题。
+示例 9-2 的输出中，backtrace 的 12 行指向了我们项目中造成问题的行：*src/main.rs* 的第 4 行。如果你不希望程序 panic，第一个提到我们编写的代码行的位置是你应该开始调查的，以便查明是什么值如何在这个地方引起了 panic。在示例 9-1 中，我们故意编写会 panic 的代码来演示如何使用 backtrace，修复这个 panic 的方法就是不要尝试在一个只包含三个项的 vector 中请求索引是 100 的元素。当将来你的代码出现了 panic，你需要搞清楚在这特定的场景下代码中执行了什么操作和什么值导致了 panic，以及应当如何处理才能避免这个问题。
 
-本章后面的小节 “panic! 还是不 panic!”会再次回到 `panic!` 会回到 `panic!` 并讲解何时应该何时不应该使用 `panic!` 来处理错误情况。接下来，我们来看看如何使用 `Result` 来从错误中恢复。
+本章后面的小节 [“panic! 还是不 panic!”][to-panic-or-not-to-panic] 会再次回到 `panic!` 会回到 `panic!` 并讲解何时应该何时不应该使用 `panic!` 来处理错误情况。接下来，我们来看看如何使用 `Result` 来从错误中恢复。
+
+[to-panic-or-not-to-panic]:
+ch09-03-to-panic-or-not-to-panic.html#to-panic-or-not-to-panic
