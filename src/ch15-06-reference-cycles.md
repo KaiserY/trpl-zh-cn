@@ -342,6 +342,6 @@ fn main() {
 
 如果本章内容引起了你的兴趣并希望现在就实现你自己的智能指针的话，请阅读 [“The Nomicon”] 来获取更多有用的信息。
 
-[“The Nomicon”]: https://doc.rust-lang.org/stable/nomicon/
+[“The Rustonomicon”]: https://doc.rust-lang.org/stable/nomicon/
 
 接下来，让我们谈谈 Rust 的并发。届时甚至还会学习到一些新的对并发有帮助的智能指针。
