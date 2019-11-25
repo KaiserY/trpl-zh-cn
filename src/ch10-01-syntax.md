@@ -2,7 +2,7 @@
 
 > [ch10-01-syntax.md](https://github.com/rust-lang/book/blob/master/src/ch10-01-syntax.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit af34ac954a6bd7fc4a8bbcc5c9685e23c5af87da
 
 我们可以使用泛型为像函数签名或结构体这样的项创建定义，这样它们就可以用于多种不同的具体数据类型。让我们看看如何使用泛型定义函数、结构体、枚举和方法，然后我们将讨论泛型如何影响代码性能。
 
@@ -114,7 +114,7 @@ error[E0369]: binary operation `>` cannot be applied to type `T`
 
 注释中提到了 `std::cmp::PartialOrd`，这是一个 *trait*。下一部分会讲到 trait。不过简单来说，这个错误表明 `largest` 的函数体不能适用于 `T` 的所有可能的类型。因为在函数体需要比较 `T` 类型的值，不过它只能用于我们知道如何排序的类型。为了开启比较功能，标准库中定义的 `std::cmp::PartialOrd` trait 可以实现类型的比较功能（查看附录 C 获取该 trait 的更多信息）。
 
-标准库中定义的 `std::cmp::PartialOrd` trait 可以实现类型的比较功能。在 “trait bound” 部分会讲解如何指定泛型实现特定的 trait，不过让我们先探索其他使用泛型参数的方法。
+标准库中定义的 `std::cmp::PartialOrd` trait 可以实现类型的比较功能。在 [“trait 作为参数”][traits-as-parameters] 部分会讲解如何指定泛型实现特定的 trait，不过让我们先探索其他使用泛型参数的方法。
 
 ### 结构体定义中的泛型
 
@@ -138,7 +138,7 @@ fn main() {
 
 其语法类似于函数定义中使用泛型。首先，必须在结构体名称后面的尖括号中声明泛型参数的名称。接着在结构体定义中可以指定具体数据类型的位置使用泛型类型。
 
-注意 `Point` 的定义中只使用了一个泛型类型，这个定义表明结构体 `Point` 对于一些类型 `T` 是泛型的，而且字段 `x` 和 `y` **都是** 相同类型的，无论它具体是何类型。如果尝试创建一个有不同类型值的 `Point` 的实例，像示例 10-7 中的代码就不能编译：
+注意 `Point<T>` 的定义中只使用了一个泛型类型，这个定义表明结构体 `Point<T>` 对于一些类型 `T` 是泛型的，而且字段 `x` 和 `y` **都是** 相同类型的，无论它具体是何类型。如果尝试创建一个有不同类型值的 `Point<T>` 的实例，像示例 10-7 中的代码就不能编译：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -162,8 +162,8 @@ error[E0308]: mismatched types
  --> src/main.rs:7:38
   |
 7 |     let wont_work = Point { x: 5, y: 4.0 };
-  |                                      ^^^ expected integral variable, found
-floating-point variable
+  |                                      ^^^ expected integer, found
+floating-point number
   |
   = note: expected type `{integer}`
              found type `{float}`
@@ -318,9 +318,9 @@ let integer = Some(5);
 let float = Some(5.0);
 ```
 
-当 Rust 编译这些代码的时候，它会进行单态化。编译器会读取传递给 `Option` 的值并发现有两种 `Option<T>`：一个对应 `i32` 另一个对应 `f64`。为此，它会将泛型定义 `Option<T>` 展开为 `Option_i32` 和 `Option_f64`，接着将泛型定义替换为这两个具体的定义。
+当 Rust 编译这些代码的时候，它会进行单态化。编译器会读取传递给 `Option<T>` 的值并发现有两种 `Option<T>`：一个对应 `i32` 另一个对应 `f64`。为此，它会将泛型定义 `Option<T>` 展开为 `Option_i32` 和 `Option_f64`，接着将泛型定义替换为这两个具体的定义。
 
-编译器生成的单态化版本的代码看起来像这样，并包含将泛型 `Option` 替换为编译器创建的具体定义后的用例代码：
+编译器生成的单态化版本的代码看起来像这样，并包含将泛型 `Option<T>` 替换为编译器创建的具体定义后的用例代码：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -342,3 +342,5 @@ fn main() {
 ```
 
 我们可以使用泛型来编写不重复的代码，而 Rust 将会为每一个实例编译其特定类型的代码。这意味着在使用泛型时没有运行时开销；当代码运行，它的执行效率就跟好像手写每个具体定义的重复代码一样。这个单态化过程正是 Rust 泛型在运行时极其高效的原因。
+
+[traits-as-parameters]: ch10-02-traits.html#traits-as-parameters

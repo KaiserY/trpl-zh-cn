@@ -2,7 +2,7 @@
 
 > [ch10-02-traits.md](https://github.com/rust-lang/book/blob/master/src/ch10-02-traits.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 34b403864ad9c5e27b00b7cc4a6893804ef5b989
 
 *trait* 告诉 Rust 编译器某个特定类型拥有可能与其他类型共享的功能。可以通过 trait 以一种抽象的方式定义共享的行为。可以使用 *trait bounds* 指定泛型是任何拥有特定行为的类型。
 
@@ -91,9 +91,9 @@ println!("1 new tweet: {}", tweet.summarize());
 
 注意因为示例 10-13 中我们在相同的 *lib.rs* 里定义了 `Summary` trait 和 `NewsArticle` 与 `Tweet` 类型，所以他们是位于同一作用域的。如果这个 *lib.rs* 是对应 `aggregator` crate 的，而别人想要利用我们 crate 的功能为其自己的库作用域中的结构体实现 `Summary` trait。首先他们需要将 trait 引入作用域。这可以通过指定 `use aggregator::Summary;` 实现，这样就可以为其类型实现 `Summary` trait 了。`Summary` 还必须是公有 trait 使得其他 crate 可以实现它，这也是为什么实例 10-12 中将 `pub` 置于 `trait` 之前。
 
-实现 trait 时需要注意的是，只有当 trait 或者要实现 trait 的类型位于 crate 的本地作用域时，才能为该类型实现 trait。例如，可以为多媒体聚合库 crate 的自定义类型 `Tweet` 实现如标准库中的 `Display` trait，这是因为 `Tweet` 类型位于多媒体聚合库 crate 本地的作用域中。类似地，也可以在多媒体聚合库 crate 中为 `Vec<T>` 实现 `Summary`，这是因为 `Summary` trait 位于多媒体聚合库 crate 本地作用域中。
+实现 trait 时需要注意的一个限制是，只有当 trait 或者要实现 trait 的类型位于 crate 的本地作用域时，才能为该类型实现 trait。例如，可以为 `aggregator` crate 的自定义类型 `Tweet` 实现如标准库中的 `Display` trait，这是因为 `Tweet` 类型位于 `aggregator` crate 本地的作用域中。类似地，也可以在 `aggregator` crate 中为 `Vec<T>` 实现 `Summary`，这是因为 `Summary` trait 位于 `aggregator` crate 本地作用域中。
 
-但是不能为外部类型实现外部 trait。例如，不能在多媒体聚合库 crate 中为 `Vec<T>` 实现 `Display` trait。这是因为 `Display` 和 `Vec<T>` 都定义于标准库中，它们并不位于多媒体聚合库的 crate 本地作用域中。这个限制是被称为 **相干性**（*coherence*） 的程序属性的一部分，或者更具体的说是 **孤儿规则**（*orphan rule*），其得名于不存在父类型。这条规则确保了其他人编写的代码不会破坏你代码，反之亦然。没有这条规则的话，两个 crate 可以分别对相同类型实现相同的 trait，而 Rust 将无从得知应该使用哪一个实现。
+但是不能为外部类型实现外部 trait。例如，不能在 `aggregator` crate 中为 `Vec<T>` 实现 `Display` trait。这是因为 `Display` 和 `Vec<T>` 都定义于标准库中，它们并不位于 `aggregator` crate 本地作用域中。这个限制是被称为 **相干性**（*coherence*） 的程序属性的一部分，或者更具体的说是 **孤儿规则**（*orphan rule*），其得名于不存在父类型。这条规则确保了其他人编写的代码不会破坏你代码，反之亦然。没有这条规则的话，两个 crate 可以分别对相同类型实现相同的 trait，而 Rust 将无从得知应该使用哪一个实现。
 
 ### 默认实现
 
@@ -113,7 +113,7 @@ pub trait Summary {
 
 <span class="caption">示例 10-14：`Summary` trait 的定义，带有一个 `summarize` 方法的默认实现</span>
 
-如果想要对 `NewsArticle` 实例使用这个默认实现，而不是定义一个自己的实现，则可以通过 impl Summary for NewsArticle {} 指定一个空的 `impl` 块。
+如果想要对 `NewsArticle` 实例使用这个默认实现，而不是定义一个自己的实现，则可以通过 `impl Summary for NewsArticle {}` 指定一个空的 `impl` 块。
 
 虽然我们不再直接为 `NewsArticle` 定义 `summarize` 方法了，但是我们提供了一个默认实现并且指定 `NewsArticle` 实现 `Summary` trait。因此，我们仍然可以对 `NewsArticle` 实例调用 `summarize` 方法，如下所示：
 
@@ -184,11 +184,11 @@ pub fn notify(item: impl Summary) {
 }
 ```
 
-在 `notify` 函数体中，可以调用任何来自 `Summary` trait 的方法，比如 `summarize`。
+对于 `item` 参数，我们指定了 `impl` 关键字和 trait 名称，而不是具体的类型。该参数支持任何实现了指定 trait 的类型。在 `notify` 函数体中，可以调用任何来自 `Summary` trait 的方法，比如 `summarize`。我们可以传递任何 `NewsArticle` 或 `Tweet` 的实例来调用 `notify`。任何用其它如 `String` 或 `i32` 的类型调用该函数的代码都不能编译，因为它们没有实现 `Summary`。
 
-#### Trait Bounds
+#### Trait Bound 语法
 
-`impl Trait` 语法适用于短小的例子，它不过是一个较长形式的语法糖。这被称为 *trait bound*，这看起来像：
+`impl Trait` 语法适用于直观的例子，它不过是一个较长形式的语法糖。这被称为 *trait bound*，这看起来像：
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: T) {
@@ -196,9 +196,9 @@ pub fn notify<T: Summary>(item: T) {
 }
 ```
 
-这与之前的例子相同，不过稍微冗长了一些。trait bound 与泛型参数声明在一起，位于尖括号中的冒号后面。因为 `T` 的 trait bound，我们可以传递任何 `NewsArticle` 或 `Tweet` 的实例调用 `notify`。用任何其他类型，比如 `String` 或 `i32`，调用该函数的代码将不能编译，因为这些类型没有实现 `Summary`。
+这与之前的例子相同，不过稍微冗长了一些。trait bound 与泛型参数声明在一起，位于尖括号中的冒号后面。
 
-何时应该使用这种形式而不是 `impl Trait` 呢？虽然 `impl Trait` 适用于短小的例子，trait bound 则适用于更复杂的场景。例如，比如需要获取两个实现了 `Summary` 的类型：
+`impl Trait` 很方便，适用于短小的例子。trait bound 则适用于更复杂的场景。例如，可以获取两个实现了 `Summary` 的参数。使用 `impl Trait` 的语法看起来像这样：
 
 ```rust,ignore
 pub fn notify(item1: impl Summary, item2: impl Summary) {
@@ -210,7 +210,9 @@ pub fn notify(item1: impl Summary, item2: impl Summary) {
 pub fn notify<T: Summary>(item1: T, item2: T) {
 ```
 
-#### 通过 `+` 指定多个 trait
+泛型 `T` 被指定为 `item1` 和 `item2` 的参数限制，如此传递给参数 `item1` 和 `item2` 值的具体类型必须一致。
+
+#### 通过 `+` 指定多个 trait bound
 
 如果 `notify` 需要显示 `item` 的格式化形式，同时也要使用 `summarize` 方法，那么 `item` 就需要同时实现两个不同的 trait：`Display` 和 `Summary`。这可以通过 `+` 语法实现：
 
@@ -218,13 +220,15 @@ pub fn notify<T: Summary>(item1: T, item2: T) {
 pub fn notify(item: impl Summary + Display) {
 ```
 
-这个语法也适用于泛型的 trait bound：
+`+` 语法也适用于泛型的 trait bound：
 
 ```rust,ignore
 pub fn notify<T: Summary + Display>(item: T) {
 ```
 
-#### 通过 `where` 简化代码
+通过指定这两个 trait bound，`notify` 的函数体可以调用 `summarize` 并使用 `{}` 来格式化 `item`。
+
+#### 通过 `where` 简化 trait bound
 
 然而，使用过多的 trait bound 也有缺点。每个泛型有其自己的 trait bound，所以有多个泛型参数的函数在名称和参数列表之间会有很长的 trait bound 信息，这使得函数签名难以阅读。为此，Rust 有另一个在函数签名之后的 `where` 从句中指定 trait bound 的语法。所以除了这么写：
 
@@ -258,11 +262,11 @@ fn returns_summarizable() -> impl Summary {
 }
 ```
 
-这个签名表明，“我要返回某个实现了 `Summary` trait 的类型，但是不确定其具体的类型”。在例子中返回了一个 `Tweet`，不过调用方并不知情。
+通过使用 `impl Summary` 作为返回值类型，我们指定了 `returns_summarizable` 函数返回某个实现了 `Summary` trait 的类型，但是不确定其具体的类型。在这个例子中 `returns_summarizable` 返回了一个 `Tweet`，不过调用方并不知情。
 
-这有什么用呢？在第十三章中，我们会学习两个大量依赖 trait 的功能：闭包和迭代器。这些功能创建只有编译器知道的类型，或者是非常非常长的类型。`impl  Trait` 允许你简单的说 “返回一个 `Iterator`” 而无需写出实际的冗长的类型。
+返回一个只是指定了需要实现的 trait 的类型的能力在闭包和迭代器场景十分的有用，第十三章会介绍它们。闭包和迭代器创建只有编译器知道的类型，或者是非常非常长的类型。`impl  Trait` 允许你简单的指定函数返回一个 `Iterator` 而无需写出实际的冗长的类型。
 
-不过这只适用于返回单一类型的情况。例如，这样就 **不行**：
+不过这只适用于返回单一类型的情况。例如，这段代码的返回值类型指定为返回 `impl Summary`，但是返回了 `NewsArticle` 或 `Tweet` 就行不通：
 
 ```rust,ignore,does_not_compile
 fn returns_summarizable(switch: bool) -> impl Summary {
@@ -285,7 +289,7 @@ fn returns_summarizable(switch: bool) -> impl Summary {
 }
 ```
 
-这里尝试返回 `NewsArticle` 或 `Tweet`。这不能编译，因为 `impl Trait` 工作方式的限制。为了编写这样的代码，你不得不等到第十七章的 “为使用不同类型的值而设计的 trait 对象” 部分。
+这里尝试返回 `NewsArticle` 或 `Tweet`。这不能编译，因为 `impl Trait` 工作方式的限制。第十七章的 [“为使用不同类型的值而设计的 trait 对象”][using-trait-objects-that-allow-for-values-of-different-types] 部分会介绍如何编写这样一个函数。
 
 ### 使用 trait bounds 来修复 `largest` 函数
 
@@ -329,7 +333,7 @@ error[E0507]: cannot move out of borrowed content
   |         cannot move out of borrowed content
 ```
 
-错误的核心是 `cannot move out of type [T], a non-copy slice`，对于非泛型版本的 `largest` 函数，我们只尝试了寻找最大的 `i32` 和 `char`。正如第四章 “只在栈上的数据：拷贝” 部分讨论过的，像 `i32` 和 `char` 这样的类型是已知大小的并可以储存在栈上，所以他们实现了 `Copy` trait。当我们将 `largest` 函数改成使用泛型后，现在 `list` 参数的类型就有可能是没有实现 `Copy` trait 的。这意味着我们可能不能将 `list[0]` 的值移动到 `largest` 变量中，这导致了上面的错误。
+错误的核心是 `cannot move out of type [T], a non-copy slice`，对于非泛型版本的 `largest` 函数，我们只尝试了寻找最大的 `i32` 和 `char`。正如第四章 [“只在栈上的数据：拷贝”][stack-only-data-copy]  部分讨论过的，像 `i32` 和 `char` 这样的类型是已知大小的并可以储存在栈上，所以他们实现了 `Copy` trait。当我们将 `largest` 函数改成使用泛型后，现在 `list` 参数的类型就有可能是没有实现 `Copy` trait 的。这意味着我们可能不能将 `list[0]` 的值移动到 `largest` 变量中，这导致了上面的错误。
 
 为了只对实现了 `Copy` 的类型调用这些代码，可以在 `T` 的 trait bounds 中增加 `Copy`！示例 10-15 中展示了一个可以编译的泛型版本的 `largest` 函数的完整代码，只要传递给 `largest` 的 slice 值的类型实现了 `PartialOrd` **和** `Copy` 这两个 trait，例如 `i32` 和 `char`：
 
@@ -420,3 +424,8 @@ blanket implementation 会出现在 trait 文档的 “Implementers” 部分。
 trait 和 trait bound 让我们使用泛型类型参数来减少重复，并仍然能够向编译器明确指定泛型类型需要拥有哪些行为。因为我们向编译器提供了 trait bound 信息，它就可以检查代码中所用到的具体类型是否提供了正确的行为。在动态类型语言中，如果我们尝试调用一个类型并没有实现的方法，会在运行时出现错误。Rust 将这些错误移动到了编译时，甚至在代码能够运行之前就强迫我们修复错误。另外，我们也无需编写运行时检查行为的代码，因为在编译时就已经检查过了，这样相比其他那些不愿放弃泛型灵活性的语言有更好的性能。
 
 这里还有一种泛型，我们一直在使用它甚至都没有察觉它的存在，这就是 **生命周期**（*lifetimes*）。不同于其他泛型帮助我们确保类型拥有期望的行为，生命周期则有助于确保引用在我们需要他们的时候一直有效。让我们学习生命周期是如何做到这些的。
+
+[stack-only-data-copy]:
+ch04-01-what-is-ownership.html#stack-only-data-copy
+[using-trait-objects-that-allow-for-values-of-different-types]:
+ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
