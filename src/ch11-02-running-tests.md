@@ -2,7 +2,7 @@
 
 > [ch11-02-running-tests.md](https://github.com/rust-lang/book/blob/master/src/ch11-02-running-tests.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 42b802f26197f9a066e4a671d2b062af25972c13
 
 就像 `cargo run` 会编译代码并运行生成的二进制文件一样，`cargo test` 在测试模式下编译代码并运行生成的测试二进制文件。可以指定命令行参数来改变 `cargo test` 的默认行为。例如，`cargo test` 生成的二进制文件的默认行为是并行的运行所有测试，并截获测试运行过程中产生的输出，阻止他们被显示出来，使得阅读测试结果相关的内容变得更容易。
 
@@ -66,10 +66,10 @@ test tests::this_test_will_fail ... FAILED
 failures:
 
 ---- tests::this_test_will_fail stdout ----
-        I got the value 8
+I got the value 8
 thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left == right)`
   left: `5`,
- right: `10`', src/lib.rs:19:8
+ right: `10`', src/lib.rs:19:9
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
@@ -95,7 +95,7 @@ I got the value 8
 test tests::this_test_will_pass ... ok
 thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left == right)`
   left: `5`,
- right: `10`', src/lib.rs:19:8
+ right: `10`', src/lib.rs:19:9
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 test tests::this_test_will_fail ... FAILED
 
@@ -208,7 +208,7 @@ fn it_works() {
 #[test]
 #[ignore]
 fn expensive_test() {
-    // code that takes an hour to run
+    // 需要运行一个小时的代码
 }
 ```
 

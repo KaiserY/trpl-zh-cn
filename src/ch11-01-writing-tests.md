@@ -2,14 +2,13 @@
 
 > [ch11-01-writing-tests.md](https://github.com/rust-lang/book/blob/master/src/ch11-01-writing-tests.md)
 > <br>
-> commit 820ac357f6cf0e866e5a8e7a9c57dd3e17e9f8ca
+> commit cc6a1ef2614aa94003566027b285b249ccf961fa
 
 Rust 中的测试函数是用来验证非测试代码是否按照期望的方式运行的。测试函数体通常执行如下三种操作：
 
 1. 设置任何所需的数据或状态
 2. 运行需要测试的代码
 3. 断言其结果是我们所期望的
-
 
 让我们看看 Rust 提供的专门用来编写测试的功能：`test` 属性、一些宏和 `should_panic` 属性。
 
@@ -28,7 +27,6 @@ $ cargo new adder --lib
      Created library `adder` project
 $ cd adder
 ```
-
 
 adder 库中 `src/lib.rs` 的内容应该看起来如示例 11-1 所示：
 
@@ -75,13 +73,13 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
 Cargo 编译并运行了测试。在 `Compiling`、`Finished` 和 `Running` 这几行之后，可以看到 `running 1 test` 这一行。下一行显示了生成的测试函数的名称，它是 `it_works`，以及测试的运行结果，`ok`。接着可以看到全体测试运行结果的摘要：`test result: ok.` 意味着所有测试都通过了。`1 passed; 0 failed` 表示通过或失败的测试数量。
 
-因为之前我们并没有将任何测试标记为忽略，所以摘要中会显示 `0 ignored`。我们也没有过滤需要运行的测试，所以摘要中会显示`0 filtered out`。在下一部分 “控制测试如何运行” 会讨论忽略和过滤测试。
+因为之前我们并没有将任何测试标记为忽略，所以摘要中会显示 `0 ignored`。我们也没有过滤需要运行的测试，所以摘要中会显示`0 filtered out`。在下一部分 [“控制测试如何运行”][controlling-how-tests-are-run] 会讨论忽略和过滤测试。
 
 `0 measured` 统计是针对性能测试的。性能测试（benchmark tests）在编写本书时，仍只能用于 Rust 开发版（nightly Rust）。请查看 [性能测试的文档][bench] 了解更多。
 
 [bench]: https://doc.rust-lang.org/unstable-book/library-features/test.html
 
-测试输出的中以 `Doc-tests adder` 开头的这一部分是所有文档测试的结果。我们现在并没有任何文档测试，不过 Rust 会编译任何在 API 文档中的代码示例。这个功能帮助我们使文档和代码保持同步！在第十四章的 “文档注释” 部分会讲到如何编写文档测试。现在我们将忽略 `Doc-tests` 部分的输出。
+测试输出的中以 `Doc-tests adder` 开头的这一部分是所有文档测试的结果。我们现在并没有任何文档测试，不过 Rust 会编译任何在 API 文档中的代码示例。这个功能帮助我们使文档和代码保持同步！在第十四章的 [“文档注释作为测试”][doc-comments] 部分会讲到如何编写文档测试。现在我们将忽略 `Doc-tests` 部分的输出。
 
 让我们改变测试的名称并看看这如何改变测试的输出。给 `it_works` 函数起个不同的名字，比如 `exploration`，像这样：
 
@@ -139,7 +137,7 @@ test tests::another ... FAILED
 failures:
 
 ---- tests::another stdout ----
-    thread 'tests::another' panicked at 'Make this test fail', src/lib.rs:10:8
+thread 'tests::another' panicked at 'Make this test fail', src/lib.rs:10:9
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
@@ -152,7 +150,7 @@ error: test failed
 
 <span class="caption">示例 11-4：一个测试通过和一个测试失败的测试结果</span>
 
-`test tests::another` 这一行是 `FAILED` 而不是 `ok` 了。在单独测试结果和摘要之间多了两个新的部分：第一个部分显示了测试失败的详细原因。在这个例子中，`another` 因为在*src/lib.rs* 的第 10 行 `panicked at 'Make this test fail'` 而失败。下一部分列出了所有失败的测试，这在有很多测试和很多失败测试的详细输出时很有帮助。我们可以通过使用失败测试的名称来只运行这个测试，以便调试；下一部分 “控制测试如何运行” 会讲到更多运行测试的方法。
+`test tests::another` 这一行是 `FAILED` 而不是 `ok` 了。在单独测试结果和摘要之间多了两个新的部分：第一个部分显示了测试失败的详细原因。在这个例子中，`another` 因为在*src/lib.rs* 的第 10 行 `panicked at 'Make this test fail'` 而失败。下一部分列出了所有失败的测试，这在有很多测试和很多失败测试的详细输出时很有帮助。我们可以通过使用失败测试的名称来只运行这个测试，以便调试；下一部分 [“控制测试如何运行”][controlling-how-tests-are-run] 会讲到更多运行测试的方法。
 
 最后是摘要行：总体上讲，测试结果是 `FAILED`。有一个测试通过和一个测试失败。
 
@@ -169,14 +167,14 @@ error: test failed
 ```rust
 # fn main() {}
 #[derive(Debug)]
-pub struct Rectangle {
-    length: u32,
+struct Rectangle {
     width: u32,
+    height: u32,
 }
 
 impl Rectangle {
-    pub fn can_hold(&self, other: &Rectangle) -> bool {
-        self.length > other.length && self.width > other.width
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
     }
 }
 ```
@@ -195,8 +193,8 @@ mod tests {
 
     #[test]
     fn larger_can_hold_smaller() {
-        let larger = Rectangle { length: 8, width: 7 };
-        let smaller = Rectangle { length: 5, width: 1 };
+        let larger = Rectangle { width: 8, height: 7 };
+        let smaller = Rectangle { width: 5, height: 1 };
 
         assert!(larger.can_hold(&smaller));
     }
@@ -205,7 +203,7 @@ mod tests {
 
 <span class="caption">示例 11-6：一个 `can_hold` 的测试，检查一个较大的矩形确实能放得下一个较小的矩形</span>
 
-注意在 `tests` 模块中新增加了一行：`use super::*;`。`tests` 是一个普通的模块，它遵循第七章 “私有性规则” 部分介绍的可见性规则。因为这是一个内部模块，要测试外部模块中的代码，需要将其引入到内部模块的作用域中。这里选择使用 glob 全局导入，以便在 `tests` 模块中使用所有在外部模块定义的内容。
+注意在 `tests` 模块中新增加了一行：`use super::*;`。`tests` 是一个普通的模块，它遵循第七章 [“路径用于引用模块树中的项”][paths-for-referring-to-an-item-in-the-module-tree] 部分介绍的可见性规则。因为这是一个内部模块，要测试外部模块中的代码，需要将其引入到内部模块的作用域中。这里选择使用 glob 全局导入，以便在 `tests` 模块中使用所有在外部模块定义的内容。
 
 我们将测试命名为 `larger_can_hold_smaller`，并创建所需的两个 `Rectangle` 实例。接着调用 `assert!` 宏并传递 `larger.can_hold(&smaller)` 调用的结果作为参数。这个表达式预期会返回 `true`，所以测试应该通过。让我们拭目以待！
 
@@ -233,8 +231,8 @@ mod tests {
 
     #[test]
     fn smaller_cannot_hold_larger() {
-        let larger = Rectangle { length: 8, width: 7 };
-        let smaller = Rectangle { length: 5, width: 1 };
+        let larger = Rectangle { width: 8, height: 7 };
+        let smaller = Rectangle { width: 5, height: 1 };
 
         assert!(!smaller.can_hold(&larger));
     }
@@ -256,15 +254,15 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```rust,not_desired_behavior
 # fn main() {}
 # #[derive(Debug)]
-# pub struct Rectangle {
-#     length: u32,
+# struct Rectangle {
 #     width: u32,
+#     height: u32,
 # }
 // --snip--
 
 impl Rectangle {
-    pub fn can_hold(&self, other: &Rectangle) -> bool {
-        self.length < other.length && self.width > other.width
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width < other.width && self.height > other.height
     }
 }
 ```
@@ -279,8 +277,8 @@ test tests::larger_can_hold_smaller ... FAILED
 failures:
 
 ---- tests::larger_can_hold_smaller stdout ----
-    thread 'tests::larger_can_hold_smaller' panicked at 'assertion failed:
-    larger.can_hold(&smaller)', src/lib.rs:22:8
+thread 'tests::larger_can_hold_smaller' panicked at 'assertion failed:
+larger.can_hold(&smaller)', src/lib.rs:22:9
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
@@ -316,7 +314,7 @@ mod tests {
 }
 ```
 
-<span class="caption">示例 11-7：使用 `assert_eq!` 宏测试 `add_two`</span>
+<span class="caption">示例 11-7：使用 `assert_eq!` 宏测试 `add_two` 函数</span>
 
 测试通过了！
 
@@ -347,9 +345,9 @@ test tests::it_adds_two ... FAILED
 failures:
 
 ---- tests::it_adds_two stdout ----
-        thread 'tests::it_adds_two' panicked at 'assertion failed: `(left == right)`
+thread 'tests::it_adds_two' panicked at 'assertion failed: `(left == right)`
   left: `4`,
- right: `5`', src/lib.rs:11:8
+ right: `5`', src/lib.rs:11:9
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
@@ -364,11 +362,11 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 
 `assert_ne!` 宏在传递给它的两个值不相等时通过，而在相等时失败。在代码按预期运行，我们不确定值 **会** 是什么，不过能确定值绝对 **不会** 是什么的时候，这个宏最有用处。例如，如果一个函数保证会以某种方式改变其输出，不过这种改变方式是由运行测试时是星期几来决定的，这时最好的断言可能就是函数的输出不等于其输入。
 
-`assert_eq!` 和 `assert_ne!` 宏在底层分别使用了 `==` 和 `!=`。当断言失败时，这些宏会使用调试格式打印出其参数，这意味着被比较的值必需实现了 `PartialEq` 和 `Debug` trait。所有的基本类型和大部分标准库类型都实现了这些 trait。对于自定义的结构体和枚举，需要实现 `PartialEq` 才能断言他们的值是否相等。需要实现 `Debug` 才能在断言失败时打印他们的值。因为这两个 trait 都是派生 trait，如第五章示例 5-12 所提到的，通常可以直接在结构体或枚举上添加 `#[derive(PartialEq, Debug)]` 注解。附录 C “可派生 trait” 中有更多关于这些和其他派生 trait 的详细信息。
+`assert_eq!` 和 `assert_ne!` 宏在底层分别使用了 `==` 和 `!=`。当断言失败时，这些宏会使用调试格式打印出其参数，这意味着被比较的值必需实现了 `PartialEq` 和 `Debug` trait。所有的基本类型和大部分标准库类型都实现了这些 trait。对于自定义的结构体和枚举，需要实现 `PartialEq` 才能断言他们的值是否相等。需要实现 `Debug` 才能在断言失败时打印他们的值。因为这两个 trait 都是派生 trait，如第五章示例 5-12 所提到的，通常可以直接在结构体或枚举上添加 `#[derive(PartialEq, Debug)]` 注解。附录 C [“可派生 trait”][derivable-traits] 中有更多关于这些和其他派生 trait 的详细信息。
 
 ### 自定义失败信息
 
-你也可以向 `assert!`、`assert_eq!` 和 `assert_ne!` 宏传递一个可选的失败信息参数，可以在测试失败时将自定义失败信息一同打印出来。任何在 `assert!` 的一个必需参数和 `assert_eq!` 和 `assert_ne!` 的两个必需参数之后指定的参数都会传递给 `format!` 宏（在第八章的“使用 `+` 运算符或 `format!` 宏拼接字符串”部分讨论过），所以可以传递一个包含 `{}` 占位符的格式字符串和需要放入占位符的值。自定义信息有助于记录断言的意义；当测试失败时就能更好的理解代码出了什么问题。
+你也可以向 `assert!`、`assert_eq!` 和 `assert_ne!` 宏传递一个可选的失败信息参数，可以在测试失败时将自定义失败信息一同打印出来。任何在 `assert!` 的一个必需参数和 `assert_eq!` 和 `assert_ne!` 的两个必需参数之后指定的参数都会传递给 `format!` 宏（在第八章的 [“使用 `+` 运算符或 `format!` 宏拼接字符串”][concatenation-with-the--operator-or-the-format-macro] 部分讨论过），所以可以传递一个包含 `{}` 占位符的格式字符串和需要放入占位符的值。自定义信息有助于记录断言的意义；当测试失败时就能更好的理解代码出了什么问题。
 
 例如，比如说有一个根据人名进行问候的函数，而我们希望测试将传递给函数的人名显示在输出中：
 
@@ -412,8 +410,8 @@ test tests::greeting_contains_name ... FAILED
 failures:
 
 ---- tests::greeting_contains_name stdout ----
-        thread 'tests::greeting_contains_name' panicked at 'assertion failed:
-result.contains("Carol")', src/lib.rs:12:8
+thread 'tests::greeting_contains_name' panicked at 'assertion failed:
+result.contains("Carol")', src/lib.rs:12:9
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
@@ -437,8 +435,8 @@ fn greeting_contains_name() {
 
 ```text
 ---- tests::greeting_contains_name stdout ----
-        thread 'tests::greeting_contains_name' panicked at 'Greeting did not
-contain name, value was `Hello!`', src/lib.rs:12:8
+thread 'tests::greeting_contains_name' panicked at 'Greeting did not
+contain name, value was `Hello!`', src/lib.rs:12:9
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
@@ -532,7 +530,7 @@ failures:
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-这回并没有得到非常有用的信息，不过一旦我们观察测试函数，会发现它标注了 `#[should_panic]`。这个错误意味着代码中函数 `Guess::new(200)` 并没有产生 panic。
+这回并没有得到非常有用的信息，不过一旦我们观察测试函数，会发现它标注了 `#[should_panic]`。这个错误意味着代码中测试函数 `Guess::new(200)` 并没有产生 panic。
 
 然而 `should_panic` 测试结果可能会非常含糊不清，因为它只是告诉我们代码并没有产生 panic。`should_panic` 甚至在一些不是我们期望的原因而导致 panic 时也会通过。为了使 `should_panic` 测试结果更精确，我们可以给 `should_panic` 属性增加一个可选的 `expected` 参数。测试工具会确保错误信息中包含其提供的文本。例如，考虑示例 11-9 中修改过的 `Guess`，这里 `new` 函数根据其值是过大还或者过小而提供不同的 panic 信息：
 
@@ -597,8 +595,8 @@ test tests::greater_than_100 ... FAILED
 failures:
 
 ---- tests::greater_than_100 stdout ----
-        thread 'tests::greater_than_100' panicked at 'Guess value must be
-greater than or equal to 1, got 200.', src/lib.rs:11:12
+thread 'tests::greater_than_100' panicked at 'Guess value must be
+greater than or equal to 1, got 200.', src/lib.rs:11:13
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 note: Panic did not include expected string 'Guess value must be less than or
 equal to 100'
@@ -629,6 +627,18 @@ mod tests {
 }
 ```
 
-这里我们将 `it_works` 改为返回 Result。同时在函数体中，在成功时返回 `Ok(())` 而不是 `assert_eq!`，而失败时返回带有 `String` 的 `Err`。跟之前一样，这个测试可能成功或失败，不过不再通过 panic，可以通过 `Result<T, E>` 来判断结果。为此不能在对这些函数使用 `#[should_panic]`；而是应该返回 `Err`！
+现在 `it_works` 函数的返回值类型为 `Result<(), String>`。在函数体中，不同于调用 `assert_eq!` 宏，而是在测试通过时返回 `Ok(())`，在测试失败时返回带有 `String` 的 `Err`。
+
+这样编写测试来返回 `Result<T, E>` 就可以在函数体中使用问号运算符，如此可以方便的编写任何运算符会返回 `Err` 成员的测试。
+
+不能对这些使用  `Result<T, E>` 的测试使用 `#[should_panic]` 注解。相反应该在测试失败时直接返回 `Err` 值。
 
 现在你知道了几种编写测试的方法，让我们看看运行测试时会发生什么，和可以用于 `cargo test` 的不同选项。
+
+[concatenation-with-the--operator-or-the-format-macro]:
+ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro
+[controlling-how-tests-are-run]:
+ch11-02-running-tests.html#controlling-how-tests-are-run
+[derivable-traits]: appendix-03-derivable-traits.html
+[doc-comments]: ch14-02-publishing-to-crates-io.html#documentation-comments-as-tests
+[paths-for-referring-to-an-item-in-the-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
