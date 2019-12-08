@@ -2,7 +2,7 @@
 
 > [ch12-04-testing-the-librarys-functionality.md](https://github.com/rust-lang/book/blob/master/src/ch12-04-testing-the-librarys-functionality.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 0ca4b88f75f8579de87adc2ad36d340709f5ccad
 
 现在我们将逻辑提取到了 *src/lib.rs* 并将所有的参数解析和错误处理留在了 *src/main.rs* 中，为代码的核心功能编写测试将更加容易。我们可以直接使用多种参数调用函数并检查返回值而无需从命令行运行二进制文件了。如果你愿意的话，请自行为 `Config::new` 和 `run` 函数的功能编写一些测试。
 
@@ -19,12 +19,12 @@
 
 ### 编写失败测试
 
-去掉 *src/lib.rs* 和 *src/main.rs* 中用于检查程序行为的 `println!` 语句，因为不再真正需要他们了。接着我们会像第十一章那样增加一个 `test` 模块和一个测试函数。测试函数指定了 `search` 函数期望拥有的行为：它会获取一个需要查询的字符串和用来查询的文本，并只会返回包含请求的文本行。示例 12-15 展示了这个测试，它还不能编译：
+去掉 *src/lib.rs* 和 *src/main.rs* 中用于检查程序行为的 `println!` 语句，因为不再真正需要他们了。接着我们会像 [第十一章][ch11-anatomy] 那样增加一个 `test` 模块和一个测试函数。测试函数指定了 `search` 函数期望拥有的行为：它会获取一个需要查询的字符串和用来查询的文本，并只会返回包含请求的文本行。示例 12-15 展示了这个测试，它还不能编译：
 
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust
-# fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+# pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 #      vec![]
 # }
 #
@@ -57,14 +57,14 @@ Pick three.";
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust
-fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     vec![]
 }
 ```
 
 <span class="caption">示例 12-16：刚好足够使测试通过编译的 `search` 函数定义</span>
 
-注意需要在 `search` 的签名中定义一个显式生命周期 `'a` 并用于 `contents` 参数和返回值。回忆一下第十章中讲到生命周期参数指定哪个参数的生命周期与返回值的生命周期相关联。在这个例子中，我们表明返回的 vector 中应该包含引用参数 `contents`（而不是参数`query`） slice 的字符串 slice。
+注意需要在 `search` 的签名中定义一个显式生命周期 `'a` 并用于 `contents` 参数和返回值。回忆一下 [第十章][ch10-lifetimes] 中讲到生命周期参数指定哪个参数的生命周期与返回值的生命周期相关联。在这个例子中，我们表明返回的 vector 中应该包含引用参数 `contents`（而不是参数`query`） slice 的字符串 slice。
 
 换句话说，我们告诉 Rust 函数 `search` 返回的数据将与 `search` 函数中的参数 `contents` 的数据存在的一样久。这是非常重要的！为了使这个引用有效那么 **被** slice 引用的数据也需要保持有效；如果编译器认为我们是在创建 `query` 而不是 `contents` 的字符串 slice，那么安全检查将是不正确的。
 
@@ -74,7 +74,7 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 error[E0106]: missing lifetime specifier
  --> src/lib.rs:5:51
   |
-5 | fn search(query: &str, contents: &str) -> Vec<&str> {
+5 | pub fn search(query: &str, contents: &str) -> Vec<&str> {
   |                                                   ^ expected lifetime
 parameter
   |
@@ -84,7 +84,7 @@ parameter
 
 Rust 不可能知道我们需要的是哪一个参数，所以需要告诉它。因为参数 `contents` 包含了所有的文本而且我们希望返回匹配的那部分文本，所以我们知道 `contents` 是应该要使用生命周期语法来与返回值相关联的参数。
 
-其他语言中并不需要你在函数签名中将参数与返回值相关联。所以这么做可能仍然感觉有些陌生，随着时间的推移这将会变得越来越容易。你可能想要将这个例子与第十章中生命 “生命周期与引用有效性” 部分做对比。
+其他语言中并不需要你在函数签名中将参数与返回值相关联。所以这么做可能仍然感觉有些陌生，随着时间的推移这将会变得越来越容易。你可能想要将这个例子与第十章中生命 [“生命周期与引用有效性”][validating-references-with-lifetimes] 部分做对比。
 
 现在运行测试：
 
@@ -137,7 +137,7 @@ Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
-fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     for line in contents.lines() {
         // do something with line
     }
@@ -146,7 +146,7 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 <span class="caption">示例 12-17：遍历 `contents` 的每一行</span>
 
-`lines` 方法返回一个迭代器。第十三章会深入了解迭代器，不过我们已经在示例 3-5 中见过使用迭代器的方法了，在那里使用了一个 `for` 循环和迭代器在一个集合的每一项上运行了一些代码。
+`lines` 方法返回一个迭代器。[第十三章][ch13-iterators] 会深入了解迭代器，不过我们已经在 [示例 3-5][ch3-iter] 中见过使用迭代器的方法了，在那里使用了一个 `for` 循环和迭代器在一个集合的每一项上运行了一些代码。
 
 #### 用查询字符串搜索每一行
 
@@ -155,7 +155,7 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
-fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     for line in contents.lines() {
         if line.contains(query) {
             // do something with line
@@ -173,7 +173,7 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
-fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
 
     for line in contents.lines() {
@@ -255,3 +255,10 @@ $ cargo run monomorphization poem.txt
 非常好！我们创建了一个属于自己的迷你版经典工具，并学习了很多如何组织程序的知识。我们还学习了一些文件输入输出、生命周期、测试和命令行解析的内容。
 
 为了使这个项目更丰满，我们将简要的展示如何处理环境变量和打印到标准错误，这两者在编写命令行程序时都很有用。
+
+[validating-references-with-lifetimes]:
+ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
+[ch11-anatomy]: ch11-01-writing-tests.html#the-anatomy-of-a-test-function
+[ch10-lifetimes]: ch10-03-lifetime-syntax.html
+[ch3-iter]: ch03-05-control-flow.html#looping-through-a-collection-with-for
+[ch13-iterators]: ch13-02-iterators.html

@@ -2,7 +2,7 @@
 
 > [ch12-01-accepting-command-line-arguments.md](https://github.com/rust-lang/book/blob/master/src/ch12-01-accepting-command-line-arguments.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit c084bdd9ee328e7e774df19882ccc139532e53d8
 
 一如既往使用 `cargo new` 新建一个项目，我们称之为 `minigrep` 以便与可能已经安装在系统上的 `grep` 工具相区别：
 
@@ -22,7 +22,7 @@ $ cargo run searchstring example-filename.txt
 
 ### 读取参数值
 
-为了确保 `minigrep` 能够获取传递给它的命令行参数的值，我们需要一个 Rust 标准库提供的函数，也就是 `std::env::args`。这个函数返回一个传递给程序的命令行参数的 **迭代器**（*iterator*）。我们还未讨论到迭代器（第十三章会全面的介绍他们），但是现在只需理解迭代器的两个细节：迭代器生成一系列的值，可以在迭代器上调用 `collect` 方法将其转换为一个集合，比如包含所有迭代器产生元素的 vector。
+为了确保 `minigrep` 能够获取传递给它的命令行参数的值，我们需要一个 Rust 标准库提供的函数，也就是 `std::env::args`。这个函数返回一个传递给程序的命令行参数的 **迭代器**（*iterator*）。我们会在 [第十三章][ch13] 全面的介绍它们。但是现在只需理解迭代器的两个细节：迭代器生成一系列的值，可以在迭代器上调用 `collect` 方法将其转换为一个集合，比如包含所有迭代器产生元素的 vector。
 
 使用示例 12-1 中的代码来读取任何传递给 `minigrep` 的命令行参数并将其收集到一个 vector 中。
 
@@ -39,7 +39,7 @@ fn main() {
 
 <span class="caption">示例 12-1：将命令行参数收集到一个 vector 中并打印出来</span>
 
-首先使用 `use` 语句来将 `std::env` 模块引入作用域以便可以使用它的 `args` 函数。注意 `std::env::args` 函数被嵌套进了两层模块中。正如第七章讲到的，当所需函数嵌套了多于一层模块时，通常将父模块引入作用域，而不是其自身。这便于我们利用 `std::env` 中的其他函数。这比增加了 `use std::env::args;` 后仅仅使用 `args` 调用函数要更明确一些，因为 `args` 容易被错认成一个定义于当前模块的函数。
+首先使用 `use` 语句来将 `std::env` 模块引入作用域以便可以使用它的 `args` 函数。注意 `std::env::args` 函数被嵌套进了两层模块中。正如 [第七章][ch7-idiomatic-use] 讲到的，当所需函数嵌套了多于一层模块时，通常将父模块引入作用域，而不是其自身。这便于我们利用 `std::env` 中的其他函数。这比增加了 `use std::env::args;` 后仅仅使用 `args` 调用函数要更明确一些，因为 `args` 容易被错认成一个定义于当前模块的函数。
 
 > ### `args` 函数和无效的 Unicode
 >
@@ -97,3 +97,6 @@ In file sample.txt
 ```
 
 好的，它可以工作！我们将所需的参数值保存进了对应的变量中。之后会增加一些错误处理来应对类似用户没有提供参数的情况，不过现在我们将忽略他们并开始增加读取文件功能。
+
+[ch13]: ch13-00-functional-features.html
+[ch7-idiomatic-use]: ch07-04-bringing-paths-into-scope-with-the-use-keyword.html#creating-idiomatic-use-paths

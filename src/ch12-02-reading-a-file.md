@@ -2,7 +2,7 @@
 
 > [ch12-02-reading-a-file.md](https://github.com/rust-lang/book/blob/master/src/ch12-02-reading-a-file.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 76df60bccead5f3de96db23d97b69597cd8a2b82
 
 现在我们要增加读取由 `filename` 命令行参数指定的文件的功能。首先，需要一个用来测试的示例文件：用来确保 `minigrep` 正常工作的最好的文件是拥有多行少量文本且有一些重复单词的文件。示例 12-3 是一首艾米莉·狄金森（Emily Dickinson）的诗，它正适合这个工作！在项目根目录创建一个文件 `poem.txt`，并输入诗 "I'm nobody! Who are you?"：
 
@@ -65,10 +65,10 @@ $ cargo run the poem.txt
 Searching for the
 In file poem.txt
 With text:
-I’m nobody! Who are you?
+I'm nobody! Who are you?
 Are you nobody, too?
-Then there’s a pair of us — don’t tell!
-They’d banish us, you know.
+Then there's a pair of us — don't tell!
+They'd banish us, you know.
 
 How dreary to be somebody!
 How public, like a frog

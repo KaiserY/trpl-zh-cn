@@ -2,7 +2,7 @@
 
 > [ch12-03-improving-error-handling-and-modularity.md](https://github.com/rust-lang/book/blob/master/src/ch12-03-improving-error-handling-and-modularity.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 426f3e4ec17e539ae9905ba559411169d303a031
 
 为了改善我们的程序这里有四个问题需要修复，而且他们都与程序的组织方式和如何处理潜在错误有关。
 
@@ -20,15 +20,16 @@
 
 `main` 函数负责多个任务的组织问题在许多二进制项目中很常见。所以 Rust 社区开发出一类在 `main` 函数开始变得庞大时进行二进制程序的关注分离的指导性过程。这些过程有如下步骤：
 
-1. 将程序拆分成 *main.rs* 和 *lib.rs* 并将程序的逻辑放入 *lib.rs* 中。
-2. 当命令行解析逻辑比较小时，可以保留在 *main.rs* 中。
-3. 当命令行解析开始变得复杂时，也同样将其从 *main.rs* 提取到 *lib.rs* 中。
-4. 经过这些过程之后保留在 `main` 函数中的责任应该被限制为：
+* 将程序拆分成 *main.rs* 和 *lib.rs* 并将程序的逻辑放入 *lib.rs* 中。
+* 当命令行解析逻辑比较小时，可以保留在 *main.rs* 中。
+* 当命令行解析开始变得复杂时，也同样将其从 *main.rs* 提取到 *lib.rs* 中。
 
-    * 使用参数值调用命令行解析逻辑
-    * 设置任何其他的配置
-    * 调用 *lib.rs* 中的 `run` 函数
-    * 如果 `run` 返回错误，则处理这个错误
+经过这些过程之后保留在 `main` 函数中的责任应该被限制为：
+
+* 使用参数值调用命令行解析逻辑
+* 设置任何其他的配置
+* 调用 *lib.rs* 中的 `run` 函数
+* 如果 `run` 返回错误，则处理这个错误
 
 这个模式的一切就是为了关注分离：*main.rs* 处理程序运行，而 *lib.rs* 处理所有的真正的任务逻辑。因为不能直接测试 `main` 函数，这个结构通过将所有的程序逻辑移动到 *lib.rs* 的函数中使得我们可以测试他们。仅仅保留在 *main.rs* 中的代码将足够小以便阅读就可以验证其正确性。让我们遵循这些步骤来重构程序。
 
@@ -69,7 +70,7 @@ fn parse_config(args: &[String]) -> (&str, &str) {
 
 > 注意：一些同学将这种在复杂类型更为合适的场景下使用基本类型的反模式称为 **基本类型偏执**（*primitive obsession*）。
 
-示例 12-6 展示了新定义的结构体 `Config`，它有字段 `query` 和 `filename`。我们也改变了 `parse_config` 函数来返回一个 `Config` 结构体的实例，并更新 `main` 来使用结构体字段而不是单独的变量：
+示例 12-6 展示了 `parse_config` 函数的改进。
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -106,6 +107,7 @@ fn parse_config(args: &[String]) -> Config {
 
 <span class="caption">示例 12-6：重构 `parse_config` 返回一个 `Config` 结构体实例</span>
 
+新定义的结构体 `Config` 中包含字段 `query` 和 `filename`。
 `parse_config` 的签名表明它现在返回一个 `Config` 值。在之前的 `parse_config` 函数体中，我们返回了引用 `args` 中 `String` 值的字符串 slice，现在我们定义 `Config` 来包含拥有所有权的 `String` 值。`main` 中的 `args` 变量是参数值的所有者并只允许 `parse_config` 函数借用他们，这意味着如果 `Config` 尝试获取 `args` 中值的所有权将违反 Rust 的借用规则。
 
 还有许多不同的方式可以处理 `String` 的数据，而最简单但有些不太高效的方式是调用这些值的 `clone` 方法。这会生成 `Config` 实例可以拥有的数据的完整拷贝，不过会比储存字符串数据的引用消耗更多的时间和内存。不过拷贝数据使得代码显得更加直白因为无需管理引用的生命周期，所以在这种情况下牺牲一小部分性能来换取简洁性的取舍是值得的。
@@ -118,7 +120,7 @@ fn parse_config(args: &[String]) -> Config {
 
 现在代码更明确的表现了我们的意图，`query` 和 `filename` 是相关联的并且他们的目的是配置程序如何工作。任何使用这些值的代码就知道在 `config` 实例中对应目的的字段名中寻找他们。
 
-### 创建一个 `Config` 构造函数
+### 创建一个 `Config` 的构造函数
 
 目前为止，我们将负责解析命令行参数的逻辑从 `main` 提取到了 `parse_config` 函数中，这有助于我们看清值 `query` 和 `filename` 是相互关联的并应该在代码中表现这种关系。接着我们增加了 `Config` 结构体来描述 `query` 和 `filename` 的相关性，并能够从 `parse_config` 函数中将这些值的名称作为结构体字段名称返回。
 
@@ -168,7 +170,7 @@ $ cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/minigrep`
 thread 'main' panicked at 'index out of bounds: the len is 1
-but the index is 1', src/main.rs:29:21
+but the index is 1', src/main.rs:25:21
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
@@ -191,8 +193,7 @@ fn new(args: &[String]) -> Config {
 
 <span class="caption">示例 12-8：增加一个参数数量检查</span>
 
-这类似于示例 9-9 中的 `Guess::new` 函数，那里如果 `value` 参数超出了有效值的范围就调用 `panic!`。不同于检查值的范围，这里检查 `args` 的长度至少是 `3`，而函数的剩余部分则可以在假设这个条件成立的基础上运行。如果 
-`args` 少于 3 个项，则这个条件将为真，并调用 `panic!` 立即终止程序。
+这类似于 [示例 9-10 中的 `Guess::new` 函数][ch9-custom-types]，那里如果 `value` 参数超出了有效值的范围就调用 `panic!`。不同于检查值的范围，这里检查 `args` 的长度至少是 `3`，而函数的剩余部分则可以在假设这个条件成立的基础上运行。如果 `args` 少于 3 个项，则这个条件将为真，并调用 `panic!` 立即终止程序。
 
 有了 `new` 中这几行额外的代码，再次不带任何参数运行程序并看看现在错误看起来像什么：
 
@@ -201,11 +202,11 @@ $ cargo run
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/minigrep`
-thread 'main' panicked at 'not enough arguments', src/main.rs:30:12
+thread 'main' panicked at 'not enough arguments', src/main.rs:26:13
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-这个输出就好多了，现在有了一个合理的错误信息。然而，还是有一堆额外的信息我们不希望提供给用户。所以在这里使用示例 9-9 中的技术可能不是最好的；正如第九章所讲到的一样，`panic!` 的调用更趋向于程序上的问题而不是使用上的问题。相反我们可以使用第九章学习的另一个技术 —— 返回一个可以表明成功或错误的 `Result`。
+这个输出就好多了，现在有了一个合理的错误信息。然而，还是有一堆额外的信息我们不希望提供给用户。所以在这里使用示例 9-9 中的技术可能不是最好的；正如 [第九章][ch9-error-guidelines] 所讲到的一样，`panic!` 的调用更趋向于程序上的问题而不是使用上的问题。相反我们可以使用第九章学习的另一个技术 —— 返回一个可以表明成功或错误的 [`Result`][ch9-result]。
 
 #### 从 `new` 中返回 `Result` 而不是调用 `panic!`
 
@@ -260,7 +261,7 @@ fn main() {
 
 <span class="caption">示例 12-10：如果新建 `Config` 失败则使用错误码退出</span>
 
-在上面的示例中，使用了一个之前没有涉及到的方法：`unwrap_or_else`，它定义于标准库的 `Result<T, E>` 上。使用 `unwrap_or_else` 可以进行一些自定义的非 `panic!` 的错误处理。当 `Result` 是 `Ok` 时，这个方法的行为类似于 `unwrap`：它返回 `Ok` 内部封装的值。然而，当其值是 `Err` 时，该方法会调用一个 **闭包**（*closure*），也就是一个我们定义的作为参数传递给 `unwrap_or_else` 的匿名函数。第十三章会更详细的介绍闭包。现在你需要理解的是 `unwrap_or_else` 会将 `Err` 的内部值，也就是示例 12-9 中增加的 `not enough arguments` 静态字符串的情况，传递给闭包中位于两道竖线间的参数 `err`。闭包中的代码在其运行时可以使用这个 `err` 值。
+在上面的示例中，使用了一个之前没有涉及到的方法：`unwrap_or_else`，它定义于标准库的 `Result<T, E>` 上。使用 `unwrap_or_else` 可以进行一些自定义的非 `panic!` 的错误处理。当 `Result` 是 `Ok` 时，这个方法的行为类似于 `unwrap`：它返回 `Ok` 内部封装的值。然而，当其值是 `Err` 时，该方法会调用一个 **闭包**（*closure*），也就是一个我们定义的作为参数传递给 `unwrap_or_else` 的匿名函数。[第十三章][ch13] 会更详细的介绍闭包。现在你需要理解的是 `unwrap_or_else` 会将 `Err` 的内部值，也就是示例 12-9 中增加的 `not enough arguments` 静态字符串的情况，传递给闭包中位于两道竖线间的参数 `err`。闭包中的代码在其运行时可以使用这个 `err` 值。
 
 我们新增了一个 `use` 行来从标准库中导入 `process`。在错误的情况闭包中将被运行的代码只有两行：我们打印出了 `err` 值，接着调用了 `std::process::exit`。`process::exit` 会立即停止程序并将传递给它的数字作为退出状态码。这类似于示例 12-8 中使用的基于 `panic!` 的错误处理，除了不会再得到所有的额外输出了。让我们试试：
 
@@ -276,7 +277,7 @@ Problem parsing arguments: not enough arguments
 
 ### 从 `main` 提取逻辑
 
-现在我们完成了配置解析的重构：让我们转向程序的逻辑。正如 “二进制项目的关注分离” 部分所展开的讨论，我们将提取一个叫做 `run` 的函数来存放目前 `main `函数中不属于设置配置或处理错误的所有逻辑。一旦完成这些，`main` 函数将简明的足以通过观察来验证，而我们将能够为所有其他逻辑编写测试。
+现在我们完成了配置解析的重构：让我们转向程序的逻辑。正如 [“二进制项目的关注分离”](#separation-of-concerns-for-binary-projects) 部分所展开的讨论，我们将提取一个叫做 `run` 的函数来存放目前 `main `函数中不属于设置配置或处理错误的所有逻辑。一旦完成这些，`main` 函数将简明的足以通过观察来验证，而我们将能够为所有其他逻辑编写测试。
 
 示例 12-11 展示了提取出来的 `run` 函数。目前我们只进行小的增量式的提取函数的改进。我们仍将在 *src/main.rs* 中定义这个函数：
 
@@ -294,7 +295,7 @@ fn main() {
 
 fn run(config: Config) {
     let contents = fs::read_to_string(config.filename)
-        .expect("something went wrong reading the file");
+        .expect("Something went wrong reading the file");
 
     println!("With text:\n{}", contents);
 }
@@ -330,21 +331,23 @@ fn run(config: Config) -> Result<(), Box<dyn Error>> {
 
 这里我们做出了三个明显的修改。首先，将 `run` 函数的返回类型变为 `Result<(), Box<dyn Error>>`。之前这个函数返回 unit 类型 `()`，现在它仍然保持作为 `Ok` 时的返回值。
 
-对于错误类型，使用了 **trait 对象** `Box<dyn Error>`（在开头使用了 `use` 语句将 `std::error::Error` 引入作用域）。第十七章会涉及 trait 对象。目前只需知道 `Box<dyn Error>` 意味着函数会返回实现了 `Error` trait 的类型，不过无需指定具体将会返回的值的类型。这提供了在不同的错误场景可能有不同类型的错误返回值的灵活性。这也就是 `dyn`，它是 “动态的”（“dynamic”）的缩写。
+对于错误类型，使用了 **trait 对象** `Box<dyn Error>`（在开头使用了 `use` 语句将 `std::error::Error` 引入作用域）。[第十七章][ch17] 会涉及 trait 对象。目前只需知道 `Box<dyn Error>` 意味着函数会返回实现了 `Error` trait 的类型，不过无需指定具体将会返回的值的类型。这提供了在不同的错误场景可能有不同类型的错误返回值的灵活性。这也就是 `dyn`，它是 “动态的”（“dynamic”）的缩写。
 
-第二个改变是去掉了 `expect` 调用并替换为第九章讲到的 `?`。不同于遇到错误就 `panic!`，`?` 会从函数中返回错误值并让调用者来处理它。
+第二个改变是去掉了 `expect` 调用并替换为 [第九章][ch9-question-mark] 讲到的 `?`。不同于遇到错误就 `panic!`，`?` 会从函数中返回错误值并让调用者来处理它。
 
 第三个修改是现在成功时这个函数会返回一个 `Ok` 值。因为 `run` 函数签名中声明成功类型返回值是 `()`，这意味着需要将 unit 类型值包装进 `Ok` 值中。`Ok(())` 一开始看起来有点奇怪，不过这样使用 `()` 是表明我们调用 `run` 只是为了它的副作用的惯用方式；它并没有返回什么有意义的值。
 
 上述代码能够编译，不过会有一个警告：
 
 ```text
-warning: unused `std::result::Result` which must be used
-  --> src/main.rs:18:5
+warning: unused `std::result::Result` that must be used
+  --> src/main.rs:17:5
    |
-18 |     run(config);
+17 |     run(config);
    |     ^^^^^^^^^^^^
-= note: #[warn(unused_must_use)] on by default
+   |
+   = note: #[warn(unused_must_use)] on by default
+   = note: this `Result` may be an `Err` variant, which should be handled
 ```
 
 Rust 提示我们的代码忽略了 `Result` 值，它可能表明这里存在一个错误。虽然我们没有检查这里是否有一个错误，而编译器提醒我们这里应该有一些错误处理代码！现在就让我们修正这个问题。
@@ -421,7 +424,6 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 use std::env;
 use std::process;
 
-use minigrep;
 use minigrep::Config;
 
 fn main() {
@@ -439,3 +441,11 @@ fn main() {
 哇哦！这可有很多的工作，不过我们为将来的成功打下了基础。现在处理错误将更容易，同时代码也更加模块化。从现在开始几乎所有的工作都将在 *src/lib.rs* 中进行。
 
 让我们利用这些新创建的模块的优势来进行一些在旧代码中难以展开的工作，这些工作在新代码中非常容易实现，那就是：编写测试！
+
+[the-static-lifetime]: ch10-03-lifetime-syntax.html#the-static-lifetime
+[ch13]: ch13-00-functional-features.html
+[ch9-custom-types]: ch09-03-to-panic-or-not-to-panic.html#creating-custom-types-for-validation
+[ch9-error-guidelines]: ch09-03-to-panic-or-not-to-panic.html#guidelines-for-error-handling
+[ch9-result]: ch09-02-recoverable-errors-with-result.html
+[ch17]: ch17-00-oop.html
+[ch9-question-mark]: ch09-02-recoverable-errors-with-result.html#a-shortcut-for-propagating-errors-the--operator
