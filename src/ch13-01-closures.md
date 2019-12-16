@@ -2,7 +2,7 @@
 
 > [ch13-01-closures.md](https://github.com/rust-lang/book/blob/master/src/ch13-01-closures.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 26565efc3f62d9dacb7c2c6d0f5974360e459493
 
 Rust 的 **闭包**（*closures*）是可以保存进变量或作为参数传递给其他函数的匿名函数。可以在一个地方创建闭包，然后在不同的上下文中执行闭包运算。不同于函数，闭包允许捕获调用者作用域中的值。我们将展示闭包的这些功能如何复用代码和自定义行为。
 
@@ -98,8 +98,6 @@ fn generate_workout(intensity: u32, random_number: u32) {
 
 示例 13-3 中的代码有多处调用了慢计算函数 `simulated_expensive_calculation` 。第一个 `if` 块调用了 `simulated_expensive_calculation` 两次， `else` 中的 `if` 没有调用它，而第二个 `else` 中的代码调用了它一次。
 
-<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
-
 `generate_workout` 函数的期望行为是首先检查用户需要低强度（由小于 25 的系数表示）锻炼还是高强度（25 或以上）锻炼。
 
 低强度锻炼计划会根据由 `simulated_expensive_calculation` 函数所模拟的复杂算法建议一定数量的俯卧撑和仰卧起坐。
@@ -178,7 +176,7 @@ let expensive_closure = |num| {
 
 闭包定义是 `expensive_closure` 赋值的 `=` 之后的部分。闭包的定义以一对竖线（`|`）开始，在竖线中指定闭包的参数；之所以选择这个语法是因为它与 Smalltalk 和 Ruby 的闭包定义类似。这个闭包有一个参数 `num`；如果有多于一个参数，可以使用逗号分隔，比如 `|param1, param2|`。
 
-参数之后是存放闭包体的大括号 —— 如果闭包体只有一行则大括号是可以省略的。大括号之后闭包的结尾，需要用于 `let` 语句的分号。因为闭包体的最后一行没有分号（正如函数体一样），所以其返回了值 `num` 。
+参数之后是存放闭包体的大括号 —— 如果闭包体只有一行则大括号是可以省略的。大括号之后闭包的结尾，需要用于 `let` 语句的分号。因为闭包体的最后一行没有分号（正如函数体一样），所以闭包体（`num`）最后一行的返回值作为调用闭包时的返回值 。
 
 注意这个 `let` 语句意味着 `expensive_closure` 包含一个匿名函数的 **定义**，不是调用匿名函数的 **返回值**。回忆一下使用闭包的原因是我们需要在一个位置定义代码，储存代码，并在之后的位置实际调用它；期望调用的代码现在储存在 `expensive_closure` 中。
 
@@ -282,7 +280,7 @@ error[E0308]: mismatched types
   |
   | let n = example_closure(5);
   |                         ^ expected struct `std::string::String`, found
-  integral variable
+  integer
   |
   = note: expected type `std::string::String`
              found type `{integer}`
@@ -298,7 +296,7 @@ error[E0308]: mismatched types
 
 为了让结构体存放闭包，我们需要指定闭包的类型，因为结构体定义需要知道其每一个字段的类型。每一个闭包实例有其自己独有的匿名类型：也就是说，即便两个闭包有着相同的签名，他们的类型仍然可以被认为是不同。为了定义使用闭包的结构体、枚举或函数参数，需要像第十章讨论的那样使用泛型和 trait bound。
 
-`Fn` 系列 trait 由标准库提供。所有的闭包都实现了 trait `Fn`、`FnMut` 或 `FnOnce` 中的一个。在“闭包会捕获其环境”部分我们会讨论这些 trait 的区别；在这个例子中可以使用 `Fn` trait。
+`Fn` 系列 trait 由标准库提供。所有的闭包都实现了 trait `Fn`、`FnMut` 或 `FnOnce` 中的一个。在 [“闭包会捕获其环境”](#capturing-the-environment-with-closures) 部分我们会讨论这些 trait 的区别；在这个例子中可以使用 `Fn` trait。
 
 为了满足 `Fn` trait bound 我们增加了代表闭包所必须的参数和返回值类型的类型。在这个例子中，闭包有一个 `u32` 的参数并返回一个 `u32`，这样所指定的 trait bound 就是 `Fn(u32) -> u32`。
 
@@ -321,7 +319,7 @@ struct Cacher<T>
 
 > 注意：函数也都实现了这三个 `Fn` trait。如果不需要捕获环境中的值，则可以使用实现了 `Fn` trait 的函数而不是闭包。
 
-`value` 是 `Option<u32>` 类型的。在执行闭包之前，`value` 将是 `None`。如果使用 `Cacher` 的代码请求闭包的结果，这时会执行闭包并将结果储存在 `value` 字段的 `Some` 成员中。接着如果代码再次请求闭包的结果，这时不再执行闭包，而是会返回存放在 `Some` 成员中的结果。
+字段 `value` 是 `Option<u32>` 类型的。在执行闭包之前，`value` 将是 `None`。如果使用 `Cacher` 的代码请求闭包的结果，这时会执行闭包并将结果储存在 `value` 字段的 `Some` 成员中。接着如果代码再次请求闭包的结果，这时不再执行闭包，而是会返回存放在 `Some` 成员中的结果。
 
 刚才讨论的有关 `value` 字段逻辑定义于示例 13-10：
 
