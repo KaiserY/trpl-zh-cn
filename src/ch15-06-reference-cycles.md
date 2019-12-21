@@ -2,7 +2,7 @@
 
 > [ch15-06-reference-cycles.md](https://github.com/rust-lang/book/blob/master/src/ch15-06-reference-cycles.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit f617d58c1a88dd2912739a041fd4725d127bf9fb
 
 Rust 的内存安全保证使其难以意外地制造永远也不会被清理的内存（被称为 **内存泄露**（*memory leak*）），但并不是不可能。与在编译时拒绝数据竞争不同， Rust 并不保证完全地避免内存泄露，这意味着内存泄露在 Rust 被认为是内存安全的。这一点可以通过 `Rc<T>` 和 `RefCell<T>` 看出：有可能会创建个个项之间相互引用的引用。这会造成内存泄露，因为每一项的引用计数将永远也到不了 0，其值也永远也不会被丢弃。
 
@@ -11,9 +11,6 @@ Rust 的内存安全保证使其难以意外地制造永远也不会被清理的
 让我们看看引用循环是如何发生的以及如何避免它。以示例 15-25 中的 `List` 枚举和 `tail` 方法的定义开始：
 
 <span class="filename">文件名: src/main.rs</span>
-
-<!-- Hidden fn main is here to disable the automatic wrapping in fn main that
-doc tests do; the `use List` fails if this listing is put within a main -->
 
 ```rust
 # fn main() {}
@@ -83,8 +80,8 @@ fn main() {
     println!("b rc count after changing a = {}", Rc::strong_count(&b));
     println!("a rc count after changing a = {}", Rc::strong_count(&a));
 
-    // 取消如下行的注释来观察引用循环；
-    // 这会导致栈溢出
+    // Uncomment the next line to see that we have a cycle;
+    // it will overflow the stack
     // println!("a next item = {:?}", a.tail());
 }
 ```
@@ -181,7 +178,7 @@ fn main() {
 
 <span class="caption">示例 15-27：创建没有子结点的 `leaf` 结点和以 `leaf` 作为子结点的 `branch` 结点</span>
 
-这里克隆了 `leaf` 中的 `Rc<Node>` 并储存在了 `branch` 中，这意味着 `leaf` 中的 `Node` 现在有两个所有者：`leaf`和`branch`。可以通过 `branch.children` 从 `branch` 中获得 `leaf`，不过无法从 `leaf` 到 `branch`。`leaf` 没有到 `branch` 的引用且并不知道他们相互关联。我们希望 `leaf` 知道 `branch` 是其父结点。稍后会这么做。
+这里克隆了 `leaf` 中的 `Rc<Node>` 并储存在了 `branch` 中，这意味着 `leaf` 中的 `Node` 现在有两个所有者：`leaf`和`branch`。可以通过 `branch.children` 从 `branch` 中获得 `leaf`，不过无法从 `leaf` 到 `branch`。`leaf` 没有到 `branch` 的引用且并不知道他们相互关联。我们希望 `leaf` 知道 `branch` 是其父结点。稍后我们会这么做。
 
 #### 增加从子到父的引用
 
@@ -340,8 +337,8 @@ fn main() {
 
 我们还介绍了提供了很多智能指针功能的 trait `Deref` 和 `Drop`。同时探索了会造成内存泄露的引用循环，以及如何使用 `Weak<T>` 来避免它们。
 
-如果本章内容引起了你的兴趣并希望现在就实现你自己的智能指针的话，请阅读 [“The Nomicon”] 来获取更多有用的信息。
+如果本章内容引起了你的兴趣并希望现在就实现你自己的智能指针的话，请阅读 [“The Rustonomicon”][nomicon] 来获取更多有用的信息。
 
-[“The Rustonomicon”]: https://doc.rust-lang.org/stable/nomicon/
+[nomicon]: https://doc.rust-lang.org/stable/nomicon/
 
 接下来，让我们谈谈 Rust 的并发。届时甚至还会学习到一些新的对并发有帮助的智能指针。

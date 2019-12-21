@@ -2,9 +2,9 @@
 
 > [ch18-03-pattern-syntax.md](https://github.com/rust-lang/book/blob/master/src/ch18-03-pattern-syntax.md)
 > <br>
-> commit 158c5eb79750d497fe92298a8bee8351c7f3606a
+> commit 86f0ae4831f24b3c429fa4845b900b4cad903a8b
 
-通过本书我们已领略过许多不同类型模式的例子。本节会统一列出所有在模式中有效的语法并且会阐述你为什么可能会希望使用其中的每一个。
+通过本书我们已领略过许多不同类型模式的例子。本节会统一列出所有在模式中有效的语法并且会阐述你为什么可能会希望使用其中的每一个语法。
 
 ### 匹配字面值
 
@@ -46,7 +46,7 @@ fn main() {
 
 <span class="caption">示例 18-11: 一个 `match` 语句其中一个分支引入了覆盖变量 `y`</span>
 
-让我们看看当 `match` 语句运行的时候发生了什么。第一个匹配分支的模式并不匹配 `x` 中定义的值，所以继续。
+让我们看看当 `match` 语句运行的时候发生了什么。第一个匹配分支的模式并不匹配 `x` 中定义的值，所以代码继续执行。
 
 第二个匹配分支中的模式引入了一个新变量 `y`，它会匹配任何 `Some` 中的值。因为我们在 `match` 表达式的新作用域中，这是一个新变量，而不是开头声明为值 10 的那个 `y`。这个新的 `y` 绑定会匹配任何 `Some` 中的值，在这里是 `x` 中的值。因此这个 `y` 绑定了 `x` 中 `Some` 内部的值。这个值是 5，所以这个分支的表达式将会执行并打印出 `Matched, y = 5`。
 
@@ -54,7 +54,7 @@ fn main() {
 
 一旦 `match` 表达式执行完毕，其作用域也就结束了，同理内部 `y` 的作用域也结束了。最后的 `println!` 会打印 `at the end: x = Some(5), y = 10`。
 
-为了创建能够比较外部 `x` 和 `y` 的值，而不引入覆盖变量的 `match` 表达式，我们需要相应的使用带有条件的匹配守卫（match guard）。我们稍后将在“匹配守卫提供的额外条件” 这一小节讨论匹配守卫。
+为了创建能够比较外部 `x` 和 `y` 的值，而不引入覆盖变量的 `match` 表达式，我们需要相应的使用带有条件的匹配守卫（match guard）。我们稍后将在 [“匹配守卫提供的额外条件”](#extra-conditionals-with-match-guards) 这一小节讨论匹配守卫。
 
 ### 多个模式
 
@@ -206,7 +206,7 @@ fn main() {
     match msg {
         Message::Quit => {
             println!("The Quit variant has no data to destructure.")
-        },
+        }
         Message::Move { x, y } => {
             println!(
                 "Move in the x direction {} and in the y direction {}",
@@ -246,7 +246,7 @@ fn main() {
 ```rust
 enum Color {
    Rgb(i32, i32, i32),
-   Hsv(i32, i32, i32)，
+   Hsv(i32, i32, i32),
 }
 
 enum Message {
@@ -267,7 +267,7 @@ fn main() {
                 g,
                 b
             )
-        },
+        }
         Message::ChangeColor(Color::Hsv(h, s, v)) => {
             println!(
                 "Change the color to hue {}, saturation {}, and value {}",
@@ -283,7 +283,7 @@ fn main() {
 
 <span class="caption">示例 18-16: 匹配嵌套的枚举</span>
 
-`match` 表达式第一个分支的模式匹配一个包含 `Color::Rgb` 枚举成员的 `Message::ChangeColor` 枚举成员，然后模式绑定了3个内部的 `i32` 值。第二个分支的模式也匹配一个 `Message::ChangeColor` 枚举成员， 但是其内部的枚举会匹配 `Color::Hsv` 枚举成员。 我们可以在一个 `match` 表达式中指定这些复杂条件，即使会涉及到两个枚举。
+`match` 表达式第一个分支的模式匹配一个包含 `Color::Rgb` 枚举成员的 `Message::ChangeColor` 枚举成员，然后模式绑定了 3 个内部的 `i32` 值。第二个分支的模式也匹配一个 `Message::ChangeColor` 枚举成员， 但是其内部的枚举会匹配 `Color::Hsv` 枚举成员。我们可以在一个 `match` 表达式中指定这些复杂条件，即使会涉及到两个枚举。
 
 #### 解构结构体和元组
 
@@ -308,7 +308,7 @@ let ((feet, inches), Point {x, y}) = ((3, 10), Point { x: 3, y: -10 });
 
 #### 使用 `_` 忽略整个值
 
-我们已经使用过下划线作为匹配但不绑定任何值的通配符模式了。虽然下划线模式作为 `match` 表达式最后的分支特别有用，也可以将其用于任意模式，包括函数参数中，如示例 18-17 所示：
+我们已经使用过下划线（`_`）作为匹配但不绑定任何值的通配符模式了。虽然 `_` 模式作为 `match` 表达式最后的分支特别有用，也可以将其用于任意模式，包括函数参数中，如示例 18-17 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -415,7 +415,7 @@ println!("{:?}", s);
 
 <span class="caption">示例 18-22: 单独使用下划线不会绑定值</span>
 
-上面的代码能很好的运行；因为没有把 `s` 绑定到任何变量，它没有被移动。
+上面的代码能很好的运行；因为没有把 `s` 绑定到任何变量；它没有被移动。
 
 #### 用 `..` 忽略剩余值
 
@@ -524,11 +524,11 @@ fn main() {
 
     match x {
         Some(50) => println!("Got 50"),
-        Some(n) if n == y => println!("Matched, n = {:?}", n),
+        Some(n) if n == y => println!("Matched, n = {}", n),
         _ => println!("Default case, x = {:?}", x),
     }
 
-    println!("at the end: x = {:?}, y = {:?}", x, y);
+    println!("at the end: x = {:?}, y = {}", x, y);
 }
 ```
 
@@ -568,7 +568,7 @@ match x {
 
 ### `@` 绑定
 
-*at* 运算符（`@`）允许我们在创建一个存放值的变量的同时测试其值是否匹配模式。示例 18-29 展示了一个例子，这里我们希望测试 `Message::Hello` 的 `id` 字段是否位于 `3...7` 范围内，同时也希望能其值绑定到 `id_variable` 变量中以便此分支相关联的代码可以使用它。可以将 `id_variable` 命名为 `id`，与字段同名，不过出于示例的目的这里选择了不同的名称：
+*at* 运算符（`@`）允许我们在创建一个存放值的变量的同时测试其值是否匹配模式。示例 18-29 展示了一个例子，这里我们希望测试 `Message::Hello` 的 `id` 字段是否位于 `3...7` 范围内，同时也希望能其值绑定到 `id_variable` 变量中以便此分支相关联的代码可以使用它。可以将 `id_variable` 命名为 `id`，与字段同名，不过出于示例的目的这里选择了不同的名称。
 
 ```rust
 enum Message {
@@ -578,10 +578,10 @@ enum Message {
 let msg = Message::Hello { id: 5 };
 
 match msg {
-    Message::Hello { id: id_variable @ 3...7 } => {
+    Message::Hello { id: id_variable @ 3..=7 } => {
         println!("Found an id in range: {}", id_variable)
     },
-    Message::Hello { id: 10...12 } => {
+    Message::Hello { id: 10..=12 } => {
         println!("Found an id in another range")
     },
     Message::Hello { id } => {

@@ -2,7 +2,7 @@
 
 > [ch13-03-improving-our-io-project.md](https://github.com/rust-lang/book/blob/master/src/ch13-03-improving-our-io-project.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 6555fb6c805fbfe7d0961980991f8bca6918928f
 
 有了这些关于迭代器的新知识，我们可以使用迭代器来改进第十二章中 I/O 项目的实现来使得代码更简洁明了。让我们看看迭代器如何能够改进 `Config::new` 函数和 `search` 函数的实现。
 
@@ -78,22 +78,6 @@ fn main() {
 `env::args` 函数返回一个迭代器！不同于将迭代器的值收集到一个 vector 中接着传递一个 slice 给 `Config::new`，现在我们直接将 `env::args` 返回的迭代器的所有权传递给 `Config::new`。
 
 接下来需要更新 `Config::new` 的定义。在 I/O 项目的 *src/lib.rs* 中，将 `Config::new` 的签名改为如示例 13-26 所示。这仍然不能编译因为我们还需更新函数体：
-
-<span class="filename">文件名: src/lib.rs</span>
-
-```rust,ignore
-impl Config {
-    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
-        // --snip--
-```
-
-<span class="caption">示例 13-26：更新 `Config::new` 的签名来接受一个迭代器</span>
-
-`env::args` 函数的标准库文档展示了其返回的迭代器类型是 `std::env::Args`。需要更新 `Config::new` 函数的签名中 `args` 参数的类型为 `std::env::Args` 而不是 `&[String]`。因为这里需要获取 `args` 的所有权且通过迭代改变 `args`，我们可以在 `args` 参数前指定 `mut` 关键字使其可变。
-
-#### 使用 `Iterator` trait 方法代替索引
-
-接下来修复 `Config::new` 的函数体。标准库文档也提到了 `std::env::Args` 实现了 `Iterator` trait，所以可以在其上调用 `next` 方法！示例 13-27 更新了示例 12-23 中的代码为使用 `next` 方法：
 
 <span class="filename">文件名: src/lib.rs</span>
 

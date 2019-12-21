@@ -2,7 +2,7 @@
 
 > [ch14-02-publishing-to-crates-io.md](https://github.com/rust-lang/book/blob/master/src/ch14-02-publishing-to-crates-io.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit c084bdd9ee328e7e774df19882ccc139532e53d8
 
 我们曾经在项目中使用 [crates.io](https://crates.io)<!-- ignore --> 上的包作为依赖，不过你也可以通过发布自己的包来向它人分享代码。[crates.io](https://crates.io)<!-- ignore --> 用来分发包的源代码，所以它主要托管开源代码。
 
@@ -22,9 +22,10 @@ Rust 和 Cargo 有一些帮助它人更方便找到和使用你发布的包的�
 /// # Examples
 ///
 /// ```
-/// let five = 5;
+/// let arg = 5;
+/// let answer = my_crate::add_one(arg);
 ///
-/// assert_eq!(6, my_crate::add_one(5));
+/// assert_eq!(6, answer);
 /// ```
 pub fn add_one(x: i32) -> i32 {
     x + 1
@@ -130,14 +131,16 @@ pub mod kinds {
 }
 
 pub mod utils {
-    use kinds::*;
+    use crate::kinds::*;
 
     /// 等量的混合两个主要颜色
     /// 来创建一个次要颜色。
     pub fn mix(c1: PrimaryColor, c2: PrimaryColor) -> SecondaryColor {
         // --snip--
+#         SecondaryColor::Orange
     }
 }
+# fn main() {}
 ```
 
 <span class="caption">示例 14-3：一个库 `art` 其组织包含 `kinds` 和 `utils` 模块</span>
@@ -178,9 +181,9 @@ fn main() {
 //!
 //! 一个描述美术信息的库。
 
-pub use kinds::PrimaryColor;
-pub use kinds::SecondaryColor;
-pub use utils::mix;
+pub use self::kinds::PrimaryColor;
+pub use self::kinds::SecondaryColor;
+pub use self::utils::mix;
 
 pub mod kinds {
     // --snip--
@@ -193,7 +196,7 @@ pub mod utils {
 
 <span class="caption">示例 14-5：增加 `pub use` 语句重导出项</span>
 
-现在此 crate 由 `cargo doc` 生成的 API 文档会在首页列出重导出的项以及其链接，如图 14-4 所示，这就使得这些类型易于查找。
+现在此 crate 由 `cargo doc` 生成的 API 文档会在首页列出重导出的项以及其链接，如图 14-4 所示，这使得 `PrimaryColor` 和 `SecondaryColor` 类型和 `mix` 函数更易于查找。
 
 <img alt="Rendered documentation for the `art` crate with the re-exports on the front page" src="img/trpl14-04.png" class="center" />
 
@@ -254,8 +257,7 @@ error: api errors: missing or empty metadata fields: description, license.
 
 这是因为我们缺少一些关键信息：关于该 crate 用途的描述和用户可能在何种条款下使用该 crate 的 license。为了修正这个错误，需要在 *Cargo.toml* 中引入这些信息。
 
-描述通常是一两句话，因为它会出现在 crate 的搜索结果中和 crate 页面里。对于 `license` 字段，你需要一个 **license 标识符值**（*license identifier value*）。[Linux 基金会 的 Software Package Data
-Exchange (SPDX)][spdx] 列出了可以使用的标识符。例如，为了指定 crate 使用 MIT License，增加 `MIT` 标识符：
+描述通常是一两句话，因为它会出现在 crate 的搜索结果中和 crate 页面里。对于 `license` 字段，你需要一个 **license 标识符值**（*license identifier value*）。[Linux 基金会的 Software Package Data Exchange (SPDX)][spdx] 列出了可以使用的标识符。例如，为了指定 crate 使用 MIT License，增加 `MIT` 标识符：
 
 [spdx]: http://spdx.org/licenses/
 
@@ -280,6 +282,7 @@ license = "MIT"
 name = "guessing_game"
 version = "0.1.0"
 authors = ["Your Name <you@example.com>"]
+edition = "2018"
 description = "A fun game where you guess what number the computer has chosen."
 license = "MIT OR Apache-2.0"
 

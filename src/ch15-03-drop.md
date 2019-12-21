@@ -2,7 +2,7 @@
 
 > [ch15-03-drop.md](https://github.com/rust-lang/book/blob/master/src/ch15-03-drop.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 57adb83f69a69e20862d9e107b2a8bab95169b4c
 
 对于智能指针模式来说第二个重要的 trait 是 `Drop`，其允许我们在值要离开作用域时执行一些代码。可以为任何类型提供 `Drop` trait 的实现，同时所指定的代码被用于释放类似于文件或网络连接的资源。我们在智能指针上下文中讨论 `Drop` 是因为其功能几乎总是用于实现智能指针。例如，`Box<T>` 自定义了 `Drop` 用来释放 box 所指向的堆空间。
 
@@ -94,7 +94,7 @@ Rust 不允许我们显式调用 `drop` 因为 Rust 仍然会在 `main` 的结�
 #
 # impl Drop for CustomSmartPointer {
 #     fn drop(&mut self) {
-#         println!("Dropping CustomSmartPointer!");
+#         println!("Dropping CustomSmartPointer with data `{}`!", self.data);
 #     }
 # }
 #

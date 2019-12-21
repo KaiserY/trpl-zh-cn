@@ -2,7 +2,7 @@
 
 > [ch16-02-message-passing.md](https://github.com/rust-lang/book/blob/master/src/ch16-02-message-passing.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 26565efc3f62d9dacb7c2c6d0f5974360e459493
 
 一个日益流行的确保安全并发的方式是 **消息传递**（*message passing*），这里线程或 actor 通过发送包含数据的消息来相互沟通。这个思想来源于 [Go 编程语言文档中](http://golang.org/doc/effective_go.html) 的口号：“不要共享内存来通讯；而是要通讯来共享内存。”（“Do not communicate by
 sharing memory; instead, share memory by communicating.”）
@@ -17,20 +17,17 @@ Rust 中一个实现消息传递并发的主要工具是 **通道**（*channel*�
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust
+```rust,ignore,does_not_compile
 use std::sync::mpsc;
 
 fn main() {
     let (tx, rx) = mpsc::channel();
-#     tx.send(()).unwrap();
 }
 ```
 
 <span class="caption">示例 16-6: 创建一个通道，并将其两端赋值给 `tx` 和 `rx`</span>
 
 这里使用 `mpsc::channel` 函数创建一个新的通道；`mpsc` 是 **多个生产者，单个消费者**（*multiple producer, single consumer*）的缩写。简而言之，Rust 标准库实现通道的方式意味着一个通道可以有多个产生值的 **发送**（*sending*）端，但只能有一个消费这些值的 **接收**（*receiving*）端。想象一下多条小河小溪最终汇聚成大河：所有通过这些小河发出的东西最后都会来到大河的下游。目前我们以单个生产者开始，但是当示例可以工作后会增加多个生产者。
-
-<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 
 `mpsc::channel` 函数返回一个元组：第一个元素是发送端，而第二个元素是接收端。由于历史原因，`tx` 和 `rx` 通常作为 **发送者**（*transmitter*）和 **接收者**（*receiver*）的缩写，所以这就是我们将用来绑定这两端变量的名字。这里使用了一个 `let` 语句和模式来解构了此元组；第十八章会讨论 `let` 语句中的模式和解构。如此使用 `let` 语句是一个方便提取 `mpsc::channel` 返回的元组中一部分的手段。
 
@@ -97,9 +94,7 @@ Got: hi
 
 ### 通道与所有权转移
 
-所有权规则在消息传递中扮演了重要角色，其有助于我们编写安全的并发代码。在并发编程中避免错误是在整个 Rust 程序中必须思考所有权所换来的一大优势。
-
-现在让我们做一个试验来看看通道与所有权如何一同协作以避免产生问题：我们将尝试在新建线程中的通道中发送完 `val` 值 **之后** 再使用它。尝试编译示例 16-9 中的代码并看看为何这是不允许的：
+所有权规则在消息传递中扮演了重要角色，其有助于我们编写安全的并发代码。在并发编程中避免错误是在整个 Rust 程序中必须思考所有权所换来的一大优势。现在让我们做一个试验来看看通道与所有权如何一同协作以避免产生问题：我们将尝试在新建线程中的通道中发送完 `val` 值 **之后** 再使用它。尝试编译示例 16-9 中的代码并看看为何这是不允许的：
 
 <span class="filename">文件名: src/main.rs</span>
 

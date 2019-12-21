@@ -2,7 +2,7 @@
 
 > [ch14-03-cargo-workspaces.md](https://github.com/rust-lang/book/blob/master/src/ch14-03-cargo-workspaces.md)
 > <br>
-> commit c084bdd9ee328e7e774df19882ccc139532e53d8
+> commit 6d3e76820418f2d2bb203233c61d90390b5690f1
 
 第十二章中，我们构建一个包含二进制 crate 和库 crate 的包。你可能会发现，随着项目开发的深入，库 crate 持续增大，而你希望将其进一步拆分成多个库 crate。对于这种情况，Cargo 提供了一个叫 **工作空间**（*workspaces*）的功能，它可以帮助我们管理多个相关的协同开发的包。
 
@@ -15,7 +15,7 @@ $ mkdir add
 $ cd add
 ```
 
-在 add* 目录中，创建 *Cargo.toml* 文件。这个 *Cargo.toml* 文件配置了整个工作空间。它不会包含 `[package]` 或其他我们在 *Cargo.toml* 中见过的元信息。相反，它以 `[workspace]` 部分作为开始，并通过指定 *adder* 的路径来为工作空间增加成员，如下会加入二进制 crate：
+接着在 add* 目录中，创建 *Cargo.toml* 文件。这个 *Cargo.toml* 文件配置了整个工作空间。它不会包含 `[package]` 或其他我们在 *Cargo.toml* 中见过的元信息。相反，它以 `[workspace]` 部分作为开始，并通过指定 *adder* 的路径来为工作空间增加成员，如下会加入二进制 crate：
 
 <span class="filename">文件名: Cargo.toml</span>
 
@@ -152,18 +152,17 @@ Hello, world! 10 plus one is 11!
 
 ```toml
 [dependencies]
-
-rand = "0.3.14"
+rand = "0.5.5"
 ```
 
 现在就可以在 *add-one/src/lib.rs* 中增加 `use rand;` 了，接着在 *add* 目录运行 `cargo build` 构建整个工作空间就会引入并编译 `rand` crate：
 
 ```text
 $ cargo build
-    Updating registry `https://github.com/rust-lang/crates.io-index`
- Downloading rand v0.3.14
+    Updating crates.io index
+  Downloaded rand v0.5.5
    --snip--
-   Compiling rand v0.3.14
+   Compiling rand v0.5.5
    Compiling add-one v0.1.0 (file:///projects/add/add-one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
     Finished dev [unoptimized + debuginfo] target(s) in 10.18 secs

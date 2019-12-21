@@ -2,9 +2,7 @@
 
 > [ch15-05-interior-mutability.md](https://github.com/rust-lang/book/blob/master/src/ch15-05-interior-mutability.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
-
-<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
+> commit 26565efc3f62d9dacb7c2c6d0f5974360e459493
 
 **内部可变性**（*Interior mutability*）是 Rust 中的一个设计模式，它允许你即使在有不可变引用时改变数据，这通常是借用规则所不允许的。为了改变数据，该模式在数据结构中使用 `unsafe` 代码来模糊 Rust 通常的可变性和借用规则。我们还未讲到不安全代码；第十九章会学习它们。当可以确保代码在运行时会遵守借用规则，即使编译器不能保证的情况，可以选择使用那些运用内部可变性模式的类型。所涉及的 `unsafe` 代码将被封装进安全的 API 中，而外部类型仍然是不可变的。
 
@@ -79,7 +77,7 @@ pub trait Messenger {
     fn send(&self, msg: &str);
 }
 
-pub struct LimitTracker<'a, T: 'a + Messenger> {
+pub struct LimitTracker<'a, T: Messenger> {
     messenger: &'a T,
     value: usize,
     max: usize,
@@ -100,12 +98,12 @@ impl<'a, T> LimitTracker<'a, T>
 
         let percentage_of_max = self.value as f64 / self.max as f64;
 
-        if percentage_of_max >= 0.75 && percentage_of_max < 0.9 {
-            self.messenger.send("Warning: You've used up over 75% of your quota!");
-        } else if percentage_of_max >= 0.9 && percentage_of_max < 1.0 {
-            self.messenger.send("Urgent warning: You've used up over 90% of your quota!");
-        } else if percentage_of_max >= 1.0 {
+        if percentage_of_max >= 1.0 {
             self.messenger.send("Error: You are over your quota!");
+        } else if percentage_of_max >= 0.9 {
+             self.messenger.send("Urgent warning: You've used up over 90% of your quota!");
+        } else if percentage_of_max >= 0.75 {
+            self.messenger.send("Warning: You've used up over 75% of your quota!");
         }
     }
 }
@@ -119,7 +117,7 @@ impl<'a, T> LimitTracker<'a, T>
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust,does_not_compile
+```rust,ignore,does_not_compile
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -177,6 +175,41 @@ error[E0596]: cannot borrow immutable field `self.sent_messages` as mutable
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust
+# pub trait Messenger {
+#     fn send(&self, msg: &str);
+# }
+#
+# pub struct LimitTracker<'a, T: Messenger> {
+#     messenger: &'a T,
+#     value: usize,
+#     max: usize,
+# }
+#
+# impl<'a, T> LimitTracker<'a, T>
+#     where T: Messenger {
+#     pub fn new(messenger: &T, max: usize) -> LimitTracker<T> {
+#         LimitTracker {
+#             messenger,
+#             value: 0,
+#             max,
+#         }
+#     }
+#
+#     pub fn set_value(&mut self, value: usize) {
+#         self.value = value;
+#
+#         let percentage_of_max = self.value as f64 / self.max as f64;
+#
+#         if percentage_of_max >= 1.0 {
+#             self.messenger.send("Error: You are over your quota!");
+#         } else if percentage_of_max >= 0.9 {
+#              self.messenger.send("Urgent warning: You've used up over 90% of your quota!");
+#         } else if percentage_of_max >= 0.75 {
+#             self.messenger.send("Warning: You've used up over 75% of your quota!");
+#         }
+#     }
+# }
+#
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -208,6 +241,7 @@ mod tests {
         assert_eq!(mock_messenger.sent_messages.borrow().len(), 1);
     }
 }
+# fn main() {}
 ```
 
 <span class="caption">示例 15-22：使用 `RefCell<T>` 能够在外部值被认为是不可变的情况下修改内部值</span>
@@ -298,7 +332,7 @@ fn main() {
 
 我们将列表 `a` 封装进了 `Rc<T>` 这样当创建列表 `b` 和 `c` 时，他们都可以引用 `a`，正如示例 15-18 一样。
 
-一旦创建了列表 `a`、`b` 和 `c`，我们将 `value` 的值加 10。为此对 `value` 调用了 `borrow_mut`，这里使用了第五章讨论的自动解引用功能（“`->` 运算符到哪去了？” 部分）来解引用 `Rc<T>` 以获取其内部的 `RefCell<T>` 值。`borrow_mut` 方法返回 `RefMut<T>` 智能指针，可以对其使用解引用运算符并修改其内部值。
+一旦创建了列表 `a`、`b` 和 `c`，我们将 `value` 的值加 10。为此对 `value` 调用了 `borrow_mut`，这里使用了第五章讨论的自动解引用功能（[“`->` 运算符到哪去了？”][wheres-the---operator] 部分）来解引用 `Rc<T>` 以获取其内部的 `RefCell<T>` 值。`borrow_mut` 方法返回 `RefMut<T>` 智能指针，可以对其使用解引用运算符并修改其内部值。
 
 当我们打印出 `a`、`b` 和 `c` 时，可以看到他们都拥有修改后的值 15 而不是 5：
 
@@ -311,3 +345,5 @@ c after = Cons(RefCell { value: 10 }, Cons(RefCell { value: 15 }, Nil))
 这是非常巧妙的！通过使用 `RefCell<T>`，我们可以拥有一个表面上不可变的 `List`，不过可以使用 `RefCell<T>` 中提供内部可变性的方法来在需要时修改数据。`RefCell<T>` 的运行时借用规则检查也确实保护我们免于出现数据竞争，而且我们也决定牺牲一些速度来换取数据结构的灵活性。
 
 标准库中也有其他提供内部可变性的类型，比如 `Cell<T>`，它有些类似（`RefCell<T>`）除了相比提供内部值的引用，其值被拷贝进和拷贝出 `Cell<T>`。还有 `Mutex<T>`，其提供线程间安全的内部可变性，下一章并发会讨论它的应用。请查看标准库来获取更多细节和不同类型之间的区别。
+
+[wheres-the---operator]: ch05-03-method-syntax.html#wheres-the---operator
