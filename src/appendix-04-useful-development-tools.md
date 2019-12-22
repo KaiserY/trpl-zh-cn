@@ -2,7 +2,7 @@
 
 > [appendix-04-useful-development-tools.md](https://github.com/rust-lang/book/blob/master/src/appendix-04-useful-development-tools.md)
 > <br />
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 70a82519e48b8a61f98cabb8ff443d1b21962fea
 
 本附录，我们将讨论 Rust 项目提供的用于开发 Rust 代码的工具。
 
@@ -10,12 +10,10 @@
 
 `rustfmt` 工具根据社区代码风格格式化代码。很多项目使用 `rustfmt` 来避免编写 Rust 风格的争论：所有人都用这个工具格式化代码！
 
-`rustfmt` 工具的质量还未达到发布 1.0 版本的水平，不过目前有一个可用的预览版。请尝试使用并告诉我们它如何！
-
 安装 `rustfmt`：
 
 ```text
-$ rustup component add rustfmt-preview
+$ rustup component add rustfmt
 ```
 
 这会提供 `rustfmt` 和 `cargo-fmt`，类似于 Rust 同时安装 `rustc` 和 `cargo`。为了格式化整个 Cargo 项目：
@@ -91,12 +89,10 @@ fn main() {
 
 `clippy` 工具是一系列 lint 的集合，用于捕捉常见错误和改进 Rust 代码。
 
-`clippy` 工具的质量还未达到发布 1.0 版本的水平，不过目前有一个可用的预览版。请尝试使用并告诉我们它如何！
-
 安装 `clippy`：
 
 ```text
-$ rustup component add clippy-preview
+$ rustup component add clippy
 ```
 
 对任何 Cargo 项目运行 clippy 的 lint：
@@ -127,7 +123,7 @@ error: approximate value of `f{32, 64}::consts::PI` found. Consider using it dir
   |             ^^^^^^
   |
   = note: #[deny(clippy::approx_constant)] on by default
-  = help: for further information visit https://rust-lang-nursery.github.io/rust-clippy/v0.0.212/index.html#approx_constant
+  = help: for further information visit https://rust-lang-nursery.github.io/rust-clippy/master/index.html#approx_constant
 ```
 
 这告诉我们 Rust 定义了更为精确的常量，而如果使用了这些常量程序将更加准确。如下代码就不会导致 `clippy` 产生任何错误或警告：
@@ -144,7 +140,7 @@ fn main() {
 
 请查看 [其文档][clippy] 来了解 `clippy` 的更多信息。
 
-[clippy]: https://github.com/rust-lang-nursery/rust-clippy
+[clippy]: https://github.com/rust-lang/rust-clippy
 
 ## 使用 Rust Language Server 的 IDE 集成
 
@@ -158,11 +154,11 @@ fn main() {
 安装 `rls`：
 
 ```text
-$ rustup component add rls-preview
+$ rustup component add rls
 ```
 
 接着为特定的 IDE 安装 language server 支持，如比便会获得如自动补全、跳转到定义和 inline error 之类的功能。
 
 请查看 [其文档][rls] 来了解 `rls` 的更多信息。
 
-[rls]: https://github.com/rust-lang-nursery/rls
+[rls]: https://github.com/rust-lang/rls

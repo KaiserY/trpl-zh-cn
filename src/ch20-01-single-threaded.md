@@ -2,7 +2,7 @@
 
 > [ch20-01-single-threaded.md](https://github.com/rust-lang/book/blob/master/src/ch20-01-single-threaded.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit f617d58c1a88dd2912739a041fd4725d127bf9fb
 
 首先让我们创建一个可运行的单线程 web server，不过在开始之前，我们将快速了解一下构建 web server 所涉及到的协议。这些协议的细节超出了本书的范畴，不过一个简单的概括会提供我们所需的信息。
 
@@ -283,7 +283,7 @@ fn handle_connection(mut stream: TcpStream) {
 }
 ```
 
-<span class="caption">示例 20-6: 匹配请求并区别处理 `/` 请求与其他请求</span>
+<span class="caption">示例 20-6: 匹配请求并区别处理 */* 请求与其他请求</span>
 
 首先，将与 */* 请求相关的数据硬编码进变量 `get`。因为我们将原始字节读取进了缓冲区，所以在 `get` 的数据开头增加 `b""` 字节字符串语法将其转换为字节字符串。接着检查 `buffer` 是否以 `get` 中的字节开头。如果是，这就是一个格式良好的 */* 请求，也就是 `if` 块中期望处理的成功情况，并会返回 HTML 文件内容的代码。
 

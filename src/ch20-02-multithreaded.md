@@ -2,7 +2,7 @@
 
 > [ch20-02-multithreaded.md](https://github.com/rust-lang/book/blob/master/src/ch20-02-multithreaded.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 120e76a0cc77c9cde52643f847ed777f8f441817
 
 目前 server 会依次处理每一个请求，意味着它在完成第一个连接的处理之前不会处理第二个连接。如果 server 正接收越来越多的请求，这类串行操作会使性能越来越差。如果一个请求花费很长时间来处理，随后而来的请求则不得不等待这个长请求结束，即便这些新请求可以很快就处理完。我们需要修复这种情况，不过首先让我们实际尝试一下这个问题。
 
@@ -195,7 +195,7 @@ impl ThreadPool {
 }
 ```
 
-这里选择 `usize` 作为 `size` 参数的类型，因为我们知道为负的线程数没有意义。我们还知道将使用 4 作为线程集合的元素数量，这也就是使用 `usize` 类型的原因，如第三章 “整数类型” 部分所讲。
+这里选择 `usize` 作为 `size` 参数的类型，因为我们知道为负的线程数没有意义。我们还知道将使用 4 作为线程集合的元素数量，这也就是使用 `usize` 类型的原因，如第三章 [“整数类型”][integer-types] 部分所讲。
 
 再次编译检查这段代码：
 
@@ -218,9 +218,9 @@ error[E0599]: no method named `execute` found for type `hello::ThreadPool` in th
    |              ^^^^^^^
 ```
 
-现在有了一个警告和一个错误。暂时先忽略警告，发生错误是因为并没有 `ThreadPool` 上的 `execute` 方法。回忆 “为有限数量的线程创建一个类似的接口” 部分我们决定线程池应该有与 `thread::spawn` 类似的接口，同时我们将实现 `execute` 函数来获取传递的闭包并将其传递给池中的空闲线程执行。
+现在有了一个警告和一个错误。暂时先忽略警告，发生错误是因为并没有 `ThreadPool` 上的 `execute` 方法。回忆 [“为有限数量的线程创建一个类似的接口”](#creating-a-similar-interface-for-a-finite-number-of-threads)  部分我们决定线程池应该有与 `thread::spawn` 类似的接口，同时我们将实现 `execute` 函数来获取传递的闭包并将其传递给池中的空闲线程执行。
 
-我们会在 `ThreadPool` 上定义 `execute` 函数来获取一个闭包参数。回忆第十三章的 “使用带有泛型和 `Fn` trait 的闭包” 部分，闭包作为参数时可以使用三个不同的 trait：`Fn`、`FnMut` 和 `FnOnce`。我们需要决定这里应该使用哪种闭包。最终需要实现的类似于标准库的 `thread::spawn`，所以我们可以观察 `thread::spawn` 的签名在其参数中使用了何种 bound。查看文档会发现：
+我们会在 `ThreadPool` 上定义 `execute` 函数来获取一个闭包参数。回忆第十三章的 [“使用带有泛型和 `Fn` trait 的闭包”][storing-closures-using-generic-parameters-and-the-fn-traits] 部分，闭包作为参数时可以使用三个不同的 trait：`Fn`、`FnMut` 和 `FnOnce`。我们需要决定这里应该使用哪种闭包。最终需要实现的类似于标准库的 `thread::spawn`，所以我们可以观察 `thread::spawn` 的签名在其参数中使用了何种 bound。查看文档会发现：
 
 ```rust,ignore
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
@@ -644,7 +644,7 @@ impl Worker {
 
 #### 实现 `execute` 方法
 
-最后让我们实现 `ThreadPool` 上的 `execute` 方法。同时也要修改 `Job` 结构体：它将不再是结构体，`Job` 将是一个有着 `execute` 接收到的闭包类型的 trait 对象的类型别名。第十九章 “类型别名用来创建类型同义词” 部分提到过，类型别名允许将长的类型变短。观察示例 20-19：
+最后让我们实现 `ThreadPool` 上的 `execute` 方法。同时也要修改 `Job` 结构体：它将不再是结构体，`Job` 将是一个有着 `execute` 接收到的闭包类型的 trait 对象的类型别名。第十九章 [“类型别名用来创建类型同义词”][creating-type-synonyms-with-type-aliases] 部分提到过，类型别名允许将长的类型变短。观察示例 20-19：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -657,7 +657,7 @@ impl Worker {
 # use std::sync::mpsc;
 # struct Worker {}
 
-type Job = Box<FnOnce() + Send + 'static>;
+type Job = Box<dyn FnOnce() + Send + 'static>;
 
 impl ThreadPool {
     // --snip--
@@ -694,7 +694,7 @@ impl Worker {
 
                 println!("Worker {} got a job; executing.", id);
 
-                (*job)();
+                job();
             }
         });
 
@@ -713,73 +713,6 @@ impl Worker {
 如果锁定了互斥器，接着调用 `recv` 从通道中接收 `Job`。最后的 `unwrap` 也绕过了一些错误，这可能发生于持有通道发送端的线程停止的情况，类似于如果接收端关闭时 `send` 方法如何返回 `Err` 一样。
 
 调用 `recv` 会阻塞当前线程，所以如果还没有任务，其会等待直到有可用的任务。`Mutex<T>` 确保一次只有一个 `Worker` 线程尝试请求任务。
-
-理论上这段代码应该能够编译。不幸的是，Rust 编译器仍不够完美，会给出如下错误：
-
-```text
-error[E0161]: cannot move a value of type std::ops::FnOnce() +
-std::marker::Send: the size of std::ops::FnOnce() + std::marker::Send cannot be
-statically determined
-  --> src/lib.rs:63:17
-   |
-63 |                 (*job)();
-   |                 ^^^^^^
-```
-
-这个错误非常的神秘，因为这个问题本身就很神秘。为了调用储存在 `Box<T>` （这正是 `Job` 别名的类型）中的 `FnOnce` 闭包，该闭包需要能将自己移动 **出** `Box<T>`，因为当调用这个闭包时，它获取 `self` 的所有权。通常来说，将值移动出 `Box<T>` 是不被允许的，因为 Rust 不知道 `Box<T>` 中的值将会有多大；回忆第十五章能够正常使用 `Box<T>` 是因为我们将未知大小的值储存进 `Box<T>` 从而得到已知大小的值。
-
-第十七章曾见过，示例 17-15 中有使用了 `self: Box<Self>` 语法的方法，它允许方法获取储存在 `Box<T>` 中的 `Self` 值的所有权。这正是我们希望做的，然而不幸的是 Rust 不允许我们这么做：Rust 当闭包被调用时行为的那部分并没有使用 `self: Box<Self>` 实现。所以这里 Rust 也不知道它可以使用 `self: Box<Self>` 来获取闭包的所有权并将闭包移动出 `Box<T>`。
-
-Rust 仍在努力改进提升编译器的过程中，不过将来示例 20-20 中的代码应该能够正常工作。有很多像你一样的人正在修复这个以及其他问题！当你结束了本书的阅读，我们希望看到你也成为他们中的一员。
-
-不过目前让我们通过一个小技巧来绕过这个问题。可以显式的告诉 Rust 在这里我们可以使用 `self: Box<Self>` 来获取 `Box<T>` 中值的所有权，而一旦获取了闭包的所有权就可以调用它了。这涉及到定义一个新 trait，它带有一个在签名中使用 `self: Box<Self>` 的方法 `call_box`，为任何实现了 `FnOnce()` 的类型定义这个 trait，修改类型别名来使用这个新 trait，并修改 `Worker` 使用 `call_box` 方法。这些修改如示例 20-21 所示：
-
-<span class="filename">文件名: src/lib.rs</span>
-
-```rust,ignore
-trait FnBox {
-    fn call_box(self: Box<Self>);
-}
-
-impl<F: FnOnce()> FnBox for F {
-    fn call_box(self: Box<F>) {
-        (*self)()
-    }
-}
-
-type Job = Box<FnBox + Send + 'static>;
-
-// --snip--
-
-impl Worker {
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        let thread = thread::spawn(move || {
-            loop {
-                let job = receiver.lock().unwrap().recv().unwrap();
-
-                println!("Worker {} got a job; executing.", id);
-
-                job.call_box();
-            }
-        });
-
-        Worker {
-            id,
-            thread,
-        }
-    }
-}
-```
-
-<span class="caption">示例 20-21: 新增一个 trait `FnBox` 来绕过当前 `Box<FnOnce()>` 的限制</span>
-
-首先，新建了一个叫做 `FnBox` 的 trait。这个 trait 有一个方法 `call_box`，它类似于其他 `Fn*` trait 中的 `call` 方法，除了它获取 `self: Box<Self>` 以便获取 `self` 的所有权并将值从 `Box<T>` 中移动出来。
-
-接下来，为任何实现了 `FnOnce()` trait 的类型 `F` 实现 `FnBox` trait。这实际上意味着任何 `FnOnce()` 闭包都可以使用 `call_box` 方法。`call_box` 的实现使用 `(*self)()` 将闭包移动出 `Box<T>` 并调用此闭包。
-
-现在我们需要 `Job` 类型别名是任何实现了新 trait `FnBox` 的 `Box`。这允许我们在得到 `Job` 值时使用 `Worker` 中的 `call_box`。为任何 `FnOnce()` 闭包都实现了 `FnBox` trait 意味着无需对实际在通道中发出的值做任何修改。现在 Rust 就能够理解我们的行为是正确的了。
-
-这是非常狡猾且复杂的手段。无需过分担心他们并不是非常有道理；总有一天，这一切将是毫无必要的。
 
 通过这个技巧，线程池处于可以运行的状态了！执行 `cargo run` 并发起一些请求：
 
@@ -826,9 +759,9 @@ Worker 2 got a job; executing.
 
 成功了！现在我们有了一个可以异步执行连接的线程池！它绝不会创建超过四个线程，所以当 server 收到大量请求时系统也不会负担过重。如果请求 */sleep*，server 也能够通过另外一个线程处理其他请求。
 
-注意如果同时在多个浏览器窗口打开 */sleep*，它们可能会彼此间隔地加载 5 秒，因为一些浏览器处于缓存的原因会顺序执行相同请求的多个实例。这些限制并不是由于我们的 web server 造成的。
+> 注意如果同时在多个浏览器窗口打开 */sleep*，它们可能会彼此间隔地加载 5 秒，因为一些浏览器处于缓存的原因会顺序执行相同请求的多个实例。这些限制并不是由于我们的 web server 造成的。
 
-在学习了第十八章的 `while let` 循环之后，你可能会好奇为何不能如此编写 worker 线程：
+在学习了第十八章的 `while let` 循环之后，你可能会好奇为何不能如此编写 worker 线程，如示例 20-21 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -841,7 +774,7 @@ impl Worker {
             while let Ok(job) = receiver.lock().unwrap().recv() {
                 println!("Worker {} got a job; executing.", id);
 
-                job.call_box();
+                job();
             }
         });
 
@@ -853,8 +786,14 @@ impl Worker {
 }
 ```
 
-<span class="caption">示例 20-22: 一个使用 `while let` 的 `Worker::new` 替代实现</span>
+<span class="caption">示例 20-21: 一个使用 `while let` 的 `Worker::new` 替代实现</span>
 
 这段代码可以编译和运行，但是并不会产生所期望的线程行为：一个慢请求仍然会导致其他请求等待执行。其原因有些微妙：`Mutex` 结构体没有公有 `unlock` 方法，因为锁的所有权依赖 `lock` 方法返回的 `LockResult<MutexGuard<T>>` 中 `MutexGuard<T>` 的生命周期。这允许借用检查器在编译时确保绝不会在没有持有锁的情况下访问由 `Mutex` 守护的资源，不过如果没有认真的思考 `MutexGuard<T>` 的生命周期的话，也可能会导致比预期更久的持有锁。因为 `while` 表达式中的值在整个块一直处于作用域中，`job.call_box()` 调用的过程中其仍然持有锁，这意味着其他 worker 不能接收任务。
 
 相反通过使用 `loop` 并在循环块之内而不是之外获取锁和任务，`lock` 方法返回的 `MutexGuard` 在 `let job` 语句结束之后立刻就被丢弃了。这确保了 `recv` 调用过程中持有锁，而在 `job.call_box()` 调用前锁就被释放了，这就允许并发处理多个请求了。
+
+[creating-type-synonyms-with-type-aliases]:
+ch19-04-advanced-types.html#creating-type-synonyms-with-type-aliases
+[integer-types]: ch03-02-data-types.html#integer-types
+[storing-closures-using-generic-parameters-and-the-fn-traits]:
+ch13-01-closures.html#storing-closures-using-generic-parameters-and-the-fn-traits

@@ -2,10 +2,12 @@
 
 > [appendix-01-keywords.md](https://raw.githubusercontent.com/rust-lang/book/master/src/appendix-01-keywords.md)
 > <br>
-> commit 0e9061cbaf95adfb9f3ed36c6cef4c046f282e86 
+> commit 27dd97a785794709aa87c51ab697cded41e8163a 
 
-下面的列表包含 Rust 中正在使用或者以后会用到的关键字。因此，这些关键字不能被用作标识符（除了 [原始标识符][raw-identifiers]），这包括函数、变量、参数、结构体字段、模块、crate、常量、宏、静态值、属性、类型、trait 或生命周期
+下面的列表包含 Rust 中正在使用或者以后会用到的关键字。因此，这些关键字不能被用作标识符（除了 “[原始标识符][raw-identifiers]” 部分介绍的原始标识符），这包括函数、变量、参数、结构体字段、模块、crate、常量、宏、静态值、属性、类型、trait 或生命周期
 的名字。
+
+[raw-identifiers]: #raw-identifiers
 
 ### 目前正在使用的关键字
 
@@ -54,6 +56,7 @@
 
 * `abstract`
 * `async`
+* `await`
 * `become`
 * `box`
 * `do`
@@ -68,13 +71,12 @@
 * `yield`
 
 ### 原始标识符
-[raw-identifiers]: #raw-identifiers
 
 原始标识符（Raw identifiers）允许你使用通常不能使用的关键字，其带有 `r#` 前缀。
 
-例如，`match` 是关键字。如果尝试编译这个函数：
+例如，`match` 是关键字。如果尝试编译如下使用 `match` 作为名字的函数：
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn match(needle: &str, haystack: &str) -> bool {
     haystack.contains(needle)
 }
@@ -90,7 +92,9 @@ error: expected identifier, found keyword `match`
   |    ^^^^^ expected identifier, found keyword
 ```
 
-该错误表示你不能将关键字`match`用作函数标识符。 你可以使用原始标识符将`match`作为函数名称使用：
+该错误表示你不能将关键字 `match` 用作函数标识符。你可以使用原始标识符将 `match` 作为函数名称使用：
+
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 fn r#match(needle: &str, haystack: &str) -> bool {
@@ -102,6 +106,8 @@ fn main() {
 }
 ```
 
-此代码编译没有任何错误。注意 `r#` 前缀需同时用于函数名和调用。
+此代码编译没有任何错误。注意 `r#` 前缀需同时用于函数名定义和 `main` 函数中的调用。
 
-原始标识符允许使用你选择的任何单词作为标识符，即使该单词恰好是保留关键字。 此外，原始标识符允许你使用以不同于你的crate使用的Rust版本编写的库。比如，`try` 在 2015 edition 中不是关键字，而在 2018 edition 则是。所以如果如果用 2015 edition 编写的库中带有 `try` 函数，在 2018 edition 中调用时就需要使用原始标识符。有关版本的更多信息，请参见[附录E](https://github.com/KaiserY/trpl-zh-cn/blob/master/src/appendix-05-editions.md).
+原始标识符允许使用你选择的任何单词作为标识符，即使该单词恰好是保留关键字。 此外，原始标识符允许你使用以不同于你的 crate 使用的 Rust 版本编写的库。比如，`try` 在 2015 edition 中不是关键字，而在 2018 edition 则是。所以如果如果用 2015 edition 编写的库中带有 `try` 函数，在 2018 edition 中调用时就需要使用原始标识符语法，在这里是 `r#try`。有关版本的更多信息，请参见[附录 E][appendix-e].
+
+[appendix-e]: appendix-05-editions.html

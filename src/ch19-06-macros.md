@@ -2,15 +2,13 @@
 
 > [ch19-06-macros.md](https://github.com/rust-lang/book/blob/master/src/ch19-06-macros.md)
 > <br>
-> commit 6babe749f8d97131b97c3cb9e7ca76e6115b90c1
+> commit 7ddc46460f09a5cd9bd2a620565bdc20b3315ea9
 
-我们已经在本书中使用过像 `println!` 这样的宏了，不过还没完全探索什么是宏以及它是如何工作的。**宏**（*Macro*）指的是 Rust 中一系列的功能：
+我们已经在本书中使用过像 `println!` 这样的宏了，不过还没完全探索什么是宏以及它是如何工作的。**宏**（*Macro*）指的是 Rust 中一系列的功能：**声明**（*Declarative*）宏，使用 `macro_rules!`，和三种 **过程**（*Procedural*）宏：
 
-* **声明**（*Declarative*）宏，使用 `macro_rules!`
-* **过程**（*Procedural*），其有三种类型：
-    * 自定义 `#[derive]` 宏
-    * 类属性（Attribute）宏
-    * 类函数宏
+* 自定义 `#[derive]` 宏在结构体和枚举上指定通过 `derive` 属性添加的代码
+* 类属性（Attribute）宏定义可用于任意项的自定义属性
+* 类函数宏看起来像函数不过作用于作为参数传递的 token。
 
 我们会依次讨论每一种宏，不过首要的是，为什么已经有了函数还需要宏呢？
 
@@ -38,7 +36,7 @@ let v: Vec<u32> = vec![1, 2, 3];
 
 也可以使用 `vec!` 宏来构造两个整数的 vector 或五个字符串 slice 的 vector 。但却无法使用函数做相同的事情，因为我们无法预先知道参数值的数量和类型。
 
-在示例 19-36 中展示了一个 `vec!` 稍微简化的定义。 
+在示例 19-28 中展示了一个 `vec!` 稍微简化的定义。 
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -57,7 +55,7 @@ macro_rules! vec {
 }
 ```
 
-<span class="caption">示例 19-36: 一个 `vec!` 宏定义的简化版本</span>
+<span class="caption">示例 19-28: 一个 `vec!` 宏定义的简化版本</span>
 
 > 注意：标准库中实际定义的 `vec!` 包括预分配适当量的内存的代码。这部分为代码优化，为了让示例简化，此处并没有包含在内。
 
@@ -68,7 +66,7 @@ macro_rules! vec {
 
 `vec!` 宏的结构和 `match` 表达式的结构类似。此处有一个单边模式 `( $( $x:expr ),* )` ，后跟 `=>` 以及和模式相关的代码块。如果模式匹配，该相关代码块将被执行。假设这只是这个宏中的模式，且只有一个有效匹配，其他任何匹配都是错误的。更复杂的宏会有多个单边模式。
 
-宏定义中有效模式语法和在第十八章提及的模式语法是不同的，因为宏模式所匹配的是 Rust 代码结构而不是值。回过头来检查下示例 D-1 中模式片段什么意思。对于全部的宏模式语法，请查阅[参考]。
+宏定义中有效模式语法和在第十八章提及的模式语法是不同的，因为宏模式所匹配的是 Rust 代码结构而不是值。回过头来检查下示例 19-28 中模式片段什么意思。对于全部的宏模式语法，请查阅[参考]。
 
 [参考]: https://doc.rust-lang.org/reference/macros.html
 
@@ -98,9 +96,9 @@ temp_vec
 
 第二种形式的宏被称为 **过程宏**（*procedural macros*），因为它们更像函数（一种过程类型）。过程宏接收 Rust 代码作为输入，在这些代码上进行操作，然后产生另一些代码作为输出，而非像声明式宏那样匹配对应模式然后以另一部分代码替换当前代码。
 
-有三种类型的过程宏，不过它们的工作方式都类似。其一，其定义必须位于一种特殊类型的属于它们自己的 crate 中。这么做出于复杂的技术原因，将来我们希望能够消除这些限制。
+有三种类型的过程宏（自定义 derive，类属性和类函数），不过它们的工作方式都类似。
 
-其二，使用这些宏需采用类似示例 19-37 所示的代码形式，其中 `some_attribute` 是一个使用特定宏的占位符。
+当创建过程宏时，其定义必须位于一种特殊类型的属于它们自己的 crate 中。这么做出于复杂的技术原因，将来我们希望能够消除这些限制。使用这些宏需采用类似示例 19-29 所示的代码形式，其中 `some_attribute` 是一个使用特定宏的占位符。
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -112,7 +110,7 @@ pub fn some_name(input: TokenStream) -> TokenStream {
 }
 ```
 
-<span class="caption">示例 19-37: 一个使用过程宏的例子</span>
+<span class="caption">示例 19-29: 一个使用过程宏的例子</span>
 
 过程宏包含一个函数，这也是其得名的原因：“过程” 是 “函数” 的同义词。那么为何不叫 “函数宏” 呢？好吧，有一个过程宏是 “类函数” 的，叫成函数会产生混乱。无论如何，定义过程宏的函数接受一个 `TokenStream` 作为输入并产生一个 `TokenStream` 作为输出。这也就是宏的核心：宏所处理的源代码组成了输入 `TokenStream`，同时宏生成的代码是输出 `TokenStream`。最后，函数上有一个属性；这个属性表明过程宏的类型。在同一 crate 中可以有多种的过程宏。
 
@@ -120,7 +118,7 @@ pub fn some_name(input: TokenStream) -> TokenStream {
 
 ### 如何编写自定义 `derive` 宏
 
-让我们创建一个 `hello_macro` crate，其包含名为 `HelloMacro` 的 trait 和关联函数 `hello_macro`。不同于让 crate 的用户为其每一个类型实现 `HelloMacro` trait，我们将会提供一个过程式宏以便用户可以使用 `#[derive(HelloMacro)]` 注解他们的类型来得到 `hello_macro` 函数的默认实现。该默认实现会打印 `Hello, Macro! My name is TypeName!`，其中 `TypeName` 为定义了 trait 的类型名。换言之，我们会创建一个 crate，使程序员能够写类似示例 19-38 中的代码。 
+让我们创建一个 `hello_macro` crate，其包含名为 `HelloMacro` 的 trait 和关联函数 `hello_macro`。不同于让 crate 的用户为其每一个类型实现 `HelloMacro` trait，我们将会提供一个过程式宏以便用户可以使用 `#[derive(HelloMacro)]` 注解他们的类型来得到 `hello_macro` 函数的默认实现。该默认实现会打印 `Hello, Macro! My name is TypeName!`，其中 `TypeName` 为定义了 trait 的类型名。换言之，我们会创建一个 crate，使程序员能够写类似示例 19-30 中的代码。 
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -136,7 +134,7 @@ fn main() {
 }
 ```
 
-<span class="caption">示例 19-38: crate 用户所写的能够使用过程式宏的代码</span>
+<span class="caption">示例 19-30: crate 用户所写的能够使用过程式宏的代码</span>
 
 运行该代码将会打印 `Hello, Macro! My name is Pancakes!` 第一步是像下面这样新建一个库 crate：
 
@@ -197,7 +195,7 @@ syn = "0.14.4"
 quote = "0.6.3"
 ```
 
-为定义一个过程式宏，请将示例 19-39 中的代码放在 `hello_macro_derive` crate 的 *src/lib.rs* 文件里面。注意这段代码在我们添加 `impl_hello_macro` 函数的定义之前是无法编译的。
+为定义一个过程式宏，请将示例 19-31 中的代码放在 `hello_macro_derive` crate 的 *src/lib.rs* 文件里面。注意这段代码在我们添加 `impl_hello_macro` 函数的定义之前是无法编译的。
 
 <span class="filename">文件名: hello_macro_derive/src/lib.rs</span>
 
@@ -231,18 +229,20 @@ pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
 }
 ```
 
-<span class="caption">示例 19-39: 大多数过程式宏处理 Rust 代码时所需的代码</span>
+<span class="caption">示例 19-31: 大多数过程式宏处理 Rust 代码时所需的代码</span>
 
-注意在 19-39 中分离函数的方式，这将和你几乎所见到或创建的每一个过程宏都一样，因为这让编写一个过程式宏更加方便。在 `impl_hello_macro` 被调用的地方所选择做的什么依赖于该过程式宏的目的而有所不同。
+注意 `hello_macro_derive` 函数中代码分割的方式，它负责解析 `TokenStream`，而 `impl_hello_macro` 函数则负责转换语法树：这让编写一个过程式宏更加方便。外部函数中的代码（在这里是 `hello_macro_derive`）几乎在所有你能看到或创建的过程宏 crate 中都一样。内部函数（在这里是 `impl_hello_macro`）的函数体中所指定的代码则依过程宏的目的而各有不同。
 
-现在，我们已经引入了 三个新的 crate：`proc_macro` 、 [`syn`] 和 [`quote`] 。Rust 自带 `proc_macro` crate，因此无需将其加到 *Cargo.toml* 文件的依赖中。`proc_macro` crate 是编译器用来读取和操作我们 Rust 代码的 API。`syn` crate 将字符串中的 Rust 代码解析成为一个可以操作的数据结构。`quote` 则将 `syn` 解析的数据结构反过来传入到 Rust 代码中。这些 crate 让解析任何我们所要处理的 Rust 代码变得更简单：为 Rust 编写整个的解析器并不是一件简单的工作。
+现在，我们已经引入了三个新的 crate：`proc_macro` 、 [`syn`] 和 [`quote`] 。Rust 自带 `proc_macro` crate，因此无需将其加到 *Cargo.toml* 文件的依赖中。`proc_macro` crate 是编译器用来读取和操作我们 Rust 代码的 API。
 
 [`syn`]: https://crates.io/crates/syn
 [`quote`]: https://crates.io/crates/quote
 
+`syn` crate 将字符串中的 Rust 代码解析成为一个可以操作的数据结构。`quote` 则将 `syn` 解析的数据结构反过来传入到 Rust 代码中。这些 crate 让解析任何我们所要处理的 Rust 代码变得更简单：为 Rust 编写整个的解析器并不是一件简单的工作。
+
 当用户在一个类型上指定 `#[derive(HelloMacro)]` 时，`hello_macro_derive`  函数将会被调用。原因在于我们已经使用 `proc_macro_derive` 及其指定名称对 `hello_macro_derive` 函数进行了注解：`HelloMacro` ，其匹配到 trait 名，这是大多数过程宏遵循的习惯。
 
-该函数首先将来自 `TokenStream` 的 `input` 转换为一个我们可以解释和操作的数据结构。这正是 `syn` 派上用场的地方。`syn` 中的 `parse_derive_input` 函数获取一个 `TokenStream` 并返回一个表示解析出 Rust 代码的 `DeriveInput` 结构体。示例 19-40 展示了从字符串 `struct Pancakes;` 中解析出来的 `DeriveInput` 结构体的相关部分：
+该函数首先将来自 `TokenStream` 的 `input` 转换为一个我们可以解释和操作的数据结构。这正是 `syn` 派上用场的地方。`syn` 中的 `parse_derive_input` 函数获取一个 `TokenStream` 并返回一个表示解析出 Rust 代码的 `DeriveInput` 结构体。示例 19-32 展示了从字符串 `struct Pancakes;` 中解析出来的 `DeriveInput` 结构体的相关部分：
 
 ```rust,ignore
 DeriveInput {
@@ -264,7 +264,7 @@ DeriveInput {
 }
 ```
 
-<span class="caption">示例 19-40: 解析示例 19-38 中带有宏属性的代码时得到的 `DeriveInput` 实例</span>
+<span class="caption">示例 19-32: 解析示例 19-30 中带有宏属性的代码时得到的 `DeriveInput` 实例</span>
 
 该结构体的字段展示了我们解析的 Rust 代码是一个类单元结构体，其 `ident`（ identifier，表示名字）为 `Pancakes`。该结构体里面有更多字段描述了所有类型的 Rust 代码，查阅 [`syn` 中 `DeriveInput` 的文档][syn-docs] 以获取更多信息。
 
@@ -274,7 +274,7 @@ DeriveInput {
 
 你可能也注意到了，当调用 `parse_derive_input` 或 `parse` 失败时。在错误时 panic 对过程宏来说是必须的，因为 `proc_macro_derive` 函数必须返回 `TokenStream` 而不是 `Result`，以此来符合过程宏的 API。这里选择用 `unwrap` 来简化了这个例子；在生产代码中，则应该通过 `panic!` 或 `expect` 来提供关于发生何种错误的更加明确的错误信息。
 
-现在我们有了将注解的 Rust 代码从 `TokenStream` 转换为 `DeriveInput` 实例的代码，让我们来创建在注解类型上实现 `HelloMacro` trait 的代码，如示例 19-41 所示。
+现在我们有了将注解的 Rust 代码从 `TokenStream` 转换为 `DeriveInput` 实例的代码，让我们来创建在注解类型上实现 `HelloMacro` trait 的代码，如示例 19-33 所示。
 
 <span class="filename">文件名: hello_macro_derive/src/lib.rs</span>
 
@@ -292,9 +292,9 @@ fn impl_hello_macro(ast: &syn::DeriveInput) -> TokenStream {
 }
 ```
 
-<span class="caption">示例 19-41: 使用解析过的 Rust 代码实现 `HelloMacro` trait</span>
+<span class="caption">示例 19-33: 使用解析过的 Rust 代码实现 `HelloMacro` trait</span>
 
-我们得到一个包含以 `ast.ident` 作为注解类型名字（标识符）的 `Ident` 结构体实例。示例 19-40 中的结构体表明当 `impl_hello_macro` 函数运行于示例 19-38 中的代码上时 `ident` 字段的值是 `"Pancakes"`。因此，示例 19-41 中 `name` 变量会包含一个 `Ident` 结构体的实例，当打印时，会是字符串 `"Pancakes"`，也就是示例 19-38 中结构体的名称。
+我们得到一个包含以 `ast.ident` 作为注解类型名字（标识符）的 `Ident` 结构体实例。示例 19-32 中的结构体表明当 `impl_hello_macro` 函数运行于示例 19-30 中的代码上时 `ident` 字段的值是 `"Pancakes"`。因此，示例 19-33 中 `name` 变量会包含一个 `Ident` 结构体的实例，当打印时，会是字符串 `"Pancakes"`，也就是示例 19-30 中结构体的名称。
 
 `quote!` 让我们可以编写希望返回的 Rust diamagnetic。`quote!` 宏执行的直接结果并不是编译器所期望的并需要转换为 `TokenStream`。为此需要调用 `into` 方法，它会消费这个中间表示（intermediate representation，IR）并返回所需的 `TokenStream` 类型值。
 
@@ -306,7 +306,7 @@ fn impl_hello_macro(ast: &syn::DeriveInput) -> TokenStream {
 
 此处所使用的 `stringify!` 为 Rust 内置宏。其接收一个 Rust 表达式，如 `1 + 2` ， 然后在编译时将表达式转换为一个字符串常量，如 `"1 + 2"` 。这与 `format!` 或 `println!` 是不同的，它计算表达式并将结果转换为 `String` 。有一种可能的情况是，所输入的 `#name` 可能是一个需要打印的表达式，因此我们用 `stringify!` 。 `stringify!` 编译时也保留了一份将 `#name` 转换为字符串之后的内存分配。
 
-此时，`cargo build` 应该都能成功编译 `hello_macro` 和 `hello_macro_derive` 。我们将这些 crate 连接到示例 19-38 的代码中来看看过程宏的行为！在 *projects* 目录下用 `cargo new pancakes` 命令新建一个二进制项目。需要将 `hello_macro` 和 `hello_macro_derive` 作为依赖加到 `pancakes` 包的 *Cargo.toml*  文件中去。如果你正将 `hello_macro` 和 `hello_macro_derive` 的版本发布到 *https://crates.io/* 上，其应为正规依赖；如果不是，则可以像下面这样将其指定为 `path` 依赖：
+此时，`cargo build` 应该都能成功编译 `hello_macro` 和 `hello_macro_derive` 。我们将这些 crate 连接到示例 19-38 的代码中来看看过程宏的行为！在 *projects* 目录下用 `cargo new pancakes` 命令新建一个二进制项目。需要将 `hello_macro` 和 `hello_macro_derive` 作为依赖加到 `pancakes` 包的 *Cargo.toml*  文件中去。如果你正将 `hello_macro` 和 `hello_macro_derive` 的版本发布到 [crates.io](https://crates.io/) 上，其应为正规依赖；如果不是，则可以像下面这样将其指定为 `path` 依赖：
 
 ```toml
 [dependencies]
@@ -340,13 +340,15 @@ pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
 
 ### 类函数宏
 
-最后，类函数宏定义看起来像函数调用的宏。例如，`sql!` 宏可能像这样被调用：
+类函数宏定义看起来像函数调用的宏。类似于 `macro_rules!`，它们比函数更灵活；例如，可以接受未知数量的参数。然而 `macro_rules!` 宏只能使用之前 [“使用 `macro_rules!` 的声明宏用于通用元编程”][decl] 介绍的类匹配的语法定义。类函数宏获取 `TokenStream` 参数，其定义使用 Rust 代码操纵 `TokenStream`，就像另两种过程宏一样。一个类函数宏例子是可以像这样被调用的 `sql!` 宏：
+
+[decl]: #declarative-macros-with-macro_rules-for-general-metaprogramming
 
 ```rust,ignore
 let sql = sql!(SELECT * FROM posts WHERE id=1);
 ```
 
-这个宏会解析其中的 SQL 语句并检查其是否是句法正确的。该宏应该被定义为如此：
+这个宏会解析其中的 SQL 语句并检查其是否是句法正确的，这是比 `macro_rules!` 可以做到的更为复杂的处理。`sql!` 宏应该被定义为如此：
 
 ```rust,ignore
 #[proc_macro]

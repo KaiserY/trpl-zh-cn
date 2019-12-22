@@ -2,13 +2,13 @@
 
 > [ch19-05-advanced-functions-and-closures.md](https://github.com/rust-lang/book/blob/master/src/ch19-05-advanced-functions-and-closures.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 426f3e4ec17e539ae9905ba559411169d303a031
 
 最后我们将探索一些有关函数和闭包的高级功能：函数指针以及返回值闭包。
 
 ### 函数指针
 
-我们讨论过了如何向函数传递闭包；也可以向函数传递常规函数！这在我们希望传递已经定义的函数而不是重新定义闭包作为参数是很有用。通过函数指针允许我们使用函数作为另一个函数的参数。函数的类型是 `fn` （使用小写的 “f” ）以免与 `Fn` 闭包 trait 相混淆。`fn` 被称为 **函数指针**（*function pointer*）。指定参数为函数指针的语法类似于闭包，如示例 19-35 所示：
+我们讨论过了如何向函数传递闭包；也可以向函数传递常规函数！这在我们希望传递已经定义的函数而不是重新定义闭包作为参数是很有用。通过函数指针允许我们使用函数作为另一个函数的参数。函数的类型是 `fn` （使用小写的 “f” ）以免与 `Fn` 闭包 trait 相混淆。`fn` 被称为 **函数指针**（*function pointer*）。指定参数为函数指针的语法类似于闭包，如示例 19-27 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -28,7 +28,7 @@ fn main() {
 }
 ```
 
-<span class="caption">示例 19-34: 使用 `fn` 类型接受函数指针作为参数</span>
+<span class="caption">示例 19-27: 使用 `fn` 类型接受函数指针作为参数</span>
 
 这会打印出 `The answer is: 12`。`do_twice` 中的 `f` 被指定为一个接受一个 `i32` 参数并返回 `i32` 的 `fn`。接着就可以在 `do_twice` 函数体中调用 `f`。在  `main` 中，可以将函数名 `add_one` 作为第一个参数传递给 `do_twice`。
 
@@ -58,7 +58,7 @@ let list_of_strings: Vec<String> = list_of_numbers
     .collect();
 ```
 
-注意这里必须使用 “高级 trait” 部分讲到的完全限定语法，因为存在多个叫做 `to_string` 的函数；这里使用了定义于 `ToString` trait 的 `to_string` 函数，标准库为所有实现了 `Display` 的类型实现了这个 trait。
+注意这里必须使用 [“高级 trait”][advanced-traits]  部分讲到的完全限定语法，因为存在多个叫做 `to_string` 的函数；这里使用了定义于 `ToString` trait 的 `to_string` 函数，标准库为所有实现了 `Display` 的类型实现了这个 trait。
 
 另一个实用的模式暴露了元组结构体和元组结构体枚举成员的实现细节。这些项使用 `()` 作为初始化语法，这看起来就像函数调用，同时它们确实被实现为返回由参数构造的实例的函数。它们也被称为实现了闭包 trait 的函数指针，并可以采用类似如下的方式调用：
 
@@ -74,7 +74,7 @@ let list_of_statuses: Vec<Status> =
     .collect();
 ```
 
-一些人倾向于函数风格，一些人喜欢闭包。这两种形式最终都会产生同样的代码，所以请使用对你来说更明白的形式吧。
+这里创建了 `Status::Value` 实例，它通过 `map` 用范围的每一个 `u32` 值调用 `Status::Value` 的初始化函数。一些人倾向于函数风格，一些人喜欢闭包。这两种形式最终都会产生同样的代码，所以请使用对你来说更明白的形式吧。
 
 ### 返回闭包
 
@@ -112,6 +112,11 @@ fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
 }
 ```
 
-这段代码正好可以编译。关于 trait 对象的更多内容，请回顾第十七章的 “为使用不同类型的值而设计的 trait 对象” 部分。
+这段代码正好可以编译。关于 trait 对象的更多内容，请回顾第十七章的 [“为使用不同类型的值而设计的 trait 对象”][using-trait-objects-that-allow-for-values-of-different-types] 部分。
 
 接下来让我们学习宏！
+
+[advanced-traits]:
+ch19-03-advanced-traits.html#advanced-traits
+[using-trait-objects-that-allow-for-values-of-different-types]:
+ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types

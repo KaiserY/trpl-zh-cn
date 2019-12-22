@@ -2,9 +2,9 @@
 
 > [ch20-03-graceful-shutdown-and-cleanup.md](https://github.com/rust-lang/book/blob/master/src/ch20-03-graceful-shutdown-and-cleanup.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 9a5a1bfaec3b7763e1bcfd31a2fb19fe95183746
 
-示例 20-21 中的代码如期通过使用线程池异步的响应请求。这里有一些警告说 `workers`、`id` 和 `thread` 字段没有直接被使用，这提醒了我们并没有清理所有的内容。当使用不那么优雅的 <span class="keystroke">ctrl-C</span> 终止主线程时，所有其他线程也会立刻停止，即便它们正处于处理请求的过程中。
+示例 20-21 中的代码如期通过使用线程池异步的响应请求。这里有一些警告说 `workers`、`id` 和 `thread` 字段没有直接被使用，这提醒了我们并没有清理所有的内容。当使用不那么优雅的 <span class="keystroke">ctrl-c</span> 终止主线程时，所有其他线程也会立刻停止，即便它们正处于处理请求的过程中。
 
 现在我们要为 `ThreadPool` 实现 `Drop` trait 对线程池中的每一个线程调用 `join`，这样这些线程将会执行完他们的请求。接着会为 `ThreadPool` 实现一个告诉线程他们应该停止接收新请求并结束的方式。为了实践这些代码，修改 server 在优雅停机（graceful shutdown）之前只接受两个请求。
 
@@ -117,7 +117,7 @@ impl Drop for ThreadPool {
 
 ### 向线程发送信号使其停止接收任务
 
-有了这些修改，代码就能编译且没有任何警告。不过也有坏消息，这些代码还不能以我们期望的方式运行。问题的关键在于 `Worker` 中分配的线程所运行的闭包中的逻辑：调用 `join` 并不会关闭线程，因为他们一直 `loop` 来寻找任务。如果采用这个实现来尝试丢弃 `ThreadPool` ，则主线程会永远阻塞在等待第一个线程结束上。
+有了所有这些修改，代码就能编译且没有任何警告。不过也有坏消息，这些代码还不能以我们期望的方式运行。问题的关键在于 `Worker` 中分配的线程所运行的闭包中的逻辑：调用 `join` 并不会关闭线程，因为他们一直 `loop` 来寻找任务。如果采用这个实现来尝试丢弃 `ThreadPool` ，则主线程会永远阻塞在等待第一个线程结束上。
 
 为了修复这个问题，修改线程既监听是否有 `Job` 运行也要监听一个应该停止监听并退出无限循环的信号。所以通道将发送这个枚举的两个成员之一而不是 `Job` 实例：
 
@@ -172,7 +172,7 @@ impl Worker {
                     Message::NewJob(job) => {
                         println!("Worker {} got a job; executing.", id);
 
-                        job.call_box();
+                        job();
                     },
                     Message::Terminate => {
                         println!("Worker {} was told to terminate.", id);
@@ -195,7 +195,7 @@ impl Worker {
 
 为了适用 `Message` 枚举需要将两个地方的 `Job` 修改为 `Message`：`ThreadPool` 的定义和 `Worker::new` 的签名。`ThreadPool` 的 `execute` 方法需要发送封装进 `Message::NewJob` 成员的任务。然后，在 `Worker::new` 中当从通道接收 `Message` 时，当获取到 `NewJob`成员会处理任务而收到 `Terminate` 成员则会退出循环。
 
-通过这些修改，代码再次能够编译并继续按照期望的行为运行。不过还是会得到一个警告，因为并没有创建任何 `Terminate` 成员的消息。如示例 20-25 所示修改 `Drop` 实现来修复此问题：
+通过这些修改，代码再次能够编译并继续按照示例 20-21 之后相同的行为运行。不过还是会得到一个警告，因为并没有创建任何 `Terminate` 成员的消息。如示例 20-25 所示修改 `Drop` 实现来修复此问题：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -289,13 +289,12 @@ Shutting down worker 3
 <span class="filename">文件名: src/bin/main.rs</span>
 
 ```rust,ignore
-extern crate hello;
 use hello::ThreadPool;
 
 use std::io::prelude::*;
 use std::net::TcpListener;
 use std::net::TcpStream;
-use std::fs::File;
+use std::fs;
 use std::thread;
 use std::time::Duration;
 
@@ -330,15 +329,12 @@ fn handle_connection(mut stream: TcpStream) {
         ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
     };
 
-     let mut file = File::open(filename).unwrap();
-     let mut contents = String::new();
+    let contents = fs::read_to_string(filename).unwrap();
 
-     file.read_to_string(&mut contents).unwrap();
+    let response = format!("{}{}", status_line, contents);
 
-     let response = format!("{}{}", status_line, contents);
-
-     stream.write(response.as_bytes()).unwrap();
-     stream.flush().unwrap();
+    stream.write(response.as_bytes()).unwrap();
+    stream.flush().unwrap();
 }
 ```
 
@@ -360,17 +356,7 @@ pub struct ThreadPool {
     sender: mpsc::Sender<Message>,
 }
 
-trait FnBox {
-    fn call_box(self: Box<Self>);
-}
-
-impl<F: FnOnce()> FnBox for F {
-    fn call_box(self: Box<F>) {
-        (*self)()
-    }
-}
-
-type Job = Box<dyn FnBox + Send + 'static>;
+type Job = Box<dyn FnOnce() + Send + 'static>;
 
 impl ThreadPool {
     /// 创建线程池。
@@ -446,7 +432,7 @@ impl Worker {
                     Message::NewJob(job) => {
                         println!("Worker {} got a job; executing.", id);
 
-                        job.call_box();
+                        job();
                     },
                     Message::Terminate => {
                         println!("Worker {} was told to terminate.", id);
@@ -471,7 +457,7 @@ impl Worker {
 - 为库的功能增加测试
 - 将 `unwrap` 调用改为更健壮的错误处理
 - 使用 `ThreadPool` 进行其他不同于处理网络请求的任务
-- 在 *https://crates.io/* 寻找一个线程池 crate 并使用它实现一个类似的 web server，将其 API 和鲁棒性与我们的实现做对比
+- 在 [crates.io](https://crates.io/) 上寻找一个线程池 crate 并使用它实现一个类似的 web server，将其 API 和鲁棒性与我们的实现做对比
 
 ## 总结
 

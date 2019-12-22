@@ -2,7 +2,7 @@
 
 > [appendix-03-derivable-traits.md](https://github.com/rust-lang/book/blob/master/src/appendix-03-derivable-traits.md)
 > <br />
-> commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
+> commit 426f3e4ec17e539ae9905ba559411169d303a031
 
 在本书的各个部分中，我们讨论了可应用于结构体和枚举定义的 `derive` 属性。`derive` 属性会在使用 `derive` 语法标记的类型上生成对应 trait 的默认实现的代码。
 
@@ -20,7 +20,7 @@
 
 一个无法被派生的 trait 的例子是为终端用户处理格式化的 `Display` 。你应该时常考虑使用合适的方法来为终端用户显示一个类型。终端用户应该看到类型的什么部分？他们会找出相关部分吗？对他们来说最相关的数据格式是什么样的？Rust 编译器没有这样的洞察力，因此无法为你提供合适的默认行为。
 
-本附录所提供的可派生 trait 列表并不全面：库可以为其自己的 trait 实现 `derive`，可以使用 `derive` 的 trait 列表事实上是无限的。实现 `derive` 涉及到过程宏的应用，这在第十九章的 “宏” 有介绍。
+本附录所提供的可派生 trait 列表并不全面：库可以为其自己的 trait 实现 `derive`，可以使用 `derive` 的 trait 列表事实上是无限的。实现 `derive` 涉及到过程宏的应用，这在第十九章的 [“宏”][macros] 有介绍。
 
 ### 用于程序员输出的 `Debug`
 
@@ -58,13 +58,13 @@
 
 ## 复制值的 `Clone` 和 `Copy`
 
-`Clone` trait 可以明确地创建一个值的深拷贝（deep copy），复制过程可能包含任意代码的执行以及堆上数据的复制。查阅第四章 “变量和数据的交互方式：移动” 以获取有关 `Clone` 的更多信息。
+`Clone` trait 可以明确地创建一个值的深拷贝（deep copy），复制过程可能包含任意代码的执行以及堆上数据的复制。查阅第四章 [“变量和数据的交互方式：移动”][ways-variables-and-data-interact-clone]  以获取有关 `Clone` 的更多信息。
 
 派生 `Clone` 实现了 `clone` 方法，其为整个的类型实现时，在类型的每一部分上调用了 `clone` 方法。这意味着类型中所有字段或值也必须实现 `Clone` 来派生 `Clone` 。
 
 例如，当在一个切片上调用 `to_vec` 方法时，`Clone` 是必须的。切片并不拥有其所包含实例的类型，但是从 `to_vec` 中返回的 vector 需要拥有其实例，因此，`to_vec` 在每个元素上调用 `clone`。因此，存储在切片中的类型必须实现 `Clone`。
 
-`Copy` trait 允许你通过只拷贝存储在栈上的位来复制值而不需要其他代码。查阅第四章“只在栈上的数据：拷贝”的部分来获取有关 `Copy` 的更多信息。
+`Copy` trait 允许你通过只拷贝存储在栈上的位来复制值而不需要其他代码。查阅第四章 [“只在栈上的数据：拷贝”][stack-only-data-copy] 的部分来获取有关 `Copy` 的更多信息。
 
 `Copy` trait 并未定义任何方法来阻止编程人员重写这些方法或违反无代码可执行的假设。所以，所有的编程人员可以假设复制一个值非常快。
 
@@ -72,7 +72,7 @@
 
 `Copy` trait 很少使用；实现 `Copy` 的类型是可以优化的，这意味着你无需调用 `clone`，这让代码更简洁。
 
-使用 `Clone` 实现 `Copy` 也是有可能的，但代码可能会稍慢或是要使用 `clone` 替代。
+任何使用 `Copy` 的代码都可以通过 `Clone` 实现，但代码可能会稍慢或是要使用 `clone` 替代。
 
 ## 固定大小的值到值映射的 `Hash`
 
@@ -84,6 +84,14 @@
 
 `Default` trait 使你创建一个类型的默认值。 派生 `Default` 实现了 `default` 函数。`default` 函数的派生实现调用了类型每部分的 `default` 函数，这意味着类型中所有的字段或值也必须把 `Default` 实现为派生 `Default` 。
 
-`Default::default` 函数通常结合结构体更新语法一起使用，这在第五章的“使用结构体更新语法从其他实例中创建实例”部分有讨论。可以自定义一个结构体的一小部分字段而剩余字段则使用 `..Default::default()` 设置为默认值。
+`Default::default` 函数通常结合结构体更新语法一起使用，这在第五章的 [“使用结构体更新语法从其他实例中创建实例”][creating-instances-from-other-instances-with-struct-update-syntax] 部分有讨论。可以自定义一个结构体的一小部分字段而剩余字段则使用 `..Default::default()` 设置为默认值。
 
 例如，当你在 `Option<T>` 实例上使用 `unwrap_or_default` 方法时，`Default` trait是必须的。如果 `Option<T>` 是 `None`的话, `unwrap_or_default` 方法将返回存储在 `Option<T>` 中 `T` 类型的 `Default::default` 的结果。
+
+[creating-instances-from-other-instances-with-struct-update-syntax]:
+ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax
+[stack-only-data-copy]:
+ch04-01-what-is-ownership.html#stack-only-data-copy
+[ways-variables-and-data-interact-clone]:
+ch04-01-what-is-ownership.html#ways-variables-and-data-interact-clone
+[macros]: ch19-06-macros.html#macros
