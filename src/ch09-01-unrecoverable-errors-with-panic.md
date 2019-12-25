@@ -71,7 +71,7 @@ thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-这指向了一个不是我们编写的文件，*vec.rs*。这是标准库中 `Vec<T>` 的实现。这是当对 vector `v` 使用 `[]` 时 *vec.rs* 中会执行的代码，也是真正出现 `panic!` 的地方。
+这指向了一个不是我们编写的文件，*libcore/slice/mod.rs*。其为 Rust 源码中 `slice` 的实现。这是当对 vector `v` 使用 `[]` 时 *libcore/slice/mod.rs* 中会执行的代码，也是真正出现 `panic!` 的地方。
 
 接下来的几行提醒我们可以设置 `RUST_BACKTRACE` 环境变量来得到一个 backtrace。*backtrace* 是一个执行到目前位置所有被调用的函数的列表。Rust 的 backtrace 跟其他语言中的一样：阅读 backtrace 的关键是从头开始读直到发现你编写的文件。这就是问题的发源地。这一行往上是你的代码所调用的代码；往下则是调用你的代码的代码。这些行可能包含核心 Rust 代码，标准库代码或用到的 crate 代码。让我们将 `RUST_BACKTRACE` 环境变量设置为任何不是 0 的值来获取 backtrace 看看。示例 9-2 展示了与你看到类似的输出：
 
