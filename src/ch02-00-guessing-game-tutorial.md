@@ -180,7 +180,7 @@ io::stdin().read_line(&mut guess).expect("Failed to read line");
 
 不过，过长的行难以阅读，所以最好拆开来写，两个方法调用占两行。现在来看看这行代码干了什么。
 
-之前提到了 `read_line` 将用户输入附加到传递给它的字符串中，不过它也返回一个值——在这个例子中是 [`io::Result`][ioresult]<!-- ignore -->。Rust 标准库中有很多叫做 `Result` 的类型。一个 [`Result`][result]<!-- ignore --> 泛型以及对应子模块的特定版本，比如 `io::Result`。
+之前提到了 `read_line` 将用户输入附加到传递给它的字符串中，不过它也返回一个值——在这个例子中是 [`io::Result`][ioresult]<!-- ignore -->。Rust 标准库中有很多叫做 `Result` 的类型：一个通用的 [`Result`][result]<!-- ignore --> 以及在子模块中的特化版本，比如 `io::Result`。
 
 [ioresult]: https://doc.rust-lang.org/std/io/type.Result.html
 [result]: https://doc.rust-lang.org/std/result/enum.Result.html
