@@ -1,7 +1,6 @@
 ## 使用 `Drop` Trait 运行清理代码
 
-> [ch15-03-drop.md](https://github.com/rust-lang/book/blob/master/src/ch15-03-drop.md)
-> <br>
+> [ch15-03-drop.md](https://github.com/rust-lang/book/blob/master/src/ch15-03-drop.md) > <br>
 > commit 57adb83f69a69e20862d9e107b2a8bab95169b4c
 
 对于智能指针模式来说第二个重要的 trait 是 `Drop`，其允许我们在值要离开作用域时执行一些代码。可以为任何类型提供 `Drop` trait 的实现，同时所指定的代码被用于释放类似于文件或网络连接的资源。我们在智能指针上下文中讨论 `Drop` 是因为其功能几乎总是用于实现智能指针。例如，`Box<T>` 自定义了 `Drop` 用来释放 box 所指向的堆空间。
@@ -77,13 +76,13 @@ error[E0040]: explicit use of destructor method
    |       ^^^^ explicit destructor calls not allowed
 ```
 
-错误信息表明不允许显式调用 `drop`。错误信息使用了术语 **析构函数**（*destructor*），这是一个清理实例的函数的通用编程概念。**析构函数** 对应创建实例的 **构造函数**。Rust 中的 `drop` 函数就是这么一个析构函数。
+错误信息表明不允许显式调用 `drop`。错误信息使用了术语 **析构函数**（_destructor_），这是一个清理实例的函数的通用编程概念。**析构函数** 对应创建实例的 **构造函数**。Rust 中的 `drop` 函数就是这么一个析构函数。
 
 Rust 不允许我们显式调用 `drop` 因为 Rust 仍然会在 `main` 的结尾对值自动调用 `drop`，这会导致一个 **double free** 错误，因为 Rust 会尝试清理相同的值两次。
 
 因为不能禁用当值离开作用域时自动插入的 `drop`，并且不能显示调用 `drop`，如果我们需要强制提早清理值，可以使用 `std::mem::drop` 函数。
 
-`std::mem::drop` 函数不同于 `Drop` trait 中的 `drop` 方法。可以通过传递希望提早强制丢弃的值作为参数。`std::mem::drop` 位于 prelude，所以我们可以修改示例 15-15 中的 `main` 来调用 `drop` 函数如示例 15-16 所示：
+`std::mem::drop` 函数不同于 `Drop` trait 中的 `drop` 方法。可以通过传递希望提早强制丢弃的值作为参数。`std::mem::drop` 位于 prelude，所以我们可以修改示例 15-15 中的 `main` 来调用 `drop` 函数。如示例 15-16 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -116,9 +115,9 @@ Dropping CustomSmartPointer with data `some data`!
 CustomSmartPointer dropped before the end of main.
 ```
 
-```Dropping CustomSmartPointer with data `some data`!``` 出现在 `CustomSmartPointer created.` 和 `CustomSmartPointer dropped before the end of main.` 之间，表明了 `drop` 方法被调用了并在此丢弃了 `c`。
+`` Dropping CustomSmartPointer with data `some data`! `` 出现在 `CustomSmartPointer created.` 和 `CustomSmartPointer dropped before the end of main.` 之间，表明了 `drop` 方法被调用了并在此丢弃了 `c`。
 
-`Drop` trait 实现中指定的代码可以用于许多方面来使得清理变得方便和安全：比如可以用其创建我们自己的内存分配器！通过 `Drop` trait 和 Rust 所有权系统，你无需担心之后清理代码，Rust 会自动考虑这些问题。
+`Drop` trait 实现中指定的代码可以用于许多方面来使得清理变得方便和安全：比如可以用其创建我们自己的内存分配器！通过 `Drop` trait 和 Rust 所有权系统，你无需担心之后的代码清理，Rust 会自动考虑这些问题。
 
 我们也无需担心意外的清理掉仍在使用的值，这会造成编译器错误：所有权系统确保引用总是有效的，也会确保 `drop` 只会在值不再被使用时被调用一次。
 
