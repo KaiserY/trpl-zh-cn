@@ -1,7 +1,6 @@
 ## 使用 `Sync` 和 `Send` trait 的可扩展并发
 
-> [ch16-04-extensible-concurrency-sync-and-send.md](https://github.com/rust-lang/book/blob/master/src/ch16-04-extensible-concurrency-sync-and-send.md)
-> <br>
+> [ch16-04-extensible-concurrency-sync-and-send.md](https://github.com/rust-lang/book/blob/master/src/ch16-04-extensible-concurrency-sync-and-send.md) > <br>
 > commit 426f3e4ec17e539ae9905ba559411169d303a031
 
 Rust 的并发模型中一个有趣的方面是：语言本身对并发知之 **甚少**。我们之前讨论的几乎所有内容，都属于标准库，而不是语言本身的内容。由于不需要语言提供并发相关的基础设施，并发方案不受标准库或语言所限：我们可以编写自己的或使用别人编写的并发功能。
@@ -28,7 +27,7 @@ Rust 的并发模型中一个有趣的方面是：语言本身对并发知之 **
 
 手动实现这些标记 trait 涉及到编写不安全的 Rust 代码，第十九章将会讲述具体的方法；当前重要的是，在创建新的由不是 `Send` 和 `Sync` 的部分构成的并发类型时需要多加小心，以确保维持其安全保证。[The Rustonomicon] 中有更多关于这些保证以及如何维持他们的信息。
 
-[The Rustonomicon]: https://doc.rust-lang.org/stable/nomicon/
+[the rustonomicon]: https://doc.rust-lang.org/stable/nomicon/
 
 ## 总结
 
@@ -40,5 +39,4 @@ Rust 提供了用于消息传递的通道，和像 `Mutex<T>` 和 `Arc<T>` 这�
 
 接下来，让我们讨论一下当 Rust 程序变得更大时，有哪些符合语言习惯的问题建模方法和结构化解决方案，以及 Rust 的风格是如何与面向对象编程（Object Oriented Programming）中那些你所熟悉的概念相联系的。
 
-[sharing-a-mutext-between-multiple-threads]:
-ch16-03-shared-state.html#sharing-a-mutext-between-multiple-threads
+[sharing-a-mutext-between-multiple-threads]: ch16-03-shared-state.html#sharing-a-mutext-between-multiple-threads
