@@ -44,7 +44,7 @@ nightly: * - - * - - * - - * - - *
 beta:                *
 ```
 
-比如我们发现了一个回归缺陷。好消息是在这些缺陷流入稳定发布之前还有一些时间来测试 beta 版本！fix 被合并到 `master`，为此 nightly 爸爸嫩得到了修复，接着这些 fix 将 backport 到 `beta` 分支，一个新的 beta 发布就产生了：
+比如我们发现了一个回归缺陷。好消息是在这些缺陷流入稳定发布之前还有一些时间来测试 beta 版本！fix 被合并到 `master`，为此 nightly 版本得到了修复，接着这些 fix 将 backport 到 `beta` 分支，一个新的 beta 发布就产生了：
 
 ```text
 nightly: * - - * - - * - - * - - * - - *
