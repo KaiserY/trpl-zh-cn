@@ -79,7 +79,7 @@ Cargo 编译并运行了测试。在 `Compiling`、`Finished` 和 `Running` 这�
 
 [bench]: https://doc.rust-lang.org/unstable-book/library-features/test.html
 
-测试输出的中以 `Doc-tests adder` 开头的这一部分是所有文档测试的结果。我们现在并没有任何文档测试，不过 Rust 会编译任何在 API 文档中的代码示例。这个功能帮助我们使文档和代码保持同步！在第十四章的 [“文档注释作为测试”][doc-comments] 部分会讲到如何编写文档测试。现在我们将忽略 `Doc-tests` 部分的输出。
+测试输出中的以 `Doc-tests adder` 开头的这一部分是所有文档测试的结果。我们现在并没有任何文档测试，不过 Rust 会编译任何在 API 文档中的代码示例。这个功能帮助我们使文档和代码保持同步！在第十四章的 [“文档注释作为测试”][doc-comments] 部分会讲到如何编写文档测试。现在我们将忽略 `Doc-tests` 部分的输出。
 
 让我们改变测试的名称并看看这如何改变测试的输出。给 `it_works` 函数起个不同的名字，比如 `exploration`，像这样：
 
