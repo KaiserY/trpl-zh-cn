@@ -49,7 +49,7 @@ fn handle_connection(mut stream: TcpStream) {
 
 现在就可以真切的看出我们的 server 有多么的原始；真实的库将会以更简洁的方式处理多请求识别问题。
 
-使用 `cargo run` 启动 server，并接着打开两个浏览器窗口：一个请求 `http://localhost:8080/` 而另一个请求 `http://localhost:8080/sleep`。如果像之前一样多次请求 `/`，会发现响应的比较快速。不过如果请求`/sleep` 之后在请求 `/`，就会看到 `/` 会等待直到 `sleep` 休眠完五秒之后才出现。
+使用 `cargo run` 启动 server，并接着打开两个浏览器窗口：一个请求 `http://localhost:8080/` 而另一个请求 `http://localhost:8080/sleep`。如果像之前一样多次请求 `/`，会发现响应的比较快速。不过如果请求`/sleep` 之后再请求 `/`，就会看到 `/` 会等待直到 `sleep` 休眠完五秒之后才出现。
 
 这里有多种办法来改变我们的 web server 使其避免所有请求都排在慢请求之后；其一便是实现一个线程池。
 
