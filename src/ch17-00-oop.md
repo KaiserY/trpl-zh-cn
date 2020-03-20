@@ -1,4 +1,4 @@
-﻿# Rust 的面向对象特性
+# Rust 的面向对象特性
 
 > [ch17-00-oop.md](https://github.com/rust-lang/book/blob/master/src/ch17-00-oop.md)
 > <br>

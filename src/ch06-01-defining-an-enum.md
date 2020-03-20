@@ -1,4 +1,4 @@
-# 定义枚举
+## 定义枚举
 
 > [ch06-01-defining-an-enum.md](https://github.com/rust-lang/book/blob/master/src/ch06-01-defining-an-enum.md)
 > <br>
