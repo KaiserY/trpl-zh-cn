@@ -3,7 +3,7 @@
 > [ch15-06-reference-cycles.md](https://github.com/rust-lang/book/blob/master/src/ch15-06-reference-cycles.md) > <br>
 > commit f617d58c1a88dd2912739a041fd4725d127bf9fb
 
-Rust 的内存安全保证使其难以意外地制造永远也不会被清理的内存（被称为 **内存泄露**（_memory leak_）），但并不是不可能。与在编译时拒绝数据竞争不同， Rust 并不保证完全地避免内存泄露，这意味着内存泄露在 Rust 被认为是内存安全的。这一点可以通过 `Rc<T>` 和 `RefCell<T>` 看出：创建引用循环的可能性是存在的。这会造成内存泄露，因为每一项的引用计数永远也到不了 0，其值也永远也不会被丢弃。
+Rust 的内存安全性保证使其难以意外地制造永远也不会被清理的内存（被称为 **内存泄露**（_memory leak_）），但并不是不可能。与在编译时拒绝数据竞争不同， Rust 并不保证完全地避免内存泄露，这意味着内存泄露在 Rust 被认为是内存安全的。这一点可以通过 `Rc<T>` 和 `RefCell<T>` 看出：创建引用循环的可能性是存在的。这会造成内存泄露，因为每一项的引用计数永远也到不了 0，其值也永远也不会被丢弃。
 
 ### 制造引用循环
 
@@ -121,7 +121,7 @@ a rc count after changing a = 2
 
 ### 避免引用循环：将 `Rc<T>` 变为 `Weak<T>`
 
-到目前为止，我们已经展示了调用 `Rc::clone` 会增加 `Rc<T>` 实例的 `strong_count`，和只在其 `strong_count` 为 0 时才会被清理的 `Rc<T>` 实例。你也可以通过调用 `Rc::downgrade` 并传递 `Rc` 实例的引用来创建其值的 **弱引用**（_weak reference_）。调用 `Rc::downgrade` 时会得到 `Weak<T>` 类型的智能指针。不同于将 `Rc<T>` 实例的 `strong_count` 加一，调用 `Rc::downgrade` 会将 `weak_count` 加一。`Rc<T>` 类型使用 `weak_count` 来记录其存在多少个 `Weak<T>` 引用，类似于 `strong_count`。其区别在于 `weak_count` 无需计数为 0 就能使 `Rc` 实例被清理。
+到目前为止，我们已经展示了调用 `Rc::clone` 会增加 `Rc<T>` 实例的 `strong_count`，和只在其 `strong_count` 为 0 时才会被清理的 `Rc<T>` 实例。你也可以通过调用 `Rc::downgrade` 并传递 `Rc` 实例的引用来创建其值的 **弱引用**（_weak reference_）。调用 `Rc::downgrade` 时会得到 `Weak<T>` 类型的智能指针。不同于将 `Rc<T>` 实例的 `strong_count` 加1，调用 `Rc::downgrade` 会将 `weak_count` 加1。`Rc<T>` 类型使用 `weak_count` 来记录其存在多少个 `Weak<T>` 引用，类似于 `strong_count`。其区别在于 `weak_count` 无需计数为 0 就能使 `Rc` 实例被清理。
 
 强引用代表如何共享 `Rc<T>` 实例的所有权，但弱引用并不属于所有权关系。他们不会造成引用循环，因为任何弱引用的循环会在其相关的强引用计数为 0 时被打断。
 
