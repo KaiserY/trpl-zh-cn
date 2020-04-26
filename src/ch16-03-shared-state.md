@@ -110,7 +110,7 @@ in previous iteration of loop
 which does not implement the `Copy` trait
 ```
 
-错误信息表明 `counter` 值在上一次循环中被移动了。所有 Rust 告诉我们不能将 `counter` 锁的所有权移动到多个线程中。让我们通过一个第十五章讨论过的多所有权手段来修复这个编译错误。
+错误信息表明 `counter` 值在上一次循环中被移动了。所以 Rust 告诉我们不能将 `counter` 锁的所有权移动到多个线程中。让我们通过一个第十五章讨论过的多所有权手段来修复这个编译错误。
 
 #### 多线程和多所有权
 
