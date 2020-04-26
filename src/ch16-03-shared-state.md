@@ -165,7 +165,7 @@ is not implemented for `std::rc::Rc<std::sync::Mutex<i32>>`
    = note: required by `std::thread::spawn`
 ```
 
-哇哦，错误信息太长不看！这里是一些需要注意的重要部分：第一行错误表明 `` `std::rc::Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely ``。编译器也告诉了我们原因 `` the trait bound `Send` is not satisfied ``。下一部分会讲到 `Send`：这是确保所使用的类型意在用于并发环境的 trait 之一。
+哇哦，错误信息太长不看！这里是一些需要注意的重要部分：第一行错误表明 `` `std::rc::Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely ``。编译器也告诉了我们原因 `` the trait bound `Send` is not satisfied ``。下一部分会讲到 `Send`：这是确保所使用的类型可以用于并发环境的 trait 之一。
 
 不幸的是，`Rc<T>` 并不能安全的在线程间共享。当 `Rc<T>` 管理引用计数时，它必须在每一个 `clone` 调用时增加计数，并在每一个克隆被丢弃时减少计数。`Rc<T>` 并没有使用任何并发原语，来确保改变计数的操作不会被其他线程打断。在计数出错时可能会导致诡异的 bug，比如可能会造成内存泄漏，或在使用结束之前就丢弃一个值。我们所需要的是一个完全类似 `Rc<T>`，又以一种线程安全的方式改变引用计数的类型。
 
