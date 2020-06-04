@@ -108,7 +108,7 @@ impl<'a, T> LimitTracker<'a, T>
 }
 ```
 
-<span class="caption">示例 15-23：一个记录某个值与最大值差距的库，并根据此值的特定级别发出警告</span>
+<span class="caption">示例 15-20：一个记录某个值与最大值差距的库，并根据此值的特定级别发出警告</span>
 
 这些代码中一个重要部分是拥有一个方法 `send` 的 `Messenger` trait，其获取一个 `self` 的不可变引用和文本信息。这是我们的 mock 对象所需要拥有的接口。另一个重要的部分是我们需要测试 `LimitTracker` 的 `set_value` 方法的行为。可以改变传递的 `value` 参数的值，不过 `set_value` 并没有返回任何可供断言的值。也就是说，如果使用某个实现了 `Messenger` trait 的值和特定的 `max` 创建 `LimitTracker`，当传递不同 `value` 值时，消息发送者应被告知发送合适的消息。
 
