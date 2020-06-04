@@ -30,7 +30,7 @@ pub trait Draw {
 
 <span class="caption">示例 17-3：`Draw` trait 的定义</span>
 
-因为第十章已经讨论过如何定义 trait，其语法看起来应该比较眼熟。接下来就是新内容了：实例 17-4 定义了一个存放了名叫 `components` 的 vector 的结构体 `Screen`。这个 vector 的类型是 `Box<dyn Draw>`，此为一个 trait 对象：它是 `Box` 中任何实现了 `Draw` trait 的类型的替身。
+因为第十章已经讨论过如何定义 trait，其语法看起来应该比较眼熟。接下来就是新内容了：示例 17-4 定义了一个存放了名叫 `components` 的 vector 的结构体 `Screen`。这个 vector 的类型是 `Box<dyn Draw>`，此为一个 trait 对象：它是 `Box` 中任何实现了 `Draw` trait 的类型的替身。
 
 <span class="filename">文件名: src/lib.rs</span>
 
