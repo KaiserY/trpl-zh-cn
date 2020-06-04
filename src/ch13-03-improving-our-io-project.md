@@ -81,6 +81,22 @@ fn main() {
 
 <span class="filename">文件名: src/lib.rs</span>
 
+```rust,ignore
+impl Config {
+    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
+        // --snip--
+```
+
+<span class="caption">示例 13-26：以迭代器作为参数更新 `Config::new` 的签名
+
+`env::args` 函数的标准库文档显示，它返回的迭代器的类型为 `std::env::Args`。我们已经更新了 `Config :: new` 函数的签名，因此参数 `args` 的类型为 `std::env::Args` 而不是 `＆[String]`。因为我们拥有 `args` 的所有权，并且将通过对其进行迭代来改变 `args` ，所以我们可以将 `mut` 关键字添加到 `args` 参数的规范中以使其可变。
+
+#### 使用 `Iterator` trait 代替索引
+
+接下来，我们将修改 `Config::new` 的内容。标准库文档还提到 `std::env::Args` 实现了 `Iterator` trait，因此我们知道可以对其调用 `next` 方法！示例 13-27 更新了示例 12-23 中的代码，以使用 `next` 方法：
+
+<span class="filename">文件名: src/lib.rs</span>
+
 ```rust
 # fn main() {}
 # use std::env;
