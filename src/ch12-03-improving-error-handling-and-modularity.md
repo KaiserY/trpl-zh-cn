@@ -436,7 +436,7 @@ fn main() {
 
 <span class="caption">示例 12-14：将 `minigrep` crate 引入 *src/main.rs* 的作用域中</span>
 
-为了将库 crate 引入二进制 crate，我们使用了 `use minigrep`。接着 `use minigrep::Config` 将 `Config` 类型引入作用域，并使用 crate 名称作为 `run` 函数的前缀。通过这些重构，所有功能应该能够联系在一起并运行了。运行 `cargo run` 来确保一切都正确的衔接在一起。
+我们添加了一行 `use minigrep::Config`，它将 `Config` 类型引入作用域，并使用 crate 名称作为 `run` 函数的前缀。通过这些重构，所有功能应该能够联系在一起并运行了。运行 `cargo run` 来确保一切都正确的衔接在一起。
 
 哇哦！这可有很多的工作，不过我们为将来的成功打下了基础。现在处理错误将更容易，同时代码也更加模块化。从现在开始几乎所有的工作都将在 *src/lib.rs* 中进行。
 
