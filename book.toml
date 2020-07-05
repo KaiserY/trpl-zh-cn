@@ -9,9 +9,3 @@ destination = "mdbook"
 [output.html]
 additional-css = ["ferris.css"]
 additional-js = ["ferris.js"]
-
-[output.latex]
-latex    = false  # default = true
-pdf      = false  # default = false
-markdown = false  # default = false
-custom-template = "custom-template.tex"
