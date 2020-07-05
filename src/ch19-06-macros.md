@@ -36,7 +36,7 @@ let v: Vec<u32> = vec![1, 2, 3];
 
 也可以使用 `vec!` 宏来构造两个整数的 vector 或五个字符串 slice 的 vector 。但却无法使用函数做相同的事情，因为我们无法预先知道参数值的数量和类型。
 
-在示例 19-28 中展示了一个 `vec!` 稍微简化的定义。 
+在示例 19-28 中展示了一个 `vec!` 稍微简化的定义。
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -118,7 +118,7 @@ pub fn some_name(input: TokenStream) -> TokenStream {
 
 ### 如何编写自定义 `derive` 宏
 
-让我们创建一个 `hello_macro` crate，其包含名为 `HelloMacro` 的 trait 和关联函数 `hello_macro`。不同于让 crate 的用户为其每一个类型实现 `HelloMacro` trait，我们将会提供一个过程式宏以便用户可以使用 `#[derive(HelloMacro)]` 注解他们的类型来得到 `hello_macro` 函数的默认实现。该默认实现会打印 `Hello, Macro! My name is TypeName!`，其中 `TypeName` 为定义了 trait 的类型名。换言之，我们会创建一个 crate，使程序员能够写类似示例 19-30 中的代码。 
+让我们创建一个 `hello_macro` crate，其包含名为 `HelloMacro` 的 trait 和关联函数 `hello_macro`。不同于让 crate 的用户为其每一个类型实现 `HelloMacro` trait，我们将会提供一个过程式宏以便用户可以使用 `#[derive(HelloMacro)]` 注解他们的类型来得到 `hello_macro` 函数的默认实现。该默认实现会打印 `Hello, Macro! My name is TypeName!`，其中 `TypeName` 为定义了 trait 的类型名。换言之，我们会创建一个 crate，使程序员能够写类似示例 19-30 中的代码。
 
 <span class="filename">文件名: src/main.rs</span>
 

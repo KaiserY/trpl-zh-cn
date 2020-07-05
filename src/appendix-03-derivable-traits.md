@@ -30,7 +30,7 @@
 
 例如，在使用 `assert_eq!` 宏时，`Debug` trait 是必须的。如果等式断言失败，这个宏就把给定实例的值作为参数打印出来，如此程序员可以看到两个实例为什么不相等。
 
-## 等值比较的 `PartialEq` 和 `Eq`
+### 等值比较的 `PartialEq` 和 `Eq`
 
 `PartialEq` trait 可以比较一个类型的实例以检查是否相等，并开启了 `==` 和 `!=` 运算符的功能。
 
@@ -42,9 +42,9 @@
 
 例如，对于一个 `HashMap<K, V>` 中的 key 来说， `Eq` 是必须的，这样 `HashMap<K, V>` 就可以知道两个 key 是否一样了。
 
-## 次序比较的 `PartialOrd` 和 `Ord`
+### 次序比较的 `PartialOrd` 和 `Ord`
 
-`PartialOrd` trait 可以基于排序的目的而比较一个类型的实例。实现了 `PartialOrd` 的类型可以使用 `<`、 `>`、`<=` 和 `>=` 操作符。但只能在同时实现了 `PartialEq` 的类型上使用 `PartialOrd`。 
+`PartialOrd` trait 可以基于排序的目的而比较一个类型的实例。实现了 `PartialOrd` 的类型可以使用 `<`、 `>`、`<=` 和 `>=` 操作符。但只能在同时实现了 `PartialEq` 的类型上使用 `PartialOrd`。
 
 派生 `PartialOrd` 实现了 `partial_cmp` 方法，其返回一个 `Option<Ordering>` ，但当给定值无法产生顺序时将返回 `None`。尽管大多数类型的值都可以比较，但一个无法产生顺序的例子是：浮点类型的非数字值。当在浮点数上调用 `partial_cmp` 时，`NaN` 的浮点数将返回 `None`。
 
@@ -56,7 +56,7 @@
 
 例如，当在 `BTreeSet<T>`（一种基于有序值存储数据的数据结构）上存值时，`Ord` 是必须的。
 
-## 复制值的 `Clone` 和 `Copy`
+### 复制值的 `Clone` 和 `Copy`
 
 `Clone` trait 可以明确地创建一个值的深拷贝（deep copy），复制过程可能包含任意代码的执行以及堆上数据的复制。查阅第四章 [“变量和数据的交互方式：移动”][ways-variables-and-data-interact-clone]  以获取有关 `Clone` 的更多信息。
 
@@ -74,13 +74,13 @@
 
 任何使用 `Copy` 的代码都可以通过 `Clone` 实现，但代码可能会稍慢或是要使用 `clone` 替代。
 
-## 固定大小的值到值映射的 `Hash`
+### 固定大小的值到值映射的 `Hash`
 
-`Hash` trait 可以实例化一个任意大小的类型，并且能够用哈希（hash）函数将该实例映射到一个固定大小的值上。派生 `Hash` 实现了 `hash` 方法。`hash` 方法的派生实现结合了在类型的每部分调用 `hash` 的结果，这意味着所有的字段或值也必须将 `Hash` 实现为派生 `Hash`。 
+`Hash` trait 可以实例化一个任意大小的类型，并且能够用哈希（hash）函数将该实例映射到一个固定大小的值上。派生 `Hash` 实现了 `hash` 方法。`hash` 方法的派生实现结合了在类型的每部分调用 `hash` 的结果，这意味着所有的字段或值也必须将 `Hash` 实现为派生 `Hash`。
 
 例如，在 `HashMap<K, V>` 的 key 上存储有效数据时，`Hash` 是必须的。
 
-## 默认值的 `Default`
+### 默认值的 `Default`
 
 `Default` trait 使你创建一个类型的默认值。 派生 `Default` 实现了 `default` 函数。`default` 函数的派生实现调用了类型每部分的 `default` 函数，这意味着类型中所有的字段或值也必须把 `Default` 实现为派生 `Default` 。
 

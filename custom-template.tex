@@ -1,0 +1,216 @@
+%% Packages and Settings
+\UseRawInputEncoding
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{adjustbox}
+\usepackage{colortbl}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+
+\usepackage{fontspec}
+\setmainfont[Script=Devanagari]{Courier New}
+\setsansfont{DejaVu Sans}
+\setmonofont{DejaVu Sans Mono}
+
+\usepackage{xeCJK}
+\setCJKmainfont[BoldFont=SimHei,ItalicFont=KaiTi]{微软雅黑}
+\xeCJKsetup{PunctStyle=kaiming,CJKspace=true,CheckSingle=true}
+
+% https://tex.stackexchange.com/questions/219174/issue-with-page-breaks-before-section-and-toc-hyperlinks?rq=1
+\usepackage{titlesec}
+\usepackage{hyperref}
+\newcommand{\sectionbreak}{\clearpage}
+
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{tabu}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{array}
+
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}m{#1}}
+\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
+\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
+
+% https://tex.stackexchange.com/questions/143015/different-column-number-in-rows
+\usepackage{booktabs,multirow,tabularx}% http://ctan.org/pkg/{booktabs,multirow,tabularx}
+\newcommand{\makecell}[1]{\begin{tabular}{c}#1\end{tabular}}
+
+% https://tex.stackexchange.com/questions/823/remove-ugly-borders-around-clickable-cross-references-and-hyperlinks
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+%% Unicode rules.
+% https://tex.stackexchange.com/questions/215520/output-from-tree-command-in-a-listing
+\usepackage{newunicodechar}
+\newunicodechar{└}{{\smash{\raisebox{0.5ex}{\rule{0.5pt}{\dimexpr\baselineskip-1.5ex}}}\raisebox{0.5ex}{\rule{1ex}{0.5pt}}}}
+\newunicodechar{─}{{\raisebox{0.5ex}{\rule{1.5ex}{0.5pt}}}}
+\newunicodechar{├}{{\smash{\raisebox{-1ex}{\rule{0.5pt}{\baselineskip}}}\raisebox{0.5ex}{\rule{1ex}{0.5pt}}}}
+\newunicodechar{’}{{'}}
+\newunicodechar{“}{{"}}
+\newunicodechar{”}{{"}}
+
+%% Code highlighting.
+\definecolor{commentsColor}{rgb}{0.497495, 0.497587, 0.497464}
+\definecolor{keywordsColor}{rgb}{0.000000, 0.000000, 0.635294}
+\definecolor{stringColor}{rgb}{0.558215, 0.000000, 0.135316}
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\footnotesize\ttfamily,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{commentsColor}\textit,    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=tb,	                   	   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{keywordsColor}\bfseries,       % keyword style
+  language=Python,                 % the language of the code (can be overrided per snippet)
+  otherkeywords={*,...},           % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{commentsColor}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{stringColor}, % string literal style
+  prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookrightarrow}},
+  tabsize=2,	                   % sets default tabsize to 2 spaces
+  title=\lstname,                  % show the filename of files included with \lstinputlisting; also try caption instead of title
+  columns=fixed,                   % Using fixed column width (for e.g. nice alignment)
+  inputencoding=utf8,              % https://tex.stackexchange.com/questions/24528/having-problems-with-listings-and-utf-8-can-it-be-fixed
+  literate={└}{{\smash{\raisebox{0.5ex}{\rule{0.5pt}{\dimexpr\baselineskip-1.5ex}}}\raisebox{0.5ex}{\rule{1ex}{0.5pt}}}}1 {─}{{\raisebox{0.5ex}{\rule{1.5ex}{0.5pt}}}}1 {├}{{\smash{\raisebox{-1ex}{\rule{0.5pt}{\baselineskip}}}\raisebox{0.5ex}{\rule{1ex}{0.5pt}}}}1,
+}
+
+%% Language definitions.
+\lstdefinelanguage{rust}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{rs}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{console}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  sensitive=false,
+  comment=[l]{\#},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{handlebars}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{shell}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{json}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{yaml}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{toml}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{diff}{
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{text}{}
+\lstdefinelanguage{hbs}{}
+\lstdefinelanguage{cmd}{}
+\lstdefinelanguage{powershell}{}
+\lstdefinelanguage{makefile}{}
+\lstdefinelanguage{markdown}{}
+
+%% Title and Author (retreived from book.toml)
+\title{}
+\author{}
+\date{}
+
+%% Begin document.
+\begin{document}
+\maketitle
+\clearpage
+\tableofcontents
+\clearpage
+
+%% mdbook-latex begin
+
+\end{document}

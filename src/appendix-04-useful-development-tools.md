@@ -6,7 +6,7 @@
 
 本附录，我们将讨论 Rust 项目提供的用于开发 Rust 代码的工具。
 
-## 通过 `rustfmt` 自动格式化
+### 通过 `rustfmt` 自动格式化
 
 `rustfmt` 工具根据社区代码风格格式化代码。很多项目使用 `rustfmt` 来避免编写 Rust 风格的争论：所有人都用这个工具格式化代码！
 
@@ -26,7 +26,7 @@ $ cargo fmt
 
 [rustfmt]: https://github.com/rust-lang-nursery/rustfmt
 
-## 通过 `rustfix` 修复代码
+### 通过 `rustfix` 修复代码
 
 如果你编写过 Rust 代码，那么你可能见过编译器警告。例如，考虑如下代码：
 
@@ -85,7 +85,7 @@ fn main() {
 
 `cargo fix` 命令可以用于在不同 Rust 版本间迁移代码。版本在附录 E 中介绍。
 
-## 通过 `clippy` 提供更多 lint 功能
+### 通过 `clippy` 提供更多 lint 功能
 
 `clippy` 工具是一系列 lint 的集合，用于捕捉常见错误和改进 Rust 代码。
 
@@ -142,7 +142,7 @@ fn main() {
 
 [clippy]: https://github.com/rust-lang/rust-clippy
 
-## 使用 Rust Language Server 的 IDE 集成
+### 使用 Rust Language Server 的 IDE 集成
 
 为了帮助 IDE 集成，Rust 项目分发了 `rls`，其为 Rust Language Server 的缩写。这个工具采用 [Language Server Protocol][lsp]，这是一个 IDE 与编程语言沟通的规格说明。`rls` 可以用于不同的客户端，比如 [Visual Studio: Code 的 Rust 插件][vscode]。
 

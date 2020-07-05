@@ -4,7 +4,7 @@
 > <br>
 > commit 0aa307c7d79d2cbf83cdf5d47780b2904e9cb03f
 
-> 注意：本书的版本与出版的 [The Rust Programming Language][nsprust] 
+> 注意：本书的版本与出版的 [The Rust Programming Language][nsprust]
 > 和电子版的 [No Starch Press][nsp] 一致
 
 [nsprust]: https://nostarch.com/rust

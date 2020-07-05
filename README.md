@@ -24,7 +24,7 @@ PS:
 全局安装 vuepress
 
 ``` bash
-npm i -g vuepress 
+npm i -g vuepress
 ```
 
 cd 到项目目录，然后开始构建。构建好的静态文档会出现在 "./src/.vuepress/dist" 中
