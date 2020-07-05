@@ -11,7 +11,7 @@ additional-css = ["ferris.css"]
 additional-js = ["ferris.js"]
 
 [output.latex]
-latex    = true  # default = true
-pdf      = true  # default = false
-markdown = true  # default = false
+latex    = false  # default = true
+pdf      = false  # default = false
+markdown = false  # default = false
 custom-template = "custom-template.tex"
