@@ -1,4 +1,4 @@
-﻿## 将错误信息输出到标准错误而不是标准输出
+## 将错误信息输出到标准错误而不是标准输出
 
 > [ch12-06-writing-to-stderr-instead-of-stdout.md](https://github.com/rust-lang/book/blob/master/src/ch12-06-writing-to-stderr-instead-of-stdout.md)
 > <br>
@@ -26,7 +26,7 @@ $ cargo run > output.txt
 Problem parsing arguments: not enough arguments
 ```
 
-是的，错误信息被打印到了标准输出中。像这样的错误信息被打印到标准错误中将会有用的多，并且只将成功运行的信息写入文件。接下来我们将对程序进行修改从而以这种方式进行输出。
+是的，错误信息被打印到了标准输出中。像这样的错误信息被打印到标准错误中将会有用得多，将使得只有成功运行所产生的输出才会写入文件。我们接下来就修改。
 
 ### 将错误打印到标准错误
 
