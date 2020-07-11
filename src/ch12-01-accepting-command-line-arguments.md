@@ -1,4 +1,4 @@
-﻿## 接受命令行参数
+### 接受命令行参数
 
 > [ch12-01-accepting-command-line-arguments.md](https://github.com/rust-lang/book/blob/master/src/ch12-01-accepting-command-line-arguments.md)
 > <br>
