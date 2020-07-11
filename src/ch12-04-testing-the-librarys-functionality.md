@@ -1,4 +1,4 @@
-﻿## 采用测试驱动开发完善库的功能
+## 采用测试驱动开发完善库的功能
 
 > [ch12-04-testing-the-librarys-functionality.md](https://github.com/rust-lang/book/blob/master/src/ch12-04-testing-the-librarys-functionality.md)
 > <br>
@@ -84,7 +84,7 @@ parameter
 
 Rust 不可能知道我们需要的是哪一个参数，所以需要告诉它。因为参数 `contents` 包含了所有的文本而且我们希望返回匹配的那部分文本，所以我们知道 `contents` 是应该要使用生命周期语法来与返回值相关联的参数。
 
-其他语言中并不需要你在函数签名中将参数与返回值相关联。所以这么做可能仍然感觉有些陌生，随着时间的推移这将会变得越来越容易。你可能想要将这个例子与第十章中生命 [“生命周期与引用有效性”][validating-references-with-lifetimes] 部分做对比。
+其他语言中并不需要你在函数签名中将参数与返回值相关联。所以这么做可能仍然感觉有些陌生，随着时间的推移这将会变得越来越容易。你可能想要将这个例子与第十章中 [“生命周期与引用有效性”][validating-references-with-lifetimes] 部分做对比。
 
 现在运行测试：
 
@@ -201,7 +201,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
 测试通过了，它可以工作了！
 
-到此为止，我们可以考虑一下重构 `search` 的实现并时刻保持测试通过来保持其功能不变的机会了。`search` 函数中的代码并不坏，不过并没有利用迭代器的一些实用功能。第十三章将回到这个例子并深入探索迭代器并看看如何改进代码。
+现在正是可以考虑重构的时机，在保证测试通过，保持功能不变的前提下重构 `search` 函数。`search` 函数中的代码并不坏，不过并没有利用迭代器的一些实用功能。第十三章将回到这个例子并深入探索迭代器并看看如何改进代码。
 
 #### 在 `run` 函数中使用 `search` 函数
 
