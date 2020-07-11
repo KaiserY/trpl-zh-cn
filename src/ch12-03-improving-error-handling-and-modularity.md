@@ -1,4 +1,4 @@
-### 重构改进模块性和错误处理
+## 重构改进模块性和错误处理
 
 > [ch12-03-improving-error-handling-and-modularity.md](https://github.com/rust-lang/book/blob/master/src/ch12-03-improving-error-handling-and-modularity.md)
 > <br>
