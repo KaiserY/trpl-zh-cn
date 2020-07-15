@@ -22,7 +22,7 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-<span class="caption">示例 7-21: 声明 `front_of_house` 模块，其内容位于 *src/front_of_house.rs*</span>
+<span class="caption">示例 7-21: 声明 `front_of_house` 模块，其内容将位于 *src/front_of_house.rs*</span>
 
 *src/front_of_house.rs* 会获取 `front_of_house` 模块的定义内容，如示例 7-22 所示。
 
