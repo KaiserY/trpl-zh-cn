@@ -157,7 +157,7 @@ fn main() {
 $ rustup component add rls
 ```
 
-接着为特定的 IDE 安装 language server 支持，如比便会获得如自动补全、跳转到定义和 inline error 之类的功能。
+接着为特定的 IDE 安装 language server 支持，如此便会获得如自动补全、跳转到定义和 inline error 之类的功能。
 
 请查看 [其文档][rls] 来了解 `rls` 的更多信息。
 
