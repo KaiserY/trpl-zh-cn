@@ -6,7 +6,7 @@
 
 在本书的各个部分中，我们讨论了可应用于结构体和枚举定义的 `derive` 属性。`derive` 属性会在使用 `derive` 语法标记的类型上生成对应 trait 的默认实现的代码。
 
-在本附录中提供了标准库中所有所有可以使用 `derive` 的 trait 的参考。这些部分涉及到：
+在本附录中提供了标准库中所有可以使用 `derive` 的 trait 的参考。这些部分涉及到：
 
 * 该 trait 将会派生什么样的操作符和方法
 * 由 `derive` 提供什么样的 trait 实现
@@ -50,7 +50,7 @@
 
 当在结构体上派生时，`PartialOrd` 以在结构体定义中字段出现的顺序比较每个字段的值来比较两个实例。当在枚举上派生时，认为在枚举定义中声明较早的枚举变体小于其后的变体。
 
-例如，对于来自于 `rand` carte 中的 `gen_range` 方法来说，当在一个大值和小值指定的范围内生成一个随机值时，`PartialOrd` trait 是必须的。
+例如，对于来自于 `rand` crate 中的 `gen_range` 方法来说，当在一个大值和小值指定的范围内生成一个随机值时，`PartialOrd` trait 是必须的。
 
 `Ord` trait 也让你明白在一个带注解类型上的任意两个值存在有效顺序。`Ord` trait 实现了 `cmp` 方法，它返回一个 `Ordering` 而不是 `Option<Ordering>`，因为总存在一个合法的顺序。只可以在实现了 `PartialOrd` 和 `Eq`（`Eq` 依赖 `PartialEq`）的类型上使用 `Ord` trait 。当在结构体或枚举上派生时， `cmp` 和以 `PartialOrd` 派生实现的 `partial_cmp` 表现一致。
 
@@ -60,29 +60,29 @@
 
 `Clone` trait 可以明确地创建一个值的深拷贝（deep copy），复制过程可能包含任意代码的执行以及堆上数据的复制。查阅第四章 [“变量和数据的交互方式：移动”][ways-variables-and-data-interact-clone]  以获取有关 `Clone` 的更多信息。
 
-派生 `Clone` 实现了 `clone` 方法，其为整个的类型实现时，在类型的每一部分上调用了 `clone` 方法。这意味着类型中所有字段或值也必须实现 `Clone` 来派生 `Clone` 。
+派生 `Clone` 实现了 `clone` 方法，其为整个的类型实现时，在类型的每一部分上调用了 `clone` 方法。这意味着类型中所有字段或值也必须实现了 `Clone`，这样才能够派生 `Clone` 。
 
-例如，当在一个切片上调用 `to_vec` 方法时，`Clone` 是必须的。切片并不拥有其所包含实例的类型，但是从 `to_vec` 中返回的 vector 需要拥有其实例，因此，`to_vec` 在每个元素上调用 `clone`。因此，存储在切片中的类型必须实现 `Clone`。
+例如，当在一个切片（slice）上调用 `to_vec` 方法时，`Clone` 是必须的。切片并不拥有其所包含实例的类型，但是从 `to_vec` 中返回的 vector 需要拥有其实例，因此，`to_vec` 在每个元素上调用 `clone`。因此，存储在切片中的类型必须实现 `Clone`。
 
-`Copy` trait 允许你通过只拷贝存储在栈上的位来复制值而不需要其他代码。查阅第四章 [“只在栈上的数据：拷贝”][stack-only-data-copy] 的部分来获取有关 `Copy` 的更多信息。
+`Copy` trait 允许你通过只拷贝存储在栈上的位来复制值而不需要额外的代码。查阅第四章 [“只在栈上的数据：拷贝”][stack-only-data-copy] 的部分来获取有关 `Copy` 的更多信息。
 
-`Copy` trait 并未定义任何方法来阻止编程人员重写这些方法或违反无代码可执行的假设。所以，所有的编程人员可以假设复制一个值非常快。
+`Copy` trait 并未定义任何方法来阻止编程人员重写这些方法或违反不需要执行额外代码的假设。尽管如此，所有的编程人员可以假设复制（copy）一个值非常快。
 
-可以在类型内部全部实现 `Copy` trait 的任意类型上派生 `Copy`。 但只可以在那些同时实现了 `Clone` 的类型上使用 `Copy` trait ，因为一个实现 `Copy` 的类型在尝试实现 `Clone` 时执行和 `Copy` 相同的任务。
+可以在类型内部全部实现 `Copy` trait 的任意类型上派生 `Copy`。 但只可以在那些同时实现了 `Clone` 的类型上使用 `Copy` trait ，因为一个实现了 `Copy` 的类型也简单地实现了 `Clone`，其执行和 `Copy` 相同的任务。
 
 `Copy` trait 很少使用；实现 `Copy` 的类型是可以优化的，这意味着你无需调用 `clone`，这让代码更简洁。
 
-任何使用 `Copy` 的代码都可以通过 `Clone` 实现，但代码可能会稍慢或是要使用 `clone` 替代。
+任何使用 `Copy` 的代码都可以通过 `Clone` 实现，但代码可能会稍慢，或者不得不在代码中的许多位置上使用 `clone`。
 
 ### 固定大小的值到值映射的 `Hash`
 
-`Hash` trait 可以实例化一个任意大小的类型，并且能够用哈希（hash）函数将该实例映射到一个固定大小的值上。派生 `Hash` 实现了 `hash` 方法。`hash` 方法的派生实现结合了在类型的每部分调用 `hash` 的结果，这意味着所有的字段或值也必须将 `Hash` 实现为派生 `Hash`。
+`Hash` trait 可以实例化一个任意大小的类型，并且能够用哈希（hash）函数将该实例映射到一个固定大小的值上。派生 `Hash` 实现了 `hash` 方法。`hash` 方法的派生实现结合了在类型的每部分调用 `hash` 的结果，这意味着所有的字段或值也必须实现了 `Hash`，这样才能够派生 `Hash`。
 
-例如，在 `HashMap<K, V>` 的 key 上存储有效数据时，`Hash` 是必须的。
+例如，在 `HashMap<K, V>` 上存储数据，存放 key 的时候，`Hash` 是必须的。
 
 ### 默认值的 `Default`
 
-`Default` trait 使你创建一个类型的默认值。 派生 `Default` 实现了 `default` 函数。`default` 函数的派生实现调用了类型每部分的 `default` 函数，这意味着类型中所有的字段或值也必须把 `Default` 实现为派生 `Default` 。
+`Default` trait 使你创建一个类型的默认值。 派生 `Default` 实现了 `default` 函数。`default` 函数的派生实现调用了类型每部分的 `default` 函数，这意味着类型中所有的字段或值也必须实现了 `Default`，这样才能够派生 `Default` 。
 
 `Default::default` 函数通常结合结构体更新语法一起使用，这在第五章的 [“使用结构体更新语法从其他实例中创建实例”][creating-instances-from-other-instances-with-struct-update-syntax] 部分有讨论。可以自定义一个结构体的一小部分字段而剩余字段则使用 `..Default::default()` 设置为默认值。
 
