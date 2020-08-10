@@ -153,6 +153,5 @@ error[E0308]: mismatched types
 
 现在我们已经了解了变量如何工作，让我们看看变量可以拥有的更多数据类型。
 
-[comparing-the-guess-to-the-secret-number]:
-ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
+[comparing-the-guess-to-the-secret-number]:ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [data-types]: ch03-02-data-types.html#data-types
