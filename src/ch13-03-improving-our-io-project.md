@@ -89,7 +89,7 @@ impl Config {
 
 <span class="caption">示例 13-26：以迭代器作为参数更新 `Config::new` 的签名
 
-`env::args` 函数的标准库文档显示，它返回的迭代器的类型为 `std::env::Args`。我们已经更新了 `Config :: new` 函数的签名，因此参数 `args` 的类型为 `std::env::Args` 而不是 `＆[String]`。因为我们拥有 `args` 的所有权，并且将通过对其进行迭代来改变 `args` ，所以我们可以将 `mut` 关键字添加到 `args` 参数的规范中以使其可变。
+`env::args` 函数的标准库文档显示，它返回的迭代器的类型为 `std::env::Args`。我们已经更新了 `Config :: new` 函数的签名，因此参数 `args` 的类型为 `std::env::Args` 而不是 `&[String]`。因为我们拥有 `args` 的所有权，并且将通过对其进行迭代来改变 `args` ，所以我们可以将 `mut` 关键字添加到 `args` 参数的规范中以使其可变。
 
 #### 使用 `Iterator` trait 代替索引
 
