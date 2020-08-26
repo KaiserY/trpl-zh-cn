@@ -16,7 +16,7 @@ Rust 和 Cargo 有一些帮助它人更方便找到和使用你发布的包的�
 <span class="filename">文件名: src/lib.rs</span>
 
 ````rust,ignore
-/// 将给定的数字加一
+/// Adds one to the number given.
 ///
 /// # Examples
 ///
@@ -77,10 +77,10 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```rust,ignore
 //! # My Crate
 //!
-//! `my_crate` 是一个使得特定计算更方便的
-//! 工具集合
+//! `my_crate` is a collection of utilities to make performing certain
+//! calculations more convenient.
 
-/// 将给定的数字加一。
+/// Adds one to the number given.
 // --snip--
 ```
 

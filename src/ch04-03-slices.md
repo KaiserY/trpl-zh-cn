@@ -222,7 +222,7 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
 
 #### 字符串字面值就是 slice
 
-还记得我们讲到过字符串字面值被储存在二进制文件中吗。现在知道 slice 了，我们就可以正确的理解字符串字面值了：
+还记得我们讲到过字符串字面值被储存在二进制文件中吗？现在知道 slice 了，我们就可以正确地理解字符串字面值了：
 
 ```rust
 let s = "Hello, world!";
