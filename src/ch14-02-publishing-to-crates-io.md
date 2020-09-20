@@ -1,6 +1,6 @@
 ## 将 crate 发布到 Crates.io
 
-> [ch14-02-publishing-to-crates-io.md](https://github.com/rust-lang/book/blob/master/src/ch14-02-publishing-to-crates-io.md) > <br>
+> [ch14-02-publishing-to-crates-io.md](https://github.com/rust-lang/book/blob/master/src/ch14-02-publishing-to-crates-io.md) <br>
 > commit c084bdd9ee328e7e774df19882ccc139532e53d8
 
 我们曾经在项目中使用 [crates.io](https://crates.io)<!-- ignore --> 上的包作为依赖，不过你也可以通过发布自己的包来向它人分享代码。[crates.io](https://crates.io)<!-- ignore --> 用来分发包的源代码，所以它主要托管开源代码。
@@ -111,17 +111,17 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```rust,ignore
 //! # Art
 //!
-//! 一个描述美术信息的库。
+//! A library for modeling artistic concepts.
 
 pub mod kinds {
-    /// 采用 RGB 色彩模式的主要颜色。
+    /// The primary colors according to the RYB color model.
     pub enum PrimaryColor {
         Red,
         Yellow,
         Blue,
     }
 
-    /// 采用 RGB 色彩模式的次要颜色。
+    /// The secondary colors according to the RYB color model.
     pub enum SecondaryColor {
         Orange,
         Green,
@@ -132,8 +132,8 @@ pub mod kinds {
 pub mod utils {
     use crate::kinds::*;
 
-    /// 等量的混合两个主要颜色
-    /// 来创建一个次要颜色。
+    /// Combines two primary colors in equal amounts to create
+    /// a secondary color.
     pub fn mix(c1: PrimaryColor, c2: PrimaryColor) -> SecondaryColor {
         // --snip--
 #         SecondaryColor::Orange
@@ -178,7 +178,7 @@ fn main() {
 ```rust,ignore
 //! # Art
 //!
-//! 一个描述美术信息的库。
+//! A library for modeling artistic concepts.
 
 pub use self::kinds::PrimaryColor;
 pub use self::kinds::SecondaryColor;
