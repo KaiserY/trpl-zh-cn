@@ -1,6 +1,6 @@
 ## 通过 `Deref` trait 将智能指针当作常规引用处理
 
-> [ch15-02-deref.md](https://github.com/rust-lang/book/blob/master/src/ch15-02-deref.md) > <br>
+> [ch15-02-deref.md](https://github.com/rust-lang/book/blob/master/src/ch15-02-deref.md) <br>
 > commit 44f1b71c117b0dcec7805eced0b95405167092f6
 
 实现 `Deref` trait 允许我们重载 **解引用运算符**（_dereference operator_）`*`（与乘法运算符或通配符相区别）。通过这种方式实现 `Deref` trait 的智能指针可以被当作常规引用来对待，可以编写操作引用的代码并用于智能指针。
