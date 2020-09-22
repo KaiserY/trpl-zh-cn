@@ -1,12 +1,11 @@
 # Rust 程序设计语言
 
-> [title-page.md](https://github.com/rust-lang/book/blob/master/src/title-page.md)
-> <br>
-> commit 636685fd35ca04a98fa73312d92eb2a46987ac96
+> [title-page.md](https://github.com/rust-lang/book/blob/master/src/title-page.md) <br>
+> commit a2bd349f8654f5c45ad1f07394225f946954b8ef
 
 **Steve Klabnik 和 Carol Nichols，以及来自 Rust 社区的贡献（Rust 中文社区翻译）**
 
-本书假设你使用 Rust 1.37.0 或更新的版本，且在所有的项目中的 *Cargo.toml* 文件中通过 `edition="2018"` 采用 Rust 2018 Edition 规范。请查看 [第一章的 “安装” 部分][install] 了解如何安装和升级 Rust，并查看新的 [附录 E][editions] 了解版本相关的信息。
+本书假设你使用 Rust 1.41.0 或更新的版本，且在所有的项目中的 *Cargo.toml* 文件中通过 `edition="2018"` 采用 Rust 2018 Edition 规范。请查看 [第一章的 “安装” 部分][install] 了解如何安装和升级 Rust，并查看新的 [附录 E][editions] 了解版本相关的信息。
 
 Rust 程序设计语言的 2018 Edition 包含许多的改进使得 Rust 更为工程化并更为容易学习。本书的此次迭代包括了很多反映这些改进的修改：
 
