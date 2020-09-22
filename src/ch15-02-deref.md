@@ -1,6 +1,6 @@
 ## 通过 `Deref` trait 将智能指针当作常规引用处理
 
-> [ch15-02-deref.md](https://github.com/rust-lang/book/blob/master/src/ch15-02-deref.md) <br>
+> [ch15-02-deref.md](https://github.com/rust-lang/book/blob/master/src/ch15-02-deref.md) > <br>
 > commit 44f1b71c117b0dcec7805eced0b95405167092f6
 
 实现 `Deref` trait 允许我们重载 **解引用运算符**（_dereference operator_）`*`（与乘法运算符或通配符相区别）。通过这种方式实现 `Deref` trait 的智能指针可以被当作常规引用来对待，可以编写操作引用的代码并用于智能指针。
@@ -207,7 +207,7 @@ fn main() {
 
 <span class="caption">示例 15-12：因为解引用强制多态，使用 `MyBox<String>` 的引用调用 `hello` 是可行的</span>
 
-这里使用 `&m` 调用 `hello` 函数，其为 `MyBox<String>` 值的引用。因为示例 15-10 中在 `MyBox<T>` 上实现了 `Deref` trait，Rust 可以通过 `deref` 调用将 `&MyBox<String>` 变为 `&String`。标准库中提供了 `String` 上的 `Deref` 实现，其会返回字符串 slice，这可以在 `Deref` 的 API 文档中看到。Rust 再次调用 `deref` 将 `&String` 变为 `&str`，这就符合 `hello` 函数的定义了。
+这里使用参数 `&m` 调用 `hello` 函数，其为 `MyBox<String>` 值的引用。因为示例 15-10 中在 `MyBox<T>` 上实现了 `Deref` trait，Rust 可以通过 `deref` 调用将 `&MyBox<String>` 变为 `&String`。标准库中提供了 `String` 上的 `Deref` 实现，其会返回字符串 slice，这可以在 `Deref` 的 API 文档中看到。Rust 再次调用 `deref` 将 `&String` 变为 `&str`，这就符合 `hello` 函数的定义了。
 
 如果 Rust 没有实现解引用强制多态，为了使用 `&MyBox<String>` 类型的值调用 `hello`，则不得不编写示例 15-13 中的代码来代替示例 15-12：
 
