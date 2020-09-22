@@ -1,6 +1,6 @@
 ## 共享状态并发
 
-> [ch16-03-shared-state.md](https://github.com/rust-lang/book/blob/master/src/ch16-03-shared-state.md) > <br>
+> [ch16-03-shared-state.md](https://github.com/rust-lang/book/blob/master/src/ch16-03-shared-state.md) <br>
 > commit ef072458f903775e91ea9e21356154bc57ee31da
 
 虽然消息传递是一个很好的处理并发的方式，但并不是唯一一个。再一次思考一下 Go 编程语言文档中口号的这一部分：“不要通过共享内存来通讯”（“do not communicate by sharing memory.”）：

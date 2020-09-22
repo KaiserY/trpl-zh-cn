@@ -1,6 +1,6 @@
 # 无畏并发
 
-> [ch16-00-concurrency.md](https://github.com/rust-lang/book/blob/master/src/ch16-00-concurrency.md) > <br>
+> [ch16-00-concurrency.md](https://github.com/rust-lang/book/blob/master/src/ch16-00-concurrency.md) <br>
 > commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 安全且高效的处理并发编程是 Rust 的另一个主要目标。**并发编程**（_Concurrent programming_），代表程序的不同部分相互独立的执行，而 **并行编程**（_parallel programming_）代表程序不同部分于同时执行，这两个概念随着计算机越来越多的利用多处理器的优势时显得愈发重要。由于历史原因，在此类上下文中编程一直是困难且容易出错的：Rust 希望能改变这一点。

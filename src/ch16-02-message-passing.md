@@ -1,6 +1,6 @@
 ## 使用消息传递在线程间传送数据
 
-> [ch16-02-message-passing.md](https://github.com/rust-lang/book/blob/master/src/ch16-02-message-passing.md) > <br>
+> [ch16-02-message-passing.md](https://github.com/rust-lang/book/blob/master/src/ch16-02-message-passing.md) <br>
 > commit 26565efc3f62d9dacb7c2c6d0f5974360e459493
 
 一个日益流行的确保安全并发的方式是 **消息传递**（_message passing_），这里线程或 actor 通过发送包含数据的消息来相互沟通。这个思想来源于 [Go 编程语言文档中](http://golang.org/doc/effective_go.html) 的口号：“不要通过共享内存来通讯；而是通过通讯来共享内存。”（“Do not communicate by sharing memory; instead, share memory by communicating.”）

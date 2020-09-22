@@ -13,7 +13,7 @@
 
 绝对路径和相对路径都后跟一个或多个由双冒号（`::`）分割的标识符。
 
-让我们回到示例 7-1。我们如何调用 `add_to_waitlist` 函数？还是同样的问题，`add_to_waitlist` 函数的路径是什么？在示例 7-3 中，我们通过删除一些模块和函数，稍微简化了一下我们的代码。我们在 crate 根定义了一个新函数 `eat_at_restaurant`，并在其中展示调用 `add_to_waitlist` 函数的两种方法。`eat_at_restaurant` 函数是我们 crate 库的一个公共API，所以我们使用 `pub` 关键字来标记它。在 “[使用`pub`关键字暴露路径](https://github.com/rust-lang/book/blob/master/src/ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword)” 一节，我们将详细介绍 `pub`。注意，这个例子无法编译通过，我们稍后会解释原因。
+让我们回到示例 7-1。我们如何调用 `add_to_waitlist` 函数？还是同样的问题，`add_to_waitlist` 函数的路径是什么？在示例 7-3 中，我们通过删除一些模块和函数，稍微简化了一下我们的代码。我们在 crate 根定义了一个新函数 `eat_at_restaurant`，并在其中展示调用 `add_to_waitlist` 函数的两种方法。`eat_at_restaurant` 函数是我们 crate 库的一个公共API，所以我们使用 `pub` 关键字来标记它。在 “[使用`pub`关键字暴露路径](ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword)” 一节，我们将详细介绍 `pub`。注意，这个例子无法编译通过，我们稍后会解释原因。
 
 <span class="filename">文件名: src/lib.rs</span>
 
