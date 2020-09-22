@@ -1,6 +1,6 @@
 ## 使用 `Sync` 和 `Send` trait 的可扩展并发
 
-> [ch16-04-extensible-concurrency-sync-and-send.md](https://github.com/rust-lang/book/blob/master/src/ch16-04-extensible-concurrency-sync-and-send.md) > <br>
+> [ch16-04-extensible-concurrency-sync-and-send.md](https://github.com/rust-lang/book/blob/master/src/ch16-04-extensible-concurrency-sync-and-send.md) <br>
 > commit 426f3e4ec17e539ae9905ba559411169d303a031
 
 Rust 的并发模型中一个有趣的方面是：语言本身对并发知之 **甚少**。我们之前讨论的几乎所有内容，都属于标准库，而不是语言本身的内容。由于不需要语言提供并发相关的基础设施，并发方案不受标准库或语言所限：我们可以编写自己的或使用别人编写的并发功能。

@@ -1,6 +1,6 @@
 ## 使用`Box <T>`指向堆上的数据
 
-> [ch15-01-box.md](https://github.com/rust-lang/book/blob/master/src/ch15-01-box.md) > <br>
+> [ch15-01-box.md](https://github.com/rust-lang/book/blob/master/src/ch15-01-box.md) <br>
 > commit a203290c640a378453261948b3fee4c4c6eb3d0f
 
 最简单直接的智能指针是 _box_，其类型是 `Box<T>`。 box 允许你将一个值放在堆上而不是栈上。留在栈上的则是指向堆数据的指针。如果你想回顾一下栈与堆的区别请参考第四章。

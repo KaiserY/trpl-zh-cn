@@ -1,6 +1,6 @@
 ## 使用线程同时运行代码
 
-> [ch16-01-threads.md](https://github.com/rust-lang/book/blob/master/src/ch16-01-threads.md) > <br>
+> [ch16-01-threads.md](https://github.com/rust-lang/book/blob/master/src/ch16-01-threads.md) <br>
 > commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
 在大部分现代操作系统中，已执行程序的代码在一个 **进程**（_process_）中运行，操作系统则负责管理多个进程。在程序内部，也可以拥有多个同时运行的独立部分。运行这些独立部分的功能被称为 **线程**（_threads_）。
