@@ -87,7 +87,7 @@ fn main() {
 }
 
 fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 512];
+    let mut buffer = [0; 1024];
 
     stream.read(&mut buffer).unwrap();
 
@@ -101,7 +101,7 @@ fn handle_connection(mut stream: TcpStream) {
 
 在 `handle_connection` 中，`stream` 参数是可变的。这是因为 `TcpStream` 实例在内部记录了所返回的数据。它可能读取了多于我们请求的数据并保存它们以备下一次请求数据。因此它需要是 `mut` 的因为其内部状态可能会改变；通常我们认为 “读取” 不需要可变性，不过在这个例子中则需要 `mut` 关键字。
 
-接下来，需要实际读取流。这里分两步进行：首先，在栈上声明一个 `buffer` 来存放读取到的数据。这里创建了一个 512 字节的缓冲区，它足以存放基本请求的数据并满足本章的目的需要。如果希望处理任意大小的请求，缓冲区管理将更为复杂，不过现在一切从简。接着将缓冲区传递给 `stream.read` ，它会从 `TcpStream` 中读取字节并放入缓冲区中。
+接下来，需要实际读取流。这里分两步进行：首先，在栈上声明一个 `buffer` 来存放读取到的数据。这里创建了一个 1024 字节的缓冲区，它足以存放基本请求的数据并满足本章的目的需要。如果希望处理任意大小的请求，缓冲区管理将更为复杂，不过现在一切从简。接着将缓冲区传递给 `stream.read` ，它会从 `TcpStream` 中读取字节并放入缓冲区中。
 
 接下来将缓冲区中的字节转换为字符串并打印出来。`String::from_utf8_lossy` 函数获取一个 `&[u8]` 并产生一个 `String`。函数名的 “lossy” 部分来源于当其遇到无效的 UTF-8 序列时的行为：它使用 `�`，`U+FFFD REPLACEMENT CHARACTER`，来代替无效序列。你可能会在缓冲区的剩余部分看到这些替代字符，因为他们没有被请求数据填满。
 
@@ -178,7 +178,7 @@ HTTP/1.1 200 OK\r\n\r\n
 # use std::io::prelude::*;
 # use std::net::TcpStream;
 fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 512];
+    let mut buffer = [0; 1024];
 
     stream.read(&mut buffer).unwrap();
 
@@ -230,12 +230,16 @@ use std::fs;
 // --snip--
 
 fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 512];
+    let mut buffer = [0; 1024];
     stream.read(&mut buffer).unwrap();
 
     let contents = fs::read_to_string("hello.html").unwrap();
 
-    let response = format!("HTTP/1.1 200 OK\r\n\r\n{}", contents);
+    let response = format!(
+        "HTTP/1.1 200 OK\r\nContent-Length: {}\r\n\r\n{}",
+        contents.len(),
+        contents
+    );
 
     stream.write(response.as_bytes()).unwrap();
     stream.flush().unwrap();
@@ -265,7 +269,7 @@ fn handle_connection(mut stream: TcpStream) {
 // --snip--
 
 fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 512];
+    let mut buffer = [0; 1024];
     stream.read(&mut buffer).unwrap();
 
     let get = b"GET / HTTP/1.1\r\n";
@@ -273,7 +277,11 @@ fn handle_connection(mut stream: TcpStream) {
     if buffer.starts_with(get) {
         let contents = fs::read_to_string("hello.html").unwrap();
 
-        let response = format!("HTTP/1.1 200 OK\r\n\r\n{}", contents);
+        let response = format!(
+            "HTTP/1.1 200 OK\r\nContent-Length: {}\r\n\r\n{}",
+            contents.len(),
+            contents
+        );
 
         stream.write(response.as_bytes()).unwrap();
         stream.flush().unwrap();
@@ -352,7 +360,7 @@ fn handle_connection(mut stream: TcpStream) {
 // --snip--
 
 fn handle_connection(mut stream: TcpStream) {
-#     let mut buffer = [0; 512];
+#     let mut buffer = [0; 1024];
 #     stream.read(&mut buffer).unwrap();
 #
 #     let get = b"GET / HTTP/1.1\r\n";
