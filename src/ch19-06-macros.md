@@ -191,8 +191,8 @@ $ cargo new hello_macro_derive --lib
 proc-macro = true
 
 [dependencies]
-syn = "0.14.4"
-quote = "0.6.3"
+syn = "1.0"
+quote = "1.0"
 ```
 
 为定义一个过程式宏，请将示例 19-31 中的代码放在 `hello_macro_derive` crate 的 *src/lib.rs* 文件里面。注意这段代码在我们添加 `impl_hello_macro` 函数的定义之前是无法编译的。
@@ -220,8 +220,7 @@ use syn;
 
 #[proc_macro_derive(HelloMacro)]
 pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
-    // 构建 Rust 代码所代表的语法树
-    // 以便可以进行操作
+    // 将 Rust 代码解析为语法树以便进行操作
     let ast = syn::parse(input).unwrap();
 
     // 构建 trait 实现
