@@ -182,7 +182,7 @@ $ cargo new hello_macro_derive --lib
 
 由于两个 crate 紧密相关，因此在 `hello_macro` 包的目录下创建过程式宏的 crate。如果改变在 `hello_macro` 中定义的 trait ，同时也必须改变在 `hello_macro_derive` 中实现的过程式宏。这两个包需要分别发布，编程人员如果使用这些包，则需要同时添加这两个依赖并将其引入作用域。我们也可以只用 `hello_macro` 包而将 `hello_macro_derive` 作为一个依赖，并重新导出过程式宏的代码。但现在我们组织项目的方式使编程人员在无需 `derive` 功能时也能够单独使用 `hello_macro`。
 
-我们需要将 `hello_macro_derive` 声明为一个过程宏(proc-macro)的 crate。正如稍后将看到的那样，我们还需要 `syn` 和 `quote` crate 中的功能，需要将其加到依赖中。将下面的代码加入到 `hello_macro_derive` 的 *Cargo.toml* 文件中。
+我们需要声明 `hello_macro_derive` crate 是过程宏(proc-macro) crate。正如稍后将看到的那样，我们还需要 `syn` 和 `quote` crate 中的功能，所以需要将其加到依赖中。将下面的代码加入到 `hello_macro_derive` 的 *Cargo.toml* 文件中。
 
 <span class="filename">文件名: hello_macro_derive/Cargo.toml</span>
 
