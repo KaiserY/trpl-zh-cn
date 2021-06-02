@@ -8,10 +8,10 @@
 
 PS:
 
-* 对照源码位置：[https://github.com/rust-lang/book/tree/master/src][source]
+* 对照源码位置：[https://github.com/rust-lang/book/tree/main/src][source]
 * 每章翻译开头都带有官方链接和 commit hash，若发现与官方不一致，欢迎 Issue 或 PR :)
 
-[source]: https://github.com/rust-lang/book/tree/master/src
+[source]: https://github.com/rust-lang/book/tree/main/src
 
 ## 静态页面构建与文档撰写
 
