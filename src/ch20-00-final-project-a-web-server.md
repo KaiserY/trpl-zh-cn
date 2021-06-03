@@ -1,6 +1,6 @@
 # 最后的项目: 构建多线程 web server
 
-> [ch20-00-final-project-a-web-server.md](https://github.com/rust-lang/book/blob/master/src/ch20-00-final-project-a-web-server.md)
+> [ch20-00-final-project-a-web-server.md](https://github.com/rust-lang/book/blob/main/src/ch20-00-final-project-a-web-server.md)
 > <br>
 > commit c084bdd9ee328e7e774df19882ccc139532e53d8
 

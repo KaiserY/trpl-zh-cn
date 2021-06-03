@@ -1,6 +1,6 @@
 ## 采用测试驱动开发完善库的功能
 
-> [ch12-04-testing-the-librarys-functionality.md](https://github.com/rust-lang/book/blob/master/src/ch12-04-testing-the-librarys-functionality.md)
+> [ch12-04-testing-the-librarys-functionality.md](https://github.com/rust-lang/book/blob/main/src/ch12-04-testing-the-librarys-functionality.md)
 > <br>
 > commit 0ca4b88f75f8579de87adc2ad36d340709f5ccad
 

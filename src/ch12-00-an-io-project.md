@@ -1,6 +1,6 @@
 # 一个 I/O 项目：构建一个命令行程序
 
-> [ch12-00-an-io-project.md](https://github.com/rust-lang/book/blob/master/src/ch12-00-an-io-project.md)
+> [ch12-00-an-io-project.md](https://github.com/rust-lang/book/blob/main/src/ch12-00-an-io-project.md)
 > <br>
 > commit db919bc6bb9071566e9c4f05053672133eaac33e
 

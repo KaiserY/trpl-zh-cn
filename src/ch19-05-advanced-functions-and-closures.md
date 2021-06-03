@@ -1,6 +1,6 @@
 ## 高级函数与闭包
 
-> [ch19-05-advanced-functions-and-closures.md](https://github.com/rust-lang/book/blob/master/src/ch19-05-advanced-functions-and-closures.md)
+> [ch19-05-advanced-functions-and-closures.md](https://github.com/rust-lang/book/blob/main/src/ch19-05-advanced-functions-and-closures.md)
 > <br>
 > commit 426f3e4ec17e539ae9905ba559411169d303a031
 

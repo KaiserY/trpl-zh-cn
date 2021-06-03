@@ -1,6 +1,6 @@
 ## 定义模块来控制作用域与私有性
 
-> [ch07-02-defining-modules-to-control-scope-and-privacy.md](https://github.com/rust-lang/book/blob/master/src/ch07-02-defining-modules-to-control-scope-and-privacy.md)
+> [ch07-02-defining-modules-to-control-scope-and-privacy.md](https://github.com/rust-lang/book/blob/main/src/ch07-02-defining-modules-to-control-scope-and-privacy.md)
 > <br>
 > commit 34b089627cca09a73ce92a052222304bff0056e3
 

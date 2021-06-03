@@ -1,6 +1,6 @@
 # 常见集合
 
-> [ch08-00-common-collections.md](https://github.com/rust-lang/book/blob/master/src/ch08-00-common-collections.md)
+> [ch08-00-common-collections.md](https://github.com/rust-lang/book/blob/main/src/ch08-00-common-collections.md)
 > <br>
 > commit 820ac357f6cf0e866e5a8e7a9c57dd3e17e9f8ca
 

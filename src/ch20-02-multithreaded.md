@@ -1,6 +1,6 @@
 ## 将单线程 server 变为多线程 server
 
-> [ch20-02-multithreaded.md](https://github.com/rust-lang/book/blob/master/src/ch20-02-multithreaded.md)
+> [ch20-02-multithreaded.md](https://github.com/rust-lang/book/blob/main/src/ch20-02-multithreaded.md)
 > <br>
 > commit 120e76a0cc77c9cde52643f847ed777f8f441817
 

@@ -1,6 +1,6 @@
 # 介绍
 
-> [ch00-00-introduction.md](https://github.com/rust-lang/book/blob/master/src/ch00-00-introduction.md)
+> [ch00-00-introduction.md](https://github.com/rust-lang/book/blob/main/src/ch00-00-introduction.md)
 > <br>
 > commit 0aa307c7d79d2cbf83cdf5d47780b2904e9cb03f
 

@@ -1,6 +1,6 @@
 ### 读取文件
 
-> [ch12-02-reading-a-file.md](https://github.com/rust-lang/book/blob/master/src/ch12-02-reading-a-file.md)
+> [ch12-02-reading-a-file.md](https://github.com/rust-lang/book/blob/main/src/ch12-02-reading-a-file.md)
 > <br>
 > commit 76df60bccead5f3de96db23d97b69597cd8a2b82
 

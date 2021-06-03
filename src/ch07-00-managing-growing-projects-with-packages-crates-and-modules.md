@@ -1,6 +1,6 @@
 # 使用包、Crate和模块管理不断增长的项目
 
-> [ch07-00-managing-growing-projects-with-packages-crates-and-modules.md](https://github.com/rust-lang/book/blob/master/src/ch07-00-managing-growing-projects-with-packages-crates-and-modules.md)
+> [ch07-00-managing-growing-projects-with-packages-crates-and-modules.md](https://github.com/rust-lang/book/blob/main/src/ch07-00-managing-growing-projects-with-packages-crates-and-modules.md)
 > <br>
 > commit 879fef2345bf32751a83a9e779e0cb84e79b6d3d
 

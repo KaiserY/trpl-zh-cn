@@ -1,6 +1,6 @@
 ## 优雅停机与清理
 
-> [ch20-03-graceful-shutdown-and-cleanup.md](https://github.com/rust-lang/book/blob/master/src/ch20-03-graceful-shutdown-and-cleanup.md)
+> [ch20-03-graceful-shutdown-and-cleanup.md](https://github.com/rust-lang/book/blob/main/src/ch20-03-graceful-shutdown-and-cleanup.md)
 > <br>
 > commit 9a5a1bfaec3b7763e1bcfd31a2fb19fe95183746
 

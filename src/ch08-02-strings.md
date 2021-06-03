@@ -1,6 +1,6 @@
 ## 使用字符串存储 UTF-8 编码的文本
 
-> [ch08-02-strings.md](https://github.com/rust-lang/book/blob/master/src/ch08-02-strings.md)
+> [ch08-02-strings.md](https://github.com/rust-lang/book/blob/main/src/ch08-02-strings.md)
 > <br>
 > commit c084bdd9ee328e7e774df19882ccc139532e53d8
 

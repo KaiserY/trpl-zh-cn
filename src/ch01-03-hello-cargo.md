@@ -1,6 +1,6 @@
 ## Hello, Cargo!
 
-> [ch01-03-hello-cargo.md](https://github.com/rust-lang/book/blob/master/src/ch01-03-hello-cargo.md)
+> [ch01-03-hello-cargo.md](https://github.com/rust-lang/book/blob/main/src/ch01-03-hello-cargo.md)
 > <br>
 > commit f63a103270ec8416899675a9cdb1c5cf6d77a498
 

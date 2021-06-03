@@ -1,6 +1,6 @@
 ## 一个使用结构体的示例程序
 
-> [ch05-02-example-structs.md](https://github.com/rust-lang/book/blob/master/src/ch05-02-example-structs.md)
+> [ch05-02-example-structs.md](https://github.com/rust-lang/book/blob/main/src/ch05-02-example-structs.md)
 > <br>
 > commit 9cb1d20394f047855a57228dc4cbbabd0a9b395a
 

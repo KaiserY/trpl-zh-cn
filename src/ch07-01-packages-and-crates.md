@@ -1,6 +1,6 @@
 ## 包和 crate
 
-> [ch07-01-packages-and-crates.md](https://github.com/rust-lang/book/blob/master/src/ch07-01-packages-and-crates.md)
+> [ch07-01-packages-and-crates.md](https://github.com/rust-lang/book/blob/main/src/ch07-01-packages-and-crates.md)
 > <br>
 > commit 879fef2345bf32751a83a9e779e0cb84e79b6d3d
 

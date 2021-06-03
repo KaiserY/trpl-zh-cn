@@ -1,6 +1,6 @@
 ## vector 用来储存一系列的值
 
-> [ch08-01-vectors.md](https://github.com/rust-lang/book/blob/master/src/ch08-01-vectors.md)
+> [ch08-01-vectors.md](https://github.com/rust-lang/book/blob/main/src/ch08-01-vectors.md)
 > <br>
 > commit 76df60bccead5f3de96db23d97b69597cd8a2b82
 

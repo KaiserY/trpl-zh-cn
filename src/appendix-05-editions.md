@@ -1,6 +1,6 @@
 ## 附录 E：版本
 
-> [appendix-05-editions.md](https://github.com/rust-lang/book/blob/master/src/appendix-05-editions.md)
+> [appendix-05-editions.md](https://github.com/rust-lang/book/blob/main/src/appendix-05-editions.md)
 > <br />
 > commit 70a82519e48b8a61f98cabb8ff443d1b21962fea
 

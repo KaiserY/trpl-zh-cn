@@ -1,6 +1,6 @@
 ## 面向对象语言的特征
 
-> [ch17-01-what-is-oo.md](https://github.com/rust-lang/book/blob/master/src/ch17-01-what-is-oo.md)
+> [ch17-01-what-is-oo.md](https://github.com/rust-lang/book/blob/main/src/ch17-01-what-is-oo.md)
 > <br>
 > commit 34caca254c3e08ff9fe3ad985007f45e92577c03
 

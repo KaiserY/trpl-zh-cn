@@ -1,6 +1,6 @@
 ## Hello, World!
 
-> [ch01-02-hello-world.md](https://github.com/rust-lang/book/blob/master/src/ch01-02-hello-world.md)
+> [ch01-02-hello-world.md](https://github.com/rust-lang/book/blob/main/src/ch01-02-hello-world.md)
 > <br>
 > commit f63a103270ec8416899675a9cdb1c5cf6d77a498
 

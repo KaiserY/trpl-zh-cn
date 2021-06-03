@@ -1,6 +1,6 @@
 # Rust 的面向对象特性
 
-> [ch17-00-oop.md](https://github.com/rust-lang/book/blob/master/src/ch17-00-oop.md)
+> [ch17-00-oop.md](https://github.com/rust-lang/book/blob/main/src/ch17-00-oop.md)
 > <br>
 > commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 

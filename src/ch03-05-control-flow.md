@@ -1,6 +1,6 @@
 ## 控制流
 
-> [ch03-05-control-flow.md](https://github.com/rust-lang/book/blob/master/src/ch03-05-control-flow.md)
+> [ch03-05-control-flow.md](https://github.com/rust-lang/book/blob/main/src/ch03-05-control-flow.md)
 > <br>
 > commit af34ac954a6bd7fc4a8bbcc5c9685e23c5af87da
 

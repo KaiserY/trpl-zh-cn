@@ -1,6 +1,6 @@
 ## 将 crate 发布到 Crates.io
 
-> [ch14-02-publishing-to-crates-io.md](https://github.com/rust-lang/book/blob/master/src/ch14-02-publishing-to-crates-io.md) <br>
+> [ch14-02-publishing-to-crates-io.md](https://github.com/rust-lang/book/blob/main/src/ch14-02-publishing-to-crates-io.md) <br>
 > commit c084bdd9ee328e7e774df19882ccc139532e53d8
 
 我们曾经在项目中使用 [crates.io](https://crates.io)<!-- ignore --> 上的包作为依赖，不过你也可以通过发布自己的包来向它人分享代码。[crates.io](https://crates.io)<!-- ignore --> 用来分发包的源代码，所以它主要托管开源代码。

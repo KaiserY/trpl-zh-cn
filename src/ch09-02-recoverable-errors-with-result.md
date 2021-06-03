@@ -1,6 +1,6 @@
 ## `Result` 与可恢复的错误
 
-> [ch09-02-recoverable-errors-with-result.md](https://github.com/rust-lang/book/blob/master/src/ch09-02-recoverable-errors-with-result.md)
+> [ch09-02-recoverable-errors-with-result.md](https://github.com/rust-lang/book/blob/main/src/ch09-02-recoverable-errors-with-result.md)
 > <br>
 > commit aa339f78da31c330ede3f1b52b4bbfb62d7814cb
 

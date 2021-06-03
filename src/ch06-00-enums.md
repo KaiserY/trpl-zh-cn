@@ -1,6 +1,6 @@
 # 枚举和模式匹配
 
-> [ch06-00-enums.md](https://github.com/rust-lang/book/blob/master/src/ch06-00-enums.md)
+> [ch06-00-enums.md](https://github.com/rust-lang/book/blob/main/src/ch06-00-enums.md)
 > <br>
 > commit a5a03d8f61a5b2c2111b21031a3f526ef60844dd
 

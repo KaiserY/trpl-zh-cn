@@ -1,6 +1,6 @@
 ## 面向对象设计模式的实现
 
-> [ch17-03-oo-design-patterns.md](https://github.com/rust-lang/book/blob/master/src/ch17-03-oo-design-patterns.md)
+> [ch17-03-oo-design-patterns.md](https://github.com/rust-lang/book/blob/main/src/ch17-03-oo-design-patterns.md)
 > <br>
 > commit 7e219336581c41a80fd41f4fbe615fecb6ed0a7d
 

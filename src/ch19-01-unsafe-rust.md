@@ -1,6 +1,6 @@
 ## 不安全 Rust
 
-> [ch19-01-unsafe-rust.md](https://github.com/rust-lang/book/blob/master/src/ch19-01-unsafe-rust.md)
+> [ch19-01-unsafe-rust.md](https://github.com/rust-lang/book/blob/main/src/ch19-01-unsafe-rust.md)
 > <br>
 > commit 28fa3d15b0bc67ea5e79eeff2198e4277fc61baf
 

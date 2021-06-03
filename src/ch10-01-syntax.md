@@ -1,6 +1,6 @@
 ## 泛型数据类型
 
-> [ch10-01-syntax.md](https://github.com/rust-lang/book/blob/master/src/ch10-01-syntax.md)
+> [ch10-01-syntax.md](https://github.com/rust-lang/book/blob/main/src/ch10-01-syntax.md)
 > <br>
 > commit af34ac954a6bd7fc4a8bbcc5c9685e23c5af87da
 

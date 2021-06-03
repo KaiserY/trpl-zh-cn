@@ -1,6 +1,6 @@
 ## `match` 控制流运算符
 
-> [ch06-02-match.md](https://github.com/rust-lang/book/blob/master/src/ch06-02-match.md)
+> [ch06-02-match.md](https://github.com/rust-lang/book/blob/main/src/ch06-02-match.md)
 > <br>
 > commit b374e75f1d7b743c84a6bb1ef72579a6588bcb8a
 

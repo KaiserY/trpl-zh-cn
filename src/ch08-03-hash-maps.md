@@ -1,6 +1,6 @@
 ## 哈希 map 储存键值对
 
-> [ch08-03-hash-maps.md](https://github.com/rust-lang/book/blob/master/src/ch08-03-hash-maps.md)
+> [ch08-03-hash-maps.md](https://github.com/rust-lang/book/blob/main/src/ch08-03-hash-maps.md)
 > <br>
 > commit 85b02530cc749565c26c05bf1b3a838334e9717f
 

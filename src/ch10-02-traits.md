@@ -1,6 +1,6 @@
 ## trait：定义共享的行为
 
-> [ch10-02-traits.md](https://github.com/rust-lang/book/blob/master/src/ch10-02-traits.md)
+> [ch10-02-traits.md](https://github.com/rust-lang/book/blob/main/src/ch10-02-traits.md)
 > <br>
 > commit 34b403864ad9c5e27b00b7cc4a6893804ef5b989
 

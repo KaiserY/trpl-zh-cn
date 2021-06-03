@@ -1,6 +1,6 @@
 ## 数据类型
 
-> [ch03-02-data-types.md](https://github.com/rust-lang/book/blob/master/src/ch03-02-data-types.md)
+> [ch03-02-data-types.md](https://github.com/rust-lang/book/blob/main/src/ch03-02-data-types.md)
 > <br>
 > commit 6598d3abac05ed1d0c45db92466ea49346d05e40
 

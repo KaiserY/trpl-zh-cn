@@ -1,6 +1,6 @@
 ## 附录 G：Rust 是如何开发的与 “Nightly Rust”
 
-> [appendix-07-nightly-rust.md](https://github.com/rust-lang/book/blob/master/src/appendix-07-nightly-rust.md)
+> [appendix-07-nightly-rust.md](https://github.com/rust-lang/book/blob/main/src/appendix-07-nightly-rust.md)
 > <br />
 > commit 70a82519e48b8a61f98cabb8ff443d1b21962fea
 

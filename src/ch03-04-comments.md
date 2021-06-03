@@ -1,6 +1,6 @@
 ## 注释
 
-> [ch03-04-comments.md](https://github.com/rust-lang/book/blob/master/src/ch03-04-comments.md)
+> [ch03-04-comments.md](https://github.com/rust-lang/book/blob/main/src/ch03-04-comments.md)
 > <br>
 > commit 75a77762ea2d2ab7fa1e9ef733907ed727c85651
 

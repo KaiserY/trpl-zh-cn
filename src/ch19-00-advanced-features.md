@@ -1,6 +1,6 @@
 # 高级特征
 
-> [ch19-00-advanced-features.md](https://github.com/rust-lang/book/blob/master/src/ch19-00-advanced-features.md)
+> [ch19-00-advanced-features.md](https://github.com/rust-lang/book/blob/main/src/ch19-00-advanced-features.md)
 > <br>
 > commit 10f89936b02dc366a2d0b34083b97cadda9e0ce4
 

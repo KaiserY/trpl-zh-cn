@@ -1,6 +1,6 @@
 ## `panic!` 还是不 `panic!`
 
-> [ch09-03-to-panic-or-not-to-panic.md](https://github.com/rust-lang/book/blob/master/src/ch09-03-to-panic-or-not-to-panic.md)
+> [ch09-03-to-panic-or-not-to-panic.md](https://github.com/rust-lang/book/blob/main/src/ch09-03-to-panic-or-not-to-panic.md)
 > <br>
 > commit 76df60bccead5f3de96db23d97b69597cd8a2b82
 
