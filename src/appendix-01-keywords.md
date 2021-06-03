@@ -1,6 +1,6 @@
 ## 附录 A：关键字
 
-> [appendix-01-keywords.md](https://raw.githubusercontent.com/rust-lang/book/master/src/appendix-01-keywords.md)
+> [appendix-01-keywords.md](https://github.com/rust-lang/book/blob/main/src/appendix-01-keywords.md)
 > <br>
 > commit 27dd97a785794709aa87c51ab697cded41e8163a
 

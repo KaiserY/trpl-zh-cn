@@ -1,6 +1,6 @@
 ## 引用与借用
 
-> [ch04-02-references-and-borrowing.md](https://github.com/rust-lang/book/blob/master/src/ch04-02-references-and-borrowing.md)
+> [ch04-02-references-and-borrowing.md](https://github.com/rust-lang/book/blob/main/src/ch04-02-references-and-borrowing.md)
 > <br>
 > commit 4f19894e592cd24ac1476f1310dcf437ae83d4ba
 

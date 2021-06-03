@@ -1,6 +1,6 @@
 ## 所有的模式语法
 
-> [ch18-03-pattern-syntax.md](https://github.com/rust-lang/book/blob/master/src/ch18-03-pattern-syntax.md)
+> [ch18-03-pattern-syntax.md](https://github.com/rust-lang/book/blob/main/src/ch18-03-pattern-syntax.md)
 > <br>
 > commit 86f0ae4831f24b3c429fa4845b900b4cad903a8b
 

@@ -1,6 +1,6 @@
 ## 附录 B：运算符与符号
 
-> [appendix-02-operators.md](https://github.com/rust-lang/book/blob/master/src/appendix-02-operators.md)
+> [appendix-02-operators.md](https://github.com/rust-lang/book/blob/main/src/appendix-02-operators.md)
 > <br />
 > commit 426f3e4ec17e539ae9905ba559411169d303a031
 

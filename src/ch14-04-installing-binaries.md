@@ -1,6 +1,6 @@
 ## 使用 `cargo install` 从 Crates.io 安装二进制文件
 
-> [ch14-04-installing-binaries.md](https://github.com/rust-lang/book/blob/master/src/ch14-04-installing-binaries.md)
+> [ch14-04-installing-binaries.md](https://github.com/rust-lang/book/blob/main/src/ch14-04-installing-binaries.md)
 > <br>
 > commit c084bdd9ee328e7e774df19882ccc139532e53d8
 

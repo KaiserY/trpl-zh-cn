@@ -1,6 +1,6 @@
 ## 路径用于引用模块树中的项
 
-> [ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md](https://github.com/rust-lang/book/blob/master/src/ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md)
+> [ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md](https://github.com/rust-lang/book/blob/main/src/ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md)
 > <br>
 > commit cc6a1ef2614aa94003566027b285b249ccf961fa
 

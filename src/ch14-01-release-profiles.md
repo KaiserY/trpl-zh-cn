@@ -1,6 +1,6 @@
 ## 采用发布配置自定义构建
 
-> [ch14-01-release-profiles.md](https://github.com/rust-lang/book/blob/master/src/ch14-01-release-profiles.md)
+> [ch14-01-release-profiles.md](https://github.com/rust-lang/book/blob/main/src/ch14-01-release-profiles.md)
 > <br>
 > commit 0f10093ac5fbd57feb2352e08ee6d3efd66f887c
 

@@ -1,6 +1,6 @@
 ## 函数
 
-> [ch03-03-how-functions-work.md](https://github.com/rust-lang/book/blob/master/src/ch03-03-how-functions-work.md)
+> [ch03-03-how-functions-work.md](https://github.com/rust-lang/book/blob/main/src/ch03-03-how-functions-work.md)
 > <br>
 > commit 669a909a199bc20b913703c6618741d8b6ce1552
 

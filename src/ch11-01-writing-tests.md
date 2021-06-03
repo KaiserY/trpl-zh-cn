@@ -1,6 +1,6 @@
 ## 如何编写测试
 
-> [ch11-01-writing-tests.md](https://github.com/rust-lang/book/blob/master/src/ch11-01-writing-tests.md)
+> [ch11-01-writing-tests.md](https://github.com/rust-lang/book/blob/main/src/ch11-01-writing-tests.md)
 > <br>
 > commit cc6a1ef2614aa94003566027b285b249ccf961fa
 

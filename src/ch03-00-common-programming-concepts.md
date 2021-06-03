@@ -1,6 +1,6 @@
 # 常见编程概念
 
-> [ch03-00-common-programming-concepts.md](https://github.com/rust-lang/book/blob/master/src/ch03-00-common-programming-concepts.md)
+> [ch03-00-common-programming-concepts.md](https://github.com/rust-lang/book/blob/main/src/ch03-00-common-programming-concepts.md)
 > <br>
 > commit 1f49356cb21cbc27bc5359bfe655d26757d4b137
 

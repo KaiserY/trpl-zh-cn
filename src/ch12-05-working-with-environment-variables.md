@@ -1,6 +1,6 @@
 ## 处理环境变量
 
-> [ch12-05-working-with-environment-variables.md](https://github.com/rust-lang/book/blob/master/src/ch12-05-working-with-environment-variables.md)
+> [ch12-05-working-with-environment-variables.md](https://github.com/rust-lang/book/blob/main/src/ch12-05-working-with-environment-variables.md)
 > <br>
 > commit f617d58c1a88dd2912739a041fd4725d127bf9fb
 

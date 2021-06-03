@@ -1,6 +1,6 @@
 ## 附录 C：可派生的 trait
 
-> [appendix-03-derivable-traits.md](https://github.com/rust-lang/book/blob/master/src/appendix-03-derivable-traits.md)
+> [appendix-03-derivable-traits.md](https://github.com/rust-lang/book/blob/main/src/appendix-03-derivable-traits.md)
 > <br />
 > commit 426f3e4ec17e539ae9905ba559411169d303a031
 

@@ -1,6 +1,6 @@
 ## 闭包：可以捕获环境的匿名函数
 
-> [ch13-01-closures.md](https://github.com/rust-lang/book/blob/master/src/ch13-01-closures.md)
+> [ch13-01-closures.md](https://github.com/rust-lang/book/blob/main/src/ch13-01-closures.md)
 > <br>
 > commit 26565efc3f62d9dacb7c2c6d0f5974360e459493
 

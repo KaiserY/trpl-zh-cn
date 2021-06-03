@@ -1,6 +1,6 @@
 ## 定义并实例化结构体
 
-> [ch05-01-defining-structs.md](https://github.com/rust-lang/book/blob/master/src/ch05-01-defining-structs.md)
+> [ch05-01-defining-structs.md](https://github.com/rust-lang/book/blob/main/src/ch05-01-defining-structs.md)
 > <br>
 > commit f617d58c1a88dd2912739a041fd4725d127bf9fb
 

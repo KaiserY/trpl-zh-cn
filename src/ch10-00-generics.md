@@ -1,6 +1,6 @@
 # 泛型、trait 和生命周期
 
-> [ch10-00-generics.md](https://github.com/rust-lang/book/blob/master/src/ch10-00-generics.md)
+> [ch10-00-generics.md](https://github.com/rust-lang/book/blob/main/src/ch10-00-generics.md)
 > <br>
 > commit 48b057106646758f6453f42b7887f34b8c24caf6
 

@@ -1,6 +1,6 @@
 ## 改进 I/O 项目
 
-> [ch13-03-improving-our-io-project.md](https://github.com/rust-lang/book/blob/master/src/ch13-03-improving-our-io-project.md)
+> [ch13-03-improving-our-io-project.md](https://github.com/rust-lang/book/blob/main/src/ch13-03-improving-our-io-project.md)
 > <br>
 > commit 6555fb6c805fbfe7d0961980991f8bca6918928f
 

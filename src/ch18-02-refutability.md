@@ -1,6 +1,6 @@
 ## Refutability（可反驳性）: 模式是否会匹配失效
 
-> [ch18-02-refutability.md](https://github.com/rust-lang/book/blob/master/src/ch18-02-refutability.md)
+> [ch18-02-refutability.md](https://github.com/rust-lang/book/blob/main/src/ch18-02-refutability.md)
 > <br>
 > commit 30fe5484f3923617410032d28e86a5afdf4076fb
 

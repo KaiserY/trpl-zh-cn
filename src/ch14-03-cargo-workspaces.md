@@ -1,6 +1,6 @@
 ## Cargo 工作空间
 
-> [ch14-03-cargo-workspaces.md](https://github.com/rust-lang/book/blob/master/src/ch14-03-cargo-workspaces.md)
+> [ch14-03-cargo-workspaces.md](https://github.com/rust-lang/book/blob/main/src/ch14-03-cargo-workspaces.md)
 > <br>
 > commit 6d3e76820418f2d2bb203233c61d90390b5690f1
 

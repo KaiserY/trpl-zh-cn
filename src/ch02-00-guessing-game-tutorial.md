@@ -1,6 +1,6 @@
 # 编写 猜猜看 游戏
 
-> [ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/master/src/ch02-00-guessing-game-tutorial.md)
+> [ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/main/src/ch02-00-guessing-game-tutorial.md)
 > <br>
 > commit c427a676393d001edc82f1a54a3b8026abcf9690
 

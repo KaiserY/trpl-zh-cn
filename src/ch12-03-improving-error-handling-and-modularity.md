@@ -1,6 +1,6 @@
 ## 重构改进模块性和错误处理
 
-> [ch12-03-improving-error-handling-and-modularity.md](https://github.com/rust-lang/book/blob/master/src/ch12-03-improving-error-handling-and-modularity.md)
+> [ch12-03-improving-error-handling-and-modularity.md](https://github.com/rust-lang/book/blob/main/src/ch12-03-improving-error-handling-and-modularity.md)
 > <br>
 > commit 426f3e4ec17e539ae9905ba559411169d303a031
 

@@ -1,6 +1,6 @@
 ## 将模块分割进不同文件
 
-> [ch07-05-separating-modules-into-different-files.md](https://github.com/rust-lang/book/blob/master/src/ch07-05-separating-modules-into-different-files.md)
+> [ch07-05-separating-modules-into-different-files.md](https://github.com/rust-lang/book/blob/main/src/ch07-05-separating-modules-into-different-files.md)
 > <br>
 > commit a5a5bf9d6ea5763a9110f727911a21da854b1d90
 

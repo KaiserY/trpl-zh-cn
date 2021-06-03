@@ -1,6 +1,6 @@
 ## 构建单线程 web server
 
-> [ch20-01-single-threaded.md](https://github.com/rust-lang/book/blob/master/src/ch20-01-single-threaded.md)
+> [ch20-01-single-threaded.md](https://github.com/rust-lang/book/blob/main/src/ch20-01-single-threaded.md)
 > <br>
 > commit f617d58c1a88dd2912739a041fd4725d127bf9fb
 

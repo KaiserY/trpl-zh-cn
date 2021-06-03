@@ -1,6 +1,6 @@
 ## 测试的组织结构
 
-> [ch11-03-test-organization.md](https://github.com/rust-lang/book/blob/master/src/ch11-03-test-organization.md)
+> [ch11-03-test-organization.md](https://github.com/rust-lang/book/blob/main/src/ch11-03-test-organization.md)
 > <br>
 > commit 4badf9a8574c12794795b05954baf5adc579fa90
 

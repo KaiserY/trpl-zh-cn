@@ -1,6 +1,6 @@
 ## 所有可能会用到模式的位置
 
-> [ch18-01-all-the-places-for-patterns.md](https://github.com/rust-lang/book/blob/master/src/ch18-01-all-the-places-for-patterns.md)
+> [ch18-01-all-the-places-for-patterns.md](https://github.com/rust-lang/book/blob/main/src/ch18-01-all-the-places-for-patterns.md)
 > <br>
 > commit 426f3e4ec17e539ae9905ba559411169d303a031
 

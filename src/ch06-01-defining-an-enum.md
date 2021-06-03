@@ -1,6 +1,6 @@
 ## 定义枚举
 
-> [ch06-01-defining-an-enum.md](https://github.com/rust-lang/book/blob/master/src/ch06-01-defining-an-enum.md)
+> [ch06-01-defining-an-enum.md](https://github.com/rust-lang/book/blob/main/src/ch06-01-defining-an-enum.md)
 > <br>
 > commit a5a03d8f61a5b2c2111b21031a3f526ef60844dd
 

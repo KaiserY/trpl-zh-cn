@@ -1,6 +1,6 @@
 ### 接受命令行参数
 
-> [ch12-01-accepting-command-line-arguments.md](https://github.com/rust-lang/book/blob/master/src/ch12-01-accepting-command-line-arguments.md)
+> [ch12-01-accepting-command-line-arguments.md](https://github.com/rust-lang/book/blob/main/src/ch12-01-accepting-command-line-arguments.md)
 > <br>
 > commit c084bdd9ee328e7e774df19882ccc139532e53d8
 

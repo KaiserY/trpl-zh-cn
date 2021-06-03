@@ -1,6 +1,6 @@
 # Rust 程序设计语言
 
-> [title-page.md](https://github.com/rust-lang/book/blob/master/src/title-page.md) <br>
+> [title-page.md](https://github.com/rust-lang/book/blob/main/src/title-page.md) <br>
 > commit a2bd349f8654f5c45ad1f07394225f946954b8ef
 
 **Steve Klabnik 和 Carol Nichols，以及来自 Rust 社区的贡献（Rust 中文社区翻译）**

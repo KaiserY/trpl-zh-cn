@@ -1,6 +1,6 @@
 ## 附录 F：本书译本
 
-> [appendix-06-translation.md](https://github.com/rust-lang/book/blob/master/src/appendix-06-translation.md)
+> [appendix-06-translation.md](https://github.com/rust-lang/book/blob/main/src/appendix-06-translation.md)
 > <br />
 > commit 72900e05f04ae60e06c2665567771bdd8befa89c
 

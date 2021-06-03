@@ -1,6 +1,6 @@
 ## 变量和可变性
 
-> [ch03-01-variables-and-mutability.md](https://github.com/rust-lang/book/blob/master/src/ch03-01-variables-and-mutability.md)
+> [ch03-01-variables-and-mutability.md](https://github.com/rust-lang/book/blob/main/src/ch03-01-variables-and-mutability.md)
 > <br>
 > commit d69b1058c660abfe1d274c58d39c06ebd5c96c47
 

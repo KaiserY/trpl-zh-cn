@@ -1,6 +1,6 @@
 ## 为使用不同类型的值而设计的 trait 对象
 
-> [ch17-02-trait-objects.md](https://github.com/rust-lang/book/blob/master/src/ch17-02-trait-objects.md)
+> [ch17-02-trait-objects.md](https://github.com/rust-lang/book/blob/main/src/ch17-02-trait-objects.md)
 > <br>
 > commit 7b23a000fc511d985069601eb5b09c6017e609eb
 

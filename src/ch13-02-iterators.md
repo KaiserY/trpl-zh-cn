@@ -1,6 +1,6 @@
 ## 使用迭代器处理元素序列
 
-> [ch13-02-iterators.md](https://github.com/rust-lang/book/blob/master/src/ch13-02-iterators.md)
+> [ch13-02-iterators.md](https://github.com/rust-lang/book/blob/main/src/ch13-02-iterators.md)
 > <br>
 > commit 8edf0457ab571b375b87357e1353ae0dd2127abe
 

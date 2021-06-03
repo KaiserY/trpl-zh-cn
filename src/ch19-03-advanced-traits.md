@@ -1,6 +1,6 @@
 ## 高级 trait
 
-> [ch19-03-advanced-traits.md](https://github.com/rust-lang/book/blob/master/src/ch19-03-advanced-traits.md)
+> [ch19-03-advanced-traits.md](https://github.com/rust-lang/book/blob/main/src/ch19-03-advanced-traits.md)
 > <br>
 > commit 426f3e4ec17e539ae9905ba559411169d303a031
 

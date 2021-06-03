@@ -1,6 +1,6 @@
 # Rust 中的函数式语言功能：迭代器与闭包
 
-> [ch13-00-functional-features.md](https://github.com/rust-lang/book/blob/master/src/ch13-00-functional-features.md)
+> [ch13-00-functional-features.md](https://github.com/rust-lang/book/blob/main/src/ch13-00-functional-features.md)
 > <br>
 > commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
