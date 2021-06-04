@@ -47,7 +47,7 @@ vuepress dev ./src
 - Rust 中文 Wiki：<https://wiki.rust-china.org/>
 - Rust编程语言社区1群，群号：303838735（已满，只能内部邀请）
 - Rust编程语言社区2群，群号：813448660
-- Rust水群(编程社区子群)，电报群：t.me/rust_deep_water
+- Rust水群(编程社区子群)，电报群：[t.me/rust_deep_water](//t.me/rust_deep_water)
 
 ## GitBook
 
