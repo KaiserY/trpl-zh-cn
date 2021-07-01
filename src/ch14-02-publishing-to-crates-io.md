@@ -3,9 +3,9 @@
 > [ch14-02-publishing-to-crates-io.md](https://github.com/rust-lang/book/blob/main/src/ch14-02-publishing-to-crates-io.md) <br>
 > commit c084bdd9ee328e7e774df19882ccc139532e53d8
 
-我们曾经在项目中使用 [crates.io](https://crates.io)<!-- ignore --> 上的包作为依赖，不过你也可以通过发布自己的包来向它人分享代码。[crates.io](https://crates.io)<!-- ignore --> 用来分发包的源代码，所以它主要托管开源代码。
+我们曾经在项目中使用 [crates.io](https://crates.io)<!-- ignore --> 上的包作为依赖，不过你也可以通过发布自己的包来向他人分享代码。[crates.io](https://crates.io)<!-- ignore --> 用来分发包的源代码，所以它主要托管开源代码。
 
-Rust 和 Cargo 有一些帮助它人更方便找到和使用你发布的包的功能。我们将介绍一些这样的功能，接着讲到如何发布一个包。
+Rust 和 Cargo 有一些帮助他人更方便找到和使用你发布的包的功能。我们将介绍一些这样的功能，接着讲到如何发布一个包。
 
 ### 编写有用的文档注释
 
