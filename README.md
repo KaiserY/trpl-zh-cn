@@ -56,4 +56,4 @@ vuepress dev ./src
 本翻译加速查看站点有：
  - 深圳站点：<http://120.78.128.153/rustbook>
 
-[GitBook.com](https://www.gitbook.com/) 地址：<https://legacy.gitbook.com/book/kaisery/trpl-zh-cn/details>
+[GitBook.com](https://www.gitbook.com/) 地址：<https://kaisery.github.io/trpl-zh-cn/>

@@ -2,17 +2,19 @@
 
 > [ch19-01-unsafe-rust.md](https://github.com/rust-lang/book/blob/main/src/ch19-01-unsafe-rust.md)
 > <br>
-> commit 28fa3d15b0bc67ea5e79eeff2198e4277fc61baf
+> commit 4921fde29ae8ccf67d5893d4e43d74284626fded
 
-目前为止讨论过的代码都有 Rust 在编译时会强制执行的内存安全保证。然而，Rust 还隐藏有第二种语言，它不会强制执行这类内存安全保证：这被称为 **不安全 Rust**（*unsafe Rust*）。它与常规 Rust 代码无异，但是会提供额外的超级力量。
+目前为止讨论过的代码都有 Rust 在编译时会强制执行的内存安全保证。然而，Rust 还隐藏有第二种语言，它不会强制执行这类内存安全保证：这被称为 **不安全 Rust**（*unsafe Rust*）。它与常规 Rust 代码无异，但是会提供额外的超能力。
 
-不安全 Rust 之所以存在，是因为静态分析本质上是保守的。当编译器尝试确定一段代码是否支持某个保证时，拒绝一些有效的程序比接受无效程序要好一些。这必然意味着有时代码可能是合法的，但是 Rust 不这么认为！在这种情况下，可以使用不安全代码告诉编译器，“相信我，我知道我在干什么。”这么做的缺点就是你只能靠自己了：如果不安全代码出错了，比如解引用空指针，可能会导致不安全的内存使用。
+尽管代码可能没问题，但如果 Rust 编译器没有足够的信息可以确定，它将拒绝代码。
+
+不安全 Rust 之所以存在，是因为静态分析本质上是保守的。当编译器尝试确定一段代码是否支持某个保证时，拒绝一些有效的程序比接受无效程序要好一些。这必然意味着有时代码 **可能** 是合法的，但如果 Rust 编译器没有足够的信息来确定，它将拒绝该代码。在这种情况下，可以使用不安全代码告诉编译器，“相信我，我知道我在干什么。”这么做的缺点就是你只能靠自己了：如果不安全代码出错了，比如解引用空指针，可能会导致不安全的内存使用。
 
 另一个 Rust 存在不安全一面的原因是：底层计算机硬件固有的不安全性。如果 Rust 不允许进行不安全操作，那么有些任务则根本完成不了。Rust 需要能够进行像直接与操作系统交互，甚至于编写你自己的操作系统这样的底层系统编程！这也是 Rust 语言的目标之一。让我们看看不安全 Rust 能做什么，和怎么做。
 
-### 不安全的超级力量
+### 不安全的超能力
 
-可以通过 `unsafe` 关键字来切换到不安全 Rust，接着可以开启一个新的存放不安全代码的块。这里有五类可以在不安全 Rust 中进行而不能用于安全 Rust 的操作，它们称之为 “不安全的超级力量。” 这些超级力量是：
+可以通过 `unsafe` 关键字来切换到不安全 Rust，接着可以开启一个新的存放不安全代码的块。这里有五类可以在不安全 Rust 中进行而不能用于安全 Rust 的操作，它们称之为 “不安全的超能力。” 这些超能力是：
 
 * 解引用裸指针
 * 调用不安全的函数或方法
@@ -28,7 +30,7 @@
 
 为了尽可能隔离不安全代码，将不安全代码封装进一个安全的抽象并提供安全 API 是一个好主意，当我们学习不安全函数和方法时会讨论到。标准库的一部分被实现为在被评审过的不安全代码之上的安全抽象。这个技术防止了 `unsafe` 泄露到所有你或者用户希望使用由 `unsafe` 代码实现的功能的地方，因为使用其安全抽象是安全的。
 
-让我们按顺序依次介绍上述五个超级力量，同时我们会看到一些提供不安全代码的安全接口的抽象。
+让我们按顺序依次介绍上述五个超能力，同时我们会看到一些提供不安全代码的安全接口的抽象。
 
 ### 解引用裸指针
 
@@ -69,7 +71,7 @@ let r = address as *const i32;
 
 记得我们说过可以在安全代码中创建裸指针，不过不能 **解引用** 裸指针和读取其指向的数据。现在我们要做的就是对裸指针使用解引用运算符 `*`，这需要一个 `unsafe` 块，如示例 19-3 所示：
 
-```rust,unsafe
+```rust
 let mut num = 5;
 
 let r1 = &num as *const i32;
@@ -95,7 +97,7 @@ unsafe {
 
 如下是一个没有做任何操作的不安全函数 `dangerous` 的例子：
 
-```rust,unsafe
+```rust
 unsafe fn dangerous() {}
 
 unsafe {
@@ -105,12 +107,23 @@ unsafe {
 
 必须在一个单独的 `unsafe` 块中调用 `dangerous` 函数。如果尝试不使用 `unsafe` 块调用 `dangerous`，则会得到一个错误：
 
-```text
-error[E0133]: call to unsafe function requires unsafe function or block
- -->
+```console
+$ cargo run
+   Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
+error[E0133]: call to unsafe function is unsafe and requires unsafe function or block
+ --> src/main.rs:4:5
   |
 4 |     dangerous();
   |     ^^^^^^^^^^^ call to unsafe function
+  |
+  = note: consult the function's documentation for information on how to avoid undefined behavior
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0133`.
+error: could not compile `unsafe-example`
+
+To learn more, run the command again with --verbose.
 ```
 
 通过将 `dangerous` 调用插入 `unsafe` 块中，我们就向 Rust 保证了我们已经阅读过函数的文档，理解如何正确使用，并验证过其满足函数的契约。
@@ -155,23 +168,35 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 
 如果尝试编译示例 19-5 的代码，会得到一个错误：
 
-```text
+```console
+$ cargo run
+   Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
 error[E0499]: cannot borrow `*slice` as mutable more than once at a time
- -->
+ --> src/main.rs:6:30
   |
-6 |     (&mut slice[..mid],
-  |           ----- first mutable borrow occurs here
-7 |      &mut slice[mid..])
-  |           ^^^^^ second mutable borrow occurs here
-8 | }
-  | - first borrow ends here
+1 | fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
+  |                        - let's call the lifetime of this reference `'1`
+...
+6 |     (&mut slice[..mid], &mut slice[mid..])
+  |     -------------------------^^^^^--------
+  |     |     |                  |
+  |     |     |                  second mutable borrow occurs here
+  |     |     first mutable borrow occurs here
+  |     returning this value requires that `*slice` is borrowed for `'1`
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0499`.
+error: could not compile `unsafe-example`
+
+To learn more, run the command again with --verbose.
 ```
 
 Rust 的借用检查器不能理解我们要借用这个 slice 的两个不同部分：它只知道我们借用了同一个 slice 两次。本质上借用 slice 的不同部分是可以的，因为结果两个 slice 不会重叠，不过 Rust 还没有智能到能够理解这些。当我们知道某些事是可以的而 Rust 不知道的时候，就是触及不安全代码的时候了
 
 示例 19-6 展示了如何使用 `unsafe` 块，裸指针和一些不安全函数调用来实现 `split_at_mut`：
 
-```rust,unsafe
+```rust
 use std::slice;
 
 fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
@@ -199,7 +224,7 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 
 与此相对，示例 19-7 中的 `slice::from_raw_parts_mut` 在使用 slice 时很有可能会崩溃。这段代码获取任意内存地址并创建了一个长为一万的 slice：
 
-```rust,unsafe
+```rust
 use std::slice;
 
 let address = 0x01234usize;
@@ -222,7 +247,7 @@ let slice: &[i32] = unsafe {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,unsafe
+```rust
 extern "C" {
     fn abs(input: i32) -> i32;
 }
@@ -270,8 +295,9 @@ fn main() {
 ```
 
 <span class="caption">示例 19-9: 定义和使用一个不可变静态变量</span>
+静态变量类似于常量，我们在第三章的 "变量和常量的区别 "一节中讨论过。静态变量的名字按惯例采用SCREAMING_SNAKE_CASE。静态变量只能存储具有 "静态寿命 "的引用，这意味着Rust编译器可以计算出其寿命，我们不需要明确注释。访问一个不可变的静态变量是安全的。
 
-`static` 变量类似于第三章 [“变量和常量的区别”][differences-between-variables-and-constants]  部分讨论的常量。通常静态变量的名称采用 `SCREAMING_SNAKE_CASE` 写法，并 **必须** 标注变量的类型，在这个例子中是 `&'static str`。静态变量只能储存拥有 `'static` 生命周期的引用，这意味着 Rust 编译器可以自己计算出其生命周期而无需显式标注。访问不可变静态变量是安全的。
+`static` 变量类似于第三章 [“变量和常量的区别”][differences-between-variables-and-constants]  部分讨论的常量。通常静态变量的名称采用 `SCREAMING_SNAKE_CASE` 写法。静态变量只能储存拥有 `'static` 生命周期的引用，这意味着 Rust 编译器可以自己计算出其生命周期而无需显式标注。访问不可变静态变量是安全的。
 
 常量与不可变静态变量可能看起来很类似，不过一个微妙的区别是静态变量中的值有一个固定的内存地址。使用这个值总是会访问相同的地址。另一方面，常量则允许在任何被用到的时候复制其数据。
 
@@ -279,7 +305,7 @@ fn main() {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,unsafe
+```rust
 static mut COUNTER: u32 = 0;
 
 fn add_to_count(inc: u32) {
@@ -305,9 +331,9 @@ fn main() {
 
 ### 实现不安全 trait
 
-最后一个只能用在 `unsafe` 中的操作是实现不安全 trait。当至少有一个方法中包含编译器不能验证的不变量时 trait 是不安全的。可以在 `trait` 之前增加 `unsafe` 关键字将 trait 声明为 `unsafe`，同时 trait 的实现也必须标记为 `unsafe`，如示例 19-11 所示：
+`unsafe` 的另一个操作用例是实现不安全 trait。当至少有一个方法中包含编译器不能验证的不变量时 trait 是不安全的。可以在 `trait` 之前增加 `unsafe` 关键字将 trait 声明为 `unsafe`，同时 trait 的实现也必须标记为 `unsafe`，如示例 19-11 所示：
 
-```rust,unsafe
+```rust
 unsafe trait Foo {
     // methods go here
 }
@@ -325,11 +351,11 @@ unsafe impl Foo for i32 {
 
 ### 访问联合体中的字段
 
-`union` 和 `struct` 类似，但是在一个实例中同时只能使用一个声明的字段。联合体主要用于和 C 代码中的联合体交互。访问联合体的字段是不安全的，因为 Rust 无法保证当前存储在联合体实例中数据的类型。可以查看[参考文档][reference]了解有关联合体的更多信息。
+仅适用于 `unsafe` 的最后一个操作是访问 **联合体** 中的字段，`union` 和 `struct` 类似，但是在一个实例中同时只能使用一个声明的字段。联合体主要用于和 C 代码中的联合体交互。访问联合体的字段是不安全的，因为 Rust 无法保证当前存储在联合体实例中数据的类型。可以查看[参考文档][reference]了解有关联合体的更多信息。
 
 ### 何时使用不安全代码
 
-使用 `unsafe` 来进行这五个操作（超级力量）之一是没有问题的，甚至是不需要深思熟虑的，不过使得 `unsafe` 代码正确也实属不易，因为编译器不能帮助保证内存安全。当有理由使用 `unsafe` 代码时，是可以这么做的，通过使用显式的 `unsafe` 标注使得在出现错误时易于追踪问题的源头。
+使用 `unsafe` 来进行这五个操作（超能力）之一是没有问题的，甚至是不需要深思熟虑的，不过使得 `unsafe` 代码正确也实属不易，因为编译器不能帮助保证内存安全。当有理由使用 `unsafe` 代码时，是可以这么做的，通过使用显式的 `unsafe` 标注可以更容易地在错误发生时追踪问题的源头。
 
 [dangling-references]:
 ch04-02-references-and-borrowing.html#dangling-references
