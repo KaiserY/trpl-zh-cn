@@ -2,7 +2,7 @@
 
 > [ch01-03-hello-cargo.md](https://github.com/rust-lang/book/blob/main/src/ch01-03-hello-cargo.md)
 > <br>
-> commit f63a103270ec8416899675a9cdb1c5cf6d77a498
+> commit c032e945406dd8ef2ce2062aa1f9d65dbf9020d6
 
 Cargo 是 Rust 的构建系统和包管理器。大多数 Rustacean 们使用 Cargo 来管理他们的 Rust 项目，因为它可以为你处理很多任务，比如构建代码、下载依赖库并编译这些库。（我们把代码所需要的库叫做 **依赖**（*dependencies*））。
 
@@ -10,7 +10,7 @@ Cargo 是 Rust 的构建系统和包管理器。大多数 Rustacean 们使用 Ca
 
 由于绝大多数 Rust 项目使用 Cargo，本书接下来的部分假设你也使用 Cargo。如果使用 [“安装”][installation] 部分介绍的官方安装包的话，则自带了 Cargo。如果通过其他方式安装的话，可以在终端输入如下命令检查是否安装了 Cargo：
 
-```text
+```console
 $ cargo --version
 ```
 
@@ -18,16 +18,16 @@ $ cargo --version
 
 ### 使用 Cargo 创建项目
 
-我们使用 Cargo 创建一个新项目，然后看看与上面的 Hello, world! 项目有什么不同。回到 *projects* 目录（或者你存放代码的目录）。接着，可在任何操作系统下运行以下命令：
+我们使用 Cargo 创建一个新项目，然后看看与上面的 “Hello, world!” 项目有什么不同。回到 *projects* 目录（或者你存放代码的目录）。接着，可在任何操作系统下运行以下命令：
 
-```text
+```console
 $ cargo new hello_cargo
 $ cd hello_cargo
 ```
 
 第一行命令新建了名为 *hello_cargo* 的目录。我们将项目命名为 *hello_cargo*，同时 Cargo 在一个同名目录中创建项目文件。
 
-进入 *hello_cargo* 目录并列出文件。将会看到 Cargo 生成了两个文件和一个目录：一个 *Cargo.toml* 文件，一个 *src* 目录，以及位于 *src* 目录中的 *main.rs* 文件。它也在 *hello_cargo* 目录初始化了一个 git 仓库，以及一个 *.gitignore* 文件。
+进入 *hello_cargo* 目录并列出文件。将会看到 Cargo 生成了两个文件和一个目录：一个 *Cargo.toml* 文件，一个 *src* 目录，以及位于 *src* 目录中的 *main.rs* 文件。它也在 *hello_cargo* 目录初始化了一个 git 仓库，以及一个 *.gitignore* 文件。如果你在现有的 git 仓库中运行 `cargo new`，则不会生成 git 文件；你可以通过使用`cargo new --vcs=git` 来覆盖此行为。
 
 > 注意：Git 是一个常用的版本控制系统（version control system， VCS）。可以通过 `--vcs` 参数使 `cargo new` 切换到其它版本控制系统（VCS），或者不使用 VCS。运行 `cargo new --help` 参看可用的选项。
 
@@ -39,7 +39,6 @@ $ cd hello_cargo
 [package]
 name = "hello_cargo"
 version = "0.1.0"
-authors = ["Your Name <you@example.com>"]
 edition = "2018"
 
 [dependencies]
@@ -47,13 +46,11 @@ edition = "2018"
 
 <span class="caption">示例 1-2: *cargo new* 命令生成的 *Cargo.toml* 的内容</span>
 
-这个文件使用 [*TOML*][toml]<!-- ignore --> (*Tom's Obvious, Minimal Language*) 格式，这是 Cargo 配置文件的格式。
-
-[toml]: https://github.com/toml-lang/toml
+这个文件使用 [*TOML*](https://toml.io)<!-- ignore --> (*Tom's Obvious, Minimal Language*) 格式，这是 Cargo 配置文件的格式。
 
 第一行，`[package]`，是一个片段（section）标题，表明下面的语句用来配置一个包。随着我们在这个文件增加更多的信息，还将增加其他片段（section）。
 
-接下来的四行设置了 Cargo 编译程序所需的配置：项目的名称、版本、作者以及要使用的 Rust 版本。Cargo 从环境中获取你的名字和 email 信息，所以如果这些信息不正确，请修改并保存此文件。附录 E 会介绍 `edition` 的值。
+接下来的三行设置了 Cargo 编译程序所需的配置：项目的名称、版本以及要使用的 Rust 版本。[附录 E][appendix-e]<!-- ignore --> 会介绍 `edition` 的值。
 
 最后一行，`[dependencies]`，是罗列项目依赖的片段的开始。在 Rust 中，代码包被称为 *crates*。这个项目并不需要其他的 crate，不过在第二章的第一个项目会用到依赖，那时会用得上这个片段。
 
@@ -77,7 +74,7 @@ Cargo 期望源文件存放在 *src* 目录中。项目根目录只存放 README
 
 现在让我们看看通过 Cargo 构建和运行 “Hello, world!” 程序有什么不同！在 *hello_cargo* 目录下，输入下面的命令来构建项目：
 
-```text
+```console
 $ cargo build
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
     Finished dev [unoptimized + debuginfo] target(s) in 2.85 secs
@@ -85,7 +82,7 @@ $ cargo build
 
 这个命令会创建一个可执行文件 *target/debug/hello_cargo* （在 Windows 上是 *target\debug\hello_cargo.exe*），而不是放在目前目录下。可以通过这个命令运行可执行文件：
 
-```text
+```console
 $ ./target/debug/hello_cargo # 或者在 Windows 下为 .\target\debug\hello_cargo.exe
 Hello, world!
 ```
@@ -94,7 +91,7 @@ Hello, world!
 
 我们刚刚使用 `cargo build` 构建了项目，并使用 `./target/debug/hello_cargo` 运行了程序，也可以使用 `cargo run` 在一个命令中同时编译并运行生成的可执行文件：
 
-```text
+```console
 $ cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/hello_cargo`
@@ -103,7 +100,7 @@ Hello, world!
 
 注意这一次并没有出现表明 Cargo 正在编译 `hello_cargo` 的输出。Cargo 发现文件并没有被改变，就直接运行了二进制文件。如果修改了源文件的话，Cargo 会在运行之前重新构建项目，并会出现像这样的输出：
 
-```text
+```console
 $ cargo run
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
     Finished dev [unoptimized + debuginfo] target(s) in 0.33 secs
@@ -113,7 +110,7 @@ Hello, world!
 
 Cargo 还提供了一个叫 `cargo check` 的命令。该命令快速检查代码确保其可以编译，但并不产生可执行文件：
 
-```text
+```console
 $ cargo check
    Checking hello_cargo v0.1.0 (file:///projects/hello_cargo)
     Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
@@ -123,8 +120,9 @@ $ cargo check
 
 我们回顾下已学习的 Cargo 内容：
 
-* 可以使用 `cargo build` 或 `cargo check` 构建项目。
+* 可以使用 `cargo build` 构建项目。
 * 可以使用 `cargo run` 一步构建并运行项目。
+* 可以在不生成二进制文件的情况下构建项目并使用 `cargo check` 检查错误。
 * 有别于将构建结果放在与源码相同的目录，Cargo 会将其放到 *target/debug* 目录。
 
 使用 Cargo 的一个额外的优点是，不管你使用什么操作系统，其命令都是一样的。所以从现在开始本书将不再为 Linux 和 macOS 以及 Windows 提供相应的命令。
@@ -139,8 +137,8 @@ $ cargo check
 
 即便 `hello_cargo` 项目十分简单，它现在也使用了很多在你之后的 Rust 生涯将会用到的实用工具。其实，要在任何已存在的项目上工作时，可以使用如下命令通过 Git 检出代码，移动到该项目目录并构建：
 
-```text
-$ git clone someurl.com/someproject
+```console
+$ git clone example.org/someproject
 $ cd someproject
 $ cargo build
 ```
@@ -162,3 +160,4 @@ $ cargo build
 是时候通过构建更实质性的程序来熟悉读写 Rust 代码了。所以在第二章我们会构建一个猜猜看游戏程序。如果你更愿意从学习 Rust 常用的编程概念开始，请阅读第三章，接着再回到第二章。
 
 [installation]: ch01-01-installation.html#installation
+[appendix-e]: appendix-05-editions.html

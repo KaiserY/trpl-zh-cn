@@ -1,11 +1,11 @@
 ## 安装
 
 > [ch01-01-installation.md](https://github.com/rust-lang/book/blob/main/src/ch01-01-installation.md) <br>
-> commit bad683bb7dcd06ef7f5f83bad3a25b1706b7b230
+> commit a01b23fee4c76a7e0d8c8c3261bdcf3a9840ccd3
 
 第一步是安装 Rust。我们会通过 `rustup` 下载 Rust，这是一个管理 Rust 版本和相关工具的命令行工具。下载时需要联网。
 
-> 注意：如果你出于某些理由倾向于不使用 `rustup`，请到 [Rust 安装页面](https://www.rust-lang.org/install.html) 查看其它安装选项。
+> 注意：如果你出于某些理由倾向于不使用 `rustup`，请参阅 [Rust 的其他安装方法页面](https://forge.rust-lang.org/infra/other-installation-methods.html) 了解更多选项。
 
 接下来的步骤会安装最新的稳定版 Rust 编译器。Rust 的稳定性确保本书所有示例在最新版本的 Rust 中能够继续编译。不同版本的输出可能略有不同，因为 Rust 经常改进错误信息和警告。也就是说，任何通过这些步骤安装的最新稳定版 Rust，都应该能正常运行本书中的内容。
 
@@ -27,7 +27,15 @@ $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 Rust is installed now. Great!
 ```
 
-另外，你需要一个某种类型的链接器（linker）。很有可能已经安装，不过当你尝试编译 Rust 程序时，却有错误指出无法执行链接器，这意味着你的系统上没有安装链接器，你需要自行安装一个。C 编译器通常带有正确的链接器。请查看你使用平台的文档，了解如何安装 C 编译器。并且，一些常用的 Rust 包依赖 C 代码，也需要安装 C 编译器。因此现在安装一个是值得的。
+另外，你还需要一个链接器（linker），这是 Rust 用来将其编译的输出连接到一个文件中的程序。很可能你已经有一个了。如果你遇到了链接器错误，请尝试安装一个 C 编译器，它通常包括一个链接器。C 编译器也很有用，因为一些常见的 Rust 包依赖于 C 代码，因此需要安装一个 C 编译器。
+
+在 macOS 上，你可以通过运行以下命令获得 C 语言编译器：
+
+```console
+$ xcode-select --install
+```
+
+根据发行版的文档，Linux 用户通常应该安装 GCC 或 Clang。例如，如果你使用 Ubuntu，则可以安装 则可以安装 `build-essential` 包。
 
 ### 在 Windows 上安装 `rustup`
 
