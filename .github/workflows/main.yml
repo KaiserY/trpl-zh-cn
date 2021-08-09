@@ -34,7 +34,8 @@ jobs:
         mdbook --version
     - name: Run mdBook Build
       run: mdbook build
-    - name: Deploy gh-pages 
+    - name: Deploy gh-pages
+      if: ${{ github.ref == 'refs/heads/main' }}
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
