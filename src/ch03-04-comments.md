@@ -2,7 +2,7 @@
 
 > [ch03-04-comments.md](https://github.com/rust-lang/book/blob/main/src/ch03-04-comments.md)
 > <br>
-> commit 75a77762ea2d2ab7fa1e9ef733907ed727c85651
+> commit 25a1530ccbf0a79c8df2920ee2af8beb106122e8
 
 所有程序员都力求使其代码易于理解，不过有时还需要提供额外的解释。在这种情况下，程序员在源码中留下记录，或者 **注释**（*comments*），编译器会忽略它们，不过阅读代码的人可能觉得有用。
 
@@ -12,7 +12,7 @@
 // hello, world
 ```
 
-在 Rust 中，注释必须以两道斜杠开始，并持续到本行的结尾。对于超过一行的注释，需要在每一行前都加上 `//`，像这样：
+在 Rust 中，惯用的注释样式是以两个斜杠开始注释，并持续到本行的结尾。对于超过一行的注释，需要在每一行前都加上 `//`，像这样：
 
 ```rust
 // So we’re doing something complicated here, long enough that we need

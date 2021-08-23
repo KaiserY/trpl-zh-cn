@@ -295,9 +295,8 @@ fn main() {
 ```
 
 <span class="caption">示例 19-9: 定义和使用一个不可变静态变量</span>
-静态变量类似于常量，我们在第三章的 "变量和常量的区别 "一节中讨论过。静态变量的名字按惯例采用SCREAMING_SNAKE_CASE。静态变量只能存储具有 "静态寿命 "的引用，这意味着Rust编译器可以计算出其寿命，我们不需要明确注释。访问一个不可变的静态变量是安全的。
 
-`static` 变量类似于第三章 [“变量和常量的区别”][differences-between-variables-and-constants]  部分讨论的常量。通常静态变量的名称采用 `SCREAMING_SNAKE_CASE` 写法。静态变量只能储存拥有 `'static` 生命周期的引用，这意味着 Rust 编译器可以自己计算出其生命周期而无需显式标注。访问不可变静态变量是安全的。
+静态（`static`）变量类似于第三章 [“变量和常量的区别”][differences-between-variables-and-constants] 部分讨论的常量。通常静态变量的名称采用 `SCREAMING_SNAKE_CASE` 写法。静态变量只能储存拥有 `'static` 生命周期的引用，这意味着 Rust 编译器可以自己计算出其生命周期而无需显式标注。访问不可变静态变量是安全的。
 
 常量与不可变静态变量可能看起来很类似，不过一个微妙的区别是静态变量中的值有一个固定的内存地址。使用这个值总是会访问相同的地址。另一方面，常量则允许在任何被用到的时候复制其数据。
 
@@ -331,7 +330,7 @@ fn main() {
 
 ### 实现不安全 trait
 
-`unsafe` 的另一个操作用例是实现不安全 trait。当至少有一个方法中包含编译器不能验证的不变量时 trait 是不安全的。可以在 `trait` 之前增加 `unsafe` 关键字将 trait 声明为 `unsafe`，同时 trait 的实现也必须标记为 `unsafe`，如示例 19-11 所示：
+`unsafe` 的另一个操作用例是实现不安全 trait。当 trait 中至少有一个方法中包含编译器无法验证的不变式（invariant）时 trait 是不安全的。可以在 `trait` 之前增加 `unsafe` 关键字将 trait 声明为 `unsafe`，同时 trait 的实现也必须标记为 `unsafe`，如示例 19-11 所示：
 
 ```rust
 unsafe trait Foo {
@@ -360,8 +359,8 @@ unsafe impl Foo for i32 {
 [dangling-references]:
 ch04-02-references-and-borrowing.html#dangling-references
 [differences-between-variables-and-constants]:
-ch03-01-variables-and-mutability.html#differences-between-variables-and-constants
+ch03-01-variables-and-mutability.html#变量和常量的区别
 [extensible-concurrency-with-the-sync-and-send-traits]:
-ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-sync-and-send-traits
+ch16-04-extensible-concurrency-sync-and-send.html#使用-sync-和-send-trait-的可扩展并发
 [the-slice-type]: ch04-03-slices.html#the-slice-type
 [reference]: https://doc.rust-lang.org/reference/items/unions.html

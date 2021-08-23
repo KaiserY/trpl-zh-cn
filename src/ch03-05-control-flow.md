@@ -2,7 +2,7 @@
 
 > [ch03-05-control-flow.md](https://github.com/rust-lang/book/blob/main/src/ch03-05-control-flow.md)
 > <br>
-> commit af34ac954a6bd7fc4a8bbcc5c9685e23c5af87da
+> commit 4b86611b0e63151f6e166edc9ecf870d553e1f09
 
 根据条件是否为真来决定是否执行某些代码，以及根据条件是否为真来重复运行一段代码是大部分编程语言的基本组成部分。Rust 代码中最常见的用来控制执行流的结构是 `if` 表达式和循环。
 
@@ -34,10 +34,10 @@ fn main() {
 
 尝试运行代码，应该能看到如下输出：
 
-```text
+```console
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31s
      Running `target/debug/branches`
 condition was true
 ```
@@ -50,10 +50,10 @@ let number = 7;
 
 再次运行程序并查看输出：
 
-```text
+```console
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31s
      Running `target/debug/branches`
 condition was false
 ```
@@ -74,15 +74,21 @@ fn main() {
 
 这里 `if` 条件的值是 `3`，Rust 抛出了一个错误：
 
-```text
+```console
+$ cargo run
+   Compiling branches v0.1.0 (file:///projects/branches)
 error[E0308]: mismatched types
  --> src/main.rs:4:8
   |
 4 |     if number {
-  |        ^^^^^^ expected bool, found integer
-  |
-  = note: expected type `bool`
-             found type `{integer}`
+  |        ^^^^^^ expected `bool`, found integer
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `branches`
+
+To learn more, run the command again with --verbose.
 ```
 
 这个错误表明 Rust 期望一个 `bool` 却得到了一个整数。不像 Ruby 或 JavaScript 这样的语言，Rust 并不会尝试自动地将非布尔值转换为布尔值。必须总是显式地使用布尔值作为 `if` 的条件。例如，如果想要 `if` 代码块只在一个数字不等于 `0` 时执行，可以把 `if` 表达式修改成下面这样：
@@ -125,7 +131,7 @@ fn main() {
 
 这个程序有四个可能的执行路径。运行后应该能看到如下输出：
 
-```text
+```console
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
     Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
@@ -160,10 +166,10 @@ fn main() {
 
 `number` 变量将会绑定到表示 `if` 表达式结果的值上。运行这段代码看看会出现什么：
 
-```text
+```console
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.30 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.30s
      Running `target/debug/branches`
 The value of number is: 5
 ```
@@ -188,20 +194,23 @@ fn main() {
 
 当编译这段代码时，会得到一个错误。`if` 和 `else` 分支的值类型是不相容的，同时 Rust 也准确地指出在程序中的何处发现的这个问题：
 
-```text
-error[E0308]: if and else have incompatible types
- --> src/main.rs:4:18
+```console
+$ cargo run
+   Compiling branches v0.1.0 (file:///projects/branches)
+error[E0308]: `if` and `else` have incompatible types
+ --> src/main.rs:4:44
   |
-4 |       let number = if condition {
-  |  __________________^
-5 | |         5
-6 | |     } else {
-7 | |         "six"
-8 | |     };
-  | |_____^ expected integer, found &str
-  |
-  = note: expected type `{integer}`
-             found type `&str`
+4 |     let number = if condition { 5 } else { "six" };
+  |                                 -          ^^^^^ expected integer, found `&str`
+  |                                 |
+  |                                 expected because of this
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `branches`
+
+To learn more, run the command again with --verbose.
 ```
 
 `if` 代码块中的表达式返回一个整数，而 `else` 代码块中的表达式返回一个字符串。这不可行，因为变量必须只有一个类型。Rust 需要在编译时就确切的知道 `number` 变量的类型，这样它就可以在编译时验证在每处使用的 `number` 变量的类型是有效的。如果`number`的类型仅在运行时确定，则Rust无法做到这一点；且编译器必须跟踪每一个变量的多种假设类型，那么它就会变得更加复杂，对代码的保证也会减少。
@@ -230,10 +239,10 @@ fn main() {
 
 当运行这个程序时，我们会看到连续的反复打印 `again!`，直到我们手动停止程序。大部分终端都支持一个快捷键，<span class="keystroke">ctrl-c</span>，来终止一个陷入无限循环的程序。尝试一下：
 
-```text
+```console
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.29 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.29s
      Running `target/debug/loops`
 again!
 again!
@@ -244,7 +253,53 @@ again!
 
 符号 `^C` 代表你在这按下了<span class="keystroke">ctrl-c</span>。在 `^C` 之后你可能看到也可能看不到 `again!` ，这取决于在接收到终止信号时代码执行到了循环的何处。
 
-幸运的是，Rust 提供了另一种更可靠的退出循环的方式。可以使用 `break` 关键字来告诉程序何时停止循环。回忆一下在第二章猜猜看游戏的 [“猜测正确后退出”][quitting-after-a-correct-guess] 部分使用过它来在用户猜对数字赢得游戏后退出程序。
+幸运的是，Rust 提供了一种从代码中跳出循环的方法。可以使用 `break` 关键字来告诉程序何时停止循环。回忆一下在第二章猜猜看游戏的 [“猜测正确后退出”][quitting-after-a-correct-guess] 部分使用过它来在用户猜对数字赢得游戏后退出程序。
+
+我们在猜谜游戏中也使用了 `continue`。循环中的 `continue` 关键字告诉程序跳过这个循环迭代中的任何剩余代码，并转到下一个迭代。
+
+如果存在嵌套循环，`break` 和 `continue` 应用于此时最内层的循环。你可以选择在一个循环上指定一个 **循环标签**（*loop label*），然后将标签与 `break` 或 `continue` 一起使用，使这些关键字应用于已标记的循环而不是最内层的循环。下面是一个包含两个嵌套循环的示例
+
+```rust
+fn main() {
+    let mut count = 0;
+    'counting_up: loop {
+        println!("count = {}", count);
+        let mut remaining = 10;
+
+        loop {
+            println!("remaining = {}", remaining);
+            if remaining == 9 {
+                break;
+            }
+            if count == 2 {
+                break 'counting_up;
+            }
+            remaining -= 1;
+        }
+
+        count += 1;
+    }
+    println!("End count = {}", count);
+}
+```
+
+外层循环有一个标签 `counting_ up`，它将从 0 数到 2。没有标签的内部循环从 10 向下数到 9。第一个没有指定标签的 `break` 将只退出内层循环。`break'counting_up;` 语句将退出外层循环。这个代码打印:
+
+```console
+$ cargo run
+   Compiling loops v0.1.0 (file:///projects/loops)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.58s
+     Running `target/debug/loops`
+count = 0
+remaining = 10
+remaining = 9
+count = 1
+remaining = 10
+remaining = 9
+count = 2
+remaining = 10
+End count = 2
+```
 
 #### 从循环返回
 
@@ -317,10 +372,10 @@ fn main() {
 
 这里，代码对数组中的元素进行计数。它从索引 `0` 开始，并接着循环直到遇到数组的最后一个索引（这时，`index < 5` 不再为真）。运行这段代码会打印出数组中的每一个元素：
 
-```text
+```console
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.32s
      Running `target/debug/loops`
 the value is: 10
 the value is: 20
@@ -331,7 +386,7 @@ the value is: 50
 
 数组中的所有五个元素都如期被打印出来。尽管 `index` 在某一时刻会到达值 `5`，不过循环在其尝试从数组获取第六个值（会越界）之前就停止了。
 
-但这个过程很容易出错；如果索引长度不正确会导致程序 panic。这也使程序更慢，因为编译器增加了运行时代码来对每次循环的每个元素进行条件检查。
+但这个过程很容易出错；如果索引长度或测试条件不正确会导致程序 panic。这也使程序更慢，因为编译器增加了运行时代码来对每次循环进行条件检查，以确定在循环的每次迭代中索引是否在数组的边界内。
 
 作为更简洁的替代方案，可以使用 `for` 循环来对一个集合的每个元素执行一些代码。`for` 循环看起来如示例 3-5 所示：
 
@@ -351,7 +406,7 @@ fn main() {
 
 当运行这段代码时，将看到与示例 3-4 一样的输出。更为重要的是，我们增强了代码安全性，并消除了可能由于超出数组的结尾或遍历长度不够而缺少一些元素而导致的 bug。
 
-例如，在示例 3-4 的代码中，如果从数组 `a` 中移除一个元素但忘记将条件更新为 `while index < 4`，代码将会 panic。使用 `for` 循环的话，就不需要惦记着在改变数组元素个数时修改其他的代码了。
+例如，在示例 3-4 的代码中，如果你将 `a` 数组的定义改为有四个元素，但忘记将条件更新为 `while index < 4`，代码将会 panic。使用 `for` 循环的话，就不需要惦记着在改变数组元素个数时修改其他的代码了。
 
 `for` 循环的安全性和简洁性使得它成为 Rust 中使用最多的循环结构。即使是在想要循环执行代码特定次数时，例如示例 3-3 中使用 `while` 循环的倒计时例子，大部分 Rustacean 也会使用 `for` 循环。这么做的方式是使用 `Range`，它是标准库提供的类型，用来生成从一个数字开始到另一个数字之前结束的所有数字的序列。
 
@@ -381,6 +436,6 @@ fn main() {
 当你准备好继续的时候，让我们讨论一个其他语言中 **并不** 常见的概念：所有权（ownership）。
 
 [comparing-the-guess-to-the-secret-number]:
-ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
+ch02-00-guessing-game-tutorial.html#比较猜测的数字和秘密数字
 [quitting-after-a-correct-guess]:
-ch02-00-guessing-game-tutorial.html#quitting-after-a-correct-guess
+ch02-00-guessing-game-tutorial.html#猜测正确后退出

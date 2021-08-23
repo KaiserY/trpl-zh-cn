@@ -476,7 +476,7 @@ error: aborting due to previous error
 Could not compile `guessing_game`.
 ```
 
-错误的核心表明这里有 **不匹配的类型**（*mismatched types*）。Rust 有一个静态强类型系统，同时也有类型推断。当我们写出 `let guess = String::new()` 时，Rust 推断出 `guess` 应该是 `String` 类型，并不需要我们写出类型。另一方面，`secret_number`，是数字类型。几个数字类型拥有 1 到 100 之间的值：32 位数字 `i32`；32 位无符号数字 `u32`；64 位数字 `i64` 等等。Rust 默认使用 `i32`，所以它是 `secret_number` 的类型，除非增加类型信息，或任何能让 Rust 推断出不同数值类型的信息。这里错误的原因在于 Rust 不会比较字符串类型和数字类型。
+错误的核心表明这里有 **不匹配的类型**（*mismatched types*）。Rust 有一个静态强类型系统，同时也有类型推断。当我们写出 `let guess = String::new()` 时，Rust 推断出 `guess` 应该是 `String` 类型，并不需要我们写出类型。另一方面，`secret_number`，是数字类型。有几个数字类型拥有 1 到 100 之间的值：32 位数字 `i32`；32 位无符号数字 `u32`；64 位数字 `i64` 等等。Rust 默认使用 `i32`，所以它是 `secret_number` 的类型，除非增加类型信息，或任何能让 Rust 推断出不同数值类型的信息。这里错误的原因在于 Rust 不会比较字符串类型和数字类型。
 
 所以我们必须把从输入中读取到的 `String` 转换为一个真正的数字类型，才好与秘密数字进行比较。这可以通过在 `main` 函数体中增加另一行代码来实现：
 
@@ -565,7 +565,7 @@ Too big!
 
 如上所示，我们将提示用户猜测之后的所有内容放入了循环。确保 loop 循环中的代码多缩进四个空格，再次运行程序。注意这里有一个新问题，因为程序忠实地执行了我们的要求：永远地请求另一个猜测，用户好像无法退出啊！
 
-用户总能使用 <span class="keystroke">ctrl-c</span> 终止程序。不过还有另一个方法跳出无限循环，就是 [“比较猜测与秘密数字”](#comparing-the-guess-to-the-secret-number) 部分提到的 `parse`：如果用户输入的答案不是一个数字，程序会崩溃。用户可以利用这一点来退出，如下所示：
+用户总能使用 <span class="keystroke">ctrl-c</span> 终止程序。不过还有另一个方法跳出无限循环，就是 [“比较猜测与秘密数字”](#比较猜测的数字和秘密数字) 部分提到的 `parse`：如果用户输入的答案不是一个数字，程序会崩溃。用户可以利用这一点来退出，如下所示：
 
 ```console
 $ cargo run
@@ -722,4 +722,4 @@ fn main() {
 本项目通过动手实践，向你介绍了 Rust 新概念：`let`、`match`、方法、函数、使用外部 crate 等等，接下来的几章，你会继续深入学习这些概念。第三章介绍大部分编程语言都有的概念，比如变量、数据类型和函数，以及如何在 Rust 中使用它们。第四章探索所有权（ownership），这是一个 Rust 同其他语言大不相同的功能。第五章讨论结构体和方法的语法，而第六章侧重解释枚举。
 
 [variables-and-mutability]:
-ch03-01-variables-and-mutability.html#variables-and-mutability
+ch03-01-variables-and-mutability.html#变量和可变性

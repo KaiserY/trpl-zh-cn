@@ -188,7 +188,7 @@ pub fn notify(item: impl Summary) {
 
 #### Trait Bound 语法
 
-`impl Trait` 语法适用于直观的例子，它不过是一个较长形式的语法糖。这被称为 *trait bound*，这看起来像：
+`impl Trait` 语法适用于直观的例子，它实际上是一种较长形式语法的语法糖。我们称为 *trait bound*，它看起来像：
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: T) {
@@ -245,7 +245,7 @@ fn some_function<T, U>(t: T, u: U) -> i32
 {
 ```
 
-这个函数签名就显得不那么杂乱，函数名、参数列表和返回值类型都离得很近，看起来类似没有很多 trait bounds 的函数。
+这个函数签名就显得不那么杂乱，函数名、参数列表和返回值类型都离得很近，看起来跟没有那么多 trait bounds 的函数很像。
 
 ### 返回实现了 trait 的类型
 
