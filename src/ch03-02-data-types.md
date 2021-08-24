@@ -2,7 +2,7 @@
 
 > [ch03-02-data-types.md](https://github.com/rust-lang/book/blob/main/src/ch03-02-data-types.md)
 > <br>
-> commit 6598d3abac05ed1d0c45db92466ea49346d05e40
+> commit 05d9c4c2312a6542f792492d17a62f79ad6dfd7b
 
 在 Rust 中，每一个值都属于某一个 **数据类型**（*data type*），这告诉 Rust 它被指定为何种数据，以便明确数据处理方式。我们将看到两类数据类型子集：标量（scalar）和复合（compound）。
 
@@ -14,15 +14,21 @@ let guess: u32 = "42".parse().expect("Not a number!");
 
 这里如果不添加类型注解，Rust 会显示如下错误，这说明编译器需要我们提供更多信息，来了解我们想要的类型：
 
-```text
+```console
+$ cargo build
+   Compiling no_type_annotations v0.1.0 (file:///projects/no_type_annotations)
 error[E0282]: type annotations needed
  --> src/main.rs:2:9
   |
 2 |     let guess = "42".parse().expect("Not a number!");
-  |         ^^^^^
-  |         |
-  |         cannot infer type for `_`
-  |         consider giving `guess` a type
+  |         ^^^^^ consider giving `guess` a type
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0282`.
+error: could not compile `no_type_annotations`
+
+To learn more, run the command again with --verbose.
 ```
 
 你会看到其它数据类型的各种类型注解。
@@ -46,13 +52,13 @@ error[E0282]: type annotations needed
 | 128-bit | `i128`  | `u128`   |
 | arch    | `isize` | `usize`  |
 
-每一个变体都可以是有符号或无符号的，并有一个明确的大小。**有符号** 和 **无符号** 代表数字能否为负值，换句话说，数字是否需要有一个符号（有符号数），或者永远为正而不需要符号（无符号数）。这有点像在纸上书写数字：当需要考虑符号的时候，数字以加号或减号作为前缀；然而，可以安全地假设为正数时，加号前缀通常省略。有符号数以[补码形式（two’s complement representation）](https://en.wikipedia.org/wiki/Two%27s_complement) 存储。
+每一个变体都可以是有符号或无符号的，并有一个明确的大小。**有符号** 和 **无符号** 代表数字能否为负值，换句话说，这个数字是否有可能是负数（有符号数），或者永远为正而不需要符号（无符号数）。这有点像在纸上书写数字：当需要考虑符号的时候，数字以加号或减号作为前缀；然而，可以安全地假设为正数时，加号前缀通常省略。有符号数以[补码形式（two’s complement representation）](https://en.wikipedia.org/wiki/Two%27s_complement) 存储。
 
 每一个有符号的变体可以储存包含从 -(2<sup>n - 1</sup>) 到 2<sup>n - 1</sup> - 1 在内的数字，这里 *n* 是变体使用的位数。所以 `i8` 可以储存从 -(2<sup>7</sup>) 到 2<sup>7</sup> - 1 在内的数字，也就是从 -128 到 127。无符号的变体可以储存从 0 到 2<sup>n</sup> - 1 的数字，所以 `u8` 可以储存从 0 到 2<sup>8</sup> - 1 的数字，也就是从 0 到 255。
 
 另外，`isize` 和 `usize` 类型依赖运行程序的计算机架构：64 位架构上它们是 64 位的， 32 位架构上它们是 32 位的。
 
-可以使用表格 3-2 中的任何一种形式编写数字字面值。注意除 byte 以外的所有数字字面值允许使用类型后缀，例如 `57u8`，同时也允许使用 `_` 做为分隔符以方便读数，例如`1_000`。
+可以使用表格 3-2 中的任何一种形式编写数字字面值。请注意可以是多种数字类型的数字字面值允许使用类型后缀，例如 `57u8` 来指定类型，同时也允许使用 `_` 做为分隔符以方便读数，例如`1_000`，它的值与你指定的 `1000` 相同。
 
 <span class="caption">表格 3-2: Rust 中的整型字面值</span>
 
@@ -64,13 +70,18 @@ error[E0282]: type annotations needed
 | Binary (二进制)          | `0b1111_0000` |
 | Byte (单字节字符)(仅限于`u8`) | `b'A'`        |
 
-那么该使用哪种类型的数字呢？如果拿不定主意，Rust 的默认类型通常就很好，数字类型默认是 `i32`：它通常是最快的，甚至在 64 位系统上也是。`isize` 或 `usize` 主要作为某些集合的索引。
+那么该使用哪种类型的数字呢？如果拿不定主意，Rust 的默认类型通常是个不错的起点，数字类型默认是 `i32`。`isize` 或 `usize` 主要作为某些集合的索引。
 
 > ##### 整型溢出
 >
 > 比方说有一个 `u8` ，它可以存放从零到 `255` 的值。那么当你将其修改为 `256` 时会发生什么呢？这被称为 “整型溢出”（“integer overflow” ），关于这一行为 Rust 有一些有趣的规则。当在 debug 模式编译时，Rust 检查这类问题并使程序 *panic*，这个术语被 Rust 用来表明程序因错误而退出。第九章 [“`panic!` 与不可恢复的错误”][unrecoverable-errors-with-panic] 部分会详细介绍 panic。
 >
-> 在 release 构建中，Rust 不检测溢出，相反会进行一种被称为二进制补码包装（*two’s complement wrapping*）的操作。简而言之，`256` 变成 `0`，`257` 变成 `1`，依此类推。依赖整型溢出被认为是一种错误，即便可能出现这种行为。如果你确实需要这种行为，标准库中有一个类型显式提供此功能，[`Wrapping`][wrapping]。
+> 在 release 构建中，Rust 不检测溢出，相反会进行一种被称为二进制补码包装（*two’s complement wrapping*）的操作。简而言之，值 `256` 变成 `0`，值 `257` 变成 `1`，依此类推。依赖整型溢出被认为是一种错误，即便可能出现这种行为。如果你确实需要这种行为，标准库中有一个类型显式提供此功能，[`Wrapping`][wrapping]。
+> 为了显式地处理溢出的可能性，你可以使用标准库在原生数值类型上提供的以下方法:
+> - 所有模式下都可以使用 `wrapping_*` 方法进行包装，如 `wrapping_add`
+> - 如果 `check_*` 方法出现溢出，则返回 `None`值
+> - 用 `overflowing_*` 方法返回值和一个布尔值，表示是否出现溢出
+> - 用 `saturating_*` 方法在值的最小值或最大值处进行饱和处理
 
 #### 浮点型
 
@@ -92,7 +103,7 @@ fn main() {
 
 #### 数值运算
 
-Rust 中的所有数字类型都支持基本数学运算：加法、减法、乘法、除法和取余。下面的代码展示了如何在 `let` 语句中使用它们：
+Rust 中的所有数字类型都支持基本数学运算：加法、减法、乘法、除法和取余。整数除法会向下舍入到最接近的整数。下面的代码展示了如何在 `let` 语句中使用它们：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -109,13 +120,14 @@ fn main() {
 
     // 除法
     let quotient = 56.7 / 32.2;
+    let floored = 2 / 3; // 结果为 0
 
     // 取余
     let remainder = 43 % 5;
 }
 ```
 
-这些语句中的每个表达式使用了一个数学运算符并计算出了一个值，然后绑定给一个变量。附录 B 包含 Rust 提供的所有运算符的列表。
+这些语句中的每个表达式使用了一个数学运算符并计算出了一个值，然后绑定给一个变量。[附录 B][appendix_b]<!-- ignore -->  包含 Rust 提供的所有运算符的列表。
 
 #### 布尔型
 
@@ -201,6 +213,8 @@ fn main() {
 
 这个程序创建了一个元组，`x`，并接着使用索引为每个元素创建新变量。跟大多数编程语言一样，元组的第一个索引值是 0。
 
+没有任何值的元组 `()` 是一种特殊的类型，只有一个值，也写成 `()` 。该类型被称为 **单元类型**（*unit type*），而该值被称为 **单元值**（*unit value*）。如果表达式不返回任何其他值，则会隐式返回单元值。
+
 #### 数组类型
 
 另一个包含多个值的方式是 **数组**（*array*）。与元组不同，数组中的每个元素的类型必须相同。Rust 中的数组与一些其他语言中的数组不同，因为 Rust 中的数组是固定长度的：一旦声明，它们的长度不能增长或缩小。
@@ -242,7 +256,7 @@ let a = [3; 5];
 
 ##### 访问数组元素
 
-数组是一整块分配在栈上的内存。可以使用索引来访问数组的元素，像这样：
+数组是可以在堆栈上分配的已知固定大小的单个内存块。可以使用索引来访问数组的元素，像这样：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -259,40 +273,53 @@ fn main() {
 
 ##### 无效的数组元素访问
 
-如果我们访问数组结尾之后的元素会发生什么呢？比如你将上面的例子改成下面这样，这可以编译通过，不过在运行时会因错误而退出：
+如果我们访问数组结尾之后的元素会发生什么呢？比如你将上面的例子改成下面这样，它使用类似于第 2 章中的猜数字游戏的代码从用户那里获取数组索引：
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,panics
+use std::io;
+
 fn main() {
     let a = [1, 2, 3, 4, 5];
-    let index = 10;
+
+    println!("Please enter an array index.");
+
+    let mut index = String::new();
+
+    io::stdin()
+        .read_line(&mut index)
+        .expect("Failed to read line");
+
+    let index: usize = index
+        .trim()
+        .parse()
+        .expect("Index entered was not a number");
 
     let element = a[index];
 
-    println!("The value of element is: {}", element);
+    println!(
+        "The value of the element at index {} is: {}",
+        index, element
+    );
 }
 ```
 
-使用 `cargo run` 运行代码后会产生如下结果：
+此代码编译成功。如果您使用 `cargo run` 运行此代码并输入 0、1、2、3 或 4，程序将在数组中的索引处打印出相应的值。如果你输入一个超过数组末端的数字，如 10，你会看到这样的输出：
 
-```text
-$ cargo run
-   Compiling arrays v0.1.0 (file:///projects/arrays)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
-     Running `target/debug/arrays`
-thread 'main' panicked at 'index out of bounds: the len is 5 but the index is
- 10', src/main.rs:5:19
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+```console
+thread 'main' panicked at 'index out of bounds: the len is 5 but the index is 10', src/main.rs:19:19
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrac
 ```
 
-编译并没有产生任何错误，不过程序会出现一个 **运行时**（*runtime*）错误并且不会成功退出。当尝试用索引访问一个元素时，Rust 会检查指定的索引是否小于数组的长度。如果索引超出了数组长度，Rust 会 *panic*，这是 Rust 术语，它用于程序因为错误而退出的情况。
+程序在索引操作中使用一个无效的值时导致 **运行时** 错误。程序带着错误信息退出，并且没有执行最后的 `println!` 语句。当尝试用索引访问一个元素时，Rust 会检查指定的索引是否小于数组的长度。如果索引超出了数组长度，Rust 会 *panic*，这是 Rust 术语，它用于程序因为错误而退出的情况。这种检查必须在运行时进行，特别是在这种情况下，因为编译器不可能知道用户在以后运行代码时将输入什么值。
 
 这是第一个在实战中遇到的 Rust 安全原则的例子。在很多底层语言中，并没有进行这类检查，这样当提供了一个不正确的索引时，就会访问无效的内存。通过立即退出而不是允许内存访问并继续执行，Rust 让你避开此类错误。第九章会讨论更多 Rust 的错误处理。
 
 [comparing-the-guess-to-the-secret-number]:
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
-[control-flow]: ch03-05-control-flow.html#control-flow
-[strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
+[control-flow]: ch03-05-control-flow.html#控制流
+[strings]: ch08-02-strings.html#使用字符串存储-utf-8-编码的文本
 [unrecoverable-errors-with-panic]: ch09-01-unrecoverable-errors-with-panic.html
-[wrapping]: ../std/num/struct.Wrapping.html
+[wrapping]: https://doc.rust-lang.org/std/num/struct.Wrapping.html
+[appendix_b]: appendix-02-operators.md
