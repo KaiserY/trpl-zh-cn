@@ -1,6 +1,6 @@
 ## Cargo 自定义扩展命令
 
-> [ch14-05-extending-cargo.md](https://github.com/rust-lang/book/blob/master/src/ch14-05-extending-cargo.md)
+> [ch14-05-extending-cargo.md](https://github.com/rust-lang/book/blob/main/src/ch14-05-extending-cargo.md)
 > <br>
 > commit c084bdd9ee328e7e774df19882ccc139532e53d8
 

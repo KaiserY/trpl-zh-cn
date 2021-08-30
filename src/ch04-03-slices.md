@@ -1,6 +1,6 @@
 ## Slice 类型
 
-> [ch04-03-slices.md](https://github.com/rust-lang/book/blob/master/src/ch04-03-slices.md)
+> [ch04-03-slices.md](https://github.com/rust-lang/book/blob/main/src/ch04-03-slices.md)
 > <br>
 > commit 9fcebe6e1b0b5e842285015dbf093f97cd5b3803
 

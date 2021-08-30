@@ -1,10 +1,10 @@
 ## 函数
 
-> [ch03-03-how-functions-work.md](https://github.com/rust-lang/book/blob/master/src/ch03-03-how-functions-work.md)
+> [ch03-03-how-functions-work.md](https://github.com/rust-lang/book/blob/main/src/ch03-03-how-functions-work.md)
 > <br>
-> commit 669a909a199bc20b913703c6618741d8b6ce1552
+> commit 05d9c4c2312a6542f792492d17a62f79ad6dfd7b
 
-函数遍布于 Rust 代码中。你已经见过语言中最重要的函数之一：`main` 函数，它是很多程序的入口点。你也见过 `fn` 关键字，它用来声明新函数。
+函数在 Rust 代码中非常普遍。你已经见过语言中最重要的函数之一：`main` 函数，它是很多程序的入口点。你也见过 `fn` 关键字，它用来声明新函数。
 
 Rust 代码中的函数和变量名使用 *snake case* 规范风格。在 snake case 中，所有字母都是小写并使用下划线分隔单词。这是一个包含函数定义示例的程序：
 
@@ -31,7 +31,7 @@ Rust 中的函数定义以 `fn` 开始并在函数名后跟一对圆括号。大
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.28 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.28s
      Running `target/debug/functions`
 Hello, world!
 Another function.
@@ -62,7 +62,7 @@ fn another_function(x: i32) {
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
-    Finished dev [unoptimized + debuginfo] target(s) in 1.21 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 1.21s
      Running `target/debug/functions`
 The value of x is: 5
 ```
@@ -77,29 +77,27 @@ The value of x is: 5
 
 ```rust
 fn main() {
-    another_function(5, 6);
+    print_labeled_measurement(5, 'h');
 }
 
-fn another_function(x: i32, y: i32) {
-    println!("The value of x is: {}", x);
-    println!("The value of y is: {}", y);
+fn print_labeled_measurement(value: i32, unit_label: char) {
+    println!("The measurement is: {}{}", value, unit_label);
 }
 ```
 
-这个例子创建了有两个参数的函数，都是 `i32` 类型。函数打印出了这两个参数的值。注意函数的参数类型并不一定相同，这个例子中只是碰巧相同罢了。
+这个例子创建了一个名为 `print_labeled_measurement` 的函数，它有两个参数。第一个参数名为 `value`， 类型是 `i32`。第二个参数是 `unit_label` ，类型是 `char`。然后，该函数打印包含 `value` 和 `unit_label` 的文本。
 
 尝试运行代码。使用上面的例子替换当前 *functions* 项目的 *src/main.rs* 文件，并用 `cargo run` 运行它：
 
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31s
      Running `target/debug/functions`
-The value of x is: 5
-The value of y is: 6
+The measurement is: 5h
 ```
 
-因为我们使用 `5` 作为 `x` 的值，`6` 作为 `y` 的值来调用函数，因此打印出这两个字符串及相应的值。
+因为我们使用 `5` 作为 `value` 的值，`h` 作为 `unit_label` 的值来调用函数，所以程序输出包含这些值。
 
 ### 包含语句和表达式的函数体
 
@@ -136,18 +134,42 @@ fn main() {
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+error[E0658]: `let` expressions in this position are experimental
+ --> src/main.rs:2:14
+  |
+2 |     let x = (let y = 6);
+  |              ^^^^^^^^^
+  |
+  = note: see issue #53667 <https://github.com/rust-lang/rust/issues/53667> for more information
+  = help: you can write `matches!(<expr>, <pattern>)` instead of `let <pattern> = <expr>`
+
 error: expected expression, found statement (`let`)
  --> src/main.rs:2:14
   |
 2 |     let x = (let y = 6);
-  |              ^^^
+  |              ^^^^^^^^^
   |
   = note: variable declaration using `let` is a statement
+
+warning: unnecessary parentheses around assigned value
+ --> src/main.rs:2:13
+  |
+2 |     let x = (let y = 6);
+  |             ^^^^^^^^^^^ help: remove these parentheses
+  |
+  = note: `#[warn(unused_parens)]` on by default
+
+error: aborting due to 2 previous errors; 1 warning emitted
+
+For more information about this error, try `rustc --explain E0658`.
+error: could not compile `functions`
+
+To learn more, run the command again with --verbose.
 ```
 
 `let y = 6` 语句并不返回值，所以没有可以绑定到 `x` 上的值。这与其他语言不同，例如 C 和 Ruby，它们的赋值语句会返回所赋的值。在这些语言中，可以这么写 `x = y = 6`，这样 `x` 和 `y` 的值都是 `6`；Rust 中不能这样写。
 
-表达式会计算出一些值，并且你将编写的大部分 Rust 代码是由表达式组成的。考虑一个简单的数学运算，比如 `5 + 6`，这是一个表达式并计算出值 `11`。表达式可以是语句的一部分：在示例 3-1 中，语句 `let y = 6;` 中的 `6` 是一个表达式，它计算出的值是 `6`。函数调用是一个表达式。宏调用是一个表达式。我们用来创建新作用域的大括号（代码块），`{}`，也是一个表达式，例如：
+表达式会计算出一个值，并且你将编写的大部分 Rust 代码是由表达式组成的。考虑一个数学运算，比如 `5 + 6`，这是一个表达式并计算出值 `11`。表达式可以是语句的一部分：在示例 3-1 中，语句 `let y = 6;` 中的 `6` 是一个表达式，它计算出的值是 `6`。函数调用是一个表达式。宏调用是一个表达式。我们用来创建新作用域的大括号（代码块），`{}`，也是一个表达式，例如：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -198,7 +220,7 @@ fn main() {
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.30 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.30s
      Running `target/debug/functions`
 The value of x is: 5
 ```
@@ -246,18 +268,24 @@ fn plus_one(x: i32) -> i32 {
 运行代码会产生一个错误，如下：
 
 ```text
+$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
 error[E0308]: mismatched types
- --> src/main.rs:7:28
+ --> src/main.rs:7:24
   |
-7 |   fn plus_one(x: i32) -> i32 {
-  |  ____________________________^
-8 | |     x + 1;
-  | |          - help: consider removing this semicolon
-9 | | }
-  | |_^ expected i32, found ()
-  |
-  = note: expected type `i32`
-             found type `()`
+7 | fn plus_one(x: i32) -> i32 {
+  |    --------            ^^^ expected `i32`, found `()`
+  |    |
+  |    implicitly returns `()` as its body has no tail or `return` expression
+8 |     x + 1;
+  |          - help: consider removing this semicolon
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `functions`
+
+To learn more, run the command again with --verbose.
 ```
 
-主要的错误信息，“mismatched types”（类型不匹配），揭示了代码的核心问题。函数 `plus_one` 的定义说明它要返回一个 `i32` 类型的值，不过语句并不会返回值，使用空元组 `()` 表示不返回值。因为不返回值与函数定义相矛盾，从而出现一个错误。在输出中，Rust 提供了一条信息，可能有助于纠正这个错误：它建议删除分号，这会修复这个错误。
+主要的错误信息，“mismatched types”（类型不匹配），揭示了代码的核心问题。函数 `plus_one` 的定义说明它要返回一个 `i32` 类型的值，不过语句并不会返回值，使用单位类型 `()` 表示不返回值。因为不返回值与函数定义相矛盾，从而出现一个错误。在输出中，Rust 提供了一条信息，可能有助于纠正这个错误：它建议删除分号，这会修复这个错误。

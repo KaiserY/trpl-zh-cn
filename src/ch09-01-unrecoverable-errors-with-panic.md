@@ -1,6 +1,6 @@
 ## `panic!` 与不可恢复的错误
 
-> [ch09-01-unrecoverable-errors-with-panic.md](https://github.com/rust-lang/book/blob/master/src/ch09-01-unrecoverable-errors-with-panic.md)
+> [ch09-01-unrecoverable-errors-with-panic.md](https://github.com/rust-lang/book/blob/main/src/ch09-01-unrecoverable-errors-with-panic.md)
 > <br>
 > commit 426f3e4ec17e539ae9905ba559411169d303a031
 

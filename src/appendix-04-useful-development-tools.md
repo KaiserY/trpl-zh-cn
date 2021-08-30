@@ -1,6 +1,6 @@
 ## 附录 D：实用开发工具
 
-> [appendix-04-useful-development-tools.md](https://github.com/rust-lang/book/blob/master/src/appendix-04-useful-development-tools.md)
+> [appendix-04-useful-development-tools.md](https://github.com/rust-lang/book/blob/main/src/appendix-04-useful-development-tools.md)
 > <br />
 > commit 70a82519e48b8a61f98cabb8ff443d1b21962fea
 

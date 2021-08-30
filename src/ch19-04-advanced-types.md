@@ -1,6 +1,6 @@
 ## 高级类型
 
-> [ch19-04-advanced-types.md](https://github.com/rust-lang/book/blob/master/src/ch19-04-advanced-types.md)
+> [ch19-04-advanced-types.md](https://github.com/rust-lang/book/blob/main/src/ch19-04-advanced-types.md)
 > <br>
 > commit 426f3e4ec17e539ae9905ba559411169d303a031
 
@@ -10,7 +10,7 @@ Rust 的类型系统有一些我们曾经提到但没有讨论过的功能。首
 
 ### 为了类型安全和抽象而使用 newtype 模式
 
-newtype 模式可以用于一些其他我们还未讨论的功能，包括静态的确保某值不被混淆，和用来表示一个值的单元。实际上示例 19-23 中已经有一个这样的例子：`Millimeters` 和 `Meters` 结构体都在 newtype 中封装了 `u32` 值。如果编写了一个有 `Millimeters` 类型参数的函数，不小心使用 `Meters` 或普通的 `u32` 值来调用该函数的程序是不能编译的。
+newtype 模式可以用于一些其他我们还未讨论的功能，包括静态的确保某值不被混淆，和用来表示一个值的单元。实际上示例 19-15 中已经有一个这样的例子：`Millimeters` 和 `Meters` 结构体都在 newtype 中封装了 `u32` 值。如果编写了一个有 `Millimeters` 类型参数的函数，不小心使用 `Meters` 或普通的 `u32` 值来调用该函数的程序是不能编译的。
 
 另一个 newtype 模式的应用在于抽象掉一些类型的实现细节：例如，封装类型可以暴露出与直接使用其内部私有类型时所不同的公有 API，以便限制其功能。
 
@@ -24,7 +24,7 @@ newtype 也可以隐藏其内部的泛型类型。例如，可以提供一个封
 type Kilometers = i32;
 ```
 
-这意味着 `Kilometers` 是 `i32` 的 **同义词**（*synonym*）；不同于示例 19-23 中创建的 `Millimeters` 和 `Meters` 类型。`Kilometers` 不是一个新的、单独的类型。`Kilometers` 类型的值将被完全当作 `i32` 类型值来对待：
+这意味着 `Kilometers` 是 `i32` 的 **同义词**（*synonym*）；不同于示例 19-15 中创建的 `Millimeters` 和 `Meters` 类型。`Kilometers` 不是一个新的、单独的类型。`Kilometers` 类型的值将被完全当作 `i32` 类型值来对待：
 
 ```rust
 type Kilometers = i32;
@@ -235,10 +235,10 @@ fn generic<T: ?Sized>(t: &T) {
 接下来，让我们讨论一下函数和闭包！
 
 [encapsulation-that-hides-implementation-details]:
-ch17-01-what-is-oo.html#encapsulation-that-hides-implementation-details
+ch17-01-what-is-oo.html#封装隐藏了实现细节
 [string-slices]: ch04-03-slices.html#string-slices
 [the-match-control-flow-operator]:
-ch06-02-match.html#the-match-control-flow-operator
+ch06-02-match.html#match-控制流运算符
 [using-trait-objects-that-allow-for-values-of-different-types]:
-ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
-[using-the-newtype-pattern]: ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
+ch17-02-trait-objects.html#为使用不同类型的值而设计的-trait-对象
+[using-the-newtype-pattern]: ch19-03-advanced-traits.html#newtype-模式用以在外部类型上实现外部-trait

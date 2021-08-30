@@ -1,6 +1,6 @@
 ## 所有可能会用到模式的位置
 
-> [ch18-01-all-the-places-for-patterns.md](https://github.com/rust-lang/book/blob/master/src/ch18-01-all-the-places-for-patterns.md)
+> [ch18-01-all-the-places-for-patterns.md](https://github.com/rust-lang/book/blob/main/src/ch18-01-all-the-places-for-patterns.md)
 > <br>
 > commit 426f3e4ec17e539ae9905ba559411169d303a031
 
@@ -112,7 +112,7 @@ c is at index 2
 
 ### `let` 语句
 
-在本章之前，我们只明确的讨论过通过 `match` 和 `if let` 使用模式，不过事实上也在别地地方使用过模式，包括 `let` 语句。例如，考虑一下这个直白的 `let` 变量赋值：
+在本章之前，我们只明确的讨论过通过 `match` 和 `if let` 使用模式，不过事实上也在别的地方使用过模式，包括 `let` 语句。例如，考虑一下这个直白的 `let` 变量赋值：
 
 ```rust
 let x = 5;
@@ -124,7 +124,7 @@ let x = 5;
 let PATTERN = EXPRESSION;
 ```
 
-像 `let x = 5;` 这样的语句中变量名位于 `PATTERN` 位置，变量名不过是形式特别朴素的模式。我们将表达式与模式比较，并为任何找到的名称赋值。所以例如 `let x = 5;` 的情况，`x` 是一个模式代表 “将匹配到的值绑定到变量 x”。同时因为名称 `x` 是整个模式，这个模式实际上等于 “将任何值绑定到变量 `x`，不管值是什么”。
+像 `let x = 5;` 这样的语句中变量名位于 `PATTERN` 位置，变量名不过是形式特别朴素的模式。我们将表达式与模式比较，并为任何找到的名称赋值。所以例如 `let x = 5;` 的情况，`x` 是一个代表 “将匹配到的值绑定到变量 x” 的模式。同时因为名称 `x` 是整个模式，这个模式实际上等于 “将任何值绑定到变量 `x`，不管值是什么”。
 
 为了更清楚的理解 `let` 的模式匹配方面的内容，考虑示例 18-4 中使用 `let` 和模式解构一个元组：
 

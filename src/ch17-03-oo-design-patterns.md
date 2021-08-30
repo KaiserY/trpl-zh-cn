@@ -1,6 +1,6 @@
 ## 面向对象设计模式的实现
 
-> [ch17-03-oo-design-patterns.md](https://github.com/rust-lang/book/blob/master/src/ch17-03-oo-design-patterns.md)
+> [ch17-03-oo-design-patterns.md](https://github.com/rust-lang/book/blob/main/src/ch17-03-oo-design-patterns.md)
 > <br>
 > commit 7e219336581c41a80fd41f4fbe615fecb6ed0a7d
 
@@ -286,7 +286,7 @@ impl Post {
 
 接着调用 `unwrap` 方法，这里我们知道它永远也不会 panic，因为 `Post` 的所有方法都确保在他们返回时 `state` 会有一个 `Some` 值。这就是一个第十二章 [“当我们比编译器知道更多的情况”][more-info-than-rustc]  部分讨论过的我们知道 `None` 是不可能的而编译器却不能理解的情况。
 
-接着我们就有了一个 `&Box<State>`，当调用其 `content` 时，解引用强制多态会作用于 `&` 和 `Box` ，这样最终会调用实现了 `State` trait 的类型的 `content` 方法。这意味着需要为 `State` trait 定义增加 `content`，这也是放置根据所处状态返回什么内容的逻辑的地方，如示例 17-18 所示：
+接着我们就有了一个 `&Box<State>`，当调用其 `content` 时，Deref 强制转换会作用于 `&` 和 `Box` ，这样最终会调用实现了 `State` trait 的类型的 `content` 方法。这意味着需要为 `State` trait 定义增加 `content`，这也是放置根据所处状态返回什么内容的逻辑的地方，如示例 17-18 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 

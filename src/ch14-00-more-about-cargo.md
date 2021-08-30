@@ -1,6 +1,6 @@
 # 进一步认识 Cargo 和 Crates.io
 
-> [ch14-00-more-about-cargo.md](https://github.com/rust-lang/book/blob/master/src/ch14-00-more-about-cargo.md)
+> [ch14-00-more-about-cargo.md](https://github.com/rust-lang/book/blob/main/src/ch14-00-more-about-cargo.md)
 > <br>
 > commit c084bdd9ee328e7e774df19882ccc139532e53d8
 

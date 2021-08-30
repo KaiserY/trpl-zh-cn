@@ -1,0 +1,44 @@
+name: CI
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+    - name: Update rustup
+      run: rustup self update
+    - name: Install Rust
+      run: |
+        rustup set profile minimal
+        rustup toolchain install 1.52 -c rust-docs
+        rustup default 1.52
+    - name: Install mdbook
+      run: |
+        mkdir bin
+        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.5/mdbook-v0.4.5-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        echo "$(pwd)/bin" >> ${GITHUB_PATH}
+    - name: Report versions
+      run: |
+        rustup --version
+        rustc -Vv
+        mdbook --version
+    - name: Run mdBook Build
+      run: mdbook build
+    - name: Deploy gh-pages
+      if: ${{ github.ref == 'refs/heads/main' }}
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./book
+        force_orphan: true
+        enable_jekyll: true

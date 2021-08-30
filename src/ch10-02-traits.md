@@ -1,6 +1,6 @@
 ## trait：定义共享的行为
 
-> [ch10-02-traits.md](https://github.com/rust-lang/book/blob/master/src/ch10-02-traits.md)
+> [ch10-02-traits.md](https://github.com/rust-lang/book/blob/main/src/ch10-02-traits.md)
 > <br>
 > commit 34b403864ad9c5e27b00b7cc4a6893804ef5b989
 
@@ -155,7 +155,7 @@ impl Summary for Tweet {
 }
 ```
 
-一旦定义了 `summarize_author`，我们就可以对 `Tweet` 结构体的实例调用 `summarize` 了，而 `summary` 的默认实现会调用我们提供的 `summarize_author` 定义。因为实现了 `summarize_author`，`Summary` trait 就提供了 `summarize` 方法的功能，且无需编写更多的代码。
+一旦定义了 `summarize_author`，我们就可以对 `Tweet` 结构体的实例调用 `summarize` 了，而 `summarize` 的默认实现会调用我们提供的 `summarize_author` 定义。因为实现了 `summarize_author`，`Summary` trait 就提供了 `summarize` 方法的功能，且无需编写更多的代码。
 
 ```rust,ignore
 let tweet = Tweet {
@@ -188,7 +188,7 @@ pub fn notify(item: impl Summary) {
 
 #### Trait Bound 语法
 
-`impl Trait` 语法适用于直观的例子，它不过是一个较长形式的语法糖。这被称为 *trait bound*，这看起来像：
+`impl Trait` 语法适用于直观的例子，它实际上是一种较长形式语法的语法糖。我们称为 *trait bound*，它看起来像：
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: T) {
@@ -245,7 +245,7 @@ fn some_function<T, U>(t: T, u: U) -> i32
 {
 ```
 
-这个函数签名就显得不那么杂乱，函数名、参数列表和返回值类型都离得很近，看起来类似没有很多 trait bounds 的函数。
+这个函数签名就显得不那么杂乱，函数名、参数列表和返回值类型都离得很近，看起来跟没有那么多 trait bounds 的函数很像。
 
 ### 返回实现了 trait 的类型
 

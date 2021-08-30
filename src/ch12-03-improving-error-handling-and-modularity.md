@@ -1,6 +1,6 @@
 ## 重构改进模块性和错误处理
 
-> [ch12-03-improving-error-handling-and-modularity.md](https://github.com/rust-lang/book/blob/master/src/ch12-03-improving-error-handling-and-modularity.md)
+> [ch12-03-improving-error-handling-and-modularity.md](https://github.com/rust-lang/book/blob/main/src/ch12-03-improving-error-handling-and-modularity.md)
 > <br>
 > commit 426f3e4ec17e539ae9905ba559411169d303a031
 
@@ -116,7 +116,7 @@ fn parse_config(args: &[String]) -> Config {
 >
 > 由于其运行时消耗，许多 Rustacean 之间有一个趋势是倾向于避免使用 `clone` 来解决所有权问题。在关于迭代器的第十三章中，我们将会学习如何更有效率的处理这种情况，不过现在，复制一些字符串来取得进展是没有问题的，因为只会进行一次这样的拷贝，而且文件名和要搜索的字符串都比较短。在第一轮编写时拥有一个可以工作但有点低效的程序要比尝试过度优化代码更好一些。随着你对 Rust 更加熟练，将能更轻松的直奔合适的方法，不过现在调用 `clone` 是完全可以接受的。
 
-我们更新 `main` 将 `parse_config` 返回的 `Config` 实例放入变量 `config` 中，并将之前分别使用 `search` 和 `filename` 变量的代码更新为现在的使用 `Config` 结构体的字段的代码。
+我们更新 `main` 将 `parse_config` 返回的 `Config` 实例放入变量 `config` 中，并将之前分别使用 `query` 和 `filename` 变量的代码更新为现在的使用 `Config` 结构体的字段的代码。
 
 现在代码更明确的表现了我们的意图，`query` 和 `filename` 是相关联的并且他们的目的是配置程序如何工作。任何使用这些值的代码就知道在 `config` 实例中对应目的的字段名中寻找他们。
 
@@ -277,7 +277,7 @@ Problem parsing arguments: not enough arguments
 
 ### 从 `main` 提取逻辑
 
-现在我们完成了配置解析的重构：让我们转向程序的逻辑。正如 [“二进制项目的关注分离”](#separation-of-concerns-for-binary-projects) 部分所展开的讨论，我们将提取一个叫做 `run` 的函数来存放目前 `main `函数中不属于设置配置或处理错误的所有逻辑。一旦完成这些，`main` 函数将简明得足以通过观察来验证，而我们将能够为所有其他逻辑编写测试。
+现在我们完成了配置解析的重构：让我们转向程序的逻辑。正如 [“二进制项目的关注分离”](#separation-of-concerns-for-binary-projects) 部分所展开的讨论，我们将提取一个叫做 `run` 的函数来存放目前 `main` 函数中不属于设置配置或处理错误的所有逻辑。一旦完成这些，`main` 函数将简明得足以通过观察来验证，而我们将能够为所有其他逻辑编写测试。
 
 示例 12-11 展示了提取出来的 `run` 函数。目前我们只进行小的增量式的提取函数的改进。我们仍将在 *src/main.rs* 中定义这个函数：
 

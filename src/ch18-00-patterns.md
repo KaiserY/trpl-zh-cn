@@ -1,6 +1,6 @@
-# 模式用来匹配值的结构
+# 模式与模式匹配
 
-> [ch18-00-patterns.md](https://github.com/rust-lang/book/blob/master/src/ch18-00-patterns.md)
+> [ch18-00-patterns.md](https://github.com/rust-lang/book/blob/main/src/ch18-00-patterns.md)
 > <br>
 > commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 

@@ -1,6 +1,6 @@
 # 智能指针
 
-> [ch15-00-smart-pointers.md](https://github.com/rust-lang/book/blob/master/src/ch15-00-smart-pointers.md)
+> [ch15-00-smart-pointers.md](https://github.com/rust-lang/book/blob/main/src/ch15-00-smart-pointers.md)
 > <br>
 > commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 

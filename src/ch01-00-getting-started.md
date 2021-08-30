@@ -1,6 +1,6 @@
 # 入门指南
 
-> [ch01-00-getting-started.md](https://github.com/rust-lang/book/blob/master/src/ch01-00-getting-started.md)
+> [ch01-00-getting-started.md](https://github.com/rust-lang/book/blob/main/src/ch01-00-getting-started.md)
 > <br>
 > commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 

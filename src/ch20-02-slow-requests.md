@@ -1,6 +1,6 @@
 ## 慢请求如何影响吞吐率
 
-> [ch20-02-slow-requests.md](https://github.com/rust-lang/book/blob/master/second-edition/src/ch20-02-slow-requests.md)
+> [ch20-02-slow-requests.md](https://github.com/rust-lang/book/blob/main/second-edition/src/ch20-02-slow-requests.md)
 > <br>
 > commit d06a6a181fd61704cbf7feb55bc61d518c6469f9
 

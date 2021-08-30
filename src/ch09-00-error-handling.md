@@ -1,6 +1,6 @@
 # 错误处理
 
-> [ch09-00-error-handling.md](https://github.com/rust-lang/book/blob/master/src/ch09-00-error-handling.md)
+> [ch09-00-error-handling.md](https://github.com/rust-lang/book/blob/main/src/ch09-00-error-handling.md)
 > <br>
 > commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 

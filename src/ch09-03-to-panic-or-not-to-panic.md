@@ -1,6 +1,6 @@
 ## `panic!` 还是不 `panic!`
 
-> [ch09-03-to-panic-or-not-to-panic.md](https://github.com/rust-lang/book/blob/master/src/ch09-03-to-panic-or-not-to-panic.md)
+> [ch09-03-to-panic-or-not-to-panic.md](https://github.com/rust-lang/book/blob/main/src/ch09-03-to-panic-or-not-to-panic.md)
 > <br>
 > commit 76df60bccead5f3de96db23d97b69597cd8a2b82
 
@@ -36,7 +36,7 @@ let home: IpAddr = "127.0.0.1".parse().unwrap();
 * 在此之后代码的运行依赖于不处于这种有害状态
 * 当没有可行的手段来将有害状态信息编码进所使用的类型中的情况
 
-如果别人调用你的代码并传递了一个没有意义的值，最好的情况也许就是 `panic!` 并警告使用你的库的人他的代码中有 bug 以便他能在开发时就修复它。类似的，`panic!` 通常适合调用不能够控制的外部代码时，这时无法修复其返回的无效状态。
+如果别人调用你的代码并传递了一个没有意义的值，最好的情况也许就是 `panic!` 并警告使用你的库的人他的代码中有 bug 以便他能在开发时就修复它。类似的，如果你正在调用不受你控制的外部代码，并且它返回了一个你无法修复的无效状态，那么 `panic!` 往往是合适的。
 
 然而当错误预期会出现时，返回 `Result` 仍要比调用 `panic!` 更为合适。这样的例子包括解析器接收到格式错误的数据，或者 HTTP 请求返回了一个表明触发了限流的状态。在这些例子中，应该通过返回 `Result` 来表明失败预期是可能的，这样将有害状态向上传播，调用者就可以决定该如何处理这个问题。使用 `panic!` 来处理这些情况就不是最好的选择。
 

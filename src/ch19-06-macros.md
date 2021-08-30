@@ -1,14 +1,14 @@
 ## 宏
 
-> [ch19-06-macros.md](https://github.com/rust-lang/book/blob/master/src/ch19-06-macros.md)
+> [ch19-06-macros.md](https://github.com/rust-lang/book/blob/main/src/ch19-06-macros.md)
 > <br>
 > commit 7ddc46460f09a5cd9bd2a620565bdc20b3315ea9
 
-我们已经在本书中使用过像 `println!` 这样的宏了，不过还没完全探索什么是宏以及它是如何工作的。**宏**（*Macro*）指的是 Rust 中一系列的功能：**声明**（*Declarative*）宏，使用 `macro_rules!`，和三种 **过程**（*Procedural*）宏：
+我们已经在本书中使用过像 `println!` 这样的宏了，不过还没完全探索什么是宏以及它是如何工作的。**宏**（*Macro*）指的是 Rust 中一系列的功能：使用 `macro_rules!` 的 **声明**（*Declarative*）宏，和三种 **过程**（*Procedural*）宏：
 
 * 自定义 `#[derive]` 宏在结构体和枚举上指定通过 `derive` 属性添加的代码
 * 类属性（Attribute-like）宏定义可用于任意项的自定义属性
-* 类函数宏看起来像函数不过作用于作为参数传递的 token。
+* 类函数宏看起来像函数不过作用于作为参数传递的 token
 
 我们会依次讨论每一种宏，不过首要的是，为什么已经有了函数还需要宏呢？
 
@@ -182,7 +182,7 @@ $ cargo new hello_macro_derive --lib
 
 由于两个 crate 紧密相关，因此在 `hello_macro` 包的目录下创建过程式宏的 crate。如果改变在 `hello_macro` 中定义的 trait ，同时也必须改变在 `hello_macro_derive` 中实现的过程式宏。这两个包需要分别发布，编程人员如果使用这些包，则需要同时添加这两个依赖并将其引入作用域。我们也可以只用 `hello_macro` 包而将 `hello_macro_derive` 作为一个依赖，并重新导出过程式宏的代码。但现在我们组织项目的方式使编程人员在无需 `derive` 功能时也能够单独使用 `hello_macro`。
 
-需要将 `hello_macro_derive` 声明为一个过程宏的 crate。同时也需要 `syn` 和 `quote` crate 中的功能，正如注释中所说，需要将其加到依赖中。为 `hello_macro_derive` 将下面的代码加入到 *Cargo.toml* 文件中。
+我们需要声明 `hello_macro_derive` crate 是过程宏(proc-macro) crate。正如稍后将看到的那样，我们还需要 `syn` 和 `quote` crate 中的功能，所以需要将其加到依赖中。将下面的代码加入到 `hello_macro_derive` 的 *Cargo.toml* 文件中。
 
 <span class="filename">文件名: hello_macro_derive/Cargo.toml</span>
 
@@ -191,8 +191,8 @@ $ cargo new hello_macro_derive --lib
 proc-macro = true
 
 [dependencies]
-syn = "0.14.4"
-quote = "0.6.3"
+syn = "1.0"
+quote = "1.0"
 ```
 
 为定义一个过程式宏，请将示例 19-31 中的代码放在 `hello_macro_derive` crate 的 *src/lib.rs* 文件里面。注意这段代码在我们添加 `impl_hello_macro` 函数的定义之前是无法编译的。
@@ -220,8 +220,7 @@ use syn;
 
 #[proc_macro_derive(HelloMacro)]
 pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
-    // 构建 Rust 代码所代表的语法树
-    // 以便可以进行操作
+    // 将 Rust 代码解析为语法树以便进行操作
     let ast = syn::parse(input).unwrap();
 
     // 构建 trait 实现
@@ -342,7 +341,7 @@ pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
 
 类函数宏定义看起来像函数调用的宏。类似于 `macro_rules!`，它们比函数更灵活；例如，可以接受未知数量的参数。然而 `macro_rules!` 宏只能使用之前 [“使用 `macro_rules!` 的声明宏用于通用元编程”][decl] 介绍的类匹配的语法定义。类函数宏获取 `TokenStream` 参数，其定义使用 Rust 代码操纵 `TokenStream`，就像另两种过程宏一样。一个类函数宏例子是可以像这样被调用的 `sql!` 宏：
 
-[decl]: #declarative-macros-with-macro_rules-for-general-metaprogramming
+[decl]: #使用-macro_rules-的声明宏用于通用元编程
 
 ```rust,ignore
 let sql = sql!(SELECT * FROM posts WHERE id=1);

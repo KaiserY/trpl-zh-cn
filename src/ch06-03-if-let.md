@@ -1,6 +1,6 @@
 ## `if let` 简单控制流
 
-> [ch06-03-if-let.md](https://github.com/rust-lang/book/blob/master/src/ch06-03-if-let.md)
+> [ch06-03-if-let.md](https://github.com/rust-lang/book/blob/main/src/ch06-03-if-let.md)
 > <br>
 > commit a86c1d315789b3ca13b20d50ad5005c62bdd9e37
 

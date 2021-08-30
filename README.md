@@ -1,6 +1,6 @@
 # Rust 程序设计语言（第二版 & 2018 edition） 简体中文版
 
-[![Build Status](https://travis-ci.org/KaiserY/trpl-zh-cn.svg?branch=master)](https://travis-ci.org/KaiserY/trpl-zh-cn)
+![Build Status](https://github.com/KaiserY/trpl-zh-cn/workflows/CI/badge.svg)
 
 ## 状态
 
@@ -8,10 +8,10 @@
 
 PS:
 
-* 对照源码位置：[https://github.com/rust-lang/book/tree/master/src][source]
+* 对照源码位置：[https://github.com/rust-lang/book/tree/main/src][source]
 * 每章翻译开头都带有官方链接和 commit hash，若发现与官方不一致，欢迎 Issue 或 PR :)
 
-[source]: https://github.com/rust-lang/book/tree/master/src
+[source]: https://github.com/rust-lang/book/tree/main/src
 
 ## 静态页面构建与文档撰写
 
@@ -45,8 +45,9 @@ vuepress dev ./src
 
 - Rust语言中文社区：<https://rust.cc/>
 - Rust 中文 Wiki：<https://wiki.rust-china.org/>
-- Rust编程语言社区主群：303838735
-- Rust 水群：253849562
+- Rust编程语言社区1群，群号：303838735（已满，只能内部邀请）
+- Rust编程语言社区2群，群号：813448660
+- Rust水群(编程社区子群)，电报群：[t.me/rust_deep_water](//t.me/rust_deep_water)
 
 ## GitBook
 
@@ -55,4 +56,4 @@ vuepress dev ./src
 本翻译加速查看站点有：
  - 深圳站点：<http://120.78.128.153/rustbook>
 
-[GitBook.com](https://www.gitbook.com/) 地址：<https://legacy.gitbook.com/book/kaisery/trpl-zh-cn/details>
+[GitBook.com](https://www.gitbook.com/) 地址：<https://kaisery.github.io/trpl-zh-cn/>

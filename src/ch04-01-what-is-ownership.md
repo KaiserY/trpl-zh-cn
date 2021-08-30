@@ -1,6 +1,6 @@
 ## 什么是所有权？
 
-> [ch04-01-what-is-ownership.md](https://github.com/rust-lang/book/blob/master/src/ch04-01-what-is-ownership.md)
+> [ch04-01-what-is-ownership.md](https://github.com/rust-lang/book/blob/main/src/ch04-01-what-is-ownership.md)
 > <br>
 > commit e81710c276b3839e8ec54d5f12aec4f9de88924b
 

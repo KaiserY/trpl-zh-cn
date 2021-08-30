@@ -1,6 +1,6 @@
 ## 控制测试如何运行
 
-> [ch11-02-running-tests.md](https://github.com/rust-lang/book/blob/master/src/ch11-02-running-tests.md)
+> [ch11-02-running-tests.md](https://github.com/rust-lang/book/blob/main/src/ch11-02-running-tests.md)
 > <br>
 > commit 42b802f26197f9a066e4a671d2b062af25972c13
 

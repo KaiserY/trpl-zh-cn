@@ -1,6 +1,6 @@
 ## 性能对比：循环 VS 迭代器
 
-> [ch13-04-performance.md](https://github.com/rust-lang/book/blob/master/src/ch13-04-performance.md)
+> [ch13-04-performance.md](https://github.com/rust-lang/book/blob/main/src/ch13-04-performance.md)
 > <br>
 > commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 

@@ -1,6 +1,6 @@
 ## 高级 trait
 
-> [ch19-03-advanced-traits.md](https://github.com/rust-lang/book/blob/master/src/ch19-03-advanced-traits.md)
+> [ch19-03-advanced-traits.md](https://github.com/rust-lang/book/blob/main/src/ch19-03-advanced-traits.md)
 > <br>
 > commit 426f3e4ec17e539ae9905ba559411169d303a031
 
@@ -48,7 +48,7 @@ pub trait Iterator<T> {
 }
 ```
 
-<span class="caption">示例 19-21: 一个使用泛型的 `Iterator` trait 假想定义</span>
+<span class="caption">示例 19-13: 一个使用泛型的 `Iterator` trait 假想定义</span>
 
 区别在于当如示例 19-13 那样使用泛型时，则不得不在每一个实现中标注类型。这是因为我们也可以实现为 `Iterator<String> for Counter`，或任何其他类型，这样就可以有多个 `Counter` 的 `Iterator` 的实现。换句话说，当 trait 有泛型参数时，可以多次实现这个 trait，每次需改变泛型参数的具体类型。接着当使用 `Counter` 的 `next` 方法时，必须提供类型注解来表明希望使用 `Iterator` 的哪一个实现。
 
@@ -503,11 +503,8 @@ fn main() {
 
 上面便是 newtype 模式如何与 trait 结合使用的；还有一个不涉及 trait 的实用模式。现在让我们将话题的焦点转移到一些与 Rust 类型系统交互的高级方法上来吧。
 
-[implementing-a-trait-on-a-type]:
-ch10-02-traits.html#implementing-a-trait-on-a-type
-[the-iterator-trait-and-the-next-method]:
-ch13-02-iterators.html#the-iterator-trait-and-the-next-method
-[traits-defining-shared-behavior]:
-ch10-02-traits.html#traits-defining-shared-behavior
-[smart-pointer-deref]: ch15-02-deref.html#treating-smart-pointers-like-regular-references-with-the-deref-trait
-[tuple-structs]: ch05-01-defining-structs.html#using-tuple-structs-without-named-fields-to-create-different-types
+[implementing-a-trait-on-a-type]: ch10-02-traits.html#为类型实现-trait
+[the-iterator-trait-and-the-next-method]: ch13-02-iterators.html#iterator-trait-和-next-方法
+[traits-defining-shared-behavior]: ch10-02-traits.html#trait定义共享的行为
+[smart-pointer-deref]: ch15-02-deref.html#通过实现-deref-trait-将某类型像引用一样处理
+[tuple-structs]: ch05-01-defining-structs.html#使用没有命名字段的元组结构体来创建不同的类型

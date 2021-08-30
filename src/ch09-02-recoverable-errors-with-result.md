@@ -1,6 +1,6 @@
 ## `Result` 与可恢复的错误
 
-> [ch09-02-recoverable-errors-with-result.md](https://github.com/rust-lang/book/blob/master/src/ch09-02-recoverable-errors-with-result.md)
+> [ch09-02-recoverable-errors-with-result.md](https://github.com/rust-lang/book/blob/main/src/ch09-02-recoverable-errors-with-result.md)
 > <br>
 > commit aa339f78da31c330ede3f1b52b4bbfb62d7814cb
 
@@ -180,7 +180,7 @@ fn main() {
 }
 ```
 
-`expect` 与 `unwrap` 的使用方式一样：返回文件句柄或调用 `panic!` 宏。`expect` 用来调用 `panic!` 的错误信息将会作为参数传递给 `expect` ，而不像`unwrap` 那样使用默认的 `panic!` 信息。它看起来像这样：
+`expect` 与 `unwrap` 的使用方式一样：返回文件句柄或调用 `panic!` 宏。`expect` 在调用 `panic!` 时使用的错误信息将是我们传递给 `expect` 的参数，而不像 `unwrap` 那样使用默认的 `panic!` 信息。它看起来像这样：
 
 ```text
 thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:

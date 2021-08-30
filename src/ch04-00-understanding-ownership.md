@@ -1,6 +1,6 @@
 # 认识所有权
 
-> [ch04-00-understanding-ownership.md](https://github.com/rust-lang/book/blob/master/src/ch04-00-understanding-ownership.md)
+> [ch04-00-understanding-ownership.md](https://github.com/rust-lang/book/blob/main/src/ch04-00-understanding-ownership.md)
 > <br>
 > commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
 
