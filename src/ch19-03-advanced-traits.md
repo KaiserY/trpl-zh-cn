@@ -503,11 +503,8 @@ fn main() {
 
 上面便是 newtype 模式如何与 trait 结合使用的；还有一个不涉及 trait 的实用模式。现在让我们将话题的焦点转移到一些与 Rust 类型系统交互的高级方法上来吧。
 
-[implementing-a-trait-on-a-type]:
-ch10-02-traits.html#implementing-a-trait-on-a-type
-[the-iterator-trait-and-the-next-method]:
-ch13-02-iterators.html#the-iterator-trait-and-the-next-method
-[traits-defining-shared-behavior]:
-ch10-02-traits.html#traits-defining-shared-behavior
-[smart-pointer-deref]: ch15-02-deref.html#treating-smart-pointers-like-regular-references-with-the-deref-trait
-[tuple-structs]: ch05-01-defining-structs.html#using-tuple-structs-without-named-fields-to-create-different-types
+[implementing-a-trait-on-a-type]: ch10-02-traits.html#为类型实现-trait
+[the-iterator-trait-and-the-next-method]: ch13-02-iterators.html#iterator-trait-和-next-方法
+[traits-defining-shared-behavior]: ch10-02-traits.html#trait定义共享的行为
+[smart-pointer-deref]: ch15-02-deref.html#通过实现-deref-trait-将某类型像引用一样处理
+[tuple-structs]: ch05-01-defining-structs.html#使用没有命名字段的元组结构体来创建不同的类型
