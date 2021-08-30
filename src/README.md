@@ -110,7 +110,7 @@
 
 - [模式用来匹配值的结构](ch18-00-patterns.md)
     - [所有可能会用到模式的位置](ch18-01-all-the-places-for-patterns.md)
-    - [Refutability：何时模式可能会匹配失败](ch18-02-refutability.md)
+    - [Refutability（可反驳性）: 模式是否会匹配失效](ch18-02-refutability.md)
     - [模式的全部语法](ch18-03-pattern-syntax.md)
 
 - [高级特征](ch19-00-advanced-features.md)
