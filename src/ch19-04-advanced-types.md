@@ -235,10 +235,10 @@ fn generic<T: ?Sized>(t: &T) {
 接下来，让我们讨论一下函数和闭包！
 
 [encapsulation-that-hides-implementation-details]:
-ch17-01-what-is-oo.html#encapsulation-that-hides-implementation-details
+ch17-01-what-is-oo.html#封装隐藏了实现细节
 [string-slices]: ch04-03-slices.html#string-slices
 [the-match-control-flow-operator]:
-ch06-02-match.html#the-match-control-flow-operator
+ch06-02-match.html#match-控制流运算符
 [using-trait-objects-that-allow-for-values-of-different-types]:
-ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
-[using-the-newtype-pattern]: ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
+ch17-02-trait-objects.html#为使用不同类型的值而设计的-trait-对象
+[using-the-newtype-pattern]: ch19-03-advanced-traits.html#newtype-模式用以在外部类型上实现外部-trait
