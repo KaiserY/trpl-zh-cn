@@ -18,7 +18,7 @@ let Some(x) = some_option_value;
 
 <span class="caption">示例 18-8: 尝试在 `let` 中使用可反驳模式</span>
 
-如果 `some_option_value` 的值是 `None`，其不会成功匹配模式 `Some(x)`，表明这个模式是可反驳的。然而 `let` 语句只能接受不可反驳模式因为代码不能通过 `None` 值进行有效的操作。Rust 会在编译时抱怨我们尝试在要求不可反驳模式的地方使用可反驳模式：
+如果 `some_option_value` 的值是 `None`，其不会成功匹配模式 `Some(x)`，表明这个模式是可反驳的。然而, 因为 `let` 对于 `None` 匹配不能产生任何任何合法的代码，所以 `let` 语句只能接受不可反驳模式。Rust 会在编译时抱怨我们尝试在要求不可反驳模式的地方使用可反驳模式：
 
 ```text
 error[E0005]: refutable pattern in local binding: `None` not covered
@@ -41,7 +41,7 @@ if let Some(x) = some_option_value {
 
 <span class="caption">示例 18-9: 使用 `if let` 和一个带有可反驳模式的代码块来代替 `let`</span>
 
-我们给了代码一个得以继续的出路！这段代码可以完美运行，尽管这意味着我们不能再使用不可反驳模式并免于收到错误。如果为 `if let` 提供了一个总是会匹配的模式，比如示例 18-10 中的 `x`，编译器会给出一个警告：
+我们给了代码一个得以继续的出路！虽然我们没办法在避免产生错误的情况下使用不可反驳模式，但这段使用可反驳模式的代码是完全有效的。如果为 `if let` 提供了一个总是会匹配的模式，比如示例 18-10 中的 `x`，编译器会给出一个警告：
 
 ```rust,ignore
 if let x = 5 {
