@@ -341,7 +341,7 @@ pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
 
 类函数宏定义看起来像函数调用的宏。类似于 `macro_rules!`，它们比函数更灵活；例如，可以接受未知数量的参数。然而 `macro_rules!` 宏只能使用之前 [“使用 `macro_rules!` 的声明宏用于通用元编程”][decl] 介绍的类匹配的语法定义。类函数宏获取 `TokenStream` 参数，其定义使用 Rust 代码操纵 `TokenStream`，就像另两种过程宏一样。一个类函数宏例子是可以像这样被调用的 `sql!` 宏：
 
-[decl]: #declarative-macros-with-macro_rules-for-general-metaprogramming
+[decl]: #使用-macro_rules-的声明宏用于通用元编程
 
 ```rust,ignore
 let sql = sql!(SELECT * FROM posts WHERE id=1);
