@@ -2,7 +2,7 @@
 
 > [ch04-02-references-and-borrowing.md](https://github.com/rust-lang/book/blob/main/src/ch04-02-references-and-borrowing.md)
 > <br>
-> commit 4f19894e592cd24ac1476f1310dcf437ae83d4ba
+> commit d377d2effa9ae9173026e35a7e464b8f5b82409a
 
 示例 4-5 中的元组代码有这样一个问题：我们必须将 `String` 返回给调用函数，以便在调用 `calculate_length` 后仍能使用 `String`，因为 `String` 被移动到了 `calculate_length` 内。
 
@@ -45,7 +45,7 @@ let s1 = String::from("hello");
 let len = calculate_length(&s1);
 ```
 
-`&s1` 语法让我们创建一个 **指向** 值 `s1` 的引用，但是并不拥有它。因为并不拥有这个值，当引用离开作用域时其指向的值也不会被丢弃。
+`&s1` 语法让我们创建一个 **指向** 值 `s1` 的引用，但是并不拥有它。因为并不拥有这个值，所以当引用停止使用时，它所指向的值也不会被丢弃。
 
 同理，函数签名使用 `&` 来表明参数 `s` 的类型是一个引用。让我们增加一些解释性的注释：
 
@@ -56,9 +56,9 @@ fn calculate_length(s: &String) -> usize { // s 是对 String 的引用
   // 所以什么也不会发生
 ```
 
-变量 `s` 有效的作用域与函数参数的作用域一样，不过当引用离开作用域后并不丢弃它指向的数据，因为我们没有所有权。当函数使用引用而不是实际值作为参数，无需返回值来交还所有权，因为就不曾拥有所有权。
+变量 `s` 有效的作用域与函数参数的作用域一样，不过当引用停止使用时并不丢弃它指向的数据，因为我们没有所有权。当函数使用引用而不是实际值作为参数，无需返回值来交还所有权，因为就不曾拥有所有权。
 
-我们将获取引用作为函数参数称为 **借用**（*borrowing*）。正如现实生活中，如果一个人拥有某样东西，你可以从他那里借来。当你使用完毕，必须还回去。
+我们将创建一个引用的行为称为 **借用**（*borrowing*）。正如现实生活中，如果一个人拥有某样东西，你可以从他那里借来。当你使用完毕，必须还回去。
 
 如果我们尝试修改借用的变量呢？尝试示例 4-6 中的代码。剧透：这行不通！
 
@@ -80,7 +80,7 @@ fn change(some_string: &String) {
 
 这里是错误：
 
-```text
+```console
 error[E0596]: cannot borrow immutable borrowed content `*some_string` as mutable
  --> error.rs:8:5
   |
@@ -110,9 +110,9 @@ fn change(some_string: &mut String) {
 }
 ```
 
-首先，必须将 `s` 改为 `mut`。然后必须创建一个可变引用 `&mut s` 和接受一个可变引用 `some_string: &mut String`。
+首先，我们必须将 `s` 改为 `mut`。然后必须在调用 `change` 函数的地方创建一个可变引用 `&mut s`，并更新函数签名以接受一个可变引用 `some_string: &mut String`。这就非常清楚地表明，`change` 函数将改变它所借用的值。
 
-不过可变引用有一个很大的限制：在特定作用域中的特定数据只能有一个可变引用。这些代码会失败：
+不过可变引用有一个很大的限制：在同一时间只能有一个对某一特定数据的可变引用。这些代码会失败：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -128,7 +128,9 @@ println!("{}, {}", r1, r2);
 
 错误如下：
 
-```text
+```console
+$ cargo run
+   Compiling ownership v0.1.0 (file:///projects/ownership)
 error[E0499]: cannot borrow `s` as mutable more than once at a time
  --> src/main.rs:5:14
   |
@@ -139,9 +141,13 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
 6 |
 7 |     println!("{}, {}", r1, r2);
   |                        -- first borrow later used here
+
+For more information about this error, try `rustc --explain E0499`.
+error: could not compile `ownership` due to previous error
 ```
 
-这个限制允许可变性，不过是以一种受限制的方式允许。新 Rustacean 们经常难以适应这一点，因为大部分语言中变量任何时候都是可变的。
+这个报错说这段代码是无效的，因为我们不能在同一时间多次将 `s` 作为可变变量借用。第一个可变的借入在 `r1` 中，并且必须持续到在 `println！` 中使用它，但是在那个可变引用的创建和它的使用之间，我们又尝试在 `r2` 中创建另一个可变引用，该引用借用与 `r1` 相同的数据。
+防止同一时间对同一数据进行多个可变引用的限制允许可变性，不过是以一种受限制的方式允许。新 Rustacean 们经常难以适应这一点，因为大部分语言中变量任何时候都是可变的。
 
 这个限制的好处是 Rust 可以在编译时就避免数据竞争。**数据竞争**（*data race*）类似于竞态条件，它可由这三个行为造成：
 
@@ -178,7 +184,9 @@ println!("{}, {}, and {}", r1, r2, r3);
 
 错误如下：
 
-```text
+```console
+$ cargo run
+   Compiling ownership v0.1.0 (file:///projects/ownership)
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
  --> src/main.rs:6:14
   |
@@ -190,13 +198,16 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
 7 |
 8 |     println!("{}, {}, and {}", r1, r2, r3);
   |                                -- immutable borrow later used here
+
+For more information about this error, try `rustc --explain E0502`.
+error: could not compile `ownership` due to previous error
 ```
 
 哇哦！我们 **也** 不能在拥有不可变引用的同时拥有可变引用。不可变引用的用户可不希望在他们的眼皮底下值就被意外的改变了！然而，多个不可变引用是可以的，因为没有哪个只能读取数据的人有能力影响其他人读取到的数据。
 
-注意一个引用的作用域从声明的地方开始一直持续到最后一次使用为止。例如，因为最后一次使用不可变引用在声明可变引用之前，所以如下代码是可以编译的：
+注意一个引用的作用域从声明的地方开始一直持续到最后一次使用为止。例如，因为最后一次使用不可变引用（`println!`)，发生在声明可变引用之前，所以如下代码是可以编译的：
 
-```rust,edition2018,ignore
+```rust,ignore
 let mut s = String::from("hello");
 
 let r1 = &s; // 没问题
@@ -208,7 +219,7 @@ let r3 = &mut s; // 没问题
 println!("{}", r3);
 ```
 
-不可变引用 `r1` 和 `r2` 的作用域在 `println!` 最后一次使用之后结束，这也是创建可变引用 `r3` 的地方。它们的作用域没有重叠，所以代码是可以编译的。
+不可变引用 `r1` 和 `r2` 的作用域在 `println!` 最后一次使用之后结束，这也是创建可变引用 `r3` 的地方。它们的作用域没有重叠，所以代码是可以编译的。编译器在作用域结束之前判断不再使用的引用的能力被称为非词法作用域生命周期（Non-Lexical Lifetimes，简称NLL）。你可以在 [The Edition Guide][nll] 中阅读更多关于它的信息。
 
 尽管这些错误有时使人沮丧，但请牢记这是 Rust 编译器在提前指出一个潜在的 bug（在编译时而不是在运行时）并精准显示问题所在。这样你就不必去跟踪为何数据并不是你想象中的那样。
 
@@ -234,7 +245,7 @@ fn dangle() -> &String {
 
 这里是错误：
 
-```text
+```console
 error[E0106]: missing lifetime specifier
  --> main.rs:5:16
   |
@@ -248,7 +259,7 @@ error[E0106]: missing lifetime specifier
 
 错误信息引用了一个我们还未介绍的功能：生命周期（lifetimes）。第十章会详细介绍生命周期。不过，如果你不理会生命周期部分，错误信息中确实包含了为什么这段代码有问题的关键信息：
 
-```text
+```console
 this function's return type contains a borrowed value, but there is no value for it to be borrowed from.
 ```
 
@@ -288,3 +299,5 @@ fn no_dangle() -> String {
 * 引用必须总是有效的。
 
 接下来，我们来看看另一种不同类型的引用：slice。
+
+[nll]: https://doc.rust-lang.org/edition-guide/rust-2018/ownership-and-lifetimes/non-lexical-lifetimes.html
