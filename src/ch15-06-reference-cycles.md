@@ -103,9 +103,7 @@ b rc count after changing a = 2
 a rc count after changing a = 2
 ```
 
-可以看到将 `a` 修改为指向 `b` 之后，`a` 和 `b` 中都有的 `Rc<List>` 实例的引用计数为 2。在 `main` 的结尾，Rust 会尝试首先丢弃 `b`，这会使 `a` 和 `b` 中 `Rc<List>` 实例的引用计数减 1。
-
-然而，因为 `a` 仍然引用 `b` 中的 `Rc<List>`，`Rc<List>` 的引用计数是 1 而不是 0，所以 `Rc<List>` 在堆上的内存不会被丢弃。其内存会因为引用计数为 1 而永远停留。为了更形象的展示，我们创建了一个如图 15-4 所示的引用循环：
+可以看到将列表 `a` 修改为指向 `b` 之后， `a` 和 `b` 中的 `Rc<List>` 实例的引用计数都是 2。在 `main` 的结尾，Rust 首先丢弃变量 `b`，这会使 `b` 中 `Rc<List>` 实例的引用计数减 1。然而，因为 `a` 仍然引用 `b` 中的 `Rc<List>`，`Rc<List>` 的引用计数是 1 而不是 0，所以 `b` 中的 `Rc<List>` 在堆上的内存不会被丢弃。接下来 Rust 会丢弃 `a`，这同理会将 `a` 中 `Rc<List>` 实例的引用计数从 2 减为 1。这个实例的内存也不能被丢弃，因为其他的 `Rc<List>` 实例仍在引用它。这些列表的内存将永远保持未被回收的状态。为了更形象的展示，我们创建了一个如图 15-4 所示的引用循环：
 
 <img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
 
