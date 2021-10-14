@@ -2,7 +2,7 @@
 
 > [ch04-03-slices.md](https://github.com/rust-lang/book/blob/main/src/ch04-03-slices.md)
 > <br>
-> commit 9fcebe6e1b0b5e842285015dbf093f97cd5b3803
+> commit d377d2effa9ae9173026e35a7e464b8f5b82409a
 
 另一个没有所有权的数据类型是 *slice*。slice 允许你引用集合中一段连续的元素序列，而不用引用整个集合。
 
@@ -48,7 +48,7 @@ for (i, &item) in bytes.iter().enumerate() {
 
 我们将在第十三章详细讨论迭代器。现在，只需知道 `iter` 方法返回集合中的每一个元素，而 `enumerate` 包装了 `iter` 的结果，将这些元素作为元组的一部分来返回。`enumerate` 返回的元组中，第一个元素是索引，第二个元素是集合中元素的引用。这比我们自己计算索引要方便一些。
 
-因为 `enumerate` 方法返回一个元组，我们可以使用模式来解构，就像 Rust 中其他任何地方所做的一样。所以在 `for` 循环中，我们指定了一个模式，其中元组中的 `i` 是索引而元组中的 `&item` 是单个字节。因为我们从 `.iter().enumerate()` 中获取了集合元素的引用，所以模式中使用了 `&`。
+因为 `enumerate` 方法返回一个元组，我们可以使用模式来解构，我们将在第 6 章中进一步讨论有关模式的问题。所以在 `for` 循环中，我们指定了一个模式，其中元组中的 `i` 是索引而元组中的 `&item` 是单个字节。因为我们从 `.iter().enumerate()` 中获取了集合元素的引用，所以模式中使用了 `&`。
 
 在 `for` 循环中，我们通过字节的字面值语法来寻找代表空格的字节。如果找到了一个空格，返回它的位置。否则，使用 `s.len()` 返回字符串的长度：
 
@@ -117,15 +117,15 @@ let world = &s[6..11];
 
 这类似于引用整个 `String` 不过带有额外的 `[0..5]` 部分。它不是对整个 `String` 的引用，而是对部分 `String` 的引用。
 
-可以使用一个由中括号中的 `[starting_index..ending_index]` 指定的 range 创建一个 slice，其中 `starting_index` 是 slice 的第一个位置，`ending_index` 则是 slice 最后一个位置的后一个值。在其内部，slice 的数据结构存储了 slice 的开始位置和长度，长度对应于 `ending_index` 减去 `starting_index` 的值。所以对于 `let world = &s[6..11];` 的情况，`world` 将是一个包含指向 `s` 第 7 个字节（从 1 开始）的指针和长度值 5 的 slice。
+可以使用一个由中括号中的 `[starting_index..ending_index]` 指定的 range 创建一个 slice，其中 `starting_index` 是 slice 的第一个位置，`ending_index` 则是 slice 最后一个位置的后一个值。在其内部，slice 的数据结构存储了 slice 的开始位置和长度，长度对应于 `ending_index` 减去 `starting_index` 的值。所以对于 `let world = &s[6..11];` 的情况，`world` 将是一个包含指向 `s` 索引 6 的指针和长度值 5 的 slice。
 
 图 4-6 展示了一个图例。
 
-<img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
+<img alt="world containing a pointer to the byte at index 6 of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
 <span class="caption">图 4-6：引用了部分 `String` 的字符串 slice</span>
 
-对于 Rust 的 `..` range 语法，如果想要从第一个索引（0）开始，可以不写两个点号之前的值。换句话说，如下两个语句是相同的：
+对于 Rust 的 `..` range 语法，如果想要从索引 0 开始，可以不写两个点号之前的值。换句话说，如下两个语句是相同的：
 
 ```rust
 let s = String::from("hello");
@@ -204,7 +204,9 @@ fn main() {
 
 这里是编译错误：
 
-```text
+```console
+$ cargo run
+   Compiling ownership v0.1.0 (file:///projects/ownership)
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
   --> src/main.rs:18:5
    |
@@ -216,9 +218,12 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
 19 |
 20 |     println!("the first word is: {}", word);
    |                                       ---- immutable borrow later used here
+
+For more information about this error, try `rustc --explain E0502`.
+error: could not compile `ownership` due to previous error
 ```
 
-回忆一下借用规则，当拥有某值的不可变引用时，就不能再获取一个可变引用。因为 `clear` 需要清空 `String`，它尝试获取一个可变引用。Rust不允许这样做，因而编译失败。Rust 不仅使得我们的 API 简单易用，也在编译时就消除了一整类的错误！
+回忆一下借用规则，当拥有某值的不可变引用时，就不能再获取一个可变引用。因为 `clear` 需要清空 `String`，它尝试获取一个可变引用。在调用 `clear` 之后的 `println!` 使用了 `word` 中的引用，所以这个不可变的引用在此时必须仍然有效。Rust 不允许 `clear` 中的可变引用和 `word` 中的不可变引用同时存在，因此编译失败。Rust 不仅使得我们的 API 简单易用，也在编译时就消除了一整类的错误！
 
 #### 字符串字面值就是 slice
 
@@ -246,7 +251,7 @@ fn first_word(s: &str) -> &str {
 
 <span class="caption">示例 4-9: 通过将 `s` 参数的类型改为字符串 slice 来改进 `first_word` 函数</span>
 
-如果有一个字符串 slice，可以直接传递它。如果有一个 `String`，则可以传递整个 `String` 的 slice。定义一个获取字符串 slice 而不是 `String` 引用的函数使得我们的 API 更加通用并且不会丢失任何功能：
+如果有一个字符串 slice，可以直接传递它。如果有一个 `String`，则可以传递整个 `String` 的 slice 或对 `String` 的引用。这种灵活性利用了 *deref coercions* 的优势，这个特性我们将在[“函数和方法的隐式 Deref 强制转换”][deref-coercions]章节中介绍。定义一个获取字符串 slice 而不是 `String` 引用的函数使得我们的 API 更加通用并且不会丢失任何功能：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -293,6 +298,8 @@ let a = [1, 2, 3, 4, 5];
 let a = [1, 2, 3, 4, 5];
 
 let slice = &a[1..3];
+
+assert_eq!(slice, &[2, 3]);
 ```
 
 这个 slice 的类型是 `&[i32]`。它跟字符串 slice 的工作方式一样，通过存储第一个集合元素的引用和一个集合总长度。你可以对其他所有集合使用这类 slice。第八章讲到 vector 时会详细讨论这些集合。
@@ -303,4 +310,5 @@ let slice = &a[1..3];
 
 所有权系统影响了 Rust 中很多其他部分的工作方式，所以我们还会继续讲到这些概念，这将贯穿本书的余下内容。让我们开始第五章，来看看如何将多份数据组合进一个 `struct` 中。
 
-[strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
+[strings]: ch08-02-strings.html#使用字符串存储-utf-8-编码的文本
+[deref-coercions]: ch15-02-deref.html#函数和方法的隐式-deref-强制转换
