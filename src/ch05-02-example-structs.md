@@ -2,7 +2,7 @@
 
 > [ch05-02-example-structs.md](https://github.com/rust-lang/book/blob/main/src/ch05-02-example-structs.md)
 > <br>
-> commit 9cb1d20394f047855a57228dc4cbbabd0a9b395a
+> commit fab5832e5f64bd2a783c4687048b266194a72792
 
 为了理解何时会需要使用结构体，让我们编写一个计算长方形面积的程序。我们会从单独的变量开始，接着重构程序直到使用结构体替代他们为止。
 
@@ -30,7 +30,11 @@ fn area(width: u32, height: u32) -> u32 {
 
 现在使用 `cargo run` 运行程序：
 
-```text
+```console
+$ cargo run
+   Compiling rectangles v0.1.0 (file:///projects/rectangles)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.42s
+     Running `target/debug/rectangles`
 The area of the rectangle is 1500 square pixels.
 ```
 
@@ -107,7 +111,7 @@ fn area(rectangle: &Rectangle) -> u32 {
 
 ### 通过派生 trait 增加实用功能
 
-如果能够在调试程序时打印出 `Rectangle` 实例来查看其所有字段的值就更好了。示例 5-11 像前面章节那样尝试使用 `println!` 宏。但这并不行。
+如果能够在调试程序时打印出 `Rectangle` 实例来查看其所有字段的值就更好了。示例 5-11 像前面章节那样尝试使用 [`println!` 宏][println]。但这并不行。
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -128,7 +132,7 @@ fn main() {
 
 当我们运行这个代码时，会出现带有如下核心信息的错误：
 
-```text
+```console
 error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
 ```
 
@@ -136,7 +140,7 @@ error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
 
 但是如果我们继续阅读错误，将会发现这个有帮助的信息：
 
-```text
+```console
 = help: the trait `std::fmt::Display` is not implemented for `Rectangle`
 = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
 ```
@@ -145,18 +149,18 @@ error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
 
 这样调整后再次运行程序。见鬼了！仍然能看到一个错误：
 
-```text
-error[E0277]: `Rectangle` doesn't implement `std::fmt::Debug`
+```console
+error[E0277]: `Rectangle` doesn't implement `Debug`
 ```
 
 不过编译器又一次给出了一个有帮助的信息：
 
-```text
-= help: the trait `std::fmt::Debug` is not implemented for `Rectangle`
-= note: add `#[derive(Debug)]` or manually implement `std::fmt::Debug`
+```console
+= help: the trait `Debug` is not implemented for `Rectangle`
+= note: add `#[derive(Debug)]` to `Rectangle` or manually `impl Debug for Rectangle`
 ```
 
-Rust **确实** 包含了打印出调试信息的功能，不过我们必须为结构体显式选择这个功能。为此，在结构体定义之前加上 `#[derive(Debug)]` 注解，如示例 5-12 所示：
+Rust **确实** 包含了打印出调试信息的功能，不过我们必须为结构体显式选择这个功能。为此，在结构体定义之前加上外部属性 `#[derive(Debug)]`，如示例 5-12 所示：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -174,25 +178,73 @@ fn main() {
 }
 ```
 
-<span class="caption">示例 5-12：增加注解来派生 `Debug` trait，并使用调试格式打印 `Rectangle` 实例</span>
+<span class="caption">示例 5-12：增加属性来派生 `Debug` trait，并使用调试格式打印 `Rectangle` 实例</span>
 
 现在我们再运行这个程序时，就不会有任何错误，并会出现如下输出：
 
-```text
+```console
+$ cargo run
+   Compiling rectangles v0.1.0 (file:///projects/rectangles)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.48s
+     Running `target/debug/rectangles`
 rect1 is Rectangle { width: 30, height: 50 }
 ```
 
 好极了！这并不是最漂亮的输出，不过它显示这个实例的所有字段，毫无疑问这对调试有帮助。当我们有一个更大的结构体时，能有更易读一点的输出就好了，为此可以使用 `{:#?}` 替换 `println!` 字符串中的 `{:?}`。如果在这个例子中使用了 `{:#?}` 风格的话，输出会看起来像这样：
 
-```text
+```console
+$ cargo run
+   Compiling rectangles v0.1.0 (file:///projects/rectangles)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.48s
+     Running `target/debug/rectangles`
 rect1 is Rectangle {
     width: 30,
-    height: 50
+    height: 50,
 }
 ```
 
-Rust 为我们提供了很多可以通过 `derive` 注解来使用的 trait，他们可以为我们的自定义类型增加实用的行为。附录 C 中列出了这些 trait 和行为。第十章会介绍如何通过自定义行为来实现这些 trait，同时还有如何创建你自己的 trait。
+另一种使用 `Debug` 格式打印数值的方法是使用 [`dbg!` 宏][dbg]。`dbg!` 宏接收一个表达式的所有权，打印出你代码中 `dbg!` 宏调用的文件和行号，以及该表达式的结果值，并返回该值的所有权。调用 `dbg!` 宏会打印到标准错误控制台流（`stderr`），而不是 `println!`，后者会打印到标准输出控制台流（`stdout`）。我们将在[第十二章 “将错误信息写入标准错误而不是标准输出” 一节][err]中更多地讨论 `stderr` 和 `stdout`。下面是一个例子，我们对分配给 `width` 字段的值以及 `rect1` 中整个结构的值感兴趣。
+
+```rust
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let scale = 2;
+    let rect1 = Rectangle {
+        width: dbg!(30 * scale),
+        height: 50,
+    };
+
+    dbg!(&rect1);
+}
+```
+我们可以把 `dbg!` 放在表达式 `30 * scale` 周围，因为 `dbg!` 返回表达式的值的所有权，所以 `width` 字段将获得相同的值，就像我们在那里没有 `dbg!` 调用一样。我们不希望 `dbg!` 拥有 `rect1` 的所有权，所以我们在下一次调用中使用对 `dbg!` 的引用。下面是这个例子的输出结果：
+
+```console
+$ cargo run
+   Compiling rectangles v0.1.0 (file:///projects/rectangles)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.61s
+     Running `target/debug/rectangles`
+[src/main.rs:10] 30 * scale = 60
+[src/main.rs:14] &rect1 = Rectangle {
+    width: 60,
+    height: 50,
+}
+```
+
+我们可以看到第一点输出来自 *src/main.rs* 第 10 行，我们正在调试表达式 `30 * scale`，其结果值是60（为整数实现的 `Debug` 格式化是只打印它们的值）。在 *src/main.rs* 第 14行 的 `dbg!` 调用输出 `&rect1` 的值，即 `Recangle` 结构。这个输出使用了更为易读的 `Debug` 格式。当你试图弄清楚你的代码在做什么时，`dbg!` 宏可能真的很有帮助!
+
+除了 `Debug` trait，Rust 还为我们提供了很多可以通过 `derive` 属性来使用的 trait，他们可以为我们的自定义类型增加实用的行为。[附录 C][app-c] 中列出了这些 trait 和行为。第十章会介绍如何通过自定义行为来实现这些 trait，同时还有如何创建你自己的 trait。除了 `derive` 之外，还有很多属性；更多信息请参见 [Rust Reference][attributes] 的 Attributes 部分。
 
 我们的 `area` 函数是非常特殊的，它只计算长方形的面积。如果这个行为与 `Rectangle` 结构体再结合得更紧密一些就更好了，因为它不能用于其他类型。现在让我们看看如何继续重构这些代码，来将 `area` 函数协调进 `Rectangle` 类型定义的 `area` **方法** 中。
 
-[the-tuple-type]: ch03-02-data-types.html#the-tuple-type
+[the-tuple-type]: ch03-02-data-types.html#元组类型
+[app-c]: appendix-03-derivable-traits.md
+[println]: https://doc.rust-lang.org/std/macro.println.html
+[dbg]: https://doc.rust-lang.org/std/macro.dbg.html
+[err]: ch12-06-writing-to-stderr-instead-of-stdout.html
+[attributes]: https://doc.rust-lang.org/stable/reference/attributes.html
