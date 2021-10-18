@@ -2,9 +2,9 @@
 
 > [ch05-01-defining-structs.md](https://github.com/rust-lang/book/blob/main/src/ch05-01-defining-structs.md)
 > <br>
-> commit f617d58c1a88dd2912739a041fd4725d127bf9fb
+> commit 794d33a8716fe814d93137fa7112747c2b76e723
 
-结构体和我们在第三章讨论过的元组类似。和元组一样，结构体的每一部分可以是不同类型。但不同于元组，结构体需要命名各部分数据以便能清楚的表明其值的意义。由于有了这些名字，结构体比元组更灵活：不需要依赖顺序来指定或访问实例中的值。
+结构体和我们在[“元组类型”][tuples]部分论过的元组类似。和元组一样，结构体的每一部分可以是不同类型。但不同于元组，结构体需要命名各部分数据以便能清楚的表明其值的意义。由于有了这些名字，结构体比元组更灵活：不需要依赖顺序来指定或访问实例中的值。
 
 定义结构体，需要使用 `struct` 关键字并为整个结构体提供一个名字。结构体的名字需要描述它所组合的数据的意义。接着，在大括号中，定义每一部分数据的名字和类型，我们称为 **字段**（*field*）。例如，示例 5-1 展示了一个存储用户账号信息的结构体：
 
@@ -115,7 +115,7 @@ fn build_user(email: String, username: String) -> User {
 
 ### 使用结构体更新语法从其他实例创建实例
 
-使用旧实例的大部分值但改变其部分值来创建一个新的结构体实例通常是很有帮助的。这可以通过 **结构体更新语法**（*struct update syntax*）实现。
+使用旧实例的大部分值但改变其部分值来创建一个新的结构体实例通常是很有用的。这可以通过 **结构体更新语法**（*struct update syntax*）实现。
 
 首先，示例 5-6 展示了不使用更新语法时，如何在 `user2` 中创建一个新 `User` 实例。我们为 `email` 和 `username` 设置了新的值，其他值则使用了实例 5-2 中创建的 `user1` 中的同名值：
 
@@ -135,14 +135,14 @@ fn build_user(email: String, username: String) -> User {
 # };
 #
 let user2 = User {
-    email: String::from("another@example.com"),
-    username: String::from("anotherusername567"),
     active: user1.active,
+    username: user1.username,
+    email: String::from("another@example.com"),
     sign_in_count: user1.sign_in_count,
 };
 ```
 
-<span class="caption">示例 5-6：创建 `User` 新实例，其使用了一些来自 `user1` 的值</span>
+<span class="caption">示例 5-6：使用 `user1` 中的一个值创建一个新的 `User` 实例</span>
 
 使用结构体更新语法，我们可以通过更少的代码来达到相同的效果，如示例 5-7 所示。`..` 语法指定了剩余未显式设置值的字段应有与给定实例对应字段相同的值。
 
@@ -163,14 +163,15 @@ let user2 = User {
 #
 let user2 = User {
     email: String::from("another@example.com"),
-    username: String::from("anotherusername567"),
     ..user1
 };
 ```
 
-<span class="caption">示例 5-7：使用结构体更新语法为一个 `User` 实例设置新的 `email` 和 `username` 值，不过其余值来自 `user1` 变量中实例的字段</span>
+<span class="caption">示例 5-7：使用结构体更新语法为一个 `User` 实例设置一个新的 `email` 值，不过其余值来自 `user1` 变量中实例的字段</span>
 
-示例 5-7 中的代码也在 `user2` 中创建了一个新实例，其有不同的 `email` 和 `username` 值不过 `active` 和 `sign_in_count` 字段的值与 `user1` 相同。
+示例 5-7 中的代码也在 `user2` 中创建了一个新实例，其有不同的 `email` 值不过 `username`、 `active` 和 `sign_in_count` 字段的值与 `user1` 相同。`...user1` 必须放在最后，以指定其余的字段应从 `user1` 的相应字段中获取其值，但我们可以选择以任何顺序为任意字段指定值，而不用考虑结构体定义中字段的顺序。
+
+请注意，结构更新语法就像带有 `=` 的赋值，因为它移动了数据，就像我们在[“变量与数据交互的方式（一）：移动”][move]部分讲到的一样。在这个例子中，我们在创建 `user2` 后不能再使用 `user1`，因为 `user1` 的 `username` 字段中的  `String` 被移到 `user2` 中。如果我们给 `user2` 的 `email` 和 `username` 都赋予新的 `String` 值，从而只使用 `user1` 的 `active` 和 `sign_in_count` 值，那么 `user1` 在创建 `user2` 后仍然有效。`active` 和 `sign_in_count` 的类型是实现 `Copy` trait 的类型，所以我们在[“变量与数据交互的方式（二）：克隆”][copy] 部分讨论的行为同样适用。
 
 ### 使用没有命名字段的元组结构体来创建不同的类型
 
@@ -190,7 +191,15 @@ let origin = Point(0, 0, 0);
 
 ### 没有任何字段的类单元结构体
 
-我们也可以定义一个没有任何字段的结构体！它们被称为 **类单元结构体**（*unit-like structs*）因为它们类似于 `()`，即 unit 类型。类单元结构体常常在你想要在某个类型上实现 trait 但不需要在类型中存储数据的时候发挥作用。我们将在第十章介绍 trait。
+我们也可以定义一个没有任何字段的结构体！它们被称为 **类单元结构体**（*unit-like structs*）因为它们类似于 `()`，即[“元组类型”][tuples]一节中提到的 unit 类型。类单元结构体常常在你想要在某个类型上实现 trait 但不需要在类型中存储数据的时候发挥作用。我们将在第十章介绍 trait。下面是一个声明和实例化一个名为 `AlwaysEqual` 的 unit 结构的例子。
+
+```rust
+struct AlwaysEqual;
+
+let subject = AlwaysEqual;
+```
+
+要定义 `AlwaysEqual`，我们使用 `struct` 关键字，我们想要的名称，然后是一个分号。不需要花括号或圆括号！然后，我们可以以类似的方式在 `subject` 变量中获得 `AlwaysEqual` 的实例：使用我们定义的名称，不需要任何花括号或圆括号。想象一下，我们将实现这个类型的行为，即每个实例始终等于每一个其他类型的实例，也许是为了获得一个已知的结果以便进行测试。我们不需要任何数据来实现这种行为，你将在第十章中，看到如何定义特性并在任何类型上实现它们，包括类似 unit 的结构体。
 
 > ### 结构体数据的所有权
 >
@@ -220,18 +229,44 @@ let origin = Point(0, 0, 0);
 >
 > 编译器会抱怨它需要生命周期标识符：
 >
-> ```text
+> ```console
+> $ cargo run
+>    Compiling structs v0.1.0 (file:///projects/structs)
 > error[E0106]: missing lifetime specifier
->  -->
+>  --> src/main.rs:2:15
 >   |
 > 2 |     username: &str,
->   |               ^ expected lifetime parameter
+>   |               ^ expected named lifetime parameter
+>   |
+> help: consider introducing a named lifetime parameter
+>   |
+> 1 | struct User<'a> {
+> 2 |     username: &'a str,
+>   |
 >
 > error[E0106]: missing lifetime specifier
->  -->
+>  --> src/main.rs:3:12
 >   |
 > 3 |     email: &str,
->   |            ^ expected lifetime parameter
+>   |            ^ expected named lifetime parameter
+>   |
+> help: consider introducing a named lifetime parameter
+>   |
+> 1 | struct User<'a> {
+> 2 |     username: &str,
+> 3 |     email: &'a str,
+>   |
+>
+> error: aborting due to 2 previous errors
+>
+> For more information about this error, try `rustc --explain E0106`.
+> error: could not compile `structs`
+>
+> To learn more, run the command again with --verbose.
 > ```
 >
 > 第十章会讲到如何修复这个问题以便在结构体中存储引用，不过现在，我们会使用像 `String` 这类拥有所有权的类型来替代 `&str` 这样的引用以修正这个错误。
+
+[tuples]: ch03-02-data-types.html#元组类型
+[move]: ch04-01-what-is-ownership.html#变量与数据交互的方式一移动
+[copy]: ch04-01-what-is-ownership.html#变量与数据交互的方式二克隆
