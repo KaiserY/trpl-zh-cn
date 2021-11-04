@@ -35,7 +35,7 @@ Rust is installed now. Great!
 $ xcode-select --install
 ```
 
-根据发行版的文档，Linux 用户通常应该安装 GCC 或 Clang。例如，如果你使用 Ubuntu，则可以安装 则可以安装 `build-essential` 包。
+根据发行版的文档，Linux 用户通常应该安装 GCC 或 Clang。例如，如果你使用 Ubuntu，则可以安装 `build-essential` 包。
 
 ### 在 Windows 上安装 `rustup`
 
