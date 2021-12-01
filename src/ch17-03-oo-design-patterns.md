@@ -173,17 +173,17 @@ impl State for PendingReview {
 
 这里为 `Post` 增加一个获取 `self` 可变引用的公有方法 `request_review`。接着在 `Post` 的当前状态下调用内部的 `request_review` 方法，并且第二个 `request_review` 方法会消费当前的状态并返回一个新状态。
 
-这里给 `State` trait 增加了 `request_review` 方法；所有实现了这个 trait 的类型现在都需要实现 `request_review` 方法。注意不同于使用 `self`、 `&self` 或者 `&mut self` 作为方法的第一个参数，这里使用了 `self: Box<Self>`。这个语法意味着这个方法调用只对这个类型的 `Box` 有效。这个语法获取了 `Box<Self>` 的所有权，使老状态无效化以便 `Post` 的状态值可以将自身转换为新状态。
+这里给 `State` trait 增加了 `request_review` 方法；所有实现了这个 trait 的类型现在都需要实现 `request_review` 方法。注意不同于使用 `self`、 `&self` 或者 `&mut self` 作为方法的第一个参数，这里使用了 `self: Box<Self>`。这个语法意味着该方法只可在持有这个类型的 `Box` 上被调用。这个语法获取了 `Box<Self>` 的所有权使老状态无效化，以便 `Post` 的状态值可转换为一个新状态。
 
-为了消费老状态，`request_review` 方法需要获取状态值的所有权。这也就是 `Post` 的 `state` 字段中 `Option` 的来历：调用 `take` 方法将 `state` 字段中的 `Some` 值取出并留下一个 `None`，因为 Rust 不允许在结构体中存在空的字段。这使得我们将 `state` 值移动出 `Post` 而不是借用它。接着将博文的 `state` 值设置为这个操作的结果。
+为了消费老状态，`request_review` 方法需要获取状态值的所有权。这就是 `Post` 的 `state` 字段中 `Option` 的来历：调用 `take` 方法将 `state` 字段中的 `Some` 值取出并留下一个 `None`，因为 Rust 不允许结构体实例中存在值为空的字段。这使得我们将 `state` 的值移出 `Post` 而不是借用它。接着我们将博文的 `state` 值设置为这个操作的结果。
 
-这里需要将 `state` 临时设置为 `None`，不同于像 `self.state = self.state.request_review();` 这样的代码直接设置 `state` 字段，来获取 `state` 值的所有权。这确保了当 `Post` 被转换为新状态后其不再能使用老的 `state` 值。
+我们需要将 `state` 临时设置为 `None` 来获取 `state` 值，即老状态的所有权，而不是使用 `self.state = self.state.request_review();` 这样的代码直接更新状态值。这确保了当 `Post` 被转换为新状态后不能再使用老 `state` 值。
 
-`Draft` 的方法 `request_review` 的实现返回一个新的，装箱的 `PendingReview` 结构体的实例，其用来代表博文处于等待审核状态。结构体 `PendingReview` 同样也实现了 `request_review` 方法，不过它不进行任何状态转换。相反它返回自身，因为请求审核已经处于 `PendingReview` 状态的博文应该保持 `PendingReview` 状态。
+`Draft` 的 `request_review` 方法需要返回一个新的，装箱的 `PendingReview` 结构体的实例，其用来代表博文处于等待审核状态。结构体 `PendingReview` 同样也实现了 `request_review` 方法，不过它不进行任何状态转换。相反它返回自身，因为当我们请求审核一个已经处于 `PendingReview` 状态的博文，它应该继续保持 `PendingReview` 状态。
 
-现在开始能够看出状态模式的优势了：`Post` 的 `request_review` 方法无论 `state` 是何值都是一样的。每个状态只负责它自己的规则。
+现在我们能看出状态模式的优势了：无论 `state` 是何值，`Post` 的 `request_review` 方法都是一样的。每个状态只负责它自己的规则。
 
-我们将继续保持 `Post` 的 `content` 方法不变，返回一个空字符串 slice。现在可以拥有 `PendingReview` 状态而不仅仅是 `Draft` 状态的 `Post` 了，不过我们希望在 `PendingReview` 状态下其也有相同的行为。现在示例 17-11 中直到 10 行的代码是可以执行的！
+我们将继续保持 `Post` 的 `content` 方法实现不变，返回一个空字符串 slice。现在我们可以拥有 `PendingReview` 状态和 `Draft` 状态的 `Post` 了，不过我们希望在 `PendingReview` 状态下 `Post` 也有相同的行为。现在示例 17-11 中直到 10 行的代码是可以执行的！
 
 ### 增加改变 `content` 行为的 `approve` 方法
 
