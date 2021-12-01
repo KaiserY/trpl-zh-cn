@@ -20,7 +20,7 @@
 // explain what’s going on.
 ```
 
-注释也可以在放在包含代码的行的末尾：
+注释也可以放在包含代码的行的末尾：
 
 <span class="filename">文件名: src/main.rs</span>
 
