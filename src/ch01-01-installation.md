@@ -1,7 +1,7 @@
 ## 安装
 
 > [ch01-01-installation.md](https://github.com/rust-lang/book/blob/main/src/ch01-01-installation.md) <br>
-> commit a01b23fee4c76a7e0d8c8c3261bdcf3a9840ccd3
+> commit aa6f28089364b148bbc6baddd59a2625dcc4dfba
 
 第一步是安装 Rust。我们会通过 `rustup` 下载 Rust，这是一个管理 Rust 版本和相关工具的命令行工具。下载时需要联网。
 

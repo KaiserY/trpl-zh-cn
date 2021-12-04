@@ -16,14 +16,14 @@
 - [常见编程概念](ch03-00-common-programming-concepts.md)
     - [变量与可变性](ch03-01-variables-and-mutability.md)
     - [数据类型](ch03-02-data-types.md)
-    - [函数如何工作](ch03-03-how-functions-work.md)
+    - [函数](ch03-03-how-functions-work.md)
     - [注释](ch03-04-comments.md)
     - [控制流](ch03-05-control-flow.md)
 
 - [认识所有权](ch04-00-understanding-ownership.md)
     - [什么是所有权？](ch04-01-what-is-ownership.md)
     - [引用与借用](ch04-02-references-and-borrowing.md)
-    - [Slices](ch04-03-slices.md)
+    - [Slice 类型](ch04-03-slices.md)
 
 - [使用结构体来组织相关联的数据](ch05-00-structs.md)
     - [定义并实例化结构体](ch05-01-defining-structs.md)
@@ -45,9 +45,9 @@
     - [将模块分割进不同文件](ch07-05-separating-modules-into-different-files.md)
 
 - [常见集合](ch08-00-common-collections.md)
-    - [vector](ch08-01-vectors.md)
-    - [字符串](ch08-02-strings.md)
-    - [哈希 map](ch08-03-hash-maps.md)
+    - [使用可变长数组(Vector)存储一列值](ch08-01-vectors.md)
+    - [使用字符串(String)存储UTF-8编码的文本](ch08-02-strings.md)
+    - [在哈希映射中存储键和关联值](ch08-03-hash-maps.md)
 
 - [错误处理](ch09-00-error-handling.md)
     - [`panic!` 与不可恢复的错误](ch09-01-unrecoverable-errors-with-panic.md)
@@ -59,9 +59,9 @@
     - [trait：定义共享的行为](ch10-02-traits.md)
     - [生命周期与引用有效性](ch10-03-lifetime-syntax.md)
 
-- [测试](ch11-00-testing.md)
-    - [编写测试](ch11-01-writing-tests.md)
-    - [运行测试](ch11-02-running-tests.md)
+- [编写自动化测试](ch11-00-testing.md)
+    - [如何编写测试](ch11-01-writing-tests.md)
+    - [控制测试如何运行](ch11-02-running-tests.md)
     - [测试的组织结构](ch11-03-test-organization.md)
 
 - [一个 I/O 项目：构建命令行程序](ch12-00-an-io-project.md)
@@ -88,18 +88,18 @@
     - [Cargo 自定义扩展命令](ch14-05-extending-cargo.md)
 
 - [智能指针](ch15-00-smart-pointers.md)
-    - [`Box<T>` 指向堆上数据，并且可确定大小](ch15-01-box.md)
-    - [通过 `Deref` trait 将智能指针当作常规引用处理](ch15-02-deref.md)
-    - [`Drop` Trait 运行清理代码](ch15-03-drop.md)
+    - [使用`Box<T>` 指向堆上数据](ch15-01-box.md)
+    - [使用`Deref` Trait 将智能指针当作常规引用处理](ch15-02-deref.md)
+    - [使用`Drop` Trait 运行清理代码](ch15-03-drop.md)
     - [`Rc<T>` 引用计数智能指针](ch15-04-rc.md)
     - [`RefCell<T>` 与内部可变性模式](ch15-05-interior-mutability.md)
-    - [引用循环与内存泄漏是安全的](ch15-06-reference-cycles.md)
+    - [引用循环会导致内存泄漏](ch15-06-reference-cycles.md)
 
 - [无畏并发](ch16-00-concurrency.md)
-    - [线程](ch16-01-threads.md)
-    - [消息传递](ch16-02-message-passing.md)
-    - [共享状态](ch16-03-shared-state.md)
-    - [可扩展的并发：`Sync` 与 `Send`](ch16-04-extensible-concurrency-sync-and-send.md)
+    - [使用线程同时地运行代码](ch16-01-threads.md)
+    - [使用消息传递在线程间通信](ch16-02-message-passing.md)
+    - [共享状态并发](ch16-03-shared-state.md)
+    - [使用`Sync` 与 `Send` Traits 的可扩展并发：](ch16-04-extensible-concurrency-sync-and-send.md)
 
 - [Rust 的面向对象编程特性](ch17-00-oop.md)
     - [面向对象语言的特点](ch17-01-what-is-oo.md)
@@ -111,7 +111,7 @@
 - [模式与模式匹配](ch18-00-patterns.md)
     - [所有可能会用到模式的位置](ch18-01-all-the-places-for-patterns.md)
     - [Refutability（可反驳性）: 模式是否会匹配失效](ch18-02-refutability.md)
-    - [模式的全部语法](ch18-03-pattern-syntax.md)
+    - [模式语法](ch18-03-pattern-syntax.md)
 
 - [高级特征](ch19-00-advanced-features.md)
     - [不安全的 Rust](ch19-01-unsafe-rust.md)
@@ -121,7 +121,7 @@
     - [宏](ch19-06-macros.md)
 
 - [最后的项目: 构建多线程 web server](ch20-00-final-project-a-web-server.md)
-    - [单线程 web server](ch20-01-single-threaded.md)
+    - [建立单线程 web server](ch20-01-single-threaded.md)
     - [将单线程 server 变为多线程 server](ch20-02-multithreaded.md)
     - [优雅停机与清理](ch20-03-graceful-shutdown-and-cleanup.md)
 
