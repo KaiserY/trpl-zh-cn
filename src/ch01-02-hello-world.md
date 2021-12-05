@@ -2,7 +2,7 @@
 
 > [ch01-02-hello-world.md](https://github.com/rust-lang/book/blob/main/src/ch01-02-hello-world.md)
 > <br>
-> commit ee7c5776a958353a2be0e3787fffa9523638d0fa
+> commit 9c0fa2714859738ff73cbbb829592e4c037d7e46
 
 既然安装好了 Rust，我们来编写第一个 Rust 程序。当学习一门新语言的时候，使用该语言在屏幕上打印 `Hello, world!` 是一项传统，我们将沿用这一传统！
 

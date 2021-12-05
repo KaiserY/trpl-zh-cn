@@ -1,5 +1,5 @@
 _book/
 mdbook/
 book/
-
+dist
 .DS_Store

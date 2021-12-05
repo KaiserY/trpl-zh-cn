@@ -2,7 +2,7 @@
 
 > [ch00-00-introduction.md](https://github.com/rust-lang/book/blob/main/src/ch00-00-introduction.md)
 > <br>
-> commit 4921fde29ae8ccf67d5893d4e43d74284626fded
+> commit 578591a3db98bc645aae4bcc2eed85db458a4e24
 
 > 注意：本书的版本与出版的 [The Rust Programming Language][nsprust]
 > 和电子版的 [No Starch Press][nsp] 一致
@@ -92,7 +92,7 @@ Rust 语言也希望能支持很多其他用户，这里提及的只是最大的
 
 生成本书的源码可以在 [GitHub][book] 上找到。
 
-[book]: https://github.com/rust-lang/book/tree/master/src
+[book]: https://github.com/rust-lang/book/tree/main/src
 
 > 译者注：本译本的 [GitHub 仓库][trpl-zh-cn]，欢迎 Issue 和 PR :)
 
