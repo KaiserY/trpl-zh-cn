@@ -2,7 +2,7 @@
 
 > [ch03-02-data-types.md](https://github.com/rust-lang/book/blob/main/src/ch03-02-data-types.md)
 > <br>
-> commit 05d9c4c2312a6542f792492d17a62f79ad6dfd7b
+> commit 1b8746013079f2e2ce1c8e85f633d9769778ea7f
 
 在 Rust 中，每一个值都属于某一个 **数据类型**（*data type*），这告诉 Rust 它被指定为何种数据，以便明确数据处理方式。我们将看到两类数据类型子集：标量（scalar）和复合（compound）。
 
@@ -39,7 +39,7 @@ To learn more, run the command again with --verbose.
 
 #### 整型
 
-**整数** 是一个没有小数部分的数字。我们在第二章使用过 `u32` 整数类型。该类型声明表明，它关联的值应该是一个占据 32 比特位的无符号整数（有符号整数类型以 `i` 开头而不是 `u`）。表格 3-1 展示了 Rust 内建的整数类型。在有符号列和无符号列中的每一个变体（例如，`i16`）都可以用来声明整数值的类型。
+**整数** 是一个没有小数部分的数字。我们在第二章使用过 `u32` 整数类型。该类型声明表明，它关联的值应该是一个占据 32 比特位的无符号整数（有符号整数类型以 `i` 开头而不是 `u`）。表格 3-1 展示了 Rust 内建的整数类型。我们可以使用其中的任一个来声明一个整数值的类型。
 
 <span class="caption">表格 3-1: Rust 中的整型</span>
 
@@ -74,7 +74,7 @@ To learn more, run the command again with --verbose.
 
 > ##### 整型溢出
 >
-> 比方说有一个 `u8` ，它可以存放从零到 `255` 的值。那么当你将其修改为 `256` 时会发生什么呢？这被称为 “整型溢出”（“integer overflow” ），关于这一行为 Rust 有一些有趣的规则。当在 debug 模式编译时，Rust 检查这类问题并使程序 *panic*，这个术语被 Rust 用来表明程序因错误而退出。第九章 [“`panic!` 与不可恢复的错误”][unrecoverable-errors-with-panic] 部分会详细介绍 panic。
+> 比方说有一个 `u8` ，它可以存放从零到 `255` 的值。那么当你将其修改为 `256` 时会发生什么呢？这被称为 “整型溢出”（“integer overflow” ），这会导致以下两种行为之一的发生。当在 debug 模式编译时，Rust 检查这类问题并使程序 *panic*，这个术语被 Rust 用来表明程序因错误而退出。第九章 [“`panic!` 与不可恢复的错误”][unrecoverable-errors-with-panic] 部分会详细介绍 panic。
 >
 > 在 release 构建中，Rust 不检测溢出，相反会进行一种被称为二进制补码包装（*two’s complement wrapping*）的操作。简而言之，值 `256` 变成 `0`，值 `257` 变成 `1`，依此类推。依赖整型溢出被认为是一种错误，即便可能出现这种行为。如果你确实需要这种行为，标准库中有一个类型显式提供此功能，[`Wrapping`][wrapping]。
 > 为了显式地处理溢出的可能性，你可以使用标准库在原生数值类型上提供的以下方法:
@@ -85,7 +85,7 @@ To learn more, run the command again with --verbose.
 
 #### 浮点型
 
-Rust 也有两个原生的 **浮点数**（*floating-point numbers*）类型，它们是带小数点的数字。Rust 的浮点数类型是 `f32` 和 `f64`，分别占 32 位和 64 位。默认类型是 `f64`，因为在现代 CPU 中，它与 `f32` 速度几乎一样，不过精度更高。
+Rust 也有两个原生的 **浮点数**（*floating-point numbers*）类型，它们是带小数点的数字。Rust 的浮点数类型是 `f32` 和 `f64`，分别占 32 位和 64 位。默认类型是 `f64`，因为在现代 CPU 中，它与 `f32` 速度几乎一样，不过精度更高。所有的浮点型都是有符号的。
 
 这是一个展示浮点数的实例：
 
@@ -147,7 +147,7 @@ fn main() {
 
 #### 字符类型
 
-目前为止只使用到了数字，不过 Rust 也支持字母。Rust 的 `char` 类型是语言中最原生的字母类型，如下代码展示了如何使用它。（注意 `char` 由单引号指定，不同于字符串使用双引号。）
+Rust的 `char` 类型是语言中最原生的字母类型。下面是一些声明 `char` 值的例子：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -159,7 +159,7 @@ fn main() {
 }
 ```
 
-Rust 的 `char` 类型的大小为四个字节(four bytes)，并代表了一个 Unicode 标量值（Unicode Scalar Value），这意味着它可以比 ASCII 表示更多内容。在 Rust 中，拼音字母（Accented letters），中文、日文、韩文等字符，emoji（绘文字）以及零长度的空白字符都是有效的 `char` 值。Unicode 标量值包含从 `U+0000` 到 `U+D7FF` 和 `U+E000` 到 `U+10FFFF` 在内的值。不过，“字符” 并不是一个 Unicode 中的概念，所以人直觉上的 “字符” 可能与 Rust 中的 `char` 并不符合。第八章的 [“使用字符串存储 UTF-8 编码的文本”][strings] 中将详细讨论这个主题。
+注意，我们用单引号声明 `char` 字面量，而与之相反的是，使用双引号声明字符串字面量。Rust 的 `char` 类型的大小为四个字节(four bytes)，并代表了一个 Unicode 标量值（Unicode Scalar Value），这意味着它可以比 ASCII 表示更多内容。在 Rust 中，拼音字母（Accented letters），中文、日文、韩文等字符，emoji（绘文字）以及零长度的空白字符都是有效的 `char` 值。Unicode 标量值包含从 `U+0000` 到 `U+D7FF` 和 `U+E000` 到 `U+10FFFF` 在内的值。不过，“字符” 并不是一个 Unicode 中的概念，所以人直觉上的 “字符” 可能与 Rust 中的 `char` 并不符合。第八章的 [“使用字符串存储 UTF-8 编码的文本”][strings] 中将详细讨论这个主题。
 
 ### 复合类型
 
@@ -195,7 +195,7 @@ fn main() {
 
 程序首先创建了一个元组并绑定到 `tup` 变量上。接着使用了 `let` 和一个模式将 `tup` 分成了三个不同的变量，`x`、`y` 和 `z`。这叫做 **解构**（*destructuring*），因为它将一个元组拆成了三个部分。最后，程序打印出了 `y` 的值，也就是 `6.4`。
 
-除了使用模式匹配解构外，也可以使用点号（`.`）后跟值的索引来直接访问它们。例如：
+我们也可以使用点号（`.`）后跟值的索引来直接访问它们。例如：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -217,9 +217,9 @@ fn main() {
 
 #### 数组类型
 
-另一个包含多个值的方式是 **数组**（*array*）。与元组不同，数组中的每个元素的类型必须相同。Rust 中的数组与一些其他语言中的数组不同，因为 Rust 中的数组是固定长度的：一旦声明，它们的长度不能增长或缩小。
+另一个包含多个值的方式是 **数组**（*array*）。与元组不同，数组中的每个元素的类型必须相同。Rust 中的数组与一些其他语言中的数组不同，Rust中的数组长度是固定的。
 
-Rust 中，数组中的值位于中括号内的逗号分隔的列表中：
+我们将数组的值写成在方括号内，用逗号分隔：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -229,9 +229,9 @@ fn main() {
 }
 ```
 
-当你想要在栈（stack）而不是在堆（heap）上为数据分配空间（第四章将讨论栈与堆的更多内容），或者是想要确保总是有固定数量的元素时，数组非常有用。但是数组并不如 vector 类型灵活。vector 类型是标准库提供的一个 **允许** 增长和缩小长度的类似数组的集合类型。当不确定是应该使用数组还是 vector 的时候，你可能应该使用 vector。第八章会详细讨论 vector。
+当你想要在栈（stack）而不是在堆（heap）上为数据分配空间（[第四章][stack-and-heap]将讨论栈与堆的更多内容），或者是想要确保总是有固定数量的元素时，数组非常有用。但是数组并不如 vector 类型灵活。vector 类型是标准库提供的一个 **允许** 增长和缩小长度的类似数组的集合类型。当不确定是应该使用数组还是 vector 的时候，那么很可能应该使用 vector。[第八章][vectors]会详细讨论 vector。
 
-一个你可能想要使用数组而不是 vector 的例子是，当程序需要知道一年中月份的名字时。程序不大可能会去增加或减少月份。这时你可以使用数组，因为我们知道它总是包含 12 个元素：
+然而，当你确定元素个数不会改变时，数组会更有用。例如，当你在一个程序中使用月份名字时，你更应趋向于使用数组而不是向量，因为你确定只会有12个元素。
 
 ```rust
 let months = ["January", "February", "March", "April", "May", "June", "July",
@@ -246,7 +246,7 @@ let a: [i32; 5] = [1, 2, 3, 4, 5];
 
 这里，`i32` 是每个元素的类型。分号之后，数字 `5` 表明该数组包含五个元素。
 
-以这种方式编写数组的类型看起来类似于初始化数组的另一种语法：如果要为每个元素创建包含相同值的数组，可以指定初始值，后跟分号，然后在方括号中指定数组的长度，如下所示：
+你还可以通过在放括号中指定初始值加分号再加元素个数的方式来创建一个每个元素都为相同值的数组：
 
 ```rust
 let a = [3; 5];
@@ -273,7 +273,7 @@ fn main() {
 
 ##### 无效的数组元素访问
 
-如果我们访问数组结尾之后的元素会发生什么呢？比如你将上面的例子改成下面这样，它使用类似于第 2 章中的猜数字游戏的代码从用户那里获取数组索引：
+让我们看看如果我们访问数组结尾之后的元素会发生什么呢？比如你执行以下代码，它使用类似于第 2 章中的猜数字游戏的代码从用户那里获取数组索引：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -320,6 +320,8 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrac
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [control-flow]: ch03-05-control-flow.html#控制流
 [strings]: ch08-02-strings.html#使用字符串存储-utf-8-编码的文本
+[stack-and-heap]: ch04-01-what-is-ownership.html#the-stack-and-the-heap
+[vectors]: ch08-01-vectors.html
 [unrecoverable-errors-with-panic]: ch09-01-unrecoverable-errors-with-panic.html
 [wrapping]: https://doc.rust-lang.org/std/num/struct.Wrapping.html
 [appendix_b]: appendix-02-operators.md
