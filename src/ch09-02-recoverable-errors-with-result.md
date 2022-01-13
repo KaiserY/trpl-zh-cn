@@ -195,7 +195,7 @@ thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
 
 例如，示例 9-6 展示了一个从文件中读取用户名的函数。如果文件不存在或不能读取，这个函数会将这些错误返回给调用它的代码：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust
 use std::io;

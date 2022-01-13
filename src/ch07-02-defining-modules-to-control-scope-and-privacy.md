@@ -12,7 +12,7 @@
 
 我们可以将函数放置到嵌套的模块中，来使我们的 crate 结构与实际的餐厅结构相同。通过执行 `cargo new --lib restaurant`，来创建一个新的名为 `restaurant` 的库。然后将示例 7-1 中所罗列出来的代码放入 *src/lib.rs* 中，来定义一些模块和函数。
 
-Filename: src/lib.rs
+<span class="filename">文件名: src/lib.rs</span>
 
 ```rust
 mod front_of_house {

@@ -39,7 +39,7 @@ impl List {
 
 在示例 15-26 中增加了一个 `main` 函数，其使用了示例 15-25 中的定义。这些代码在 `a` 中创建了一个列表，一个指向 `a` 中列表的 `b` 列表，接着修改 `a` 中的列表指向 `b` 中的列表，这会创建一个引用循环。在这个过程的多个位置有 `println!` 语句展示引用计数。
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件: src/main.rs</span>
 
 ```rust
 # use crate::List::{Cons, Nil};
