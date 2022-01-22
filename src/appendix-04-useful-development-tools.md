@@ -2,7 +2,7 @@
 
 > [appendix-04-useful-development-tools.md](https://github.com/rust-lang/book/blob/main/src/appendix-04-useful-development-tools.md)
 > <br />
-> commit 70a82519e48b8a61f98cabb8ff443d1b21962fea
+> commit d48e9884f4e5ecb112095d4e8c55ebc3bce4b009
 
 本附录，我们将讨论 Rust 项目提供的用于开发 Rust 代码的工具。
 
@@ -12,13 +12,13 @@
 
 安装 `rustfmt`：
 
-```text
+```console
 $ rustup component add rustfmt
 ```
 
 这会提供 `rustfmt` 和 `cargo-fmt`，类似于 Rust 同时安装 `rustc` 和 `cargo`。为了格式化整个 Cargo 项目：
 
-```text
+```console
 $ cargo fmt
 ```
 
@@ -44,7 +44,7 @@ fn main() {
 
 这里调用了 `do_something` 函数 100 次，不过从未在 `for` 循环体中使用变量 `i`。Rust 会警告说：
 
-```text
+```console
 $ cargo build
    Compiling myprogram v0.1.0 (file:///projects/myprogram)
 warning: unused variable: `i`
@@ -60,7 +60,7 @@ warning: unused variable: `i`
 
 警告中建议使用 `_i` 名称：下划线表明该变量有意不使用。我们可以通过 `cargo fix` 命令使用 `rustfix` 工具来自动采用该建议：
 
-```text
+```console
 $ cargo fix
     Checking myprogram v0.1.0 (file:///projects/myprogram)
       Fixing src/main.rs (1 fix)
@@ -91,13 +91,13 @@ fn main() {
 
 安装 `clippy`：
 
-```text
+```console
 $ rustup component add clippy
 ```
 
 对任何 Cargo 项目运行 clippy 的 lint：
 
-```text
+```console
 $ cargo clippy
 ```
 
@@ -142,23 +142,16 @@ fn main() {
 
 [clippy]: https://github.com/rust-lang/rust-clippy
 
-### 使用 Rust Language Server 的 IDE 集成
+### 使用 `rust-analyzer` 的 IDE 集成
 
-为了帮助 IDE 集成，Rust 项目分发了 `rls`，其为 Rust Language Server 的缩写。这个工具采用 [Language Server Protocol][lsp]，这是一个 IDE 与编程语言沟通的规格说明。`rls` 可以用于不同的客户端，比如 [Visual Studio: Code 的 Rust 插件][vscode]。
+为了帮助 IDE 集成，Rust 社区建议使用 [`rust-analyzer`][rust-analyzer]。这个工具是一组以编译器为中心的实用程序，它实现了 [Language Server Protocol][lsp]（一个 IDE 与编程语言之间的通信规范）。`rust-analyzer` 可以用于不同的客户端，比如 [Visual Studio Code 的 Rust analyzer 插件][vscode]。
 
 [lsp]: http://langserver.org/
-[vscode]: https://marketplace.visualstudio.com/items?itemName=rust-lang.rust
+[vscode]: https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer
 
-`rls` 工具的质量还未达到发布 1.0 版本的水平，不过目前有一个可用的预览版。请尝试使用并告诉我们它如何！
+访问 `rust-analyzer` 项目的 [主页][rust-analyzer] 来了解如何安装安装它，然后为你的 IDE 安装 language server 支持。如此你的 IDE 便会获得如自动补全、跳转到定义和 inline error 之类的功能。
 
-安装 `rls`：
+请查看 [`rust-analyzer` 的文档][rust-analyzer-manual] 来了解更多信息。
 
-```text
-$ rustup component add rls
-```
-
-接着为特定的 IDE 安装 language server 支持，如此便会获得如自动补全、跳转到定义和 inline error 之类的功能。
-
-请查看 [其文档][rls] 来了解 `rls` 的更多信息。
-
-[rls]: https://github.com/rust-lang/rls
+[rust-analyzer]: https://rust-analyzer.github.io
+[rust-analyzer-manual]: https://rust-analyzer.github.io/manual.html
