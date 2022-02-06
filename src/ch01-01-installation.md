@@ -5,7 +5,9 @@
 
 第一步是安装 Rust。我们会通过 `rustup` 下载 Rust，这是一个管理 Rust 版本和相关工具的命令行工具。下载时需要联网。
 
-> 注意：如果你出于某些理由倾向于不使用 `rustup`，请参阅 [Rust 的其他安装方法页面](https://forge.rust-lang.org/infra/other-installation-methods.html) 了解更多选项。
+> 注意：如果你出于某些理由倾向于不使用 `rustup`，请到 [Rust 的其他安装方法页面][otherinstall] 查看其它安装选项。
+
+[otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
 
 接下来的步骤会安装最新的稳定版 Rust 编译器。Rust 的稳定性确保本书所有示例在最新版本的 Rust 中能够继续编译。不同版本的输出可能略有不同，因为 Rust 经常改进错误信息和警告。也就是说，任何通过这些步骤安装的最新稳定版 Rust，都应该能正常运行本书中的内容。
 
@@ -17,7 +19,7 @@
 
 如果你使用 Linux 或 macOS，打开终端并输入如下命令：
 
-```text
+```console
 $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
@@ -35,7 +37,7 @@ Rust is installed now. Great!
 $ xcode-select --install
 ```
 
-根据发行版的文档，Linux 用户通常应该安装 GCC 或 Clang。例如，如果你使用 Ubuntu，则可以安装 `build-essential` 包。
+Linux 用户通常需要根据发行版（distribution）文档安装 GCC 或 Clang。比如，如果你使用 Ubuntu，可以安装 `build-essential` 包。
 
 ### 在 Windows 上安装 `rustup`
 
@@ -50,13 +52,13 @@ $ xcode-select --install
 
 通过 `rustup` 安装了 Rust 之后，很容易更新到最新版本。在 shell 中运行如下更新脚本：
 
-```text
+```console
 $ rustup update
 ```
 
 为了卸载 Rust 和 `rustup`，在 shell 中运行如下卸载脚本:
 
-```text
+```console
 $ rustup self uninstall
 ```
 
@@ -64,7 +66,7 @@ $ rustup self uninstall
 
 要检查是否正确安装了 Rust，打开 shell 并运行如下行：
 
-```text
+```console
 $ rustc --version
 ```
 

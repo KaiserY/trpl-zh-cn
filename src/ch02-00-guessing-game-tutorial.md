@@ -1,16 +1,15 @@
 # 编写 猜猜看 游戏
 
-> [ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/main/src/ch02-00-guessing-game-tutorial.md)
-> <br>
-> commit 24ec8683571d6eaee21c5ce421abe39690647193
+> [ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/master/src/ch02-00-guessing-game-tutorial.md) > <br>
+> commit d68d96576b705fcff7aa6341a9840f4de3c0ca0c
 
-让我们一起动手完成一个项目，来快速上手 Rust！本章将介绍 Rust 中一些常用概念，并通过真实的程序来展示如何运用它们。你将会学到 `let`、`match`、方法、关联函数、外部 crate 等知识！在后续章节，我们会深入探讨这些概念的细节。在这一章，我们将做基础练习。
+让我们一起动手完成一个项目，来快速上手 Rust！本章将介绍 Rust 中一些常用概念，并通过真实的程序来展示如何运用它们。你将会学到 `let`、`match`、方法（method）、关联函数（associated function）、使用外部 crate 等知识！后续章节会深入探讨这些概念的细节。在这一章，我们将练习基础内容。
 
 我们会实现一个经典的新手编程问题：猜猜看游戏。它是这么工作的：程序将会随机生成一个 1 到 100 之间的随机整数。接着它会请玩家猜一个数并输入，然后提示猜测是大了还是小了。如果猜对了，它会打印祝贺信息并退出。
 
 ## 准备一个新项目
 
-要创建一个新项目，进入第一章中创建的 *projects* 目录，使用 Cargo 新建一个项目，如下：
+要创建一个新项目，进入第一章中创建的 _projects_ 目录，使用 Cargo 新建一个项目，如下：
 
 ```console
 $ cargo new guessing_game
@@ -19,66 +18,40 @@ $ cd guessing_game
 
 第一个命令，`cargo new`，它获取项目的名称（`guessing_game`）作为第一个参数。第二个命令进入到新创建的项目目录。
 
-看看生成的 *Cargo.toml* 文件：
+看看生成的 _Cargo.toml_ 文件：
 
 <span class="filename">文件名: Cargo.toml</span>
 
 ```toml
-[package]
-name = "guessing_game"
-version = "0.1.0"
-edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
+{{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/Cargo.toml}}
 ```
 
-正如第一章那样，`cargo new` 生成了一个 “Hello, world!” 程序。查看 *src/main.rs* 文件：
+正如第一章那样，`cargo new` 生成了一个 “Hello, world!” 程序。查看 _src/main.rs_ 文件：
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    println!("Hello, world!");
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/src/main.rs}}
 ```
 
 现在使用 `cargo run` 命令，一步完成 “Hello, world!” 程序的编译和运行：
 
 ```console
-$ cargo run
-   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 1.50s
-     Running `target/debug/guessing_game`
-Hello, world!
+{{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/output.txt}}
 ```
 
 当你需要在项目中快速迭代时，`run` 命令就能派上用场，正如我们在这个游戏项目中做的，在下一次迭代之前快速测试每一次迭代。
 
-重新打开 *src/main.rs* 文件。我们将会在这个文件中编写全部的代码。
+重新打开 _src/main.rs_ 文件。我们将会在这个文件中编写全部的代码。
 
 ## 处理一次猜测
 
-猜猜看程序的第一部分请求和处理用户输入，并检查输入是否符合预期的格式。首先，允许玩家输入猜测。在 *src/main.rs* 中输入示例 2-1 中的代码。
+猜猜看程序的第一部分请求和处理用户输入，并检查输入是否符合预期的格式。首先，允许玩家输入猜测。在 _src/main.rs_ 中输入示例 2-1 中的代码。
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-use std::io;
-
-fn main() {
-    println!("Guess the number!");
-
-    println!("Please input your guess.");
-
-    let mut guess = String::new();
-
-    io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
-
-    println!("You guessed: {}", guess);
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:all}}
 ```
 
 <span class="caption">示例 2-1：获取用户猜测并打印的代码</span>
@@ -86,40 +59,38 @@ fn main() {
 这些代码包含很多信息，我们一行一行地过一遍。为了获取用户输入并打印结果作为输出，我们需要将 `io`输入/输出库引入当前作用域。`io` 库来自于标准库，也被称为 `std`：
 
 ```rust,ignore
-use std::io;
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:io}}
 ```
 
-默认情况下，Rust会将少量标准库中定义的模块引入到每个程序的作用域中。这些模块称作 *prelude*，你可以在[标准库文档][prelude]中了解到更多。
+默认情况下，Rust 将 [_prelude_][prelude]<!-- ignore --> 模块中少量的类型引入到每个程序的作用域中。如果需要的类型不在 prelude 中，你必须使用 `use` 语句显式地将其引入作用域。`std::io` 库提供很多有用的功能，包括接收用户输入的功能。
 
 如果你需要的类型不在 prelude 中，你必须使用 `use` 语句显式地将其引入作用域。`std::io` 库提供很多有用的功能，包括接收用户输入的功能。
 
 如第一章所提及，`main` 函数是程序的入口点：
 
 ```rust,ignore
-fn main() {
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:main}}
 ```
 
-`fn` 语法声明了一个新函数，`()` 表明没有参数，`{` 作为函数体的开始。
+`fn` 语法声明了一个新函数，小括号 `()` 表明没有参数，大括号 `{` 作为函数体的开始。
 
 第一章也提及了 `println!` 是一个在屏幕上打印字符串的宏：
 
 ```rust,ignore
-println!("Guess the number!");
-
-println!("Please input your guess.");
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print}}
 ```
 
 这些代码仅仅打印提示，介绍游戏的内容然后请求用户输入。
 
 ### 使用变量储存值
 
-接下来，创建一个储存用户输入的*变量*，像这样：
+接下来，创建一个 **变量**（_variable_）来储存用户输入，像这样：
 
 ```rust,ignore
-let mut guess = String::new();
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:string}}
 ```
 
-现在程序开始变得有意思了！这一小行代码发生了很多事。我们使用 `let` 声明来创建变量。我们在变量名前添加 `mut` 以使其可变。
+现在程序开始变得有意思了！这一小行代码发生了很多事。我们使用 `let` 语句来创建变量。这里是另外一个例子：
 
 ```rust,ignore
 let apples = 5;
@@ -128,15 +99,15 @@ let apples = 5;
 这行代码新建了一个叫做 `apples` 的变量并把它绑定到值 `5` 上。在 Rust 中，变量默认是不可变的。我们将会在第三章的 [“变量与可变性”][variables-and-mutability] 部分详细讨论这个概念。下面的例子展示了如何在变量名前使用 `mut` 来使一个变量可变：
 
 ```rust,ignore
-let apples = 5; // immutable
-let mut bananas = 5; // mutable
+let apples = 5; // 不可变
+let mut bananas = 5; // 可变
 ```
 
-> 注意：`//` 语法开始一个注释，持续到行尾。Rust 忽略注释中的所有内容。我们将会在[第三章][comments]中更详细地介绍注释。
+> 注意：`//` 语法开始一个注释，持续到行尾。Rust 忽略注释中的所有内容，[第三章][comments]将会详细介绍注释。
 
 回到猜猜看程序中。现在我们知道了 `let mut guess` 会引入一个叫做 `guess` 的可变变量。等号（`=`）告诉Rust我们现在想将某个值绑定在变量上。等号的右边是 `guess` 所绑定的值，它是 `String::new` 的结果，这个函数会返回一个 `String` 的新实例。[`String`][string]<!-- ignore --> 是一个标准库提供的字符串类型，它是 UTF-8 编码的可增长文本块。
 
-`::new` 那一行的 `::` 语法表明 `new` 是 `String` 类型的一个关联函数。*关联函数*（*associated function*）是实现一种特定类型的函数，在这个例子中类型是 `String`。
+`::new` 那一行的 `::` 语法表明 `new` 是 `String` 类型的一个 **关联函数**（_associated function_）。关联函数是针对类型实现的，在这个例子中是 `String`，而不是 `String` 的某个特定实例。一些语言中把它称为 **静态方法**（_static method_）。
 
 `new` 函数创建了一个新的空字符串，你会发现很多类型上有 `new` 函数，因为它是创建类型实例的惯用函数名。
 
@@ -144,74 +115,60 @@ let mut bananas = 5; // mutable
 
 ### 接收用户输入
 
-回忆一下，我们在程序的第一行使用 `use std::io;` 从标准库中引入了输入/输出功能。现在调用可以使我们处理用户输入的 `io` 库中的函数 `stdin`：
+### 接收用户输入
+
+回忆一下，我们在程序的第一行使用 `use std::io;` 从标准库中引入了输入/输出功能。现在调用 `io` 库中的函数 `stdin`：
 
 ```rust,ignore
-io::stdin().read_line(&mut guess)
-    .expect("Failed to read line");
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:read}}
 ```
 
 如果程序的开头没有使用 `use std::io` 引入 `io` 库，我们仍可以通过把函数调用写成 `std::io::stdin` 来使用函数。`stdin` 函数返回一个 [`std::io::Stdin`][iostdin]<!-- ignore --> 的实例，这代表终端标准输入句柄的类型。
 
-接下来，`.read_line(&mut guess)` 这一行调用了 [`read_line`][read_line]<!-- ignore --> 方法从标准输入句柄获取用户输入。我们还将 `&mut guess` 作为参数传递给 `read_line()` ，以告诉它在哪个字符串存储用户输入 。
+代码的下一部分，`.read_line(&mut guess)`，调用 [`read_line`][read_line]<!-- ignore --> 方法从标准输入句柄获取用户输入。我们还将 `&mut guess` 作为参数传递给 `read_line()` 函数，让其将用户输入储存到这个字符串中。`read_line` 的工作是，无论用户在标准输入中键入什么内容，都将其追加（不会覆盖其原有内容）到一个字符串中，因此它需要字符串作为参数。这个字符串参数应该是可变的，以便 `read_line` 将用户输入附加上去。
 
-`read_line` 全部的工作是接收用户在标准输入中输入的任何内容，并将其追加到一个字符串中（不覆盖其内容），因此我们传入字符串作为参数。这个字符串参数需要是可变的，以便该方法可以改变字符串的内容。
-
-`&` 表示这个参数是一个 **引用**（*reference*），它允许多处代码访问同一处数据，而无需在内存中多次拷贝。引用是一个复杂的特性，Rust 的一个主要优势就是安全而简单的操纵引用。完成当前程序并不需要了解如此多细节。现在，我们只需知道它像变量一样，默认是不可变的。因此，需要写成 `&mut guess` 来使其可变，而不是 `&guess`。（第四章会更全面的解释引用。）
+`&` 表示这个参数是一个 **引用**（_reference_），它允许多处代码访问同一处数据，而无需在内存中多次拷贝。引用是一个复杂的特性，Rust 的一个主要优势就是安全而简单的操纵引用。完成当前程序并不需要了解如此多细节。现在，我们只需知道它像变量一样，默认是不可变的。因此，需要写成 `&mut guess` 来使其可变，而不是 `&guess`。（第四章会更全面的解释引用。）
 
 ### 使用 `Result` 类型来处理潜在的错误
 
 我们还没有完全分析完这行代码。虽然我们已经讲到了文本中的第三行，但它仍是逻辑行（虽然换行了但仍是语句）的一部分。后一部分是这个方法：
 
 ```rust,ignore
-.expect("Failed to read line");
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:expect}}
 ```
 
-我们完全可以这样写：
+我们也可以将代码这样写：
 
 ```rust,ignore
 io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```
 
-不过，过长的行难以阅读，所以最好拆开来写。当你使用 `.method_name()` 语法调用方法时，换行并添加空格来拆分长代码行通常是明智的。现在来看看这行代码干了什么。
+不过，过长的代码行难以阅读，所以最好拆开来写。通常来说，当使用 `.method_name()` 语法调用方法时引入换行符和空格将长的代码行拆开是明智的。现在来看看这行代码干了什么。
 
-之前提到了 `read_line` 将用户输入放置到传递给它的字符串中，不过它也返回一个值——在这个例子中是 [`io::Result`][ioresult]<!-- ignore -->。Rust 标准库中有很多叫做 `Result` 的类型：一个通用的 [`Result`][result]<!-- ignore --> 以及在子模块中的特化版本，比如 `io::Result`。`Result` 类型是 [*枚举*（*enumerations*）][enums]<!-- ignore -->，通常也写作 *enums*。枚举类型持有固定集合的值，这些值被称为枚举的 **成员**（*variants*）。枚举往往与条件表达式 `match` 一起使用，可以方便地根据枚举值是哪个成员来执行不同的代码。
+之前提到了 `read_line` 将用户输入附加到传递给它的字符串中，不过它也返回一个值 —— 在这个例子中是 [`io::Result`][ioresult]<!-- ignore -->。Rust 标准库中有很多叫做 `Result` 的类型：一个泛型 [`Result`][result]<!-- ignore --> 以及在子模块中的特化版本，比如 `io::Result`。`Result` 类型是 [_枚举_（_enumerations_）][enums]<!-- ignore -->，通常也写作 _enums_。枚举类型持有固定集合的值，这些值被称为枚举的 **成员**（_variants_）。枚举通常和 `match` 一同使用，这是一个便于根据条件执行时枚举的不同成员值来执行不同代码块的条件语句。
 
-第六章将介绍枚举的更多细节。这些 `Result` 类型的目的是编码错误处理信息。
+第六章将介绍枚举的更多细节。这里的 `Result` 类型将用来编码错误处理的信息。
 
 `Result` 的成员是 `Ok` 和 `Err`，`Ok` 成员表示操作成功，内部包含成功时产生的值。`Err` 成员则意味着操作失败，并且包含失败的前因后果。
 
-这些 `Result` 类型的作用是编码错误处理信息。`Result` 类型的值，像其他类型一样，拥有定义于其上的方法。`io::Result` 的实例拥有 [`expect` 方法][expect]<!-- ignore -->。如果 `io::Result` 实例的值是 `Err`，`expect` 会导致程序崩溃，并显示当做参数传递给 `expect` 的信息。如果 `read_line` 方法返回 `Err`，则可能是来源于底层操作系统错误的结果。如果 `io::Result` 实例的值是 `Ok`，`expect` 会获取 `Ok` 中的值并原样返回。在本例中，这个值是用户输入的字节数。
+这些 `Result` 类型的作用是编码错误处理信息。`Result` 类型的值，像其他类型一样，拥有定义于其上的方法。`io::Result` 的实例拥有 [`expect` 方法][expect]<!-- ignore -->。如果 `io::Result` 实例的值是 `Err`，`expect` 会导致程序崩溃，并显示当做参数传递给 `expect` 的信息。如果 `read_line` 方法返回 `Err`，则可能是来源于底层操作系统错误的结果。如果 `io::Result` 实例的值是 `Ok`，`expect` 会获取 `Ok` 中的值并原样返回。在本例中，这个值是用户输入到标准输入中的字节数。
 
 如果不调用 `expect`，程序也能编译，不过会出现一个警告：
 
 ```console
-$ cargo build
-   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-warning: unused `Result` that must be used
-  --> src/main.rs:10:5
-   |
-10 |     io::stdin().read_line(&mut guess);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-   = note: `#[warn(unused_must_use)]` on by default
-   = note: this `Result` may be an `Err` variant, which should be handled
-
-warning: 1 warning emitted
-
-    Finished dev [unoptimized + debuginfo] target(s) in 0.59s
+{{#include ../listings/ch02-guessing-game-tutorial/no-listing-02-without-expect/output.txt}}
 ```
 
 Rust 警告我们没有使用 `read_line` 的返回值 `Result`，说明有一个可能的错误没有处理。
 
-消除警告的正确做法是实际编写错误处理代码，不过由于我们就是希望程序在出现问题时立即崩溃，所以直接使用 `expect`。[第九章][recover]会学习如何从错误中恢复。
+消除警告的正确做法是实际去编写错误处理代码，不过由于我们就是希望程序在出现问题时立即崩溃，所以直接使用 `expect`。[第九章][recover] 会学习如何从错误中恢复。
 
 ### 使用 `println!` 占位符打印值
 
 除了位于结尾的右花括号，目前为止就只有这一行代码值得讨论一下了，就是这一行：
 
 ```rust,ignore
-println!("You guessed: {}", guess);
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print_guess}}
 ```
 
 这行代码现在打印了存储用户输入的字符串。第一个参数是格式化字符串，里面的 `{}` 是预留在特定位置的占位符：把 `{}` 想象成小蟹钳，可以夹住合适的值。使用 `{}` 也可以打印多个值：第一对 `{}` 使用格式化字符串之后的第一个值，第二对则使用第二个值，依此类推。调用一次 `println!` 打印多个值看起来像这样：
@@ -255,12 +212,10 @@ Cargo 对外部 crate 的运用是其真正的亮点所在。在我们使用 `ra
 <span class="filename">文件名: Cargo.toml</span>
 
 ```toml
-[dependencies]
-
-rand = "0.8.3"
+{{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:9:}}
 ```
 
-在 *Cargo.toml* 文件中，标题以及之后的内容属同一个片段，直到遇到下一个标题才开始新的片段。在 `[dependencies]` 片段中，你要告诉 Cargo 本项目依赖了哪些外部 crate 及其版本。本例中，我们使用语义化版本 `0.8.3` 来指定 `rand` crate。Cargo 理解[语义化版本（Semantic Versioning）][semver]<!-- ignore -->（有时也称为 *SemVer*），这是一种定义版本号的标准。`0.8.3` 事实上是 `^0.8.3` 的简写，它表示 任何不低于 `0.8.3`， 但是低于 `0.9.0` 的版本。Cargo将这些版本视作与 `0.8.3` 版本公有 API 相兼容的版本，这个声明确保你将获得最新的补丁版本，它仍然可以与本章中的代码正常编译。`0.9.0` 或以上版本不保证拥有接下来示例中使用到的API。
+在 _Cargo.toml_ 文件中，标题以及之后的内容属同一个片段，直到遇到下一个标题才开始新的片段。`[dependencies]` 片段告诉 Cargo 本项目依赖了哪些外部 crate 及其版本。本例中，我们使用语义化版本 `0.8.3` 来指定 `rand` crate。Cargo 理解 [语义化版本（Semantic Versioning）][semver]<!-- ignore -->（有时也称为 _SemVer_），这是一种定义版本号的标准。`0.8.3` 事实上是 `^0.8.3` 的简写，它表示任何至少是 `0.8.3` 但小于 `0.9.0` 的版本。Cargo 认为这些版本与 `0.8.3` 版本的公有 API 相兼容，这样的版本指定确保了我们可以获取能使本章代码编译的最新的补丁（patch）版本。任何大于等于 `0.9.0` 的版本不能保证和接下来的示例采用了相同的 API。
 
 现在，不修改任何代码，构建项目，如示例 2-2 所示：
 
@@ -287,15 +242,15 @@ $ cargo build
 
 <span class="caption">示例 2-2: 将 rand crate 添加为依赖之后运行 `cargo build` 的输出</span>
 
-可能会出现不同的版本号（多亏了语义化版本，它们与代码是兼容的！），不同的行(取决于操作系统)，同时显示顺序也可能会有所不同。
+可能会出现不同的版本号（多亏了语义化版本，它们与代码是兼容的！），同时显示顺序也可能会有所不同。
 
-当我们有了一个外部依赖，Cargo 从 *registry* 上获取所有依赖所需的最新版本，这是一份来自 [Crates.io][cratesio] 的数据拷贝。Crates.io 是 Rust 生态环境中的开发者们向他人贡献 Rust 开源项目的地方。
+现在我们有了一个外部依赖，Cargo 从 _registry_ 上获取所有包的最新版本信息，这是一份来自 [Crates.io][cratesio] 的数据拷贝。Crates.io 是 Rust 生态环境中的开发者们向他人贡献 Rust 开源项目的地方。
 
 在更新完 registry 后，Cargo 检查 `[dependencies]` 片段并下载列表中包含但还未下载的 crates 。本例中，虽然只声明了 `rand` 一个依赖，然而 Cargo 还是额外获取了 `rand` 所需要的其他 crates，因为 `rand` 依赖它们来正常工作。下载完成后，Rust 编译依赖，然后使用这些依赖编译项目。
 
-如果不做任何修改，立刻再次运行 `cargo build`，则不会看到任何除了 `Finished` 行之外的输出。Cargo 知道它已经下载并编译了依赖，同时 *Cargo.toml* 文件也没有变动。Cargo 还知道代码也没有任何修改，所以它不会重新编译代码。因为无事可做，它简单的退出了。
+如果不做任何修改，立刻再次运行 `cargo build`，则不会看到任何除了 `Finished` 行之外的输出。Cargo 知道它已经下载并编译了依赖，同时 _Cargo.toml_ 文件也没有变动。Cargo 还知道代码也没有任何修改，所以它不会重新编译代码。因为无事可做，它简单的退出了。
 
-如果打开 *src/main.rs* 文件，做一些无关紧要的修改，保存并再次构建，则会出现两行输出：
+如果打开 _src/main.rs_ 文件，做一些无关紧要的修改，保存并再次构建，则会出现两行输出：
 
 ```console
 $ cargo build
@@ -303,9 +258,9 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
 ```
 
-这一行表示 Cargo 只针对 *src/main.rs* 文件的微小修改而更新构建。依赖没有变化，所以 Cargo 知道它可以复用已经为此下载并编译的代码。
+这一行表示 Cargo 只针对 _src/main.rs_ 文件的微小修改而更新构建。依赖没有变化，所以 Cargo 知道它可以复用已经为此下载并编译的代码。它只是重新构建了部分（项目）代码。
 
-#### *Cargo.lock* 文件确保构建是可重现的
+#### _Cargo.lock_ 文件确保构建是可重现的
 
 Cargo 有一个机制来确保任何人在任何时候重新构建代码，都会产生相同的结果：Cargo 只会使用你指定的依赖版本，除非你又手动指定了别的。例如，如果下周 `rand` crate 的 `0.8.4` 版本出来了，它修复了一个重要的 bug，同时也含有一个会破坏代码运行的缺陷。为了处理这个问题，Rust在你第一次运行 `cargo build` 时建立了 *Cargo.lock* 文件，我们现在可以在*guessing_game* 目录找到它。
 
@@ -335,38 +290,19 @@ rand = "0.9.0"
 
 ### 生成一个随机数
 
-让我们开始使用 `rand` 来生成一个要猜的数。下一步是更新 *src/main.rs*，如示例 2-3 所示。
+让我们开始使用 `rand` 来生成一个猜猜看随机数。下一步是更新 *src/main.rs*，如示例 2-3 所示。
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-use std::io;
-use rand::Rng;
-
-fn main() {
-    println!("Guess the number!");
-
-    let secret_number = rand::thread_rng().gen_range(1..101);
-
-    println!("The secret number is: {}", secret_number);
-
-    println!("Please input your guess.");
-
-    let mut guess = String::new();
-
-    io::stdin()
-        .read_line(&mut guess)
-        .expect("Failed to read line");
-
-    println!("You guessed: {}", guess);
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:all}}
 ```
 
 <span class="caption">示例 2-3：添加生成随机数的代码</span>
 
 首先，我们新增了一行 `use rand::Rng`。`Rng` 是一个 trait，它定义了随机数生成器应实现的方法，想使用这些方法的话，此 trait 必须在作用域中。第十章会详细介绍 trait。
 
-接下来，我们在中间还新增加了两行。第一行中，我们调用 `rand::thread_rng` 函数来获取我们接下来要使用的随机数生成器：它位于当前执行线程的本地环境中，并从操作系统获取 seed。接下来，调用随机数生成器的 `gen_range` 方法。这个方法由刚才引入到作用域的 `Rng` trait 定义。`gen_range` 方法接受一个范围表达式作为参数，并在该范围内生成一个随机数。我们在这里使用的范围表达式采用 `start..end` 形式，它包含下限但不包含上限，所以需要指定 `1..101` 来请求一个 1 和 100 之间的数。另外，我们也可以传递 `1..=100`，这是等价的。
+接下来，我们在中间还新增加了两行。第一行调用了 `rand::thread_rng` 函数提供实际使用的随机数生成器：它位于当前执行线程的本地环境中，并从操作系统获取 seed。接着调用随机数生成器的 `gen_range` 方法。这个方法由 `use rand::Rng` 语句引入到作用域的 `Rng` trait 定义。`gen_range` 方法获取一个范围表达式（range expression）作为参数，并生成一个在此范围之间的随机数。这里使用的这类范围表达式的在 `start..end` 之间取值且包含下限但不包含上限，所以需要指定 `1` 和 `101` 来请求一个 1 和 100 之间的数。另外也可以使用范围 `1..=100`，这两者是等价的。
 
 > 注意：你不可能凭空就知道应该 use 哪个 trait 以及该从 crate 中调用哪个方法，因此每个crate 有使用说明文档。Cargo 有一个很棒的功能是：运行 `cargo doc --open` 命令来构建所有本地依赖提供的文档，并在浏览器中打开。例如，假设你对 `rand` crate 中的其他功能感兴趣，你可以运行 `cargo doc --open` 并点击左侧导航栏中的 `rand`。
 
@@ -404,22 +340,7 @@ You guessed: 5
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::io;
-use std::cmp::Ordering;
-use rand::Rng;
-
-fn main() {
-
-    // ---snip---
-
-    println!("You guessed: {}", guess);
-
-    match guess.cmp(&secret_number) {
-        Ordering::Less => println!("Too small!"),
-        Ordering::Greater => println!("Too big!"),
-        Ordering::Equal => println!("You win!"),
-    }
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-04/src/main.rs:here}}
 ```
 
 <span class="caption">示例 2-4：处理比较两个数字可能的返回值</span>
@@ -428,53 +349,24 @@ fn main() {
 
 接着，底部的五行新代码使用了 `Ordering` 类型，`cmp` 方法用来比较两个值并可以在任何可比较的值上调用。它获取一个被比较值的引用：这里是把 `guess` 与 `secret_number` 做比较。 然后它会返回一个刚才通过 `use` 引入作用域的 `Ordering` 枚举的成员。使用一个 [`match`][match]<!-- ignore --> 表达式，根据对 `guess` 和 `secret_number` 调用 `cmp` 返回的 `Ordering` 成员来决定接下来做什么。
 
-一个 `match` 表达式由 **分支（arms）** 构成。一个分支包含一个用于匹配的 **模式**（*pattern*），丢给 `match` 的值与分支模式相匹配时应该执行对应分支的代码。Rust 获取提供给 `match` 的值并挨个检查每个分支的模式。模式和 `match` 结构是 Rust 中强大的功能，它体现了代码可能遇到的多种情形，并帮助你确保没有遗漏处理。这些功能将分别在第六章和第十八章详细介绍。
+一个 `match` 表达式由 **分支（arms）** 构成。一个分支包含一个 **模式**（*pattern*）和表达式开头的值与分支模式相匹配时应该执行的代码。Rust 获取提供给 `match` 的值并挨个检查每个分支的模式。`match` 结构和模式是 Rust 中强大的功能，它体现了代码可能遇到的多种情形，并帮助你确保没有遗漏处理。这些功能将分别在第六章和第十八章详细介绍。
 
 让我们看看使用 `match` 表达式的例子。假设用户猜了 50，这时随机生成的秘密数字是 38。比较 50 与 38 时，因为 50 比 38 要大，`cmp` 方法会返回 `Ordering::Greater`。`Ordering::Greater` 是 `match` 表达式得到的值。它检查第一个分支的模式，`Ordering::Less` 与 `Ordering::Greater`并不匹配，所以它忽略了这个分支的代码并来到下一个分支。下一个分支的模式是 `Ordering::Greater`，**正确** 匹配！这个分支关联的代码被执行，在屏幕打印出 `Too big!`。`match` 表达式就此终止，因为该场景下没有检查最后一个分支的必要。
 
 然而，示例 2-4 的代码并不能编译，可以尝试一下：
 
 ```console
-$ cargo build
-   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-error[E0308]: mismatched types
-  --> src/main.rs:23:21
-   |
-23 |     match guess.cmp(&secret_number) {
-   |                     ^^^^^^^^^^^^^^ expected struct `std::string::String`, found integer
-   |
-   = note: expected type `&std::string::String`
-   = note:    found type `&{integer}`
-
-error: aborting due to previous error
-Could not compile `guessing_game`.
+{{#include ../listings/ch02-guessing-game-tutorial/listing-02-04/output.txt}}
 ```
 
-错误的核心表明这里有 *不匹配的类型*（*mismatched types*）。Rust 有一个静态强类型系统，同时也有类型推断。当我们写出 `let guess = String::new()` 时，Rust 推断出 `guess` 应该是 `String` 类型，并不需要我们写出类型。另一方面，`secret_number`，是数字类型。有几个Rust的数字类型拥有 1 到 100 之间的值：32 位数字 `i32`；32 位无符号数字 `u32`；64 位数字 `i64` 等等。Rust 默认使用 `i32`，所以它是 `secret_number` 的类型，除非增加类型信息，或任何能让 Rust 推断出不同数值类型的信息。这里错误的原因在于 Rust 不会比较字符串类型和数字类型。
+错误的核心表明这里有 **不匹配的类型**（_mismatched types_）。Rust 有一个静态强类型系统，同时也有类型推断。当我们写出 `let guess = String::new()` 时，Rust 推断出 `guess` 应该是 `String` 类型，并不需要我们写出类型。另一方面，`secret_number`，是数字类型。几个数字类型拥有 1 到 100 之间的值：32 位数字 `i32`；32 位无符号数字 `u32`；64 位数字 `i64` 等等。Rust 默认使用 `i32`，所以它是 `secret_number` 的类型，除非增加类型信息，或任何能让 Rust 推断出不同数值类型的信息。这里错误的原因在于 Rust 不会比较字符串类型和数字类型。
 
-所以我们必须把从输入中读取到的 `String` 转换为一个真正的数字类型，才好与秘密数字进行比较。这可以通过在 `main` 函数体中增加另一行代码来实现：
+所以我们必须把从输入中读取到的 `String` 转换为一个真正的数字类型，才好与秘密数字进行比较。这可以通过在 `main` 函数体中增加如下代码来实现：
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-// --snip--
-
-    let mut guess = String::new();
-
-    io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
-
-    let guess: u32 = guess.trim().parse()
-        .expect("Please type a number!");
-
-    println!("You guessed: {}", guess);
-
-    match guess.cmp(&secret_number) {
-        Ordering::Less => println!("Too small!"),
-        Ordering::Greater => println!("Too big!"),
-        Ordering::Equal => println!("You win!"),
-    }
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-03-convert-string-to-number/src/main.rs:here}}
 ```
 
 这行新代码是：
@@ -483,13 +375,13 @@ Could not compile `guessing_game`.
 let guess: u32 = guess.trim().parse().expect("Please type a number!");
 ```
 
-这里创建了一个叫做 `guess` 的变量。不过等等，不是已经有了一个叫做 `guess` 的变量了吗？确实如此，不过 Rust 允许用一个新值来 **隐藏** （*shadow*） `guess` 之前的值。它允许我们复用 `guess` 变量的名字，而不是被迫创建两个不同变量，诸如 `guess_str` 和 `guess` 之类。我们会在第三章介绍 shadowing 的更多细节，暂时你只需知道这个功能通常用作转换值类型。
+这里创建了一个叫做 `guess` 的变量。不过等等，不是已经有了一个叫做 `guess` 的变量了吗？确实如此，不过 Rust 允许用一个新值来 **隐藏** （_shadow_） `guess` 之前的值。这个功能常用在需要转换值类型之类的场景。它允许我们复用 `guess` 变量的名字，而不是被迫创建两个不同变量，诸如 `guess_str` 和 `guess` 之类。（第三章会介绍 shadowing 的更多细节。）
 
 我们将这个新变量绑定到 `guess.trim().parse()` 表达式上。表达式中的 `guess` 指的是包含输入的字符串类型 `guess` 变量。`String` 实例的 `trim` 方法会去除字符串开头和结尾的空白字符，我们必须执行此方法才能将字符串与 `u32` 比较，因为 `u32` 只能包含数值型数据。用户必须输入 <span class="keystroke">enter</span> 键才能让 `read_line` 返回并输入他们的猜想，这将会在字符串中增加一个换行（newline）符。例如，用户输入 <span class="keystroke">5</span> 并按下 <span class="keystroke">enter</span>（在 Windows 上，按下 <span class="keystroke">enter</span> 键会得到一个回车符和一个换行符，`\r\n`），`guess` 看起来像这样：`5\n` 或者 `5\r\n`。`\n` 代表 “换行”，回车键；`\r` 代表 “回车”，回车键。`trim` 方法会消除 `\n` 或者 `\r\n`，只留下 `5`。
 
-[字符串的 `parse` 方法][parse]<!-- ignore --> 将字符串解析成数字。因为这个方法可以解析多种数字类型，因此需要告诉 Rust 具体的数字类型，这里通过 `let guess: u32` 指定。`guess` 后面的冒号（`:`）告诉 Rust 我们指定了变量的类型。Rust 有一些内建的数字类型；`u32` 是一个无符号的 32 位整型。对于不大的正整数来说，它是不错的类型，第三章还会讲到其他数字类型。另外，程序中的 `u32` 注解以及与 `secret_number` 的比较，意味着 Rust 会推断出 `secret_number` 也是 `u32` 类型。现在可以使用相同类型比较两个值了！
+[字符串的 `parse` 方法][parse]<!-- ignore --> 将字符串解析成数字。因为这个方法可以解析多种数字类型，因此需要告诉 Rust 具体的数字类型，这里通过 `let guess: u32` 指定。`guess` 后面的冒号（`:`）告诉 Rust 我们指定了变量的类型。Rust 有一些内建的数字类型；`u32` 是一个无符号的 32 位整型。对于不大的正整数来说，它是不错的默认类型，第三章还会讲到其他数字类型。另外，程序中的 `u32` 注解以及与 `secret_number` 的比较，意味着 Rust 会推断出 `secret_number` 也是 `u32` 类型。现在可以使用相同类型比较两个值了！
 
-由于 `parse` 方法只能作用于可以逻辑转换为数字的字符，所以调用它很容易产生错误。例如，字符串中包含 `A👍%`，就无法将其转换为一个数字。因此，`parse` 方法返回一个 `Result` 类型。像之前 [“使用 `Result` 类型来处理潜在的错误”](#使用-result-类型来处理潜在的错误) 讨论的 `read_line` 方法那样，再次按部就班地用 `expect` 方法处理即可。如果 `parse` 不能从字符串生成一个数字，返回一个 `Result` 的 `Err` 成员时，`expect` 会使游戏崩溃并打印附带的信息。如果 `parse` 成功地将字符串转换为一个数字，它会返回 `Result` 的 `Ok` 成员，然后 `expect` 会返回 `Ok` 值中的数字。
+`parse` 方法只有在字符逻辑上可以转换为数字的时候才能工作所以非常容易出错。例如，字符串中包含 `A👍%`，就无法将其转换为一个数字。因此，`parse` 方法返回一个 `Result` 类型。像之前 [“使用 `Result` 类型来处理潜在的错误”](#使用-result-类型来处理潜在的错误) 讨论的 `read_line` 方法那样，再次按部就班的用 `expect` 方法处理即可。如果 `parse` 不能从字符串生成一个数字，返回一个 `Result` 的 `Err` 成员时，`expect` 会使游戏崩溃并打印附带的信息。如果 `parse` 成功地将字符串转换为一个数字，它会返回 `Result` 的 `Ok` 成员，然后 `expect` 会返回 `Ok` 值中的数字。
 
 现在让我们运行程序！
 
@@ -517,25 +409,10 @@ Too big!
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-// --snip--
-
-    println!("The secret number is: {}", secret_number);
-
-    loop {
-        println!("Please input your guess.");
-
-        // --snip--
-
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => println!("You win!"),
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-04-looping/src/main.rs:here}}
 ```
 
-如上所示，我们将提示用户猜测之后的所有内容放入了循环。确保 loop 循环中的代码多缩进四个空格，再次运行程序。注意这里有一个新问题，因为程序忠实地执行了我们的要求：永远地请求另一个猜测，用户好像无法退出啊！
+如上所示，我们将提示用户猜测之后的所有内容移动到了循环中。确保 loop 循环中的代码多缩进四个空格，再次运行程序。注意这里有一个新问题，因为程序忠实地执行了我们的要求：永远地请求另一个猜测，用户好像无法退出啊！
 
 用户总能使用 <span class="keystroke">ctrl-c</span> 终止程序。不过还有另一个方法跳出无限循环，就是 [“比较猜测与秘密数字”](#比较猜测的数字和秘密数字) 部分提到的 `parse`：如果用户输入的答案不是一个数字，程序会崩溃。我们可以利用这一点来退出，如下所示：
 
@@ -573,18 +450,7 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-// --snip--
-
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => {
-                println!("You win!");
-                break;
-            }
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-05-quitting/src/main.rs:here}}
 ```
 
 通过在 `You win!` 之后增加一行 `break`，用户猜对了神秘数字后会退出循环。退出循环也意味着退出程序，因为循环是 `main` 的最后一部分。
@@ -596,19 +462,7 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-// --snip--
-
-io::stdin().read_line(&mut guess)
-    .expect("Failed to read line");
-
-let guess: u32 = match guess.trim().parse() {
-    Ok(num) => num,
-    Err(_) => continue,
-};
-
-println!("You guessed: {}", guess);
-
-// --snip--
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:here}}
 ```
 
 <span class="caption">示例 2-5: 忽略非数字的猜测并重新请求数字而不是让程序崩溃</span>
@@ -617,7 +471,7 @@ println!("You guessed: {}", guess);
 
 如果 `parse` 能够成功的将字符串转换为一个数字，它会返回一个包含结果数字的 `Ok`。这个 `Ok` 值与 `match` 第一个分支的模式相匹配，该分支对应的动作返回 `Ok` 值中的数字 `num`，最后如愿变成新创建的 `guess` 变量。
 
-如果 `parse` *不* 能将字符串转换为一个数字，它会返回一个包含更多错误信息的 `Err`。`Err` 值不能匹配第一个 `match` 分支的 `Ok(num)` 模式，但是会匹配第二个分支的 `Err(_)` 模式：`_` 是一个通配符值，本例中用来匹配所有 `Err` 值，不管其中有何种信息。所以程序会执行第二个分支的动作，`continue` 意味着进入 `loop` 的下一次循环，请求另一个猜测。这样程序就有效的忽略了 `parse` 可能遇到的所有错误！
+如果 `parse` **不**能将字符串转换为一个数字，它会返回一个包含更多错误信息的 `Err`。`Err` 值不能匹配第一个 `match` 分支的 `Ok(num)` 模式，但是会匹配第二个分支的 `Err(_)` 模式：`_` 是一个通配符值，本例中用来匹配所有 `Err` 值，不管其中有何种信息。所以程序会执行第二个分支的动作，`continue` 意味着进入 `loop` 的下一次循环，请求另一个猜测。这样程序就有效的忽略了 `parse` 可能遇到的所有错误！
 
 现在万事俱备，只需运行 `cargo run`：
 
@@ -649,40 +503,7 @@ You win!
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-use std::io;
-use std::cmp::Ordering;
-use rand::Rng;
-
-fn main() {
-    println!("Guess the number!");
-
-    let secret_number = rand::thread_rng().gen_range(1..101);
-
-    loop {
-        println!("Please input your guess.");
-
-        let mut guess = String::new();
-
-        io::stdin().read_line(&mut guess)
-            .expect("Failed to read line");
-
-        let guess: u32 = match guess.trim().parse() {
-            Ok(num) => num,
-            Err(_) => continue,
-        };
-
-        println!("You guessed: {}", guess);
-
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => {
-                println!("You win!");
-                break;
-            }
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-06/src/main.rs}}
 ```
 
 <span class="caption">示例 2-6：猜猜看游戏的完整代码</span>
