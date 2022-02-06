@@ -2,7 +2,7 @@
 
 > [ch01-02-hello-world.md](https://github.com/rust-lang/book/blob/master/src/ch01-02-hello-world.md)
 > <br>
-> commit f63a103270ec8416899675a9cdb1c5cf6d77a498
+> commit 9c0fa2714859738ff73cbbb829592e4c037d7e46
 
 既然安装好了 Rust，我们来编写第一个 Rust 程序。当学习一门新语言的时候，使用该语言在屏幕上打印 `Hello, world!` 是一项传统，我们将沿用这一传统！
 
@@ -16,7 +16,7 @@
 
 对于 Linux、macOS 和 Windows PowerShell，输入：
 
-```text
+```console
 $ mkdir ~/projects
 $ cd ~/projects
 $ mkdir hello_world
@@ -50,7 +50,7 @@ fn main() {
 
 保存文件，并回到终端窗口。在 Linux 或 macOS 上，输入如下命令，编译并运行文件：
 
-```text
+```console
 $ rustc main.rs
 $ ./main
 Hello, world!
@@ -82,7 +82,7 @@ fn main() {
 
 还须注意，函数体被包裹在花括号中，`{}`。Rust 要求所有函数体都要用花括号包裹起来。一般来说，将左花括号与函数声明置于同一行并以空格分隔，是良好的代码风格。
 
-在编写本书的时候，一个叫做 `rustfmt` 的自动格式化工具正在开发中。如果你希望在 Rust 项目中保持一种标准风格，`rustfmt` 会将代码格式化为特定的风格。Rust 团队计划最终将该工具包含在标准 Rust 发行版中，就像 `rustc`。所以根据你阅读本书的时间，它可能已经安装到你的电脑中了！检查在线文档以了解更多细节。
+如果你希望在 Rust 项目中保持一种标准风格，`rustfmt` 会将代码格式化为特定的风格。Rust 团队已经将该工具包含在标准 Rust 发行版中，就像 `rustc`，所以它已经安装到你的电脑中了！检查在线文档以了解更多细节。
 
 在 `main()` 函数中是如下代码：
 
@@ -92,7 +92,7 @@ fn main() {
 
 这行代码完成这个简单程序的所有工作：在屏幕上打印文本。这里有四个重要的细节需要注意。首先 Rust 的缩进风格使用 4 个空格，而不是 1 个制表符（tab）。
 
-第二，`println!` 调用了一个 Rust 宏（macro）。如果是调用函数，则应输入 `println`（没有`!`）。我们将在第十九章详细讨论宏。现在你只需记住，当看到符号 `!` 的时候，就意味着调用的是宏而不是普通函数。
+第二，`println!` 调用了一个 Rust 宏（macro）。如果是调用函数，则应输入 `println`（没有`!`）。我们将在第十九章详细讨论宏。现在你只需记住，当看到符号 `!` 的时候，就意味着调用的是宏而不是普通函数，并且宏并不总是和函数遵守同样的规则。
 
 第三，`"Hello, world!"` 是一个字符串。我们把这个字符串作为一个参数传递给 `println!`，字符串将被打印到屏幕上。
 
@@ -104,7 +104,7 @@ fn main() {
 
 在运行 Rust 程序之前，必须先使用 Rust 编译器编译它，即输入 `rustc` 命令并传入源文件名称，如下：
 
-```text
+```console
 $ rustc main.rs
 ```
 
@@ -112,7 +112,7 @@ $ rustc main.rs
 
 在 Linux、macOS 或 Windows 的 PowerShell 上，在 shell 中输入 `ls` 命令可以看见这个可执行文件。在 Linux 和 macOS，你会看到两个文件。在 Windows PowerShell 中，你会看到同使用 CMD 相同的三个文件。
 
-```text
+```console
 $ ls
 main  main.rs
 ```
@@ -128,7 +128,7 @@ main.rs
 
 这展示了扩展名为 *.rs* 的源文件、可执行文件（在 Windows 下是 *main.exe*，其它平台是 *main*），以及当使用 CMD 时会有一个包含调试信息、扩展名为 *.pdb* 的文件。从这里开始运行 *main* 或 *main.exe* 文件，如下：
 
-```text
+```console
 $ ./main # Windows 是 .\main.exe
 ```
 

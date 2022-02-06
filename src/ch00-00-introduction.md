@@ -2,7 +2,7 @@
 
 > [ch00-00-introduction.md](https://github.com/rust-lang/book/blob/master/src/ch00-00-introduction.md)
 > <br>
-> commit 0aa307c7d79d2cbf83cdf5d47780b2904e9cb03f
+> commit 578591a3db98bc645aae4bcc2eed85db458a4e24
 
 > 注意：本书的版本与出版的 [The Rust Programming Language][nsprust]
 > 和电子版的 [No Starch Press][nsp] 一致
@@ -82,10 +82,10 @@ Rust 语言也希望能支持很多其他用户，这里提及的只是最大的
 
 | Ferris                                                                 | 意义                                          |
 |------------------------------------------------------------------------|--------------------------------------------------|
-| <img src="img/ferris/does_not_compile.svg" class="ferris-explain">     | 这些代码不能编译！                      |
-| <img src="img/ferris/panics.svg" class="ferris-explain">               | 这些代码会 panic！                                |
-| <img src="img/ferris/unsafe.svg" class="ferris-explain">               | 这些代码块包含不安全（unsafe）代码。            |
-| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain"> | 这些代码不会产生期望的行为。 |
+| <img src="img/ferris/does_not_compile.svg" class="ferris-explain" alt="does not compile"/>     | 这些代码不能编译！                      |
+| <img src="img/ferris/panics.svg" class="ferris-explain" alt="panic"/>              | 这些代码会 panic！                                |
+| <img src="img/ferris/unsafe.svg" class="ferris-explain" alt="unsafe"/>              | 这些代码块包含不安全（unsafe）代码。            |
+| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain" alt="not desired behavior"/> | 这些代码不会产生期望的行为。 |
 
 在大部分情况，我们会指引你将任何不能编译的代码纠正为正确版本。
 
@@ -93,7 +93,7 @@ Rust 语言也希望能支持很多其他用户，这里提及的只是最大的
 
 生成本书的源码可以在 [GitHub][book] 上找到。
 
-[book]: https://github.com/rust-lang/book/tree/master/src
+[book]: https://github.com/rust-lang/book/tree/main/src
 
 > 译者注：本译本的 [GitHub 仓库][trpl-zh-cn]，欢迎 Issue 和 PR :)
 

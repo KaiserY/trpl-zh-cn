@@ -1,11 +1,13 @@
 ## 安装
 
 > [ch01-01-installation.md](https://github.com/rust-lang/book/blob/master/src/ch01-01-installation.md) <br>
-> commit bad683bb7dcd06ef7f5f83bad3a25b1706b7b230
+> commit aa6f28089364b148bbc6baddd59a2625dcc4dfba
 
 第一步是安装 Rust。我们会通过 `rustup` 下载 Rust，这是一个管理 Rust 版本和相关工具的命令行工具。下载时需要联网。
 
-> 注意：如果你出于某些理由倾向于不使用 `rustup`，请到 [Rust 安装页面](https://www.rust-lang.org/install.html) 查看其它安装选项。
+> 注意：如果你出于某些理由倾向于不使用 `rustup`，请到 [其他 Rust 安装方式页面][otherinstall] 查看其它安装选项。
+
+[otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
 
 接下来的步骤会安装最新的稳定版 Rust 编译器。Rust 的稳定性确保本书所有示例在最新版本的 Rust 中能够继续编译。不同版本的输出可能略有不同，因为 Rust 经常改进错误信息和警告。也就是说，任何通过这些步骤安装的最新稳定版 Rust，都应该能正常运行本书中的内容。
 
@@ -17,7 +19,7 @@
 
 如果你使用 Linux 或 macOS，打开终端并输入如下命令：
 
-```text
+```console
 $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
@@ -27,7 +29,15 @@ $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 Rust is installed now. Great!
 ```
 
-另外，你需要一个某种类型的链接器（linker）。很有可能已经安装，不过当你尝试编译 Rust 程序时，却有错误指出无法执行链接器，这意味着你的系统上没有安装链接器，你需要自行安装一个。C 编译器通常带有正确的链接器。请查看你使用平台的文档，了解如何安装 C 编译器。并且，一些常用的 Rust 包依赖 C 代码，也需要安装 C 编译器。因此现在安装一个是值得的。
+另外，你还需要一个链接器（linker），这是一个 Rust 用来将其编译输出链接成一个（可执行）文件的程序。你很有可能已经安装了。如果你遇到了链接器错误，则应该安装一个 C 编译器（compiler），它通常会包含一个链接器。并且，一些常用的 Rust 包依赖 C 代码，也需要安装 C 编译器。因此现在安装一个是值得的。
+
+在 macOS 上，运行如下来获取一个 C 编译器：
+
+```console
+$ xcode-select --install
+```
+
+Linux 用户通常需要根据发行版（distribution）文档安装 GCC 或 Clang。比如，如果你使用 Ubuntu，可以安装 `build-essential` 包。
 
 ### 在 Windows 上安装 `rustup`
 
@@ -42,13 +52,13 @@ Rust is installed now. Great!
 
 通过 `rustup` 安装了 Rust 之后，很容易更新到最新版本。在 shell 中运行如下更新脚本：
 
-```text
+```console
 $ rustup update
 ```
 
 为了卸载 Rust 和 `rustup`，在 shell 中运行如下卸载脚本:
 
-```text
+```console
 $ rustup self uninstall
 ```
 
@@ -56,7 +66,7 @@ $ rustup self uninstall
 
 要检查是否正确安装了 Rust，打开 shell 并运行如下行：
 
-```text
+```console
 $ rustc --version
 ```
 
