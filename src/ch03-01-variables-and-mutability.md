@@ -2,7 +2,7 @@
 
 > [ch03-01-variables-and-mutability.md](https://github.com/rust-lang/book/blob/main/src/ch03-01-variables-and-mutability.md)
 > <br>
-> commit d281b7b062e6dbfbcf47f8381073f7fce9e5cd4e
+> commit 059f85014f2a96b7a2dcdc23e01c87ae319873bc
 
 正如第二章中[“使用变量储存值”][storing-values-with-variables]<!-- ignore --> 部分提到的那样，变量默认是不可改变的（immutable）。这是 Rust 提供给你的众多优势之一，让你得以充分利用 Rust 提供的安全性和简单并发性来编写代码。不过，你仍然可以使用可变变量。让我们探讨一下 Rust 为何及如何鼓励你利用不可变性，以及何时你会选择不使用不可变性。
 
@@ -13,37 +13,13 @@
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let x = 5;
-    println!("The value of x is: {}", x);
-    x = 6;
-    println!("The value of x is: {}", x);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/src/main.rs}}
 ```
 
 保存并使用 `cargo run` 运行程序。应该会看到一条错误信息，如下输出所示：
 
 ```console
-$ cargo run
-   Compiling variables v0.1.0 (file:///projects/variables)
-error[E0384]: cannot assign twice to immutable variable `x`
- --> src/main.rs:4:5
-  |
-2 |     let x = 5;
-  |         -
-  |         |
-  |         first assignment to `x`
-  |         help: consider making this binding mutable: `mut x`
-3 |     println!("The value of x is: {}", x);
-4 |     x = 6;
-  |     ^^^^^ cannot assign twice to immutable variable
-
-error: aborting due to previous error
-
-For more information about this error, try `rustc --explain E0384`.
-error: could not compile `variables`
-
-To learn more, run the command again with --verbose.
+{{#include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/output.txt}}
 ```
 
 这个例子展示了编译器如何帮助你找出程序中的错误。虽然编译错误令人沮丧，但那只是表示程序不能安全的完成你想让它完成的工作；并 **不能** 说明你不是一个好程序员！经验丰富的 Rustacean 们一样会遇到编译错误。
@@ -61,23 +37,13 @@ Rust 编译器保证，如果声明一个值不会变，它就真的不会变，
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let mut x = 5;
-    println!("The value of x is: {}", x);
-    x = 6;
-    println!("The value of x is: {}", x);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/src/main.rs}}
 ```
 
 现在运行这个程序，出现如下内容：
 
 ```console
-$ cargo run
-   Compiling variables v0.1.0 (file:///projects/variables)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.30s
-     Running `target/debug/variables`
-The value of x is: 5
-The value of x is: 6
+{{#include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/output.txt}}
 ```
 
 通过 `mut`，允许把绑定到 `x` 的值从 `5` 改成 `6`。除了防止出现 bug 外，还有很多地方需要权衡取舍。例如，使用大型数据结构时，适当地使用可变变量，可能比复制和返回新分配的实例更快。对于较小的数据结构，总是创建新实例，采用更偏向函数式的编程风格，可能会使代码更易理解，为可读性而牺牲性能或许是值得的。
@@ -113,29 +79,13 @@ const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = 5;
-
-    let x = x + 1;
-
-    {
-        let x = x * 2;
-        println!("The value of x in the inner scope is: {}", x);
-    }
-
-    println!("The value of x is: {}", x);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/src/main.rs}}
 ```
 
 这个程序首先将 `x` 绑定到值 `5` 上。接着通过 `let x =` 隐藏 `x`，获取初始值并加 `1`，这样 `x` 的值就变成 `6` 了。然后，在内部作用域内，第三个 `let` 语句也隐藏了 `x`，将之前的值乘以 `2`，`x` 得到的值是 `12`。当该作用域结束时，内部 shadowing 的作用域也结束了，`x` 又返回到 `6`。运行这个程序，它会有如下输出：
 
 ```console
-$ cargo run
-   Compiling variables v0.1.0 (file:///projects/variables)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31s
-     Running `target/debug/variables`
-The value of x in the inner scope is: 12
-The value of x is: 6
+{{#include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/output.txt}}
 ```
 
 隐藏与将变量标记为 `mut` 是有区别的。当不小心尝试对变量重新赋值时，如果没有使用 `let` 关键字，就会导致编译时错误。通过使用 `let`，我们可以用这个值进行一些计算，不过计算完之后变量仍然是不可变的。
@@ -143,34 +93,19 @@ The value of x is: 6
 `mut` 与隐藏的另一个区别是，当再次使用 `let` 时，实际上创建了一个新变量，我们可以改变值的类型，并且复用这个名字。例如，假设程序请求用户输入空格字符来说明希望在文本之间显示多少个空格，接下来我们想将输入存储成数字（多少个空格）：
 
 ```rust
-let spaces = "   ";
-let spaces = spaces.len();
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-04-shadowing-can-change-types/src/main.rs:here}}
 ```
 
 第一个 `spaces` 变量是字符串类型，第二个 `spaces` 变量是数字类型。隐藏使我们不必使用不同的名字，如 `spaces_str` 和 `spaces_num`；相反，我们可以复用 `spaces` 这个更简单的名字。然而，如果尝试使用 `mut`，将会得到一个编译时错误，如下所示：
 
 ```rust,ignore,does_not_compile
-let mut spaces = "   ";
-spaces = spaces.len();
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/src/main.rs:here}}
 ```
 
 这个错误说明，我们不能改变变量的类型：
 
 ```console
-$ cargo run
-   Compiling variables v0.1.0 (file:///projects/variables)
-error[E0308]: mismatched types
- --> src/main.rs:3:14
-  |
-3 |     spaces = spaces.len();
-  |              ^^^^^^^^^^^^ expected `&str`, found `usize`
-
-error: aborting due to previous error
-
-For more information about this error, try `rustc --explain E0308`.
-error: could not compile `variables`
-
-To learn more, run the command again with --verbose.
+{{#include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/output.txt}}
 ```
 
 现在我们已经了解了变量如何工作，让我们看看变量可以拥有的更多数据类型。

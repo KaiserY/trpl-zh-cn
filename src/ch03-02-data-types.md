@@ -15,20 +15,7 @@ let guess: u32 = "42".parse().expect("Not a number!");
 这里如果不添加类型注解，Rust 会显示如下错误，这说明编译器需要我们提供更多信息，来了解我们想要的类型：
 
 ```console
-$ cargo build
-   Compiling no_type_annotations v0.1.0 (file:///projects/no_type_annotations)
-error[E0282]: type annotations needed
- --> src/main.rs:2:9
-  |
-2 |     let guess = "42".parse().expect("Not a number!");
-  |         ^^^^^ consider giving `guess` a type
-
-error: aborting due to previous error
-
-For more information about this error, try `rustc --explain E0282`.
-error: could not compile `no_type_annotations`
-
-To learn more, run the command again with --verbose.
+{{#include ../listings/ch03-common-programming-concepts/output-only-01-no-type-annotations/output.txt}}
 ```
 
 你会看到其它数据类型的各种类型注解。
@@ -92,11 +79,7 @@ Rust 也有两个原生的 **浮点数**（*floating-point numbers*）类型，�
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = 2.0; // f64
-
-    let y: f32 = 3.0; // f32
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-06-floating-point/src/main.rs}}
 ```
 
 浮点数采用 IEEE-754 标准表示。`f32` 是单精度浮点数，`f64` 是双精度浮点数。
@@ -108,23 +91,7 @@ Rust 中的所有数字类型都支持基本数学运算：加法、减法、乘
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    // 加法
-    let sum = 5 + 10;
-
-    // 减法
-    let difference = 95.5 - 4.3;
-
-    // 乘法
-    let product = 4 * 30;
-
-    // 除法
-    let quotient = 56.7 / 32.2;
-    let floored = 2 / 3; // 结果为 0
-
-    // 取余
-    let remainder = 43 % 5;
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-07-numeric-operations/src/main.rs}}
 ```
 
 这些语句中的每个表达式使用了一个数学运算符并计算出了一个值，然后绑定给一个变量。[附录 B][appendix_b]<!-- ignore -->  包含 Rust 提供的所有运算符的列表。
@@ -136,11 +103,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let t = true;
-
-    let f: bool = false; // 显式指定类型注解
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-08-boolean/src/main.rs}}
 ```
 
 使用布尔值的主要场景是条件表达式，例如 `if` 表达式。在 [“控制流”（“Control Flow”）][control-flow] 部分将介绍 `if` 表达式在 Rust 中如何工作。
@@ -152,11 +115,7 @@ Rust的 `char` 类型是语言中最原生的字母类型。下面是一些声�
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let c = 'z';
-    let z = 'ℤ';
-    let heart_eyed_cat = '😻';
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-09-char/src/main.rs}}
 ```
 
 注意，我们用单引号声明 `char` 字面量，而与之相反的是，使用双引号声明字符串字面量。Rust 的 `char` 类型的大小为四个字节(four bytes)，并代表了一个 Unicode 标量值（Unicode Scalar Value），这意味着它可以比 ASCII 表示更多内容。在 Rust 中，拼音字母（Accented letters），中文、日文、韩文等字符，emoji（绘文字）以及零长度的空白字符都是有效的 `char` 值。Unicode 标量值包含从 `U+0000` 到 `U+D7FF` 和 `U+E000` 到 `U+10FFFF` 在内的值。不过，“字符” 并不是一个 Unicode 中的概念，所以人直觉上的 “字符” 可能与 Rust 中的 `char` 并不符合。第八章的 [“使用字符串存储 UTF-8 编码的文本”][strings] 中将详细讨论这个主题。
@@ -174,9 +133,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let tup: (i32, f64, u8) = (500, 6.4, 1);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-10-tuples/src/main.rs}}
 ```
 
 `tup` 变量绑定到整个元组上，因为元组是一个单独的复合元素。为了从元组中获取单个值，可以使用模式匹配（pattern matching）来解构（destructure）元组值，像这样：
@@ -184,13 +141,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let tup = (500, 6.4, 1);
-
-    let (x, y, z) = tup;
-
-    println!("The value of y is: {}", y);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-11-destructuring-tuples/src/main.rs}}
 ```
 
 程序首先创建了一个元组并绑定到 `tup` 变量上。接着使用了 `let` 和一个模式将 `tup` 分成了三个不同的变量，`x`、`y` 和 `z`。这叫做 **解构**（*destructuring*），因为它将一个元组拆成了三个部分。最后，程序打印出了 `y` 的值，也就是 `6.4`。
@@ -200,15 +151,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x: (i32, f64, u8) = (500, 6.4, 1);
-
-    let five_hundred = x.0;
-
-    let six_point_four = x.1;
-
-    let one = x.2;
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-12-tuple-indexing/src/main.rs}}
 ```
 
 这个程序创建了一个元组，`x`，并接着使用索引为每个元素创建新变量。跟大多数编程语言一样，元组的第一个索引值是 0。
@@ -224,9 +167,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let a = [1, 2, 3, 4, 5];
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-13-arrays/src/main.rs}}
 ```
 
 当你想要在栈（stack）而不是在堆（heap）上为数据分配空间（[第四章][stack-and-heap]将讨论栈与堆的更多内容），或者是想要确保总是有固定数量的元素时，数组非常有用。但是数组并不如 vector 类型灵活。vector 类型是标准库提供的一个 **允许** 增长和缩小长度的类似数组的集合类型。当不确定是应该使用数组还是 vector 的时候，那么很可能应该使用 vector。[第八章][vectors]会详细讨论 vector。
@@ -261,12 +202,7 @@ let a = [3; 5];
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let a = [1, 2, 3, 4, 5];
-
-    let first = a[0];
-    let second = a[1];
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-14-array-indexing/src/main.rs}}
 ```
 
 在这个例子中，叫做 `first` 的变量的值是 `1`，因为它是数组索引 `[0]` 的值。变量 `second` 将会是数组索引 `[1]` 的值 `2`。
@@ -278,38 +214,14 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,panics
-use std::io;
-
-fn main() {
-    let a = [1, 2, 3, 4, 5];
-
-    println!("Please enter an array index.");
-
-    let mut index = String::new();
-
-    io::stdin()
-        .read_line(&mut index)
-        .expect("Failed to read line");
-
-    let index: usize = index
-        .trim()
-        .parse()
-        .expect("Index entered was not a number");
-
-    let element = a[index];
-
-    println!(
-        "The value of the element at index {} is: {}",
-        index, element
-    );
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/src/main.rs}}
 ```
 
 此代码编译成功。如果您使用 `cargo run` 运行此代码并输入 0、1、2、3 或 4，程序将在数组中的索引处打印出相应的值。如果你输入一个超过数组末端的数字，如 10，你会看到这样的输出：
 
 ```console
 thread 'main' panicked at 'index out of bounds: the len is 5 but the index is 10', src/main.rs:19:19
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrac
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
 程序在索引操作中使用一个无效的值时导致 **运行时** 错误。程序带着错误信息退出，并且没有执行最后的 `println!` 语句。当尝试用索引访问一个元素时，Rust 会检查指定的索引是否小于数组的长度。如果索引超出了数组长度，Rust 会 *panic*，这是 Rust 术语，它用于程序因为错误而退出的情况。这种检查必须在运行时进行，特别是在这种情况下，因为编译器不可能知道用户在以后运行代码时将输入什么值。

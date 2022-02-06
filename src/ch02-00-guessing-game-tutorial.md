@@ -1,6 +1,6 @@
 # 编写 猜猜看 游戏
 
-> [ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/master/src/ch02-00-guessing-game-tutorial.md) > <br>
+> [ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/main/src/ch02-00-guessing-game-tutorial.md) > <br>
 > commit d68d96576b705fcff7aa6341a9840f4de3c0ca0c
 
 让我们一起动手完成一个项目，来快速上手 Rust！本章将介绍 Rust 中一些常用概念，并通过真实的程序来展示如何运用它们。你将会学到 `let`、`match`、方法（method）、关联函数（associated function）、使用外部 crate 等知识！后续章节会深入探讨这些概念的细节。在这一章，我们将练习基础内容。

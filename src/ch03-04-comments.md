@@ -2,9 +2,9 @@
 
 > [ch03-04-comments.md](https://github.com/rust-lang/book/blob/main/src/ch03-04-comments.md)
 > <br>
-> commit 25a1530ccbf0a79c8df2920ee2af8beb106122e8
+> commit d281b7b062e6dbfbcf47f8381073f7fce9e5cd4e
 
-所有程序员都力求使其代码易于理解，不过有时还需要提供额外的解释。在这种情况下，程序员在源码中留下记录，或者 **注释**（*comments*），编译器会忽略它们，不过阅读代码的人可能觉得有用。
+所有程序员都力求使其代码易于理解，不过有时还需要提供额外的解释。在这种情况下，程序员在源码中留下 **注释**（*comments*），编译器会忽略它们，不过阅读代码的人可能觉得有用。
 
 这是一个简单的注释：
 
@@ -25,9 +25,7 @@
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let lucky_number = 7; // I’m feeling lucky today
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-24-comments-end-of-line/src/main.rs}}
 ```
 
 不过你更经常看到的是以这种格式使用它们，也就是位于它所解释的代码行的上面一行：
@@ -35,10 +33,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    // I’m feeling lucky today
-    let lucky_number = 7;
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}
 ```
 
 Rust 还有另一种注释，称为文档注释，我们将在 14 章的 “将 crate 发布到 Crates.io” 部分讨论它。
