@@ -2,12 +2,12 @@ fn main() {
     // ANCHOR: here
     let mut s = String::from("hello");
 
-    let r1 = &s; // no problem
-    let r2 = &s; // no problem
+    let r1 = &s; // 没问题
+    let r2 = &s; // 没问题
     println!("{} and {}", r1, r2);
-    // variables r1 and r2 will not be used after this point
+    // 此位置之后 r1 和 r2 不再使用
 
-    let r3 = &mut s; // no problem
+    let r3 = &mut s; // 没问题
     println!("{}", r3);
     // ANCHOR_END: here
 }

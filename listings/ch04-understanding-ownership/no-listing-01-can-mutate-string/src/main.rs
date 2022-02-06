@@ -2,8 +2,8 @@ fn main() {
     // ANCHOR: here
     let mut s = String::from("hello");
 
-    s.push_str(", world!"); // push_str() appends a literal to a String
+    s.push_str(", world!"); // push_str() 在字符串后追加字面值
 
-    println!("{}", s); // This will print `hello, world!`
+    println!("{}", s); // 将打印 `hello, world!`
                        // ANCHOR_END: here
 }

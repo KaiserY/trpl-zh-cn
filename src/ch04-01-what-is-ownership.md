@@ -2,11 +2,11 @@
 
 > [ch04-01-what-is-ownership.md](https://github.com/rust-lang/book/blob/main/src/ch04-01-what-is-ownership.md)
 > <br>
-> commit d377d2effa9ae9173026e35a7e464b8f5b82409a
+> commit a5e0c5b2c5f9054be3b961aea2c7edfeea591de8
 
 Rust 的核心功能（之一）是 **所有权**（*ownership*）。虽然该功能很容易解释，但它对语言的其他部分有着深刻的影响。
 
-所有运行的程序都必须管理其使用计算机内存的方式。一些语言中具有垃圾回收机制，在程序运行时不断地寻找不再使用的内存；在另一些语言中，程序员必须亲自分配和释放内存。Rust 则选择了第三种方式：通过所有权系统管理内存，编译器在编译时会根据一系列的规则进行检查。在运行时，所有权系统的任何功能都不会减慢程序。
+所有程序都必须管理其运行时使用计算机内存的方式。一些语言中具有垃圾回收机制，在程序运行时不断地寻找不再使用的内存；在另一些语言中，程序员必须亲自分配和释放内存。Rust 则选择了第三种方式：通过所有权系统管理内存，编译器在编译时会根据一系列的规则进行检查。如果违反了任何这些规则，程序都不能编译。在运行时，所有权系统的任何功能都不会减慢程序。
 
 因为所有权对很多程序员来说都是一个新概念，需要一些时间来适应。好消息是随着你对 Rust 和所有权系统的规则越来越有经验，你就越能自然地编写出安全和高效的代码。持之以恒！
 
@@ -16,11 +16,8 @@ Rust 的核心功能（之一）是 **所有权**（*ownership*）。虽然该�
 >
 > 在很多语言中，你并不需要经常考虑到栈与堆。不过在像 Rust 这样的系统编程语言中，值是位于栈上还是堆上在更大程度上影响了语言的行为以及为何必须做出这样的抉择。我们会在本章的稍后部分描述所有权与栈和堆相关的内容，所以这里只是一个用来预热的简要解释。
 >
-> 栈和堆都是代码在运行时可供使用的内存，但是它们的结构不同。栈以放入值的顺序存储值并以相反顺序取出值。这也被称作 **后进先出**（*last in, first out*）。想象一下一叠盘子：当增加更多盘子时，把它们放在盘子堆的顶部，当需要盘子时，也从顶部拿走。不能从中间也不能从底部增加或拿走盘子！增加数据叫做 **进栈**（*pushing onto the stack*），而移出数据叫做 **出栈**（*popping off the stack*）。
->
-> 栈中的所有数据都必须占用已知且固定的大小。在编译时大小未知或大小可能变化的数据，要改为存储在堆上。堆是缺乏组织的：当向堆放入数据时，你要请求一定大小的空间。内存分配器（memory allocator）在堆的某处找到一块足够大的空位，把它标记为已使用，并返回一个表示该位置地址的 **指针**（*pointer*）。这个过程称作 **在堆上分配内存**（*allocating on the heap*），有时简称为 “分配”（allocating）。将数据推入栈中并不被认为是分配。因为指针的大小是已知并且固定的，你可以将指针存储在栈上，不过当需要实际数据时，必须访问指针。
->
-> 想象一下去餐馆就座吃饭。当进入时，你说明有几个人，餐馆员工会找到一个够大的空桌子并领你们过去。如果有人来迟了，他们也可以通过询问来找到你们坐在哪。
+> 栈和堆都是代码在运行时可供使用的内存，但是它们的结构不同。栈以放入值的顺序存储值并以相反顺序取出值。这也被称作 **后进先出**（*last in, first out*）。想象一下一叠盘子：当增加更多盘子时，把它们放在盘子堆的顶部，当需要盘子时，也从顶部拿走。不能从中间也不能从底部增加或拿走盘子！增加数据叫做 **进栈**（*pushing onto the stack*），而移出数据叫做 **出栈**（*popping off the stack*）。栈中的所有数据都必须占用已知且固定的大小。在编译时大小未知或大小可能变化的数据，要改为存储在堆上。
+> 堆是缺乏组织的：当向堆放入数据时，你要请求一定大小的空间。内存分配器（memory allocator）在堆的某处找到一块足够大的空位，把它标记为已使用，并返回一个表示该位置地址的 **指针**（*pointer*）。这个过程称作 **在堆上分配内存**（*allocating on the heap*），有时简称为 “分配”（allocating）。将数据推入栈中并不被认为是分配。因为指针的大小是已知并且固定的，你可以将指针存储在栈上，不过当需要实际数据时，必须访问指针。想象一下去餐馆就座吃饭。当进入时，你说明有几个人，餐馆员工会找到一个够大的空桌子并领你们过去。如果有人来迟了，他们也可以通过询问来找到你们坐在哪。
 >
 > 入栈比在堆上分配内存要快，因为（入栈时）分配器无需为存储新数据去搜索内存空间；其位置总是在栈顶。相比之下，在堆上分配内存则需要更多的工作，这是因为分配器必须首先找到一块足够存放数据的内存空间，并接着做一些记录为下一次分配做准备。
 >
@@ -28,7 +25,7 @@ Rust 的核心功能（之一）是 **所有权**（*ownership*）。虽然该�
 >
 > 当你的代码调用一个函数时，传递给函数的值（包括可能指向堆上数据的指针）和函数的局部变量被压入栈中。当函数结束时，这些值被移出栈。
 >
-> 跟踪哪部分代码正在使用堆上的哪些数据，最大限度的减少堆上的重复数据的数量，以及清理堆上不再使用的数据确保不会耗尽空间，这些问题正是所有权系统要处理的。一旦理解了所有权，你就不需要经常考虑栈和堆了，不过明白了所有权的存在就是为了管理堆数据，能够帮助解释为什么所有权要以这种方式工作。
+> 跟踪哪部分代码正在使用堆上的哪些数据，最大限度的减少堆上的重复数据的数量，以及清理堆上不再使用的数据确保不会耗尽空间，这些问题正是所有权系统要处理的。一旦理解了所有权，你就不需要经常考虑栈和堆了，不过明白了所有权的主要目的就是为了管理堆数据，能够帮助解释为什么所有权要以这种方式工作。
 
 ### 所有权规则
 
@@ -40,7 +37,7 @@ Rust 的核心功能（之一）是 **所有权**（*ownership*）。虽然该�
 
 ### 变量作用域
 
-我们已经在第二章完成一个 Rust 程序示例。既然我们已经掌握了基本语法，将不会在之后的例子中包含 `fn main() {` 代码，所以如果你是一路跟过来的，必须手动将之后例子的代码放入一个 `main` 函数中。这样，例子将显得更加简明，使我们可以关注实际细节而不是样板代码。
+既然我们已经掌握了基本语法，将不会在之后的例子中包含 `fn main() {` 代码，所以如果你是一路跟过来的，必须手动将之后例子的代码放入一个 `main` 函数中。这样，例子将显得更加简明，使我们可以关注实际细节而不是样板代码。
 
 在所有权的第一个例子中，我们看看一些变量的 **作用域**（*scope*）。作用域是一个项（item）在程序中有效的范围。假设有这样一个变量：
 
@@ -48,14 +45,10 @@ Rust 的核心功能（之一）是 **所有权**（*ownership*）。虽然该�
 let s = "hello";
 ```
 
-变量 `s` 绑定到了一个字符串字面值，这个字符串值是硬编码进程序代码中的。这个变量从声明的点开始直到当前 **作用域** 结束时都是有效的。示例 4-1 的注释标明了变量 `s` 在何处是有效的。
+变量 `s` 绑定到了一个字符串字面值，这个字符串值是硬编码进程序代码中的。这个变量从声明的点开始直到当前 **作用域** 结束时都是有效的。示例 4-1 中的注释标明了变量 `s` 在何处是有效的。
 
 ```rust
-{                      // s 在这里无效, 它尚未声明
-    let s = "hello";   // 从此处起，s 是有效的
-
-    // 使用 s
-}                      // 此作用域已结束，s 不再有效
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-01/src/main.rs:here}}
 ```
 
 <span class="caption">示例 4-1：一个变量和其有效的作用域</span>
@@ -71,7 +64,7 @@ let s = "hello";
 
 为了演示所有权的规则，我们需要一个比第三章 [“数据类型”][data-types] 中讲到的都要复杂的数据类型。前面介绍的类型都是已知大小的，可以存储在栈中，并且当离开作用域时被移出栈，如果代码的另一部分需要在不同的作用域中使用相同的值，可以快速简单地复制它们来创建一个新的独立实例。不过我们需要寻找一个存储在堆上的数据来探索 Rust 是如何知道该在何时清理数据的。
 
-这里使用 `String` 作为例子，并专注于 `String` 与所有权相关的部分。这些方面也同样适用于标准库提供的或你自己创建的其他复杂数据类型。在第八章会更深入地讲解 `String`。
+我们会专注于 `String` 与所有权相关的部分。这些方面也同样适用于标准库提供的或你自己创建的其他复杂数据类型。在[第八章][ch8]会更深入地讲解 `String`。
 
 我们已经见过字符串字面值，即被硬编码进程序里的字符串值。字符串字面值是很方便的，不过它们并不适合使用文本的每一种场景。原因之一就是它们是不可变的。另一个原因是并非所有字符串的值都能在编写代码时就知道：例如，要是想获取用户输入并存储该怎么办呢？为此，Rust 有第二个字符串类型，`String`。这个类型管理被分配到堆上的数据，所以能够存储在编译时未知大小的文本。可以使用 `from` 函数基于字符串字面值来创建 `String`，如下：
 
@@ -79,16 +72,12 @@ let s = "hello";
 let s = String::from("hello");
 ```
 
-这两个冒号（`::`）是运算符，允许将特定的 `from` 函数置于 `String` 类型的命名空间（namespace）下，而不需要使用类似 `string_from` 这样的名字。在第五章的 [“方法语法”（“Method Syntax”）][method-syntax] 部分会着重讲解这个语法而且在第七章的 [“路径用于引用模块树中的项”][paths-module-tree]  中会讲到模块的命名空间。
+这两个冒号 `::` 是运算符，允许将特定的 `from` 函数置于 `String` 类型的命名空间（namespace）下，而不需要使用类似 `string_from` 这样的名字。在第五章的 [“方法语法”（“Method Syntax”）][method-syntax] 部分会着重讲解这个语法而且在第七章的 [“路径用于引用模块树中的项”][paths-module-tree]  中会讲到模块的命名空间。
 
 **可以** 修改此类字符串 ：
 
 ```rust
-let mut s = String::from("hello");
-
-s.push_str(", world!"); // push_str() 在字符串后追加字面值
-
-println!("{}", s); // 将打印 `hello, world!`
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-01-can-mutate-string/src/main.rs:here}}
 ```
 
 那么这里有什么区别呢？为什么 `String` 可变而字面值却不行呢？区别在于两个类型对内存的处理上。
@@ -104,17 +93,12 @@ println!("{}", s); // 将打印 `hello, world!`
 
 第一部分由我们完成：当调用 `String::from` 时，它的实现 (*implementation*) 请求其所需的内存。这在编程语言中是非常通用的。
 
-然而，第二部分实现起来就各有区别了。在有 **垃圾回收**（*garbage collector*，*GC*）的语言中， GC 记录并清除不再使用的内存，而我们并不需要关心它。没有 GC 的话，识别出不再使用的内存并调用代码显式释放就是我们的责任了，跟请求内存的时候一样。从历史的角度上说正确处理内存回收曾经是一个困难的编程问题。如果忘记回收了会浪费内存。如果过早回收了，将会出现无效变量。如果重复回收，这也是个 bug。我们需要精确的为一个 `allocate` 配对一个 `free`。
+然而，第二部分实现起来就各有区别了。在有 **垃圾回收**（*garbage collector*，*GC*）的语言中， GC 记录并清除不再使用的内存，而我们并不需要关心它。在大部分没有 GC 的语言中，识别出不再使用的内存并调用代码显式释放就是我们的责任了，跟请求内存的时候一样。从历史的角度上说正确处理内存回收曾经是一个困难的编程问题。如果忘记回收了会浪费内存。如果过早回收了，将会出现无效变量。如果重复回收，这也是个 bug。我们需要精确的为一个 `allocate` 配对一个 `free`。
 
 Rust 采取了一个不同的策略：内存在拥有它的变量离开作用域后就被自动释放。下面是示例 4-1 中作用域例子的一个使用 `String` 而不是字符串字面值的版本：
 
 ```rust
-{
-    let s = String::from("hello"); // 从此处起，s 是有效的
-
-    // 使用 s
-}                                  // 此作用域已结束，
-                                   // s 不再有效
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-02-string-scope/src/main.rs:here}}
 ```
 
 这是一个将 `String` 需要的内存返回给分配器的很自然的位置：当 `s` 离开作用域的时候。当变量离开作用域，Rust 为我们调用一个特殊的函数。这个函数叫做 [`drop`][drop]，在这里 `String` 的作者可以放置释放内存的代码。Rust 在结尾的 `}` 处自动调用 `drop`。
@@ -128,8 +112,7 @@ Rust 采取了一个不同的策略：内存在拥有它的变量离开作用域
 在Rust 中，多个变量可以采取不同的方式与同一数据进行交互。让我们看看示例 4-2 中一个使用整型的例子。
 
 ```rust
-let x = 5;
-let y = x;
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-02/src/main.rs:here}}
 ```
 
 <span class="caption">示例 4-2：将变量 `x` 的整数值赋给 `y`</span>
@@ -139,8 +122,7 @@ let y = x;
 现在看看这个 `String` 版本：
 
 ```rust
-let s1 = String::from("hello");
-let s2 = s1;
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-03-string-move/src/main.rs:here}}
 ```
 
 这看起来与上面的代码非常类似，所以我们可能会假设他们的运行方式也是类似的：也就是说，第二行可能会生成一个 `s1` 的拷贝并绑定到 `s2` 上。不过，事实上并不完全是这样。
@@ -167,33 +149,16 @@ let s2 = s1;
 
 之前我们提到过当变量离开作用域后，Rust 自动调用 `drop` 函数并清理变量的堆内存。不过图 4-2 展示了两个数据指针指向了同一位置。这就有了一个问题：当 `s2` 和 `s1` 离开作用域，他们都会尝试释放相同的内存。这是一个叫做 **二次释放**（*double free*）的错误，也是之前提到过的内存安全性 bug 之一。两次释放（相同）内存会导致内存污染，它可能会导致潜在的安全漏洞。
 
-为了确保内存安全，这种场景下 Rust 的处理有另一个细节值得注意。在 `let s2 = s1` 之后，Rust 认为 `s1` 不再有效，因此 Rust 不需要在 `s1` 离开作用域后清理任何东西。看看在 `s2` 被创建之后尝试使用 `s1` 会发生什么；这段代码不能运行：
+为了确保内存安全，在 `let s2 = s1` 之后，Rust 认为 `s1` 不再有效，因此 Rust 不需要在 `s1` 离开作用域后清理任何东西。看看在 `s2` 被创建之后尝试使用 `s1` 会发生什么；这段代码不能运行：
 
 ```rust,ignore,does_not_compile
-let s1 = String::from("hello");
-let s2 = s1;
-
-println!("{}, world!", s1);
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/src/main.rs:here}}
 ```
 
 你会得到一个类似如下的错误，因为 Rust 禁止你使用无效的引用。
 
 ```console
-$ cargo run
-   Compiling ownership v0.1.0 (file:///projects/ownership)
-error[E0382]: borrow of moved value: `s1`
- --> src/main.rs:5:28
-  |
-2 |     let s1 = String::from("hello");
-  |         -- move occurs because `s1` has type `String`, which does not implement the `Copy` trait
-3 |     let s2 = s1;
-  |              -- value moved here
-4 |
-5 |     println!("{}, world!", s1);
-  |                            ^^ value borrowed here after move
-
-For more information about this error, try `rustc --explain E0382`.
-error: could not compile `ownership` due to previous error
+{{#include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/output.txt}}
 ```
 
 如果你在其他语言中听说过术语 **浅拷贝**（*shallow copy*）和 **深拷贝**（*deep copy*），那么拷贝指针、长度和容量而不拷贝数据可能听起来像浅拷贝。不过因为 Rust 同时使第一个变量无效了，这个操作被称为 **移动**（*move*），而不是浅拷贝。上面的例子可以解读为 `s1` 被 **移动** 到了 `s2` 中。那么具体发生了什么，如图 4-4 所示。
@@ -213,10 +178,7 @@ error: could not compile `ownership` due to previous error
 这是一个实际使用 `clone` 方法的例子：
 
 ```rust
-let s1 = String::from("hello");
-let s2 = s1.clone();
-
-println!("s1 = {}, s2 = {}", s1, s2);
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-05-clone/src/main.rs:here}}
 ```
 
 这段代码能正常运行，并且明确产生图 4-3 中行为，这里堆上的数据 **确实** 被复制了。
@@ -228,10 +190,7 @@ println!("s1 = {}, s2 = {}", s1, s2);
 这里还有一个没有提到的小窍门。这些代码使用了整型并且是有效的，他们是示例 4-2 中的一部分：
 
 ```rust
-let x = 5;
-let y = x;
-
-println!("x = {}, y = {}", x, y);
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-06-copy/src/main.rs:here}}
 ```
 
 但这段代码似乎与我们刚刚学到的内容相矛盾：没有调用 `clone`，不过 `x` 依然有效且没有被移动到 `y` 中。
@@ -255,27 +214,7 @@ Rust 有一个叫做 `Copy` trait 的特殊注解，可以用在类似整型这�
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let s = String::from("hello");  // s 进入作用域
-
-    takes_ownership(s);             // s 的值移动到函数里 ...
-                                    // ... 所以到这里不再有效
-
-    let x = 5;                      // x 进入作用域
-
-    makes_copy(x);                  // x 应该移动函数里，
-                                    // 但 i32 是 Copy 的，所以在后面可继续使用 x
-
-} // 这里, x 先移出了作用域，然后是 s。但因为 s 的值已被移走，
-  // 所以不会有特殊操作
-
-fn takes_ownership(some_string: String) { // some_string 进入作用域
-    println!("{}", some_string);
-} // 这里，some_string 移出作用域并调用 `drop` 方法。占用的内存被释放
-
-fn makes_copy(some_integer: i32) { // some_integer 进入作用域
-    println!("{}", some_integer);
-} // 这里，some_integer 移出作用域。不会有特殊操作
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-03/src/main.rs}}
 ```
 
 <span class="caption">示例 4-3：带有所有权和作用域注释的函数</span>
@@ -284,69 +223,34 @@ fn makes_copy(some_integer: i32) { // some_integer 进入作用域
 
 ### 返回值与作用域
 
-返回值也可以转移所有权。示例 4-4 与示例 4-3 一样带有类似的注释。
+返回值也可以转移所有权。示例 4-4 展示了一个返回了某些值的示例，与示例 4-3 一样带有类似的注释。
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let s1 = gives_ownership();         // gives_ownership 将返回值
-                                        // 移给 s1
-
-    let s2 = String::from("hello");     // s2 进入作用域
-
-    let s3 = takes_and_gives_back(s2);  // s2 被移动到
-                                        // takes_and_gives_back 中,
-                                        // 它也将返回值移给 s3
-} // 这里, s3 移出作用域并被丢弃。s2 也移出作用域，但已被移走，
-  // 所以什么也不会发生。s1 移出作用域并被丢弃
-
-fn gives_ownership() -> String {             // gives_ownership 将返回值移动给
-                                             // 调用它的函数
-
-    let some_string = String::from("hello"); // some_string 进入作用域.
-
-    some_string                              // 返回 some_string 并移出给调用的函数
-}
-
-// takes_and_gives_back 将传入字符串并返回该值
-fn takes_and_gives_back(a_string: String) -> String { // a_string 进入作用域
-
-    a_string  // 返回 a_string 并移出给调用的函数
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-04/src/main.rs}}
 ```
 
 <span class="caption">示例 4-4: 转移返回值的所有权</span>
 
 变量的所有权总是遵循相同的模式：将值赋给另一个变量时移动它。当持有堆中数据值的变量离开作用域时，其值将通过 `drop` 被清理掉，除非数据被移动为另一个变量所有。
 
-在每一个函数中都获取所有权并接着返回所有权有些啰嗦。如果我们想要函数使用一个值但不获取所有权该怎么办呢？如果我们还要接着使用它的话，每次都传进去再返回来就有点烦人了，除此之外，我们也可能想返回函数体中产生的一些数据。
+虽然这样是可以的，但是在每一个函数中都获取所有权并接着返回所有权有些啰嗦。如果我们想要函数使用一个值但不获取所有权该怎么办呢？如果我们还要接着使用它的话，每次都传进去再返回来就有点烦人了，除此之外，我们也可能想返回函数体中产生的一些数据。
 
 我们可以使用元组来返回多个值，如示例 4-5 所示。
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let s1 = String::from("hello");
-
-    let (s2, len) = calculate_length(s1);
-
-    println!("The length of '{}' is {}.", s2, len);
-}
-
-fn calculate_length(s: String) -> (String, usize) {
-    let length = s.len(); // len() 返回字符串的长度
-
-    (s, length)
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-05/src/main.rs}}
 ```
 
 <span class="caption">示例 4-5: 返回参数的所有权</span>
 
-但是这未免有些形式主义，而且这种场景应该很常见。幸运的是，Rust 对此提供了一个功能，叫做 **引用**（*references*）。
+但是这未免有些形式主义，而且这种场景应该很常见。幸运的是，Rust 对此提供了一个不用获取所有权就可以使用值的功能，叫做 **引用**（*references*）。
 
 [data-types]: ch03-02-data-types.html#数据类型
+[ch8]: ch08-02-strings.html
 [derivable-traits]: appendix-03-derivable-traits.html
 [method-syntax]: ch05-03-method-syntax.html#方法语法
 [paths-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html

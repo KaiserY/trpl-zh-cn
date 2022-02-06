@@ -9,6 +9,6 @@ fn main() {
 // ANCHOR: here
 fn calculate_length(s: &String) -> usize { // s is a reference to a String
     s.len()
-} // Here, s goes out of scope. But because it does not have ownership of what
-  // it refers to, nothing happens.
+} // 这里，s 离开了作用域。但因为它并不拥有引用值的所有权，
+  // 所以什么也不会发生
 // ANCHOR_END: here
