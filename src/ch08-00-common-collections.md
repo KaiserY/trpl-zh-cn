@@ -2,7 +2,7 @@
 
 > [ch08-00-common-collections.md](https://github.com/rust-lang/book/blob/main/src/ch08-00-common-collections.md)
 > <br>
-> commit 820ac357f6cf0e866e5a8e7a9c57dd3e17e9f8ca
+> commit 1fd890031311612e54965f7f800a8c8bd4464663
 
 Rust 标准库中包含一系列被称为 **集合**（*collections*）的非常有用的数据结构。大部分其他数据类型都代表一个特定的值，不过集合可以包含多个值。不同于内建的数组和元组类型，这些集合指向的数据是储存在堆上的，这意味着数据的数量不必在编译时就已知，并且还可以随着程序的运行增长或缩小。每种集合都有着不同功能和成本，而根据当前情况选择合适的集合，这是一项应当逐渐掌握的技能。在这一章里，我们将详细的了解三个在 Rust 程序中被广泛使用的集合：
 
@@ -12,6 +12,6 @@ Rust 标准库中包含一系列被称为 **集合**（*collections*）的非常
 
 对于标准库提供的其他类型的集合，请查看[文档][collections]。
 
-[collections]: https://doc.rust-lang.org/std/collections
-
 我们将讨论如何创建和更新 vector、字符串和哈希 map，以及它们有什么特别之处。
+
+[collections]: https://doc.rust-lang.org/std/collections/index.html

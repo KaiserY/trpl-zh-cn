@@ -2,7 +2,7 @@
 
 > [ch08-02-strings.md](https://github.com/rust-lang/book/blob/main/src/ch08-02-strings.md)
 > <br>
-> commit c084bdd9ee328e7e774df19882ccc139532e53d8
+> commit db403a8bdfe5223d952737f54b0d9651b3e6ae1d
 
 第四章已经讲过一些字符串的内容，不过现在让我们更深入地了解它。字符串是新晋 Rustacean 们通常会被困住的领域，这是由于三方面理由的结合：Rust 倾向于确保暴露出可能的错误，字符串是比很多程序员所想象的要更为复杂的数据结构，以及 UTF-8。所有这些要素结合起来对于来自其他语言背景的程序员就可能显得很困难了。
 
@@ -21,7 +21,7 @@ Rust 标准库中还包含一系列其他字符串类型，比如 `OsString`、`
 很多 `Vec` 可用的操作在 `String` 中同样可用，从以 `new` 函数创建字符串开始，如示例 8-11 所示。
 
 ```rust
-let mut s = String::new();
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-11/src/main.rs:here}}
 ```
 
 <span class="caption">示例 8-11：新建一个空的 `String`</span>
@@ -29,12 +29,7 @@ let mut s = String::new();
 这新建了一个叫做 `s` 的空的字符串，接着我们可以向其中装载数据。通常字符串会有初始数据，因为我们希望一开始就有这个字符串。为此，可以使用 `to_string` 方法，它能用于任何实现了 `Display` trait 的类型，字符串字面值也实现了它。示例 8-12 展示了两个例子。
 
 ```rust
-let data = "initial contents";
-
-let s = data.to_string();
-
-// 该方法也可直接用于字符串字面值：
-let s = "initial contents".to_string();
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-12/src/main.rs:here}}
 ```
 
 <span class="caption">示例 8-12：使用 `to_string` 方法从字符串字面值创建 `String`</span>
@@ -44,27 +39,17 @@ let s = "initial contents".to_string();
 也可以使用 `String::from` 函数来从字符串字面值创建 `String`。示例 8-13 中的代码等同于使用 `to_string`。
 
 ```rust
-let s = String::from("initial contents");
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-13/src/main.rs:here}}
 ```
 
 <span class="caption">示例 8-13：使用 `String::from` 函数从字符串字面值创建 `String`</span>
 
-因为字符串应用广泛，这里有很多不同的用于字符串的通用 API 可供选择。其中一些可能看起来多余，不过都有其用武之地！在这个例子中，`String::from` 和 `.to_string` 最终做了完全相同的工作，所以如何选择就是风格问题了。
+因为字符串应用广泛，这里有很多不同的用于字符串的通用 API 可供选择。其中一些可能看起来多余，不过都有其用武之地！在这个例子中，`String::from` 和 `.to_string` 最终做了完全相同的工作，所以如何选择就是代码风格与可读性的问题了。
 
 记住字符串是 UTF-8 编码的，所以可以包含任何可以正确编码的数据，如示例 8-14 所示。
 
 ```rust
-let hello = String::from("السلام عليكم");
-let hello = String::from("Dobrý den");
-let hello = String::from("Hello");
-let hello = String::from("שָׁלוֹם");
-let hello = String::from("नमस्ते");
-let hello = String::from("こんにちは");
-let hello = String::from("안녕하세요");
-let hello = String::from("你好");
-let hello = String::from("Olá");
-let hello = String::from("Здравствуйте");
-let hello = String::from("Hola");
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:here}}
 ```
 
 <span class="caption">示例 8-14：在字符串中储存不同语言的问候语</span>
@@ -80,30 +65,25 @@ let hello = String::from("Hola");
 可以通过 `push_str` 方法来附加字符串 slice，从而使 `String` 变长，如示例 8-15 所示。
 
 ```rust
-let mut s = String::from("foo");
-s.push_str("bar");
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-15/src/main.rs:here}}
 ```
 
 <span class="caption">示例 8-15：使用 `push_str` 方法向 `String` 附加字符串 slice</span>
 
-执行这两行代码之后，`s` 将会包含 `foobar`。`push_str` 方法采用字符串 slice，因为我们并不需要获取参数的所有权。例如，示例 8-16 展示了如果将 `s2` 的内容附加到 `s1` 之后，自身不能被使用就糟糕了。
+执行这两行代码之后，`s` 将会包含 `foobar`。`push_str` 方法采用字符串 slice，因为我们并不需要获取参数的所有权。例如，示例 8-16 中我们希望在将 `s2` 的内容附加到 `s1` 之后还能使用它。
 
 ```rust
-let mut s1 = String::from("foo");
-let s2 = "bar";
-s1.push_str(s2);
-println!("s2 is {}", s2);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-16/src/main.rs:here}}
 ```
 
 <span class="caption">示例 8-16：将字符串 slice 的内容附加到 `String` 后使用它</span>
 
 如果 `push_str` 方法获取了 `s2` 的所有权，就不能在最后一行打印出其值了。好在代码如我们期望那样工作！
 
-`push` 方法被定义为获取一个单独的字符作为参数，并附加到 `String` 中。示例 8-17 展示了使用 `push` 方法将字母 *l* 加入 `String` 的代码。
+`push` 方法被定义为获取一个单独的字符作为参数，并附加到 `String` 中。示例 8-17 展示了使用 `push` 方法将字母 "l" 加入 `String` 的代码。
 
 ```rust
-let mut s = String::from("lo");
-s.push('l');
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-17/src/main.rs:here}}
 ```
 
 <span class="caption">示例 8-17：使用 `push` 将一个字符加入 `String` 值中</span>
@@ -115,9 +95,7 @@ s.push('l');
 通常你会希望将两个已知的字符串合并在一起。一种办法是像这样使用 `+` 运算符，如示例 8-18 所示。
 
 ```rust
-let s1 = String::from("Hello, ");
-let s2 = String::from("world!");
-let s3 = s1 + &s2; // 注意 s1 被移动了，不能继续使用
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-18/src/main.rs:here}}
 ```
 
 <span class="caption">示例 8-18：使用 `+` 运算符将两个 `String` 值合并到一个新的 `String` 值中</span>
@@ -139,46 +117,31 @@ fn add(self, s: &str) -> String {
 如果想要级联多个字符串，`+` 的行为就显得笨重了：
 
 ```rust
-let s1 = String::from("tic");
-let s2 = String::from("tac");
-let s3 = String::from("toe");
-
-let s = s1 + "-" + &s2 + "-" + &s3;
+{{#rustdoc_include ../listings/ch08-common-collections/no-listing-01-concat-multiple-strings/src/main.rs:here}}
 ```
 
 这时 `s` 的内容会是 “tic-tac-toe”。在有这么多 `+` 和 `"` 字符的情况下，很难理解具体发生了什么。对于更为复杂的字符串链接，可以使用 `format!` 宏：
 
 ```rust
-let s1 = String::from("tic");
-let s2 = String::from("tac");
-let s3 = String::from("toe");
-
-let s = format!("{}-{}-{}", s1, s2, s3);
+{{#rustdoc_include ../listings/ch08-common-collections/no-listing-02-format/src/main.rs:here}}
 ```
 
-这些代码也会将 `s` 设置为 “tic-tac-toe”。`format!` 与 `println!` 的工作原理相同，不过不同于将输出打印到屏幕上，它返回一个带有结果内容的 `String`。这个版本就好理解的多，并且不会获取任何参数的所有权。
+这些代码也会将 `s` 设置为 “tic-tac-toe”。`format!` 与 `println!` 的工作原理相同，不过不同于将输出打印到屏幕上，它返回一个带有结果内容的 `String`。这个版本就好理解的多，宏 `format!` 生成的代码使用索引并且不会获取任何参数的所有权。
 
 ### 索引字符串
 
 在很多语言中，通过索引来引用字符串中的单独字符是有效且常见的操作。然而在 Rust 中，如果你尝试使用索引语法访问 `String` 的一部分，会出现一个错误。考虑一下如示例 8-19 中所示的无效代码。
 
 ```rust,ignore,does_not_compile
-let s1 = String::from("hello");
-let h = s1[0];
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-19/src/main.rs:here}}
 ```
 
 <span class="caption">示例 8-19：尝试对字符串使用索引语法</span>
 
 这段代码会导致如下错误：
 
-```text
-error[E0277]: the trait bound `std::string::String: std::ops::Index<{integer}>` is not satisfied
- -->
-  |
-3 |     let h = s1[0];
-  |             ^^^^^ the type `std::string::String` cannot be indexed by `{integer}`
-  |
-  = help: the trait `std::ops::Index<{integer}>` is not implemented for `std::string::String`
+```console
+{{#include ../listings/ch08-common-collections/listing-08-19/output.txt}}
 ```
 
 错误和提示说明了全部问题：Rust 的字符串不支持索引。那么接下来的问题是，为什么不支持呢？为了回答这个问题，我们必须先聊一聊 Rust 是如何在内存中储存字符串的。
@@ -188,13 +151,13 @@ error[E0277]: the trait bound `std::string::String: std::ops::Index<{integer}>` 
 `String` 是一个 `Vec<u8>` 的封装。让我们看看示例 8-14 中一些正确编码的字符串的例子。首先是这一个：
 
 ```rust
-let len = String::from("Hola").len();
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:spanish}}
 ```
 
 在这里，`len` 的值是 4 ，这意味着储存字符串 “Hola” 的 `Vec` 的长度是四个字节：这里每一个字母的 UTF-8 编码都占用一个字节。那下面这个例子又如何呢？（注意这个字符串中的首字母是西里尔字母的 Ze 而不是阿拉伯数字 3 。）
 
 ```rust
-let len = String::from("Здравствуйте").len();
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:russian}}
 ```
 
 当问及这个字符是多长的时候有人可能会说是 12。然而，Rust 的回答是 24。这是使用 UTF-8 编码 “Здравствуйте” 所需要的字节数，这是因为每个 Unicode 标量值需要两个字节存储。因此一个字符串字节值的索引并不总是对应一个有效的 Unicode 标量值。作为演示，考虑如下无效的 Rust 代码：
@@ -204,7 +167,9 @@ let hello = "Здравствуйте";
 let answer = &hello[0];
 ```
 
-`answer` 的值应该是什么呢？它应该是第一个字符 `З` 吗？当使用 UTF-8 编码时，`З` 的第一个字节 `208`，第二个是 `151`，所以 `answer` 实际上应该是 `208`，不过 `208` 自身并不是一个有效的字母。返回 `208` 可不是一个请求字符串第一个字母的人所希望看到的，不过它是 Rust 在字节索引 0 位置所能提供的唯一数据。用户通常不会想要一个字节值被返回，即便这个字符串只有拉丁字母： 即便 `&"hello"[0]` 是返回字节值的有效代码，它也应当返回 `104` 而不是 `h`。为了避免返回意外的值并造成不能立刻发现的 bug，Rust 根本不会编译这些代码，并在开发过程中及早杜绝了误会的发生。
+我们已经知道 `answer` 不是第一个字符 `З`。当使用 UTF-8 编码时，`З` 的第一个字节 `208`，第二个是 `151`，所以 `answer` 实际上应该是 `208`，不过 `208` 自身并不是一个有效的字母。返回 `208` 可不是一个请求字符串第一个字母的人所希望看到的，不过它是 Rust 在字节索引 0 位置所能提供的唯一数据。用户通常不会想要一个字节值被返回，即便这个字符串只有拉丁字母： 即便 `&"hello"[0]` 是返回字节值的有效代码，它也应当返回 `104` 而不是 `h`。
+
+为了避免返回意外的值并造成不能立刻发现的 bug，Rust 根本不会编译这些代码，并在开发过程中及早杜绝了误会的发生。
 
 #### 字节、标量值和字形簇！天呐！
 
@@ -213,7 +178,8 @@ let answer = &hello[0];
 比如这个用梵文书写的印度语单词 “नमस्ते”，最终它储存在 vector 中的 `u8` 值看起来像这样：
 
 ```text
-[224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224, 164, 164, 224, 165, 135]
+[224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224, 164, 164,
+224, 165, 135]
 ```
 
 这里有 18 个字节，也就是计算机最终会储存的数据。如果从 Unicode 标量值的角度理解它们，也就像 Rust 的 `char` 类型那样，这些字节看起来像这样：
@@ -246,17 +212,15 @@ let s = &hello[0..4];
 
 如果获取 `&hello[0..1]` 会发生什么呢？答案是：Rust 在运行时会 panic，就跟访问 vector 中的无效索引时一样：
 
-```text
-thread 'main' panicked at 'byte index 1 is not a char boundary; it is inside 'З' (bytes 0..2) of `Здравствуйте`', src/libcore/str/mod.rs:2188:4
+```console
+{{#include ../listings/ch08-common-collections/output-only-01-not-char-boundary/output.txt}}
 ```
 
 你应该小心谨慎的使用这个操作，因为这么做可能会使你的程序崩溃。
 
 ### 遍历字符串的方法
 
-幸运的是，这里还有其他获取字符串元素的方式。
-
-如果你需要操作单独的 Unicode 标量值，最好的选择是使用 `chars` 方法。对 “नमस्ते” 调用 `chars` 方法会将其分开并返回六个 `char` 类型的值，接着就可以遍历其结果来访问每一个元素了：
+操作字符串每一部分的最好的方法是明确表示需要字符还是字节。对于单独的 Unicode 标量值使用 `chars` 方法。对 “नमस्ते” 调用 `chars` 方法会将其分开并返回六个 `char` 类型的值，接着就可以遍历其结果来访问每一个元素了：
 
 ```rust
 for c in "नमस्ते".chars() {
@@ -275,7 +239,7 @@ for c in "नमस्ते".chars() {
 े
 ```
 
-`bytes` 方法返回每一个原始字节，这可能会适合你的使用场景：
+另外 `bytes` 方法返回每一个原始字节，这可能会适合你的使用场景：
 
 ```rust
 for b in "नमस्ते".bytes() {
@@ -295,7 +259,7 @@ for b in "नमस्ते".bytes() {
 
 不过请记住有效的 Unicode 标量值可能会由不止一个字节组成。
 
-从字符串中获取字形簇是很复杂的，所以标准库并没有提供这个功能。[crates.io](https://crates.io) 上有些提供这样功能的 crate。
+从字符串中获取字形簇是很复杂的，所以标准库并没有提供这个功能。[crates.io](https://crates.io/)<!-- ignore --> 上有些提供这样功能的 crate。
 
 ### 字符串并不简单
 

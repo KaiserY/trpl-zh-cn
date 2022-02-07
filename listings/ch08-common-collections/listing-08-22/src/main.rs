@@ -7,7 +7,7 @@ fn main() {
 
     let mut map = HashMap::new();
     map.insert(field_name, field_value);
-    // field_name and field_value are invalid at this point, try using them and
-    // see what compiler error you get!
+    // 这里 field_name 和 field_value 不再有效，
+    // 尝试使用它们看看会出现什么编译错误！
     // ANCHOR_END: here
 }

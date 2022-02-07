@@ -4,7 +4,7 @@ fn main() {
 
     let s = data.to_string();
 
-    // the method also works on a literal directly:
+    // 该方法也可直接用于字符串字面值：
     let s = "initial contents".to_string();
     // ANCHOR_END: here
 }
