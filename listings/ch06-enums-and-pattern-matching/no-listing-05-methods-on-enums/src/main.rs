@@ -9,7 +9,7 @@ fn main() {
     // ANCHOR: here
     impl Message {
         fn call(&self) {
-            // method body would be defined here
+            // 在这里定义方法体
         }
     }
 

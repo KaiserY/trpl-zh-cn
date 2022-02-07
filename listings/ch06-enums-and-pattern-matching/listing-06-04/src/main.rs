@@ -1,5 +1,5 @@
 // ANCHOR: here
-#[derive(Debug)] // so we can inspect the state in a minute
+#[derive(Debug)] // 这样可以立刻看到州的名称
 enum UsState {
     Alabama,
     Alaska,
