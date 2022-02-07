@@ -2,7 +2,7 @@
 
 > [ch07-04-bringing-paths-into-scope-with-the-use-keyword.md](https://github.com/rust-lang/book/blob/main/src/ch07-04-bringing-paths-into-scope-with-the-use-keyword.md)
 > <br>
-> commit 6d3e76820418f2d2bb203233c61d90390b5690f1
+> commit 2d605f66b3d891dea0a2f684ece508aa2282b854
 
 到目前为止，似乎我们编写的用于调用函数的路径都很冗长且重复，并不方便。例如，示例 7-7 中，无论我们选择 `add_to_waitlist` 函数的绝对路径还是相对路径，每次我们想要调用 `add_to_waitlist` 时，都必须指定`front_of_house` 和 `hosting`。幸运的是，有一种方法可以简化这个过程。我们可以使用 `use` 关键字将路径一次性引入作用域，然后调用该路径中的项，就如同它们是本地项一样。
 
@@ -10,21 +10,8 @@
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-mod front_of_house {
-    pub mod hosting {
-        pub fn add_to_waitlist() {}
-    }
-}
-
-use crate::front_of_house::hosting;
-
-pub fn eat_at_restaurant() {
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-}
-# fn main() {}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-11/src/lib.rs}}
 ```
 
 <span class="caption">示例 7-11: 使用 `use` 将模块引入作用域</span>
@@ -35,21 +22,8 @@ pub fn eat_at_restaurant() {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-mod front_of_house {
-    pub mod hosting {
-        pub fn add_to_waitlist() {}
-    }
-}
-
-use front_of_house::hosting;
-
-pub fn eat_at_restaurant() {
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-}
-# fn main() {}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-12/src/lib.rs}}
 ```
 
 <span class="caption">示例 7-12: 使用 `use` 和相对路径将模块引入作用域</span>
@@ -60,21 +34,8 @@ pub fn eat_at_restaurant() {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-mod front_of_house {
-    pub mod hosting {
-        pub fn add_to_waitlist() {}
-    }
-}
-
-use crate::front_of_house::hosting::add_to_waitlist;
-
-pub fn eat_at_restaurant() {
-    add_to_waitlist();
-    add_to_waitlist();
-    add_to_waitlist();
-}
-# fn main() {}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-13/src/lib.rs}}
 ```
 
 <span class="caption">示例 7-13: 使用 `use` 将 `add_to_waitlist` 函数引入作用域，这并不符合习惯</span>
@@ -86,12 +47,7 @@ pub fn eat_at_restaurant() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-use std::collections::HashMap;
-
-fn main() {
-    let mut map = HashMap::new();
-    map.insert(1, 2);
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-14/src/main.rs}}
 ```
 
 <span class="caption">示例 7-14: 将 `HashMap` 引入作用域的习惯用法</span>
@@ -102,19 +58,8 @@ fn main() {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-use std::fmt;
-use std::io;
-
-fn function1() -> fmt::Result {
-    // --snip--
-#     Ok(())
-}
-
-fn function2() -> io::Result<()> {
-    // --snip--
-#     Ok(())
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-15/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 7-15: 使用父模块将两个具有相同名称的类型引入同一作用域</span>
@@ -127,19 +72,8 @@ fn function2() -> io::Result<()> {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-use std::fmt::Result;
-use std::io::Result as IoResult;
-
-fn function1() -> Result {
-    // --snip--
-#     Ok(())
-}
-
-fn function2() -> IoResult<()> {
-    // --snip--
-#     Ok(())
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-16/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 7-16: 使用 `as` 关键字重命名引入作用域的类型</span>
@@ -154,21 +88,8 @@ fn function2() -> IoResult<()> {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-mod front_of_house {
-    pub mod hosting {
-        pub fn add_to_waitlist() {}
-    }
-}
-
-pub use crate::front_of_house::hosting;
-
-pub fn eat_at_restaurant() {
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-}
-# fn main() {}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-17/src/lib.rs}}
 ```
 
 <span class="caption">示例 7-17: 通过 `pub use` 使名称可引入任何代码的作用域中</span>
@@ -184,8 +105,7 @@ pub fn eat_at_restaurant() {
 <span class="filename">文件名: Cargo.toml</span>
 
 ```toml
-[dependencies]
-rand = "0.5.5"
+{{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:9:}}
 ```
 
 在 *Cargo.toml* 中加入 `rand` 依赖告诉了 Cargo 要从 [crates.io](https://crates.io) 下载 `rand` 和其依赖，并使其可在项目代码中使用。
@@ -193,11 +113,7 @@ rand = "0.5.5"
 接着，为了将 `rand` 定义引入项目包的作用域，我们加入一行 `use` 起始的包名，它以 `rand` 包名开头并列出了需要引入作用域的项。回忆一下第二章的 “生成一个随机数” 部分，我们曾将 `Rng` trait 引入作用域并调用了 `rand::thread_rng` 函数：
 
 ```rust,ignore
-use rand::Rng;
-
-fn main() {
-    let secret_number = rand::thread_rng().gen_range(1, 101);
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:ch07-04}}
 ```
 
 [crates.io](https://crates.io) 上有很多 Rust 社区成员发布的包，将其引入你自己的项目都需要一道相同的步骤：在 *Cargo.toml* 列出它们并通过 `use` 将其中定义的项引入项目包的作用域中。
@@ -216,19 +132,16 @@ use std::collections::HashMap;
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust
-use std::cmp::Ordering;
-use std::io;
-// ---snip---
+```rust,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-01-use-std-unnested/src/main.rs:here}}
 ```
 
 相反，我们可以使用嵌套路径将相同的项在一行中引入作用域。这么做需要指定路径的相同部分，接着是两个冒号，接着是大括号中的各自不同的路径部分，如示例 7-18 所示。
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust
-use std::{cmp::Ordering, io};
-// ---snip---
+```rust,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-18/src/main.rs:here}}
 ```
 
 <span class="caption">示例 7-18: 指定嵌套的路径在一行中将多个带有相同前缀的项引入作用域</span>
@@ -239,9 +152,8 @@ use std::{cmp::Ordering, io};
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-use std::io;
-use std::io::Write;
+```rust,noplayground
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-19/src/lib.rs}}
 ```
 
 <span class="caption">示例 7-19: 通过两行 `use` 语句引入两个路径，其中一个是另一个的子路径</span>
@@ -250,8 +162,8 @@ use std::io::Write;
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-use std::io::{self, Write};
+```rust,noplayground
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-20/src/lib.rs}}
 ```
 
 <span class="caption">示例 7-20: 将示例 7-19 中部分重复的路径合并为一个 `use` 语句</span>
@@ -269,3 +181,6 @@ use std::collections::*;
 这个 `use` 语句将 `std::collections` 中定义的所有公有项引入当前作用域。使用 glob 运算符时请多加小心！Glob 会使得我们难以推导作用域中有什么名称和它们是在何处定义的。
 
 glob 运算符经常用于测试模块 `tests` 中，这时会将所有内容引入作用域；我们将在第十一章 “如何编写测试” 部分讲解。glob 运算符有时也用于 prelude 模式；查看 [标准库中的文档](https://doc.rust-lang.org/std/prelude/index.html#other-preludes) 了解这个模式的更多细节。
+
+[rand]: ch02-00-guessing-game-tutorial.html#生成一个随机数
+[writing-tests]: ch11-01-writing-tests.html#如何编写测试

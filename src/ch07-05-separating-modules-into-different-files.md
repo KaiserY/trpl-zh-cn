@@ -2,7 +2,7 @@
 
 > [ch07-05-separating-modules-into-different-files.md](https://github.com/rust-lang/book/blob/main/src/ch07-05-separating-modules-into-different-files.md)
 > <br>
-> commit a5a5bf9d6ea5763a9110f727911a21da854b1d90
+> commit d5584fb1efeaf8aadfc7caf516df7f1ca0820ceb
 
 到目前为止，本章所有的例子都在一个文件中定义多个模块。当模块变得更大时，你可能想要将它们的定义移动到单独的文件中，从而使代码更容易阅读。
 
@@ -11,15 +11,7 @@
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
-mod front_of_house;
-
-pub use crate::front_of_house::hosting;
-
-pub fn eat_at_restaurant() {
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/lib.rs}}
 ```
 
 <span class="caption">示例 7-21: 声明 `front_of_house` 模块，其内容将位于 *src/front_of_house.rs*</span>
@@ -28,10 +20,8 @@ pub fn eat_at_restaurant() {
 
 <span class="filename">文件名: src/front_of_house.rs</span>
 
-```rust
-pub mod hosting {
-    pub fn add_to_waitlist() {}
-}
+```rust,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
 ```
 
 <span class="caption">示例 7-22: 在 *src/front_of_house.rs* 中定义 `front_of_house`
@@ -41,16 +31,16 @@ pub mod hosting {
 
 <span class="filename">文件名: src/front_of_house.rs</span>
 
-```rust
-pub mod hosting;
+```rust,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house.rs}}
 ```
 
 接着我们创建一个 *src/front_of_house* 目录和一个包含 `hosting` 模块定义的 *src/front_of_house/hosting.rs* 文件：
 
 <span class="filename">文件名: src/front_of_house/hosting.rs</span>
 
-```
-pub fn add_to_waitlist() {}
+```rust
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house/hosting.rs}}
 ```
 
 模块树依然保持相同，`eat_at_restaurant` 中的函数调用也无需修改继续保持有效，即便其定义存在于不同的文件中。这个技巧让你可以在模块代码增长时，将它们移动到新文件中。

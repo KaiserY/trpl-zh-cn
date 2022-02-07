@@ -2,7 +2,7 @@
 
 > [ch07-02-defining-modules-to-control-scope-and-privacy.md](https://github.com/rust-lang/book/blob/main/src/ch07-02-defining-modules-to-control-scope-and-privacy.md)
 > <br>
-> commit 34b089627cca09a73ce92a052222304bff0056e3
+> commit eb60fedc9ccd72999f9aabd82f5936ca0143dd8f
 
 在本节，我们将讨论模块和其它一些关于模块系统的部分，如允许你命名项的 *路径*（*paths*）；用来将路径引入作用域的 `use` 关键字；以及使项变为公有的 `pub` 关键字。我们还将讨论 `as` 关键字、外部包和 glob 运算符。现在，让我们把注意力放在模块上！
 
@@ -14,22 +14,8 @@
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-mod front_of_house {
-    mod hosting {
-        fn add_to_waitlist() {}
-
-        fn seat_at_table() {}
-    }
-
-    mod serving {
-        fn take_order() {}
-
-        fn server_order() {}
-
-        fn take_payment() {}
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-01/src/lib.rs}}
 ```
 
 <span class="caption">示例 7-1：一个包含了其他内置了函数的模块的 `front_of_house` 模块</span>
