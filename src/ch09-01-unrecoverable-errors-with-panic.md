@@ -2,7 +2,7 @@
 
 > [ch09-01-unrecoverable-errors-with-panic.md](https://github.com/rust-lang/book/blob/main/src/ch09-01-unrecoverable-errors-with-panic.md)
 > <br>
-> commit 426f3e4ec17e539ae9905ba559411169d303a031
+> commit 199ca99926f232ee7f581a917eada4b65ff21754
 
 突然有一天，代码出问题了，而你对此束手无策。对于这种情况，Rust 有 `panic!`宏。当执行这个宏时，程序会打印出一个错误信息，展开并清理栈数据，然后接着退出。出现这种情况的场景通常是检测到一些类型的 bug，而且程序员并不清楚该如何处理它。
 
@@ -20,20 +20,13 @@
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,should_panic,panics
-fn main() {
-    panic!("crash and burn");
-}
+{{#rustdoc_include ../listings/ch09-error-handling/no-listing-01-panic/src/main.rs}}
 ```
 
 运行程序将会出现类似这样的输出：
 
-```text
-$ cargo run
-   Compiling panic v0.1.0 (file:///projects/panic)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.25s
-     Running `target/debug/panic`
-thread 'main' panicked at 'crash and burn', src/main.rs:2:5
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+```console
+{{#include ../listings/ch09-error-handling/no-listing-01-panic/output.txt}}
 ```
 
 最后两行包含 `panic!` 调用造成的错误信息。第一行显示了 panic 提供的信息并指明了源码中 panic 出现的位置：*src/main.rs:2:5* 表明这是 *src/main.rs* 文件的第二行第五个字符。
@@ -47,81 +40,44 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,should_panic,panics
-fn main() {
-    let v = vec![1, 2, 3];
-
-    v[99];
-}
+{{#rustdoc_include ../listings/ch09-error-handling/listing-09-01/src/main.rs}}
 ```
 
 <span class="caption">示例 9-1：尝试访问超越 vector 结尾的元素，这会造成 `panic!`</span>
 
 这里尝试访问 vector 的第一百个元素（这里的索引是 99 因为索引从 0 开始），不过它只有三个元素。这种情况下 Rust 会 panic。`[]` 应当返回一个元素，不过如果传递了一个无效索引，就没有可供 Rust 返回的正确的元素。
 
-这种情况下其他像 C 这样语言会尝试直接提供所要求的值，即便这可能不是你期望的：你会得到任何对应 vector 中这个元素的内存位置的值，甚至是这些内存并不属于 vector 的情况。这被称为 **缓冲区溢出**（*buffer overread*），并可能会导致安全漏洞，比如攻击者可以像这样操作索引来读取储存在数组后面不被允许的数据。
+C 语言中，尝试读取数据结构之后的值是未定义行为（undefined behavior）。你会得到任何对应数据结构中这个元素的内存位置的值，甚至是这些内存并不属于这个数据结构的情况。这被称为 **缓冲区溢出**（*buffer overread*），并可能会导致安全漏洞，比如攻击者可以像这样操作索引来读取储存在数据结构之后不被允许的数据。
 
-为了使程序远离这类漏洞，如果尝试读取一个索引不存在的元素，Rust 会停止执行并拒绝继续。尝试运行上面的程序会出现如下：
+为了保护程序远离这类漏洞，如果尝试读取一个索引不存在的元素，Rust 会停止执行并拒绝继续。尝试运行上面的程序会出现如下：
 
-```text
-$ cargo run
-   Compiling panic v0.1.0 (file:///projects/panic)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.27s
-     Running `target/debug/panic`
-thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', libcore/slice/mod.rs:2448:10
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+```console
+{{#include ../listings/ch09-error-handling/listing-09-01/output.txt}}
 ```
 
-这指向了一个不是我们编写的文件，*libcore/slice/mod.rs*。其为 Rust 源码中 `slice` 的实现。这是当对 vector `v` 使用 `[]` 时 *libcore/slice/mod.rs* 中会执行的代码，也是真正出现 `panic!` 的地方。
+错误指向 `main.rs` 的第 4 行，这里我们尝试访问索引 99。下面的说明（note）行提醒我们可以设置 `RUST_BACKTRACE` 环境变量来得到一个 backtrace。*backtrace* 是一个执行到目前位置所有被调用的函数的列表。Rust 的 backtrace 跟其他语言中的一样：阅读 backtrace 的关键是从头开始读直到发现你编写的文件。这就是问题的发源地。这一行往上是你的代码所调用的代码；往下则是调用你的代码的代码。这些行可能包含核心 Rust 代码，标准库代码或用到的 crate 代码。让我们将 `RUST_BACKTRACE` 环境变量设置为任何不是 0 的值来获取 backtrace 看看。示例 9-2 展示了与你看到类似的输出：
 
-接下来的几行提醒我们可以设置 `RUST_BACKTRACE` 环境变量来得到一个 backtrace。*backtrace* 是一个执行到目前位置所有被调用的函数的列表。Rust 的 backtrace 跟其他语言中的一样：阅读 backtrace 的关键是从头开始读直到发现你编写的文件。这就是问题的发源地。这一行往上是你的代码所调用的代码；往下则是调用你的代码的代码。这些行可能包含核心 Rust 代码，标准库代码或用到的 crate 代码。让我们将 `RUST_BACKTRACE` 环境变量设置为任何不是 0 的值来获取 backtrace 看看。示例 9-2 展示了与你看到类似的输出：
-
-```text
+```console
 $ RUST_BACKTRACE=1 cargo run
-    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
-     Running `target/debug/panic`
-thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', libcore/slice/mod.rs:2448:10
+thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', src/main.rs:4:5
 stack backtrace:
-   0: std::sys::unix::backtrace::tracing::imp::unwind_backtrace
-             at libstd/sys/unix/backtrace/tracing/gcc_s.rs:49
-   1: std::sys_common::backtrace::print
-             at libstd/sys_common/backtrace.rs:71
-             at libstd/sys_common/backtrace.rs:59
-   2: std::panicking::default_hook::{{closure}}
-             at libstd/panicking.rs:211
-   3: std::panicking::default_hook
-             at libstd/panicking.rs:227
-   4: <std::panicking::begin_panic::PanicPayload<A> as core::panic::BoxMeUp>::get
-             at libstd/panicking.rs:476
-   5: std::panicking::continue_panic_fmt
-             at libstd/panicking.rs:390
-   6: std::panicking::try::do_call
-             at libstd/panicking.rs:325
-   7: core::ptr::drop_in_place
-             at libcore/panicking.rs:77
-   8: core::ptr::drop_in_place
-             at libcore/panicking.rs:59
-   9: <usize as core::slice::SliceIndex<[T]>>::index
-             at libcore/slice/mod.rs:2448
-  10: core::slice::<impl core::ops::index::Index<I> for [T]>::index
-             at libcore/slice/mod.rs:2316
-  11: <alloc::vec::Vec<T> as core::ops::index::Index<I>>::index
-             at liballoc/vec.rs:1653
-  12: panic::main
-             at src/main.rs:4
-  13: std::rt::lang_start::{{closure}}
-             at libstd/rt.rs:74
-  14: std::panicking::try::do_call
-             at libstd/rt.rs:59
-             at libstd/panicking.rs:310
-  15: macho_symbol_search
-             at libpanic_unwind/lib.rs:102
-  16: std::alloc::default_alloc_error_hook
-             at libstd/panicking.rs:289
-             at libstd/panic.rs:392
-             at libstd/rt.rs:58
-  17: std::rt::lang_start
-             at libstd/rt.rs:74
-  18: panic::main
+   0: rust_begin_unwind
+             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/std/src/panicking.rs:483
+   1: core::panicking::panic_fmt
+             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/panicking.rs:85
+   2: core::panicking::panic_bounds_check
+             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/panicking.rs:62
+   3: <usize as core::slice::index::SliceIndex<[T]>>::index
+             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/slice/index.rs:255
+   4: core::slice::index::<impl core::ops::index::Index<I> for [T]>::index
+             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/slice/index.rs:15
+   5: <alloc::vec::Vec<T> as core::ops::index::Index<I>>::index
+             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/alloc/src/vec.rs:1982
+   6: panic::main
+             at ./src/main.rs:4
+   7: core::ops::function::FnOnce::call_once
+             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/ops/function.rs:227
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
 ```
 
 <span class="caption">示例 9-2：当设置 `RUST_BACKTRACE` 环境变量时 `panic!` 调用所生成的 backtrace 信息</span>
@@ -133,4 +89,4 @@ stack backtrace:
 本章后面的小节 [“panic! 还是不 panic!”][to-panic-or-not-to-panic] 会再次回到 `panic!` 并讲解何时应该、何时不应该使用 `panic!` 来处理错误情况。接下来，我们来看看如何使用 `Result` 来从错误中恢复。
 
 [to-panic-or-not-to-panic]:
-ch09-03-to-panic-or-not-to-panic.html#to-panic-or-not-to-panic
+ch09-03-to-panic-or-not-to-panic.html#panic-还是不-panic
