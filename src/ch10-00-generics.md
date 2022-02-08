@@ -2,7 +2,7 @@
 
 > [ch10-00-generics.md](https://github.com/rust-lang/book/blob/main/src/ch10-00-generics.md)
 > <br>
-> commit 48b057106646758f6453f42b7887f34b8c24caf6
+> commit 9c0fa2714859738ff73cbbb829592e4c037d7e46
 
 每一个编程语言都有高效处理重复概念的工具。在 Rust 中其工具之一就是 **泛型**（*generics*）。泛型是具体类型或其他属性的抽象替代。我们可以表达泛型的属性，比如他们的行为或如何与其他泛型相关联，而不需要在编写和编译代码时知道他们在这里实际上代表什么。
 
@@ -23,20 +23,7 @@
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let number_list = vec![34, 50, 25, 100, 65];
-
-    let mut largest = number_list[0];
-
-    for number in number_list {
-        if number > largest {
-            largest = number;
-        }
-    }
-
-    println!("The largest number is {}", largest);
-#  assert_eq!(largest, 100);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-01/src/main.rs:here}}
 ```
 
 <span class="caption">示例 10-1：在一个数字列表中寻找最大值的函数</span>
@@ -48,31 +35,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let number_list = vec![34, 50, 25, 100, 65];
-
-    let mut largest = number_list[0];
-
-    for number in number_list {
-        if number > largest {
-            largest = number;
-        }
-    }
-
-    println!("The largest number is {}", largest);
-
-    let number_list = vec![102, 34, 6000, 89, 54, 2, 43, 8];
-
-    let mut largest = number_list[0];
-
-    for number in number_list {
-        if number > largest {
-            largest = number;
-        }
-    }
-
-    println!("The largest number is {}", largest);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-02/src/main.rs}}
 ```
 
 <span class="caption">示例 10-2：寻找 **两个** 数字列表最大值的代码</span>
@@ -86,36 +49,12 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn largest(list: &[i32]) -> i32 {
-    let mut largest = list[0];
-
-    for &item in list {
-        if item > largest {
-            largest = item;
-        }
-    }
-
-    largest
-}
-
-fn main() {
-    let number_list = vec![34, 50, 25, 100, 65];
-
-    let result = largest(&number_list);
-    println!("The largest number is {}", result);
-#    assert_eq!(result, 100);
-
-    let number_list = vec![102, 34, 6000, 89, 54, 2, 43, 8];
-
-    let result = largest(&number_list);
-    println!("The largest number is {}", result);
-#    assert_eq!(result, 6000);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-03/src/main.rs:here}}
 ```
 
 <span class="caption">示例 10-3：抽象后的寻找两个数字列表最大值的代码</span>
 
-`largest` 函数有一个参数 `list`，它代表会传递给函数的任何具体的 `i32`值的 slice。函数定义中的 `list` 代表任何 `&[i32]`。当调用 `largest` 函数时，其代码实际上运行于我们传递的特定值上。
+`largest` 函数有一个参数 `list`，它代表会传递给函数的任何具体的 `i32`值的 slice。函数定义中的 `list` 代表任何 `&[i32]`。当调用 `largest` 函数时，其代码实际上运行于我们传递的特定值上。目前不需要担心 `for` 循环的语法。这里不是引用了一个 `i32` 的引用，这里只是模式匹配并表明循环的值应该是 `&i32`。[第十八章][ch18] 会详细介绍模式匹配。
 
 总的来说，从示例 10-2 到示例 10-3 中涉及的机制经历了如下几步：
 
@@ -126,3 +65,5 @@ fn main() {
 在不同的场景使用不同的方式，我们也可以利用相同的步骤和泛型来减少重复代码。与函数体可以在抽象`list`而不是特定值上操作的方式相同，泛型允许代码对抽象类型进行操作。
 
 如果我们有两个函数，一个寻找一个 `i32` 值的 slice 中的最大项而另一个寻找 `char` 值的 slice 中的最大项该怎么办？该如何消除重复呢？让我们拭目以待！
+
+[ch18]: ch18-00-patterns.html
