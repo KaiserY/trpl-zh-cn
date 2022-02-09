@@ -2,7 +2,7 @@
 
 > [ch14-04-installing-binaries.md](https://github.com/rust-lang/book/blob/main/src/ch14-04-installing-binaries.md)
 > <br>
-> commit c084bdd9ee328e7e774df19882ccc139532e53d8
+> commit 359895c6b2e440275a663ee1a3c17e6a94fdc62b
 
 `cargo install` 命令用于在本地安装和使用二进制 crate。它并不打算替换系统中的包；它意在作为一个方便 Rust 开发者们安装其他人已经在 [crates.io](https://crates.io/)<!-- ignore --> 上共享的工具的手段。只有拥有二进制目标文件的包能够被安装。**二进制目标** 文件是在 crate 有 *src/main.rs* 或者其他指定为二进制文件时所创建的可执行程序，这不同于自身不能执行但适合包含在其他程序中的库目标文件。通常 crate 的 *README* 文件中有该 crate 是库、二进制目标还是两者都是的信息。
 
@@ -10,14 +10,17 @@
 
 例如，第十二章提到的叫做 `ripgrep` 的用于搜索文件的 `grep` 的 Rust 实现。如果想要安装 `ripgrep`，可以运行如下：
 
-```text
+```console
 $ cargo install ripgrep
-Updating registry `https://github.com/rust-lang/crates.io-index`
- Downloading ripgrep v0.3.2
- --snip--
-   Compiling ripgrep v0.3.2
-    Finished release [optimized + debuginfo] target(s) in 97.91 secs
+    Updating crates.io index
+  Downloaded ripgrep v11.0.2
+  Downloaded 1 crate (243.3 KB) in 0.88s
+  Installing ripgrep v11.0.2
+--snip--
+   Compiling ripgrep v11.0.2
+    Finished release [optimized + debuginfo] target(s) in 3m 10s
   Installing ~/.cargo/bin/rg
+   Installed package `ripgrep v11.0.2` (executable `rg`)
 ```
 
 最后一行输出展示了安装的二进制文件的位置和名称，在这里 `ripgrep` 被命名为 `rg`。只要你像上面提到的那样将安装目录加入 `$PATH`，就可以运行 `rg --help` 并开始使用一个更快更 Rust 的工具来搜索文件了！
