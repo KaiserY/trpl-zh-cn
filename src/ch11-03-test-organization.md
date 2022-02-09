@@ -2,7 +2,7 @@
 
 > [ch11-03-test-organization.md](https://github.com/rust-lang/book/blob/main/src/ch11-03-test-organization.md)
 > <br>
-> commit 4badf9a8574c12794795b05954baf5adc579fa90
+> commit cfb2c3cce7c20d4ad523dafdbf90ae3b25b1ba2c
 
 本章一开始就提到，测试是一个复杂的概念，而且不同的开发者也采用不同的技术和组织。Rust 社区倾向于根据测试的两个主要分类来考虑问题：**单元测试**（*unit tests*）与 **集成测试**（*integration tests*）。单元测试倾向于更小而更集中，在隔离的环境中一次测试一个模块，或者是测试私有接口。而集成测试对于你的库来说则完全是外部的。它们与其他外部代码一样，通过相同的方式使用你的代码，只测试公有接口而且每个测试都有可能会测试多个模块。
 
@@ -20,14 +20,8 @@
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-01/src/lib.rs}}
 ```
 
 上述代码就是自动生成的测试模块。`cfg` 属性代表 *configuration* ，它告诉 Rust 其之后的项只应该被包含进特定配置选项中。在这个例子中，配置选项是 `test`，即 Rust 所提供的用于编译和运行测试的配置选项。通过使用 `cfg` 属性，Cargo 只会在我们主动使用 `cargo test` 运行测试时才编译测试代码。这包括测试模块中可能存在的帮助函数， 以及标注为 #[test] 的函数。
@@ -38,31 +32,13 @@ mod tests {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# fn main() {}
-
-pub fn add_two(a: i32) -> i32 {
-    internal_adder(a, 2)
-}
-
-fn internal_adder(a: i32, b: i32) -> i32 {
-    a + b
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn internal() {
-        assert_eq!(4, internal_adder(2, 2));
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-12/src/lib.rs}}
 ```
 
 <span class="caption">示例 11-12：测试私有函数</span>
 
-注意 `internal_adder` 函数并没有标记为 `pub`，不过因为测试也不过是 Rust 代码同时 `tests` 也仅仅是另一个模块，我们完全可以在测试中导入和调用 `internal_adder`。如果你并不认为应该测试私有函数，Rust 也不会强迫你这么做。
+注意 `internal_adder` 函数并没有标记为 `pub`。测试也不过是 Rust 代码，同时 `tests` 也仅仅是另一个模块。正如 [“路径用于引用模块树中的项”][paths] 部分所说，子模块的项可以使用其上级模块的项。在测试中，我们通过 `use super::*` 将 `test` 模块的父模块的所有项引入了作用域，接着测试调用了 `internal_adder`。如果你并不认为应该测试私有函数，Rust 也不会强迫你这么做。
 
 ### 集成测试
 
@@ -77,12 +53,7 @@ mod tests {
 <span class="filename">文件名: tests/integration_test.rs</span>
 
 ```rust,ignore
-use adder;
-
-#[test]
-fn it_adds_two() {
-    assert_eq!(4, adder::add_two(2));
-}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-13/tests/integration_test.rs}}
 ```
 
 <span class="caption">示例 11-13：一个 `adder` crate 中函数的集成测试</span>
@@ -91,29 +62,8 @@ fn it_adds_two() {
 
 并不需要将 *tests/integration_test.rs* 中的任何代码标注为 `#[cfg(test)]`。 `tests` 文件夹在 Cargo 中是一个特殊的文件夹， Cargo 只会在运行 `cargo test` 时编译这个目录中的文件。现在就运行 `cargo test` 试试：
 
-```text
-$ cargo test
-   Compiling adder v0.1.0 (file:///projects/adder)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
-     Running target/debug/deps/adder-abcabcabc
-
-running 1 test
-test tests::internal ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
-
-     Running target/debug/deps/integration_test-ce99bcc2479f4607
-
-running 1 test
-test it_adds_two ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
-
-   Doc-tests adder
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+```console
+{{#include ../listings/ch11-writing-automated-tests/listing-11-13/output.txt}}
 ```
 
 现在有了三个部分的输出：单元测试、集成测试和文档测试。第一部分单元测试与我们之前见过的一样：每个单元测试一行（示例 11-12 中有一个叫做 `internal` 的测试），接着是一个单元测试的摘要行。
@@ -124,15 +74,8 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
 我们仍然可以通过指定测试函数的名称作为 `cargo test` 的参数来运行特定集成测试。也可以使用 `cargo test` 的 `--test` 后跟文件的名称来运行某个特定集成测试文件中的所有测试：
 
-```text
-$ cargo test --test integration_test
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/integration_test-952a27e0126bb565
-
-running 1 test
-test it_adds_two ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+```console
+{{#include ../listings/ch11-writing-automated-tests/output-only-05-single-integration/output.txt}}
 ```
 
 这个命令只运行了 *tests* 目录中我们指定的文件 `integration_test.rs` 中的测试。
@@ -148,37 +91,13 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 <span class="filename">文件名: tests/common.rs</span>
 
 ```rust
-pub fn setup() {
-    // 编写特定库测试所需的代码
-}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-12-shared-test-code-problem/tests/common.rs}}
 ```
 
 如果再次运行测试，将会在测试结果中看到一个新的对应 *common.rs* 文件的测试结果部分，即便这个文件并没有包含任何测试函数，也没有任何地方调用了 `setup` 函数：
 
-```text
-running 1 test
-test tests::internal ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
-
-     Running target/debug/deps/common-b8b07b6f1be2db70
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
-
-     Running target/debug/deps/integration_test-d993c68b431d39df
-
-running 1 test
-test it_adds_two ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
-
-   Doc-tests adder
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+```console
+{{#include ../listings/ch11-writing-automated-tests/no-listing-12-shared-test-code-problem/output.txt}}
 ```
 
 我们并不想要`common` 出现在测试结果中显示 `running 0 tests` 。我们只是希望其能被其他多个集成测试文件中调用罢了。
@@ -190,18 +109,10 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 <span class="filename">文件名: tests/integration_test.rs</span>
 
 ```rust,ignore
-use adder;
-
-mod common;
-
-#[test]
-fn it_adds_two() {
-    common::setup();
-    assert_eq!(4, adder::add_two(2));
-}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-13-fix-shared-test-code-problem/tests/integration_test.rs}}
 ```
 
-注意 `mod common;` 声明与示例 7-25 中展示的模块声明相同。接着在测试函数中就可以调用 `common::setup()` 了。
+注意 `mod common;` 声明与示例 7-21 中展示的模块声明相同。接着在测试函数中就可以调用 `common::setup()` 了。
 
 #### 二进制 crate 的集成测试
 
@@ -215,5 +126,6 @@ Rust 的测试功能提供了一个确保即使你改变了函数的实现方式
 
 让我们将本章和其他之前章节所学的知识组合起来，在下一章一起编写一个项目！
 
+[paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
 [separating-modules-into-files]:
 ch07-05-separating-modules-into-different-files.html

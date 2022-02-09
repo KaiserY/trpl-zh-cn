@@ -6,5 +6,5 @@ fn it_works() {
 #[test]
 #[ignore]
 fn expensive_test() {
-    // code that takes an hour to run
+    // 需要运行一个小时的代码
 }

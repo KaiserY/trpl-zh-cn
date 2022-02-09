@@ -2,7 +2,7 @@
 
 > [ch11-01-writing-tests.md](https://github.com/rust-lang/book/blob/main/src/ch11-01-writing-tests.md)
 > <br>
-> commit cc6a1ef2614aa94003566027b285b249ccf961fa
+> commit b9a473ff80e72ed9a77f97a80799b5aff25b594a
 
 Rust 中的测试函数是用来验证非测试代码是否按照期望的方式运行的。测试函数体通常执行如下三种操作：
 
@@ -22,7 +22,7 @@ Rust 中的测试函数是用来验证非测试代码是否按照期望的方式
 
 让我们创建一个新的库项目 `adder`：
 
-```text
+```console
 $ cargo new adder --lib
      Created library `adder` project
 $ cd adder
@@ -32,15 +32,8 @@ adder 库中 `src/lib.rs` 的内容应该看起来如示例 11-1 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# fn main() {}
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-01/src/lib.rs}}
 ```
 
 <span class="caption">示例 11-1：由 `cargo new` 自动生成的测试模块和函数</span>
@@ -51,22 +44,8 @@ mod tests {
 
 `cargo test` 命令会运行项目中所有的测试，如示例 11-2 所示：
 
-```text
-$ cargo test
-   Compiling adder v0.1.0 (file:///projects/adder)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.22 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
-
-running 1 test
-test tests::it_works ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
-
-   Doc-tests adder
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+```console
+{{#include ../listings/ch11-writing-automated-tests/listing-11-01/output.txt}}
 ```
 
 <span class="caption">示例 11-2：运行自动生成测试的输出</span>
@@ -85,67 +64,30 @@ Cargo 编译并运行了测试。在 `Compiling`、`Finished` 和 `Running` 这�
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# fn main() {}
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn exploration() {
-        assert_eq!(2 + 2, 4);
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-01-changing-test-name/src/lib.rs}}
 ```
 
 并再次运行 `cargo test`。现在输出中将出现 `exploration` 而不是 `it_works`：
 
-```text
-running 1 test
-test tests::exploration ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+```console
+{{#include ../listings/ch11-writing-automated-tests/no-listing-01-changing-test-name/output.txt}}
 ```
 
 让我们增加另一个测试，不过这一次是一个会失败的测试！当测试函数中出现 panic 时测试就失败了。每一个测试都在一个新线程中运行，当主线程发现测试线程异常了，就将对应测试标记为失败。第九章讲到了最简单的造成 panic 的方法：调用 `panic!` 宏。写入新测试 `another` 后， `src/lib.rs` 现在看起来如示例 11-3 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust,panics
-# fn main() {}
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn exploration() {
-        assert_eq!(2 + 2, 4);
-    }
-
-    #[test]
-    fn another() {
-        panic!("Make this test fail");
-    }
-}
+```rust,panics,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-03/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 11-3：增加第二个因调用了 `panic!` 而失败的测试</span>
 
 再次 `cargo test` 运行测试。输出应该看起来像示例 11-4，它表明 `exploration` 测试通过了而 `another` 失败了：
 
-```text
-running 2 tests
-test tests::exploration ... ok
-test tests::another ... FAILED
-
-failures:
-
----- tests::another stdout ----
-thread 'tests::another' panicked at 'Make this test fail', src/lib.rs:10:9
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
-
-failures:
-    tests::another
-
-test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
-
-error: test failed
+```console
+{{#include ../listings/ch11-writing-automated-tests/listing-11-03/output.txt}}
 ```
 
 <span class="caption">示例 11-4：一个测试通过和一个测试失败的测试结果</span>
@@ -164,19 +106,8 @@ error: test failed
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# fn main() {}
-#[derive(Debug)]
-struct Rectangle {
-    width: u32,
-    height: u32,
-}
-
-impl Rectangle {
-    fn can_hold(&self, other: &Rectangle) -> bool {
-        self.width > other.width && self.height > other.height
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-05/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 11-5：第五章中 `Rectangle` 结构体和其 `can_hold` 方法</span>
@@ -185,20 +116,8 @@ impl Rectangle {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# fn main() {}
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn larger_can_hold_smaller() {
-        let larger = Rectangle { width: 8, height: 7 };
-        let smaller = Rectangle { width: 5, height: 1 };
-
-        assert!(larger.can_hold(&smaller));
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-06/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 11-6：一个 `can_hold` 的测试，检查一个较大的矩形确实能放得下一个较小的矩形</span>
@@ -207,84 +126,34 @@ mod tests {
 
 我们将测试命名为 `larger_can_hold_smaller`，并创建所需的两个 `Rectangle` 实例。接着调用 `assert!` 宏并传递 `larger.can_hold(&smaller)` 调用的结果作为参数。这个表达式预期会返回 `true`，所以测试应该通过。让我们拭目以待！
 
-```text
-running 1 test
-test tests::larger_can_hold_smaller ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+```console
+{{#include ../listings/ch11-writing-automated-tests/listing-11-06/output.txt}}
 ```
 
 它确实通过了！再来增加另一个测试，这一回断言一个更小的矩形不能放下一个更大的矩形：
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# fn main() {}
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn larger_can_hold_smaller() {
-        // --snip--
-    }
-
-    #[test]
-    fn smaller_cannot_hold_larger() {
-        let larger = Rectangle { width: 8, height: 7 };
-        let smaller = Rectangle { width: 5, height: 1 };
-
-        assert!(!smaller.can_hold(&larger));
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-02-adding-another-rectangle-test/src/lib.rs:here}}
 ```
 
 因为这里 `can_hold` 函数的正确结果是 `false` ，我们需要将这个结果取反后传递给 `assert!` 宏。因此 `can_hold` 返回 `false` 时测试就会通过：
 
-```text
-running 2 tests
-test tests::smaller_cannot_hold_larger ... ok
-test tests::larger_can_hold_smaller ... ok
-
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+```console
+{{#include ../listings/ch11-writing-automated-tests/no-listing-02-adding-another-rectangle-test/output.txt}}
 ```
 
 两个通过的测试！现在让我们看看如果引入一个 bug 的话测试结果会发生什么。将 `can_hold` 方法中比较长度时本应使用大于号的地方改成小于号：
 
-```rust,not_desired_behavior
-# fn main() {}
-# #[derive(Debug)]
-# struct Rectangle {
-#     width: u32,
-#     height: u32,
-# }
-// --snip--
-
-impl Rectangle {
-    fn can_hold(&self, other: &Rectangle) -> bool {
-        self.width < other.width && self.height > other.height
-    }
-}
+```rust,not_desired_behavior,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-03-introducing-a-bug/src/lib.rs:here}}
 ```
 
 现在运行测试会产生：
 
-```text
-running 2 tests
-test tests::smaller_cannot_hold_larger ... ok
-test tests::larger_can_hold_smaller ... FAILED
-
-failures:
-
----- tests::larger_can_hold_smaller stdout ----
-thread 'tests::larger_can_hold_smaller' panicked at 'assertion failed:
-larger.can_hold(&smaller)', src/lib.rs:22:9
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
-
-failures:
-    tests::larger_can_hold_smaller
-
-test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
+```console
+{{#include ../listings/ch11-writing-automated-tests/no-listing-03-introducing-a-bug/output.txt}}
 ```
 
 我们的测试捕获了 bug！因为 `larger.length` 是 8 而 `smaller.length` 是 5，`can_hold` 中的长度比较现在因为 8 不小于 5 而返回 `false`。
@@ -297,63 +166,30 @@ test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# fn main() {}
-pub fn add_two(a: i32) -> i32 {
-    a + 2
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_adds_two() {
-        assert_eq!(4, add_two(2));
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-07/src/lib.rs}}
 ```
 
 <span class="caption">示例 11-7：使用 `assert_eq!` 宏测试 `add_two` 函数</span>
 
 测试通过了！
 
-```text
-running 1 test
-test tests::it_adds_two ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+```console
+{{#include ../listings/ch11-writing-automated-tests/listing-11-07/output.txt}}
 ```
 
 传递给 `assert_eq!` 宏的第一个参数 `4` ，等于调用 `add_two(2)` 的结果。测试中的这一行 `test tests::it_adds_two ... ok` 中 `ok` 表明测试通过！
 
 在代码中引入一个 bug 来看看使用 `assert_eq!` 的测试失败是什么样的。修改 `add_two` 函数的实现使其加 3：
 
-```rust,not_desired_behavior
-# fn main() {}
-pub fn add_two(a: i32) -> i32 {
-    a + 3
-}
+```rust,not_desired_behavior,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-04-bug-in-add-two/src/lib.rs:here}}
 ```
 
 再次运行测试：
 
-```text
-running 1 test
-test tests::it_adds_two ... FAILED
-
-failures:
-
----- tests::it_adds_two stdout ----
-thread 'tests::it_adds_two' panicked at 'assertion failed: `(left == right)`
-  left: `4`,
- right: `5`', src/lib.rs:11:9
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
-
-failures:
-    tests::it_adds_two
-
-test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
+```console
+{{#include ../listings/ch11-writing-automated-tests/no-listing-04-bug-in-add-two/output.txt}}
 ```
 
 测试捕获到了 bug！`it_adds_two` 测试失败，显示信息 `` assertion failed: `(left == right)` `` 并表明 `left` 是 `4` 而 `right` 是 `5`。这个信息有助于我们开始调试：它说 `assert_eq!` 的 `left` 参数是 `4`，而 `right` 参数，也就是 `add_two(2)` 的结果，是 `5`。
@@ -372,72 +208,34 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# fn main() {}
-pub fn greeting(name: &str) -> String {
-    format!("Hello {}!", name)
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn greeting_contains_name() {
-        let result = greeting("Carol");
-        assert!(result.contains("Carol"));
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-05-greeter/src/lib.rs}}
 ```
 
 这个程序的需求还没有被确定，因此问候文本开头的 `Hello` 文本很可能会改变。然而我们并不想在需求改变时不得不更新测试，所以相比检查 `greeting` 函数返回的确切值，我们将仅仅断言输出的文本中包含输入参数。
 
 让我们通过将 `greeting` 改为不包含 `name` 来在代码中引入一个 bug 来测试失败时是怎样的：
 
-```rust,not_desired_behavior
-# fn main() {}
-pub fn greeting(name: &str) -> String {
-    String::from("Hello!")
-}
+```rust,not_desired_behavior,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-06-greeter-with-bug/src/lib.rs:here}}
 ```
 
 运行测试会产生：
 
-```text
-running 1 test
-test tests::greeting_contains_name ... FAILED
-
-failures:
-
----- tests::greeting_contains_name stdout ----
-thread 'tests::greeting_contains_name' panicked at 'assertion failed:
-result.contains("Carol")', src/lib.rs:12:9
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
-
-failures:
-    tests::greeting_contains_name
+```console
+{{#include ../listings/ch11-writing-automated-tests/no-listing-06-greeter-with-bug/output.txt}}
 ```
 
 结果仅仅告诉了我们断言失败了和失败的行号。一个更有用的失败信息应该打印出 `greeting` 函数的值。让我们为测试函数增加一个自定义失败信息参数：带占位符的格式字符串，以及 `greeting` 函数的值：
 
 ```rust,ignore
-#[test]
-fn greeting_contains_name() {
-    let result = greeting("Carol");
-    assert!(
-        result.contains("Carol"),
-        "Greeting did not contain name, value was `{}`", result
-    );
-}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-07-custom-failure-message/src/lib.rs:here}}
 ```
 
 现在如果再次运行测试，将会看到更有价值的信息：
 
-```text
----- tests::greeting_contains_name stdout ----
-thread 'tests::greeting_contains_name' panicked at 'Greeting did not
-contain name, value was `Hello!`', src/lib.rs:12:9
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+```console
+{{#include ../listings/ch11-writing-automated-tests/no-listing-07-custom-failure-message/output.txt}}
 ```
 
 可以在测试输出中看到所取得的确切的值，这会帮助我们理解真正发生了什么，而不是期望发生什么。
@@ -452,82 +250,28 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# fn main() {}
-pub struct Guess {
-    value: i32,
-}
-
-impl Guess {
-    pub fn new(value: i32) -> Guess {
-        if value < 1 || value > 100 {
-            panic!("Guess value must be between 1 and 100, got {}.", value);
-        }
-
-        Guess {
-            value
-        }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    #[should_panic]
-    fn greater_than_100() {
-        Guess::new(200);
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-08/src/lib.rs}}
 ```
 
 <span class="caption">示例 11-8：测试会造成 `panic!` 的条件</span>
 
 `#[should_panic]` 属性位于 `#[test]` 之后，对应的测试函数之前。让我们看看测试通过时它是什么样子：
 
-```text
-running 1 test
-test tests::greater_than_100 ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+```console
+{{#include ../listings/ch11-writing-automated-tests/listing-11-08/output.txt}}
 ```
 
 看起来不错！现在在代码中引入 bug，移除 `new` 函数在值大于 100 时会 panic 的条件：
 
-```rust,not_desired_behavior
-# fn main() {}
-# pub struct Guess {
-#     value: i32,
-# }
-#
-// --snip--
-
-impl Guess {
-    pub fn new(value: i32) -> Guess {
-        if value < 1  {
-            panic!("Guess value must be between 1 and 100, got {}.", value);
-        }
-
-        Guess {
-            value
-        }
-    }
-}
+```rust,not_desired_behavior,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-08-guess-with-bug/src/lib.rs:here}}
 ```
 
 如果运行示例 11-8 的测试，它会失败：
 
-```text
-running 1 test
-test tests::greater_than_100 ... FAILED
-
-failures:
-
-failures:
-    tests::greater_than_100
-
-test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
+```console
+{{#include ../listings/ch11-writing-automated-tests/no-listing-08-guess-with-bug/output.txt}}
 ```
 
 这回并没有得到非常有用的信息，不过一旦我们观察测试函数，会发现它标注了 `#[should_panic]`。这个错误意味着代码中测试函数 `Guess::new(200)` 并没有产生 panic。
@@ -536,40 +280,8 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# fn main() {}
-# pub struct Guess {
-#     value: i32,
-# }
-#
-// --snip--
-
-impl Guess {
-    pub fn new(value: i32) -> Guess {
-        if value < 1 {
-            panic!("Guess value must be greater than or equal to 1, got {}.",
-                   value);
-        } else if value > 100 {
-            panic!("Guess value must be less than or equal to 100, got {}.",
-                   value);
-        }
-
-        Guess {
-            value
-        }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    #[should_panic(expected = "Guess value must be less than or equal to 100")]
-    fn greater_than_100() {
-        Guess::new(200);
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-09/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 11-9：一个会带有特定错误信息的 `panic!` 条件的测试</span>
@@ -579,32 +291,13 @@ mod tests {
 为了观察带有 `expected` 信息的 `should_panic` 测试失败时会发生什么，让我们再次引入一个 bug，将 `if value < 1` 和 `else if value > 100` 的代码块对换：
 
 ```rust,ignore,not_desired_behavior
-if value < 1 {
-    panic!("Guess value must be less than or equal to 100, got {}.", value);
-} else if value > 100 {
-    panic!("Guess value must be greater than or equal to 1, got {}.", value);
-}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-09-guess-with-panic-msg-bug/src/lib.rs:here}}
 ```
 
 这一次运行 `should_panic` 测试，它会失败：
 
-```text
-running 1 test
-test tests::greater_than_100 ... FAILED
-
-failures:
-
----- tests::greater_than_100 stdout ----
-thread 'tests::greater_than_100' panicked at 'Guess value must be
-greater than or equal to 1, got 200.', src/lib.rs:11:13
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
-note: Panic did not include expected string 'Guess value must be less than or
-equal to 100'
-
-failures:
-    tests::greater_than_100
-
-test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
+```console
+{{#include ../listings/ch11-writing-automated-tests/no-listing-09-guess-with-panic-msg-bug/output.txt}}
 ```
 
 失败信息表明测试确实如期望 panic 了，不过 panic 信息中并没有包含 `expected` 信息 `'Guess value must be less than or equal to 100'`。而我们得到的 panic 信息是 `'Guess value must be greater than or equal to 1, got 200.'`。这样就可以开始寻找 bug 在哪了！
@@ -613,32 +306,22 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 
 目前为止，我们编写的测试在失败时就会 panic。也可以使用 `Result<T, E>` 编写测试！这里是第一个例子采用了 Result：
 
-```rust
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() -> Result<(), String> {
-        if 2 + 2 == 4 {
-            Ok(())
-        } else {
-            Err(String::from("two plus two does not equal four"))
-        }
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-10-result-in-tests/src/lib.rs}}
 ```
 
 现在 `it_works` 函数的返回值类型为 `Result<(), String>`。在函数体中，不同于调用 `assert_eq!` 宏，而是在测试通过时返回 `Ok(())`，在测试失败时返回带有 `String` 的 `Err`。
 
 这样编写测试来返回 `Result<T, E>` 就可以在函数体中使用问号运算符，如此可以方便的编写任何运算符会返回 `Err` 成员的测试。
 
-不能对这些使用  `Result<T, E>` 的测试使用 `#[should_panic]` 注解。相反应该在测试失败时直接返回 `Err` 值。
+不能对这些使用 `Result<T, E>` 的测试使用 `#[should_panic]` 注解。为了断言一个操作返回 `Err` 成员，**不要**使用对 `Result<T, E>` 值使用问好表达式（`?`）。而是使用 `assert!(value.is_err())`。
 
 现在你知道了几种编写测试的方法，让我们看看运行测试时会发生什么，和可以用于 `cargo test` 的不同选项。
 
 [concatenation-with-the--operator-or-the-format-macro]:
-ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro
+ch08-02-strings.html#使用--运算符或-format-宏拼接字符串
 [controlling-how-tests-are-run]:
-ch11-02-running-tests.html#controlling-how-tests-are-run
+ch11-02-running-tests.html#控制测试如何运行
 [derivable-traits]: appendix-03-derivable-traits.html
-[doc-comments]: ch14-02-publishing-to-crates-io.html#documentation-comments-as-tests
+[doc-comments]: ch14-02-publishing-to-crates-io.html#文档注释作为测试
 [paths-for-referring-to-an-item-in-the-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
