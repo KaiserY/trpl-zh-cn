@@ -20,7 +20,7 @@ fn main() {
     let word = first_word(&my_string[0..6]);
     let word = first_word(&my_string[..]);
     // `first_word` 也适用于 `String` 的引用，
-    // 这等价于真个 `String` 的 slice
+    // 这等价于整个 `String` 的 slice
     let word = first_word(&my_string);
 
     let my_string_literal = "hello world";
