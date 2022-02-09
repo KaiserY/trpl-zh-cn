@@ -2,7 +2,9 @@
 
 > [ch13-04-performance.md](https://github.com/rust-lang/book/blob/main/src/ch13-04-performance.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 009fffa4580ffb175f1b8470b5b12e4a63d670e4
+
+为了决定使用循环还是迭代器，我们需要指导哪个实现更快一些：是显式循环版本的 `search` 函数还是迭代器版本的。
 
 为了决定使用哪个实现，我们需要知道哪个版本的 `search` 函数更快一些：是直接使用 `for` 循环的版本还是使用迭代器的版本。
 

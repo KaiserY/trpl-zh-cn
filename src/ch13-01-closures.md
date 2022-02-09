@@ -2,7 +2,7 @@
 
 > [ch13-01-closures.md](https://github.com/rust-lang/book/blob/main/src/ch13-01-closures.md)
 > <br>
-> commit 26565efc3f62d9dacb7c2c6d0f5974360e459493
+> commit 8acef6cfd40a36be60a3c62458d9f78e2427e190
 
 Rust 的 **闭包**（*closures*）是可以保存进变量或作为参数传递给其他函数的匿名函数。可以在一个地方创建闭包，然后在不同的上下文中执行闭包运算。不同于函数，闭包允许捕获调用者作用域中的值。我们将展示闭包的这些功能如何复用代码和自定义行为。
 
@@ -17,14 +17,7 @@ Rust 的 **闭包**（*closures*）是可以保存进变量或作为参数传递
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-use std::thread;
-use std::time::Duration;
-
-fn simulated_expensive_calculation(intensity: u32) -> u32 {
-    println!("calculating slowly...");
-    thread::sleep(Duration::from_secs(2));
-    intensity
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-01/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-1：一个用来代替假定计算的函数，它大约会执行两秒钟</span>
@@ -41,16 +34,7 @@ fn simulated_expensive_calculation(intensity: u32) -> u32 {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let simulated_user_specified_value = 10;
-    let simulated_random_number = 7;
-
-    generate_workout(
-        simulated_user_specified_value,
-        simulated_random_number
-    );
-}
-# fn generate_workout(intensity: u32, random_number: u32) {}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-02/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-2：`main` 函数包含了用于 `generate_workout` 函数的模拟用户输入和模拟随机数输入</span>
@@ -62,36 +46,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-# use std::thread;
-# use std::time::Duration;
-#
-# fn simulated_expensive_calculation(num: u32) -> u32 {
-#     println!("calculating slowly...");
-#     thread::sleep(Duration::from_secs(2));
-#     num
-# }
-#
-fn generate_workout(intensity: u32, random_number: u32) {
-    if intensity < 25 {
-        println!(
-            "Today, do {} pushups!",
-            simulated_expensive_calculation(intensity)
-        );
-        println!(
-            "Next, do {} situps!",
-            simulated_expensive_calculation(intensity)
-        );
-    } else {
-        if random_number == 3 {
-            println!("Take a break today! Remember to stay hydrated!");
-        } else {
-            println!(
-                "Today, run for {} minutes!",
-                simulated_expensive_calculation(intensity)
-            );
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-03/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-3：程序的业务逻辑，它根据输入并调用 `simulated_expensive_calculation` 函数来打印出健身计划</span>
@@ -113,46 +68,14 @@ fn generate_workout(intensity: u32, random_number: u32) {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-# use std::thread;
-# use std::time::Duration;
-#
-# fn simulated_expensive_calculation(num: u32) -> u32 {
-#     println!("calculating slowly...");
-#     thread::sleep(Duration::from_secs(2));
-#     num
-# }
-#
-fn generate_workout(intensity: u32, random_number: u32) {
-    let expensive_result =
-        simulated_expensive_calculation(intensity);
-
-    if intensity < 25 {
-        println!(
-            "Today, do {} pushups!",
-            expensive_result
-        );
-        println!(
-            "Next, do {} situps!",
-            expensive_result
-        );
-    } else {
-        if random_number == 3 {
-            println!("Take a break today! Remember to stay hydrated!");
-        } else {
-            println!(
-                "Today, run for {} minutes!",
-                expensive_result
-            );
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-04/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-4：将 `simulated_expensive_calculation` 调用提取到一个位置，并将结果储存在变量 `expensive_result` 中</span>
 
 这个修改统一了 `simulated_expensive_calculation` 调用并解决了第一个 `if` 块中不必要的两次调用函数的问题。不幸的是，现在所有的情况下都需要调用函数并等待结果，包括那个完全不需要这一结果的内部 `if` 块。
 
-我们希望能够在程序的一个位置指定某些代码，并只在程序的某处实际需要结果的时候 **执行** 这些代码。这正是闭包的用武之地！
+我们希望在 `generate_workout` 中只引用 `simulated_expensive_calculation` 一次，并推迟复杂计算的执行直到我们确实需要结果的时候。这正是闭包的用武之地！
 
 #### 重构使用闭包储存代码
 
@@ -161,15 +84,7 @@ fn generate_workout(intensity: u32, random_number: u32) {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-# use std::thread;
-# use std::time::Duration;
-#
-let expensive_closure = |num| {
-    println!("calculating slowly...");
-    thread::sleep(Duration::from_secs(2));
-    num
-};
-# expensive_closure(5);
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-05/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-5：定义一个闭包并储存到变量 `expensive_closure` 中</span>
@@ -185,41 +100,12 @@ let expensive_closure = |num| {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-# use std::thread;
-# use std::time::Duration;
-#
-fn generate_workout(intensity: u32, random_number: u32) {
-    let expensive_closure = |num| {
-        println!("calculating slowly...");
-        thread::sleep(Duration::from_secs(2));
-        num
-    };
-
-    if intensity < 25 {
-        println!(
-            "Today, do {} pushups!",
-            expensive_closure(intensity)
-        );
-        println!(
-            "Next, do {} situps!",
-            expensive_closure(intensity)
-        );
-    } else {
-        if random_number == 3 {
-            println!("Take a break today! Remember to stay hydrated!");
-        } else {
-            println!(
-                "Today, run for {} minutes!",
-                expensive_closure(intensity)
-            );
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-06/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-6：调用定义的 `expensive_closure`</span>
 
-现在耗时的计算只在一个地方被调用，并只会在需要结果的时候执行该代码。
+现在如何执行复杂计算只被定义了一次，并只会在需要结果的时候执行该代码。
 
 然而，我们又重新引入了示例 13-3 中的问题：仍然在第一个 `if` 块中调用了闭包两次，这调用了慢计算代码两次而使得用户需要多等待一倍的时间。可以通过在 `if` 块中创建一个本地变量存放闭包调用的结果来解决这个问题，不过闭包可以提供另外一种解决方案。我们稍后会讨论这个方案，不过目前让我们首先讨论一下为何闭包定义中和所涉及的 trait 中没有类型注解。
 
@@ -236,14 +122,7 @@ fn generate_workout(intensity: u32, random_number: u32) {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-# use std::thread;
-# use std::time::Duration;
-#
-let expensive_closure = |num: u32| -> u32 {
-    println!("calculating slowly...");
-    thread::sleep(Duration::from_secs(2));
-    num
-};
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-07/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-7：为闭包的参数和返回值增加可选的类型注解</span>
@@ -257,33 +136,22 @@ let add_one_v3 = |x|             { x + 1 };
 let add_one_v4 = |x|               x + 1  ;
 ```
 
-第一行展示了一个函数定义，而第二行展示了一个完整标注的闭包定义。第三行闭包定义中省略了类型注解，而第四行去掉了可选的大括号，因为闭包体只有一行。这些都是有效的闭包定义，并在调用时产生相同的行为。
+第一行展示了一个函数定义，而第二行展示了一个完整标注的闭包定义。第三行闭包定义中省略了类型注解，而第四行去掉了可选的大括号，因为闭包体只有一行。这些都是有效的闭包定义，并在调用时产生相同的行为。调用闭包要求 `add_one_v3` 和 `add_one_v4` 必须更够编译因为会根据其用途推断其类型。
 
 闭包定义会为每个参数和返回值推断一个具体类型。例如，示例 13-8 中展示了仅仅将参数作为返回值的简短的闭包定义。除了作为示例的目的这个闭包并不是很实用。注意其定义并没有增加任何类型注解：如果尝试调用闭包两次，第一次使用 `String` 类型作为参数而第二次使用 `u32`，则会得到一个错误：
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-let example_closure = |x| x;
-
-let s = example_closure(String::from("hello"));
-let n = example_closure(5);
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-08/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-8：尝试调用一个被推断为两个不同类型的闭包</span>
 
 编译器给出如下错误：
 
-```text
-error[E0308]: mismatched types
- --> src/main.rs
-  |
-  | let n = example_closure(5);
-  |                         ^ expected struct `std::string::String`, found
-  integer
-  |
-  = note: expected type `std::string::String`
-             found type `{integer}`
+```console
+{{#include ../listings/ch13-functional-features/listing-13-08/output.txt}}
 ```
 
 第一次使用 `String` 值调用 `example_closure` 时，编译器推断 `x` 和此闭包返回值的类型为 `String`。接着这些类型被锁定进闭包 `example_closure` 中，如果尝试对同一闭包使用不同类型则会得到类型错误。
@@ -305,12 +173,7 @@ error[E0308]: mismatched types
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-struct Cacher<T>
-    where T: Fn(u32) -> u32
-{
-    calculation: T,
-    value: Option<u32>,
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-09/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-9：定义一个 `Cacher` 结构体来在 `calculation` 中存放闭包并在 `value` 中存放 Option 值</span>
@@ -326,34 +189,7 @@ struct Cacher<T>
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-# struct Cacher<T>
-#     where T: Fn(u32) -> u32
-# {
-#     calculation: T,
-#     value: Option<u32>,
-# }
-#
-impl<T> Cacher<T>
-    where T: Fn(u32) -> u32
-{
-    fn new(calculation: T) -> Cacher<T> {
-        Cacher {
-            calculation,
-            value: None,
-        }
-    }
-
-    fn value(&mut self, arg: u32) -> u32 {
-        match self.value {
-            Some(v) => v,
-            None => {
-                let v = (self.calculation)(arg);
-                self.value = Some(v);
-                v
-            },
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-10/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-10：`Cacher` 的缓存逻辑</span>
@@ -371,65 +207,7 @@ impl<T> Cacher<T>
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-# use std::thread;
-# use std::time::Duration;
-#
-# struct Cacher<T>
-#     where T: Fn(u32) -> u32
-# {
-#     calculation: T,
-#     value: Option<u32>,
-# }
-#
-# impl<T> Cacher<T>
-#     where T: Fn(u32) -> u32
-# {
-#     fn new(calculation: T) -> Cacher<T> {
-#         Cacher {
-#             calculation,
-#             value: None,
-#         }
-#     }
-#
-#     fn value(&mut self, arg: u32) -> u32 {
-#         match self.value {
-#             Some(v) => v,
-#             None => {
-#                 let v = (self.calculation)(arg);
-#                 self.value = Some(v);
-#                 v
-#             },
-#         }
-#     }
-# }
-#
-fn generate_workout(intensity: u32, random_number: u32) {
-    let mut expensive_result = Cacher::new(|num| {
-        println!("calculating slowly...");
-        thread::sleep(Duration::from_secs(2));
-        num
-    });
-
-    if intensity < 25 {
-        println!(
-            "Today, do {} pushups!",
-            expensive_result.value(intensity)
-        );
-        println!(
-            "Next, do {} situps!",
-            expensive_result.value(intensity)
-        );
-    } else {
-        if random_number == 3 {
-            println!("Take a break today! Remember to stay hydrated!");
-        } else {
-            println!(
-                "Today, run for {} minutes!",
-                expensive_result.value(intensity)
-            );
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-11/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-11：在 `generate_workout` 函数中利用 `Cacher` 结构体来抽象出缓存逻辑</span>
@@ -445,25 +223,15 @@ fn generate_workout(intensity: u32, random_number: u32) {
 第一个问题是 `Cacher` 实例假设对于 `value` 方法的任何 `arg` 参数值总是会返回相同的值。也就是说，这个 `Cacher` 的测试会失败：
 
 ```rust,ignore,panics
-#[test]
-fn call_with_different_values() {
-    let mut c = Cacher::new(|a| a);
-
-    let v1 = c.value(1);
-    let v2 = c.value(2);
-
-    assert_eq!(v2, 2);
-}
+{{#rustdoc_include ../listings/ch13-functional-features/no-listing-01-failing-cacher-test/src/lib.rs:here}}
 ```
 
 这个测试使用返回传递给它的值的闭包创建了一个新的 `Cacher` 实例。使用为 1 的 `arg` 和为 2 的 `arg` 调用 `Cacher` 实例的 `value` 方法，同时我们期望使用为 2 的 `arg` 调用 `value` 会返回 2。
 
 使用示例 13-9 和示例 13-10 的 `Cacher` 实现运行测试，它会在 `assert_eq!` 失败并显示如下信息：
 
-```text
-thread 'call_with_different_values' panicked at 'assertion failed: `(left == right)`
-  left: `1`,
- right: `2`', src/main.rs
+```console
+{{#include ../listings/ch13-functional-features/no-listing-01-failing-cacher-test/output.txt}}
 ```
 
 这里的问题是第一次使用 1 调用 `c.value`，`Cacher` 实例将 `Some(1)` 保存进 `self.value`。在这之后，无论传递什么值调用 `value`，它总是会返回 1。
@@ -481,15 +249,7 @@ thread 'call_with_different_values' panicked at 'assertion failed: `(left == rig
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = 4;
-
-    let equal_to_x = |z| z == x;
-
-    let y = 4;
-
-    assert!(equal_to_x(y));
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-12/src/main.rs}}
 ```
 
 <span class="caption">示例 13-12：一个引用了其周围作用域中变量的闭包示例</span>
@@ -501,26 +261,13 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let x = 4;
-
-    fn equal_to_x(z: i32) -> bool { z == x }
-
-    let y = 4;
-
-    assert!(equal_to_x(y));
-}
+{{#rustdoc_include ../listings/ch13-functional-features/no-listing-02-functions-cant-capture/src/main.rs}}
 ```
 
 这会得到一个错误：
 
-```text
-error[E0434]: can't capture dynamic environment in a fn item; use the || { ...
-} closure form instead
- --> src/main.rs
-  |
-4 |     fn equal_to_x(z: i32) -> bool { z == x }
-  |                                          ^
+```console
+{{#include ../listings/ch13-functional-features/no-listing-02-functions-cant-capture/output.txt}}
 ```
 
 编译器甚至会提示我们这只能用于闭包！
@@ -537,38 +284,20 @@ error[E0434]: can't capture dynamic environment in a fn item; use the || { ...
 
 如果你希望强制闭包获取其使用的环境值的所有权，可以在参数列表前使用 `move` 关键字。这个技巧在将闭包传递给新线程以便将数据移动到新线程中时最为实用。
 
+> 注意：即使其捕获的值已经被移动了，`move` 闭包仍需要实现 `Fn` 或 `FnMut`。这是因为闭包所实现的 trait 是由闭包所捕获了什么值而不是如何捕获所决定的。而 `move` 关键字仅代表了后者。
+
 第十六章讨论并发时会展示更多 `move` 闭包的例子，不过现在这里修改了示例 13-12 中的代码（作为演示），在闭包定义中增加 `move` 关键字并使用 vector 代替整型，因为整型可以被拷贝而不是移动；注意这些代码还不能编译：
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let x = vec![1, 2, 3];
-
-    let equal_to_x = move |z| z == x;
-
-    println!("can't use x here: {:?}", x);
-
-    let y = vec![1, 2, 3];
-
-    assert!(equal_to_x(y));
-}
+{{#rustdoc_include ../listings/ch13-functional-features/no-listing-03-move-closures/src/main.rs}}
 ```
 
 这个例子并不能编译，会产生以下错误：
 
-```text
-error[E0382]: use of moved value: `x`
- --> src/main.rs:6:40
-  |
-4 |     let equal_to_x = move |z| z == x;
-  |                      -------- value moved (into closure) here
-5 |
-6 |     println!("can't use x here: {:?}", x);
-  |                                        ^ value used here after move
-  |
-  = note: move occurs because `x` has type `std::vec::Vec<i32>`, which does not
-  implement the `Copy` trait
+```console
+{{#include ../listings/ch13-functional-features/no-listing-03-move-closures/output.txt}}
 ```
 
 `x` 被移动进了闭包，因为闭包使用 `move` 关键字定义。接着闭包获取了 `x` 的所有权，同时 `main` 就不再允许在 `println!` 语句中使用 `x` 了。去掉 `println!` 即可修复问题。

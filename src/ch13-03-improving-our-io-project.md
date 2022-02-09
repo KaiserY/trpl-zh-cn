@@ -2,7 +2,7 @@
 
 > [ch13-03-improving-our-io-project.md](https://github.com/rust-lang/book/blob/main/src/ch13-03-improving-our-io-project.md)
 > <br>
-> commit 6555fb6c805fbfe7d0961980991f8bca6918928f
+> commit cc958ca579816ea6ac7e9067d628b0423a1ed3e4
 
 有了这些关于迭代器的新知识，我们可以使用迭代器来改进第十二章中 I/O 项目的实现来使得代码更简洁明了。让我们看看迭代器如何能够改进 `Config::new` 函数和 `search` 函数的实现。
 
@@ -13,20 +13,7 @@
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
-impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
-        }
-
-        let query = args[1].clone();
-        let filename = args[2].clone();
-
-        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
-
-        Ok(Config { query, filename, case_sensitive })
-    }
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-12-23-reproduced/src/lib.rs:ch13}}
 ```
 
 <span class="caption">示例 13-24：重现第十二章结尾的 `Config::new` 函数</span>
@@ -46,31 +33,15 @@ impl Config {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let config = Config::new(&args).unwrap_or_else(|err| {
-        eprintln!("Problem parsing arguments: {}", err);
-        process::exit(1);
-    });
-
-    // --snip--
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-12-24-reproduced/src/main.rs:ch13}}
 ```
 
 修改第十二章结尾示例 12-24 中的 `main` 函数的开头为示例 13-25 中的代码。在更新 `Config::new` 之前这些代码还不能编译：
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
-fn main() {
-    let config = Config::new(env::args()).unwrap_or_else(|err| {
-        eprintln!("Problem parsing arguments: {}", err);
-        process::exit(1);
-    });
-
-    // --snip--
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-25/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-25：将 `env::args` 的返回值传递给 `Config::new`</span>
@@ -81,15 +52,15 @@ fn main() {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust,ignore
-impl Config {
-    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
-        // --snip--
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-26/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 13-26：以迭代器作为参数更新 `Config::new` 的签名
 
 `env::args` 函数的标准库文档显示，它返回的迭代器的类型为 `std::env::Args`。我们已经更新了 `Config :: new` 函数的签名，因此参数 `args` 的类型为 `std::env::Args` 而不是 `&[String]`。因为我们拥有 `args` 的所有权，并且将通过对其进行迭代来改变 `args` ，所以我们可以将 `mut` 关键字添加到 `args` 参数的规范中以使其可变。
+
+现在我们还需指定字符串 slice 错误类型只能有 `'static` 生命周期。因为我们之前只会返回字符串 slice，所以这是成立的。然而，当参数中有一个引用的时候，返回类型的引用有可能与参数的引用有着相同的生命周期。之前第十章 [“生命周期省略”][lifetime-elision] 部分讨论的规则生效，因此无需注明 `&str` 的生命周期。随着对 `args` 的修改，生命周期省略规则不再适用，所以必须指定 `'static` 生命周期。
 
 #### 使用 `Iterator` trait 代替索引
 
@@ -97,35 +68,8 @@ impl Config {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# fn main() {}
-# use std::env;
-#
-# struct Config {
-#     query: String,
-#     filename: String,
-#     case_sensitive: bool,
-# }
-#
-impl Config {
-    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
-        args.next();
-
-        let query = match args.next() {
-            Some(arg) => arg,
-            None => return Err("Didn't get a query string"),
-        };
-
-        let filename = match args.next() {
-            Some(arg) => arg,
-            None => return Err("Didn't get a file name"),
-        };
-
-        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
-
-        Ok(Config { query, filename, case_sensitive })
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-27/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 13-27：修改 `Config::new` 的函数体来使用迭代器方法</span>
@@ -139,17 +83,7 @@ I/O 项目中其他可以利用迭代器的地方是 `search` 函数，示例 13
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
-
-    for line in contents.lines() {
-        if line.contains(query) {
-            results.push(line);
-        }
-    }
-
-    results
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:ch13}}
 ```
 
 <span class="caption">示例 13-28：示例 12-19 中 `search` 函数的定义</span>
@@ -159,11 +93,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    contents.lines()
-        .filter(|line| line.contains(query))
-        .collect()
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-29/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 13-29：在 `search` 函数实现中使用迭代器适配器</span>
@@ -173,3 +103,5 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 接下来的逻辑问题就是在代码中应该选择哪种风格：是使用示例 13-28 中的原始实现还是使用示例 13-29 中使用迭代器的版本？大部分 Rust 程序员倾向于使用迭代器风格。开始这有点难以理解，不过一旦你对不同迭代器的工作方式有了感觉之后，迭代器可能会更容易理解。相比摆弄不同的循环并创建新 vector，（迭代器）代码则更关注循环的目的。这抽象掉那些老生常谈的代码，这样就更容易看清代码所特有的概念，比如迭代器中每个元素必须面对的过滤条件。
 
 不过这两种实现真的完全等同吗？直觉上的假设是更底层的循环会更快一些。让我们聊聊性能吧。
+
+[lifetime-elision]: ch10-03-lifetime-syntax.html#生命周期省略lifetime-elision

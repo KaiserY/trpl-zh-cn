@@ -2,16 +2,14 @@
 
 > [ch13-02-iterators.md](https://github.com/rust-lang/book/blob/main/src/ch13-02-iterators.md)
 > <br>
-> commit 8edf0457ab571b375b87357e1353ae0dd2127abe
+> commit f207d4125b28f51a9bd962b3232cdea925660073
 
 迭代器模式允许你对一个序列的项进行某些处理。**迭代器**（*iterator*）负责遍历序列中的每一项和决定序列何时结束的逻辑。当使用迭代器时，我们无需重新实现这些逻辑。
 
 在 Rust 中，迭代器是 **惰性的**（*lazy*），这意味着在调用方法使用迭代器之前它都不会有效果。例如，示例 13-13 中的代码通过调用定义于 `Vec` 上的 `iter` 方法在一个 vector `v1` 上创建了一个迭代器。这段代码本身没有任何用处：
 
 ```rust
-let v1 = vec![1, 2, 3];
-
-let v1_iter = v1.iter();
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-13/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-13：创建一个迭代器</span>
@@ -21,13 +19,7 @@ let v1_iter = v1.iter();
 示例 13-14 中的例子将迭代器的创建和 `for` 循环中的使用分开。迭代器被储存在 `v1_iter` 变量中，而这时没有进行迭代。一旦 `for` 循环开始使用 `v1_iter`，接着迭代器中的每一个元素被用于循环的一次迭代，这会打印出其每一个值：
 
 ```rust
-let v1 = vec![1, 2, 3];
-
-let v1_iter = v1.iter();
-
-for val in v1_iter {
-    println!("Got: {}", val);
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-14/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-14：在一个 `for` 循环中使用迭代器</span>
@@ -58,19 +50,10 @@ pub trait Iterator {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-#[test]
-fn iterator_demonstration() {
-    let v1 = vec![1, 2, 3];
-
-    let mut v1_iter = v1.iter();
-
-    assert_eq!(v1_iter.next(), Some(&1));
-    assert_eq!(v1_iter.next(), Some(&2));
-    assert_eq!(v1_iter.next(), Some(&3));
-    assert_eq!(v1_iter.next(), None);
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-15/src/lib.rs:here}}
 ```
+
 
 <span class="caption">示例 13-15：在迭代器上（直接）调用 `next` 方法</span>
 
@@ -86,17 +69,8 @@ fn iterator_demonstration() {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-#[test]
-fn iterator_sum() {
-    let v1 = vec![1, 2, 3];
-
-    let v1_iter = v1.iter();
-
-    let total: i32 = v1_iter.sum();
-
-    assert_eq!(total, 6);
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-16/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 13-16：调用 `sum` 方法获取迭代器所有项的总和</span>
@@ -112,24 +86,15 @@ fn iterator_sum() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,not_desired_behavior
-let v1: Vec<i32> = vec![1, 2, 3];
-
-v1.iter().map(|x| x + 1);
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-17/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-17：调用迭代器适配器 `map` 来创建一个新迭代器</span>
 
 得到的警告是：
 
-```text
-warning: unused `std::iter::Map` which must be used: iterator adaptors are lazy
-and do nothing unless consumed
- --> src/main.rs:4:5
-  |
-4 |     v1.iter().map(|x| x + 1);
-  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
-  |
-  = note: #[warn(unused_must_use)] on by default
+```console
+{{#include ../listings/ch13-functional-features/listing-13-17/output.txt}}
 ```
 
 示例 13-17 中的代码实际上并没有做任何事；所指定的闭包从未被调用过。警告提醒了我们为什么：迭代器适配器是惰性的，而这里我们需要消费迭代器。
@@ -141,11 +106,7 @@ and do nothing unless consumed
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-let v1: Vec<i32> = vec![1, 2, 3];
-
-let v2: Vec<_> = v1.iter().map(|x| x + 1).collect();
-
-assert_eq!(v2, vec![2, 3, 4]);
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-18/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-18：调用 `map` 方法创建一个新迭代器，接着调用 `collect` 方法消费新迭代器并创建一个 vector</span>
@@ -160,37 +121,8 @@ assert_eq!(v2, vec![2, 3, 4]);
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-#[derive(PartialEq, Debug)]
-struct Shoe {
-    size: u32,
-    style: String,
-}
-
-fn shoes_in_my_size(shoes: Vec<Shoe>, shoe_size: u32) -> Vec<Shoe> {
-    shoes.into_iter()
-        .filter(|s| s.size == shoe_size)
-        .collect()
-}
-
-#[test]
-fn filters_by_size() {
-    let shoes = vec![
-        Shoe { size: 10, style: String::from("sneaker") },
-        Shoe { size: 13, style: String::from("sandal") },
-        Shoe { size: 10, style: String::from("boot") },
-    ];
-
-    let in_my_size = shoes_in_my_size(shoes, 10);
-
-    assert_eq!(
-        in_my_size,
-        vec![
-            Shoe { size: 10, style: String::from("sneaker") },
-            Shoe { size: 10, style: String::from("boot") },
-        ]
-    );
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-19/src/lib.rs}}
 ```
 
 <span class="caption">示例 13-19：使用 `filter` 方法和一个捕获 `shoe_size` 的闭包</span>
@@ -213,16 +145,8 @@ fn filters_by_size() {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-struct Counter {
-    count: u32,
-}
-
-impl Counter {
-    fn new() -> Counter {
-        Counter { count: 0 }
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-20/src/lib.rs}}
 ```
 
 <span class="caption">示例 13-20：定义 `Counter` 结构体和一个创建 `count` 初值为 0 的 `Counter` 实例的 `new` 函数</span>
@@ -233,24 +157,8 @@ impl Counter {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# struct Counter {
-#     count: u32,
-# }
-#
-impl Iterator for Counter {
-    type Item = u32;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.count += 1;
-
-        if self.count < 6 {
-            Some(self.count)
-        } else {
-            None
-        }
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-21/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 13-21：在 `Counter` 结构体上实现 `Iterator` trait</span>
@@ -265,36 +173,8 @@ impl Iterator for Counter {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# struct Counter {
-#     count: u32,
-# }
-#
-# impl Iterator for Counter {
-#     type Item = u32;
-#
-#     fn next(&mut self) -> Option<Self::Item> {
-#         self.count += 1;
-#
-#         if self.count < 6 {
-#             Some(self.count)
-#         } else {
-#             None
-#         }
-#     }
-# }
-#
-#[test]
-fn calling_next_directly() {
-    let mut counter = Counter::new();
-
-    assert_eq!(counter.next(), Some(1));
-    assert_eq!(counter.next(), Some(2));
-    assert_eq!(counter.next(), Some(3));
-    assert_eq!(counter.next(), Some(4));
-    assert_eq!(counter.next(), Some(5));
-    assert_eq!(counter.next(), None);
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-22/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 13-22：测试 `next` 方法实现的功能</span>
@@ -309,42 +189,8 @@ fn calling_next_directly() {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# struct Counter {
-#     count: u32,
-# }
-#
-# impl Counter {
-#     fn new() -> Counter {
-#         Counter { count: 0 }
-#     }
-# }
-#
-# impl Iterator for Counter {
-#     // 迭代器会产生 u32s
-#     type Item = u32;
-#
-#     fn next(&mut self) -> Option<Self::Item> {
-#         // count 自增 1。也就是为什么从 0 开始。
-#         self.count += 1;
-#
-#         // 检测是否结束结束计数。
-#         if self.count < 6 {
-#             Some(self.count)
-#         } else {
-#             None
-#         }
-#     }
-# }
-#
-#[test]
-fn using_other_iterator_trait_methods() {
-    let sum: u32 = Counter::new().zip(Counter::new().skip(1))
-                                 .map(|(a, b)| a * b)
-                                 .filter(|x| x % 3 == 0)
-                                 .sum();
-    assert_eq!(18, sum);
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-23/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 13-23：使用自定义的 `Counter` 迭代器的多种方法</span>
