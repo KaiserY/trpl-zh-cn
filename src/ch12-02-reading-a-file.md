@@ -2,22 +2,14 @@
 
 > [ch12-02-reading-a-file.md](https://github.com/rust-lang/book/blob/main/src/ch12-02-reading-a-file.md)
 > <br>
-> commit 76df60bccead5f3de96db23d97b69597cd8a2b82
+> commit 0f87daf683ae3de3cb725faecb11b7e7e89f0e5a
 
 现在我们要增加读取由 `filename` 命令行参数指定的文件的功能。首先，需要一个用来测试的示例文件：用来确保 `minigrep` 正常工作的最好的文件是拥有多行少量文本且有一些重复单词的文件。示例 12-3 是一首艾米莉·狄金森（Emily Dickinson）的诗，它正适合这个工作！在项目根目录创建一个文件 `poem.txt`，并输入诗 "I'm nobody! Who are you?"：
 
 <span class="filename">文件名: poem.txt</span>
 
 ```text
-I'm nobody! Who are you?
-Are you nobody, too?
-Then there's a pair of us - don't tell!
-They'd banish us, you know.
-
-How dreary to be somebody!
-How public, like a frog
-To tell your name the livelong day
-To an admiring bog!
+{{#include ../listings/ch12-an-io-project/listing-12-03/poem.txt}}
 ```
 
 <span class="caption">示例 12-3：艾米莉·狄金森的诗 “I’m nobody! Who are you?”，一个好的测试用例</span>
@@ -26,25 +18,8 @@ To an admiring bog!
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,should_panic
-use std::env;
-use std::fs;
-
-fn main() {
-#     let args: Vec<String> = env::args().collect();
-#
-#     let query = &args[1];
-#     let filename = &args[2];
-#
-#     println!("Searching for {}", query);
-    // --snip--
-    println!("In file {}", filename);
-
-    let contents = fs::read_to_string(filename)
-        .expect("Something went wrong reading the file");
-
-    println!("With text:\n{}", contents);
-}
+```rust,should_panic,noplayground
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/src/main.rs:here}}
 ```
 
 <span class="caption">示例 12-4：读取第二个参数所指定的文件内容</span>
@@ -57,23 +32,8 @@ fn main() {
 
 尝试运行这些代码，随意指定一个字符串作为第一个命令行参数（因为还未实现搜索功能的部分）而将 *poem.txt* 文件将作为第二个参数：
 
-```text
-$ cargo run the poem.txt
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep the poem.txt`
-Searching for the
-In file poem.txt
-With text:
-I'm nobody! Who are you?
-Are you nobody, too?
-Then there's a pair of us — don't tell!
-They'd banish us, you know.
-
-How dreary to be somebody!
-How public, like a frog
-To tell your name the livelong day
-To an admiring bog!
+```console
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/output.txt}}
 ```
 
 好的！代码读取并打印出了文件的内容。虽然它还有一些瑕疵：`main` 函数有着多个职能，通常函数只负责一个功能的话会更简洁并易于维护。另一个问题是没有尽可能的处理错误。虽然我们的程序还很小，这些瑕疵并不是什么大问题，不过随着程序功能的丰富，将会越来越难以用简单的方法修复他们。在开发程序时，及早开始重构是一个最佳实践，因为重构少量代码时要容易的多，所以让我们现在就开始吧。

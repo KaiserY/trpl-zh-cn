@@ -2,7 +2,7 @@
 
 > [ch12-03-improving-error-handling-and-modularity.md](https://github.com/rust-lang/book/blob/main/src/ch12-03-improving-error-handling-and-modularity.md)
 > <br>
-> commit 426f3e4ec17e539ae9905ba559411169d303a031
+> commit c8a9ac9cee7923422b2eceebf0375363440dbfc1
 
 为了改善我们的程序这里有四个问题需要修复，而且他们都与程序的组织方式和如何处理潜在错误有关。
 
@@ -40,20 +40,7 @@
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let (query, filename) = parse_config(&args);
-
-    // --snip--
-}
-
-fn parse_config(args: &[String]) -> (&str, &str) {
-    let query = &args[1];
-    let filename = &args[2];
-
-    (query, filename)
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-05/src/main.rs:here}}
 ```
 
 <span class="caption">示例 12-5：从 `main` 中提取出 `parse_config` 函数</span>
@@ -74,35 +61,8 @@ fn parse_config(args: &[String]) -> (&str, &str) {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,should_panic
-# use std::env;
-# use std::fs;
-#
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let config = parse_config(&args);
-
-    println!("Searching for {}", config.query);
-    println!("In file {}", config.filename);
-
-    let contents = fs::read_to_string(config.filename)
-        .expect("Something went wrong reading the file");
-
-    // --snip--
-}
-
-struct Config {
-    query: String,
-    filename: String,
-}
-
-fn parse_config(args: &[String]) -> Config {
-    let query = args[1].clone();
-    let filename = args[2].clone();
-
-    Config { query, filename }
-}
+```rust,should_panic,noplayground
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-06/src/main.rs:here}}
 ```
 
 <span class="caption">示例 12-6：重构 `parse_config` 返回一个 `Config` 结构体实例</span>
@@ -128,32 +88,8 @@ fn parse_config(args: &[String]) -> Config {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,should_panic
-# use std::env;
-#
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let config = Config::new(&args);
-
-    // --snip--
-}
-
-# struct Config {
-#     query: String,
-#     filename: String,
-# }
-#
-// --snip--
-
-impl Config {
-    fn new(args: &[String]) -> Config {
-        let query = args[1].clone();
-        let filename = args[2].clone();
-
-        Config { query, filename }
-    }
-}
+```rust,should_panic,noplayground
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-07/src/main.rs:here}}
 ```
 
 <span class="caption">示例 12-7：将 `parse_config` 变为 `Config::new`</span>
@@ -164,14 +100,8 @@ impl Config {
 
 现在我们开始修复错误处理。回忆一下之前提到过如果 `args` vector 包含少于 3 个项并尝试访问 vector 中索引 `1` 或索引 `2` 的值会造成程序 panic。尝试不带任何参数运行程序；这将看起来像这样：
 
-```text
-$ cargo run
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep`
-thread 'main' panicked at 'index out of bounds: the len is 1
-but the index is 1', src/main.rs:25:21
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+```console
+{{#include ../listings/ch12-an-io-project/listing-12-07/output.txt}}
 ```
 
 `index out of bounds: the len is 1 but the index is 1` 是一个针对程序员的错误信息，然而这并不能真正帮助终端用户理解发生了什么和他们应该做什么。现在就让我们修复它吧。
@@ -183,27 +113,17 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-// --snip--
-fn new(args: &[String]) -> Config {
-    if args.len() < 3 {
-        panic!("not enough arguments");
-    }
-    // --snip--
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-08/src/main.rs:here}}
 ```
 
 <span class="caption">示例 12-8：增加一个参数数量检查</span>
 
-这类似于 [示例 9-10 中的 `Guess::new` 函数][ch9-custom-types]，那里如果 `value` 参数超出了有效值的范围就调用 `panic!`。不同于检查值的范围，这里检查 `args` 的长度至少是 `3`，而函数的剩余部分则可以在假设这个条件成立的基础上运行。如果 `args` 少于 3 个项，则这个条件将为真，并调用 `panic!` 立即终止程序。
+这类似于 [示例 9-13 中的 `Guess::new` 函数][ch9-custom-types]，那里如果 `value` 参数超出了有效值的范围就调用 `panic!`。不同于检查值的范围，这里检查 `args` 的长度至少是 `3`，而函数的剩余部分则可以在假设这个条件成立的基础上运行。如果 `args` 少于 3 个项，则这个条件将为真，并调用 `panic!` 立即终止程序。
 
 有了 `new` 中这几行额外的代码，再次不带任何参数运行程序并看看现在错误看起来像什么：
 
-```text
-$ cargo run
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep`
-thread 'main' panicked at 'not enough arguments', src/main.rs:26:13
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+```console
+{{#include ../listings/ch12-an-io-project/listing-12-08/output.txt}}
 ```
 
 这个输出就好多了，现在有了一个合理的错误信息。然而，还是有一堆额外的信息我们不希望提供给用户。所以在这里使用示例 9-9 中的技术可能不是最好的；正如 [第九章][ch9-error-guidelines] 所讲到的一样，`panic!` 的调用更趋向于程序上的问题而不是使用上的问题。相反我们可以使用第九章学习的另一个技术 —— 返回一个可以表明成功或错误的 [`Result`][ch9-result]。
@@ -216,19 +136,8 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
-impl Config {
-    fn new(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
-        }
-
-        let query = args[1].clone();
-        let filename = args[2].clone();
-
-        Ok(Config { query, filename })
-    }
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-09/src/main.rs:here}}
 ```
 
 <span class="caption">示例 12-9：从 `Config::new` 中返回 `Result`</span>
@@ -246,31 +155,17 @@ impl Config {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-use std::process;
-
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let config = Config::new(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {}", err);
-        process::exit(1);
-    });
-
-    // --snip--
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-10/src/main.rs:here}}
 ```
 
 <span class="caption">示例 12-10：如果新建 `Config` 失败则使用错误码退出</span>
 
-在上面的示例中，使用了一个之前没有涉及到的方法：`unwrap_or_else`，它定义于标准库的 `Result<T, E>` 上。使用 `unwrap_or_else` 可以进行一些自定义的非 `panic!` 的错误处理。当 `Result` 是 `Ok` 时，这个方法的行为类似于 `unwrap`：它返回 `Ok` 内部封装的值。然而，当其值是 `Err` 时，该方法会调用一个 **闭包**（*closure*），也就是一个我们定义的作为参数传递给 `unwrap_or_else` 的匿名函数。[第十三章][ch13] 会更详细的介绍闭包。现在你需要理解的是 `unwrap_or_else` 会将 `Err` 的内部值，也就是示例 12-9 中增加的 `not enough arguments` 静态字符串的情况，传递给闭包中位于两道竖线间的参数 `err`。闭包中的代码在其运行时可以使用这个 `err` 值。
+在上面的示例中，使用了一个之前没有详细说明的方法：`unwrap_or_else`，它定义于标准库的 `Result<T, E>` 上。使用 `unwrap_or_else` 可以进行一些自定义的非 `panic!` 的错误处理。当 `Result` 是 `Ok` 时，这个方法的行为类似于 `unwrap`：它返回 `Ok` 内部封装的值。然而，当其值是 `Err` 时，该方法会调用一个 **闭包**（*closure*），也就是一个我们定义的作为参数传递给 `unwrap_or_else` 的匿名函数。[第十三章][ch13] 会更详细的介绍闭包。现在你需要理解的是 `unwrap_or_else` 会将 `Err` 的内部值，也就是示例 12-9 中增加的 `not enough arguments` 静态字符串的情况，传递给闭包中位于两道竖线间的参数 `err`。闭包中的代码在其运行时可以使用这个 `err` 值。
 
 我们新增了一个 `use` 行来从标准库中导入 `process`。在错误的情况闭包中将被运行的代码只有两行：我们打印出了 `err` 值，接着调用了 `std::process::exit`。`process::exit` 会立即停止程序并将传递给它的数字作为退出状态码。这类似于示例 12-8 中使用的基于 `panic!` 的错误处理，除了不会再得到所有的额外输出了。让我们试试：
 
-```text
-$ cargo run
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.48 secs
-     Running `target/debug/minigrep`
-Problem parsing arguments: not enough arguments
+```console
+{{#include ../listings/ch12-an-io-project/listing-12-10/output.txt}}
 ```
 
 非常好！现在输出对于用户来说就友好多了。
@@ -284,23 +179,7 @@ Problem parsing arguments: not enough arguments
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    // --snip--
-
-    println!("Searching for {}", config.query);
-    println!("In file {}", config.filename);
-
-    run(config);
-}
-
-fn run(config: Config) {
-    let contents = fs::read_to_string(config.filename)
-        .expect("Something went wrong reading the file");
-
-    println!("With text:\n{}", contents);
-}
-
-// --snip--
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-11/src/main.rs:here}}
 ```
 
 <span class="caption">示例 12-11：提取 `run` 函数来包含剩余的程序逻辑</span>
@@ -314,17 +193,7 @@ fn run(config: Config) {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-use std::error::Error;
-
-// --snip--
-
-fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let contents = fs::read_to_string(config.filename)?;
-
-    println!("With text:\n{}", contents);
-
-    Ok(())
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-12/src/main.rs:here}}
 ```
 
 <span class="caption">示例 12-12：修改 `run` 函数返回 `Result`</span>
@@ -339,15 +208,8 @@ fn run(config: Config) -> Result<(), Box<dyn Error>> {
 
 上述代码能够编译，不过会有一个警告：
 
-```text
-warning: unused `std::result::Result` that must be used
-  --> src/main.rs:17:5
-   |
-17 |     run(config);
-   |     ^^^^^^^^^^^^
-   |
-   = note: #[warn(unused_must_use)] on by default
-   = note: this `Result` may be an `Err` variant, which should be handled
+```console
+{{#include ../listings/ch12-an-io-project/listing-12-12/output.txt}}
 ```
 
 Rust 提示我们的代码忽略了 `Result` 值，它可能表明这里存在一个错误。但我们却没有检查这里是否有一个错误，而编译器提醒我们这里应该有一些错误处理代码！现在就让我们修正这个问题。
@@ -359,18 +221,7 @@ Rust 提示我们的代码忽略了 `Result` 值，它可能表明这里存在�
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    // --snip--
-
-    println!("Searching for {}", config.query);
-    println!("In file {}", config.filename);
-
-    if let Err(e) = run(config) {
-        println!("Application error: {}", e);
-
-        process::exit(1);
-    }
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/no-listing-01-handling-errors-in-main/src/main.rs:here}}
 ```
 
 我们使用 `if let` 来检查 `run` 是否返回一个 `Err` 值，不同于 `unwrap_or_else`，并在出错时调用 `process::exit(1)`。`run` 并不返回像 `Config::new` 返回的 `Config` 实例那样需要 `unwrap` 的值。因为 `run` 在成功时返回 `()`，而我们只关心检测错误，所以并不需要 `unwrap_or_else` 来返回未封装的值，因为它只会是 `()`。
@@ -392,24 +243,8 @@ fn main() {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust,ignore
-use std::error::Error;
-use std::fs;
-
-pub struct Config {
-    pub query: String,
-    pub filename: String,
-}
-
-impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        // --snip--
-    }
-}
-
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    // --snip--
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-13/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 12-13：将 `Config` 和 `run` 移动到 *src/lib.rs*</span>
@@ -421,17 +256,7 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use std::env;
-use std::process;
-
-use minigrep::Config;
-
-fn main() {
-    // --snip--
-    if let Err(e) = minigrep::run(config) {
-        // --snip--
-    }
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-14/src/main.rs:here}}
 ```
 
 <span class="caption">示例 12-14：将 `minigrep` crate 引入 *src/main.rs* 的作用域中</span>
@@ -442,7 +267,6 @@ fn main() {
 
 让我们利用这些新创建的模块的优势来进行一些在旧代码中难以展开的工作，这些工作在新代码中非常容易实现，那就是：编写测试！
 
-[the-static-lifetime]: ch10-03-lifetime-syntax.html#the-static-lifetime
 [ch13]: ch13-00-functional-features.html
 [ch9-custom-types]: ch09-03-to-panic-or-not-to-panic.html#creating-custom-types-for-validation
 [ch9-error-guidelines]: ch09-03-to-panic-or-not-to-panic.html#guidelines-for-error-handling

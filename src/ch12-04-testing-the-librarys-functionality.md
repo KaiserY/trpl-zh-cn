@@ -2,9 +2,9 @@
 
 > [ch12-04-testing-the-librarys-functionality.md](https://github.com/rust-lang/book/blob/main/src/ch12-04-testing-the-librarys-functionality.md)
 > <br>
-> commit 0ca4b88f75f8579de87adc2ad36d340709f5ccad
+> commit 04170d1feee2a47525b39f1edce77ba615ca9cdf
 
-现在我们将逻辑提取到了 *src/lib.rs* 并将所有的参数解析和错误处理留在了 *src/main.rs* 中，为代码的核心功能编写测试将更加容易。我们可以直接使用多种参数调用函数并检查返回值而无需从命令行运行二进制文件了。如果你愿意的话，请自行为 `Config::new` 和 `run` 函数的功能编写一些测试。
+现在我们将逻辑提取到了 *src/lib.rs* 并将所有的参数解析和错误处理留在了 *src/main.rs* 中，为代码的核心功能编写测试将更加容易。我们可以直接使用多种参数调用函数并检查返回值而无需从命令行运行二进制文件了。
 
 在这一部分，我们将遵循测试驱动开发（Test Driven Development, TDD）的模式来逐步增加 `minigrep` 的搜索逻辑。这是一个软件开发技术，它遵循如下步骤：
 
@@ -23,43 +23,20 @@
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-#      vec![]
-# }
-#
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn one_result() {
-        let query = "duct";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.";
-
-        assert_eq!(
-            vec!["safe, fast, productive."],
-            search(query, contents)
-        );
-    }
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-15/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 12-15：创建一个我们期望的 `search` 函数的失败测试</span>
 
-这里选择使用 `"duct"` 作为这个测试中需要搜索的字符串。用来搜索的文本有三行，其中只有一行包含 `"duct"`。我们断言 `search` 函数的返回值只包含期望的那一行。
+这里选择使用 `"duct"` 作为这个测试中需要搜索的字符串。用来搜索的文本有三行，其中只有一行包含 `"duct"`。（注意双引号之后的反斜杠，这告诉 Rust 不要在字符串字面值内容的开头加入换行符）我们断言 `search` 函数的返回值只包含期望的那一行。
 
 我们还不能运行这个测试并看到它失败，因为它甚至都还不能编译：`search` 函数还不存在呢！我们将增加足够的代码来使其能够编译：一个总是会返回空 vector 的 `search` 函数定义，如示例 12-16 所示。然后这个测试应该能够编译并因为空 vector 并不匹配一个包含一行 `"safe, fast, productive."` 的 vector 而失败。
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    vec![]
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-16/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 12-16：刚好足够使测试通过编译的 `search` 函数定义</span>
@@ -70,16 +47,8 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 如果尝试不用生命周期编译的话，我们将得到如下错误：
 
-```text
-error[E0106]: missing lifetime specifier
- --> src/lib.rs:5:51
-  |
-5 | pub fn search(query: &str, contents: &str) -> Vec<&str> {
-  |                                                   ^ expected lifetime
-parameter
-  |
-  = help: this function's return type contains a borrowed value, but the
-  signature does not say whether it is borrowed from `query` or `contents`
+```console
+{{#include ../listings/ch12-an-io-project/output-only-02-missing-lifetimes/output.txt}}
 ```
 
 Rust 不可能知道我们需要的是哪一个参数，所以需要告诉它。因为参数 `contents` 包含了所有的文本而且我们希望返回匹配的那部分文本，所以我们知道 `contents` 是应该要使用生命周期语法来与返回值相关联的参数。
@@ -88,32 +57,8 @@ Rust 不可能知道我们需要的是哪一个参数，所以需要告诉它。
 
 现在运行测试：
 
-```text
-$ cargo test
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
---warnings--
-    Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
-     Running target/debug/deps/minigrep-abcabcabc
-
-running 1 test
-test tests::one_result ... FAILED
-
-failures:
-
----- tests::one_result stdout ----
-        thread 'tests::one_result' panicked at 'assertion failed: `(left ==
-right)`
-left: `["safe, fast, productive."]`,
-right: `[]`)', src/lib.rs:48:8
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
-
-
-failures:
-    tests::one_result
-
-test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
-
-error: test failed, to rerun pass '--lib'
+```console
+{{#include ../listings/ch12-an-io-project/listing-12-16/output.txt}}
 ```
 
 好的，测试失败了，这正是我们所期望的。修改代码来让测试通过吧！
@@ -136,12 +81,8 @@ Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    for line in contents.lines() {
-        // do something with line
-    }
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-17/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 12-17：遍历 `contents` 的每一行</span>
@@ -154,14 +95,8 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    for line in contents.lines() {
-        if line.contains(query) {
-            // do something with line
-        }
-    }
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-18/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 12-18：增加检查文本行是否包含 `query` 中字符串的功能</span>
@@ -173,30 +108,15 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
-
-    for line in contents.lines() {
-        if line.contains(query) {
-            results.push(line);
-        }
-    }
-
-    results
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 12-19：储存匹配的行以便可以返回他们</span>
 
 现在 `search` 函数应该返回只包含 `query` 的那些行，而测试应该会通过。让我们运行测试：
 
-```text
-$ cargo test
---snip--
-running 1 test
-test tests::one_result ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+```console
+{{#include ../listings/ch12-an-io-project/listing-12-19/output.txt}}
 ```
 
 测试通过了，它可以工作了！
@@ -210,55 +130,37 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let contents = fs::read_to_string(config.filename)?;
-
-    for line in search(&config.query, &contents) {
-        println!("{}", line);
-    }
-
-    Ok(())
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/src/lib.rs:here}}
 ```
 
 这里仍然使用了 `for` 循环获取了 `search` 返回的每一行并打印出来。
 
 现在整个程序应该可以工作了！让我们试一试，首先使用一个只会在艾米莉·狄金森的诗中返回一行的单词 “frog”：
 
-```text
-$ cargo run frog poem.txt
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.38 secs
-     Running `target/debug/minigrep frog poem.txt`
-How public, like a frog
+```console
+{{#include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/output.txt}}
 ```
 
 好的！现在试试一个会匹配多行的单词，比如 “body”：
 
-```text
-$ cargo run body poem.txt
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep body poem.txt`
-I’m nobody! Who are you?
-Are you nobody, too?
-How dreary to be somebody!
+```console
+{{#include ../listings/ch12-an-io-project/output-only-03-multiple-matches/output.txt}}
 ```
 
 最后，让我们确保搜索一个在诗中哪里都没有的单词时不会得到任何行，比如 "monomorphization"：
 
-```text
-$ cargo run monomorphization poem.txt
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep monomorphization poem.txt`
+```console
+{{#include ../listings/ch12-an-io-project/output-only-04-no-matches/output.txt}}
 ```
+
 
 非常好！我们创建了一个属于自己的迷你版经典工具，并学习了很多如何组织程序的知识。我们还学习了一些文件输入输出、生命周期、测试和命令行解析的内容。
 
 为了使这个项目更丰满，我们将简要的展示如何处理环境变量和打印到标准错误，这两者在编写命令行程序时都很有用。
 
 [validating-references-with-lifetimes]:
-ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
+ch10-03-lifetime-syntax.html#生命周期与引用有效性
 [ch11-anatomy]: ch11-01-writing-tests.html#the-anatomy-of-a-test-function
 [ch10-lifetimes]: ch10-03-lifetime-syntax.html
-[ch3-iter]: ch03-05-control-flow.html#looping-through-a-collection-with-for
+[ch3-iter]: ch03-05-control-flow.html#使用-for-遍历集合
 [ch13-iterators]: ch13-02-iterators.html

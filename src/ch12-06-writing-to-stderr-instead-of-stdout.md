@@ -2,11 +2,11 @@
 
 > [ch12-06-writing-to-stderr-instead-of-stdout.md](https://github.com/rust-lang/book/blob/main/src/ch12-06-writing-to-stderr-instead-of-stdout.md)
 > <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit c5c12e911b20fac20eefc511f6fe8d432a8e5ec2
 
-目前为止，我们将所有的输出都 `println!` 到了终端。大部分终端都提供了两种输出：**标准输出**（*standard output*，`stdout`）对应一般信息，**标准错误**（*standard error*，`stderr`）则用于错误信息。这种区别允许用户选择将程序正常输出定向到一个文件中并仍将错误信息打印到屏幕上。
+目前为止，我们将所有的输出都通过 `println!` 写到了终端。大部分终端都提供了两种输出：**标准输出**（*standard output*，`stdout`）对应一般信息，**标准错误**（*standard error*，`stderr`）则用于错误信息。这种区别允许用户选择将程序正常输出定向到一个文件中并仍将错误信息打印到屏幕上。
 
-但是 `println!` 函数只能够打印到标准输出，所以我们必须使用其他方法来打印到标准错误。
+但是 `println!` 宏只能够打印到标准输出，所以我们必须使用其他方法来打印到标准错误。
 
 ### 检查错误应该写入何处
 
@@ -16,7 +16,7 @@
 
 我们通过 `>` 和文件名 *output.txt* 来运行程序，我们期望重定向标准输出流到该文件中。在这里，我们没有传递任何参数，所以会产生一个错误：
 
-```text
+```console
 $ cargo run > output.txt
 ```
 
@@ -35,27 +35,14 @@ Problem parsing arguments: not enough arguments
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let config = Config::new(&args).unwrap_or_else(|err| {
-        eprintln!("Problem parsing arguments: {}", err);
-        process::exit(1);
-    });
-
-    if let Err(e) = minigrep::run(config) {
-        eprintln!("Application error: {}", e);
-
-        process::exit(1);
-    }
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-24/src/main.rs:here}}
 ```
 
 <span class="caption">示例 12-24：使用 `eprintln!` 将错误信息写入标准错误而不是标准输出</span>
 
 将 `println!` 改为 `eprintln!` 之后，让我们再次尝试用同样的方式运行程序，不使用任何参数并通过 `>` 重定向标准输出：
 
-```text
+```console
 $ cargo run > output.txt
 Problem parsing arguments: not enough arguments
 ```
@@ -64,7 +51,7 @@ Problem parsing arguments: not enough arguments
 
 如果使用不会造成错误的参数再次运行程序，不过仍然将标准输出重定向到一个文件，像这样：
 
-```text
+```console
 $ cargo run to poem.txt > output.txt
 ```
 

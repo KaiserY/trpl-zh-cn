@@ -2,11 +2,11 @@
 
 > [ch12-01-accepting-command-line-arguments.md](https://github.com/rust-lang/book/blob/main/src/ch12-01-accepting-command-line-arguments.md)
 > <br>
-> commit c084bdd9ee328e7e774df19882ccc139532e53d8
+> commit 0f87daf683ae3de3cb725faecb11b7e7e89f0e5a
 
 一如既往使用 `cargo new` 新建一个项目，我们称之为 `minigrep` 以便与可能已经安装在系统上的 `grep` 工具相区别：
 
-```text
+```console
 $ cargo new minigrep
      Created binary (application) `minigrep` project
 $ cd minigrep
@@ -14,7 +14,7 @@ $ cd minigrep
 
 第一个任务是让 `minigrep` 能够接受两个命令行参数：文件名和要搜索的字符串。也就是说我们希望能够使用 `cargo run`、要搜索的字符串和被搜索的文件的路径来运行程序，像这样：
 
-```text
+```console
 $ cargo run searchstring example-filename.txt
 ```
 
@@ -29,12 +29,7 @@ $ cargo run searchstring example-filename.txt
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-use std::env;
-
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    println!("{:?}", args);
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-01/src/main.rs}}
 ```
 
 <span class="caption">示例 12-1：将命令行参数收集到一个 vector 中并打印出来</span>
@@ -49,14 +44,12 @@ fn main() {
 
 最后，我们使用调试格式 `:?` 打印出 vector。让我们尝试分别用两种方式（不包含参数和包含参数）运行代码：
 
-```text
-$ cargo run
---snip--
-["target/debug/minigrep"]
+```console
+{{#include ../listings/ch12-an-io-project/listing-12-01/output.txt}}
+```
 
-$ cargo run needle haystack
---snip--
-["target/debug/minigrep", "needle", "haystack"]
+```console
+{{#include ../listings/ch12-an-io-project/output-only-01-with-args/output.txt}}
 ```
 
 注意 vector 的第一个值是 `"target/debug/minigrep"`，它是我们二进制文件的名称。这与 C 中的参数列表的行为相匹配，让程序使用在执行时调用它们的名称。如果要在消息中打印它或者根据用于调用程序的命令行别名更改程序的行为，通常可以方便地访问程序名称，不过考虑到本章的目的，我们将忽略它并只保存所需的两个参数。
@@ -67,18 +60,8 @@ $ cargo run needle haystack
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,should_panic
-use std::env;
-
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let query = &args[1];
-    let filename = &args[2];
-
-    println!("Searching for {}", query);
-    println!("In file {}", filename);
-}
+```rust,should_panic,noplayground
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-02/src/main.rs}}
 ```
 
 <span class="caption">示例 12-2：创建变量来存放查询参数和文件名参数</span>
@@ -87,16 +70,11 @@ fn main() {
 
 我们将临时打印出这些变量的值来证明代码如我们期望的那样工作。使用参数 `test` 和 `sample.txt` 再次运行这个程序：
 
-```text
-$ cargo run test sample.txt
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep test sample.txt`
-Searching for test
-In file sample.txt
+```console
+{{#include ../listings/ch12-an-io-project/listing-12-02/output.txt}}
 ```
 
 好的，它可以工作！我们将所需的参数值保存进了对应的变量中。之后会增加一些错误处理来应对类似用户没有提供参数的情况，不过现在我们将忽略他们并开始增加读取文件功能。
 
 [ch13]: ch13-00-functional-features.html
-[ch7-idiomatic-use]: ch07-04-bringing-paths-into-scope-with-the-use-keyword.html#creating-idiomatic-use-paths
+[ch7-idiomatic-use]: ch07-04-bringing-paths-into-scope-with-the-use-keyword.html#创建惯用的-use-路径
