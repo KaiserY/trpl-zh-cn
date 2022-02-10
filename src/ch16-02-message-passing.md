@@ -1,9 +1,9 @@
 ## 使用消息传递在线程间传送数据
 
 > [ch16-02-message-passing.md](https://github.com/rust-lang/book/blob/main/src/ch16-02-message-passing.md) <br>
-> commit 26565efc3f62d9dacb7c2c6d0f5974360e459493
+> commit 24e275d624fe85af7b5b6316e78f8bfbbcac23e7
 
-一个日益流行的确保安全并发的方式是 **消息传递**（_message passing_），这里线程或 actor 通过发送包含数据的消息来相互沟通。这个思想来源于 [Go 编程语言文档中](http://golang.org/doc/effective_go.html) 的口号：“不要通过共享内存来通讯；而是通过通讯来共享内存。”（“Do not communicate by sharing memory; instead, share memory by communicating.”）
+一个日益流行的确保安全并发的方式是 **消息传递**（_message passing_），这里线程或 actor 通过发送包含数据的消息来相互沟通。这个思想来源于 [Go 编程语言文档中](https://golang.org/doc/effective_go.html#concurrency) 的口号：“不要通过共享内存来通讯；而是通过通讯来共享内存。”（“Do not communicate by sharing memory; instead, share memory by communicating.”）
 
 Rust 中一个实现消息传递并发的主要工具是 **通道**（_channel_），Rust 标准库提供了其实现的编程概念。你可以将其想象为一个水流的通道，比如河流或小溪。如果你将诸如橡皮鸭或小船之类的东西放入其中，它们会顺流而下到达下游。
 
@@ -16,11 +16,7 @@ Rust 中一个实现消息传递并发的主要工具是 **通道**（_channel_�
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::sync::mpsc;
-
-fn main() {
-    let (tx, rx) = mpsc::channel();
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-06/src/main.rs}}
 ```
 
 <span class="caption">示例 16-6: 创建一个通道，并将其两端赋值给 `tx` 和 `rx`</span>
@@ -34,17 +30,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-use std::thread;
-use std::sync::mpsc;
-
-fn main() {
-    let (tx, rx) = mpsc::channel();
-
-    thread::spawn(move || {
-        let val = String::from("hi");
-        tx.send(val).unwrap();
-    });
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-07/src/main.rs}}
 ```
 
 <span class="caption">示例 16-7: 将 `tx` 移动到一个新建的线程中并发送 “hi”</span>
@@ -58,20 +44,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-use std::thread;
-use std::sync::mpsc;
-
-fn main() {
-    let (tx, rx) = mpsc::channel();
-
-    thread::spawn(move || {
-        let val = String::from("hi");
-        tx.send(val).unwrap();
-    });
-
-    let received = rx.recv().unwrap();
-    println!("Got: {}", received);
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-08/src/main.rs}}
 ```
 
 <span class="caption">示例 16-8: 在主线程中接收并打印内容 “hi”</span>
@@ -97,38 +70,15 @@ Got: hi
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::thread;
-use std::sync::mpsc;
-
-fn main() {
-    let (tx, rx) = mpsc::channel();
-
-    thread::spawn(move || {
-        let val = String::from("hi");
-        tx.send(val).unwrap();
-        println!("val is {}", val);
-    });
-
-    let received = rx.recv().unwrap();
-    println!("Got: {}", received);
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-09/src/main.rs}}
 ```
 
 <span class="caption">示例 16-9: 在我们已经发送到通道中后，尝试使用 `val` 引用</span>
 
 这里尝试在通过 `tx.send` 发送 `val` 到通道中之后将其打印出来。允许这么做是一个坏主意：一旦将值发送到另一个线程后，那个线程可能会在我们再次使用它之前就将其修改或者丢弃。其他线程对值可能的修改会由于不一致或不存在的数据而导致错误或意外的结果。然而，尝试编译示例 16-9 的代码时，Rust 会给出一个错误：
 
-```text
-error[E0382]: use of moved value: `val`
-  --> src/main.rs:10:31
-   |
-9  |         tx.send(val).unwrap();
-   |                 --- value moved here
-10 |         println!("val is {}", val);
-   |                               ^^^ value used here after move
-   |
-   = note: move occurs because `val` has type `std::string::String`, which does
-not implement the `Copy` trait
+```console
+{{#include ../listings/ch16-fearless-concurrency/listing-16-09/output.txt}}
 ```
 
 我们的并发错误会造成一个编译时错误。`send` 函数获取其参数的所有权并移动这个值归接收者所有。这可以防止在发送后再次意外地使用这个值；所有权系统检查一切是否合乎规则。
@@ -139,32 +89,8 @@ not implement the `Copy` trait
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust
-use std::thread;
-use std::sync::mpsc;
-use std::time::Duration;
-
-fn main() {
-    let (tx, rx) = mpsc::channel();
-
-    thread::spawn(move || {
-        let vals = vec![
-            String::from("hi"),
-            String::from("from"),
-            String::from("the"),
-            String::from("thread"),
-        ];
-
-        for val in vals {
-            tx.send(val).unwrap();
-            thread::sleep(Duration::from_secs(1));
-        }
-    });
-
-    for received in rx {
-        println!("Got: {}", received);
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-10/src/main.rs}}
 ```
 
 <span class="caption">示例 16-10: 发送多个消息，并在每次发送后暂停一段时间</span>
@@ -190,51 +116,8 @@ Got: thread
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust
-# use std::thread;
-# use std::sync::mpsc;
-# use std::time::Duration;
-#
-# fn main() {
-// --snip--
-
-let (tx, rx) = mpsc::channel();
-
-let tx1 = tx.clone();
-thread::spawn(move || {
-    let vals = vec![
-        String::from("hi"),
-        String::from("from"),
-        String::from("the"),
-        String::from("thread"),
-    ];
-
-    for val in vals {
-        tx1.send(val).unwrap();
-        thread::sleep(Duration::from_secs(1));
-    }
-});
-
-thread::spawn(move || {
-    let vals = vec![
-        String::from("more"),
-        String::from("messages"),
-        String::from("for"),
-        String::from("you"),
-    ];
-
-    for val in vals {
-        tx.send(val).unwrap();
-        thread::sleep(Duration::from_secs(1));
-    }
-});
-
-for received in rx {
-    println!("Got: {}", received);
-}
-
-// --snip--
-# }
+```rust,noplayground
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-11/src/main.rs:here}}
 ```
 
 <span class="caption">示例 16-11: 从多个生产者发送多个消息</span>

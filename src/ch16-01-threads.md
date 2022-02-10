@@ -1,7 +1,7 @@
 ## 使用线程同时运行代码
 
 > [ch16-01-threads.md](https://github.com/rust-lang/book/blob/main/src/ch16-01-threads.md) <br>
-> commit 1fedfc4b96c2017f64ecfcf41a0a07e2e815f24f
+> commit 6b9eae8ce91dd0d94982795762d22077d372e90c
 
 在大部分现代操作系统中，已执行程序的代码在一个 **进程**（_process_）中运行，操作系统则负责管理多个进程。在程序内部，也可以拥有多个同时运行的独立部分。运行这些独立部分的功能被称为 **线程**（_threads_）。
 
@@ -13,17 +13,7 @@
 
 Rust 尝试减轻使用线程的负面影响。不过在多线程上下文中编程仍需格外小心，同时其所要求的代码结构也不同于运行于单线程的程序。
 
-编程语言有一些不同的方法来实现线程。很多操作系统提供了创建新线程的 API。这种由编程语言调用操作系统 API 创建线程的模型有时被称为 _1:1_，一个 OS 线程对应一个语言线程。
-
-很多编程语言提供了自己特殊的线程实现。编程语言提供的线程被称为 **绿色**（_green_）线程，使用绿色线程的语言会在不同数量的 OS 线程的上下文中执行它们。为此，绿色线程模式被称为 _M:N_ 模型：`M` 个绿色线程对应 `N` 个 OS 线程，这里 `M` 和 `N` 不必相同。
-
-每一个模型都有其优势和取舍。对于 Rust 来说最重要的取舍是运行时支持。**运行时**（_Runtime_）是一个令人迷惑的概念，其在不同上下文中可能有不同的含义。
-
-在当前上下文中，**运行时** 代表二进制文件中包含的由语言自身提供的代码。这些代码根据语言的不同可大可小，不过任何非汇编语言都会有一定数量的运行时代码。为此，通常人们说一个语言 “没有运行时”，一般意味着 “小运行时”。更小的运行时拥有更少的功能不过其优势在于更小的二进制输出，这使其易于在更多上下文中与其他语言相结合。虽然很多语言觉得增加运行时来换取更多功能没有什么问题，但是 Rust 需要做到几乎没有运行时，同时为了保持高性能必须能够调用 C 语言，这点也是不能妥协的。
-
-绿色线程的 M:N 模型需要更大的语言运行时来管理这些线程。因此，Rust 标准库只提供了 1:1 线程模型实现。由于 Rust 是较为底层的语言，如果你愿意牺牲性能来换取抽象，以获得对线程运行更精细的控制及更低的上下文切换成本，你可以使用实现了 M:N 线程模型的 crate。
-
-现在我们明白了 Rust 中的线程是如何定义的，让我们开始探索如何使用标准库提供的线程相关的 API 吧。
+编程语言有一些不同的方法来实现线程。很多操作系统提供了创建新线程的 API。这种由编程语言调用操作系统 API 创建线程的模型有时被称为 *1:1*，一个 OS 线程对应一个语言线程。Rust 标准库只提供了 1:1 线程实现；有一些 crate 实现了其他有着不同取舍的线程模型。
 
 ### 使用 `spawn` 创建新线程
 
@@ -32,22 +22,7 @@ Rust 尝试减轻使用线程的负面影响。不过在多线程上下文中编
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-use std::thread;
-use std::time::Duration;
-
-fn main() {
-    thread::spawn(|| {
-        for i in 1..10 {
-            println!("hi number {} from the spawned thread!", i);
-            thread::sleep(Duration::from_millis(1));
-        }
-    });
-
-    for i in 1..5 {
-        println!("hi number {} from the main thread!", i);
-        thread::sleep(Duration::from_millis(1));
-    }
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-01/src/main.rs}}
 ```
 
 <span class="caption">示例 16-1: 创建一个打印某些内容的新线程，但是主线程打印其它内容</span>
@@ -79,24 +54,7 @@ hi number 5 from the spawned thread!
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-use std::thread;
-use std::time::Duration;
-
-fn main() {
-    let handle = thread::spawn(|| {
-        for i in 1..10 {
-            println!("hi number {} from the spawned thread!", i);
-            thread::sleep(Duration::from_millis(1));
-        }
-    });
-
-    for i in 1..5 {
-        println!("hi number {} from the main thread!", i);
-        thread::sleep(Duration::from_millis(1));
-    }
-
-    handle.join().unwrap();
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-02/src/main.rs}}
 ```
 
 <span class="caption">示例 16-2: 从 `thread::spawn` 保存一个 `JoinHandle` 以确保该线程能够运行至结束</span>
@@ -126,24 +84,7 @@ hi number 9 from the spawned thread!
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-use std::thread;
-use std::time::Duration;
-
-fn main() {
-    let handle = thread::spawn(|| {
-        for i in 1..10 {
-            println!("hi number {} from the spawned thread!", i);
-            thread::sleep(Duration::from_millis(1));
-        }
-    });
-
-    handle.join().unwrap();
-
-    for i in 1..5 {
-        println!("hi number {} from the main thread!", i);
-        thread::sleep(Duration::from_millis(1));
-    }
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/no-listing-01-join-too-early/src/main.rs}}
 ```
 
 主线程会等待直到新建线程执行完毕之后才开始执行 `for` 循环，所以输出将不会交替出现，如下所示：
@@ -168,7 +109,7 @@ hi number 4 from the main thread!
 
 ### 线程与 `move` 闭包
 
-`move` 闭包，我们曾在第十三章简要的提到过，其经常与 `thread::spawn` 一起使用，因为它允许我们在一个线程中使用另一个线程的数据。
+`move` 关键字经常用于传递给 `thread::spawn` 的闭包，因为闭包会获取从环境中取得的值的所有权，因此会将这些值的所有权从一个线程传送到另一个线程。在第十三章 [“闭包会捕获其环境”][capture] 部分讨论了闭包上下文中的 `move`。现在我们会更专注于 `move` 和 `thread::spawn` 之间的交互。
 
 在第十三章中，我们讲到可以在参数列表前使用 `move` 关键字强制闭包获取其使用的环境值的所有权。这个技巧在创建新线程将值的所有权从一个线程移动到另一个线程时最为实用。
 
@@ -177,38 +118,15 @@ hi number 4 from the main thread!
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::thread;
-
-fn main() {
-    let v = vec![1, 2, 3];
-
-    let handle = thread::spawn(|| {
-        println!("Here's a vector: {:?}", v);
-    });
-
-    handle.join().unwrap();
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-03/src/main.rs}}
 ```
 
 <span class="caption">示例 16-3: 尝试在另一个线程使用主线程创建的 vector</span>
 
 闭包使用了 `v`，所以闭包会捕获 `v` 并使其成为闭包环境的一部分。因为 `thread::spawn` 在一个新线程中运行这个闭包，所以可以在新线程中访问 `v`。然而当编译这个例子时，会得到如下错误：
 
-```text
-error[E0373]: closure may outlive the current function, but it borrows `v`,
-which is owned by the current function
- --> src/main.rs:6:32
-  |
-6 |     let handle = thread::spawn(|| {
-  |                                ^^ may outlive borrowed value `v`
-7 |         println!("Here's a vector: {:?}", v);
-  |                                           - `v` is borrowed here
-  |
-help: to force the closure to take ownership of `v` (and any other referenced
-variables), use the `move` keyword
-  |
-6 |     let handle = thread::spawn(move || {
-  |                                ^^^^^^^
+```console
+{{#include ../listings/ch16-fearless-concurrency/listing-16-03/output.txt}}
 ```
 
 Rust 会 **推断** 如何捕获 `v`，因为 `println!` 只需要 `v` 的引用，闭包尝试借用 `v`。然而这有一个问题：Rust 不知道这个新建线程会执行多久，所以无法知晓 `v` 的引用是否一直有效。
@@ -218,19 +136,7 @@ Rust 会 **推断** 如何捕获 `v`，因为 `println!` 只需要 `v` 的引用
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::thread;
-
-fn main() {
-    let v = vec![1, 2, 3];
-
-    let handle = thread::spawn(|| {
-        println!("Here's a vector: {:?}", v);
-    });
-
-    drop(v); // oh no!
-
-    handle.join().unwrap();
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-04/src/main.rs}}
 ```
 
 <span class="caption">示例 16-4: 一个具有闭包的线程，尝试使用一个在主线程中被回收的引用 `v`</span>
@@ -240,11 +146,10 @@ fn main() {
 为了修复示例 16-3 的编译错误，我们可以听取错误信息的建议：
 
 ```text
-help: to force the closure to take ownership of `v` (and any other referenced
-variables), use the `move` keyword
+help: to force the closure to take ownership of `v` (and any other referenced variables), use the `move` keyword
   |
 6 |     let handle = thread::spawn(move || {
-  |                                ^^^^^^^
+  |                                ++++
 ```
 
 通过在闭包之前增加 `move` 关键字，我们强制闭包获取其使用的值的所有权，而不是任由 Rust 推断它应该借用值。示例 16-5 中展示的对示例 16-3 代码的修改，可以按照我们的预期编译并运行：
@@ -252,37 +157,19 @@ variables), use the `move` keyword
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-use std::thread;
-
-fn main() {
-    let v = vec![1, 2, 3];
-
-    let handle = thread::spawn(move || {
-        println!("Here's a vector: {:?}", v);
-    });
-
-    handle.join().unwrap();
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-05/src/main.rs}}
 ```
 
 <span class="caption">示例 16-5: 使用 `move` 关键字强制获取它使用的值的所有权</span>
 
 那么如果使用了 `move` 闭包，示例 16-4 中主线程调用了 `drop` 的代码会发生什么呢？加了 `move` 就搞定了吗？不幸的是，我们会得到一个不同的错误，因为示例 16-4 所尝试的操作由于一个不同的原因而不被允许。如果为闭包增加 `move`，将会把 `v` 移动进闭包的环境中，如此将不能在主线程中对其调用 `drop` 了。我们会得到如下不同的编译错误：
 
-```text
-error[E0382]: use of moved value: `v`
-  --> src/main.rs:10:10
-   |
-6  |     let handle = thread::spawn(move || {
-   |                                ------- value moved (into closure) here
-...
-10 |     drop(v); // oh no!
-   |          ^ value used here after move
-   |
-   = note: move occurs because `v` has type `std::vec::Vec<i32>`, which does
-   not implement the `Copy` trait
+```console
+{{#include ../listings/ch16-fearless-concurrency/output-only-01-move-drop/output.txt}}
 ```
 
 Rust 的所有权规则又一次帮助了我们！示例 16-3 中的错误是因为 Rust 是保守的并只会为线程借用 `v`，这意味着主线程理论上可能使新建线程的引用无效。通过告诉 Rust 将 `v` 的所有权移动到新建线程，我们向 Rust 保证主线程不会再使用 `v`。如果对示例 16-4 也做出如此修改，那么当在主线程中使用 `v` 时就会违反所有权规则。 `move` 关键字覆盖了 Rust 默认保守的借用，但它不允许我们违反所有权规则。
 
 现在我们对线程和线程 API 有了基本的了解，让我们讨论一下使用线程实际可以 **做** 什么吧。
+
+[capture]: ch13-01-closures.html#闭包会捕获其环境

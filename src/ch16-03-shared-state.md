@@ -1,7 +1,7 @@
 ## 共享状态并发
 
 > [ch16-03-shared-state.md](https://github.com/rust-lang/book/blob/main/src/ch16-03-shared-state.md) <br>
-> commit ef072458f903775e91ea9e21356154bc57ee31da
+> commit 75b9d4a8dccc245e0343eb1480aa86f169043ea5
 
 虽然消息传递是一个很好的处理并发的方式，但并不是唯一一个。再一次思考一下 Go 编程语言文档中口号的这一部分：“不要通过共享内存来通讯”（“do not communicate by sharing memory.”）：
 
@@ -31,18 +31,7 @@
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-use std::sync::Mutex;
-
-fn main() {
-    let m = Mutex::new(5);
-
-    {
-        let mut num = m.lock().unwrap();
-        *num = 6;
-    }
-
-    println!("m = {:?}", m);
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-12/src/main.rs}}
 ```
 
 <span class="caption">示例 16-12: 出于简单的考虑，在一个单线程上下文中探索 `Mutex<T>` 的 API</span>
@@ -64,28 +53,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::sync::Mutex;
-use std::thread;
-
-fn main() {
-    let counter = Mutex::new(0);
-    let mut handles = vec![];
-
-    for _ in 0..10 {
-        let handle = thread::spawn(move || {
-            let mut num = counter.lock().unwrap();
-
-            *num += 1;
-        });
-        handles.push(handle);
-    }
-
-    for handle in handles {
-        handle.join().unwrap();
-    }
-
-    println!("Result: {}", *counter.lock().unwrap());
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-13/src/main.rs}}
 ```
 
 <span class="caption">示例 16-13: 程序启动了 10 个线程，每个线程都通过 `Mutex<T>` 来增加计数器的值</span>
@@ -96,73 +64,28 @@ fn main() {
 
 之前提示过这个例子不能编译，让我们看看为什么！
 
-```text
-error[E0382]: use of moved value: `counter`
-  --> src/main.rs:9:36
-   |
-9  |         let handle = thread::spawn(move || {
-   |                                    ^^^^^^^ value moved into closure here,
-in previous iteration of loop
-10 |             let mut num = counter.lock().unwrap();
-   |                           ------- use occurs due to use in closure
-   |
-   = note: move occurs because `counter` has type `std::sync::Mutex<i32>`,
-which does not implement the `Copy` trait
+```console
+{{#include ../listings/ch16-fearless-concurrency/listing-16-13/output.txt}}
 ```
 
 错误信息表明 `counter` 值在上一次循环中被移动了。所以 Rust 告诉我们不能将 `counter` 锁的所有权移动到多个线程中。让我们通过一个第十五章讨论过的多所有权手段来修复这个编译错误。
 
 #### 多线程和多所有权
 
-在第十五章中，通过使用智能指针 `Rc<T>` 来创建引用计数的值，以便拥有多所有者。让我们在这也这么做看看会发生什么。将示例 16-14 中的 `Mutex<T>` 封装进 `Rc<T>` 中并在将所有权移入线程之前克隆了 `Rc<T>`。现在我们理解了所发生的错误，同时也将代码改回使用 `for` 循环，并保留闭包的 `move` 关键字：
+在第十五章中，通过使用智能指针 `Rc<T>` 来创建引用计数的值，以便拥有多所有者。让我们在这也这么做看看会发生什么。将示例 16-14 中的 `Mutex<T>` 封装进 `Rc<T>` 中并在将所有权移入线程之前克隆了 `Rc<T>`。
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::rc::Rc;
-use std::sync::Mutex;
-use std::thread;
-
-fn main() {
-    let counter = Rc::new(Mutex::new(0));
-    let mut handles = vec![];
-
-    for _ in 0..10 {
-        let counter = Rc::clone(&counter);
-        let handle = thread::spawn(move || {
-            let mut num = counter.lock().unwrap();
-
-            *num += 1;
-        });
-        handles.push(handle);
-    }
-
-    for handle in handles {
-        handle.join().unwrap();
-    }
-
-    println!("Result: {}", *counter.lock().unwrap());
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-14/src/main.rs}}
 ```
 
 <span class="caption">示例 16-14: 尝试使用 `Rc<T>` 来允许多个线程拥有 `Mutex<T>`</span>
 
 再一次编译并...出现了不同的错误！编译器真是教会了我们很多！
 
-```text
-error[E0277]: `std::rc::Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely
-  --> src/main.rs:11:22
-   |
-11 |         let handle = thread::spawn(move || {
-   |                      ^^^^^^^^^^^^^ `std::rc::Rc<std::sync::Mutex<i32>>`
-cannot be sent between threads safely
-   |
-   = help: within `[closure@src/main.rs:11:36: 14:10
-counter:std::rc::Rc<std::sync::Mutex<i32>>]`, the trait `std::marker::Send`
-is not implemented for `std::rc::Rc<std::sync::Mutex<i32>>`
-   = note: required because it appears within the type
-`[closure@src/main.rs:11:36: 14:10 counter:std::rc::Rc<std::sync::Mutex<i32>>]`
-   = note: required by `std::thread::spawn`
+```console
+{{#include ../listings/ch16-fearless-concurrency/listing-16-14/output.txt}}
 ```
 
 哇哦，错误信息太长不看！这里是一些需要注意的重要部分：第一行错误表明 `` `std::rc::Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely ``。编译器也告诉了我们原因 `` the trait bound `Send` is not satisfied ``。下一部分会讲到 `Send`：这是确保所使用的类型可以用于并发环境的 trait 之一。
@@ -171,7 +94,7 @@ is not implemented for `std::rc::Rc<std::sync::Mutex<i32>>`
 
 #### 原子引用计数 `Arc<T>`
 
-所幸 `Arc<T>` **正是** 这么一个类似 `Rc<T>` 并可以安全的用于并发环境的类型。字母 “a” 代表 **原子性**（_atomic_），所以这是一个**原子引用计数**（_atomically reference counted_）类型。原子性是另一类这里还未涉及到的并发原语：请查看标准库中 `std::sync::atomic` 的文档来获取更多细节。其中的要点就是：原子性类型工作起来类似原始类型，不过可以安全的在线程间共享。
+所幸 `Arc<T>` **正是** 这么一个类似 `Rc<T>` 并可以安全的用于并发环境的类型。字母 “a” 代表 **原子性**（_atomic_），所以这是一个 **原子引用计数**（_atomically reference counted_）类型。原子性是另一类这里还未涉及到的并发原语：请查看标准库中 [`std::sync::atomic`][atomic] 的文档来获取更多细节。目前我们只需要知道原子类就像基本类型一样可以安全的在线程间共享。
 
 你可能会好奇为什么不是所有的原始类型都是原子性的？为什么不是所有标准库中的类型都默认使用 `Arc<T>` 实现？原因在于线程安全带有性能惩罚，我们希望只在必要时才为此买单。如果只是在单线程中对值进行操作，原子性提供的保证并无必要，代码可以因此运行的更快。
 
@@ -180,29 +103,7 @@ is not implemented for `std::rc::Rc<std::sync::Mutex<i32>>`
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-use std::sync::{Mutex, Arc};
-use std::thread;
-
-fn main() {
-    let counter = Arc::new(Mutex::new(0));
-    let mut handles = vec![];
-
-    for _ in 0..10 {
-        let counter = Arc::clone(&counter);
-        let handle = thread::spawn(move || {
-            let mut num = counter.lock().unwrap();
-
-            *num += 1;
-        });
-        handles.push(handle);
-    }
-
-    for handle in handles {
-        handle.join().unwrap();
-    }
-
-    println!("Result: {}", *counter.lock().unwrap());
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-15/src/main.rs}}
 ```
 
 <span class="caption">示例 16-15: 使用 `Arc<T>` 包装一个 `Mutex<T>` 能够实现在多线程之间共享所有权</span>
@@ -222,3 +123,5 @@ Result: 10
 另一个值得注意的细节是 Rust 不能避免使用 `Mutex<T>` 的全部逻辑错误。回忆一下第十五章使用 `Rc<T>` 就有造成引用循环的风险，这时两个 `Rc<T>` 值相互引用，造成内存泄漏。同理，`Mutex<T>` 也有造成 **死锁**（_deadlock_） 的风险。这发生于当一个操作需要锁住两个资源而两个线程各持一个锁，这会造成它们永远相互等待。如果你对这个主题感兴趣，尝试编写一个带有死锁的 Rust 程序，接着研究任何其他语言中使用互斥器的死锁规避策略并尝试在 Rust 中实现他们。标准库中 `Mutex<T>` 和 `MutexGuard` 的 API 文档会提供有用的信息。
 
 接下来，为了丰富本章的内容，让我们讨论一下 `Send`和 `Sync` trait 以及如何对自定义类型使用他们。
+
+[`std::sync::atomic`]: https://doc.rust-lang.org/std/sync/atomic/index.html
