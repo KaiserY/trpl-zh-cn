@@ -2,7 +2,7 @@
 
 > [ch17-03-oo-design-patterns.md](https://github.com/rust-lang/book/blob/main/src/ch17-03-oo-design-patterns.md)
 > <br>
-> commit 7e219336581c41a80fd41f4fbe615fecb6ed0a7d
+> commit 851449061b74d8b15adca936350a3fca6160ff39
 
 **状态模式**（*state pattern*）是一个面向对象设计模式。该模式的关键在于一个值有某些内部状态，体现为一系列的 **状态对象**，同时值的行为随着其内部状态而改变。状态对象共享功能：当然，在 Rust 中使用结构体和 trait 而不是对象和继承。每一个状态对象负责其自身的行为，以及该状态何时应当转移至另一个状态。持有一个状态对象的值对于不同状态的行为以及何时状态转移毫不知情。
 
@@ -21,26 +21,13 @@
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
-use blog::Post;
-
-fn main() {
-    let mut post = Post::new();
-
-    post.add_text("I ate a salad for lunch today");
-    assert_eq!("", post.content());
-
-    post.request_review();
-    assert_eq!("", post.content());
-
-    post.approve();
-    assert_eq!("I ate a salad for lunch today", post.content());
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch17-oop/listing-17-11/src/main.rs:all}}
 ```
 
 <span class="caption">示例 17-11: 展示了 `blog` crate 期望行为的代码</span>
 
-我们希望允许用户使用 `Post::new` 创建一个新的博文草案。接着希望能在草案阶段为博文编写一些文本。如果尝试在审核之前立即打印出博文的内容，什么也不会发生因为博文仍然是草案。这里增加的 `assert_eq!` 出于演示目的。一个好的单元测试将是断言草案博文的 `content` 方法返回空字符串，不过我们并不准备为这个例子编写单元测试。
+我们希望允许用户使用 `Post::new` 创建一个新的博文草案。也希望能在草案阶段为博文编写一些文本。如果在审批之前尝试立刻获取博文的内容，不应该获取到任何文本因为博文仍然是草案。一个好的单元测试将是断言草案博文的 `content` 方法返回空字符串，不过我们并不准备为这个例子编写单元测试。
 
 接下来，我们希望能够请求审核博文，而在等待审核的阶段 `content` 应该仍然返回空字符串。最后当博文审核通过，它应该被发表，这意味着当调用 `content` 时博文的文本将被返回。
 
@@ -52,28 +39,9 @@ fn main() {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-pub struct Post {
-    state: Option<Box<dyn State>>,
-    content: String,
-}
-
-impl Post {
-    pub fn new() -> Post {
-        Post {
-            state: Some(Box::new(Draft {})),
-            content: String::new(),
-        }
-    }
-}
-
-trait State {}
-
-struct Draft {}
-
-impl State for Draft {}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-12/src/lib.rs}}
 ```
-
 
 <span class="caption">示例 17-12: `Post` 结构体的定义和新建 `Post` 实例的 `new` 函数，`State` trait 和结构体 `Draft`</span>
 
@@ -87,17 +55,8 @@ impl State for Draft {}
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# pub struct Post {
-#     content: String,
-# }
-#
-impl Post {
-    // --snip--
-    pub fn add_text(&mut self, text: &str) {
-        self.content.push_str(text);
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-13/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 17-13: 实现方法 `add_text` 来向博文的 `content` 增加文本</span>
@@ -110,17 +69,8 @@ impl Post {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# pub struct Post {
-#     content: String,
-# }
-#
-impl Post {
-    // --snip--
-    pub fn content(&self) -> &str {
-        ""
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-14/src/lib.rs:here}}
 ```
 
 <span class="caption">列表 17-14: 增加一个 `Post` 的 `content` 方法的占位实现，它总是返回一个空字符串 slice</span>
@@ -133,40 +83,8 @@ impl Post {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# pub struct Post {
-#     state: Option<Box<dyn State>>,
-#     content: String,
-# }
-#
-impl Post {
-    // --snip--
-    pub fn request_review(&mut self) {
-        if let Some(s) = self.state.take() {
-            self.state = Some(s.request_review())
-        }
-    }
-}
-
-trait State {
-    fn request_review(self: Box<Self>) -> Box<dyn State>;
-}
-
-struct Draft {}
-
-impl State for Draft {
-    fn request_review(self: Box<Self>) -> Box<dyn State> {
-        Box::new(PendingReview {})
-    }
-}
-
-struct PendingReview {}
-
-impl State for PendingReview {
-    fn request_review(self: Box<Self>) -> Box<dyn State> {
-        self
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-15/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 17-15: 实现 `Post` 和 `State` trait 的 `request_review` 方法</span>
@@ -191,98 +109,29 @@ impl State for PendingReview {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# pub struct Post {
-#     state: Option<Box<dyn State>>,
-#     content: String,
-# }
-#
-impl Post {
-    // --snip--
-    pub fn approve(&mut self) {
-        if let Some(s) = self.state.take() {
-            self.state = Some(s.approve())
-        }
-    }
-}
-
-trait State {
-    fn request_review(self: Box<Self>) -> Box<dyn State>;
-    fn approve(self: Box<Self>) -> Box<dyn State>;
-}
-
-struct Draft {}
-
-impl State for Draft {
-#     fn request_review(self: Box<Self>) -> Box<dyn State> {
-#         Box::new(PendingReview {})
-#     }
-#
-    // --snip--
-    fn approve(self: Box<Self>) -> Box<dyn State> {
-        self
-    }
-}
-
-struct PendingReview {}
-
-impl State for PendingReview {
-#     fn request_review(self: Box<Self>) -> Box<dyn State> {
-#         self
-#     }
-#
-    // --snip--
-    fn approve(self: Box<Self>) -> Box<dyn State> {
-        Box::new(Published {})
-    }
-}
-
-struct Published {}
-
-impl State for Published {
-    fn request_review(self: Box<Self>) -> Box<dyn State> {
-        self
-    }
-
-    fn approve(self: Box<Self>) -> Box<dyn State> {
-        self
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-16/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 17-16: 为 `Post` 和 `State` trait 实现 `approve` 方法</span>
 
 这里为 `State` trait 增加了 `approve` 方法，并新增了一个实现了 `State` 的结构体，`Published` 状态。
 
-类似于 `request_review`，如果对 `Draft` 调用 `approve` 方法，并没有任何效果，因为它会返回 `self`。当对 `PendingReview` 调用 `approve` 时，它返回一个新的、装箱的 `Published` 结构体的实例。`Published` 结构体实现了 `State` trait，同时对于 `request_review` 和 `approve` 两方法来说，它返回自身，因为在这两种情况博文应该保持 `Published` 状态。
+类似于 `PendingReview` 中 `request_review` 的工作方式，如果对 `Draft` 调用 `approve` 方法，并没有任何效果，因为它会返回 `self`。当对 `PendingReview` 调用 `approve` 时，它返回一个新的、装箱的 `Published` 结构体的实例。`Published` 结构体实现了 `State` trait，同时对于 `request_review` 和 `approve` 两方法来说，它返回自身，因为在这两种情况博文应该保持 `Published` 状态。
 
-现在更新 `Post` 的 `content` 方法：如果状态为 `Published` 希望返回博文 `content` 字段的值；否则希望返回空字符串 slice，如示例 17-17 所示：
+现在需要更新 `Post` 的 `content` 方法。我们希望 `content` 根据 `Post` 的当前状态返回值，所以需要 `Post` 代理一个定义于 `state` 上的 `content` 方法，如实例 17-17 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# trait State {
-#     fn content<'a>(&self, post: &'a Post) -> &'a str;
-# }
-# pub struct Post {
-#     state: Option<Box<dyn State>>,
-#     content: String,
-# }
-#
-impl Post {
-    // --snip--
-    pub fn content(&self) -> &str {
-        self.state.as_ref().unwrap().content(self)
-    }
-    // --snip--
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch17-oop/listing-17-17/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 17-17: 更新 `Post` 的 `content` 方法来委托调用 `State` 的`content` 方法</span>
 
 因为目标是将所有像这样的规则保持在实现了 `State` 的结构体中，我们将调用 `state` 中的值的 `content` 方法并传递博文实例（也就是 `self`）作为参数。接着返回 `state` 值的 `content` 方法的返回值。
 
-这里调用 `Option` 的 `as_ref` 方法是因为需要 `Option` 中值的引用而不是获取其所有权。因为 `state` 是一个 `Option<Box<State>>`，调用 `as_ref` 会返回一个 `Option<&Box<State>>`。如果不调用 `as_ref`，将会得到一个错误，因为不能将 `state` 移动出借用的 `&self` 函数参数。
+这里调用 `Option` 的 `as_ref` 方法是因为需要 `Option` 中值的引用而不是获取其所有权。因为 `state` 是一个 `Option<&Box<dynState>>`，调用 `as_ref` 会返回一个 `Option<&Box<State>>`。如果不调用 `as_ref`，将会得到一个错误，因为不能将 `state` 移动出借用的 `&self` 函数参数。
 
 接着调用 `unwrap` 方法，这里我们知道它永远也不会 panic，因为 `Post` 的所有方法都确保在他们返回时 `state` 会有一个 `Some` 值。这就是一个第十二章 [“当我们比编译器知道更多的情况”][more-info-than-rustc]  部分讨论过的我们知道 `None` 是不可能的而编译器却不能理解的情况。
 
@@ -290,26 +139,8 @@ impl Post {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# pub struct Post {
-#     content: String
-# }
-trait State {
-    // --snip--
-    fn content<'a>(&self, post: &'a Post) -> &'a str {
-        ""
-    }
-}
-
-// --snip--
-struct Published {}
-
-impl State for Published {
-    // --snip--
-    fn content<'a>(&self, post: &'a Post) -> &'a str {
-        &post.content
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-18/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 17-18: 为 `State` trait 增加 `content` 方法</span>
@@ -351,46 +182,15 @@ impl State for Published {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-# use blog::Post;
-
-fn main() {
-    let mut post = Post::new();
-
-    post.add_text("I ate a salad for lunch today");
-    assert_eq!("", post.content());
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-11/src/main.rs:here}}
 ```
 
 我们仍然希望能够使用 `Post::new` 创建一个新的草案博文，并能够增加博文的内容。不过不同于存在一个草案博文时返回空字符串的 `content` 方法，我们将使草案博文完全没有 `content` 方法。这样如果尝试获取草案博文的内容，将会得到一个方法不存在的编译错误。这使得我们不可能在生产环境意外显示出草案博文的内容，因为这样的代码甚至就不能编译。示例 17-19 展示了 `Post` 结构体、`DraftPost` 结构体以及各自的方法的定义：
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-pub struct Post {
-    content: String,
-}
-
-pub struct DraftPost {
-    content: String,
-}
-
-impl Post {
-    pub fn new() -> DraftPost {
-        DraftPost {
-            content: String::new(),
-        }
-    }
-
-    pub fn content(&self) -> &str {
-        &self.content
-    }
-}
-
-impl DraftPost {
-    pub fn add_text(&mut self, text: &str) {
-        self.content.push_str(text);
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-19/src/lib.rs}}
 ```
 
 <span class="caption">示例 17-19: 带有 `content` 方法的 `Post` 和没有 `content` 方法的 `DraftPost`</span>
@@ -407,36 +207,8 @@ impl DraftPost {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# pub struct Post {
-#     content: String,
-# }
-#
-# pub struct DraftPost {
-#     content: String,
-# }
-#
-impl DraftPost {
-    // --snip--
-
-    pub fn request_review(self) -> PendingReviewPost {
-        PendingReviewPost {
-            content: self.content,
-        }
-    }
-}
-
-pub struct PendingReviewPost {
-    content: String,
-}
-
-impl PendingReviewPost {
-    pub fn approve(self) -> Post {
-        Post {
-            content: self.content,
-        }
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-20/src/lib.rs:here}}
 ```
 
 <span class="caption">列表 17-20: `PendingReviewPost` 通过调用 `DraftPost` 的 `request_review` 创建，`approve` 方法将 `PendingReviewPost` 变为发布的 `Post`</span>
@@ -448,19 +220,7 @@ impl PendingReviewPost {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-use blog::Post;
-
-fn main() {
-    let mut post = Post::new();
-
-    post.add_text("I ate a salad for lunch today");
-
-    let post = post.request_review();
-
-    let post = post.approve();
-
-    assert_eq!("I ate a salad for lunch today", post.content());
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-21/src/main.rs}}
 ```
 
 <span class="caption">示例 17-21: `main` 中使用新的博文工作流实现的修改</span>
@@ -477,5 +237,5 @@ fn main() {
 
 接下来，让我们看看另一个提供了多样灵活性的 Rust 功能：模式。贯穿全书的模式, 我们已经和它们打过照面了，但并没有见识过它们的全部本领。让我们开始探索吧！
 
-[more-info-than-rustc]: ch09-03-to-panic-or-not-to-panic.html#cases-in-which-you-have-more-information-than-the-compiler
-[macros]: ch19-06-macros.html#macros
+[more-info-than-rustc]: ch09-03-to-panic-or-not-to-panic.html#当我们比编译器知道更多的情况
+[macros]: ch19-06-macros.html#宏

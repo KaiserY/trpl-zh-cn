@@ -2,7 +2,7 @@
 
 > [ch17-02-trait-objects.md](https://github.com/rust-lang/book/blob/main/src/ch17-02-trait-objects.md)
 > <br>
-> commit 7b23a000fc511d985069601eb5b09c6017e609eb
+> commit 727ef100a569d9aa0b9da3a498a346917fadc979
 
  在第八章中，我们谈到了 vector 只能存储同种类型元素的局限。示例 8-10 中提供了一个定义 `SpreadsheetCell` 枚举来储存整型，浮点型和文本成员的替代方案。这意味着可以在每个单元中储存不同类型的数据，并仍能拥有一个代表一排单元的 vector。这在当编译代码时就知道希望可以交替使用的类型为固定集合的情况下是完全可行的。
 
@@ -22,10 +22,8 @@
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-pub trait Draw {
-    fn draw(&self);
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-03/src/lib.rs}}
 ```
 
 <span class="caption">示例 17-3：`Draw` trait 的定义</span>
@@ -34,14 +32,8 @@ pub trait Draw {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# pub trait Draw {
-#     fn draw(&self);
-# }
-#
-pub struct Screen {
-    pub components: Vec<Box<dyn Draw>>,
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-04/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 17-4: 一个 `Screen` 结构体的定义，它带有一个字段 `components`，其包含实现了 `Draw` trait 的 trait 对象的 vector</span>
@@ -50,22 +42,8 @@ pub struct Screen {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# pub trait Draw {
-#     fn draw(&self);
-# }
-#
-# pub struct Screen {
-#     pub components: Vec<Box<dyn Draw>>,
-# }
-#
-impl Screen {
-    pub fn run(&self) {
-        for component in self.components.iter() {
-            component.draw();
-        }
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-05/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 17-5：在 `Screen` 上实现一个 `run` 方法，该方法在每个 component 上调用 `draw` 方法</span>
@@ -74,23 +52,8 @@ impl Screen {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# pub trait Draw {
-#     fn draw(&self);
-# }
-#
-pub struct Screen<T: Draw> {
-    pub components: Vec<T>,
-}
-
-impl<T> Screen<T>
-    where T: Draw {
-    pub fn run(&self) {
-        for component in self.components.iter() {
-            component.draw();
-        }
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-06/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 17-6: 一种 `Screen` 结构体的替代实现，其 `run` 方法使用泛型和 trait bound</span>
@@ -105,22 +68,8 @@ impl<T> Screen<T>
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# pub trait Draw {
-#     fn draw(&self);
-# }
-#
-pub struct Button {
-    pub width: u32,
-    pub height: u32,
-    pub label: String,
-}
-
-impl Draw for Button {
-    fn draw(&self) {
-        // 实际绘制按钮的代码
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-07/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 17-7: 一个实现了 `Draw` trait 的 `Button` 结构体</span>
@@ -132,19 +81,7 @@ impl Draw for Button {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-use gui::Draw;
-
-struct SelectBox {
-    width: u32,
-    height: u32,
-    options: Vec<String>,
-}
-
-impl Draw for SelectBox {
-    fn draw(&self) {
-        // code to actually draw a select box
-    }
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-08/src/main.rs:here}}
 ```
 
 <span class="caption">示例 17-8: 另一个使用 `gui` 的 crate 中，在 `SelectBox` 结构体上实现 `Draw` trait</span>
@@ -154,30 +91,7 @@ impl Draw for SelectBox {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
-use gui::{Screen, Button};
-
-fn main() {
-    let screen = Screen {
-        components: vec![
-            Box::new(SelectBox {
-                width: 75,
-                height: 10,
-                options: vec![
-                    String::from("Yes"),
-                    String::from("Maybe"),
-                    String::from("No")
-                ],
-            }),
-            Box::new(Button {
-                width: 50,
-                height: 10,
-                label: String::from("OK"),
-            }),
-        ],
-    };
-
-    screen.run();
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-09/src/main.rs:here}}
 ```
 
 <span class="caption">示例 17-9: 使用 trait 对象来存储实现了相同 trait 的不同类型的值</span>
@@ -193,32 +107,15 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use gui::Screen;
-
-fn main() {
-    let screen = Screen {
-        components: vec![
-            Box::new(String::from("Hi")),
-        ],
-    };
-
-    screen.run();
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-10/src/main.rs}}
 ```
 
 <span class="caption">示例 17-10: 尝试使用一种没有实现 trait 对象的 trait 的类型</span>
 
 我们会遇到这个错误，因为 `String` 没有实现 `rust_gui::Draw` trait：
 
-```text
-error[E0277]: the trait bound `std::string::String: gui::Draw` is not satisfied
-  --> src/main.rs:7:13
-   |
- 7 |             Box::new(String::from("Hi")),
-   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait gui::Draw is not
-   implemented for `std::string::String`
-   |
-   = note: required for the cast to the object type `gui::Draw`
+```console
+{{#include ../listings/ch17-oop/listing-17-10/output.txt}}
 ```
 
 这告诉了我们，要么是我们传递了并不希望传递给 `Screen` 的类型并应该提供其他类型，要么应该在 `String` 上实现 `Draw` 以便 `Screen` 可以调用其上的 `draw`。
@@ -229,50 +126,6 @@ error[E0277]: the trait bound `std::string::String: gui::Draw` is not satisfied
 
 当使用 trait 对象时，Rust 必须使用动态分发。编译器无法知晓所有可能用于 trait 对象代码的类型，所以它也不知道应该调用哪个类型的哪个方法实现。为此，Rust 在运行时使用 trait 对象中的指针来知晓需要调用哪个方法。动态分发也阻止编译器有选择的内联方法代码，这会相应的禁用一些优化。尽管在编写示例 17-5 和可以支持示例 17-9 中的代码的过程中确实获得了额外的灵活性，但仍然需要权衡取舍。
 
-### Trait 对象要求对象安全
-
-只有 **对象安全**（*object safe*）的 trait 才可以组成 trait 对象。围绕所有使得 trait 对象安全的属性存在一些复杂的规则，不过在实践中，只涉及到两条规则。如果一个 trait 中所有的方法有如下属性时，则该 trait 是对象安全的：
-
-- 返回值类型不为 `Self`
-- 方法没有任何泛型类型参数
-
-`Self` 关键字是我们要实现 trait 或方法的类型的别名。对象安全对于 trait 对象是必须的，因为一旦有了 trait 对象，就不再知晓实现该 trait 的具体类型是什么了。如果 trait 方法返回具体的 `Self` 类型，但是 trait 对象忘记了其真正的类型，那么方法不可能使用已经忘却的原始具体类型。同理对于泛型类型参数来说，当使用 trait 时其会放入具体的类型参数：此具体类型变成了实现该 trait 的类型的一部分。当使用 trait 对象时其具体类型被抹去了，故无从得知放入泛型参数类型的类型是什么。
-
-一个 trait 的方法不是对象安全的例子是标准库中的 `Clone` trait。`Clone` trait 的 `clone` 方法的参数签名看起来像这样：
-
-```rust
-pub trait Clone {
-    fn clone(&self) -> Self;
-}
-```
-
-`String` 实现了 `Clone` trait，当在 `String` 实例上调用 `clone` 方法时会得到一个 `String` 实例。类似的，当调用 `Vec<T>` 实例的 `clone` 方法会得到一个 `Vec<T>` 实例。`clone` 的签名需要知道什么类型会代替 `Self`，因为这是它的返回值。
-
-如果尝试做一些违反有关 trait 对象的对象安全规则的事情，编译器会提示你。例如，如果尝试实现示例 17-4 中的 `Screen` 结构体来存放实现了 `Clone` trait 而不是 `Draw` trait 的类型，像这样：
-
-```rust,ignore,does_not_compile
-pub struct Screen {
-    pub components: Vec<Box<dyn Clone>>,
-}
-```
-
-将会得到如下错误：
-
-```text
-error[E0038]: the trait `std::clone::Clone` cannot be made into an object
- --> src/lib.rs:2:5
-  |
-2 |     pub components: Vec<Box<dyn Clone>>,
-  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::clone::Clone`
-  cannot be made into an object
-  |
-  = note: the trait cannot require that `Self : Sized`
-```
-
-这意味着不能以这种方式使用此 trait 作为 trait 对象。如果你对对象安全的更多细节感兴趣，请查看 [Rust RFC 255]。
-
-[Rust RFC 255]: https://github.com/rust-lang/rfcs/blob/master/text/0255-object-safety.md
-
 [performance-of-code-using-generics]:
-ch10-01-syntax.html#performance-of-code-using-generics
-[dynamically-sized]: ch19-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait
+ch10-01-syntax.html#泛型代码的性能
+[dynamically-sized]: ch19-04-advanced-types.html#动态大小类型和-sized-trait

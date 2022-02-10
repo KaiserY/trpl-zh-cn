@@ -2,13 +2,13 @@
 
 > [ch17-01-what-is-oo.md](https://github.com/rust-lang/book/blob/main/src/ch17-01-what-is-oo.md)
 > <br>
-> commit 34caca254c3e08ff9fe3ad985007f45e92577c03
+> commit 3fa4eeca3a57f257e3569055d808b6a76e9b70ee
 
 关于一个语言被称为面向对象所需的功能，在编程社区内并未达成一致意见。Rust 被很多不同的编程范式影响，包括面向对象编程；比如第十三章提到了来自函数式编程的特性。面向对象编程语言所共享的一些特性往往是对象、封装和继承。让我们看一下这每一个概念的含义以及 Rust 是否支持他们。
 
 ### 对象包含数据和行为
 
-由 Erich Gamma、Richard Helm、Ralph Johnson 和 John Vlissides（Addison-Wesley Professional, 1994）编写的书 *Design Patterns: Elements of Reusable Object-Oriented Software* 被俗称为 *The Gang of Four* (字面意思为“四人帮”)，它是面向对象编程模式的目录。它这样定义面向对象编程：
+由 Erich Gamma、Richard Helm、Ralph Johnson 和 John Vlissides（Addison-Wesley Professional, 1994）编写的书 *Design Patterns: Elements of Reusable Object-Oriented Software* 被俗称为 *The Gang of Four* (字面意思为 “四人帮”)，它是面向对象编程模式的目录。它这样定义面向对象编程：
 
 > Object-oriented programs are made up of objects. An *object* packages both
 > data and the procedures that operate on that data. The procedures are
@@ -26,11 +26,8 @@
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-pub struct AveragedCollection {
-    list: Vec<i32>,
-    average: f64,
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-01/src/lib.rs}}
 ```
 
 <span class="caption">示例 17-1: `AveragedCollection` 结构体维护了一个整型列表和集合中所有元素的平均值。</span>
@@ -39,37 +36,8 @@ pub struct AveragedCollection {
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# pub struct AveragedCollection {
-#     list: Vec<i32>,
-#     average: f64,
-# }
-impl AveragedCollection {
-    pub fn add(&mut self, value: i32) {
-        self.list.push(value);
-        self.update_average();
-    }
-
-    pub fn remove(&mut self) -> Option<i32> {
-        let result = self.list.pop();
-        match result {
-            Some(value) => {
-                self.update_average();
-                Some(value)
-            },
-            None => None,
-        }
-    }
-
-    pub fn average(&self) -> f64 {
-        self.average
-    }
-
-    fn update_average(&mut self) {
-        let total: i32 = self.list.iter().sum();
-        self.average = total as f64 / self.list.len() as f64;
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-02/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 17-2: 在`AveragedCollection` 结构体上实现了`add`、`remove` 和 `average` 公有方法</span>
