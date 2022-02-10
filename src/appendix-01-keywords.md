@@ -2,18 +2,20 @@
 
 > [appendix-01-keywords.md](https://github.com/rust-lang/book/blob/main/src/appendix-01-keywords.md)
 > <br>
-> commit 27dd97a785794709aa87c51ab697cded41e8163a
+> commit de7174e6704ee4f6c8cdaead2c5c47e593775ec5
 
 下面的列表包含 Rust 中正在使用或者以后会用到的关键字。因此，这些关键字不能被用作标识符（除了 “[原始标识符][raw-identifiers]” 部分介绍的原始标识符），这包括函数、变量、参数、结构体字段、模块、crate、常量、宏、静态值、属性、类型、trait 或生命周期
 的名字。
 
-[raw-identifiers]: #raw-identifiers
+[raw-identifiers]: #原始标识符
 
 ### 目前正在使用的关键字
 
 如下关键字目前有对应其描述的功能。
 
 * `as` - 强制类型转换，消除特定包含项的 trait 的歧义，或者对 `use` 和 `extern crate` 语句中的项重命名
+* `async` - 返回一个 `Future` 而不是阻塞当前线程
+* `await` - 暂停执行直到 `Future` 的结果就绪
 * `break` - 立刻退出循环
 * `const` - 定义常量或不变裸指针（constant raw pointer）
 * `continue` - 继续进入下一次循环迭代
@@ -37,7 +39,7 @@
 * `pub` - 表示结构体字段、`impl` 块或模块的公有可见性
 * `ref` - 通过引用绑定
 * `return` - 从函数中返回
-* `Self` - 实现 trait 的类型的类型别名
+* `Self` - 定义或实现 trait 的类型的类型别名
 * `self` - 表示方法本身或当前模块
 * `static` - 表示全局变量或在整个程序执行期间保持其生命周期
 * `struct` - 定义一个结构体
@@ -45,18 +47,19 @@
 * `trait` - 定义一个 trait
 * `true` - 布尔字面值 `true`
 * `type` - 定义一个类型别名或关联类型
+* `union` - 定义一个 [union] 并且是 union 声明中唯一用到的关键字
 * `unsafe` - 表示不安全的代码、函数、trait 或实现
 * `use` - 引入外部空间的符号
 * `where` - 表示一个约束类型的从句
 * `while` - 基于一个表达式的结果判断是否进行循环
+
+[union]: https://doc.rust-lang.org/reference/items/unions.html
 
 ### 保留做将来使用的关键字
 
 如下关键字没有任何功能，不过由 Rust 保留以备将来的应用。
 
 * `abstract`
-* `async`
-* `await`
 * `become`
 * `box`
 * `do`

@@ -1,7 +1,6 @@
 ## 附录 D：实用开发工具
 
-> [appendix-04-useful-development-tools.md](https://github.com/rust-lang/book/blob/main/src/appendix-04-useful-development-tools.md)
-> <br />
+> [appendix-04-useful-development-tools.md](https://github.com/rust-lang/book/blob/main/src/appendix-04-useful-development-tools.md) > <br />
 > commit d48e9884f4e5ecb112095d4e8c55ebc3bce4b009
 
 本附录，我们将讨论 Rust 项目提供的用于开发 Rust 代码的工具。
@@ -24,7 +23,7 @@ $ cargo fmt
 
 运行此命令会格式化当前 crate 中所有的 Rust 代码。这应该只会改变代码风格，而不是代码语义。请查看 [该文档][rustfmt] 了解 `rustfmt` 的更多信息。
 
-[rustfmt]: https://github.com/rust-lang-nursery/rustfmt
+[rustfmt]: https://github.com/rust-lang/rustfmt
 
 ### 通过 `rustfix` 修复代码
 
@@ -67,7 +66,7 @@ $ cargo fix
     Finished dev [unoptimized + debuginfo] target(s) in 0.59s
 ```
 
-如果再次查看 *src/main.rs*，会发现 `cargo fix` 修改了代码：
+如果再次查看 _src/main.rs_，会发现 `cargo fix` 修改了代码：
 
 <span class="filename">文件名: src/main.rs</span>
 

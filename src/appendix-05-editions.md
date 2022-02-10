@@ -1,8 +1,7 @@
 ## 附录 E：版本
 
-> [appendix-05-editions.md](https://github.com/rust-lang/book/blob/main/src/appendix-05-editions.md)
-> <br />
-> commit 70a82519e48b8a61f98cabb8ff443d1b21962fea
+> [appendix-05-editions.md](https://github.com/rust-lang/book/blob/main/src/appendix-05-editions.md) > <br />
+> commit 8cf0496bb8e56b683ea3f015871c8631684decf4
 
 早在第一章，我们见过 `cargo new` 在 *Cargo.toml* 中增加了一些有关 `edition` 的元数据。本附录将解释其意义！
 
@@ -12,11 +11,11 @@ Rust 语言和编译器有一个为期 6 周的发布循环。这意味着用户
 
 这为不同的人群提供了不同的功能：
 
-* 对于活跃的 Rust 用户，其将增量的修改与易于理解的功能包相结合。
-* 对于非用户，它表明发布了一些重大进展，这意味着 Rust 可能变得值得一试。
-* 对于 Rust 自身开发者，其提供了项目整体的集合点。
+- 对于活跃的 Rust 用户，其将增量的修改与易于理解的功能包相结合。
+- 对于非用户，它表明发布了一些重大进展，这意味着 Rust 可能变得值得一试。
+- 对于 Rust 自身开发者，其提供了项目整体的集合点。
 
-在本文档编写时，Rust 有两个版本：Rust 2015 和 Rust 2018。本书基于 Rust 2018 edition 编写。
+在本文档编写时，Rust 有三个可用版本：Rust 2015、 Rust 2018 和 Rust 2021。本书基于 Rust 2021 edition 风格编写。
 
 *Cargo.toml* 中的 `edition` 字段表明代码应该使用哪个版本编译。如果该字段不存在，其默认为 `2015` 以提供后向兼容性。
 

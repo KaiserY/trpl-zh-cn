@@ -2,7 +2,7 @@
 
 > [ch20-01-single-threaded.md](https://github.com/rust-lang/book/blob/main/src/ch20-01-single-threaded.md)
 > <br>
-> commit f617d58c1a88dd2912739a041fd4725d127bf9fb
+> commit 9c0fa2714859738ff73cbbb829592e4c037d7e46
 
 首先让我们创建一个可运行的单线程 web server，不过在开始之前，我们将快速了解一下构建 web server 所涉及到的协议。这些协议的细节超出了本书的范畴，不过一个简单的概括会提供我们所需的信息。
 
@@ -14,7 +14,7 @@ TCP 是一个底层协议，它描述了信息如何从一个 server 到另一�
 
 所以我们的 web server 所需做的第一件事便是能够监听 TCP 连接。标准库提供了 `std::net` 模块处理这些功能。让我们一如既往新建一个项目：
 
-```text
+```console
 $ cargo new hello
      Created binary (application) `hello` project
 $ cd hello
@@ -25,17 +25,7 @@ $ cd hello
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,no_run
-use std::net::TcpListener;
-
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-
-    for stream in listener.incoming() {
-        let stream = stream.unwrap();
-
-        println!("Connection established!");
-    }
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-01/src/main.rs}}
 ```
 
 <span class="caption">示例 20-1: 监听传入的流并在接收到流时打印信息</span>
@@ -72,27 +62,7 @@ Connection established!
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,no_run
-use std::io::prelude::*;
-use std::net::TcpStream;
-use std::net::TcpListener;
-
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-
-    for stream in listener.incoming() {
-        let stream = stream.unwrap();
-
-        handle_connection(stream);
-    }
-}
-
-fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 1024];
-
-    stream.read(&mut buffer).unwrap();
-
-    println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-02/src/main.rs}}
 ```
 
 <span class="caption">示例 20-2: 读取 `TcpStream` 并打印数据</span>
@@ -107,10 +77,10 @@ fn handle_connection(mut stream: TcpStream) {
 
 让我们试一试！启动程序并再次在浏览器中发起请求。注意浏览器中仍然会出现错误页面，不过终端中程序的输出现在看起来像这样：
 
-```text
+```console
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.42 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.42s
      Running `target/debug/hello`
 Request: GET / HTTP/1.1
 Host: 127.0.0.1:7878
@@ -174,19 +144,8 @@ HTTP/1.1 200 OK\r\n\r\n
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust
-# use std::io::prelude::*;
-# use std::net::TcpStream;
-fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 1024];
-
-    stream.read(&mut buffer).unwrap();
-
-    let response = "HTTP/1.1 200 OK\r\n\r\n";
-
-    stream.write(response.as_bytes()).unwrap();
-    stream.flush().unwrap();
-}
+```rust,no_run
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-03/src/main.rs:here}}
 ```
 
 <span class="caption">示例 20-3: 将一个微型成功 HTTP 响应写入流</span>
@@ -204,17 +163,7 @@ fn handle_connection(mut stream: TcpStream) {
 <span class="filename">文件名: hello.html</span>
 
 ```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Hello!</title>
-  </head>
-  <body>
-    <h1>Hello!</h1>
-    <p>Hi from Rust</p>
-  </body>
-</html>
+{{#include ../listings/ch20-web-server/listing-20-04/hello.html}}
 ```
 
 <span class="caption">示例 20-4: 一个简单的 HTML 文件用来作为响应</span>
@@ -223,27 +172,8 @@ fn handle_connection(mut stream: TcpStream) {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust
-# use std::io::prelude::*;
-# use std::net::TcpStream;
-use std::fs;
-// --snip--
-
-fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 1024];
-    stream.read(&mut buffer).unwrap();
-
-    let contents = fs::read_to_string("hello.html").unwrap();
-
-    let response = format!(
-        "HTTP/1.1 200 OK\r\nContent-Length: {}\r\n\r\n{}",
-        contents.len(),
-        contents
-    );
-
-    stream.write(response.as_bytes()).unwrap();
-    stream.flush().unwrap();
-}
+```rust,no_run
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-05/src/main.rs:here}}
 ```
 
 <span class="caption">示例 20-5: 将 *hello.html* 的内容作为响应 body 发送</span>
@@ -262,33 +192,8 @@ fn handle_connection(mut stream: TcpStream) {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust
-# use std::io::prelude::*;
-# use std::net::TcpStream;
-# use std::fs;
-// --snip--
-
-fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 1024];
-    stream.read(&mut buffer).unwrap();
-
-    let get = b"GET / HTTP/1.1\r\n";
-
-    if buffer.starts_with(get) {
-        let contents = fs::read_to_string("hello.html").unwrap();
-
-        let response = format!(
-            "HTTP/1.1 200 OK\r\nContent-Length: {}\r\n\r\n{}",
-            contents.len(),
-            contents
-        );
-
-        stream.write(response.as_bytes()).unwrap();
-        stream.flush().unwrap();
-    } else {
-        // 其他请求
-    }
-}
+```rust,no_run
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-06/src/main.rs:here}}
 ```
 
 <span class="caption">示例 20-6: 匹配请求并区别处理 */* 请求与其他请求</span>
@@ -303,28 +208,8 @@ fn handle_connection(mut stream: TcpStream) {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust
-# use std::io::prelude::*;
-# use std::net::TcpStream;
-# use std::fs;
-# fn handle_connection(mut stream: TcpStream) {
-# if true {
-// --snip--
-
-} else {
-    let status_line = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
-    let contents = fs::read_to_string("404.html").unwrap();
-
-    let response = format!("{}\r\nContent-Length: {}\r\n\r\n{}",
-        status_line,
-        contents.len(),
-        contents
-    );
-
-    stream.write(response.as_bytes()).unwrap();
-    stream.flush().unwrap();
-}
-# }
+```rust,no_run
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-07/src/main.rs:here}}
 ```
 
 <span class="caption">示例 20-7: 对于任何不是 */* 的请求返回 `404` 状态码的响应和错误页面</span>
@@ -334,17 +219,7 @@ fn handle_connection(mut stream: TcpStream) {
 <span class="filename">文件名: 404.html</span>
 
 ```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Hello!</title>
-  </head>
-  <body>
-    <h1>Oops!</h1>
-    <p>Sorry, I don't know what you're asking for.</p>
-  </body>
-</html>
+{{#include ../listings/ch20-web-server/listing-20-08/404.html}}
 ```
 
 <span class="caption">示例 20-8: 任何 404 响应所返回错误页面内容样例</span>
@@ -357,36 +232,8 @@ fn handle_connection(mut stream: TcpStream) {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust
-# use std::io::prelude::*;
-# use std::net::TcpStream;
-# use std::fs;
-// --snip--
-
-fn handle_connection(mut stream: TcpStream) {
-#     let mut buffer = [0; 1024];
-#     stream.read(&mut buffer).unwrap();
-#
-#     let get = b"GET / HTTP/1.1\r\n";
-    // --snip--
-
-    let (status_line, filename) = if buffer.starts_with(get) {
-        ("HTTP/1.1 200 OK", "hello.html")
-    } else {
-        ("HTTP/1.1 404 NOT FOUND", "404.html")
-    };
-
-    let contents = fs::read_to_string(filename).unwrap();
-
-    let response = format!("{}\r\nContent-Length: {}\r\n\r\n{}",
-        status_line,
-        contents.len(),
-        contents
-    );
-
-    stream.write(response.as_bytes()).unwrap();
-    stream.flush().unwrap();
-}
+```rust,no_run
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-09/src/main.rs:here}}
 ```
 
 <span class="caption">示例 20-9: 重构使得 `if` 和 `else` 块中只包含两个情况所不同的代码</span>

@@ -1,18 +1,17 @@
 ## 附录 C：可派生的 trait
 
-> [appendix-03-derivable-traits.md](https://github.com/rust-lang/book/blob/main/src/appendix-03-derivable-traits.md)
-> <br />
-> commit 426f3e4ec17e539ae9905ba559411169d303a031
+> [appendix-03-derivable-traits.md](https://github.com/rust-lang/book/blob/main/src/appendix-03-derivable-traits.md) > <br />
+> commit bb8f6cc9ba2724e8363823bb6bf176cd33584548
 
 在本书的各个部分中，我们讨论了可应用于结构体和枚举定义的 `derive` 属性。`derive` 属性会在使用 `derive` 语法标记的类型上生成对应 trait 的默认实现的代码。
 
 在本附录中提供了标准库中所有可以使用 `derive` 的 trait 的参考。这些部分涉及到：
 
-* 该 trait 将会派生什么样的操作符和方法
-* 由 `derive` 提供什么样的 trait 实现
-* 由什么来实现类型的 trait
-* 是否允许实现该 trait 的条件
-* 需要 trait 操作的例子
+- 该 trait 将会派生什么样的操作符和方法
+- 由 `derive` 提供什么样的 trait 实现
+- 由什么来实现类型的 trait
+- 是否允许实现该 trait 的条件
+- 需要 trait 操作的例子
 
 如果你希望不同于 `derive` 属性所提供的行为，请查阅 [标准库文档](https://doc.rust-lang.org/std/index.html) 中每个 trait 的细节以了解如何手动实现它们。
 
@@ -50,7 +49,7 @@
 
 当在结构体上派生时，`PartialOrd` 以在结构体定义中字段出现的顺序比较每个字段的值来比较两个实例。当在枚举上派生时，认为在枚举定义中声明较早的枚举变体小于其后的变体。
 
-例如，对于来自于 `rand` crate 中的 `gen_range` 方法来说，当在一个大值和小值指定的范围内生成一个随机值时，`PartialOrd` trait 是必须的。
+例如，对于来自于 `rand` crate 中的 `gen_range` 方法来说，当在一个范围表达式指定的范围内生成一个随机值时，`PartialOrd` trait 是必须的。
 
 `Ord` trait 也让你明白在一个带注解类型上的任意两个值存在有效顺序。`Ord` trait 实现了 `cmp` 方法，它返回一个 `Ordering` 而不是 `Option<Ordering>`，因为总存在一个合法的顺序。只可以在实现了 `PartialOrd` 和 `Eq`（`Eq` 依赖 `PartialEq`）的类型上使用 `Ord` trait 。当在结构体或枚举上派生时， `cmp` 和以 `PartialOrd` 派生实现的 `partial_cmp` 表现一致。
 
@@ -58,7 +57,7 @@
 
 ### 复制值的 `Clone` 和 `Copy`
 
-`Clone` trait 可以明确地创建一个值的深拷贝（deep copy），复制过程可能包含任意代码的执行以及堆上数据的复制。查阅第四章 [“变量和数据的交互方式：移动”][ways-variables-and-data-interact-clone]  以获取有关 `Clone` 的更多信息。
+`Clone` trait 可以明确地创建一个值的深拷贝（deep copy），复制过程可能包含任意代码的执行以及堆上数据的复制。查阅第四章 [“变量与数据交互的方式（二）：克隆”][ways-variables-and-data-interact-clone] 以获取有关 `Clone` 的更多信息。
 
 派生 `Clone` 实现了 `clone` 方法，其为整个的类型实现时，在类型的每一部分上调用了 `clone` 方法。这意味着类型中所有字段或值也必须实现了 `Clone`，这样才能够派生 `Clone` 。
 
@@ -68,7 +67,7 @@
 
 `Copy` trait 并未定义任何方法来阻止编程人员重写这些方法或违反不需要执行额外代码的假设。尽管如此，所有的编程人员可以假设复制（copy）一个值非常快。
 
-可以在类型内部全部实现 `Copy` trait 的任意类型上派生 `Copy`。 但只可以在那些同时实现了 `Clone` 的类型上使用 `Copy` trait ，因为一个实现了 `Copy` 的类型也简单地实现了 `Clone`，其执行和 `Copy` 相同的任务。
+可以在类型内部全部实现 `Copy` trait 的任意类型上派生 `Copy`。一个实现了 `Copy` 的类型必须也实现了 `Clone`，因为一个实现了 `Copy` 的类型也简单地实现了 `Clone`，其执行和 `Copy` 相同的任务。
 
 `Copy` trait 很少使用；实现 `Copy` 的类型是可以优化的，这意味着你无需调用 `clone`，这让代码更简洁。
 
@@ -86,12 +85,9 @@
 
 `Default::default` 函数通常结合结构体更新语法一起使用，这在第五章的 [“使用结构体更新语法从其他实例中创建实例”][creating-instances-from-other-instances-with-struct-update-syntax] 部分有讨论。可以自定义一个结构体的一小部分字段而剩余字段则使用 `..Default::default()` 设置为默认值。
 
-例如，当你在 `Option<T>` 实例上使用 `unwrap_or_default` 方法时，`Default` trait是必须的。如果 `Option<T>` 是 `None`的话, `unwrap_or_default` 方法将返回存储在 `Option<T>` 中 `T` 类型的 `Default::default` 的结果。
+例如，当你在 `Option<T>` 实例上使用 `unwrap_or_default` 方法时，`Default` trait 是必须的。如果 `Option<T>` 是 `None`的话, `unwrap_or_default` 方法将返回存储在 `Option<T>` 中 `T` 类型的 `Default::default` 的结果。
 
-[creating-instances-from-other-instances-with-struct-update-syntax]:
-ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax
-[stack-only-data-copy]:
-ch04-01-what-is-ownership.html#stack-only-data-copy
-[ways-variables-and-data-interact-clone]:
-ch04-01-what-is-ownership.html#ways-variables-and-data-interact-clone
-[macros]: ch19-06-macros.html#macros
+[creating-instances-from-other-instances-with-struct-update-syntax]: ch05-01-defining-structs.html#使用结构体更新语法从其他实例创建实例
+[stack-only-data-copy]: ch04-01-what-is-ownership.html#只在栈上的数据拷贝
+[ways-variables-and-data-interact-clone]: ch04-01-what-is-ownership.html#变量与数据交互的方式二克隆
+[macros]: ch19-06-macros.html#宏

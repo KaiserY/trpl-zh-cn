@@ -2,7 +2,7 @@
 
 > [appendix-02-operators.md](https://github.com/rust-lang/book/blob/main/src/appendix-02-operators.md)
 > <br />
-> commit 426f3e4ec17e539ae9905ba559411169d303a031
+> commit f83c4d08d2bc9c1e1c33037747ffe818b397e67a
 
 该附录包含了 Rust 语法的词汇表，包括运算符以及其他的符号，这些符号单独出现或出现在路径、泛型、trait bounds、宏、属性、注释、元组以及大括号上下文中。
 
@@ -23,10 +23,10 @@
 | `&` | `&type`, `&mut type`, `&'a type`, `&'a mut type` | 借用指针类型 |  |
 | `&` | `expr & expr` | 按位与 | `BitAnd` |
 | `&=` | `var &= expr` | 按位与及赋值 | `BitAndAssign` |
-| `&&` | `expr && expr` | 逻辑与 |  |
+| `&&` | `expr && expr` | 短路（Short-circuiting）逻辑与 |  |
 | `*` | `expr * expr` | 算术乘法 | `Mul` |
 | `*=` | `var *= expr` | 算术乘法与赋值 | `MulAssign` |
-| `*` | `*expr` | 解引用 | |
+| `*` | `*expr` | 解引用 | `Deref` |
 | `*` | `*const type`, `*mut type` | 裸指针 | |
 | `+` | `trait + trait`, `'a + trait` | 复合类型限制 | |
 | `+` | `expr + expr` | 算术加法 | `Add` |
@@ -37,10 +37,11 @@
 | `-=` | `var -= expr` | 算术减法与赋值 | `SubAssign` |
 | `->` | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | 函数与闭包，返回类型 | |
 | `.` | `expr.ident` | 成员访问 | |
-| `..` | `..`, `expr..`, `..expr`, `expr..expr` | 右排除范围 | |
+| `..` | `..`, `expr..`, `..expr`, `expr..expr` | 右开区间范围 | `PartialOrd` |
+| `..=` | `..=expr`, `expr..=expr` | 右闭区间范围模式 | `PartialOrd` |
 | `..` | `..expr` | 结构体更新语法 | |
-| `..` | `variant(x, ..)`, `struct_type { x, .. }` | “与剩余部分”的模式绑定 | |
-| `...` | `expr...expr` | 模式: 范围包含模式 | |
+| `..` | `variant(x, ..)`, `struct_type { x, .. }` | “与剩余部分” 的模式绑定 | |
+| `...` | `expr...expr` | （Deprecated，请使用 `..=`）在模式中: 闭区间范围模式 | |
 | `/` | `expr / expr` | 算术除法 | `Div` |
 | `/=` | `var /= expr` | 算术除法与赋值 | `DivAssign` |
 | `:` | `pat: type`, `ident: type` | 约束 | |
@@ -65,7 +66,7 @@
 | <code>&vert;</code> | <code>pat &vert; pat</code> | 模式选择 | |
 | <code>&vert;</code> | <code>expr &vert; expr</code> | 按位或 | `BitOr` |
 | <code>&vert;=</code> | <code>var &vert;= expr</code> | 按位或与赋值 | `BitOrAssign` |
-| <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code> | 逻辑或 | |
+| <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code> | 短路（Short-circuiting）逻辑或 | |
 | `?` | `expr?` | 错误传播 | |
 
 ### 非运算符符号
@@ -130,7 +131,7 @@
 |--------|-------------|
 | `T: U` | 泛型参数 `T` 约束于实现了 `U` 的类型 |
 | `T: 'a` | 泛型 `T` 的生命周期必须长于 `'a`（意味着该类型不能传递包含生命周期短于 `'a` 的任何引用）|
-| `T : 'static` | 泛型 T 不包含除 'static 之外的借用引用 |
+| `T: 'static` | 泛型 T 不包含除 'static 之外的借用引用 |
 | `'b: 'a` | 泛型 `'b` 生命周期必须长于泛型 `'a` |
 | `T: ?Sized` | 使用一个不定大小的泛型类型 |
 | `'a + trait`, `trait + trait` | 复合类型限制 |
@@ -146,6 +147,7 @@
 | `$ident` | 宏替换 |
 | `$ident:kind` | 宏捕获 |
 | `$(…)…` | 宏重复 |
+| `ident!(...)`, `ident!{...}`, `ident![...]` | 宏调用 |
 
 表 B-7 展示了写注释的符号。
 
@@ -173,7 +175,6 @@
 | `(expr, ...)` | 元组表达式 |
 | `(type, ...)` | 元组类型 |
 | `expr(expr, ...)` | 函数调用表达式；也用于初始化元组结构体 `struct` 以及元组枚举 `enum` 变体 |
-| `ident!(...)`, `ident!{...}`, `ident![...]` | 宏调用 |
 | `expr.0`, `expr.1`, etc. | 元组索引 |
 
 表 B-9 展示了使用大括号的上下文。

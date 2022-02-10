@@ -1,8 +1,7 @@
 ## 附录 G：Rust 是如何开发的与 “Nightly Rust”
 
-> [appendix-07-nightly-rust.md](https://github.com/rust-lang/book/blob/main/src/appendix-07-nightly-rust.md)
-> <br />
-> commit 70a82519e48b8a61f98cabb8ff443d1b21962fea
+> [appendix-07-nightly-rust.md](https://github.com/rust-lang/book/blob/main/src/appendix-07-nightly-rust.md) > <br />
+> commit d44317c3122b44fb713aba66cc295dee3453b24b
 
 本附录介绍 Rust 是如何开发的以及这如何影响作为 Rust 开发者的你。
 
@@ -14,11 +13,11 @@
 
 ### Choo, Choo! ~~（开车啦，逃）~~ 发布通道和发布时刻表（Riding the Trains）
 
-Rust 开发运行于一个 ~~车次表~~ **发布时刻表**（*train schedule*）之上。也就是说，所有的开发工作都位于 Rust 仓库的 `master` 分支。发布采用 software release train 模型，其被用于思科 IOS 等其它软件项目。Rust 有三个 **发布通道**（*release channel*）：
+Rust 开发运行于一个 ~~车次表~~ **发布时刻表**（_train schedule_）之上。也就是说，所有的开发工作都位于 Rust 仓库的 `master` 分支。发布采用 software release train 模型，其被用于思科 IOS 等其它软件项目。Rust 有三个 **发布通道**（_release channel_）：
 
-* Nightly
-* Beta
-* Stable（稳定版）
+- Nightly
+- Beta
+- Stable（稳定版）
 
 大部分 Rust 开发者主要采用稳定版通道，不过希望实验新功能的开发者可能会使用 nightly 或 beta 版。
 
@@ -90,11 +89,11 @@ Rust 每 6 周发布一个版本，如时钟般准确。如果你知道了某个
 
 Rustup 使得改变不同发布通道的 Rust 更为简单，其在全局或分项目的层次工作。其默认会安装稳定版 Rust。例如为了安装 nightly：
 
-```text
-$ rustup install nightly
+```console
+$ rustup toolchain install nightly
 ```
 
-你会发现 `rustup` 也安装了所有的 **工具链**（*toolchains*， Rust 和其相关组件）。如下是一位作者的 Windows 计算机上的例子：
+你会发现 `rustup` 也安装了所有的 **工具链**（_toolchains_， Rust 和其相关组件）。如下是一位作者的 Windows 计算机上的例子：
 
 ```powershell
 > rustup toolchain list
@@ -105,12 +104,12 @@ nightly-x86_64-pc-windows-msvc
 
 如你所见，默认是稳定版。大部分 Rust 用户在大部分时间使用稳定版。你可能也会这么做，不过如果你关心最新的功能，可以为特定项目使用 nightly 版。为此，可以在项目目录使用 `rustup override` 来设置当前目录 `rustup` 使用 nightly 工具链：
 
-```text
+```console
 $ cd ~/projects/needs-nightly
 $ rustup override set nightly
 ```
 
-现在，每次在 *~/projects/needs-nightly* 调用 `rustc` 或 `cargo`，`rustup` 会确保使用 nightly 版 Rust。在你有很多 Rust 项目时大有裨益！
+现在，每次在 _~/projects/needs-nightly_ 调用 `rustc` 或 `cargo`，`rustup` 会确保使用 nightly 版 Rust。在你有很多 Rust 项目时大有裨益！
 
 ### RFC 过程和团队
 
@@ -118,6 +117,6 @@ $ rustup override set nightly
 
 任何人都可以编写 RFC 来改进 Rust，同时这些 RFC 会被 Rust 团队评审和讨论，他们由很多不同分工的子团队组成。这里是 [Rust 官网上](https://www.rust-lang.org/governance) 所有团队的总列表，其包含了项目中每个领域的团队：语言设计、编译器实现、基础设施、文档等。各个团队会阅读相应的提议和评论，编写回复，并最终达成接受或回绝功能的一致。
 
-如果功能被接受了，在 Rust 仓库会打开一个 issue，人们就可以实现它。实现功能的人当然可能不是最初提议功能的人！当实现完成后，其会合并到 `master` 分支并位于一个功能开关（feature gate）之后，正如 [“不稳定功能”](#unstable-features) 部分所讨论的。
+如果功能被接受了，在 Rust 仓库会打开一个 issue，人们就可以实现它。实现功能的人当然可能不是最初提议功能的人！当实现完成后，其会合并到 `master` 分支并位于一个功能开关（feature gate）之后，正如 [“不稳定功能”](#不稳定功能) 部分所讨论的。
 
 在稍后的某个时间，一旦使用 nightly 版的 Rust 团队能够尝试这个功能了，团队成员会讨论这个功能，它如何在 nightly 中工作，并决定是否应该进入稳定版。如果决定继续推进，功能开关会移除，然后这个功能就被认为是稳定的了！乘着“发布的列车”，最终在新的稳定版 Rust 中出现。
