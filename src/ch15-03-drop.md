@@ -1,9 +1,9 @@
 ## 使用 `Drop` Trait 运行清理代码
 
 > [ch15-03-drop.md](https://github.com/rust-lang/book/blob/main/src/ch15-03-drop.md) <br>
-> commit 57adb83f69a69e20862d9e107b2a8bab95169b4c
+> commit d44317c3122b44fb713aba66cc295dee3453b24b
 
-对于智能指针模式来说第二个重要的 trait 是 `Drop`，其允许我们在值要离开作用域时执行一些代码。可以为任何类型提供 `Drop` trait 的实现，同时所指定的代码被用于释放类似于文件或网络连接的资源。我们在智能指针上下文中讨论 `Drop` 是因为其功能几乎总是用于实现智能指针。例如，`Box<T>` 自定义了 `Drop` 用来释放 box 所指向的堆空间。
+对于智能指针模式来说第二个重要的 trait 是 `Drop`，其允许我们在值要离开作用域时执行一些代码。可以为任何类型提供 `Drop` trait 的实现，同时所指定的代码被用于释放类似于文件或网络连接的资源。我们在智能指针上下文中讨论 `Drop` 是因为其功能几乎总是用于实现智能指针。例如，当 `Box<T>` 被丢弃时会释放 box 指向的堆空间。
 
 在其他一些语言中，我们不得不记住在每次使用完智能指针实例后调用清理内存或资源的代码。如果忘记的话，运行代码的系统可能会因为负荷过重而崩溃。在 Rust 中，可以指定每当值离开作用域时被执行的代码，编译器会自动插入这些代码。于是我们就不需要在程序中到处编写在实例结束时清理这些变量的代码 —— 而且还不会泄漏资源。
 
@@ -14,21 +14,7 @@
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-struct CustomSmartPointer {
-    data: String,
-}
-
-impl Drop for CustomSmartPointer {
-    fn drop(&mut self) {
-        println!("Dropping CustomSmartPointer with data `{}`!", self.data);
-    }
-}
-
-fn main() {
-    let c = CustomSmartPointer { data: String::from("my stuff") };
-    let d = CustomSmartPointer { data: String::from("other stuff") };
-    println!("CustomSmartPointers created.");
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-14/src/main.rs}}
 ```
 
 <span class="caption">示例 15-14：结构体 `CustomSmartPointer`，其实现了放置清理代码的 `Drop` trait</span>
@@ -39,10 +25,8 @@ fn main() {
 
 当运行这个程序，会出现如下输出：
 
-```text
-CustomSmartPointers created.
-Dropping CustomSmartPointer with data `other stuff`!
-Dropping CustomSmartPointer with data `my stuff`!
+```console
+{{#include ../listings/ch15-smart-pointers/listing-15-14/output.txt}}
 ```
 
 当实例离开作用域 Rust 会自动调用 `drop`，并调用我们指定的代码。变量以被创建时相反的顺序被丢弃，所以 `d` 在 `c` 之前被丢弃。这个例子刚好给了我们一个 drop 方法如何工作的可视化指导，不过通常需要指定类型所需执行的清理代码而不是打印信息。
@@ -56,24 +40,15 @@ Dropping CustomSmartPointer with data `my stuff`!
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let c = CustomSmartPointer { data: String::from("some data") };
-    println!("CustomSmartPointer created.");
-    c.drop();
-    println!("CustomSmartPointer dropped before the end of main.");
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-15/src/main.rs:here}}
 ```
 
 <span class="caption">示例 15-15：尝试手动调用 `Drop` trait 的 `drop` 方法提早清理</span>
 
 如果尝试编译代码会得到如下错误：
 
-```text
-error[E0040]: explicit use of destructor method
-  --> src/main.rs:14:7
-   |
-14 |     c.drop();
-   |       ^^^^ explicit destructor calls not allowed
+```console
+{{#include ../listings/ch15-smart-pointers/listing-15-15/output.txt}}
 ```
 
 错误信息表明不允许显式调用 `drop`。错误信息使用了术语 **析构函数**（_destructor_），这是一个清理实例的函数的通用编程概念。**析构函数** 对应创建实例的 **构造函数**。Rust 中的 `drop` 函数就是这么一个析构函数。
@@ -87,32 +62,15 @@ Rust 不允许我们显式调用 `drop` 因为 Rust 仍然会在 `main` 的结�
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-# struct CustomSmartPointer {
-#     data: String,
-# }
-#
-# impl Drop for CustomSmartPointer {
-#     fn drop(&mut self) {
-#         println!("Dropping CustomSmartPointer with data `{}`!", self.data);
-#     }
-# }
-#
-fn main() {
-    let c = CustomSmartPointer { data: String::from("some data") };
-    println!("CustomSmartPointer created.");
-    drop(c);
-    println!("CustomSmartPointer dropped before the end of main.");
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-16/src/main.rs:here}}
 ```
 
 <span class="caption">示例 15-16: 在值离开作用域之前调用 `std::mem::drop` 显式清理</span>
 
 运行这段代码会打印出如下：
 
-```text
-CustomSmartPointer created.
-Dropping CustomSmartPointer with data `some data`!
-CustomSmartPointer dropped before the end of main.
+```console
+{{#include ../listings/ch15-smart-pointers/listing-15-16/output.txt}}
 ```
 
 `` Dropping CustomSmartPointer with data `some data`! `` 出现在 `CustomSmartPointer created.` 和 `CustomSmartPointer dropped before the end of main.` 之间，表明了 `drop` 方法被调用了并在此丢弃了 `c`。

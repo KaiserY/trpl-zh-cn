@@ -1,7 +1,7 @@
 ## `RefCell<T>` 和内部可变性模式
 
 > [ch15-05-interior-mutability.md](https://github.com/rust-lang/book/blob/main/src/ch15-05-interior-mutability.md) <br>
-> commit 26565efc3f62d9dacb7c2c6d0f5974360e459493
+> commit 74edb8dfe07edf8fdae49c6385c72840c07dd18f
 
 **内部可变性**（_Interior mutability_）是 Rust 中的一个设计模式，它允许你即使在有不可变引用时也可以改变数据，这通常是借用规则所不允许的。为了改变数据，该模式在数据结构中使用 `unsafe` 代码来模糊 Rust 通常的可变性和借用规则。我们还未讲到不安全代码；第十九章会学习它们。当可以确保代码在运行时会遵守借用规则，即使编译器不能保证的情况，可以选择使用那些运用内部可变性模式的类型。所涉及的 `unsafe` 代码将被封装进安全的 API 中，而外部类型仍然是不可变的。
 
@@ -37,22 +37,13 @@
 借用规则的一个推论是当有一个不可变值时，不能可变地借用它。例如，如下代码不能编译：
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let x = 5;
-    let y = &mut x;
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/no-listing-01-cant-borrow-immutable-as-mutable/src/main.rs}}
 ```
 
 如果尝试编译，会得到如下错误：
 
-```text
-error[E0596]: cannot borrow immutable local variable `x` as mutable
- --> src/main.rs:3:18
-  |
-2 |     let x = 5;
-  |         - consider changing this to `mut x`
-3 |     let y = &mut x;
-  |                  ^ cannot borrow mutably
+```console
+{{#include ../listings/ch15-smart-pointers/no-listing-01-cant-borrow-immutable-as-mutable/output.txt}}
 ```
 
 然而，特定情况下，令一个值在其方法内部能够修改自身，而在其他代码中仍视为不可变，是很有用的。值方法外部的代码就不能修改其值了。`RefCell<T>` 是一个获得内部可变性的方法。`RefCell<T>` 并没有完全绕开借用规则，编译器中的借用检查器允许内部可变性并相应地在运行时检查借用规则。如果违反了这些规则，会出现 panic 而不是编译错误。
@@ -71,82 +62,20 @@ error[E0596]: cannot borrow immutable local variable `x` as mutable
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-pub trait Messenger {
-    fn send(&self, msg: &str);
-}
-
-pub struct LimitTracker<'a, T: Messenger> {
-    messenger: &'a T,
-    value: usize,
-    max: usize,
-}
-
-impl<'a, T> LimitTracker<'a, T>
-    where T: Messenger {
-    pub fn new(messenger: &T, max: usize) -> LimitTracker<T> {
-        LimitTracker {
-            messenger,
-            value: 0,
-            max,
-        }
-    }
-
-    pub fn set_value(&mut self, value: usize) {
-        self.value = value;
-
-        let percentage_of_max = self.value as f64 / self.max as f64;
-
-        if percentage_of_max >= 1.0 {
-            self.messenger.send("Error: You are over your quota!");
-        } else if percentage_of_max >= 0.9 {
-             self.messenger.send("Urgent warning: You've used up over 90% of your quota!");
-        } else if percentage_of_max >= 0.75 {
-            self.messenger.send("Warning: You've used up over 75% of your quota!");
-        }
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-20/src/lib.rs}}
 ```
 
 <span class="caption">示例 15-20：一个记录某个值与最大值差距的库，并根据此值的特定级别发出警告</span>
 
-这些代码中一个重要部分是拥有一个方法 `send` 的 `Messenger` trait，其获取一个 `self` 的不可变引用和文本信息。这是我们的 mock 对象所需要拥有的接口。另一个重要的部分是我们需要测试 `LimitTracker` 的 `set_value` 方法的行为。可以改变传递的 `value` 参数的值，不过 `set_value` 并没有返回任何可供断言的值。也就是说，如果使用某个实现了 `Messenger` trait 的值和特定的 `max` 创建 `LimitTracker`，当传递不同 `value` 值时，消息发送者应被告知发送合适的消息。
+这些代码中一个重要部分是拥有一个方法 `send` 的 `Messenger` trait，其获取一个 `self` 的不可变引用和文本信息。这个 trait 是 mock 对象所需要实现的接口库，这样 mock 就能像一个真正的对象那样使用了。另一个重要的部分是我们需要测试 `LimitTracker` 的 `set_value` 方法的行为。可以改变传递的 `value` 参数的值，不过 `set_value` 并没有返回任何可供断言的值。也就是说，如果使用某个实现了 `Messenger` trait 的值和特定的 `max` 创建 `LimitTracker`，当传递不同 `value` 值时，消息发送者应被告知发送合适的消息。
 
 我们所需的 mock 对象是，调用 `send` 并不实际发送 email 或消息，而是只记录信息被通知要发送了。可以新建一个 mock 对象实例，用其创建 `LimitTracker`，调用 `LimitTracker` 的 `set_value` 方法，然后检查 mock 对象是否有我们期望的消息。示例 15-21 展示了一个如此尝试的 mock 对象实现，不过借用检查器并不允许：
 
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    struct MockMessenger {
-        sent_messages: Vec<String>,
-    }
-
-    impl MockMessenger {
-        fn new() -> MockMessenger {
-            MockMessenger { sent_messages: vec![] }
-        }
-    }
-
-    impl Messenger for MockMessenger {
-        fn send(&self, message: &str) {
-            self.sent_messages.push(String::from(message));
-        }
-    }
-
-    #[test]
-    fn it_sends_an_over_75_percent_warning_message() {
-        let mock_messenger = MockMessenger::new();
-        let mut limit_tracker = LimitTracker::new(&mock_messenger, 100);
-
-        limit_tracker.set_value(80);
-
-        assert_eq!(mock_messenger.sent_messages.len(), 1);
-    }
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-21/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 15-21：尝试实现 `MockMessenger`，借用检查器不允许这么做</span>
@@ -157,14 +86,8 @@ mod tests {
 
 然而，这个测试是有问题的：
 
-```text
-error[E0596]: cannot borrow immutable field `self.sent_messages` as mutable
-  --> src/lib.rs:52:13
-   |
-51 |         fn send(&self, message: &str) {
-   |                 ----- use `&mut self` here to make mutable
-52 |             self.sent_messages.push(String::from(message));
-   |             ^^^^^^^^^^^^^^^^^^ cannot mutably borrow immutable field
+```console
+{{#include ../listings/ch15-smart-pointers/listing-15-21/output.txt}}
 ```
 
 不能修改 `MockMessenger` 来记录消息，因为 `send` 方法获取了 `self` 的不可变引用。我们也不能参考错误文本的建议使用 `&mut self` 替代，因为这样 `send` 的签名就不符合 `Messenger` trait 定义中的签名了（可以试着这么改，看看会出现什么错误信息）。
@@ -173,74 +96,8 @@ error[E0596]: cannot borrow immutable field `self.sent_messages` as mutable
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-# pub trait Messenger {
-#     fn send(&self, msg: &str);
-# }
-#
-# pub struct LimitTracker<'a, T: Messenger> {
-#     messenger: &'a T,
-#     value: usize,
-#     max: usize,
-# }
-#
-# impl<'a, T> LimitTracker<'a, T>
-#     where T: Messenger {
-#     pub fn new(messenger: &T, max: usize) -> LimitTracker<T> {
-#         LimitTracker {
-#             messenger,
-#             value: 0,
-#             max,
-#         }
-#     }
-#
-#     pub fn set_value(&mut self, value: usize) {
-#         self.value = value;
-#
-#         let percentage_of_max = self.value as f64 / self.max as f64;
-#
-#         if percentage_of_max >= 1.0 {
-#             self.messenger.send("Error: You are over your quota!");
-#         } else if percentage_of_max >= 0.9 {
-#              self.messenger.send("Urgent warning: You've used up over 90% of your quota!");
-#         } else if percentage_of_max >= 0.75 {
-#             self.messenger.send("Warning: You've used up over 75% of your quota!");
-#         }
-#     }
-# }
-#
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use std::cell::RefCell;
-
-    struct MockMessenger {
-        sent_messages: RefCell<Vec<String>>,
-    }
-
-    impl MockMessenger {
-        fn new() -> MockMessenger {
-            MockMessenger { sent_messages: RefCell::new(vec![]) }
-        }
-    }
-
-    impl Messenger for MockMessenger {
-        fn send(&self, message: &str) {
-            self.sent_messages.borrow_mut().push(String::from(message));
-        }
-    }
-
-    #[test]
-    fn it_sends_an_over_75_percent_warning_message() {
-        // --snip--
-#         let mock_messenger = MockMessenger::new();
-#         let mut limit_tracker = LimitTracker::new(&mock_messenger, 100);
-#         limit_tracker.set_value(75);
-
-        assert_eq!(mock_messenger.sent_messages.borrow().len(), 1);
-    }
-}
-# fn main() {}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-22/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 15-22：使用 `RefCell<T>` 能够在外部值被认为是不可变的情况下修改内部值</span>
@@ -264,26 +121,15 @@ mod tests {
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore,panics
-impl Messenger for MockMessenger {
-    fn send(&self, message: &str) {
-        let mut one_borrow = self.sent_messages.borrow_mut();
-        let mut two_borrow = self.sent_messages.borrow_mut();
-
-        one_borrow.push(String::from(message));
-        two_borrow.push(String::from(message));
-    }
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-23/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 15-23：在同一作用域中创建两个可变引用并观察 `RefCell<T>` panic</span>
 
 这里为 `borrow_mut` 返回的 `RefMut` 智能指针创建了 `one_borrow` 变量。接着用相同的方式在变量 `two_borrow` 创建了另一个可变借用。这会在相同作用域中创建两个可变引用，这是不允许的。当运行库的测试时，示例 15-23 编译时不会有任何错误，不过测试会失败：
 
-```text
----- tests::it_sends_an_over_75_percent_warning_message stdout ----
-	thread 'tests::it_sends_an_over_75_percent_warning_message' panicked at
-'already borrowed: BorrowMutError', src/libcore/result.rs:906:4
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+```console
+{{#include ../listings/ch15-smart-pointers/listing-15-23/output.txt}}
 ```
 
 注意代码 panic 和信息 `already borrowed: BorrowMutError`。这也就是 `RefCell<T>` 如何在运行时处理违反借用规则的情况。
@@ -299,30 +145,7 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-#[derive(Debug)]
-enum List {
-    Cons(Rc<RefCell<i32>>, Rc<List>),
-    Nil,
-}
-
-use crate::List::{Cons, Nil};
-use std::rc::Rc;
-use std::cell::RefCell;
-
-fn main() {
-    let value = Rc::new(RefCell::new(5));
-
-    let a = Rc::new(Cons(Rc::clone(&value), Rc::new(Nil)));
-
-    let b = Cons(Rc::new(RefCell::new(6)), Rc::clone(&a));
-    let c = Cons(Rc::new(RefCell::new(10)), Rc::clone(&a));
-
-    *value.borrow_mut() += 10;
-
-    println!("a after = {:?}", a);
-    println!("b after = {:?}", b);
-    println!("c after = {:?}", c);
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-24/src/main.rs}}
 ```
 
 <span class="caption">示例 15-24：使用 `Rc<RefCell<i32>>` 创建可以修改的 `List`</span>
@@ -335,14 +158,12 @@ fn main() {
 
 当我们打印出 `a`、`b` 和 `c` 时，可以看到他们都拥有修改后的值 15 而不是 5：
 
-```text
-a after = Cons(RefCell { value: 15 }, Nil)
-b after = Cons(RefCell { value: 6 }, Cons(RefCell { value: 15 }, Nil))
-c after = Cons(RefCell { value: 10 }, Cons(RefCell { value: 15 }, Nil))
+```console
+{{#include ../listings/ch15-smart-pointers/listing-15-24/output.txt}}
 ```
 
 这是非常巧妙的！通过使用 `RefCell<T>`，我们可以拥有一个表面上不可变的 `List`，不过可以使用 `RefCell<T>` 中提供内部可变性的方法来在需要时修改数据。`RefCell<T>` 的运行时借用规则检查也确实保护我们免于出现数据竞争——有时为了数据结构的灵活性而付出一些性能是值得的。
 
 标准库中也有其他提供内部可变性的类型，比如 `Cell<T>`，它类似 `RefCell<T>` 但有一点除外：它并非提供内部值的引用，而是把值拷贝进和拷贝出 `Cell<T>`。还有 `Mutex<T>`，其提供线程间安全的内部可变性，我们将在第 16 章中讨论其用法。请查看标准库来获取更多细节关于这些不同类型之间的区别。
 
-[wheres-the---operator]: ch05-03-method-syntax.html#wheres-the---operator
+[wheres-the---operator]: ch05-03-method-syntax.html#--运算符到哪去了
