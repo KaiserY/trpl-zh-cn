@@ -1,8 +1,7 @@
 ## 所有的模式语法
 
-> [ch18-03-pattern-syntax.md](https://github.com/rust-lang/book/blob/main/src/ch18-03-pattern-syntax.md)
-> <br>
-> commit 86f0ae4831f24b3c429fa4845b900b4cad903a8b
+> [ch18-03-pattern-syntax.md](https://github.com/rust-lang/book/blob/main/src/ch18-03-pattern-syntax.md) > <br>
+> commit e72de80f114dc68f69f3920768314f7c005d0dd5
 
 通过本书我们已领略过许多不同类型模式的例子。在本节中，我们收集了模式中所有有效的语法，并讨论了为什么可能要使用每个语法。
 
@@ -11,14 +10,7 @@
 如第六章所示，可以直接匹配字面值模式。如下代码给出了一些例子：
 
 ```rust
-let x = 1;
-
-match x {
-    1 => println!("one"),
-    2 => println!("two"),
-    3 => println!("three"),
-    _ => println!("anything"),
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-01-literals/src/main.rs:here}}
 ```
 
 这段代码会打印 `one` 因为 `x` 的值是 1。如果希望代码获得特定的具体值，则该语法很有用。
@@ -30,18 +22,7 @@ match x {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = Some(5);
-    let y = 10;
-
-    match x {
-        Some(50) => println!("Got 50"),
-        Some(y) => println!("Matched, y = {:?}", y),
-        _ => println!("Default case, x = {:?}", x),
-    }
-
-    println!("at the end: x = {:?}, y = {:?}", x, y);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-11/src/main.rs:here}}
 ```
 
 <span class="caption">示例 18-11: 一个 `match` 语句其中一个分支引入了覆盖变量 `y`</span>
@@ -58,16 +39,10 @@ fn main() {
 
 ### 多个模式
 
-在 `match` 表达式中，可以使用 `|` 语法匹配多个模式，它代表 **或**（*or*）的意思。例如，如下代码将 `x` 的值与匹配分支相比较，第一个分支有 **或** 选项，意味着如果 `x` 的值匹配此分支的任一个值，它就会运行：
+在 `match` 表达式中，可以使用 `|` 语法匹配多个模式，它代表 **或**（_or_）的意思。例如，如下代码将 `x` 的值与匹配分支相比较，第一个分支有 **或** 选项，意味着如果 `x` 的值匹配此分支的任一个值，它就会运行：
 
 ```rust
-let x = 1;
-
-match x {
-    1 | 2 => println!("one or two"),
-    3 => println!("three"),
-    _ => println!("anything"),
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-02-multiple-patterns/src/main.rs:here}}
 ```
 
 上面的代码会打印 `one or two`。
@@ -77,12 +52,7 @@ match x {
 `..=` 语法允许你匹配一个闭区间范围内的值。在如下代码中，当模式匹配任何在此范围内的值时，该分支会执行：
 
 ```rust
-let x = 5;
-
-match x {
-    1..=5 => println!("one through five"),
-    _ => println!("something else"),
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-03-ranges/src/main.rs:here}}
 ```
 
 如果 `x` 是 1、2、3、4 或 5，第一个分支就会匹配。这相比使用 `|` 运算符表达相同的意思更为方便；相比 `1..=5`，使用 `|` 则不得不指定 `1 | 2 | 3 | 4 | 5`。相反指定范围就简短的多，特别是在希望匹配比如从 1 到 1000 的数字的时候！
@@ -92,20 +62,14 @@ match x {
 如下是一个使用 `char` 类型值范围的例子：
 
 ```rust
-let x = 'c';
-
-match x {
-    'a'..='j' => println!("early ASCII letter"),
-    'k'..='z' => println!("late ASCII letter"),
-    _ => println!("something else"),
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-04-ranges-of-char/src/main.rs:here}}
 ```
 
 Rust 知道 `c` 位于第一个模式的范围内，并会打印出 `early ASCII letter`。
 
 ### 解构并分解值
 
-也可以使用模式来解构结构体、枚举、元组和引用，以便使用这些值的不同部分。让我们来分别看一看。
+也可以使用模式来解构结构体、枚举和元组，以便使用这些值的不同部分。让我们来分别看一看。
 
 #### 解构结构体
 
@@ -114,18 +78,7 @@ Rust 知道 `c` 位于第一个模式的范围内，并会打印出 `early ASCII
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-fn main() {
-    let p = Point { x: 0, y: 7 };
-
-    let Point { x: a, y: b } = p;
-    assert_eq!(0, a);
-    assert_eq!(7, b);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-12/src/main.rs}}
 ```
 
 <span class="caption">示例 18-12: 解构一个结构体的字段为单独的变量</span>
@@ -137,18 +90,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-fn main() {
-    let p = Point { x: 0, y: 7 };
-
-    let Point { x, y } = p;
-    assert_eq!(0, x);
-    assert_eq!(7, y);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-13/src/main.rs}}
 ```
 
 <span class="caption">示例 18-13: 使用结构体字段简写来解构结构体字段</span>
@@ -162,20 +104,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-# struct Point {
-#     x: i32,
-#     y: i32,
-# }
-#
-fn main() {
-    let p = Point { x: 0, y: 7 };
-
-    match p {
-        Point { x, y: 0 } => println!("On the x axis at {}", x),
-        Point { x: 0, y } => println!("On the y axis at {}", y),
-        Point { x, y } => println!("On neither axis: ({}, {})", x, y),
-    }
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-14/src/main.rs:here}}
 ```
 
 <span class="caption">示例 18-14: 解构和匹配模式中的字面值</span>
@@ -193,38 +122,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-enum Message {
-    Quit,
-    Move { x: i32, y: i32 },
-    Write(String),
-    ChangeColor(i32, i32, i32),
-}
-
-fn main() {
-    let msg = Message::ChangeColor(0, 160, 255);
-
-    match msg {
-        Message::Quit => {
-            println!("The Quit variant has no data to destructure.")
-        }
-        Message::Move { x, y } => {
-            println!(
-                "Move in the x direction {} and in the y direction {}",
-                x,
-                y
-            );
-        }
-        Message::Write(text) => println!("Text message: {}", text),
-        Message::ChangeColor(r, g, b) => {
-            println!(
-                "Change the color to red {}, green {}, and blue {}",
-                r,
-                g,
-                b
-            )
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-15/src/main.rs}}
 ```
 
 <span class="caption">示例 18-15: 解构包含不同类型值成员的枚举</span>
@@ -244,41 +142,7 @@ fn main() {
 例如，我们可以重构列表 18-15 的代码来同时支持 RGB 和 HSV 色彩模式：
 
 ```rust
-enum Color {
-   Rgb(i32, i32, i32),
-   Hsv(i32, i32, i32),
-}
-
-enum Message {
-    Quit,
-    Move { x: i32, y: i32 },
-    Write(String),
-    ChangeColor(Color),
-}
-
-fn main() {
-    let msg = Message::ChangeColor(Color::Hsv(0, 160, 255));
-
-    match msg {
-        Message::ChangeColor(Color::Rgb(r, g, b)) => {
-            println!(
-                "Change the color to red {}, green {}, and blue {}",
-                r,
-                g,
-                b
-            )
-        }
-        Message::ChangeColor(Color::Hsv(h, s, v)) => {
-            println!(
-                "Change the color to hue {}, saturation {}, and value {}",
-                h,
-                s,
-                v
-            )
-        }
-        _ => ()
-    }
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-16/src/main.rs}}
 ```
 
 <span class="caption">示例 18-16: 匹配嵌套的枚举</span>
@@ -290,12 +154,7 @@ fn main() {
 甚至可以用复杂的方式来混合、匹配和嵌套解构模式。如下是一个复杂结构体的例子，其中结构体和元组嵌套在元组中，并将所有的原始类型解构出来：
 
 ```rust
-# struct Point {
-#     x: i32,
-#     y: i32,
-# }
-#
-let ((feet, inches), Point {x, y}) = ((3, 10), Point { x: 3, y: -10 });
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-05-destructuring-structs-and-tuples/src/main.rs:here}}
 ```
 
 这将复杂的类型分解成部分组件以便可以单独使用我们感兴趣的值。
@@ -313,13 +172,7 @@ let ((feet, inches), Point {x, y}) = ((3, 10), Point { x: 3, y: -10 });
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn foo(_: i32, y: i32) {
-    println!("This code only uses the y parameter: {}", y);
-}
-
-fn main() {
-    foo(3, 4);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-17/src/main.rs}}
 ```
 
 <span class="caption">示例 18-17: 在函数签名中使用 `_`</span>
@@ -333,19 +186,7 @@ fn main() {
 也可以在一个模式内部使用`_` 忽略部分值，例如，当只需要测试部分值但在期望运行的代码中没有用到其他部分时。示例 18-18 展示了负责管理设置值的代码。业务需求是用户不允许覆盖现有的自定义设置，但是可以取消设置，也可以在当前未设置时为其提供设置。
 
 ```rust
-let mut setting_value = Some(5);
-let new_setting_value = Some(10);
-
-match (setting_value, new_setting_value) {
-    (Some(_), Some(_)) => {
-        println!("Can't overwrite an existing customized value");
-    }
-    _ => {
-        setting_value = new_setting_value;
-    }
-}
-
-println!("setting is {:?}", setting_value);
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-18/src/main.rs:here}}
 ```
 
 <span class="caption">示例 18-18: 当不需要 `Some` 中的值时在模式内使用下划线来匹配 `Some` 成员</span>
@@ -357,13 +198,7 @@ println!("setting is {:?}", setting_value);
 也可以在一个模式中的多处使用下划线来忽略特定值，如示例 18-19 所示，这里忽略了一个五元元组中的第二和第四个值：
 
 ```rust
-let numbers = (2, 4, 8, 16, 32);
-
-match numbers {
-    (first, _, third, _, fifth) => {
-        println!("Some numbers: {}, {}, {}", first, third, fifth)
-    },
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-19/src/main.rs:here}}
 ```
 
 <span class="caption">示例 18-19: 忽略元组的多个部分</span>
@@ -372,15 +207,12 @@ match numbers {
 
 #### 通过在名字前以一个下划线开头来忽略未使用的变量
 
-如果你创建了一个变量却不在任何地方使用它, Rust 通常会给你一个警告，因为这可能会是个 bug。但是有时创建一个还未使用的变量是有用的，比如你正在设计原型或刚刚开始一个项目。这时你希望告诉 Rust 不要警告未使用的变量，为此可以用下划线作为变量名的开头。示例 18-20 中创建了两个未使用变量，不过当运行代码时只会得到其中一个的警告：
+如果你创建了一个变量却不在任何地方使用它, Rust 通常会给你一个警告，因为这可能会是个 bug。但是有时创建一个还未使用的变量是有用的，比如你正在设计原型或刚刚开始一个项目。这时你希望告诉 Rust 不要警告未使用的变量，为此可以用下划线作为变量名的开头。示例 18-20 中创建了两个未使用变量，不过当编译代码时只会得到其中一个的警告：
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let _x = 5;
-    let y = 10;
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-20/src/main.rs}}
 ```
 
 <span class="caption">示例 18-20: 以下划线开始变量名以便去掉未使用变量警告</span>
@@ -390,13 +222,7 @@ fn main() {
 注意, 只使用 `_` 和使用以下划线开头的名称有些微妙的不同：比如 `_x` 仍会将值绑定到变量，而 `_` 则完全不会绑定。为了展示这个区别的意义，示例 18-21 会产生一个错误。
 
 ```rust,ignore,does_not_compile
-let s = Some(String::from("Hello!"));
-
-if let Some(_s) = s {
-    println!("found a string");
-}
-
-println!("{:?}", s);
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-21/src/main.rs:here}}
 ```
 
 <span class="caption">示例 18-21: 以下划线开头的未使用变量仍然会绑定值，它可能会获取值的所有权</span>
@@ -404,13 +230,7 @@ println!("{:?}", s);
 我们会得到一个错误，因为 `s` 的值仍然会移动进 `_s`，并阻止我们再次使用 `s`。然而只使用下划线本身，并不会绑定值。示例 18-22 能够无错编译，因为 `s` 没有被移动进 `_`：
 
 ```rust
-let s = Some(String::from("Hello!"));
-
-if let Some(_) = s {
-    println!("found a string");
-}
-
-println!("{:?}", s);
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-22/src/main.rs:here}}
 ```
 
 <span class="caption">示例 18-22: 单独使用下划线不会绑定值</span>
@@ -422,17 +242,7 @@ println!("{:?}", s);
 对于有多个部分的值，可以使用 `..` 语法来只使用部分并忽略其它值，同时避免不得不每一个忽略值列出下划线。`..` 模式会忽略模式中剩余的任何没有显式匹配的值部分。在示例 18-23 中，有一个 `Point` 结构体存放了三维空间中的坐标。在 `match` 表达式中，我们希望只操作 `x` 坐标并忽略 `y` 和 `z` 字段的值：
 
 ```rust
-struct Point {
-    x: i32,
-    y: i32,
-    z: i32,
-}
-
-let origin = Point { x: 0, y: 0, z: 0 };
-
-match origin {
-    Point { x, .. } => println!("x is {}", x),
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-23/src/main.rs:here}}
 ```
 
 <span class="caption">示例 18-23: 通过使用 `..` 来忽略 `Point` 中除 `x` 以外的字段</span>
@@ -444,15 +254,7 @@ match origin {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let numbers = (2, 4, 8, 16, 32);
-
-    match numbers {
-        (first, .., last) => {
-            println!("Some numbers: {}, {}", first, last);
-        },
-    }
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-24/src/main.rs}}
 ```
 
 <span class="caption">示例 18-24: 只匹配元组中的第一个和最后一个值并忽略掉所有其它值</span>
@@ -464,45 +266,27 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let numbers = (2, 4, 8, 16, 32);
-
-    match numbers {
-        (.., second, ..) => {
-            println!("Some numbers: {}", second)
-        },
-    }
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-25/src/main.rs}}
 ```
 
 <span class="caption">示例 18-25: 尝试以有歧义的方式运用 `..`</span>
 
 如果编译上面的例子，会得到下面的错误：
 
-```text
-error: `..` can only be used once per tuple or tuple struct pattern
- --> src/main.rs:5:22
-  |
-5 |         (.., second, ..) => {
-  |                      ^^
+```console
+{{#include ../listings/ch18-patterns-and-matching/listing-18-25/output.txt}}
 ```
 
 Rust 不可能决定在元组中匹配 `second` 值之前应该忽略多少个值，以及在之后忽略多少个值。这段代码可能表明我们意在忽略 `2`，绑定 `second` 为 `4`，接着忽略 `8`、`16` 和 `32`；抑或是意在忽略 `2` 和 `4`，绑定 `second` 为 `8`，接着忽略 `16` 和 `32`，以此类推。变量名 `second` 对于 Rust 来说并没有任何特殊意义，所以会得到编译错误，因为在这两个地方使用 `..` 是有歧义的。
 
 ### 匹配守卫提供的额外条件
 
-**匹配守卫**（*match guard*）是一个指定于 `match` 分支模式之后的额外 `if` 条件，它也必须被满足才能选择此分支。匹配守卫用于表达比单独的模式所能允许的更为复杂的情况。
+**匹配守卫**（_match guard_）是一个指定于 `match` 分支模式之后的额外 `if` 条件，它也必须被满足才能选择此分支。匹配守卫用于表达比单独的模式所能允许的更为复杂的情况。
 
 这个条件可以使用模式中创建的变量。示例 18-26 展示了一个 `match`，其中第一个分支有模式 `Some(x)` 还有匹配守卫 `if x < 5`：
 
 ```rust
-let num = Some(4);
-
-match num {
-    Some(x) if x < 5 => println!("less than five: {}", x),
-    Some(x) => println!("{}", x),
-    None => (),
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-26/src/main.rs:here}}
 ```
 
 <span class="caption">示例 18-26: 在模式中加入匹配守卫</span>
@@ -511,25 +295,14 @@ match num {
 
 相反如果 `num` 为 `Some(10)`，因为 10 不小于 5 所以第一个分支的匹配守卫为假。接着 Rust 会前往第二个分支，这会匹配因为它没有匹配守卫所以会匹配任何 `Some` 成员。
 
-无法在模式中表达 `if x < 5` 的条件，所以匹配守卫提供了表现此逻辑的能力。
+无法在模式中表达 `if x % 2 == 0` 的条件，所以匹配守卫提供了表现此逻辑的能力。这种额外表现力的缺点在于当涉及匹配守卫表达式时编译器不会尝试检查穷尽性。
 
 在示例 18-11 中，我们提到可以使用匹配守卫来解决模式中变量覆盖的问题，那里 `match` 表达式的模式中新建了一个变量而不是使用 `match` 之外的同名变量。新变量意味着不能够测试外部变量的值。示例 18-27 展示了如何使用匹配守卫修复这个问题。
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = Some(5);
-    let y = 10;
-
-    match x {
-        Some(50) => println!("Got 50"),
-        Some(n) if n == y => println!("Matched, n = {}", n),
-        _ => println!("Default case, x = {:?}", x),
-    }
-
-    println!("at the end: x = {:?}, y = {}", x, y);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-27/src/main.rs}}
 ```
 
 <span class="caption">示例 18-27: 使用匹配守卫来测试与外部变量的相等性</span>
@@ -541,13 +314,7 @@ fn main() {
 也可以在匹配守卫中使用 **或** 运算符 `|` 来指定多个模式，同时匹配守卫的条件会作用于所有的模式。示例 18-28 展示了结合匹配守卫与使用了 `|` 的模式的优先级。这个例子中重要的部分是匹配守卫 `if y` 作用于 `4`、`5` **和** `6`，即使这看起来好像 `if y` 只作用于 `6`：
 
 ```rust
-let x = 4;
-let y = false;
-
-match x {
-    4 | 5 | 6 if y => println!("yes"),
-    _ => println!("no"),
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-28/src/main.rs:here}}
 ```
 
 <span class="caption">示例 18-28: 结合多个模式与匹配守卫</span>
@@ -568,26 +335,10 @@ match x {
 
 ### `@` 绑定
 
-*at* 运算符（`@`）允许我们在创建一个存放值的变量的同时测试其值是否匹配模式。示例 18-29 展示了一个例子，这里我们希望测试 `Message::Hello` 的 `id` 字段是否位于 `3..=7` 范围内，同时也希望能将其值绑定到 `id_variable` 变量中以便此分支相关联的代码可以使用它。可以将 `id_variable` 命名为 `id`，与字段同名，不过出于示例的目的这里选择了不同的名称。
+_at_ 运算符（`@`）允许我们在创建一个存放值的变量的同时测试其值是否匹配模式。示例 18-29 展示了一个例子，这里我们希望测试 `Message::Hello` 的 `id` 字段是否位于 `3..=7` 范围内，同时也希望能将其值绑定到 `id_variable` 变量中以便此分支相关联的代码可以使用它。可以将 `id_variable` 命名为 `id`，与字段同名，不过出于示例的目的这里选择了不同的名称。
 
 ```rust
-enum Message {
-    Hello { id: i32 },
-}
-
-let msg = Message::Hello { id: 5 };
-
-match msg {
-    Message::Hello { id: id_variable @ 3..=7 } => {
-        println!("Found an id in range: {}", id_variable)
-    },
-    Message::Hello { id: 10..=12 } => {
-        println!("Found an id in another range")
-    },
-    Message::Hello { id } => {
-        println!("Found some other id: {}", id)
-    },
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-29/src/main.rs:here}}
 ```
 
 <span class="caption">示例 18-29: 使用 `@` 在模式中绑定值的同时测试它</span>

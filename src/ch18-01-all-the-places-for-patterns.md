@@ -2,7 +2,7 @@
 
 > [ch18-01-all-the-places-for-patterns.md](https://github.com/rust-lang/book/blob/main/src/ch18-01-all-the-places-for-patterns.md)
 > <br>
-> commit 426f3e4ec17e539ae9905ba559411169d303a031
+> commit 8a1aad812b90126974853f80d9217e07bd226650
 
 模式出现在 Rust 的很多地方。你已经在不经意间使用了很多模式！本部分是一个所有有效模式位置的参考。
 
@@ -33,25 +33,7 @@ match VALUE {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn main() {
-    let favorite_color: Option<&str> = None;
-    let is_tuesday = false;
-    let age: Result<u8, _> = "34".parse();
-
-    if let Some(color) = favorite_color {
-        println!("Using your favorite color, {}, as the background", color);
-    } else if is_tuesday {
-        println!("Tuesday is green day!");
-    } else if let Ok(age) = age {
-        if age > 30 {
-            println!("Using purple as the background color");
-        } else {
-            println!("Using orange as the background color");
-        }
-    } else {
-        println!("Using blue as the background color");
-    }
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-01/src/main.rs}}
 ```
 
 <span class="caption">示例 18-1: 结合 `if let`、`else if`、`else if let` 以及 `else`</span>
@@ -69,15 +51,7 @@ fn main() {
 一个与 `if let` 结构类似的是 `while let` 条件循环，它允许只要模式匹配就一直进行 `while` 循环。示例 18-2 展示了一个使用 `while let` 的例子，它使用 vector 作为栈并以先进后出的方式打印出 vector 中的值：
 
 ```rust
-let mut stack = Vec::new();
-
-stack.push(1);
-stack.push(2);
-stack.push(3);
-
-while let Some(top) = stack.pop() {
-    println!("{}", top);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-02/src/main.rs:here}}
 ```
 
 <span class="caption">列表 18-2: 使用 `while let` 循环只要 `stack.pop()` 返回 `Some` 就打印出其值</span>
@@ -91,24 +65,18 @@ while let Some(top) = stack.pop() {
 示例 18-3 中展示了如何使用 `for` 循环来解构，或拆开一个元组作为 `for` 循环的一部分：
 
 ```rust
-let v = vec!['a', 'b', 'c'];
-
-for (index, value) in v.iter().enumerate() {
-    println!("{} is at index {}", value, index);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-03/src/main.rs:here}}
 ```
 
 <span class="caption">列表 18-3: 在 `for` 循环中使用模式来解构元组</span>
 
 示例 18-3 的代码会打印出：
 
-```text
-a is at index 0
-b is at index 1
-c is at index 2
+```console
+{{#include ../listings/ch18-patterns-and-matching/listing-18-03/output.txt}}
 ```
 
-这里使用 `enumerate` 方法适配一个迭代器来产生一个值和其在迭代器中的索引，他们位于一个元组中。第一个 `enumerate` 调用会产生元组 `(0, 'a')`。当这个值匹配模式 `(index, value)`，`index` 将会是 0 而 `value` 将会是  `'a'`，并打印出第一行输出。
+这里使用 `enumerate` 方法适配一个迭代器来产生一个值和其在迭代器中的索引，他们位于一个元组中。第一个产生的值是元组 `(0, 'a')`。当这个值匹配模式 `(index, value)`，`index` 将会是 0 而 `value` 将会是  `'a'`，并打印出第一行输出。
 
 ### `let` 语句
 
@@ -129,7 +97,7 @@ let PATTERN = EXPRESSION;
 为了更清楚的理解 `let` 的模式匹配方面的内容，考虑示例 18-4 中使用 `let` 和模式解构一个元组：
 
 ```rust
-let (x, y, z) = (1, 2, 3);
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-04/src/main.rs:here}}
 ```
 
 <span class="caption">示例 18-4: 使用模式解构元组并一次创建三个变量</span>
@@ -139,22 +107,15 @@ let (x, y, z) = (1, 2, 3);
 如果模式中元素的数量不匹配元组中元素的数量，则整个类型不匹配，并会得到一个编译时错误。例如，示例 18-5 展示了尝试用两个变量解构三个元素的元组，这是不行的：
 
 ```rust,ignore,does_not_compile
-let (x, y) = (1, 2, 3);
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-05/src/main.rs:here}}
 ```
 
 <span class="caption">示例 18-5: 一个错误的模式结构，其中变量的数量不符合元组中元素的数量</span>
 
 尝试编译这段代码会给出如下类型错误：
 
-```text
-error[E0308]: mismatched types
- --> src/main.rs:2:9
-  |
-2 |     let (x, y) = (1, 2, 3);
-  |         ^^^^^^ expected a tuple with 3 elements, found one with 2 elements
-  |
-  = note: expected type `({integer}, {integer}, {integer})`
-             found type `(_, _)`
+```console
+{{#include ../listings/ch18-patterns-and-matching/listing-18-05/output.txt}}
 ```
 
 如果希望忽略元组中一个或多个值，也可以使用 `_` 或 `..`，如 [“忽略模式中的值”][ignoring-values-in-a-pattern]  部分所示。如果问题是模式中有太多的变量，则解决方法是通过去掉变量使得变量数与元组中元素数相等。
@@ -164,9 +125,7 @@ error[E0308]: mismatched types
 函数参数也可以是模式。列表 18-6 中的代码声明了一个叫做 `foo` 的函数，它获取一个 `i32` 类型的参数 `x`，现在这看起来应该很熟悉：
 
 ```rust
-fn foo(x: i32) {
-    // 代码
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-06/src/main.rs:here}}
 ```
 
 <span class="caption">列表 18-6: 在参数中使用模式的函数签名</span>
@@ -176,14 +135,7 @@ fn foo(x: i32) {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn print_coordinates(&(x, y): &(i32, i32)) {
-    println!("Current location: ({}, {})", x, y);
-}
-
-fn main() {
-    let point = (3, 5);
-    print_coordinates(&point);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-07/src/main.rs}}
 ```
 
 <span class="caption">列表 18-7: 一个在参数中解构元组的函数</span>
@@ -195,4 +147,4 @@ fn main() {
 现在我们见过了很多使用模式的方式了，不过模式在每个使用它的地方并不以相同的方式工作；在一些地方，模式必须是 *irrefutable* 的，意味着他们必须匹配所提供的任何值。在另一些情况，他们则可以是 refutable 的。接下来让我们讨论这两个概念。
 
 [ignoring-values-in-a-pattern]:
-ch18-03-pattern-syntax.html#ignoring-values-in-a-pattern
+ch18-03-pattern-syntax.html#忽略模式中的值
