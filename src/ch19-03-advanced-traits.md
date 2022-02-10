@@ -2,7 +2,7 @@
 
 > [ch19-03-advanced-traits.md](https://github.com/rust-lang/book/blob/main/src/ch19-03-advanced-traits.md)
 > <br>
-> commit 426f3e4ec17e539ae9905ba559411169d303a031
+> commit 81d05c9a6d06d79f2a85c8ea184f41dc82532d98
 
 第十章 [“trait：定义共享的行为”][traits-defining-shared-behavior]  部分，我们第一次涉及到了 trait，不过就像生命周期一样，我们并没有覆盖一些较为高级的细节。现在我们更加了解 Rust 了，可以深入理解其本质了。
 
@@ -14,12 +14,8 @@
 
 一个带有关联类型的 trait 的例子是标准库提供的 `Iterator` trait。它有一个叫做 `Item` 的关联类型来替代遍历的值的类型。第十三章的 [“`Iterator` trait 和 `next` 方法”][the-iterator-trait-and-the-next-method] 部分曾提到过 `Iterator` trait 的定义如示例 19-12 所示：
 
-```rust
-pub trait Iterator {
-    type Item;
-
-    fn next(&mut self) -> Option<Self::Item>;
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-12/src/lib.rs}}
 ```
 
 <span class="caption">示例 19-12: `Iterator` trait 的定义中带有关联类型 `Item`</span>
@@ -33,19 +29,13 @@ pub trait Iterator {
 <span class="filename">文件名: src/lib.rs</span>
 
 ```rust,ignore
-impl Iterator for Counter {
-    type Item = u32;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        // --snip--
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-13-21-reproduced/src/lib.rs:ch19}}
 ```
 
 这类似于泛型。那么为什么 `Iterator` trait 不像示例 19-13 那样定义呢？
 
-```rust
-pub trait Iterator<T> {
-    fn next(&mut self) -> Option<T>;
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-13/src/lib.rs}}
 ```
 
 <span class="caption">示例 19-13: 一个使用泛型的 `Iterator` trait 假想定义</span>
@@ -65,29 +55,7 @@ Rust 并不允许创建自定义运算符或重载任意运算符，不过 `std:
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-use std::ops::Add;
-
-#[derive(Debug, PartialEq)]
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-impl Add for Point {
-    type Output = Point;
-
-    fn add(self, other: Point) -> Point {
-        Point {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
-    }
-}
-
-fn main() {
-    assert_eq!(Point { x: 1, y: 0 } + Point { x: 2, y: 3 },
-               Point { x: 3, y: 3 });
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-14/src/main.rs}}
 ```
 
 <span class="caption">示例 19-14: 实现 `Add` trait 重载 `Point` 实例的 `+` 运算符</span>
@@ -97,39 +65,28 @@ fn main() {
 这里默认泛型类型位于 `Add` trait 中。这里是其定义：
 
 ```rust
-trait Add<RHS=Self> {
+trait Add<Rhs=Self> {
     type Output;
 
-    fn add(self, rhs: RHS) -> Self::Output;
+    fn add(self, rhs: Rhs) -> Self::Output;
 }
 ```
 
-这看来应该很熟悉，这是一个带有一个方法和一个关联类型的 trait。比较陌生的部分是尖括号中的 `RHS=Self`：这个语法叫做 **默认类型参数**（*default type parameters*）。`RHS` 是一个泛型类型参数（“right hand side” 的缩写），它用于定义 `add` 方法中的 `rhs` 参数。如果实现 `Add` trait 时不指定 `RHS` 的具体类型，`RHS` 的类型将是默认的 `Self` 类型，也就是在其上实现 `Add` 的类型。
+这些代码看来应该很熟悉，这是一个带有一个方法和一个关联类型的 trait。比较陌生的部分是尖括号中的 `Rhs=Self`：这个语法叫做 **默认类型参数**（*default type parameters*）。`Rhs` 是一个泛型类型参数（“right hand side” 的缩写），它用于定义 `add` 方法中的 `rhs` 参数。如果实现 `Add` trait 时不指定 `Rhs` 的具体类型，`Rhs` 的类型将是默认的 `Self` 类型，也就是在其上实现 `Add` 的类型。
 
-当为 `Point` 实现 `Add` 时，使用了默认的 `RHS`，因为我们希望将两个 `Point` 实例相加。让我们看看一个实现 `Add` trait 时希望自定义 `RHS` 类型而不是使用默认类型的例子。
+当为 `Point` 实现 `Add` 时，使用了默认的 `Rhs`，因为我们希望将两个 `Point` 实例相加。让我们看看一个实现 `Add` trait 时希望自定义 `Rhs` 类型而不是使用默认类型的例子。
 
-这里有两个存放不同单元值的结构体，`Millimeters` 和 `Meters`。我们希望能够将毫米值与米值相加，并让 `Add` 的实现正确处理转换。可以为 `Millimeters` 实现 `Add` 并以 `Meters` 作为 `RHS`，如示例 19-15 所示。
+这里有两个存放不同单元值的结构体，`Millimeters` 和 `Meters`。（这种将现有类型简单封装进另一个结构体的方式被称为 **newtype 模式**（*newtype pattern*，之后的 [“为了类型安全和抽象而使用 newtype 模式”][newtype] 部分会详细介绍。）我们希望能够将毫米值与米值相加，并让 `Add` 的实现正确处理转换。可以为 `Millimeters` 实现 `Add` 并以 `Meters` 作为 `Rhs`，如示例 19-15 所示。
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-use std::ops::Add;
-
-struct Millimeters(u32);
-struct Meters(u32);
-
-impl Add<Meters> for Millimeters {
-    type Output = Millimeters;
-
-    fn add(self, other: Meters) -> Millimeters {
-        Millimeters(self.0 + (other.0 * 1000))
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-15/src/lib.rs}}
 ```
 
 <span class="caption">示例 19-15: 在 `Millimeters` 上实现 `Add`，以便能够将 `Millimeters` 与 `Meters` 相加</span>
 
-为了使 `Millimeters` 和 `Meters` 能够相加，我们指定 `impl Add<Meters>` 来设定 `RHS` 类型参数的值而不是使用默认的 `Self`。
+为了使 `Millimeters` 和 `Meters` 能够相加，我们指定 `impl Add<Meters>` 来设定 `Rhs` 类型参数的值而不是使用默认的 `Self`。
 
 默认参数类型主要用于如下两个方面：
 
@@ -149,33 +106,7 @@ Rust 既不能避免一个 trait 与另一个 trait 拥有相同名称的方法�
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-trait Pilot {
-    fn fly(&self);
-}
-
-trait Wizard {
-    fn fly(&self);
-}
-
-struct Human;
-
-impl Pilot for Human {
-    fn fly(&self) {
-        println!("This is your captain speaking.");
-    }
-}
-
-impl Wizard for Human {
-    fn fly(&self) {
-        println!("Up!");
-    }
-}
-
-impl Human {
-    fn fly(&self) {
-        println!("*waving arms furiously*");
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-16/src/main.rs:here}}
 ```
 
 <span class="caption">示例 19-16: 两个 trait 定义为拥有 `fly` 方法，并在直接定义有 `fly` 方法的 `Human` 类型上实现这两个 trait</span>
@@ -185,38 +116,7 @@ impl Human {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-# trait Pilot {
-#     fn fly(&self);
-# }
-#
-# trait Wizard {
-#     fn fly(&self);
-# }
-#
-# struct Human;
-#
-# impl Pilot for Human {
-#     fn fly(&self) {
-#         println!("This is your captain speaking.");
-#     }
-# }
-#
-# impl Wizard for Human {
-#     fn fly(&self) {
-#         println!("Up!");
-#     }
-# }
-#
-# impl Human {
-#     fn fly(&self) {
-#         println!("*waving arms furiously*");
-#     }
-# }
-#
-fn main() {
-    let person = Human;
-    person.fly();
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-17/src/main.rs:here}}
 ```
 
 <span class="caption">示例 19-17: 调用 `Human` 实例的 `fly`</span>
@@ -228,40 +128,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-# trait Pilot {
-#     fn fly(&self);
-# }
-#
-# trait Wizard {
-#     fn fly(&self);
-# }
-#
-# struct Human;
-#
-# impl Pilot for Human {
-#     fn fly(&self) {
-#         println!("This is your captain speaking.");
-#     }
-# }
-#
-# impl Wizard for Human {
-#     fn fly(&self) {
-#         println!("Up!");
-#     }
-# }
-#
-# impl Human {
-#     fn fly(&self) {
-#         println!("*waving arms furiously*");
-#     }
-# }
-#
-fn main() {
-    let person = Human;
-    Pilot::fly(&person);
-    Wizard::fly(&person);
-    person.fly();
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-18/src/main.rs:here}}
 ```
 
 <span class="caption">示例 19-18: 指定我们希望调用哪一个 trait 的 `fly` 方法</span>
@@ -270,10 +137,8 @@ fn main() {
 
 运行这段代码会打印出：
 
-```text
-This is your captain speaking.
-Up!
-*waving arms furiously*
+```console
+{{#include ../listings/ch19-advanced-features/listing-19-18/output.txt}}
 ```
 
 因为 `fly` 方法获取一个 `self` 参数，如果有两个 **类型** 都实现了同一 **trait**，Rust 可以根据 `self` 的类型计算出应该使用哪一个 trait 实现。
@@ -283,27 +148,7 @@ Up!
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-trait Animal {
-    fn baby_name() -> String;
-}
-
-struct Dog;
-
-impl Dog {
-    fn baby_name() -> String {
-        String::from("Spot")
-    }
-}
-
-impl Animal for Dog {
-    fn baby_name() -> String {
-        String::from("puppy")
-    }
-}
-
-fn main() {
-    println!("A baby dog is called a {}", Dog::baby_name());
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-19/src/main.rs}}
 ```
 
 <span class="caption">示例 19-19: 一个带有关联函数的 trait 和一个带有同名关联函数并实现了此 trait 的类型</span>
@@ -312,8 +157,8 @@ fn main() {
 
 在 `main` 调用了 `Dog::baby_name` 函数，它直接调用了定义于 `Dog` 之上的关联函数。这段代码会打印出：
 
-```text
-A baby dog is called a Spot
+```console
+{{#include ../listings/ch19-advanced-features/listing-19-19/output.txt}}
 ```
 
 这并不是我们需要的。我们希望调用的是 `Dog` 上 `Animal` trait 实现那部分的 `baby_name` 函数，这样能够打印出 `A baby dog is called a puppy`。示例 19-18 中用到的技术在这并不管用；如果将 `main` 改为示例 19-20 中的代码，则会得到一个编译错误：
@@ -321,23 +166,15 @@ A baby dog is called a Spot
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    println!("A baby dog is called a {}", Animal::baby_name());
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-20/src/main.rs:here}}
 ```
 
 <span class="caption">示例 19-20: 尝试调用 `Animal` trait 的 `baby_name` 函数，不过 Rust 并不知道该使用哪一个实现</span>
 
 因为 `Animal::baby_name` 是关联函数而不是方法，因此它没有 `self` 参数，Rust 无法计算出所需的是哪一个 `Animal::baby_name` 实现。我们会得到这个编译错误：
 
-```text
-error[E0283]: type annotations required: cannot resolve `_: Animal`
-  --> src/main.rs:20:43
-   |
-20 |     println!("A baby dog is called a {}", Animal::baby_name());
-   |                                           ^^^^^^^^^^^^^^^^^
-   |
-   = note: required by `Animal::baby_name`
+```console
+{{#include ../listings/ch19-advanced-features/listing-19-20/output.txt}}
 ```
 
 为了消歧义并告诉 Rust 我们希望使用的是 `Dog` 的 `Animal` 实现，需要使用 **完全限定语法**，这是调用函数时最为明确的方式。示例 19-21 展示了如何使用完全限定语法：
@@ -345,35 +182,15 @@ error[E0283]: type annotations required: cannot resolve `_: Animal`
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-# trait Animal {
-#     fn baby_name() -> String;
-# }
-#
-# struct Dog;
-#
-# impl Dog {
-#     fn baby_name() -> String {
-#         String::from("Spot")
-#     }
-# }
-#
-# impl Animal for Dog {
-#     fn baby_name() -> String {
-#         String::from("puppy")
-#     }
-# }
-#
-fn main() {
-    println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-21/src/main.rs:here}}
 ```
 
 <span class="caption">示例 19-21: 使用完全限定语法来指定我们希望调用的是 `Dog` 上 `Animal` trait 实现中的 `baby_name` 函数</span>
 
 我们在尖括号中向 Rust 提供了类型注解，并通过在此函数调用中将 `Dog` 类型当作 `Animal` 对待，来指定希望调用的是 `Dog` 上 `Animal` trait 实现中的 `baby_name` 函数。现在这段代码会打印出我们期望的数据：
 
-```text
-A baby dog is called a puppy
+```console
+{{#include ../listings/ch19-advanced-features/listing-19-21/output.txt}}
 ```
 
 通常，完全限定语法定义为：
@@ -403,19 +220,7 @@ A baby dog is called a puppy
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-use std::fmt;
-
-trait OutlinePrint: fmt::Display {
-    fn outline_print(&self) {
-        let output = self.to_string();
-        let len = output.len();
-        println!("{}", "*".repeat(len + 4));
-        println!("*{}*", " ".repeat(len + 2));
-        println!("* {} *", output);
-        println!("*{}*", " ".repeat(len + 2));
-        println!("{}", "*".repeat(len + 4));
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-22/src/main.rs:here}}
 ```
 
 <span class="caption">示例 19-22: 实现 `OutlinePrint` trait，它要求来自 `Display` 的功能</span>
@@ -426,27 +231,14 @@ trait OutlinePrint: fmt::Display {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust
-# trait OutlinePrint {}
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-impl OutlinePrint for Point {}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-02-impl-outlineprint-for-point/src/main.rs:here}}
 ```
 
 这样会得到一个错误说 `Display` 是必须的而未被实现：
 
-```text
-error[E0277]: the trait bound `Point: std::fmt::Display` is not satisfied
-  --> src/main.rs:20:6
-   |
-20 | impl OutlinePrint for Point {}
-   |      ^^^^^^^^^^^^ `Point` cannot be formatted with the default formatter;
-try using `:?` instead if you are using a format string
-   |
-   = help: the trait `std::fmt::Display` is not implemented for `Point`
+```console
+{{#include ../listings/ch19-advanced-features/no-listing-02-impl-outlineprint-for-point/output.txt}}
 ```
 
 一旦在 `Point` 上实现 `Display` 并满足 `OutlinePrint` 要求的限制，比如这样：
@@ -454,18 +246,7 @@ try using `:?` instead if you are using a format string
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-# struct Point {
-#     x: i32,
-#     y: i32,
-# }
-#
-use std::fmt;
-
-impl fmt::Display for Point {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "({}, {})", self.x, self.y)
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-03-impl-display-for-point/src/main.rs:here}}
 ```
 
 那么在 `Point` 上实现 `OutlinePrint` trait 将能成功编译，并可以在 `Point` 实例上调用 `outline_print` 来显示位于星号框中的点的值。
@@ -474,28 +255,15 @@ impl fmt::Display for Point {
 
 在第十章的 [“为类型实现 trait”][implementing-a-trait-on-a-type] 部分，我们提到了孤儿规则（orphan rule），它说明只要 trait 或类型对于当前 crate 是本地的话就可以在此类型上实现该 trait。一个绕开这个限制的方法是使用 **newtype 模式**（*newtype pattern*），它涉及到在一个元组结构体（第五章 [“用没有命名字段的元组结构体来创建不同的类型”][tuple-structs]  部分介绍了元组结构体）中创建一个新类型。这个元组结构体带有一个字段作为希望实现 trait 的类型的简单封装。接着这个封装类型对于 crate 是本地的，这样就可以在这个封装上实现 trait。*Newtype* 是一个源自 ~~（U.C.0079，逃）~~ Haskell 编程语言的概念。使用这个模式没有运行时性能惩罚，这个封装类型在编译时就被省略了。
 
-例如，如果想要在 `Vec<T>` 上实现 `Display`，而孤儿规则阻止我们直接这么做，因为 `Display` trait 和 `Vec<T>` 都定义于我们的 crate 之外。可以创建一个包含 `Vec<T>` 实例的 `Wrapper` 结构体，接着可以如列表 19-31 那样在 `Wrapper` 上实现 `Display` 并使用 `Vec<T>` 的值：
+例如，如果想要在 `Vec<T>` 上实现 `Display`，而孤儿规则阻止我们直接这么做，因为 `Display` trait 和 `Vec<T>` 都定义于我们的 crate 之外。可以创建一个包含 `Vec<T>` 实例的 `Wrapper` 结构体，接着可以如列表 19-23 那样在 `Wrapper` 上实现 `Display` 并使用 `Vec<T>` 的值：
 
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-use std::fmt;
-
-struct Wrapper(Vec<String>);
-
-impl fmt::Display for Wrapper {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "[{}]", self.0.join(", "))
-    }
-}
-
-fn main() {
-    let w = Wrapper(vec![String::from("hello"), String::from("world")]);
-    println!("w = {}", w);
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-23/src/main.rs}}
 ```
 
-<span class="caption">示例 19-31: 创建 `Wrapper` 类型封装 `Vec<String>` 以便能够实现 `Display`</span>
+<span class="caption">示例 19-23: 创建 `Wrapper` 类型封装 `Vec<String>` 以便能够实现 `Display`</span>
 
 `Display` 的实现使用 `self.0` 来访问其内部的 `Vec<T>`，因为 `Wrapper` 是元组结构体而 `Vec<T>` 是结构体总位于索引 0 的项。接着就可以使用 `Wrapper` 中 `Display` 的功能了。
 
@@ -503,6 +271,7 @@ fn main() {
 
 上面便是 newtype 模式如何与 trait 结合使用的；还有一个不涉及 trait 的实用模式。现在让我们将话题的焦点转移到一些与 Rust 类型系统交互的高级方法上来吧。
 
+[newtype]: ch19-04-advanced-types.html#为了类型安全和抽象而使用-newtype-模式
 [implementing-a-trait-on-a-type]: ch10-02-traits.html#为类型实现-trait
 [the-iterator-trait-and-the-next-method]: ch13-02-iterators.html#iterator-trait-和-next-方法
 [traits-defining-shared-behavior]: ch10-02-traits.html#trait定义共享的行为

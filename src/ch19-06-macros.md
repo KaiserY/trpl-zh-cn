@@ -2,7 +2,7 @@
 
 > [ch19-06-macros.md](https://github.com/rust-lang/book/blob/main/src/ch19-06-macros.md)
 > <br>
-> commit 7ddc46460f09a5cd9bd2a620565bdc20b3315ea9
+> commit acc806a06b5a23c7397b7218aecec0e774619512
 
 我们已经在本书中使用过像 `println!` 这样的宏了，不过还没完全探索什么是宏以及它是如何工作的。**宏**（*Macro*）指的是 Rust 中一系列的功能：使用 `macro_rules!` 的 **声明**（*Declarative*）宏，和三种 **过程**（*Procedural*）宏：
 
@@ -40,19 +40,8 @@ let v: Vec<u32> = vec![1, 2, 3];
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-#[macro_export]
-macro_rules! vec {
-    ( $( $x:expr ),* ) => {
-        {
-            let mut temp_vec = Vec::new();
-            $(
-                temp_vec.push($x);
-            )*
-            temp_vec
-        }
-    };
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-28/src/lib.rs}}
 ```
 
 <span class="caption">示例 19-28: 一个 `vec!` 宏定义的简化版本</span>
@@ -68,7 +57,7 @@ macro_rules! vec {
 
 宏定义中有效模式语法和在第十八章提及的模式语法是不同的，因为宏模式所匹配的是 Rust 代码结构而不是值。回过头来检查下示例 19-28 中模式片段什么意思。对于全部的宏模式语法，请查阅[参考]。
 
-[参考]: https://doc.rust-lang.org/reference/macros.html
+[参考]: https://doc.rust-lang.org/reference/macros-by-example.html
 
 首先，一对括号包含了整个模式。接下来是美元符号（ `$` ），后跟一对括号，捕获了符合括号内模式的值以用于替换后的代码。`$()` 内则是 `$x:expr` ，其匹配 Rust 的任意表达式，并将该表达式记作 `$x`。
 
@@ -79,18 +68,20 @@ macro_rules! vec {
 现在让我们来看看与此单边模式相关联的代码块中的模式：对于每个（在 `=>` 前面）匹配模式中的 `$()` 的部分，生成零个或更多个（在 `=>` 后面）位于 `$()*` 内的 `temp_vec.push()` ，生成的个数取决于该模式被匹配的次数。`$x` 由每个与之相匹配的表达式所替换。当以 `vec![1, 2, 3];` 调用该宏时，替换该宏调用所生成的代码会是下面这样：
 
 ```rust,ignore
-let mut temp_vec = Vec::new();
-temp_vec.push(1);
-temp_vec.push(2);
-temp_vec.push(3);
-temp_vec
+{
+    let mut temp_vec = Vec::new();
+    temp_vec.push(1);
+    temp_vec.push(2);
+    temp_vec.push(3);
+    temp_vec
+}
 ```
 
 我们已经定义了一个宏，其可以接收任意数量和类型的参数，同时可以生成能够创建包含指定元素的 vector 的代码。
 
 `macro_rules!` 中有一些奇怪的地方。在将来，会有第二种采用 `macro` 关键字的声明宏，其工作方式类似但修复了这些极端情况。在此之后，`macro_rules!` 实际上就过时（deprecated）了。在此基础之上，同时鉴于大多数 Rust 程序员 **使用** 宏而非 **编写** 宏的事实，此处不再深入探讨 `macro_rules!`。请查阅在线文档或其他资源，如 [“The Little Book of Rust Macros”][tlborm] 来更多地了解如何写宏。
 
-[tlborm]: https://danielkeep.github.io/tlborm/book/index.html
+[tlborm]: https://veykril.github.io/tlborm/
 
 ### 用于从属性生成代码的过程宏
 
@@ -114,7 +105,7 @@ pub fn some_name(input: TokenStream) -> TokenStream {
 
 定义过程宏的函数以 TokenStream 作为输入并生成 TokenStream 作为输出。 TokenStream 类型由包含在 Rust 中的 proc_macro crate 定义并表示令牌序列。 这是宏的核心：宏所操作的源代码构成了输入 TokenStream，宏产生的代码是输出 TokenStream。 该函数还附加了一个属性，用于指定我们正在创建的程序宏类型。 我们可以在同一个 crate 中拥有多种程序宏。
 
-让我们看看不同种类的程序宏。 我们将从一个自定义的派生宏开始，然后解释使其他形式不同的小差异。 
+让我们看看不同种类的程序宏。 我们将从一个自定义的派生宏开始，然后解释使其他形式不同的小差异。
 
 ### 如何编写自定义 `derive` 宏
 
@@ -122,23 +113,15 @@ pub fn some_name(input: TokenStream) -> TokenStream {
 
 <span class="filename">文件名: src/main.rs</span>
 
-```rust,ignore
-use hello_macro::HelloMacro;
-use hello_macro_derive::HelloMacro;
-
-#[derive(HelloMacro)]
-struct Pancakes;
-
-fn main() {
-    Pancakes::hello_macro();
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-30/src/main.rs}}
 ```
 
 <span class="caption">示例 19-30: crate 用户所写的能够使用过程式宏的代码</span>
 
 运行该代码将会打印 `Hello, Macro! My name is Pancakes!` 第一步是像下面这样新建一个库 crate：
 
-```text
+```console
 $ cargo new hello_macro --lib
 ```
 
@@ -146,28 +129,14 @@ $ cargo new hello_macro --lib
 
 <span class="filename">文件名: src/lib.rs</span>
 
-```rust
-pub trait HelloMacro {
-    fn hello_macro();
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-20-impl-hellomacro-for-pancakes/hello_macro/src/lib.rs}}
 ```
 
 现在有了一个包含函数的 trait 。此时，crate 用户可以实现该 trait 以达到其期望的功能，像这样：
 
 ```rust,ignore
-use hello_macro::HelloMacro;
-
-struct Pancakes;
-
-impl HelloMacro for Pancakes {
-    fn hello_macro() {
-        println!("Hello, Macro! My name is Pancakes!");
-    }
-}
-
-fn main() {
-    Pancakes::hello_macro();
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-20-impl-hellomacro-for-pancakes/pancakes/src/main.rs}}
 ```
 
 然而，他们需要为每一个他们想使用 `hello_macro` 的类型编写实现的代码块。我们希望为其节约这些工作。
@@ -176,7 +145,7 @@ fn main() {
 
 下一步是定义过程式宏。在编写本部分时，过程式宏必须在其自己的 crate 内。该限制最终可能被取消。构造 crate 和其中宏的惯例如下：对于一个 `foo` 的包来说，一个自定义的派生过程宏的包被称为 `foo_derive` 。在 `hello_macro` 项目中新建名为 `hello_macro_derive` 的包。
 
-```text
+```console
 $ cargo new hello_macro_derive --lib
 ```
 
@@ -187,45 +156,15 @@ $ cargo new hello_macro_derive --lib
 <span class="filename">文件名: hello_macro_derive/Cargo.toml</span>
 
 ```toml
-[lib]
-proc-macro = true
-
-[dependencies]
-syn = "1.0"
-quote = "1.0"
+{{#include ../listings/ch19-advanced-features/listing-19-31/hello_macro/hello_macro_derive/Cargo.toml:6:12}}
 ```
 
 为定义一个过程式宏，请将示例 19-31 中的代码放在 `hello_macro_derive` crate 的 *src/lib.rs* 文件里面。注意这段代码在我们添加 `impl_hello_macro` 函数的定义之前是无法编译的。
 
 <span class="filename">文件名: hello_macro_derive/src/lib.rs</span>
 
-<!--
-This usage of `extern crate` is required for the moment with 1.31.0, see:
-https://github.com/rust-lang/rust/issues/54418
-https://github.com/rust-lang/rust/pull/54658
-https://github.com/rust-lang/rust/issues/55599
--->
-
-> 在 Rust 1.31.0 时，`extern crate` 仍是必须的，请查看 <br />
-> https://github.com/rust-lang/rust/issues/54418 <br />
-> https://github.com/rust-lang/rust/pull/54658 <br />
-> https://github.com/rust-lang/rust/issues/55599
-
-```rust,ignore
-extern crate proc_macro;
-
-use crate::proc_macro::TokenStream;
-use quote::quote;
-use syn;
-
-#[proc_macro_derive(HelloMacro)]
-pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
-    // 将 Rust 代码解析为语法树以便进行操作
-    let ast = syn::parse(input).unwrap();
-
-    // 构建 trait 实现
-    impl_hello_macro(&ast)
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-31/hello_macro/hello_macro_derive/src/lib.rs}}
 ```
 
 <span class="caption">示例 19-31: 大多数过程式宏处理 Rust 代码时所需的代码</span>
@@ -278,17 +217,7 @@ DeriveInput {
 <span class="filename">文件名: hello_macro_derive/src/lib.rs</span>
 
 ```rust,ignore
-fn impl_hello_macro(ast: &syn::DeriveInput) -> TokenStream {
-    let name = &ast.ident;
-    let gen = quote! {
-        impl HelloMacro for #name {
-            fn hello_macro() {
-                println!("Hello, Macro! My name is {}", stringify!(#name));
-            }
-        }
-    };
-    gen.into()
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-33/hello_macro/hello_macro_derive/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 19-33: 使用解析过的 Rust 代码实现 `HelloMacro` trait</span>
@@ -308,9 +237,7 @@ fn impl_hello_macro(ast: &syn::DeriveInput) -> TokenStream {
 此时，`cargo build` 应该都能成功编译 `hello_macro` 和 `hello_macro_derive` 。我们将这些 crate 连接到示例 19-30 的代码中来看看过程宏的行为！在 *projects* 目录下用 `cargo new pancakes` 命令新建一个二进制项目。需要将 `hello_macro` 和 `hello_macro_derive` 作为依赖加到 `pancakes` 包的 *Cargo.toml*  文件中去。如果你正将 `hello_macro` 和 `hello_macro_derive` 的版本发布到 [crates.io](https://crates.io/) 上，其应为常规依赖；如果不是，则可以像下面这样将其指定为 `path` 依赖：
 
 ```toml
-[dependencies]
-hello_macro = { path = "../hello_macro" }
-hello_macro_derive = { path = "../hello_macro/hello_macro_derive" }
+{{#include ../listings/ch19-advanced-features/no-listing-21-pancakes/pancakes/Cargo.toml:7:9}}
 ```
 
 把示例 19-30 中的代码放在 *src/main.rs* ，然后执行 `cargo run`：其应该打印 `Hello, Macro! My name is Pancakes!`。其包含了该过程宏中 `HelloMacro` trait 的实现，而无需 `pancakes` crate 实现它；`#[derive(HelloMacro)]` 增加了该 trait 实现。

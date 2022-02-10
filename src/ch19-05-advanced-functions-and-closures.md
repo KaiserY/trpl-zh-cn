@@ -2,7 +2,7 @@
 
 > [ch19-05-advanced-functions-and-closures.md](https://github.com/rust-lang/book/blob/main/src/ch19-05-advanced-functions-and-closures.md)
 > <br>
-> commit 426f3e4ec17e539ae9905ba559411169d303a031
+> commit 9e30688e0ac4a1ad86fc60aa380bebfb1c34b8a7
 
 接下来我们将探索一些有关函数和闭包的高级功能：函数指针以及返回值闭包。
 
@@ -13,19 +13,7 @@
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-fn add_one(x: i32) -> i32 {
-    x + 1
-}
-
-fn do_twice(f: fn(i32) -> i32, arg: i32) -> i32 {
-    f(arg) + f(arg)
-}
-
-fn main() {
-    let answer = do_twice(add_one, 5);
-
-    println!("The answer is: {}", answer);
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-27/src/main.rs}}
 ```
 
 <span class="caption">示例 19-27: 使用 `fn` 类型接受函数指针作为参数</span>
@@ -41,21 +29,13 @@ fn main() {
 作为一个既可以使用内联定义的闭包又可以使用命名函数的例子，让我们看看一个 `map` 的应用。使用 `map` 函数将一个数字 vector 转换为一个字符串 vector，就可以使用闭包，比如这样：
 
 ```rust
-let list_of_numbers = vec![1, 2, 3];
-let list_of_strings: Vec<String> = list_of_numbers
-    .iter()
-    .map(|i| i.to_string())
-    .collect();
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-15-map-closure/src/main.rs:here}}
 ```
 
 或者可以将函数作为 `map` 的参数来代替闭包，像是这样：
 
 ```rust
-let list_of_numbers = vec![1, 2, 3];
-let list_of_strings: Vec<String> = list_of_numbers
-    .iter()
-    .map(ToString::to_string)
-    .collect();
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-16-map-function/src/main.rs:here}}
 ```
 
 注意这里必须使用 [“高级 trait”][advanced-traits]  部分讲到的完全限定语法，因为存在多个叫做 `to_string` 的函数；这里使用了定义于 `ToString` trait 的 `to_string` 函数，标准库为所有实现了 `Display` 的类型实现了这个 trait。
@@ -63,15 +43,7 @@ let list_of_strings: Vec<String> = list_of_numbers
 另一个实用的模式暴露了元组结构体和元组结构体枚举成员的实现细节。这些项使用 `()` 作为初始化语法，这看起来就像函数调用，同时它们确实被实现为返回由参数构造的实例的函数。它们也被称为实现了闭包 trait 的函数指针，并可以采用类似如下的方式调用：
 
 ```rust
-enum Status {
-    Value(u32),
-    Stop,
-}
-
-let list_of_statuses: Vec<Status> =
-    (0u32..20)
-    .map(Status::Value)
-    .collect();
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-17-map-initializer/src/main.rs:here}}
 ```
 
 这里创建了 `Status::Value` 实例，它通过 `map` 用范围的每一个 `u32` 值调用 `Status::Value` 的初始化函数。一些人倾向于函数风格，一些人喜欢闭包。这两种形式最终都会产生同样的代码，所以请使用对你来说更明白的形式吧。
@@ -83,33 +55,19 @@ let list_of_statuses: Vec<Status> =
 这段代码尝试直接返回闭包，它并不能编译：
 
 ```rust,ignore,does_not_compile
-fn returns_closure() -> Fn(i32) -> i32 {
-    |x| x + 1
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-18-returns-closure/src/lib.rs}}
 ```
 
 编译器给出的错误是：
 
-```text
-error[E0277]: the trait bound `std::ops::Fn(i32) -> i32 + 'static:
-std::marker::Sized` is not satisfied
- -->
-  |
-1 | fn returns_closure() -> Fn(i32) -> i32 {
-  |                         ^^^^^^^^^^^^^^ `std::ops::Fn(i32) -> i32 + 'static`
-  does not have a constant size known at compile-time
-  |
-  = help: the trait `std::marker::Sized` is not implemented for
-  `std::ops::Fn(i32) -> i32 + 'static`
-  = note: the return type of a function must have a statically known size
+```console
+{{#include ../listings/ch19-advanced-features/no-listing-18-returns-closure/output.txt}}
 ```
 
 错误又一次指向了 `Sized` trait！Rust 并不知道需要多少空间来储存闭包。不过我们在上一部分见过这种情况的解决办法：可以使用 trait 对象：
 
-```rust
-fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
-    Box::new(|x| x + 1)
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-19-returns-closure-trait-object/src/lib.rs}}
 ```
 
 这段代码正好可以编译。关于 trait 对象的更多内容，请回顾第十七章的 [“为使用不同类型的值而设计的 trait 对象”][using-trait-objects-that-allow-for-values-of-different-types] 部分。

@@ -2,7 +2,7 @@
 
 > [ch19-01-unsafe-rust.md](https://github.com/rust-lang/book/blob/main/src/ch19-01-unsafe-rust.md)
 > <br>
-> commit 4921fde29ae8ccf67d5893d4e43d74284626fded
+> commit 1524fa89fbaa4d52c4a2095141f6eaa6c22f8bd0
 
 目前为止讨论过的代码都有 Rust 在编译时会强制执行的内存安全保证。然而，Rust 还隐藏有第二种语言，它不会强制执行这类内存安全保证：这被称为 **不安全 Rust**（*unsafe Rust*）。它与常规 Rust 代码无异，但是会提供额外的超能力。
 
@@ -48,10 +48,7 @@
 示例 19-1 展示了如何从引用同时创建不可变和可变裸指针。
 
 ```rust
-let mut num = 5;
-
-let r1 = &num as *const i32;
-let r2 = &mut num as *mut i32;
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-01/src/main.rs:here}}
 ```
 
 <span class="caption">示例 19-1: 通过引用创建裸指针</span>
@@ -63,8 +60,7 @@ let r2 = &mut num as *mut i32;
 接下来会创建一个不能确定其有效性的裸指针，示例 19-2 展示了如何创建一个指向任意内存地址的裸指针。尝试使用任意内存是未定义行为：此地址可能有数据也可能没有，编译器可能会优化掉这个内存访问，或者程序可能会出现段错误（segmentation fault）。通常没有好的理由编写这样的代码，不过却是可行的：
 
 ```rust
-let address = 0x012345usize;
-let r = address as *const i32;
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-02/src/main.rs:here}}
 ```
 
 <span class="caption">示例 19-2: 创建指向任意内存地址的裸指针</span>
@@ -72,15 +68,7 @@ let r = address as *const i32;
 记得我们说过可以在安全代码中创建裸指针，不过不能 **解引用** 裸指针和读取其指向的数据。现在我们要做的就是对裸指针使用解引用运算符 `*`，这需要一个 `unsafe` 块，如示例 19-3 所示：
 
 ```rust
-let mut num = 5;
-
-let r1 = &num as *const i32;
-let r2 = &mut num as *mut i32;
-
-unsafe {
-    println!("r1 is: {}", *r1);
-    println!("r2 is: {}", *r2);
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-03/src/main.rs:here}}
 ```
 
 <span class="caption">示例 19-3: 在 `unsafe` 块中解引用裸指针</span>
@@ -98,32 +86,13 @@ unsafe {
 如下是一个没有做任何操作的不安全函数 `dangerous` 的例子：
 
 ```rust
-unsafe fn dangerous() {}
-
-unsafe {
-    dangerous();
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-01-unsafe-fn/src/main.rs:here}}
 ```
 
 必须在一个单独的 `unsafe` 块中调用 `dangerous` 函数。如果尝试不使用 `unsafe` 块调用 `dangerous`，则会得到一个错误：
 
 ```console
-$ cargo run
-   Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
-error[E0133]: call to unsafe function is unsafe and requires unsafe function or block
- --> src/main.rs:4:5
-  |
-4 |     dangerous();
-  |     ^^^^^^^^^^^ call to unsafe function
-  |
-  = note: consult the function's documentation for information on how to avoid undefined behavior
-
-error: aborting due to previous error
-
-For more information about this error, try `rustc --explain E0133`.
-error: could not compile `unsafe-example`
-
-To learn more, run the command again with --verbose.
+{{#include ../listings/ch19-advanced-features/output-only-01-missing-unsafe/output.txt}}
 ```
 
 通过将 `dangerous` 调用插入 `unsafe` 块中，我们就向 Rust 保证了我们已经阅读过函数的文档，理解如何正确使用，并验证过其满足函数的契约。
@@ -135,14 +104,7 @@ To learn more, run the command again with --verbose.
 仅仅因为函数包含不安全代码并不意味着整个函数都需要标记为不安全的。事实上，将不安全代码封装进安全函数是一个常见的抽象。作为一个例子，标准库中的函数，`split_at_mut`，它需要一些不安全代码，让我们探索如何可以实现它。这个安全函数定义于可变 slice 之上：它获取一个 slice 并从给定的索引参数开始将其分为两个 slice。`split_at_mut` 的用法如示例 19-4 所示：
 
 ```rust
-let mut v = vec![1, 2, 3, 4, 5, 6];
-
-let r = &mut v[..];
-
-let (a, b) = r.split_at_mut(3);
-
-assert_eq!(a, &mut [1, 2, 3]);
-assert_eq!(b, &mut [4, 5, 6]);
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-04/src/main.rs:here}}
 ```
 
 <span class="caption">示例 19-4: 使用安全的 `split_at_mut` 函数</span>
@@ -150,14 +112,7 @@ assert_eq!(b, &mut [4, 5, 6]);
 这个函数无法只通过安全 Rust 实现。一个尝试可能看起来像示例 19-5，它不能编译。出于简单考虑，我们将 `split_at_mut` 实现为函数而不是方法，并只处理 `i32` 值而非泛型 `T` 的 slice。
 
 ```rust,ignore,does_not_compile
-fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
-    let len = slice.len();
-
-    assert!(mid <= len);
-
-    (&mut slice[..mid],
-     &mut slice[mid..])
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-05/src/main.rs:here}}
 ```
 
 <span class="caption">示例 19-5: 尝试只使用安全 Rust 来实现 `split_at_mut`</span>
@@ -169,27 +124,7 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 如果尝试编译示例 19-5 的代码，会得到一个错误：
 
 ```console
-$ cargo run
-   Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
-error[E0499]: cannot borrow `*slice` as mutable more than once at a time
- --> src/main.rs:6:30
-  |
-1 | fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
-  |                        - let's call the lifetime of this reference `'1`
-...
-6 |     (&mut slice[..mid], &mut slice[mid..])
-  |     -------------------------^^^^^--------
-  |     |     |                  |
-  |     |     |                  second mutable borrow occurs here
-  |     |     first mutable borrow occurs here
-  |     returning this value requires that `*slice` is borrowed for `'1`
-
-error: aborting due to previous error
-
-For more information about this error, try `rustc --explain E0499`.
-error: could not compile `unsafe-example`
-
-To learn more, run the command again with --verbose.
+{{#include ../listings/ch19-advanced-features/listing-19-05/output.txt}}
 ```
 
 Rust 的借用检查器不能理解我们要借用这个 slice 的两个不同部分：它只知道我们借用了同一个 slice 两次。本质上借用 slice 的不同部分是可以的，因为结果两个 slice 不会重叠，不过 Rust 还没有智能到能够理解这些。当我们知道某些事是可以的而 Rust 不知道的时候，就是触及不安全代码的时候了
@@ -197,19 +132,7 @@ Rust 的借用检查器不能理解我们要借用这个 slice 的两个不同�
 示例 19-6 展示了如何使用 `unsafe` 块，裸指针和一些不安全函数调用来实现 `split_at_mut`：
 
 ```rust
-use std::slice;
-
-fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
-    let len = slice.len();
-    let ptr = slice.as_mut_ptr();
-
-    assert!(mid <= len);
-
-    unsafe {
-        (slice::from_raw_parts_mut(ptr, mid),
-         slice::from_raw_parts_mut(ptr.add(mid), len - mid))
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-06/src/main.rs:here}}
 ```
 
 <span class="caption">示例 19-6: 在 `split_at_mut` 函数的实现中使用不安全代码</span>
@@ -225,14 +148,7 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 与此相对，示例 19-7 中的 `slice::from_raw_parts_mut` 在使用 slice 时很有可能会崩溃。这段代码获取任意内存地址并创建了一个长为一万的 slice：
 
 ```rust
-use std::slice;
-
-let address = 0x01234usize;
-let r = address as *mut i32;
-
-let slice: &[i32] = unsafe {
-    slice::from_raw_parts_mut(r, 10000)
-};
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-07/src/main.rs:here}}
 ```
 
 <span class="caption">示例 19-7: 通过任意内存地址创建 slice</span>
@@ -248,15 +164,7 @@ let slice: &[i32] = unsafe {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-extern "C" {
-    fn abs(input: i32) -> i32;
-}
-
-fn main() {
-    unsafe {
-        println!("Absolute value of -3 according to C: {}", abs(-3));
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-08/src/main.rs}}
 ```
 
 <span class="caption">示例 19-8: 声明并调用另一个语言中定义的 `extern` 函数</span>
@@ -287,11 +195,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-static HELLO_WORLD: &str = "Hello, world!";
-
-fn main() {
-    println!("name is: {}", HELLO_WORLD);
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-09/src/main.rs}}
 ```
 
 <span class="caption">示例 19-9: 定义和使用一个不可变静态变量</span>
@@ -305,21 +209,7 @@ fn main() {
 <span class="filename">文件名: src/main.rs</span>
 
 ```rust
-static mut COUNTER: u32 = 0;
-
-fn add_to_count(inc: u32) {
-    unsafe {
-        COUNTER += inc;
-    }
-}
-
-fn main() {
-    add_to_count(3);
-
-    unsafe {
-        println!("COUNTER: {}", COUNTER);
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-10/src/main.rs}}
 ```
 
 <span class="caption">示例 19-10: 读取或修改一个可变静态变量是不安全的</span>
@@ -333,13 +223,7 @@ fn main() {
 `unsafe` 的另一个操作用例是实现不安全 trait。当 trait 中至少有一个方法中包含编译器无法验证的不变式（invariant）时 trait 是不安全的。可以在 `trait` 之前增加 `unsafe` 关键字将 trait 声明为 `unsafe`，同时 trait 的实现也必须标记为 `unsafe`，如示例 19-11 所示：
 
 ```rust
-unsafe trait Foo {
-    // methods go here
-}
-
-unsafe impl Foo for i32 {
-    // method implementations go here
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-11/src/main.rs}}
 ```
 
 <span class="caption">示例 19-11: 定义并实现不安全 trait</span>
@@ -350,17 +234,17 @@ unsafe impl Foo for i32 {
 
 ### 访问联合体中的字段
 
-仅适用于 `unsafe` 的最后一个操作是访问 **联合体** 中的字段，`union` 和 `struct` 类似，但是在一个实例中同时只能使用一个声明的字段。联合体主要用于和 C 代码中的联合体交互。访问联合体的字段是不安全的，因为 Rust 无法保证当前存储在联合体实例中数据的类型。可以查看[参考文档][reference]了解有关联合体的更多信息。
+仅适用于 `unsafe` 的最后一个操作是访问 **联合体** 中的字段，`union` 和 `struct` 类似，但是在一个实例中同时只能使用一个声明的字段。联合体主要用于和 C 代码中的联合体交互。访问联合体的字段是不安全的，因为 Rust 无法保证当前存储在联合体实例中数据的类型。可以查看 [参考文档][reference] 了解有关联合体的更多信息。
 
 ### 何时使用不安全代码
 
 使用 `unsafe` 来进行这五个操作（超能力）之一是没有问题的，甚至是不需要深思熟虑的，不过使得 `unsafe` 代码正确也实属不易，因为编译器不能帮助保证内存安全。当有理由使用 `unsafe` 代码时，是可以这么做的，通过使用显式的 `unsafe` 标注可以更容易地在错误发生时追踪问题的源头。
 
 [dangling-references]:
-ch04-02-references-and-borrowing.html#dangling-references
+ch04-02-references-and-borrowing.html#悬垂引用dangling-references
 [differences-between-variables-and-constants]:
-ch03-01-variables-and-mutability.html#变量和常量的区别
+ch03-01-variables-and-mutability.html#常量
 [extensible-concurrency-with-the-sync-and-send-traits]:
 ch16-04-extensible-concurrency-sync-and-send.html#使用-sync-和-send-trait-的可扩展并发
-[the-slice-type]: ch04-03-slices.html#the-slice-type
+[the-slice-type]: ch04-03-slices.html#slice-类型
 [reference]: https://doc.rust-lang.org/reference/items/unions.html

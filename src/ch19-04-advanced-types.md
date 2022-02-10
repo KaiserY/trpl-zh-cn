@@ -2,7 +2,7 @@
 
 > [ch19-04-advanced-types.md](https://github.com/rust-lang/book/blob/main/src/ch19-04-advanced-types.md)
 > <br>
-> commit 426f3e4ec17e539ae9905ba559411169d303a031
+> commit a90f07f1e9a7fc75dc9105a6c6f16d5c13edceb0
 
 Rust 的类型系统有一些我们曾经提到但没有讨论过的功能。首先我们从一个关于为什么 newtype 与类型一样有用的更宽泛的讨论开始。接着会转向类型别名（type aliases），一个类似于 newtype 但有着稍微不同的语义的功能。我们还会讨论 `!` 类型和动态大小类型。
 
@@ -21,18 +21,13 @@ newtype 也可以隐藏其内部的泛型类型。例如，可以提供一个封
 连同 newtype 模式，Rust 还提供了声明 **类型别名**（*type alias*）的能力，使用 `type` 关键字来给予现有类型另一个名字。例如，可以像这样创建 `i32` 的别名 `Kilometers`：
 
 ```rust
-type Kilometers = i32;
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-04-kilometers-alias/src/main.rs:here}}
 ```
 
 这意味着 `Kilometers` 是 `i32` 的 **同义词**（*synonym*）；不同于示例 19-15 中创建的 `Millimeters` 和 `Meters` 类型。`Kilometers` 不是一个新的、单独的类型。`Kilometers` 类型的值将被完全当作 `i32` 类型值来对待：
 
 ```rust
-type Kilometers = i32;
-
-let x: i32 = 5;
-let y: Kilometers = 5;
-
-println!("x + y = {}", x + y);
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-04-kilometers-alias/src/main.rs:there}}
 ```
 
 因为 `Kilometers` 是 `i32` 的别名，他们是同一类型，可以将 `i32` 与 `Kilometers` 相加，也可以将 `Kilometers` 传递给获取 `i32` 参数的函数。但通过这种手段无法获得上一部分讨论的 newtype 模式所提供的类型检查的好处。
@@ -46,16 +41,7 @@ Box<dyn Fn() + Send + 'static>
 在函数签名或类型注解中每次都书写这个类型将是枯燥且易于出错的。想象一下如示例 19-24 这样全是如此代码的项目：
 
 ```rust
-let f: Box<dyn Fn() + Send + 'static> = Box::new(|| println!("hi"));
-
-fn takes_long_type(f: Box<dyn Fn() + Send + 'static>) {
-    // --snip--
-}
-
-fn returns_long_type() -> Box<dyn Fn() + Send + 'static> {
-    // --snip--
-#     Box::new(|| ())
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-24/src/main.rs:here}}
 ```
 
 <span class="caption">示例 19-24: 在很多地方使用名称很长的类型</span>
@@ -63,18 +49,7 @@ fn returns_long_type() -> Box<dyn Fn() + Send + 'static> {
 类型别名通过减少项目中重复代码的数量来使其更加易于控制。这里我们为这个冗长的类型引入了一个叫做 `Thunk` 的别名，这样就可以如示例 19-25 所示将所有使用这个类型的地方替换为更短的 `Thunk`：
 
 ```rust
-type Thunk = Box<dyn Fn() + Send + 'static>;
-
-let f: Thunk = Box::new(|| println!("hi"));
-
-fn takes_long_type(f: Thunk) {
-    // --snip--
-}
-
-fn returns_long_type() -> Thunk {
-    // --snip--
-#     Box::new(|| ())
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-25/src/main.rs:here}}
 ```
 
 <span class="caption">示例 19-25: 引入类型别名 `Thunk` 来减少重复</span>
@@ -83,35 +58,20 @@ fn returns_long_type() -> Thunk {
 
 类型别名也经常与 `Result<T, E>` 结合使用来减少重复。考虑一下标准库中的 `std::io` 模块。I/O 操作通常会返回一个 `Result<T, E>`，因为这些操作可能会失败。标准库中的 `std::io::Error` 结构体代表了所有可能的 I/O 错误。`std::io` 中大部分函数会返回 `Result<T, E>`，其中 `E` 是 `std::io::Error`，比如 `Write` trait 中的这些函数：
 
-```rust
-use std::io::Error;
-use std::fmt;
-
-pub trait Write {
-    fn write(&mut self, buf: &[u8]) -> Result<usize, Error>;
-    fn flush(&mut self) -> Result<(), Error>;
-
-    fn write_all(&mut self, buf: &[u8]) -> Result<(), Error>;
-    fn write_fmt(&mut self, fmt: fmt::Arguments) -> Result<(), Error>;
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-05-write-trait/src/lib.rs}}
 ```
 
 这里出现了很多的 `Result<..., Error>`。为此，`std::io` 有这个类型别名声明：
 
-```rust
-type Result<T> = std::result::Result<T, std::io::Error>;
+```rust,noplayground
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-06-result-alias/src/lib.rs:here}}
 ```
 
 因为这位于 `std::io` 中，可用的完全限定的别名是 `std::io::Result<T>` —— 也就是说，`Result<T, E>` 中 `E` 放入了 `std::io::Error`。`Write` trait 中的函数最终看起来像这样：
 
-```rust,ignore
-pub trait Write {
-    fn write(&mut self, buf: &[u8]) -> Result<usize>;
-    fn flush(&mut self) -> Result<()>;
-
-    fn write_all(&mut self, buf: &[u8]) -> Result<()>;
-    fn write_fmt(&mut self, fmt: Arguments) -> Result<()>;
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-06-result-alias/src/lib.rs:there}}
 ```
 
 类型别名在两个方面有帮助：易于编写 **并** 在整个 `std::io` 中提供了一致的接口。因为这是一个别名，它只是另一个 `Result<T, E>`，这意味着可以在其上使用 `Result<T, E>` 的任何方法，以及像 `?` 这样的特殊语法。
@@ -120,25 +80,16 @@ pub trait Write {
 
 Rust 有一个叫做 `!` 的特殊类型。在类型理论术语中，它被称为 *empty type*，因为它没有值。我们更倾向于称之为 *never type*。这个名字描述了它的作用：在函数从不返回的时候充当返回值。例如：
 
-```rust,ignore
-fn bar() -> ! {
-    // --snip--
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-07-never-type/src/lib.rs:here}}
 ```
 
 这读 “函数 `bar` 从不返回”，而从不返回的函数被称为 **发散函数**（*diverging functions*）。不能创建 `!` 类型的值，所以 `bar` 也不可能返回值。
 
 不过一个不能创建值的类型有什么用呢？如果你回想一下示例 2-5 中的代码，曾经有一些看起来像这样的代码，如示例 19-26 所重现的：
 
-```rust
-# let guess = "3";
-# loop {
-let guess: u32 = match guess.trim().parse() {
-    Ok(num) => num,
-    Err(_) => continue,
-};
-# break;
-# }
+```rust,ignore
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:ch19}}
 ```
 
 <span class="caption">示例 19-26: `match` 语句和一个以 `continue` 结束的分支</span>
@@ -146,10 +97,7 @@ let guess: u32 = match guess.trim().parse() {
 当时我们忽略了代码中的一些细节。在第六章 [“`match` 控制流运算符”][the-match-control-flow-operator] 部分，我们学习了 `match` 的分支必须返回相同的类型。如下代码不能工作：
 
 ```rust,ignore,does_not_compile
-let guess = match guess.trim().parse() {
-    Ok(_) => 5,
-    Err(_) => "hello",
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-08-match-arms-different-types/src/main.rs:here}}
 ```
 
 这里的 `guess` 必须既是整型 **也是** 字符串，而 Rust 要求 `guess` 只能是一个类型。那么 `continue` 返回了什么呢？为什么示例 19-26 中会允许一个分支返回 `u32` 而另一个分支却以 `continue` 结束呢？
@@ -161,14 +109,7 @@ let guess = match guess.trim().parse() {
 never type 的另一个用途是 `panic!`。还记得 `Option<T>` 上的 `unwrap` 函数吗？它产生一个值或 panic。这里是它的定义：
 
 ```rust,ignore
-impl<T> Option<T> {
-    pub fn unwrap(self) -> T {
-        match self {
-            Some(val) => val,
-            None => panic!("called `Option::unwrap()` on a `None` value"),
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-09-unwrap-definition/src/lib.rs:here}}
 ```
 
 这里与示例 19-34 中的 `match` 发生了相同的情况：Rust 知道 `val` 是 `T` 类型，`panic!` 是 `!` 类型，所以整个 `match` 表达式的结果是 `T` 类型。这能工作是因为 `panic!` 并不产生一个值；它会终止程序。对于 `None` 的情况，`unwrap` 并不返回一个值，所以这些代码是有效的。
@@ -176,11 +117,7 @@ impl<T> Option<T> {
 最后一个有着 `!` 类型的表达式是 `loop`：
 
 ```rust,ignore
-print!("forever ");
-
-loop {
-    print!("and ever ");
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-10-loop-returns-never/src/main.rs:here}}
 ```
 
 这里，循环永远也不结束，所以此表达式的值是 `!`。但是如果引入 `break` 这就不为真了，因为循环在执行到 `break` 后就会终止。
@@ -192,8 +129,7 @@ loop {
 让我们深入研究一个贯穿本书都在使用的动态大小类型的细节：`str`。没错，不是 `&str`，而是 `str` 本身。`str` 是一个 DST；直到运行时我们都不知道字符串有多长。因为直到运行时都不能知道其大小，也就意味着不能创建 `str` 类型的变量，也不能获取 `str` 类型的参数。考虑一下这些代码，他们不能工作：
 
 ```rust,ignore,does_not_compile
-let s1: str = "Hello there!";
-let s2: str = "How's it going?";
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-11-cant-create-str/src/main.rs:here}}
 ```
 
 Rust 需要知道应该为特定类型的值分配多少内存，同时所有同一类型的值必须使用相同数量的内存。如果允许编写这样的代码，也就意味着这两个 `str` 需要占用完全相同大小的空间，不过它们有着不同的长度。这也就是为什么不可能创建一个存放动态大小类型的变量的原因。
@@ -207,28 +143,22 @@ Rust 需要知道应该为特定类型的值分配多少内存，同时所有同
 为了处理 DST，Rust 有一个特定的 trait 来决定一个类型的大小是否在编译时可知：这就是 `Sized` trait。这个 trait 自动为编译器在编译时就知道大小的类型实现。另外，Rust 隐式的为每一个泛型函数增加了 `Sized` bound。也就是说，对于如下泛型函数定义：
 
 ```rust,ignore
-fn generic<T>(t: T) {
-    // --snip--
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-12-generic-fn-definition/src/lib.rs}}
 ```
 
 实际上被当作如下处理：
 
 ```rust,ignore
-fn generic<T: Sized>(t: T) {
-    // --snip--
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-13-generic-implicit-sized-bound/src/lib.rs}}
 ```
 
 泛型函数默认只能用于在编译时已知大小的类型。然而可以使用如下特殊语法来放宽这个限制：
 
 ```rust,ignore
-fn generic<T: ?Sized>(t: &T) {
-    // --snip--
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-14-generic-maybe-sized/src/lib.rs}}
 ```
 
-`?Sized` trait bound 与 `Sized` 相对；也就是说，它可以读作 “`T` 可能是也可能不是 `Sized` 的”。这个语法只能用于 `Sized` ，而不能用于其他 trait。
+`?Sized` 上的 trait bound 意味着 “`T` 可能是也可能不是 `Sized`” 同时这个注解会覆盖泛型类型必须在编译时拥有固定大小的默认规则。这种意义的 `?Trait` 语法只能用于 `Sized` ，而不能用于任何其他 trait。
 
 另外注意我们将 `t` 参数的类型从 `T` 变为了 `&T`：因为其类型可能不是 `Sized` 的，所以需要将其置于某种指针之后。在这个例子中选择了引用。
 
@@ -236,7 +166,7 @@ fn generic<T: ?Sized>(t: &T) {
 
 [encapsulation-that-hides-implementation-details]:
 ch17-01-what-is-oo.html#封装隐藏了实现细节
-[string-slices]: ch04-03-slices.html#string-slices
+[string-slices]: ch04-03-slices.html#字符串-slice
 [the-match-control-flow-operator]:
 ch06-02-match.html#match-控制流运算符
 [using-trait-objects-that-allow-for-values-of-different-types]:
