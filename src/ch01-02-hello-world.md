@@ -25,7 +25,7 @@ $ cd hello_world
 
 对于 Windows CMD，输入：
 
-```cmd
+```doscon
 > mkdir "%USERPROFILE%\projects"
 > cd /d "%USERPROFILE%\projects"
 > mkdir hello_world
@@ -119,7 +119,7 @@ main  main.rs
 
 在 Windows 的 CMD 上，则输入如下内容：
 
-```cmd
+```doscon
 > dir /B %= the /B option says to only show the file names =%
 main.exe
 main.pdb
