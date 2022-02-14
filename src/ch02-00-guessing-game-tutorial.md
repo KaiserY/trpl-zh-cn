@@ -62,7 +62,7 @@ $ cd guessing_game
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:io}}
 ```
 
-默认情况下，Rust 将 [_prelude_][prelude]<!-- ignore --> 模块中少量的类型引入到每个程序的作用域中。如果需要的类型不在 prelude 中，你必须使用 `use` 语句显式地将其引入作用域。`std::io` 库提供很多有用的功能，包括接收用户输入的功能。
+默认情况下，Rust 将 [_prelude_][prelude]<!-- ignore --> 模块中少量的类型引入到每个程序的作用域中。
 
 如果你需要的类型不在 prelude 中，你必须使用 `use` 语句显式地将其引入作用域。`std::io` 库提供很多有用的功能，包括接收用户输入的功能。
 
