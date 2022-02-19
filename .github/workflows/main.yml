@@ -63,8 +63,8 @@ jobs:
     - name: Run mdBook Build
       run:  |
         mdbook build
-        mv book/html/* ./
-        mv "book/latex-pdf/Rust 程序设计语言 简体中文版.pdf" ./
+        mv book/html/* book/
+        mv "book/latex-pdf/Rust 程序设计语言 简体中文版.pdf" book/
         rm -r book/html/
         rm -rf book/latex-pdf/
     - name: Deploy gh-pages
