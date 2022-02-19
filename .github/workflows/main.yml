@@ -27,6 +27,34 @@ jobs:
         mkdir bin
         curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.14/mdbook-v0.4.14-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
         echo "$(pwd)/bin" >> ${GITHUB_PATH}
+    - name: Install mdbook-latex-pdf
+      run: |
+        mkdir bin
+        curl -sL -o bin/mdbook-latex-pdf https://github.com/KaiserY/mdbook-latex-pdf/releases/download/0.1.0/mdbook-latex-pdf-x86_64-unknown-linux-gnu
+        chmod +x bin/mdbook-latex-pdf
+        echo "$(pwd)/bin" >> ${GITHUB_PATH}
+        pip install Pygments
+    - name: Install font
+      run: |
+        mkdir fonts
+        mkdir -p ~/.local/share/fonts
+        curl -sL -o Noto_Sans.zip https://fonts.google.com/download?family=Noto%20Sans
+        unzip Noto_Sans.zip -d fonts/Noto_Sans
+        curl -sL -o Noto_Sans_SC.zip https://fonts.google.com/download?family=Noto%20Sans%20SC
+        unzip Noto_Sans_SC.zip -d fonts/Noto_Sans_SC
+        curl -sL -o Noto_Sans_Mono.zip https://fonts.google.com/download?family=Noto%20Sans%20Mono
+        unzip Noto_Sans_Mono.zip -d fonts/Noto_Sans_Mono
+        curl -sL -o Noto_Sans_KR.zip https://fonts.google.com/download?family=Noto%20Sans%20KR
+        unzip Noto_Sans_KR.zip -d fonts/Noto_Sans_KR
+        curl -sL -o Noto_Sans_Thai.zip https://fonts.google.com/download?family=Noto%20Sans%20Thai
+        unzip Noto_Sans_Thai.zip -d fonts/Noto_Sans_Thai
+        curl -sL -o Noto_Sans_Arabic.zip https://fonts.google.com/download?family=Noto%20Sans%20Arabic
+        unzip Noto_Sans_Arabic.zip -d fonts/Noto_Sans_Arabic
+        curl -sL -o Noto_Sans_Hebrew.zip https://fonts.google.com/download?family=Noto%20Sans%20Hebrew
+        unzip Noto_Sans_Hebrew.zip -d fonts/Noto_Sans_Hebrew
+        curl -sL -o Noto_Sans_Devanagari.zip https://fonts.google.com/download?family=Noto%20Sans%20Devanagari
+        unzip Noto_Sans_Devanagari.zip -d fonts/Noto_Sans_Devanagari
+        fc-cache -rv
     - name: Report versions
       run: |
         rustup --version
