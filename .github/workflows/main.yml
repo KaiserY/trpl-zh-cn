@@ -63,10 +63,10 @@ jobs:
     - name: Run mdBook Build
       run:  |
         mdbook build
-        mv html/* ./
-        mv "latex-pdf/Rust 程序设计语言 简体中文版.pdf" ./
-        rm -r html/
-        rm -rf latex-pdf/
+        mv book/html/* ./
+        mv "book/latex-pdf/Rust 程序设计语言 简体中文版.pdf" ./
+        rm -r book/html/
+        rm -rf book/latex-pdf/
     - name: Deploy gh-pages
       if: ${{ github.ref == 'refs/heads/main' }}
       uses: peaceiris/actions-gh-pages@v3
