@@ -53,6 +53,7 @@ jobs:
         unzip Noto_Sans_Hebrew.zip -d fonts/Noto_Sans_Hebrew
         curl -sL -o Noto_Sans_Devanagari.zip https://fonts.google.com/download?family=Noto%20Sans%20Devanagari
         unzip Noto_Sans_Devanagari.zip -d fonts/Noto_Sans_Devanagari
+        mv fonts/* ~/.local/share/fonts/
         fc-cache -rv
     - name: Report versions
       run: |
