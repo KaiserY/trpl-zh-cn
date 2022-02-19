@@ -32,7 +32,7 @@ jobs:
         curl -sL -o bin/mdbook-latex-pdf https://github.com/KaiserY/mdbook-latex-pdf/releases/download/0.1.0/mdbook-latex-pdf-x86_64-unknown-linux-gnu
         chmod +x bin/mdbook-latex-pdf
         echo "$(pwd)/bin" >> ${GITHUB_PATH}
-        pip install Pygments
+        pip install --upgrade --force-reinstall Pygments
     - name: Install font
       run: |
         mkdir fonts
