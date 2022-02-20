@@ -49,6 +49,13 @@ vuepress dev ./src
 - Rust编程语言社区2群，群号：813448660
 - Rust水群(编程社区子群)，电报群：[t.me/rust_deep_water](//t.me/rust_deep_water)
 
+## PDF
+
+[Rust 程序设计语言 简体中文版.pdf](https://kaisery.github.io/trpl-zh-cn/Rust%20%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E8%AF%AD%E8%A8%80%20%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88.pdf)
+
+- emoji 无法显示
+- ferris 无法显示
+
 ## GitBook
 
 本翻译主要采用 [mdBook](https://github.com/rust-lang-nursery/mdBook) 格式。同时支持 [GitBook](https://github.com/GitbookIO/gitbook)，但会缺失部分功能，如一些代码没有语法高亮。
