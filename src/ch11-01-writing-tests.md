@@ -314,7 +314,7 @@ Cargo 编译并运行了测试。在 `Compiling`、`Finished` 和 `Running` 这�
 
 这样编写测试来返回 `Result<T, E>` 就可以在函数体中使用问号运算符，如此可以方便的编写任何运算符会返回 `Err` 成员的测试。
 
-不能对这些使用 `Result<T, E>` 的测试使用 `#[should_panic]` 注解。为了断言一个操作返回 `Err` 成员，**不要**使用对 `Result<T, E>` 值使用问好表达式（`?`）。而是使用 `assert!(value.is_err())`。
+不能对这些使用 `Result<T, E>` 的测试使用 `#[should_panic]` 注解。为了断言一个操作返回 `Err` 成员，**不要**使用对 `Result<T, E>` 值使用问号表达式（`?`）。而是使用 `assert!(value.is_err())`。
 
 现在你知道了几种编写测试的方法，让我们看看运行测试时会发生什么，和可以用于 `cargo test` 的不同选项。
 
