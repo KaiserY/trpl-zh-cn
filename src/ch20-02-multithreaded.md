@@ -233,21 +233,21 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 这段代码能够编译并用指定给 `ThreadPool::new` 的参数创建储存了一系列的 `Worker` 实例，不过 **仍然** 没有处理 `execute` 中得到的闭包。让我们聊聊接下来怎么做。
 
-#### 使用通道向线程发送请求
+#### 使用信道向线程发送请求
 
 下一个需要解决的问题是传递给 `thread::spawn` 的闭包完全没有做任何工作。目前，我们在 `execute` 方法中获得期望执行的闭包，不过在创建 `ThreadPool` 的过程中创建每一个 `Worker` 时需要向 `thread::spawn` 传递一个闭包。
 
 我们希望刚创建的 `Worker` 结构体能够从 `ThreadPool` 的队列中获取需要执行的代码，并发送到线程中执行他们。
 
-在第十六章，我们学习了 **通道** —— 一个沟通两个线程的简单手段 —— 对于这个例子来说则是绝佳的。这里通道将充当任务队列的作用，`execute` 将通过 `ThreadPool` 向其中线程正在寻找工作的 `Worker` 实例发送任务。如下是这个计划：
+在第十六章，我们学习了 **信道** —— 一个沟通两个线程的简单手段 —— 对于这个例子来说则是绝佳的。这里信道将充当任务队列的作用，`execute` 将通过 `ThreadPool` 向其中线程正在寻找工作的 `Worker` 实例发送任务。如下是这个计划：
 
-1. `ThreadPool` 会创建一个通道并充当发送端。
-2. 每个 `Worker` 将会充当通道的接收端。
-3. 新建一个 `Job` 结构体来存放用于向通道中发送的闭包。
-4. `execute` 方法会在通道发送端发出期望执行的任务。
-5. 在线程中，`Worker` 会遍历通道的接收端并执行任何接收到的任务。
+1. `ThreadPool` 会创建一个信道并充当发送端。
+2. 每个 `Worker` 将会充当信道的接收端。
+3. 新建一个 `Job` 结构体来存放用于向信道中发送的闭包。
+4. `execute` 方法会在信道发送端发出期望执行的任务。
+5. 在线程中，`Worker` 会遍历信道的接收端并执行任何接收到的任务。
 
-让我们以在 `ThreadPool::new` 中创建通道并让 `ThreadPool` 实例充当发送端开始，如示例 20-16 所示。`Job` 是将在通道中发出的类型，目前它是一个没有任何内容的结构体：
+让我们以在 `ThreadPool::new` 中创建信道并让 `ThreadPool` 实例充当发送端开始，如示例 20-16 所示。`Job` 是将在信道中发出的类型，目前它是一个没有任何内容的结构体：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -255,11 +255,11 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-16/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 20-16: 修改 `ThreadPool` 来储存一个发送 `Job` 实例的通道发送端</span>
+<span class="caption">示例 20-16: 修改 `ThreadPool` 来储存一个发送 `Job` 实例的信道发送端</span>
 
-在 `ThreadPool::new` 中，新建了一个通道，并接着让线程池在接收端等待。这段代码能够编译，不过仍有警告。
+在 `ThreadPool::new` 中，新建了一个信道，并接着让线程池在接收端等待。这段代码能够编译，不过仍有警告。
 
-让我们尝试在线程池创建每个 worker 时将通道的接收端传递给他们。须知我们希望在 worker 所分配的线程中使用通道的接收端，所以将在闭包中引用 `receiver` 参数。示例 20-17 中展示的代码还不能编译：
+让我们尝试在线程池创建每个 worker 时将信道的接收端传递给他们。须知我们希望在 worker 所分配的线程中使用信道的接收端，所以将在闭包中引用 `receiver` 参数。示例 20-17 中展示的代码还不能编译：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -267,9 +267,9 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-17/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 20-17: 将通道的接收端传递给 worker</span>
+<span class="caption">示例 20-17: 将信道的接收端传递给 worker</span>
 
-这是一些小而直观的修改：将通道的接收端传递进了 `Worker::new`，并接着在闭包中使用它。
+这是一些小而直观的修改：将信道的接收端传递进了 `Worker::new`，并接着在闭包中使用它。
 
 如果尝试 check 代码，会得到这个错误：
 
@@ -277,9 +277,9 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 {{#include ../listings/ch20-web-server/listing-20-17/output.txt}}
 ```
 
-这段代码尝试将 `receiver` 传递给多个 `Worker` 实例。这是不行的，回忆第十六章：Rust 所提供的通道实现是多 **生产者**，单 **消费者** 的。这意味着不能简单的克隆通道的消费端来解决问题。即便可以，那也不是我们希望使用的技术；我们希望通过在所有的 worker 中共享单一 `receiver`，在线程间分发任务。
+这段代码尝试将 `receiver` 传递给多个 `Worker` 实例。这是不行的，回忆第十六章：Rust 所提供的信道实现是多 **生产者**，单 **消费者** 的。这意味着不能简单的克隆信道的消费端来解决问题。即便可以，那也不是我们希望使用的技术；我们希望通过在所有的 worker 中共享单一 `receiver`，在线程间分发任务。
 
-另外，从通道队列中取出任务涉及到修改 `receiver`，所以这些线程需要一个能安全的共享和修改 `receiver` 的方式，否则可能导致竞争状态（参考第十六章）。
+另外，从信道队列中取出任务涉及到修改 `receiver`，所以这些线程需要一个能安全的共享和修改 `receiver` 的方式，否则可能导致竞争状态（参考第十六章）。
 
 回忆一下第十六章讨论的线程安全智能指针，为了在多个线程间共享所有权并允许线程修改其值，需要使用 `Arc<Mutex<T>>`。`Arc` 使得多个 worker 拥有接收端，而 `Mutex` 则确保一次只有一个 worker 能从接收端得到任务。示例 20-18 展示了所需的修改：
 
@@ -289,9 +289,9 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-18/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 20-18: 使用 `Arc` 和 `Mutex` 在 worker 间共享通道的接收端</span>
+<span class="caption">示例 20-18: 使用 `Arc` 和 `Mutex` 在 worker 间共享信道的接收端</span>
 
-在 `ThreadPool::new` 中，将通道的接收端放入一个 `Arc` 和一个 `Mutex` 中。对于每一个新 worker，克隆 `Arc` 来增加引用计数，如此这些 worker 就可以共享接收端的所有权了。
+在 `ThreadPool::new` 中，将信道的接收端放入一个 `Arc` 和一个 `Mutex` 中。对于每一个新 worker，克隆 `Arc` 来增加引用计数，如此这些 worker 就可以共享接收端的所有权了。
 
 通过这些修改，代码可以编译了！我们做到了！
 
@@ -305,11 +305,11 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-19/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 20-19: 为存放每一个闭包的 `Box` 创建一个 `Job` 类型别名，接着在通道中发出任务</span>
+<span class="caption">示例 20-19: 为存放每一个闭包的 `Box` 创建一个 `Job` 类型别名，接着在信道中发出任务</span>
 
-在使用 `execute` 得到的闭包新建 `Job` 实例之后，将这些任务从通道的发送端发出。这里调用 `send` 上的 `unwrap`，因为发送可能会失败，这可能发生于例如停止了所有线程执行的情况，这意味着接收端停止接收新消息了。不过目前我们无法停止线程执行；只要线程池存在他们就会一直执行。使用 `unwrap` 是因为我们知道失败不可能发生，即便编译器不这么认为。
+在使用 `execute` 得到的闭包新建 `Job` 实例之后，将这些任务从信道的发送端发出。这里调用 `send` 上的 `unwrap`，因为发送可能会失败，这可能发生于例如停止了所有线程执行的情况，这意味着接收端停止接收新消息了。不过目前我们无法停止线程执行；只要线程池存在他们就会一直执行。使用 `unwrap` 是因为我们知道失败不可能发生，即便编译器不这么认为。
 
-不过到此事情还没有结束！在 worker 中，传递给 `thread::spawn` 的闭包仍然还只是 **引用** 了通道的接收端。相反我们需要闭包一直循环，向通道的接收端请求任务，并在得到任务时执行他们。如示例 20-20 对 `Worker::new` 做出修改：
+不过到此事情还没有结束！在 worker 中，传递给 `thread::spawn` 的闭包仍然还只是 **引用** 了信道的接收端。相反我们需要闭包一直循环，向信道的接收端请求任务，并在得到任务时执行他们。如示例 20-20 对 `Worker::new` 做出修改：
 
 <span class="filename">文件名: src/lib.rs</span>
 
@@ -321,7 +321,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 这里，首先在 `receiver` 上调用了 `lock` 来获取互斥器，接着 `unwrap` 在出现任何错误时 panic。如果互斥器处于一种叫做 **被污染**（*poisoned*）的状态时获取锁可能会失败，这可能发生于其他线程在持有锁时 panic 了且没有释放锁。在这种情况下，调用 `unwrap` 使其 panic 是正确的行为。请随意将 `unwrap` 改为包含有意义错误信息的 `expect`。
 
-如果锁定了互斥器，接着调用 `recv` 从通道中接收 `Job`。最后的 `unwrap` 也绕过了一些错误，这可能发生于持有通道发送端的线程停止的情况，类似于如果接收端关闭时 `send` 方法如何返回 `Err` 一样。
+如果锁定了互斥器，接着调用 `recv` 从信道中接收 `Job`。最后的 `unwrap` 也绕过了一些错误，这可能发生于持有信道发送端的线程停止的情况，类似于如果接收端关闭时 `send` 方法如何返回 `Err` 一样。
 
 调用 `recv` 会阻塞当前线程，所以如果还没有任务，其会等待直到有可用的任务。`Mutex<T>` 确保一次只有一个 `Worker` 线程尝试请求任务。
 

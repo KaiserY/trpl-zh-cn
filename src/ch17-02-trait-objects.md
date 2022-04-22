@@ -1,4 +1,4 @@
-## 为使用不同类型的值而设计的 trait 对象
+## 顾及不同类型值的 trait 对象
 
 > [ch17-02-trait-objects.md](https://github.com/rust-lang/book/blob/main/src/ch17-02-trait-objects.md)
 > <br>
