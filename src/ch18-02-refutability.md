@@ -18,7 +18,7 @@
 
 <span class="caption">示例 18-8: 尝试在 `let` 中使用可反驳模式</span>
 
-如果 `some_option_value` 的值是 `None`，其不会成功匹配模式 `Some(x)`，表明这个模式是可反驳的。然而, 因为 `let` 对于 `None` 匹配不能产生任何任何合法的代码，所以 `let` 语句只能接受不可反驳模式。Rust 会在编译时抱怨我们尝试在要求不可反驳模式的地方使用可反驳模式：
+如果 `some_option_value` 的值是 `None`，其不会成功匹配模式 `Some(x)`，表明这个模式是可反驳的。然而, 因为 `let` 对于 `None` 匹配不能产生任何合法的代码，所以 `let` 语句只能接受不可反驳模式。Rust 会在编译时抱怨我们尝试在要求不可反驳模式的地方使用可反驳模式：
 
 ```console
 {{#include ../listings/ch18-patterns-and-matching/listing-18-08/output.txt}}
