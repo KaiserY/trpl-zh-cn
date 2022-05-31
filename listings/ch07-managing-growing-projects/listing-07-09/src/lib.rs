@@ -17,7 +17,7 @@ mod back_of_house {
 pub fn eat_at_restaurant() {
     // 在夏天订购一个黑麦土司作为早餐
     let mut meal = back_of_house::Breakfast::summer("Rye");
-    // 改变注意更换想要面包的类型
+    // 改变主意更换想要面包的类型
     meal.toast = String::from("Wheat");
     println!("I'd like {} toast please", meal.toast);
 
