@@ -131,11 +131,11 @@
 
 因为目标是将所有像这样的规则保持在实现了 `State` 的结构体中，我们将调用 `state` 中的值的 `content` 方法并传递博文实例（也就是 `self`）作为参数。接着返回 `state` 值的 `content` 方法的返回值。
 
-这里调用 `Option` 的 `as_ref` 方法是因为需要 `Option` 中值的引用而不是获取其所有权。因为 `state` 是一个 `Option<&Box<dynState>>`，调用 `as_ref` 会返回一个 `Option<&Box<State>>`。如果不调用 `as_ref`，将会得到一个错误，因为不能将 `state` 移动出借用的 `&self` 函数参数。
+这里调用 `Option` 的 `as_ref` 方法是因为需要 `Option` 中值的引用而不是获取其所有权。因为 `state` 是一个 `Option<&Box<dyn State>>`，调用 `as_ref` 会返回一个 `Option<&Box<dyn State>>`。如果不调用 `as_ref`，将会得到一个错误，因为不能将 `state` 移动出借用的 `&self` 函数参数。
 
 接着调用 `unwrap` 方法，这里我们知道它永远也不会 panic，因为 `Post` 的所有方法都确保在他们返回时 `state` 会有一个 `Some` 值。这就是一个第十二章 [“当我们比编译器知道更多的情况”][more-info-than-rustc]  部分讨论过的我们知道 `None` 是不可能的而编译器却不能理解的情况。
 
-接着我们就有了一个 `&Box<State>`，当调用其 `content` 时，Deref 强制转换会作用于 `&` 和 `Box` ，这样最终会调用实现了 `State` trait 的类型的 `content` 方法。这意味着需要为 `State` trait 定义增加 `content`，这也是放置根据所处状态返回什么内容的逻辑的地方，如示例 17-18 所示：
+接着我们就有了一个 `&Box<dyn State>`，当调用其 `content` 时，Deref 强制转换会作用于 `&` 和 `Box` ，这样最终会调用实现了 `State` trait 的类型的 `content` 方法。这意味着需要为 `State` trait 定义增加 `content`，这也是放置根据所处状态返回什么内容的逻辑的地方，如示例 17-18 所示：
 
 <span class="filename">文件名: src/lib.rs</span>
 
