@@ -22,7 +22,7 @@ fn handle_connection(mut stream: TcpStream) {
 
     let get = b"GET / HTTP/1.1\r\n";
 
-    if buffer.starts_with(get) {
+    if buffer.starts_with("GET".as_bytes()) {
         let contents = fs::read_to_string("hello.html").unwrap();
 
         let response = format!(
