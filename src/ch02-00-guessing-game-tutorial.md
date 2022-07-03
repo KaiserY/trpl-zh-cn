@@ -1,4 +1,4 @@
-# 编写 猜猜看 游戏
+# 写个猜数字游戏
 
 > [ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/main/src/ch02-00-guessing-game-tutorial.md) > <br>
 > commit d68d96576b705fcff7aa6341a9840f4de3c0ca0c

@@ -11,7 +11,7 @@
     - [Hello, World!](ch01-02-hello-world.md)
     - [Hello, Cargo!](ch01-03-hello-cargo.md)
 
-- [猜猜看游戏教程](ch02-00-guessing-game-tutorial.md)
+- [写个猜数字游戏](ch02-00-guessing-game-tutorial.md)
 
 - [常见编程概念](ch03-00-common-programming-concepts.md)
     - [变量与可变性](ch03-01-variables-and-mutability.md)
