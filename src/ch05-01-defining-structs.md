@@ -1,4 +1,4 @@
-## 定义并实例化结构体
+## 结构体的定义和实例化
 
 > [ch05-01-defining-structs.md](https://github.com/rust-lang/book/blob/main/src/ch05-01-defining-structs.md)
 > <br>

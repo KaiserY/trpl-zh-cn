@@ -1,4 +1,4 @@
-## trait：定义共享的行为
+## Trait：定义共同行为
 
 > [ch10-02-traits.md](https://github.com/rust-lang/book/blob/main/src/ch10-02-traits.md)
 > <br>

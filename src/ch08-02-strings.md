@@ -1,4 +1,4 @@
-## 使用字符串存储 UTF-8 编码的文本
+## 使用字符串储存 UTF-8 编码的文本
 
 > [ch08-02-strings.md](https://github.com/rust-lang/book/blob/main/src/ch08-02-strings.md)
 > <br>

@@ -1,4 +1,4 @@
-## 路径用于引用模块树中的项
+## 引用模块项目的路径
 
 > [ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md](https://github.com/rust-lang/book/blob/main/src/ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md) > <br>
 > commit 9c0fa2714859738ff73cbbb829592e4c037d7e46

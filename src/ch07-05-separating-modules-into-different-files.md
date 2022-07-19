@@ -1,4 +1,4 @@
-## 将模块分割进不同文件
+## 将模块拆分成多个文件
 
 > [ch07-05-separating-modules-into-different-files.md](https://github.com/rust-lang/book/blob/main/src/ch07-05-separating-modules-into-different-files.md)
 > <br>

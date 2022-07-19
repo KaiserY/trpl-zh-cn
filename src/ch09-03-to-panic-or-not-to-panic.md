@@ -1,4 +1,4 @@
-## `panic!` 还是不 `panic!`
+## 要不要 `panic!`
 
 > [ch09-03-to-panic-or-not-to-panic.md](https://github.com/rust-lang/book/blob/main/src/ch09-03-to-panic-or-not-to-panic.md)
 > <br>

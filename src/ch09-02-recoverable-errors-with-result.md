@@ -1,4 +1,4 @@
-## `Result` 与可恢复的错误
+## 用 `Result` 处理可恢复的错误
 
 > [ch09-02-recoverable-errors-with-result.md](https://github.com/rust-lang/book/blob/main/src/ch09-02-recoverable-errors-with-result.md)
 > <br>

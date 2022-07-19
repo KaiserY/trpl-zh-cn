@@ -1,4 +1,4 @@
-## vector 用来储存一系列的值
+## 使用 Vector 储存列表
 
 > [ch08-01-vectors.md](https://github.com/rust-lang/book/blob/main/src/ch08-01-vectors.md)
 > <br>

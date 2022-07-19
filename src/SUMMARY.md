@@ -2,7 +2,7 @@
 
 [Rust 程序设计语言](title-page.md)
 [前言](foreword.md)
-[介绍](ch00-00-introduction.md)
+[简介](ch00-00-introduction.md)
 
 ## 入门指南
 
@@ -25,39 +25,39 @@
     - [引用与借用](ch04-02-references-and-borrowing.md)
     - [Slice 类型](ch04-03-slices.md)
 
-- [使用结构体来组织相关联的数据](ch05-00-structs.md)
-    - [定义并实例化结构体](ch05-01-defining-structs.md)
-    - [一个使用结构体的示例程序](ch05-02-example-structs.md)
+- [使用结构体组织相关联的数据](ch05-00-structs.md)
+    - [结构体的定义和实例化](ch05-01-defining-structs.md)
+    - [结构体示例程序](ch05-02-example-structs.md)
     - [方法语法](ch05-03-method-syntax.md)
 
-- [枚举与模式匹配](ch06-00-enums.md)
-    - [定义枚举](ch06-01-defining-an-enum.md)
-    - [`match` 控制流运算符](ch06-02-match.md)
+- [枚举和模式匹配](ch06-00-enums.md)
+    - [枚举的定义](ch06-01-defining-an-enum.md)
+    - [`match` 控制流结构](ch06-02-match.md)
     - [`if let` 简洁控制流](ch06-03-if-let.md)
 
 ## 基本 Rust 技能
 
 - [使用包、Crate 和模块管理不断增长的项目](ch07-00-managing-growing-projects-with-packages-crates-and-modules.md)
-    - [包和 crate](ch07-01-packages-and-crates.md)
+    - [包和 Crate](ch07-01-packages-and-crates.md)
     - [定义模块来控制作用域与私有性](ch07-02-defining-modules-to-control-scope-and-privacy.md)
-    - [路径用于引用模块树中的项](ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md)
-    - [使用 `use` 关键字将名称引入作用域](ch07-04-bringing-paths-into-scope-with-the-use-keyword.md)
-    - [将模块分割进不同文件](ch07-05-separating-modules-into-different-files.md)
+    - [引用模块项目的路径](ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md)
+    - [使用 `use` 关键字将路径引入作用域](ch07-04-bringing-paths-into-scope-with-the-use-keyword.md)
+    - [将模块拆分成多个文件](ch07-05-separating-modules-into-different-files.md)
 
 - [常见集合](ch08-00-common-collections.md)
-    - [使用可变长数组(Vector)存储一列值](ch08-01-vectors.md)
-    - [使用字符串(String)存储UTF-8编码的文本](ch08-02-strings.md)
-    - [在哈希映射中存储键和关联值](ch08-03-hash-maps.md)
+    - [使用 Vector 储存列表](ch08-01-vectors.md)
+    - [使用字符串储存 UTF-8 编码的文本](ch08-02-strings.md)
+    - [使用 Hash Map 储存键值对](ch08-03-hash-maps.md)
 
 - [错误处理](ch09-00-error-handling.md)
-    - [`panic!` 与不可恢复的错误](ch09-01-unrecoverable-errors-with-panic.md)
-    - [`Result` 与可恢复的错误](ch09-02-recoverable-errors-with-result.md)
-    - [`panic!` 还是不 `panic!`](ch09-03-to-panic-or-not-to-panic.md)
+    - [用 `panic!` 处理不可恢复的错误](ch09-01-unrecoverable-errors-with-panic.md)
+    - [用 `Result` 处理可恢复的错误](ch09-02-recoverable-errors-with-result.md)
+    - [要不要 `panic!`](ch09-03-to-panic-or-not-to-panic.md)
 
-- [泛型、trait 与生命周期](ch10-00-generics.md)
+- [泛型、Trait 和生命周期](ch10-00-generics.md)
     - [泛型数据类型](ch10-01-syntax.md)
-    - [trait：定义共享的行为](ch10-02-traits.md)
-    - [生命周期与引用有效性](ch10-03-lifetime-syntax.md)
+    - [Trait：定义共同行为](ch10-02-traits.md)
+    - [生命周期确保引用有效](ch10-03-lifetime-syntax.md)
 
 - [编写自动化测试](ch11-00-testing.md)
     - [如何编写测试](ch11-01-writing-tests.md)

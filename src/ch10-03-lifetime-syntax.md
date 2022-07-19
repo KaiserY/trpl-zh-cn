@@ -1,4 +1,4 @@
-## 生命周期与引用有效性
+## 生命周期确保引用有效
 
 > [ch10-03-lifetime-syntax.md](https://github.com/rust-lang/book/blob/main/src/ch10-03-lifetime-syntax.md)
 > <br>
