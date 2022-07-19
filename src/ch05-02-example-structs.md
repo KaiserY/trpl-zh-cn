@@ -1,4 +1,4 @@
-## 一个使用结构体的示例程序
+## 结构体示例程序
 
 > [ch05-02-example-structs.md](https://github.com/rust-lang/book/blob/main/src/ch05-02-example-structs.md)
 > <br>

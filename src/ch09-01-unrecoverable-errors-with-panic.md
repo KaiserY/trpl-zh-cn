@@ -1,4 +1,4 @@
-## `panic!` 与不可恢复的错误
+## 用 `panic!` 处理不可恢复的错误
 
 > [ch09-01-unrecoverable-errors-with-panic.md](https://github.com/rust-lang/book/blob/main/src/ch09-01-unrecoverable-errors-with-panic.md)
 > <br>

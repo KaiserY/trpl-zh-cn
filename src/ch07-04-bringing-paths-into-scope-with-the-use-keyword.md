@@ -1,4 +1,4 @@
-## 使用 `use` 关键字将名称引入作用域
+## 使用 `use` 关键字将路径引入作用域
 
 > [ch07-04-bringing-paths-into-scope-with-the-use-keyword.md](https://github.com/rust-lang/book/blob/main/src/ch07-04-bringing-paths-into-scope-with-the-use-keyword.md)
 > <br>

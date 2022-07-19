@@ -1,4 +1,4 @@
-## `match` 控制流运算符
+## `match` 控制流结构
 
 > [ch06-02-match.md](https://github.com/rust-lang/book/blob/main/src/ch06-02-match.md)
 > <br>

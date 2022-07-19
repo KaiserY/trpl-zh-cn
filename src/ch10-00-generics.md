@@ -1,4 +1,4 @@
-# 泛型、trait 和生命周期
+# 泛型、Trait 和生命周期
 
 > [ch10-00-generics.md](https://github.com/rust-lang/book/blob/main/src/ch10-00-generics.md)
 > <br>
