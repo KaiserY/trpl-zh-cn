@@ -2,9 +2,9 @@
 
 > [appendix-06-translation.md](https://github.com/rust-lang/book/blob/main/src/appendix-06-translation.md)
 > <br />
-> commit 8b89742623513647ba289e0cf96edca4fe6fb022
+> commit f77e8c47bd04dd68094aaa7483e9dbf4d7386b8c
 
-一些非英语语言的资源。多数仍在翻译中；查阅 [翻译标签][label] 来帮助我们或使我们知道新的翻译！
+一些非英语语言的资源。多数仍在翻译中；查阅 [翻译标签][label] 来帮助翻译，或者添加译本链接！
 
 [label]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 
@@ -30,3 +30,4 @@
 - [Turkish](https://github.com/RustDili/dokuman/tree/master/ceviriler), [online](https://rustdili.github.io/)
 - [हिंदी](https://github.com/venkatarun95/rust-book-hindi)
 - [ไทย](https://github.com/rust-lang-th/book-th)
+- [Danske](https://github.com/DanKHansen/book-dk)
