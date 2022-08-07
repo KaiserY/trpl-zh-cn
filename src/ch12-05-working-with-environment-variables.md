@@ -97,7 +97,7 @@ PS> $Env:CASE_INSENSITIVE=1; cargo run to poem.txt
 这回应该得到包含可能有大写字母的 “to” 的行：
 
 ```console
-$ CASE_INSENSITIVE=1 cargo run to poem.txt
+$ (CASE_INSENSITIVE=1; cargo run to poem.txt)
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
