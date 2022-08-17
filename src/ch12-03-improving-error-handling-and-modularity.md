@@ -253,7 +253,7 @@ Rust 提示我们的代码忽略了 `Result` 值，它可能表明这里存在�
 
 现在需要在 *src/main.rs* 中将移动到 *src/lib.rs* 的代码引入二进制 crate 的作用域中，如示例 12-14 所示：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-14/src/main.rs:here}}
