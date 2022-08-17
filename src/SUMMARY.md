@@ -99,7 +99,7 @@
     - [使用线程同时地运行代码](ch16-01-threads.md)
     - [使用消息传递在线程间通信](ch16-02-message-passing.md)
     - [共享状态并发](ch16-03-shared-state.md)
-    - [使用`Sync` 与 `Send` Traits 的可扩展并发：](ch16-04-extensible-concurrency-sync-and-send.md)
+    - [使用`Sync` 与 `Send` Traits 的可扩展并发](ch16-04-extensible-concurrency-sync-and-send.md)
 
 - [Rust 的面向对象编程特性](ch17-00-oop.md)
     - [面向对象语言的特点](ch17-01-what-is-oo.md)
