@@ -1,7 +1,8 @@
 # 写个猜数字游戏
 
 > [ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/main/src/ch02-00-guessing-game-tutorial.md)
-> commit 4a8924fd5bb38d46f0b0d74f4beea7ab695fa1b3
+> <br>
+> commit 6e2fe7c0f085989cc498cec139e717e2af172cb7
 
 让我们一起动手完成一个项目，来快速上手 Rust！本章将介绍 Rust 中一些常用概念，并通过真实的程序来展示如何运用它们。你将会学到 `let`、`match`、方法（method）、关联函数（associated function）、使用外部 crate 等知识！后续章节会深入探讨这些概念的细节。在这一章，我们将练习基础内容。
 
