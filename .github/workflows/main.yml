@@ -20,16 +20,16 @@ jobs:
     - name: Install Rust
       run: |
         rustup set profile minimal
-        rustup toolchain install 1.58 -c rust-docs
-        rustup default 1.58
+        rustup toolchain install 1.62 -c rust-docs
+        rustup default 1.62
     - name: Install mdbook
       run: |
         mkdir bin
-        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.14/mdbook-v0.4.14-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
         echo "$(pwd)/bin" >> ${GITHUB_PATH}
     - name: Install mdbook-latex-pdf
       run: |
-        curl -sL -o bin/mdbook-latex-pdf https://github.com/KaiserY/mdbook-latex-pdf/releases/download/0.1.0/mdbook-latex-pdf-x86_64-unknown-linux-gnu
+        curl -sL -o bin/mdbook-latex-pdf https://github.com/KaiserY/mdbook-latex-pdf/releases/download/0.1.1/mdbook-latex-pdf-x86_64-unknown-linux-gnu
         chmod +x bin/mdbook-latex-pdf
         echo "$(pwd)/bin" >> ${GITHUB_PATH}
         pip install --upgrade --force-reinstall Pygments
@@ -53,6 +53,8 @@ jobs:
         unzip Noto_Sans_Hebrew.zip -d fonts/Noto_Sans_Hebrew
         curl -sL -o Noto_Sans_Devanagari.zip https://fonts.google.com/download?family=Noto%20Sans%20Devanagari
         unzip Noto_Sans_Devanagari.zip -d fonts/Noto_Sans_Devanagari
+        curl -sL -o Noto_Emoji.zip https://fonts.google.com/download?family=Noto%20Emoji
+        unzip Noto_Emoji.zip -d fonts/Noto_Emoji
         mv fonts/* ~/.local/share/fonts/
         fc-cache -rv
     - name: Report versions
