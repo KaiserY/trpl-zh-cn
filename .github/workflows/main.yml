@@ -53,8 +53,11 @@ jobs:
         unzip Noto_Sans_Hebrew.zip -d fonts/Noto_Sans_Hebrew
         curl -sL -o Noto_Sans_Devanagari.zip https://fonts.google.com/download?family=Noto%20Sans%20Devanagari
         unzip Noto_Sans_Devanagari.zip -d fonts/Noto_Sans_Devanagari
+        rm -f fonts/Noto_Sans_Devanagari/NotoSansDevanagari-VariableFont_wdth,wght.ttf
         curl -sL -o Noto_Emoji.zip https://fonts.google.com/download?family=Noto%20Emoji
         unzip Noto_Emoji.zip -d fonts/Noto_Emoji
+        curl -sL -o times_sans_serif.zip  https://dl.dafont.com/dl/?f=times_sans_serif
+        unzip times_sans_serif.zip -d fonts/times_sans_serif
         mv fonts/* ~/.local/share/fonts/
         fc-cache -rv
     - name: Report versions
