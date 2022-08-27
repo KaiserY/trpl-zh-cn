@@ -35,6 +35,7 @@ jobs:
         pip install --upgrade --force-reinstall Pygments
     - name: Install font
       run: |
+        echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
         sudo apt-get -y install msttcorefonts
         mkdir fonts
         mkdir -p ~/.local/share/fonts
