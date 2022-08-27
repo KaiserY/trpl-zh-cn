@@ -35,7 +35,7 @@ jobs:
         pip install --upgrade --force-reinstall Pygments
     - name: Install font
       run: |
-        apt -y install msttcorefonts
+        sudo apt-get -y install msttcorefonts
         mkdir fonts
         mkdir -p ~/.local/share/fonts
         curl -sL -o Noto_Sans.zip https://fonts.google.com/download?family=Noto%20Sans
