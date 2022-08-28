@@ -1,7 +1,8 @@
 ## 附录 C：可派生的 trait
 
-> [appendix-03-derivable-traits.md](https://github.com/rust-lang/book/blob/main/src/appendix-03-derivable-traits.md) > <br />
-> commit bb8f6cc9ba2724e8363823bb6bf176cd33584548
+> [appendix-03-derivable-traits.md](https://github.com/rust-lang/book/blob/main/src/appendix-03-derivable-traits.md)
+> <br />
+> commit c07dddac692848ade6c2112c8e15a7087fbbec45
 
 在本书的各个部分中，我们讨论了可应用于结构体和枚举定义的 `derive` 属性。`derive` 属性会在使用 `derive` 语法标记的类型上生成对应 trait 的默认实现的代码。
 
@@ -15,7 +16,7 @@
 
 如果你希望不同于 `derive` 属性所提供的行为，请查阅 [标准库文档](https://doc.rust-lang.org/std/index.html) 中每个 trait 的细节以了解如何手动实现它们。
 
-标准库中定义的其它 trait 不能通过 `derive` 在类型上实现。这些 trait 不存在有意义的默认行为，所以由你负责以合理的方式实现它们。
+这里列出的 trait 是仅有的在标准库中定义且能通过 `derive` 在类型上实现。标准库中定义的其它 trait 不能通过 `derive` 在类型上实现。这些 trait 不存在有意义的默认行为，所以由你负责以合理的方式实现它们。
 
 一个无法被派生的 trait 的例子是为终端用户处理格式化的 `Display` 。你应该时常考虑使用合适的方法来为终端用户显示一个类型。终端用户应该看到类型的什么部分？他们会找出相关部分吗？对他们来说最相关的数据格式是什么样的？Rust 编译器没有这样的洞察力，因此无法为你提供合适的默认行为。
 
