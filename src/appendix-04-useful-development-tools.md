@@ -1,7 +1,8 @@
 ## 附录 D：实用开发工具
 
-> [appendix-04-useful-development-tools.md](https://github.com/rust-lang/book/blob/main/src/appendix-04-useful-development-tools.md) > <br />
-> commit d48e9884f4e5ecb112095d4e8c55ebc3bce4b009
+> [appendix-04-useful-development-tools.md](https://github.com/rust-lang/book/blob/main/src/appendix-04-useful-development-tools.md)
+> <br />
+> commit efbafdba3618487fbc9305318fcab9775132ac15
 
 本附录，我们将讨论 Rust 项目提供的用于开发 Rust 代码的工具。
 
@@ -27,7 +28,7 @@ $ cargo fmt
 
 ### 通过 `rustfix` 修复代码
 
-如果你编写过 Rust 代码，那么你可能见过编译器警告。例如，考虑如下代码：
+如果你编写过 Rust 代码，那么你可能见过那些有很明显修复方式的编译器警告。例如，考虑如下代码：
 
 <span class="filename">文件名: src/main.rs</span>
 
@@ -49,7 +50,7 @@ $ cargo build
 warning: unused variable: `i`
  --> src/main.rs:4:9
   |
-4 |     for i in 1..100 {
+4 |     for i in 0..100 {
   |         ^ help: consider using `_i` instead
   |
   = note: #[warn(unused_variables)] on by default
@@ -146,11 +147,8 @@ fn main() {
 为了帮助 IDE 集成，Rust 社区建议使用 [`rust-analyzer`][rust-analyzer]。这个工具是一组以编译器为中心的实用程序，它实现了 [Language Server Protocol][lsp]（一个 IDE 与编程语言之间的通信规范）。`rust-analyzer` 可以用于不同的客户端，比如 [Visual Studio Code 的 Rust analyzer 插件][vscode]。
 
 [lsp]: http://langserver.org/
-[vscode]: https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer
+[vscode]: https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer
 
 访问 `rust-analyzer` 项目的 [主页][rust-analyzer] 来了解如何安装安装它，然后为你的 IDE 安装 language server 支持。如此你的 IDE 便会获得如自动补全、跳转到定义和 inline error 之类的功能。
 
-请查看 [`rust-analyzer` 的文档][rust-analyzer-manual] 来了解更多信息。
-
 [rust-analyzer]: https://rust-analyzer.github.io
-[rust-analyzer-manual]: https://rust-analyzer.github.io/manual.html

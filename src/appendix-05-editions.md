@@ -1,6 +1,7 @@
 ## 附录 E：版本
 
-> [appendix-05-editions.md](https://github.com/rust-lang/book/blob/main/src/appendix-05-editions.md) > <br />
+> [appendix-05-editions.md](https://github.com/rust-lang/book/blob/main/src/appendix-05-editions.md)
+> <br />
 > commit 8cf0496bb8e56b683ea3f015871c8631684decf4
 
 早在第一章，我们见过 `cargo new` 在 *Cargo.toml* 中增加了一些有关 `edition` 的元数据。本附录将解释其意义！

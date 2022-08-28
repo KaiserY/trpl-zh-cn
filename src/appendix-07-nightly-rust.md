@@ -1,6 +1,7 @@
 ## 附录 G：Rust 是如何开发的与 “Nightly Rust”
 
-> [appendix-07-nightly-rust.md](https://github.com/rust-lang/book/blob/main/src/appendix-07-nightly-rust.md) > <br />
+> [appendix-07-nightly-rust.md](https://github.com/rust-lang/book/blob/main/src/appendix-07-nightly-rust.md)
+> <br />
 > commit d44317c3122b44fb713aba66cc295dee3453b24b
 
 本附录介绍 Rust 是如何开发的以及这如何影响作为 Rust 开发者的你。
