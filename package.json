@@ -1,0 +1,24 @@
+{
+  "name": "trpl-zh-cn",
+  "version": "1.0.0",
+  "description": "![Build Status](https://github.com/KaiserY/trpl-zh-cn/workflows/CI/badge.svg)",
+  "main": "ferris.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs:dev": "vuepress dev src",
+    "docs:build": "vuepress build src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KaiserY/trpl-zh-cn.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KaiserY/trpl-zh-cn/issues"
+  },
+  "homepage": "https://github.com/KaiserY/trpl-zh-cn#readme",
+  "devDependencies": {
+    "vuepress": "^2.0.0-beta.51"
+  }
+}

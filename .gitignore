@@ -3,3 +3,6 @@ mdbook/
 book/
 dist
 .DS_Store
+node_modules
+.temp
+.cache
