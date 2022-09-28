@@ -1,4 +1,4 @@
-## 使用`Box <T>`指向堆上的数据
+## 使用`Box<T>`指向堆上的数据
 
 > [ch15-01-box.md](https://github.com/rust-lang/book/blob/main/src/ch15-01-box.md) <br>
 > commit 359895c6b2e440275a663ee1a3c17e6a94fdc62b
