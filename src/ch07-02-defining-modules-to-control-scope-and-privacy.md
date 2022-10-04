@@ -2,9 +2,67 @@
 
 > [ch07-02-defining-modules-to-control-scope-and-privacy.md](https://github.com/rust-lang/book/blob/main/src/ch07-02-defining-modules-to-control-scope-and-privacy.md)
 > <br>
-> commit eb60fedc9ccd72999f9aabd82f5936ca0143dd8f
+> commit 310ea6cb0dd855eaf510c9ba05648bc5836ead0c
 
 在本节，我们将讨论模块和其它一些关于模块系统的部分，如允许你命名项的 *路径*（*paths*）；用来将路径引入作用域的 `use` 关键字；以及使项变为公有的 `pub` 关键字。我们还将讨论 `as` 关键字、外部包和 glob 运算符。现在，让我们把注意力放在模块上！
+
+首先，我们将从一系列的规则开始，在你未来组织代码的时候，这些规则可被用作简单的参考。接下来我们将会详细的解释每条规则。
+
+## 模块小抄
+
+这里我们提供一个简单的参考，用来解释模块、路径、`use`关键词和`pub`关键词如何在编译器中工作，和大部分开发者如何组织他们的代码。我们将在这个章节中对每条规则的例子一一列举，但这是一个用来参考的好地方用于表达模块是如何工作的。
+
+- **从crate根节点开始**: 当编译一个crate, 编译器首先在crate根文件（通常，对于一个库crate而言是*src/lib.rs*，对于一个二进制crate而言是*src/main.rs*）中寻找需要被编译的代码。
+- **声明模块**: 在crate根文件中，你可以声明一个新模块；比如，你用过`mod garden`声明了一个叫做`garden`的模块。编译器会在下列路径中寻找模块代码：
+  - 内联, 在大括号中，当`mod garden`后方不是一个分号而是一个大括号
+  - 在文件 *src/garden.rs*
+  - 在文件 *src/garden/mod.rs*
+- **声明子模块**: 在除了crate根节点以外的其他文件中，你可以定义子模块。比如，你可能在*src/garden.rs*中定义了`mod vegetables;`。编译器会在以父模块命名的目录中寻找子模块代码：
+  - 内联, 在大括号中，当`mod vegetables`后方不是一个分号而是一个大括号
+  - 在文件 *src/garden/vegetables.rs*
+  - 在文件 *src/garden/vegetables/mod.rs*
+- **模块中的代码路径**: 一旦一个模块是你crate的一部分， 你可以在隐私规则允许的前提下，从同一个crate内的任意地方，通过代码路径引用该模块的代码。举例而言，一个garden vegetables模块下的`Asparagus`类型可以在`crate::garden::vegetables::Asparagus`被找到。
+- **私有 vs 公用**: 一个模块里的代码默认对其父模块私有。为了使一个模块公用，应当在声明时使用`pub mod`替代`mod`。为了使一个公用模块内部的成员公用，应当在声明前使用`pub`。
+- **`use` 关键字**: 在一个作用域内，`use`关键字创建了一个成员的快捷方式，用来减少长路径的重复。在任何可以引用`crate::garden::vegetables::Asparagus`的作用域, 你可以通过 `use crate::garden::vegetables::Asparagus;`创建一个快捷方式，然后你就可以在作用域中只写`Asparagus`来使用该类型。
+
+这里我们创建一个名为`backyard`的二进制crate来说明这些规则。该crate的路径同样命名为`backyard`，该路径包含了这些文件和目录：
+
+```text
+backyard
+├── Cargo.lock
+├── Cargo.toml
+└── src
+    ├── garden
+    │   └── vegetables.rs
+    ├── garden.rs
+    └── main.rs
+```
+
+这个例子中的crate根文件是*src/main.rs*，该文件包括了：
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust,noplayground,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/main.rs}}
+```
+
+`pub mod garden;`行告诉编译器应该包含在*src/garden.rs*文件中发现的代码:
+
+<span class="filename">Filename: src/garden.rs</span>
+
+```rust,noplayground,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden.rs}}
+```
+
+在此处， `pub mod vegetables;`意味着在*src/garden/vegetables.rs*中的代码也应该被包括。这些代码是:
+
+```rust,noplayground,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden/vegetables.rs}}
+```
+
+现在让我们深入了解这些规则的细节并在实际中演示它们！
+
+### 在模块中对相关代码进行分组
 
 *模块* 让我们可以将一个 crate 中的代码进行分组，以提高可读性与重用性。模块还可以控制项的 *私有性*，即项是可以被外部代码使用的（*public*），还是作为一个内部实现的内容，不能被外部代码使用（*private*）。
 
