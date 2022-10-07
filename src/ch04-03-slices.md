@@ -169,7 +169,7 @@ let s = "Hello, world!";
 fn first_word(s: &String) -> &str {
 ```
 
-而更有经验的 Rustacean 会编写出示例 4-9 中的签名，因为它使得可以对 `String` 值和 `&str` 值使用相同的函数：
+而更有经验的 Rustacean 会编写出示例 4-9 中的签名，因为它使得可以对 `&String` 值和 `&str` 值使用相同的函数：
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-09/src/main.rs:here}}
