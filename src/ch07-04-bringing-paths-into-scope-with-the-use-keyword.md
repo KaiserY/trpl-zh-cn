@@ -94,7 +94,7 @@
 
 <span class="caption">示例 7-17: 通过 `pub use` 使名称可从新作用域中被导入至任何代码</span>
 
-通过 `pub use`，外部代码现在可以通过新路径 `hosting::add_to_waitlist` 来调用 `add_to_waitlist` 函数。如果没有指定 `pub use`，`eat_at_restaurant` 函数可以在其作用域中调用 `hosting::add_to_waitlist`，但外部代码则不允许使用这个新路径。
+通过 `pub use`重导出，外部代码现在可以通过新路径 `restaurant::hosting::add_to_waitlist` 来调用 `add_to_waitlist` 函数。如果没有指定 `pub use`，外部代码需在其作用域中调用 `restaurant::front_of_house::hosting::add_to_waitlist`。
 
 当你代码的内部结构与调用你代码的程序员所想象的结构不同时，重导出会很有用。例如，在这个餐馆的比喻中，经营餐馆的人会想到“前台”和“后台”。但顾客在光顾一家餐馆时，可能不会以这些术语来考虑餐馆的各个部分。使用 `pub use`，我们可以使用一种结构编写代码，却将不同的结构形式暴露出来。这样做使我们的库井井有条，也使开发这个库的程序员和调用这个库的程序员都更加方便。
 
