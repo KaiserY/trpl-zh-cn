@@ -3,7 +3,7 @@
 > [ch18-03-pattern-syntax.md](https://github.com/rust-lang/book/blob/main/src/ch18-03-pattern-syntax.md) > <br>
 > commit e72de80f114dc68f69f3920768314f7c005d0dd5
 
-通过本书我们已领略过许多不同类型模式的例子。在本节中，我们收集了模式中所有有效的语法，并讨论了为什么可能要使用每个语法。
+通过本书我们已领略过许多不同类型模式的例子。在本节中，我们收集了模式中所有有效的语法，并讨论为什么以及何时你可能要使用这些语法。
 
 ### 匹配字面值
 
