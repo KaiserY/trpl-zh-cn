@@ -10,7 +10,7 @@
 
 ### 生命周期避免了悬垂引用
 
-生命周期的主要目标是避免悬垂引用，后者会导致程序引用了非预期引用的数据。考虑一下示例 10-17 中的程序，它有一个外部作用域和一个内部作用域.
+生命周期的主要目标是避免悬垂引用，后者会导致程序引用了非预期引用的数据。考虑一下示例 10-17 中的程序，它有一个外部作用域和一个内部作用域。
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-17/src/main.rs:here}}

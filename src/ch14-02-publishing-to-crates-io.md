@@ -148,7 +148,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 ### 创建 Crates.io 账号
 
-在你可以发布任何 crate 之前，需要在 [crates.io](https://crates.io)<!-- ignore --> 上注册账号并获取一个 API token。为此，访问位于 [crates.io](https://crates.io)<!-- ignore --> 的首页并使用 GitHub 账号登陆。（目前 GitHub 账号是必须的，不过将来该网站可能会支持其他创建账号的方法）一旦登陆之后，查看位于 [https://crates.io/me/](https://crates.io/me/)<!-- ignore --> 的账户设置页面并获取 API token。接着使用该 API token 运行 `cargo login` 命令，像这样：
+在你可以发布任何 crate 之前，需要在 [crates.io](https://crates.io)<!-- ignore --> 上注册账号并获取一个 API token。为此，访问位于 [crates.io](https://crates.io)<!-- ignore --> 的首页并使用 GitHub 账号登录。（目前 GitHub 账号是必须的，不过将来该网站可能会支持其他创建账号的方法）一旦登录之后，查看位于 [https://crates.io/me/](https://crates.io/me/)<!-- ignore --> 的账户设置页面并获取 API token。接着使用该 API token 运行 `cargo login` 命令，像这样：
 
 ```console
 $ cargo login abcdefghijklmnopqrstuvwxyz012345
