@@ -124,4 +124,4 @@ Result: 10
 
 接下来，为了丰富本章的内容，让我们讨论一下 `Send`和 `Sync` trait 以及如何对自定义类型使用他们。
 
-[`std::sync::atomic`]: https://doc.rust-lang.org/std/sync/atomic/index.html
+[atomic]: https://doc.rust-lang.org/std/sync/atomic/index.html
