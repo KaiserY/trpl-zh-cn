@@ -187,7 +187,7 @@ fn some_function<T, U>(t: &T, u: &U) -> i32
 
 通过使用 `impl Summary` 作为返回值类型，我们指定了 `returns_summarizable` 函数返回某个实现了 `Summary` trait 的类型，但是不确定其具体的类型。在这个例子中 `returns_summarizable` 返回了一个 `Tweet`，不过调用方并不知情。
 
-返回一个只是指定了需要实现的 trait 的类型的能力在闭包和迭代器场景十分的有用，第十三章会介绍它们。闭包和迭代器创建只有编译器知道的类型，或者是非常非常长的类型。`impl  Trait` 允许你简单的指定函数返回一个 `Iterator` 而无需写出实际的冗长的类型。
+返回一个只是指定了需要实现的 trait 的类型的能力在闭包和迭代器场景十分的有用，第十三章会介绍它们。闭包和迭代器创建只有编译器知道的类型，或者是非常非常长的类型。`impl Trait` 允许你简单的指定函数返回一个 `Iterator` 而无需写出实际的冗长的类型。
 
 不过这只适用于返回单一类型的情况。例如，这段代码的返回值类型指定为返回 `impl Summary`，但是返回了 `NewsArticle` 或 `Tweet` 就行不通：
 
@@ -217,7 +217,7 @@ fn some_function<T, U>(t: &T, u: &U) -> i32
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-07-fixing-listing-10-05/output.txt}}
 ```
 
-错误的核心是 `cannot move out of type [T], a non-copy slice`，对于非泛型版本的 `largest` 函数，我们只尝试了寻找最大的 `i32` 和 `char`。正如第四章 [“只在栈上的数据：拷贝”][stack-only-data-copy]  部分讨论过的，像 `i32` 和 `char` 这样的类型是已知大小的并可以储存在栈上，所以他们实现了 `Copy` trait。当我们将 `largest` 函数改成使用泛型后，现在 `list` 参数的类型就有可能是没有实现 `Copy` trait 的。这意味着我们可能不能将 `list[0]` 的值移动到 `largest` 变量中，这导致了上面的错误。
+错误的核心是 `cannot move out of type [T], a non-copy slice`，对于非泛型版本的 `largest` 函数，我们只尝试了寻找最大的 `i32` 和 `char`。正如第四章 [“只在栈上的数据：拷贝”][stack-only-data-copy] 部分讨论过的，像 `i32` 和 `char` 这样的类型是已知大小的并可以储存在栈上，所以他们实现了 `Copy` trait。当我们将 `largest` 函数改成使用泛型后，现在 `list` 参数的类型就有可能是没有实现 `Copy` trait 的。这意味着我们可能不能将 `list[0]` 的值移动到 `largest` 变量中，这导致了上面的错误。
 
 为了只对实现了 `Copy` 的类型调用这些代码，可以在 `T` 的 trait bounds 中增加 `Copy`！示例 10-15 中展示了一个可以编译的泛型版本的 `largest` 函数的完整代码，只要传递给 `largest` 的 slice 值的类型实现了 `PartialOrd` **和** `Copy` 这两个 trait，例如 `i32` 和 `char`：
 

@@ -94,7 +94,7 @@ Rust 中的所有数字类型都支持基本数学运算：加法、减法、乘
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-07-numeric-operations/src/main.rs}}
 ```
 
-这些语句中的每个表达式使用了一个数学运算符并计算出了一个值，然后绑定给一个变量。[附录 B][appendix_b]<!-- ignore -->  包含 Rust 提供的所有运算符的列表。
+这些语句中的每个表达式使用了一个数学运算符并计算出了一个值，然后绑定给一个变量。[附录 B][appendix_b]<!-- ignore --> 包含 Rust 提供的所有运算符的列表。
 
 #### 布尔型
 
