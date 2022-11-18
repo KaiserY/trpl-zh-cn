@@ -46,7 +46,7 @@ $ cargo new adder
 
 ### 在工作空间中创建第二个包
 
-接下来，让我们在工作空间中指定另一个成员 crate。这个 crate 位于 *add-one* 目录中，所以修改顶级 *Cargo.toml* 为也包含 *add-one* 路径：
+接下来，让我们在工作空间中指定另一个成员 crate。这个 crate 位于 *add_one* 目录中，所以修改顶级 *Cargo.toml* 为也包含 *add_one* 路径：
 
 <span class="filename">文件名: Cargo.toml</span>
 
@@ -54,7 +54,7 @@ $ cargo new adder
 {{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/Cargo.toml}}
 ```
 
-接着新生成一个叫做 `add-one` 的库：
+接着新生成一个叫做 `add_one` 的库：
 
 ```console
 $ cargo new add_one --lib
@@ -77,15 +77,15 @@ $ cargo new add_one --lib
 └── target
 ```
 
-在 *add-one/src/lib.rs* 文件中，增加一个 `add_one` 函数：
+在 *add_one/src/lib.rs* 文件中，增加一个 `add_one` 函数：
 
-<span class="filename">文件名: add-one/src/lib.rs</span>
+<span class="filename">文件名: add_one/src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/add_one/src/lib.rs}}
 ```
 
-现在工作空间中有了一个库 crate，让 `adder` 依赖库 crate `add-one`。首先需要在 *adder/Cargo.toml* 文件中增加 `add-one` 作为路径依赖：
+现在工作空间中有了一个库 crate，让 `adder` 依赖库 crate `add_one`。首先需要在 *adder/Cargo.toml* 文件中增加 `add_one` 作为路径依赖：
 
 <span class="filename">文件名: adder/Cargo.toml</span>
 
@@ -95,7 +95,7 @@ $ cargo new add_one --lib
 
 cargo并不假定工作空间中的Crates会相互依赖，所以需要明确表明工作空间中 crate 的依赖关系。
 
-接下来，在 `adder` crate 中使用 `add-one` crate 的函数 `add_one`。打开 *adder/src/main.rs* 在顶部增加一行 `use` 将新 `add-one` 库 crate 引入作用域。接着修改 `main` 函数来调用 `add_one` 函数，如示例 14-7 所示。
+接下来，在 `adder` crate 中使用 `add_one` crate 的函数 `add_one`。打开 *adder/src/main.rs* 在顶部增加一行 `use` 将新 `add_one` 库 crate 引入作用域。接着修改 `main` 函数来调用 `add_one` 函数，如示例 14-7 所示。
 
 <span class="filename">文件名: adder/src/main.rs</span>
 
@@ -103,7 +103,7 @@ cargo并不假定工作空间中的Crates会相互依赖，所以需要明确表
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-07/add/adder/src/main.rs}}
 ```
 
-<span class="caption">示例 14-7：在 `adder` crate 中使用 `add-one` 库 crate</span>
+<span class="caption">示例 14-7：在 `adder` crate 中使用 `add_one` 库 crate</span>
 
 在 *add* 目录中运行 `cargo build` 来构建工作空间！
 
@@ -123,20 +123,20 @@ $ cargo run -p adder
 Hello, world! 10 plus one is 11!
 ```
 
-这会运行 *adder/src/main.rs* 中的代码，其依赖 `add-one` crate
+这会运行 *adder/src/main.rs* 中的代码，其依赖 `add_one` crate
 
 
 #### 在工作空间中依赖外部包
 
-还需注意的是工作空间只在根目录有一个 *Cargo.lock*，而不是在每一个 crate 目录都有 *Cargo.lock*。这确保了所有的 crate 都使用完全相同版本的依赖。如果在 *Cargo.toml* 和 *add-one/Cargo.toml* 中都增加 `rand` crate，则 Cargo 会将其都解析为同一版本并记录到唯一的 *Cargo.lock* 中。使得工作空间中的所有 crate 都使用相同的依赖意味着其中的 crate 都是相互兼容的。让我们在 *add-one/Cargo.toml* 中的 `[dependencies]` 部分增加 `rand` crate 以便能够在 `add-one` crate 中使用 `rand` crate：
+还需注意的是工作空间只在根目录有一个 *Cargo.lock*，而不是在每一个 crate 目录都有 *Cargo.lock*。这确保了所有的 crate 都使用完全相同版本的依赖。如果在 *Cargo.toml* 和 *add_one/Cargo.toml* 中都增加 `rand` crate，则 Cargo 会将其都解析为同一版本并记录到唯一的 *Cargo.lock* 中。使得工作空间中的所有 crate 都使用相同的依赖意味着其中的 crate 都是相互兼容的。让我们在 *add_one/Cargo.toml* 中的 `[dependencies]` 部分增加 `rand` crate 以便能够在 `add_one` crate 中使用 `rand` crate：
 
-<span class="filename">文件名: add-one/Cargo.toml</span>
+<span class="filename">文件名: add_one/Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add/add_one/Cargo.toml:6:7}}
 ```
 
-现在就可以在 *add-one/src/lib.rs* 中增加 `use rand;` 了，接着在 *add* 目录运行 `cargo build` 构建整个工作空间就会引入并编译 `rand` crate：
+现在就可以在 *add_one/src/lib.rs* 中增加 `use rand;` 了，接着在 *add* 目录运行 `cargo build` 构建整个工作空间就会引入并编译 `rand` crate：
 
 ```console
 $ cargo build
@@ -159,7 +159,7 @@ warning: 1 warning emitted
     Finished dev [unoptimized + debuginfo] target(s) in 10.18s
 ```
 
-现在顶级的 *Cargo.lock* 包含了 `add-one` 的 `rand` 依赖的信息。然而，即使 `rand` 被用于工作空间的某处，也不能在其他 crate 中使用它，除非也在他们的 *Cargo.toml* 中加入 `rand`。例如，如果在顶级的 `adder` crate 的 *adder/src/main.rs* 中增加 `use rand;`，会得到一个错误：
+现在顶级的 *Cargo.lock* 包含了 `add_one` 的 `rand` 依赖的信息。然而，即使 `rand` 被用于工作空间的某处，也不能在其他 crate 中使用它，除非也在他们的 *Cargo.toml* 中加入 `rand`。例如，如果在顶级的 `adder` crate 的 *adder/src/main.rs* 中增加 `use rand;`，会得到一个错误：
 
 ```console
 $ cargo build
@@ -178,7 +178,7 @@ error[E0432]: unresolved import `rand`
 
 作为另一个提升，让我们为 `add_one` crate 中的 `add_one::add_one` 函数增加一个测试：
 
-<span class="filename">文件名: add-one/src/lib.rs</span>
+<span class="filename">文件名: add_one/src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add/add_one/src/lib.rs}}
@@ -211,7 +211,7 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-输出的第一部分显示 `add-one` crate 的 `it_works` 测试通过了。下一个部分显示 `adder` crate 中找到了 0 个测试，最后一部分显示 `add-one` crate 中有 0 个文档测试。在像这样的工作空间结构中运行 `cargo test` 会运行工作空间中所有 crate 的测试。
+输出的第一部分显示 `add_one` crate 的 `it_workstests` 测试通过了。下一个部分显示 `adder` crate 中找到了 0 个测试，最后一部分显示 `add_one` crate 中有 0 个文档测试。在像这样的工作空间结构中运行 `cargo test` 会运行工作空间中所有 crate 的测试。
 
 也可以选择运行工作空间中特定 crate 的测试，通过在根目录使用 `-p` 参数并指定希望测试的 crate 名称：
 
@@ -232,10 +232,10 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-输出显示了 `cargo test` 只运行了 `add-one` crate 的测试而没有运行 `adder` crate 的测试。
+输出显示了 `cargo test` 只运行了 `add_one` crate 的测试而没有运行 `adder` crate 的测试。
 
 如果你选择向 [crates.io](https://crates.io/)发布工作空间中的 crate，每一个工作空间中的 crate 需要单独发布。`cargo publish` 命令并没有 `--all` 或者 `-p` 参数，所以必须进入每一个 crate 的目录并运行 `cargo publish` 来发布工作空间中的每一个 crate。
 
-现在尝试以类似 `add-one` crate 的方式向工作空间增加 `add_two` crate 来作为更多的练习！
+现在尝试以类似 `add_one` crate 的方式向工作空间增加 `add_two` crate 来作为更多的练习！
 
 随着项目增长，考虑使用工作空间：每一个更小的组件比一大块代码要容易理解。如果它们经常需要同时被修改的话，将 crate 保持在工作空间中更易于协调他们的改变。
