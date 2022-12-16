@@ -40,7 +40,7 @@ backyard
 
 这个例子中的crate根文件是*src/main.rs*，该文件包括了：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/main.rs}}
@@ -48,7 +48,7 @@ backyard
 
 `pub mod garden;`行告诉编译器应该包含在*src/garden.rs*文件中发现的代码:
 
-<span class="filename">Filename: src/garden.rs</span>
+<span class="filename">文件名: src/garden.rs</span>
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden.rs}}
