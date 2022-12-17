@@ -10,7 +10,7 @@
 
 ## 模块小抄
 
-这里我们提供一个简单的参考，用来解释模块、路径、`use`关键词和`pub`关键词如何在编译器中工作，和大部分开发者如何组织他们的代码。我们将在这个章节中对每条规则的例子一一列举，但这是一个用来参考的好地方用于表达模块是如何工作的。
+这里我们提供一个简单的参考，用来解释模块、路径、`use`关键词和`pub`关键词如何在编译器中工作，以及大部分开发者如何组织他们的代码。我们将在本章节中举例说明每条规则，不过这是一个解释模块工作方式的良好参考。
 
 - **从crate根节点开始**: 当编译一个crate, 编译器首先在crate根文件（通常，对于一个库crate而言是*src/lib.rs*，对于一个二进制crate而言是*src/main.rs*）中寻找需要被编译的代码。
 - **声明模块**: 在crate根文件中，你可以声明一个新模块；比如，你用`mod garden`声明了一个叫做`garden`的模块。编译器会在下列路径中寻找模块代码：
@@ -40,7 +40,7 @@ backyard
 
 这个例子中的crate根文件是*src/main.rs*，该文件包括了：
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">文件名: src/main.rs</span>
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/main.rs}}
@@ -48,7 +48,7 @@ backyard
 
 `pub mod garden;`行告诉编译器应该包含在*src/garden.rs*文件中发现的代码:
 
-<span class="filename">Filename: src/garden.rs</span>
+<span class="filename">文件名: src/garden.rs</span>
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden.rs}}
