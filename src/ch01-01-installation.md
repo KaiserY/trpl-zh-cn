@@ -1,7 +1,7 @@
 ## 安装
 
 > [ch01-01-installation.md](https://github.com/rust-lang/book/blob/main/src/ch01-01-installation.md) <br>
-> commit 1e17bf15b12f6f7b8d1711dbd343ef8993f64baa
+> commit 2bd5d42c9956369132228da6409f0e68da56c51a
 
 第一步是安装 Rust。我们会通过 `rustup` 下载 Rust，这是一个管理 Rust 版本和相关工具的命令行工具。下载时需要联网。
 
@@ -18,7 +18,7 @@
 如果你使用 Linux 或 macOS，打开终端并输入如下命令：
 
 ```console
-$ curl --proto '=https' --tlsv1.3 https://sh.rustup.rs -sSf | sh
+$ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
 此命令下载一个脚本并开始安装 `rustup` 工具，这会安装最新稳定版 Rust。过程中可能会提示你输入密码。如果安装成功，将会出现如下内容：
@@ -39,11 +39,13 @@ Linux 用户通常需要根据发行版（distribution）文档安装 GCC 或 Cl
 
 ### 在 Windows 上安装 `rustup`
 
-在 Windows 上，前往 [https://www.rust-lang.org/install.html][install] 并按照说明安装 Rust。在安装过程的某个步骤，你会收到一个信息说明为什么需要安装 Visual Studio 2013 或其更新版本的 MSVC 构建工具。要获取构建工具，你需要安装 [Visual Studio 2022][visualstudio]。当被问及需要安装什么工作负载（Workload）的时候，请确保勾选了以下内容：
+在 Windows 上，前往 [https://www.rust-lang.org/install.html][install] 并按照说明安装 Rust。在安装过程的某个步骤，你会收到一个信息说明为什么需要安装 Visual Studio 2013 或其更新版本的 MSVC 构建工具。
 
-- “使用 C++ 的桌面开发”，
-- Windows 10 （或 11） SDK，
-- 英语语言包，以及其他你所需要的语言包。
+要获取构建工具，你需要安装 [Visual Studio 2022][visualstudio]。当被问及需要安装什么工作负载（Workload）的时候，请确保勾选了以下内容：
+
+- “使用 C++ 的桌面开发”（“Desktop Development with C++”）
+- Windows 10（或 11）SDK
+- 英语语言包，以及其他你所需要的语言包
 
 本书的余下部分会使用能同时运行于 *cmd.exe* 和 PowerShell 的命令。如果存在特定差异，我们会解释使用哪一个。
 
@@ -75,23 +77,21 @@ rustc x.y.z (abcabcabc yyyy-mm-dd)
 
 在 PowerShell 中，请使用命令：
 
-```console
+```powershell
 > echo $env:Path
 ```
 
 在 Linux 和 macOS 中，请使用命令：
 
 ```console
-echo $PATH
+$ echo $PATH
 ```
 
-如果一切正确但 Rust 仍不能使用，有许多地方可以求助。最简单的是[位于 Rust 官方 Discord][discord] 上的 #beginners 频道。在这里你可以和其他 Rustacean（Rust 用户的称号，有自嘲意味）聊天并寻求帮助。其它给力的资源包括[用户论坛][users]和 [Stack Overflow][stackoverflow]。
-
-> 译者注：这些资源的主要语言都是英语。
+如果一切正确但 Rust 仍不能使用，有许多地方可以求助。您可以在[社区页面][community]查看如何与其他 Rustaceans（Rust 用户的称号，有自嘲意味）联系。
 
 ## 更新与卸载
 
-通过 `rustup` 安装了 Rust 之后，很容易更新到最新版本，只需要在命令行中运行如下更新脚本即可：
+通过 `rustup` 安装了 Rust 之后，更新到最新版本就很简单了，只需要在您对应的命令行中运行如下更新脚本：
 
 ```console
 $ rustup update
@@ -112,6 +112,4 @@ $ rustup self uninstall
 [otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
 [install]: https://www.rust-lang.org/tools/install
 [visualstudio]: https://visualstudio.microsoft.com/downloads/
-[discord]: https://discord.gg/rust-lang
-[users]: https://users.rust-lang.org/
-[stackoverflow]: https://stackoverflow.com/questions/tagged/rust
+[community]: https://www.rust-lang.org/community

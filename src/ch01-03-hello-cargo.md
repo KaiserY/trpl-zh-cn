@@ -2,7 +2,7 @@
 
 > [ch01-03-hello-cargo.md](https://github.com/rust-lang/book/blob/main/src/ch01-03-hello-cargo.md)
 > <br>
-> commit 0a5421ceb238357b3634fb75234eba4d1dad643c
+> commit f801008f555e4e94aae826cf45f3a8011a773098
 
 Cargo 是 Rust 的构建系统和包管理器。大多数 Rustacean 们使用 Cargo 来管理他们的 Rust 项目，因为它可以为你处理很多任务，比如构建代码、下载依赖库并编译这些库。（我们把代码所需要的库叫做 **依赖**（*dependencies*））。
 
@@ -51,8 +51,6 @@ edition = "2021"
 <span class="caption">示例 1-2: *cargo new* 命令生成的 *Cargo.toml* 的内容</span>
 
 这个文件使用 [*TOML*][toml]<!-- ignore --> (*Tom's Obvious, Minimal Language*) 格式，这是 Cargo 配置文件的格式。
-
-[toml]: https://toml.io
 
 第一行，`[package]`，是一个片段（section）标题，表明下面的语句用来配置一个包。随着我们在这个文件增加更多的信息，还将增加其他片段（section）。
 
@@ -152,9 +150,7 @@ $ cd someproject
 $ cargo build
 ```
 
-关于更多 Cargo 的信息，请查阅 [其文档][its documentation]。
-
-[its documentation]: https://doc.rust-lang.org/cargo/
+关于更多 Cargo 的信息，请查阅 [其文档][cargo]。
 
 ## 总结
 
@@ -169,4 +165,6 @@ $ cargo build
 是时候通过构建更实质性的程序来熟悉读写 Rust 代码了。所以在第二章我们会构建一个猜猜看游戏程序。如果你更愿意从学习 Rust 常用的编程概念开始，请阅读第三章，接着再回到第二章。
 
 [installation]: ch01-01-installation.html#installation
+[toml]: https://toml.io
 [appendix-e]: appendix-05-editions.html
+[cargo]: https://doc.rust-lang.org/cargo/

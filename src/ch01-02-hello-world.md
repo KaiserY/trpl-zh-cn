@@ -2,9 +2,9 @@
 
 > [ch01-02-hello-world.md](https://github.com/rust-lang/book/blob/main/src/ch01-02-hello-world.md)
 > <br>
-> commit 3709acaf30b7e8e520c53e02aa8081f33f4a4c17
+> commit f801008f555e4e94aae826cf45f3a8011a773098
 
-既然安装好了 Rust，我们来编写第一个 Rust 程序。当学习一门新语言的时候，使用该语言在屏幕上打印 `Hello, world!` 是一项传统，我们将沿用这一传统！
+既然安装好了 Rust，是时候来编写第一个 Rust 程序了。当学习一门新语言的时候，使用该语言在屏幕上打印 `Hello, world!` 是一项传统，我们将沿用这一传统！
 
 > 注意：本书假设你熟悉基本的命令行操作。Rust 对于你的编辑器、工具，以及代码位于何处并没有特定的要求，如果你更倾向于使用集成开发环境（IDE），而不是命令行，请尽管使用你喜欢的 IDE。目前很多 IDE 都在一定程度上支持 Rust；查看 IDE 文档以了解更多细节。Rust 团队一直致力于借助 `rust-analyzer` 提供强大的 IDE 支持。详见[附录 D][devtools]<!-- ignore -->。
 
@@ -110,14 +110,14 @@ $ rustc main.rs
 
 如果你有 C 或 C++ 背景，就会发现这与 `gcc` 和 `clang` 类似。编译成功后，Rust 会输出一个二进制的可执行文件。
 
-在 Linux、macOS 或 Windows 的 PowerShell 上，在 shell 中输入 `ls` 命令可以看见这个可执行文件。在 Linux 和 macOS，你会看到两个文件。在 Windows PowerShell 中，你会看到同使用 CMD 相同的三个文件。
+在 Linux、macOS 或 Windows 的 PowerShell 上，在 shell 中输入 `ls` 命令可以看见这个可执行文件。
 
 ```console
 $ ls
 main  main.rs
 ```
 
-在 Windows 的 CMD 上，则输入如下内容：
+在 Linux 和 macOS，你会看到两个文件。在 Windows PowerShell 中，你会看到同使用 CMD 相同的三个文件。在 Windows 的 CMD 上，则输入如下内容：
 
 ```doscon
 > dir /B %= the /B option says to only show the file names =%
