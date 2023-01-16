@@ -2,7 +2,7 @@
 
 > [ch03-02-data-types.md](https://github.com/rust-lang/book/blob/main/src/ch03-02-data-types.md)
 > <br>
-> commit 4284e160715917a768d25265daf2db897c683065
+> commit d0acb2595c891de97a133d06635c50ab449dd65c
 
 在 Rust 中，每一个值都属于某一个 **数据类型**（*data type*），这告诉 Rust 它被指定为何种数据，以便明确数据处理方式。我们将看到两类数据类型子集：标量（scalar）和复合（compound）。
 
@@ -12,7 +12,7 @@
 let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
-如果不像上面这样添加类型注解 `: u32`，Rust 会显示如下错误，这说明编译器需要我们提供更多信息，来了解我们想要的类型：
+如果不像上面的代码这样添加类型注解 `: u32`，Rust 会显示如下错误，这说明编译器需要我们提供更多信息，来了解我们想要的类型：
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/output-only-01-no-type-annotations/output.txt}}
@@ -39,7 +39,7 @@ let guess: u32 = "42".parse().expect("Not a number!");
 | 128-bit | `i128`  | `u128`   |
 | arch    | `isize` | `usize`  |
 
-每一个变体都可以是有符号或无符号的，并有一个明确的大小。**有符号** 和 **无符号** 代表数字能否为负值，换句话说，这个数字是否有可能是负数（有符号数），或者永远为正而不需要符号（无符号数）。这有点像在纸上书写数字：当需要考虑符号的时候，数字以加号或减号作为前缀；然而，可以安全地假设为正数时，加号前缀通常省略。有符号数以[补码形式（two’s complement representation）](https://en.wikipedia.org/wiki/Two%27s_complement) 存储。
+每一个变体都可以是有符号或无符号的，并有一个明确的大小。**有符号** 和 **无符号** 代表数字能否为负值，换句话说，这个数字是否有可能是负数（有符号数），或者永远为正而不需要符号（无符号数）。这有点像在纸上书写数字：当需要考虑符号的时候，数字以加号或减号作为前缀；然而，可以安全地假设为正数时，加号前缀通常省略。有符号数以[补码形式（two’s complement representation）][twos-complement] 存储。
 
 每一个有符号的变体可以储存包含从 -(2<sup>n - 1</sup>) 到 2<sup>n - 1</sup> - 1 在内的数字，这里 *n* 是变体使用的位数。所以 `i8` 可以储存从 -(2<sup>7</sup>) 到 2<sup>7</sup> - 1 在内的数字，也就是从 -128 到 127。无符号的变体可以储存从 0 到 2<sup>n</sup> - 1 的数字，所以 `u8` 可以储存从 0 到 2<sup>8</sup> - 1 的数字，也就是从 0 到 255。
 
@@ -63,12 +63,13 @@ let guess: u32 = "42".parse().expect("Not a number!");
 >
 > 比方说有一个 `u8` ，它可以存放从零到 `255` 的值。那么当你将其修改为 `256` 时会发生什么呢？这被称为 “整型溢出”（“integer overflow” ），这会导致以下两种行为之一的发生。当在 debug 模式编译时，Rust 检查这类问题并使程序 *panic*，这个术语被 Rust 用来表明程序因错误而退出。第九章 [“`panic!` 与不可恢复的错误”][unrecoverable-errors-with-panic] 部分会详细介绍 panic。
 >
-> 在 release 构建中，Rust 不检测溢出，相反会进行一种被称为二进制补码回绕（*two’s complement wrapping*）的操作。简而言之，比此类型能容纳最大值还大的值会回绕到最小值，值 `256` 变成 `0`，值 `257` 变成 `1`，依此类推。依赖整型回绕被认为是一种错误，即便可能出现这种行为。如果你确实需要这种行为，标准库中有一个类型显式提供此功能，[`Wrapping`][wrapping]。
-> 为了显式地处理溢出的可能性，你可以使用标准库在原生数值类型上提供的以下方法:
-> - 所有模式下都可以使用 `wrapping_*` 方法进行回绕，如 `wrapping_add`
-> - 如果 `checked_*` 方法出现溢出，则返回 `None`值
-> - 用 `overflowing_*` 方法返回值和一个布尔值，表示是否出现溢出
-> - 用 `saturating_*` 方法在值的最小值或最大值处进行饱和处理
+> 使用 `--release` flag 在 release 模式中构建时，Rust **不会**检测会导致 panic 的整型溢出。相反发生整型溢出时， Rust 会进行一种被称为二进制补码 wrapping（*two’s complement wrapping*）的操作。简而言之，比此类型能容纳最大值还大的值会回绕到最小值，值 `256` 变成 `0`，值 `257` 变成 `1`，依此类推。程序不会 panic，不过变量可能也不会是你所期望的值。依赖整型溢出 wrapping 的行为被认为是一种错误。
+>
+> 为了显式地处理溢出的可能性，可以使用这几类标准库提供的原始数字类型方法：
+> * 所有模式下都可以使用 `wrapping_*` 方法进行 wrapping，如 `wrapping_add`
+> * 如果 `checked_*` 方法出现溢出，则返回 `None`值
+> * 用 `overflowing_*` 方法返回值和一个布尔值，表示是否出现溢出
+> * 用 `saturating_*` 方法在值的最小值或最大值处进行饱和处理
 
 #### 浮点型
 
@@ -217,7 +218,7 @@ let a = [3; 5];
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/src/main.rs}}
 ```
 
-此代码编译成功。如果您使用 `cargo run` 运行此代码并输入 0、1、2、3 或 4，程序将在数组中的索引处打印出相应的值。如果你输入一个超过数组末端的数字，如 10，你会看到这样的输出：
+此代码编译成功。如果您使用 `cargo run` 运行此代码并输入 `0`、`1`、`2`、`3` 或 `4`，程序将在数组中的索引处打印出相应的值。如果你输入一个超过数组末端的数字，如 10，你会看到这样的输出：
 
 ```console
 thread 'main' panicked at 'index out of bounds: the len is 5 but the index is 10', src/main.rs:19:19
@@ -230,6 +231,7 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 [comparing-the-guess-to-the-secret-number]:
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
+[twos-complement]: https://en.wikipedia.org/wiki/Two%27s_complement
 [control-flow]: ch03-05-control-flow.html#控制流
 [strings]: ch08-02-strings.html#使用字符串存储-utf-8-编码的文本
 [stack-and-heap]: ch04-01-what-is-ownership.html#the-stack-and-the-heap

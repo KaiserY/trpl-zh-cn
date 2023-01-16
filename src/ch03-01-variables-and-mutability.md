@@ -1,8 +1,8 @@
 ## 变量和可变性
 
 > [ch03-01-variables-and-mutability.md](https://github.com/rust-lang/book/blob/main/src/ch03-01-variables-and-mutability.md)
-> 
-> commit 54164e99f7a1ad27fc6fc578783994513abd988d
+>
+> commit d0acb2595c891de97a133d06635c50ab449dd65c
 
 正如第二章中[“使用变量储存值”][storing-values-with-variables]<!-- ignore --> 部分提到的那样，变量默认是不可改变的（immutable）。这是 Rust 提供给你的众多优势之一，让你得以充分利用 Rust 提供的安全性和简单并发性来编写代码。不过，你仍然可以使用可变变量。让我们探讨一下 Rust 为何及如何鼓励你利用不可变性，以及何时你会选择不使用不可变性。
 
@@ -16,7 +16,7 @@
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/src/main.rs}}
 ```
 
-保存并使用 `cargo run` 运行程序。应该会看到一条错误信息，如下输出所示：
+保存并使用 `cargo run` 运行程序。应该会看到一条与不可变性有关的错误信息，如下输出所示：
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/output.txt}}
@@ -30,7 +30,7 @@
 
 Rust 编译器保证，如果声明一个值不会变，它就真的不会变，所以你不必自己跟踪它。这意味着你的代码更易于推导。
 
-不过可变性也是非常有用的，可以用来更方便地编写代码。尽管变量默认是不可变的，你仍然可以在变量名前添加 `mut` 来使其可变，正如在第二章所做的那样。`mut` 也向读者表明了其他代码将会改变这个变量值的意图。
+不过可变性也是非常有用的，可以用来更方便地编写代码。尽管变量默认是不可变的，你仍然可以在变量名前添加 `mut` 来使其可变，正如在[第二章][storing-values-with-variables]所做的那样。`mut` 也向读者表明了其他代码将会改变这个变量值的意图。
 
 例如，让我们将 *src/main.rs* 修改为如下代码：
 
@@ -52,9 +52,7 @@ Rust 编译器保证，如果声明一个值不会变，它就真的不会变，
 
 类似于不可变变量，*常量(constants)* 是绑定到一个名称的不允许改变的值，不过常量与变量还是有一些区别。
 
-首先，不允许对常量使用 `mut`。常量不光默认不能变，它总是不能变。
-
-声明常量使用 `const` 关键字而不是 `let`，并且 *必须* 注明值的类型。在下一部分，[“数据类型”][data-types] 中会介绍类型和类型注解，现在无需关心这些细节，记住总是标注类型即可。
+首先，不允许对常量使用 `mut`。常量不光默认不可变，它总是不可变。声明常量使用 `const` 关键字而不是 `let`，并且 *必须* 注明值的类型。在下一部分，[“数据类型”][data-types] 中会介绍类型和类型注解，现在无需关心这些细节，记住总是标注类型即可。
 
 常量可以在任何作用域中声明，包括全局作用域，这在一个值需要被很多部分的代码用到时很有用。
 

@@ -2,7 +2,7 @@
 
 > [ch04-02-references-and-borrowing.md](https://github.com/rust-lang/book/blob/main/src/ch04-02-references-and-borrowing.md)
 > <br>
-> commit d82136cbdc91c598ef9997493aa577b1a349565e
+> commit 3d51f70c78162faaebcab0da0de2ddd333e7a8ed
 
 示例 4-5 中的元组代码有这样一个问题：我们必须将 `String` 返回给调用函数，以便在调用 `calculate_length` 后仍能使用 `String`，因为 `String` 被移动到了 `calculate_length` 内。相反我们可以提供一个 `String` 值的引用（reference）。**引用**（*reference*）像一个指针，因为它是一个地址，我们可以由此访问储存于该地址的属于其他变量的数据。
 与指针不同，引用确保指向某个特定类型的有效值。
@@ -17,7 +17,9 @@
 
 首先，注意变量声明和函数返回值中的所有元组代码都消失了。其次，注意我们传递 `&s1` 给 `calculate_length`，同时在函数定义中，我们获取 `&String` 而不是 `String`。这些 & 符号就是 **引用**，它们允许你使用值但不获取其所有权。图 4-5 展示了一张示意图。
 
-<img alt="&amp;String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
+<img alt="Three tables: the table for s contains only a pointer to the table
+for s1. The table for s1 contains the stack data for s1 and points to the
+string data on the heap." src="img/trpl04-05.svg" class="center" />
 
 <span class="caption">图 4-5：`&String s` 指向 `String s1` 示意图</span>
 
@@ -123,7 +125,7 @@ Rust 在同时使用可变与不可变引用时也采用的类似的规则。这
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-13-reference-scope-ends/src/main.rs:here}}
 ```
 
-不可变引用 `r1` 和 `r2` 的作用域在 `println!` 最后一次使用之后结束，这也是创建可变引用 `r3` 的地方。它们的作用域没有重叠，所以代码是可以编译的。编译器在作用域结束之前判断不再使用的引用的能力被称为 **非词法作用域生命周期**（*Non-Lexical Lifetimes*，简称 NLL）。你可以在 [The Edition Guide][nll] 中阅读更多关于它的信息。
+不可变引用 `r1` 和 `r2` 的作用域在 `println!` 最后一次使用之后结束，这也是创建可变引用 `r3` 的地方。它们的作用域没有重叠，所以代码是可以编译的。编译器可以在作用域结束之前判断不再使用的引用。
 
 尽管这些错误有时使人沮丧，但请牢记这是 Rust 编译器在提前指出一个潜在的 bug（在编译时而不是在运行时）并精准显示问题所在。这样你就不必去跟踪为何数据并不是你想象中的那样。
 
@@ -178,5 +180,3 @@ for it to be borrowed from
 * 引用必须总是有效的。
 
 接下来，我们来看看另一种不同类型的引用：slice。
-
-[nll]: https://doc.rust-lang.org/edition-guide/rust-2018/ownership-and-lifetimes/non-lexical-lifetimes.html

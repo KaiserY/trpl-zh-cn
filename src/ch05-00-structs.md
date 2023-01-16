@@ -2,7 +2,7 @@
 
 > [ch05-00-structs.md](https://github.com/rust-lang/book/blob/main/src/ch05-00-structs.md)
 > <br>
-> commit dd7e05275822d6cf790bcdae6983b3234141b5e7
+> commit 8612c4a5801b61f8d2e952f8bbbb444692ff1ec2
 
 *struct*，或者 *structure*，是一个自定义数据类型，允许你包装和命名多个相关的值，从而形成一个有意义的组合。如果你熟悉一门面向对象语言，*struct* 就像对象中的数据属性。在本章中，我们会对元组和结构体进行比较和对比。
 

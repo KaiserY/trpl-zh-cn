@@ -2,7 +2,7 @@
 
 > [ch04-03-slices.md](https://github.com/rust-lang/book/blob/main/src/ch04-03-slices.md)
 > <br>
-> commit a5e0c5b2c5f9054be3b961aea2c7edfeea591de8
+> commit 3d51f70c78162faaebcab0da0de2ddd333e7a8ed
 
 *slice* 允许你引用集合中一段连续的元素序列，而不用引用整个集合。slice 是一类引用，所以它没有所有权。
 
@@ -24,7 +24,7 @@ fn first_word(s: &String) -> ?
 
 <span class="caption">示例 4-7：`first_word` 函数返回 `String` 参数的一个字节索引值</span>
 
-因为需要逐个元素的检查 `String` 中的值是否为空格，需要用 `as_bytes` 方法将 `String` 转化为字节数组：
+因为需要逐个元素的检查 `String` 中的值是否为空格，需要用 `as_bytes` 方法将 `String` 转化为字节数组。
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:as_bytes}}
@@ -80,7 +80,11 @@ fn second_word(s: &String) -> (usize, usize) {
 
 图 4-6 展示了一个图例。
 
-<img alt="world containing a pointer to the byte at index 6 of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
+<img alt="Three tables: a table representing the stack data of s, which points
+to the byte at index 0 in a table of the string data &quot;hello world&quot; on
+the heap. The third table rep-resents the stack data of the slice world, which
+has a length value of 5 and points to byte 6 of the heap data table."
+src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
 <span class="caption">图 4-6：引用了部分 `String` 的字符串 slice</span>
 
@@ -150,6 +154,8 @@ fn second_word(s: &String) -> &str {
 ```
 
 回忆一下借用规则，当拥有某值的不可变引用时，就不能再获取一个可变引用。因为 `clear` 需要清空 `String`，它尝试获取一个可变引用。在调用 `clear` 之后的 `println!` 使用了 `word` 中的引用，所以这个不可变的引用在此时必须仍然有效。Rust 不允许 `clear` 中的可变引用和 `word` 中的不可变引用同时存在，因此编译失败。Rust 不仅使得我们的 API 简单易用，也在编译时就消除了一整类的错误！
+
+<a id="string-literals-are-slices"></a>
 
 #### 字符串字面值就是 slice
 
