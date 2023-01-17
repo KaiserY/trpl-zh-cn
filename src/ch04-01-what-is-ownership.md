@@ -74,7 +74,7 @@ let s = String::from("hello");
 
 这两个冒号 `::` 是运算符，允许将特定的 `from` 函数置于 `String` 类型的命名空间（namespace）下，而不需要使用类似 `string_from` 这样的名字。在第五章的 [“方法语法”（“Method Syntax”）][method-syntax] 部分会着重讲解这个语法而且在第七章的 [“路径用于引用模块树中的项”][paths-module-tree] 中会讲到模块的命名空间。
 
-**可以** 修改此类字符串 ：
+**可以** 修改此类字符串：
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-01-can-mutate-string/src/main.rs:here}}
@@ -93,7 +93,7 @@ let s = String::from("hello");
 
 第一部分由我们完成：当调用 `String::from` 时，它的实现 (*implementation*) 请求其所需的内存。这在编程语言中是非常通用的。
 
-然而，第二部分实现起来就各有区别了。在有 **垃圾回收**（*garbage collector*，*GC*）的语言中， GC 记录并清除不再使用的内存，而我们并不需要关心它。在大部分没有 GC 的语言中，识别出不再使用的内存并调用代码显式释放就是我们的责任了，跟请求内存的时候一样。从历史的角度上说正确处理内存回收曾经是一个困难的编程问题。如果忘记回收了会浪费内存。如果过早回收了，将会出现无效变量。如果重复回收，这也是个 bug。我们需要精确的为一个 `allocate` 配对一个 `free`。
+然而，第二部分实现起来就各有区别了。在有 **垃圾回收**（*garbage collector*，*GC*）的语言中，GC 记录并清除不再使用的内存，而我们并不需要关心它。在大部分没有 GC 的语言中，识别出不再使用的内存并调用代码显式释放就是我们的责任了，跟请求内存的时候一样。从历史的角度上说正确处理内存回收曾经是一个困难的编程问题。如果忘记回收了会浪费内存。如果过早回收了，将会出现无效变量。如果重复回收，这也是个 bug。我们需要精确的为一个 `allocate` 配对一个 `free`。
 
 Rust 采取了一个不同的策略：内存在拥有它的变量离开作用域后就被自动释放。下面是示例 4-1 中作用域例子的一个使用 `String` 而不是字符串字面值的版本：
 
@@ -111,7 +111,7 @@ Rust 采取了一个不同的策略：内存在拥有它的变量离开作用域
 
 #### 变量与数据交互的方式（一）：移动
 
-在Rust 中，多个变量可以采取不同的方式与同一数据进行交互。让我们看看示例 4-2 中一个使用整型的例子。
+在 Rust 中，多个变量可以采取不同的方式与同一数据进行交互。让我们看看示例 4-2 中一个使用整型的例子。
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-02/src/main.rs:here}}
@@ -227,7 +227,7 @@ Rust 不允许自身或其任何部分实现了 `Drop` trait 的类型使用 `Co
 
 将值传递给函数与给变量赋值的原理相似。向函数传递值可能会移动或者复制，就像赋值语句一样。示例 4-3 使用注释展示变量何时进入和离开作用域：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-03/src/main.rs}}
@@ -241,7 +241,7 @@ Rust 不允许自身或其任何部分实现了 `Drop` trait 的类型使用 `Co
 
 返回值也可以转移所有权。示例 4-4 展示了一个返回了某些值的示例，与示例 4-3 一样带有类似的注释。
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-04/src/main.rs}}
@@ -255,7 +255,7 @@ Rust 不允许自身或其任何部分实现了 `Drop` trait 的类型使用 `Co
 
 我们可以使用元组来返回多个值，如示例 4-5 所示。
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-05/src/main.rs}}

@@ -10,7 +10,7 @@
 
 让我们看看一个慢请求如何影响当前 server 实现中的其他请求。示例 20-10 通过模拟慢响应实现了 */sleep* 请求处理，它会使 server 在响应之前休眠五秒。
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-10/src/main.rs:here}}
@@ -30,7 +30,7 @@
 
 **线程池**（*thread pool*）是一组预先分配的等待或准备处理任务的线程。当程序收到一个新任务，线程池中的一个线程会被分配任务，这个线程会离开并处理任务。其余的线程则可用于处理在第一个线程处理任务的同时处理其他接收到的任务。当第一个线程处理完任务时，它会返回空闲线程池中等待处理新任务。线程池允许我们并发处理连接，增加 server 的吞吐量。
 
-我们会将池中线程限制为较少的数量，以防拒绝服务（Denial of Service， DoS）攻击；如果程序为每一个接收的请求都新建一个线程，某人向 server 发起千万级的请求时会耗尽服务器的资源并导致所有请求的处理都被终止。
+我们会将池中线程限制为较少的数量，以防拒绝服务（Denial of Service，DoS）攻击；如果程序为每一个接收的请求都新建一个线程，某人向 server 发起千万级的请求时会耗尽服务器的资源并导致所有请求的处理都被终止。
 
 不同于分配无限的线程，线程池中将有固定数量的等待线程。当新进请求时，将请求发送到线程池中做处理。线程池会维护一个接收请求的队列。每一个线程会从队列中取出一个请求，处理请求，接着向队列索取另一个请求。通过这种设计，则可以并发处理 `N` 个请求，其中 `N` 为线程数。如果每一个线程都在响应慢请求，之后的请求仍然会阻塞队列，不过相比之前增加了能处理的慢请求的数量。
 
@@ -44,7 +44,7 @@
 
 首先，让我们探索一下为每一个连接都创建一个线程的代码看起来如何。这并不是最终方案，因为正如之前讲到的它会潜在的分配无限的线程，不过这是一个开始。示例 20-11 展示了 `main` 的改变，它在 `for` 循环中为每一个流分配了一个新线程进行处理：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-11/src/main.rs:here}}
@@ -58,7 +58,7 @@
 
 我们期望线程池以类似且熟悉的方式工作，以便从线程切换到线程池并不会对使用该 API 的代码做出较大的修改。示例 20-12 展示我们希望用来替换 `thread::spawn` 的 `ThreadPool` 结构体的假想接口：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-12/src/main.rs:here}}
@@ -80,7 +80,7 @@
 
 创建 *src/lib.rs* 文件，它包含了目前可用的最简单的 `ThreadPool` 定义：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-01-define-threadpool-struct/src/lib.rs}}
@@ -88,7 +88,7 @@
 
 接着创建一个新目录，*src/bin*，并将二进制 crate 根文件从 *src/main.rs* 移动到 *src/bin/main.rs*。这使得库 crate 成为 *hello* 目录的主要 crate；不过仍然可以使用 `cargo run` 运行 *src/bin/main.rs* 二进制文件。移动了 *main.rs* 文件之后，修改 *src/bin/main.rs* 文件开头加入如下代码来引入库 crate 并将 `ThreadPool` 引入作用域：
 
-<span class="filename">文件名: src/bin/main.rs</span>
+<span class="filename">文件名：src/bin/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-01-define-threadpool-struct/src/bin/main.rs:here}}
@@ -102,7 +102,7 @@
 
 这告诉我们下一步是为 `ThreadPool` 创建一个叫做 `new` 的关联函数。我们还知道 `new` 需要有一个参数可以接受 `4`，而且 `new` 应该返回 `ThreadPool` 实例。让我们实现拥有此特征的最小化 `new` 函数：
 
-<span class="filename">文件夹: src/lib.rs</span>
+<span class="filename">文件夹：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-02-impl-threadpool-new/src/lib.rs}}
@@ -132,7 +132,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 `F` 还有 trait bound `Send` 和生命周期绑定 `'static`，这对我们的情况也是有意义的：需要 `Send` 来将闭包从一个线程转移到另一个线程，而 `'static` 是因为并不知道线程会执行多久。让我们编写一个使用带有这些 bound 的泛型参数 `F` 的 `ThreadPool` 的 `execute` 方法：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-03-define-execute/src/lib.rs:here}}
@@ -154,7 +154,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 这里仍然存在警告是因为其并没有对 `new` 和 `execute` 的参数做任何操作。让我们用期望的行为来实现这些函数。以考虑 `new` 作为开始。之前选择使用无符号类型作为 `size` 参数的类型，因为线程数为负的线程池没有意义。然而，线程数为零的线程池同样没有意义，不过零是一个完全有效的 `u32` 值。让我们增加在返回 `ThreadPool` 实例之前检查 `size` 是否大于零的代码，并使用 `assert!` 宏在得到零时 panic，如示例 20-13 所示：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-13/src/lib.rs:here}}
@@ -186,7 +186,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 示例 20-14 中的代码可以编译，不过实际上还并没有创建任何线程。我们改变了 `ThreadPool` 的定义来存放一个 `thread::JoinHandle<()>` 的 vector 实例，使用 `size` 容量来初始化，并设置一个 `for` 循环了来运行创建线程的代码，并返回包含这些线程的 `ThreadPool` 实例：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore,not_desired_behavior
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-14/src/lib.rs:here}}
@@ -219,7 +219,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 准备好了吗？示例 20-15 就是一个做出了这些修改的例子：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-15/src/lib.rs:here}}
@@ -249,7 +249,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 让我们以在 `ThreadPool::new` 中创建信道并让 `ThreadPool` 实例充当发送端开始，如示例 20-16 所示。`Job` 是将在信道中发出的类型，目前它是一个没有任何内容的结构体：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-16/src/lib.rs:here}}
@@ -261,7 +261,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 让我们尝试在线程池创建每个 worker 时将信道的接收端传递给他们。须知我们希望在 worker 所分配的线程中使用信道的接收端，所以将在闭包中引用 `receiver` 参数。示例 20-17 中展示的代码还不能编译：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-17/src/lib.rs:here}}
@@ -283,7 +283,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 回忆一下第十六章讨论的线程安全智能指针，为了在多个线程间共享所有权并允许线程修改其值，需要使用 `Arc<Mutex<T>>`。`Arc` 使得多个 worker 拥有接收端，而 `Mutex` 则确保一次只有一个 worker 能从接收端得到任务。示例 20-18 展示了所需的修改：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-18/src/lib.rs:here}}
@@ -299,7 +299,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 最后让我们实现 `ThreadPool` 上的 `execute` 方法。同时也要修改 `Job` 结构体：它将不再是结构体，`Job` 将是一个有着 `execute` 接收到的闭包类型的 trait 对象的类型别名。第十九章 [“类型别名用来创建类型同义词”][creating-type-synonyms-with-type-aliases] 部分提到过，类型别名允许将长的类型变短。观察示例 20-19：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-19/src/lib.rs:here}}
@@ -311,7 +311,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 不过到此事情还没有结束！在 worker 中，传递给 `thread::spawn` 的闭包仍然还只是 **引用** 了信道的接收端。相反我们需要闭包一直循环，向信道的接收端请求任务，并在得到任务时执行他们。如示例 20-20 对 `Worker::new` 做出修改：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-20/src/lib.rs:here}}
@@ -372,7 +372,7 @@ Worker 2 got a job; executing.
 
 在学习了第十八章的 `while let` 循环之后，你可能会好奇为何不能如此编写 worker 线程，如示例 20-21 所示：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore,not_desired_behavior
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-21/src/lib.rs:here}}

@@ -30,7 +30,7 @@ $ cd adder
 
 adder 库中 `src/lib.rs` 的内容应该看起来如示例 11-1 所示：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-01/src/lib.rs}}
@@ -62,7 +62,7 @@ Cargo 编译并运行了测试。在 `Compiling`、`Finished` 和 `Running` 这�
 
 让我们改变测试的名称并看看这如何改变测试的输出。给 `it_works` 函数起个不同的名字，比如 `exploration`，像这样：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-01-changing-test-name/src/lib.rs}}
@@ -76,7 +76,7 @@ Cargo 编译并运行了测试。在 `Compiling`、`Finished` 和 `Running` 这�
 
 让我们增加另一个测试，不过这一次是一个会失败的测试！当测试函数中出现 panic 时测试就失败了。每一个测试都在一个新线程中运行，当主线程发现测试线程异常了，就将对应测试标记为失败。第九章讲到了最简单的造成 panic 的方法：调用 `panic!` 宏。写入新测试 `another` 后， `src/lib.rs` 现在看起来如示例 11-3 所示：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,panics,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-03/src/lib.rs:here}}
@@ -104,7 +104,7 @@ Cargo 编译并运行了测试。在 `Compiling`、`Finished` 和 `Running` 这�
 
 回忆一下第五章中，示例 5-15 中有一个 `Rectangle` 结构体和一个 `can_hold` 方法，在示例 11-5 中再次使用他们。将他们放进 *src/lib.rs* 并使用 `assert!` 宏编写一些测试。
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-05/src/lib.rs:here}}
@@ -114,7 +114,7 @@ Cargo 编译并运行了测试。在 `Compiling`、`Finished` 和 `Running` 这�
 
 `can_hold` 方法返回一个布尔值，这意味着它完美符合 `assert!` 宏的使用场景。在示例 11-6 中，让我们编写一个 `can_hold` 方法的测试来作为练习，这里创建一个长为 8 宽为 7 的 `Rectangle` 实例，并假设它可以放得下另一个长为 5 宽为 1 的 `Rectangle` 实例：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-06/src/lib.rs:here}}
@@ -132,7 +132,7 @@ Cargo 编译并运行了测试。在 `Compiling`、`Finished` 和 `Running` 这�
 
 它确实通过了！再来增加另一个测试，这一回断言一个更小的矩形不能放下一个更大的矩形：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-02-adding-another-rectangle-test/src/lib.rs:here}}
@@ -164,7 +164,7 @@ Cargo 编译并运行了测试。在 `Compiling`、`Finished` 和 `Running` 这�
 
 示例 11-7 中，让我们编写一个对其参数加二并返回结果的函数 `add_two`。接着使用 `assert_eq!` 宏测试这个函数。
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-07/src/lib.rs}}
@@ -206,7 +206,7 @@ Cargo 编译并运行了测试。在 `Compiling`、`Finished` 和 `Running` 这�
 
 例如，比如说有一个根据人名进行问候的函数，而我们希望测试将传递给函数的人名显示在输出中：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-05-greeter/src/lib.rs}}
@@ -248,7 +248,7 @@ Cargo 编译并运行了测试。在 `Compiling`、`Finished` 和 `Running` 这�
 
 示例 11-8 展示了一个检查 `Guess::new` 是否按照我们的期望出错的测试：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-08/src/lib.rs}}
@@ -278,7 +278,7 @@ Cargo 编译并运行了测试。在 `Compiling`、`Finished` 和 `Running` 这�
 
 然而 `should_panic` 测试结果可能会非常含糊不清，因为它只是告诉我们代码并没有产生 panic。`should_panic` 甚至在一些不是我们期望的原因而导致 panic 时也会通过。为了使 `should_panic` 测试结果更精确，我们可以给 `should_panic` 属性增加一个可选的 `expected` 参数。测试工具会确保错误信息中包含其提供的文本。例如，考虑示例 11-9 中修改过的 `Guess`，这里 `new` 函数根据其值是过大还或者过小而提供不同的 panic 信息：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-09/src/lib.rs:here}}

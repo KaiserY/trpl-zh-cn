@@ -17,7 +17,7 @@ $ cd add
 
 接着在 *add* 目录中，创建 *Cargo.toml* 文件。这个 *Cargo.toml* 文件配置了整个工作空间。它不会包含 `[package]` 或其他我们在 *Cargo.toml* 中见过的元信息。相反，它以 `[workspace]` 部分作为开始，并通过指定 *adder* 的路径来为工作空间增加成员，如下会加入二进制 crate：
 
-<span class="filename">文件名: Cargo.toml</span>
+<span class="filename">文件名：Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-01-workspace-with-adder-crate/add/Cargo.toml}}
@@ -48,7 +48,7 @@ $ cargo new adder
 
 接下来，让我们在工作空间中指定另一个成员 crate。这个 crate 位于 *add_one* 目录中，所以修改顶级 *Cargo.toml* 为也包含 *add_one* 路径：
 
-<span class="filename">文件名: Cargo.toml</span>
+<span class="filename">文件名：Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/Cargo.toml}}
@@ -79,7 +79,7 @@ $ cargo new add_one --lib
 
 在 *add_one/src/lib.rs* 文件中，增加一个 `add_one` 函数：
 
-<span class="filename">文件名: add_one/src/lib.rs</span>
+<span class="filename">文件名：add_one/src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/add_one/src/lib.rs}}
@@ -87,17 +87,17 @@ $ cargo new add_one --lib
 
 现在工作空间中有了一个库 crate，让 `adder` 依赖库 crate `add_one`。首先需要在 *adder/Cargo.toml* 文件中增加 `add_one` 作为路径依赖：
 
-<span class="filename">文件名: adder/Cargo.toml</span>
+<span class="filename">文件名：adder/Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/adder/Cargo.toml:6:7}}
 ```
 
-cargo并不假定工作空间中的Crates会相互依赖，所以需要明确表明工作空间中 crate 的依赖关系。
+cargo 并不假定工作空间中的 Crates 会相互依赖，所以需要明确表明工作空间中 crate 的依赖关系。
 
 接下来，在 `adder` crate 中使用 `add_one` crate 的函数 `add_one`。打开 *adder/src/main.rs* 在顶部增加一行 `use` 将新 `add_one` 库 crate 引入作用域。接着修改 `main` 函数来调用 `add_one` 函数，如示例 14-7 所示。
 
-<span class="filename">文件名: adder/src/main.rs</span>
+<span class="filename">文件名：adder/src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-07/add/adder/src/main.rs}}
@@ -130,7 +130,7 @@ Hello, world! 10 plus one is 11!
 
 还需注意的是工作空间只在根目录有一个 *Cargo.lock*，而不是在每一个 crate 目录都有 *Cargo.lock*。这确保了所有的 crate 都使用完全相同版本的依赖。如果在 *Cargo.toml* 和 *add_one/Cargo.toml* 中都增加 `rand` crate，则 Cargo 会将其都解析为同一版本并记录到唯一的 *Cargo.lock* 中。使得工作空间中的所有 crate 都使用相同的依赖意味着其中的 crate 都是相互兼容的。让我们在 *add_one/Cargo.toml* 中的 `[dependencies]` 部分增加 `rand` crate 以便能够在 `add_one` crate 中使用 `rand` crate：
 
-<span class="filename">文件名: add_one/Cargo.toml</span>
+<span class="filename">文件名：add_one/Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add/add_one/Cargo.toml:6:7}}
@@ -178,7 +178,7 @@ error[E0432]: unresolved import `rand`
 
 作为另一个提升，让我们为 `add_one` crate 中的 `add_one::add_one` 函数增加一个测试：
 
-<span class="filename">文件名: add_one/src/lib.rs</span>
+<span class="filename">文件名：add_one/src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add/add_one/src/lib.rs}}

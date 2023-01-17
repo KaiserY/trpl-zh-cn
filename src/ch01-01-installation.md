@@ -97,7 +97,7 @@ $ echo $PATH
 $ rustup update
 ```
 
-若要卸载 Rust 和 `rustup`，请在命令行中运行如下卸载脚本:
+若要卸载 Rust 和 `rustup`，请在命令行中运行如下卸载脚本：
 
 ```console
 $ rustup self uninstall

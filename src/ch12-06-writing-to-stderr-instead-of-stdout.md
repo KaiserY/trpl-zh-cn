@@ -32,7 +32,7 @@ Problem parsing arguments: not enough arguments
 
 让我们如示例 12-24 所示的代码改变错误信息是如何被打印的。得益于本章早些时候的重构，所有打印错误信息的代码都位于 `main` 一个函数中。标准库提供了 `eprintln!` 宏来打印到标准错误流，所以将两个调用 `println!` 打印错误信息的位置替换为 `eprintln!`：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-24/src/main.rs:here}}
@@ -57,7 +57,7 @@ $ cargo run to poem.txt > output.txt
 
 我们并不会在终端看到任何输出，同时 `output.txt` 将会包含其结果：
 
-<span class="filename">文件名: output.txt</span>
+<span class="filename">文件名：output.txt</span>
 
 ```text
 Are you nobody, too?

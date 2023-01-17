@@ -22,7 +22,7 @@
 
 注释也可以放在包含代码的行的末尾：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-24-comments-end-of-line/src/main.rs}}
@@ -30,7 +30,7 @@
 
 不过你更经常看到的是以这种格式使用它们，也就是位于它所解释的代码行的上面一行：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}

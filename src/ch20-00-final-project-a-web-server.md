@@ -1,4 +1,4 @@
-# 最后的项目: 构建多线程 web server
+# 最后的项目：构建多线程 web server
 
 > [ch20-00-final-project-a-web-server.md](https://github.com/rust-lang/book/blob/main/src/ch20-00-final-project-a-web-server.md)
 > <br>

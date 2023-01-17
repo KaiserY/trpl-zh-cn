@@ -10,7 +10,7 @@ fn main() {
                                     // 但 i32 是 Copy 的，
                                     // 所以在后面可继续使用 x
 
-} // 这里, x 先移出了作用域，然后是 s。但因为 s 的值已被移走，
+} // 这里，x 先移出了作用域，然后是 s。但因为 s 的值已被移走，
   // 没有特殊之处
 
 fn takes_ownership(some_string: String) { // some_string 进入作用域

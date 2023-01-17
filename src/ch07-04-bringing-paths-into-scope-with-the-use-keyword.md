@@ -8,7 +8,7 @@
 
 在示例 7-11 中，我们将 `crate::front_of_house::hosting` 模块引入了 `eat_at_restaurant` 函数的作用域，而我们只需要指定 `hosting::add_to_waitlist` 即可在 `eat_at_restaurant` 中调用 `add_to_waitlist` 函数。
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-11/src/lib.rs}}
@@ -20,7 +20,7 @@
 
 你还可以使用 `use` 和相对路径来将一个项引入作用域。示例 7-12 展示了如何指定相对路径来取得与示例 7-11 中一样的行为。
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-12/src/lib.rs}}
@@ -32,7 +32,7 @@
 
 在示例 7-11 中，你可能会比较疑惑，为什么我们是指定 `use crate::front_of_house::hosting` ，然后在 `eat_at_restaurant` 中调用 `hosting::add_to_waitlist` ，而不是通过指定一直到 `add_to_waitlist` 函数的 `use` 路径来得到相同的结果，如示例 7-13 所示。
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-13/src/lib.rs}}
@@ -44,7 +44,7 @@
 
 另一方面，使用 `use` 引入结构体、枚举和其他项时，习惯是指定它们的完整路径。示例 7-14 展示了将 `HashMap` 结构体引入二进制 crate 作用域的习惯用法。
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-14/src/main.rs}}
@@ -56,7 +56,7 @@
 
 这个习惯用法有一个例外，那就是我们想使用 `use` 语句将两个具有相同名称的项带入作用域，因为 Rust 不允许这样做。示例 7-15 展示了如何将两个具有相同名称但不同父模块的 `Result` 类型引入作用域，以及如何引用它们。
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-15/src/lib.rs:here}}
@@ -70,7 +70,7 @@
 
 使用 `use` 将两个同名类型引入同一作用域这个问题还有另一个解决办法：在这个类型的路径后面，我们使用 `as` 指定一个新的本地名称或者别名。示例 7-16 展示了另一个编写示例 7-15 中代码的方法，通过 `as` 重命名其中一个 `Result` 类型。
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-16/src/lib.rs:here}}
@@ -78,7 +78,7 @@
 
 <span class="caption">示例 7-16: 使用 `as` 关键字重命名引入作用域的类型</span>
 
-在第二个 `use` 语句中，我们选择 `IoResult` 作为 `std::io::Result` 的新名称，它与从 `std::fmt` 引入作用域的 `Result` 并不冲突。示例 7-15 和示例 7-16 都是惯用的，如何选择都取决于你!
+在第二个 `use` 语句中，我们选择 `IoResult` 作为 `std::io::Result` 的新名称，它与从 `std::fmt` 引入作用域的 `Result` 并不冲突。示例 7-15 和示例 7-16 都是惯用的，如何选择都取决于你！
 
 ### 使用 `pub use` 重导出名称
 
@@ -86,7 +86,7 @@
 
 示例 7-17 将示例 7-11 根模块中的 `use` 改为 `pub use` 。
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-17/src/lib.rs}}
@@ -102,7 +102,7 @@
 
 在第二章中我们编写了一个猜猜看游戏。那个项目使用了一个外部包，`rand`，来生成随机数。为了在项目中使用 `rand`，在 *Cargo.toml* 中加入了如下行：
 
-<span class="filename">文件名: Cargo.toml</span>
+<span class="filename">文件名：Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:9:}}
@@ -130,7 +130,7 @@ use std::collections::HashMap;
 
 当需要引入很多定义于相同包或相同模块的项时，为每一项单独列出一行会占用源码很大的空间。例如猜猜看章节示例 2-4 中有两行 `use` 语句都从 `std` 引入项到作用域：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-01-use-std-unnested/src/main.rs:here}}
@@ -138,7 +138,7 @@ use std::collections::HashMap;
 
 相反，我们可以使用嵌套路径将相同的项在一行中引入作用域。这么做需要指定路径的相同部分，接着是两个冒号，接着是大括号中的各自不同的路径部分，如示例 7-18 所示。
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-18/src/main.rs:here}}
@@ -150,7 +150,7 @@ use std::collections::HashMap;
 
 我们可以在路径的任何层级使用嵌套路径，这在组合两个共享子路径的 `use` 语句时非常有用。例如，示例 7-19 中展示了两个 `use` 语句：一个将 `std::io` 引入作用域，另一个将 `std::io::Write` 引入作用域：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-19/src/lib.rs}}
@@ -160,7 +160,7 @@ use std::collections::HashMap;
 
 两个路径的相同部分是 `std::io`，这正是第一个路径。为了在一行 `use` 语句中引入这两个路径，可以在嵌套路径中使用 `self`，如示例 7-20 所示。
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-20/src/lib.rs}}

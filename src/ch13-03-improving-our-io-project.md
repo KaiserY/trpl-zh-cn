@@ -10,7 +10,7 @@
 
 在示例 12-6 中，我们增加了一些代码获取一个 `String` slice 并创建一个 `Config` 结构体的实例，他们索引 slice 中的值并克隆这些值以便 `Config` 结构体可以拥有这些值。在示例 13-24 中重现了第十二章结尾示例 12-23 中 `Config::new` 函数的实现：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch13-functional-features/listing-12-23-reproduced/src/lib.rs:ch13}}
@@ -30,7 +30,7 @@
 
 打开 I/O 项目的 *src/main.rs* 文件，它看起来应该像这样：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch13-functional-features/listing-12-24-reproduced/src/main.rs:ch13}}
@@ -38,7 +38,7 @@
 
 修改第十二章结尾示例 12-24 中的 `main` 函数的开头为示例 13-25 中的代码。在更新 `Config::new` 之前这些代码还不能编译：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-25/src/main.rs:here}}
@@ -50,7 +50,7 @@
 
 接下来需要更新 `Config::new` 的定义。在 I/O 项目的 *src/lib.rs* 中，将 `Config::new` 的签名改为如示例 13-26 所示。这仍然不能编译因为我们还需更新函数体：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-26/src/lib.rs:here}}
@@ -64,7 +64,7 @@
 
 接下来，我们将修改 `Config::new` 的内容。标准库文档还提到 `std::env::Args` 实现了 `Iterator` trait，因此我们知道可以对其调用 `next` 方法！示例 13-27 更新了示例 12-23 中的代码，以使用 `next` 方法：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-27/src/lib.rs:here}}
@@ -78,7 +78,7 @@
 
 I/O 项目中其他可以利用迭代器的地方是 `search` 函数，示例 13-28 中重现了第十二章结尾示例 12-19 中此函数的定义：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:ch13}}
@@ -88,7 +88,7 @@ I/O 项目中其他可以利用迭代器的地方是 `search` 函数，示例 13
 
 可以通过使用迭代器适配器方法来编写更简明的代码。这也避免了一个可变的中间 `results` vector 的使用。函数式编程风格倾向于最小化可变状态的数量来使代码更简洁。去掉可变状态可能会使得将来进行并行搜索的增强变得更容易，因为我们不必管理 `results` vector 的并发访问。示例 13-29 展示了该变化：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-29/src/lib.rs:here}}

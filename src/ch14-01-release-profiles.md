@@ -21,7 +21,7 @@ $ cargo build --release
 
 当项目的 *Cargo.toml* 文件中没有任何 `[profile.*]` 部分的时候，Cargo 会对每一个配置都采用默认设置。通过增加任何希望定制的配置对应的 `[profile.*]` 部分，我们可以选择覆盖任意默认设置的子集。例如，如下是 `dev` 和 `release` 配置的 `opt-level` 设置的默认值：
 
-<span class="filename">文件名: Cargo.toml</span>
+<span class="filename">文件名：Cargo.toml</span>
 
 ```toml
 [profile.dev]
@@ -35,7 +35,7 @@ opt-level = 3
 
 我们可以选择通过在 *Cargo.toml* 增加不同的值来覆盖任何默认设置。比如，如果我们想要在开发配置中使用级别 1 的优化，则可以在 *Cargo.toml* 中增加这两行：
 
-<span class="filename">文件名: Cargo.toml</span>
+<span class="filename">文件名：Cargo.toml</span>
 
 ```toml
 [profile.dev]

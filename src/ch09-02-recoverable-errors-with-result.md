@@ -19,7 +19,7 @@ enum Result<T, E> {
 
 让我们调用一个返回 `Result` 的函数，因为它可能会失败：如示例 9-3 所示打开一个文件：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-03/src/main.rs}}
@@ -47,7 +47,7 @@ enum Result<T, E> {
 
 我们需要在示例 9-3 的代码中增加根据 `File::open` 返回值进行不同处理的逻辑。示例 9-4 展示了一个使用基本工具处理 `Result` 的例子：第六章学习过的 `match` 表达式。
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,should_panic
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-04/src/main.rs}}
@@ -72,7 +72,7 @@ enum Result<T, E> {
 
 示例 9-4 中的代码不管 `File::open` 是因为什么原因失败都会 `panic!`。我们真正希望的是对不同的错误原因采取不同的行为：如果 `File::open `因为文件不存在而失败，我们希望创建这个文件并返回新文件的句柄。如果 `File::open` 因为任何其他原因失败，例如没有打开文件的权限，我们仍然希望像示例 9-4 那样 `panic!`。让我们看看示例 9-5，其中 `match` 增加了另一个分支：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-05/src/main.rs}}
@@ -113,7 +113,7 @@ enum Result<T, E> {
 
 `match` 能够胜任它的工作，不过它可能有点冗长并且不总是能很好的表明其意图。`Result<T, E>` 类型定义了很多辅助方法来处理各种情况。其中之一叫做 `unwrap`，它的实现就类似于示例 9-4 中的 `match` 语句。如果 `Result` 值是成员 `Ok`，`unwrap` 会返回 `Ok` 中的值。如果 `Result` 是成员 `Err`，`unwrap` 会为我们调用 `panic!`。这里是一个实践 `unwrap` 的例子：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,should_panic
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-04-unwrap/src/main.rs}}
@@ -129,7 +129,7 @@ src/libcore/result.rs:906:4
 
 还有另一个类似于 `unwrap` 的方法它还允许我们选择 `panic!` 的错误信息：`expect`。使用 `expect` 而不是 `unwrap` 并提供一个好的错误信息可以表明你的意图并更易于追踪 panic 的根源。`expect` 的语法看起来像这样：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,should_panic
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-05-expect/src/main.rs}}
@@ -150,7 +150,7 @@ thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
 
 例如，示例 9-6 展示了一个从文件中读取用户名的函数。如果文件不存在或不能读取，这个函数会将这些错误返回给调用它的代码：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#include ../listings/ch09-error-handling/listing-09-06/src/main.rs:here}}
@@ -172,7 +172,7 @@ thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
 
 示例 9-7 展示了一个 `read_username_from_file` 的实现，它实现了与示例 9-6 中的代码相同的功能，不过这个实现使用了 `?` 运算符：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#include ../listings/ch09-error-handling/listing-09-07/src/main.rs:here}}
@@ -188,7 +188,7 @@ thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
 
 `?` 运算符消除了大量样板代码并使得函数的实现更简单。我们甚至可以在 `?` 之后直接使用链式方法调用来进一步缩短代码，如示例 9-8 所示：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#include ../listings/ch09-error-handling/listing-09-08/src/main.rs:here}}
@@ -200,7 +200,7 @@ thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
 
 说到编写这个函数的不同方法，甚至还有一个更短的写法：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#include ../listings/ch09-error-handling/listing-09-09/src/main.rs:here}}
@@ -245,7 +245,7 @@ thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
 
 目前为止，我们所使用的所有 `main` 函数都返回 `()`。`main` 函数是特殊的因为它是可执行程序的入口点和退出点，为了使程序能正常工作，其可以返回的类型是有限制的。
 
-幸运的是 `main` 函数也可以返回 `Result<(), E>`， 示例 9-12 中的代码来自示例 9-10 不过修改了 `main` 的返回值为 `Result<(), Box<dyn Error>>` 并在结尾增加了一个 `Ok(())` 作为返回值。这段代码可以编译：
+幸运的是 `main` 函数也可以返回 `Result<(), E>`，示例 9-12 中的代码来自示例 9-10 不过修改了 `main` 的返回值为 `Result<(), Box<dyn Error>>` 并在结尾增加了一个 `Ok(())` 作为返回值。这段代码可以编译：
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-12/src/main.rs}}

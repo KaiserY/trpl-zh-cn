@@ -3,7 +3,7 @@
 > [ch15-01-box.md](https://github.com/rust-lang/book/blob/main/src/ch15-01-box.md) <br>
 > commit 359895c6b2e440275a663ee1a3c17e6a94fdc62b
 
-最简单直接的智能指针是 _box_，其类型是 `Box<T>`。 box 允许你将一个值放在堆上而不是栈上。留在栈上的则是指向堆数据的指针。如果你想回顾一下栈与堆的区别请参考第四章。
+最简单直接的智能指针是 _box_，其类型是 `Box<T>`。box 允许你将一个值放在堆上而不是栈上。留在栈上的则是指向堆数据的指针。如果你想回顾一下栈与堆的区别请参考第四章。
 
 除了数据被储存在堆上而不是栈上之外，box 没有性能损失。不过也没有很多额外的功能。它们多用于如下场景：
 
@@ -19,7 +19,7 @@
 
 示例 15-1 展示了如何使用 box 在堆上储存一个 `i32`：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-01/src/main.rs}}
@@ -49,7 +49,7 @@ cons list 的每一项都包含两个元素：当前项的值和下一项。其�
 
 示例 15-2 包含一个 cons list 的枚举定义。注意这还不能编译因为这个类型没有已知的大小，之后我们会展示：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-02/src/main.rs:here}}
@@ -61,7 +61,7 @@ cons list 的每一项都包含两个元素：当前项的值和下一项。其�
 
 使用这个 cons list 来储存列表 `1, 2, 3` 将看起来如示例 15-3 所示：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-03/src/main.rs:here}}
@@ -114,7 +114,7 @@ help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to make `List` repre
 
 我们可以修改示例 15-2 中 `List` 枚举的定义和示例 15-3 中对 `List` 的应用，如示例 15-65 所示，这是可以编译的：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-05/src/main.rs}}
@@ -122,7 +122,7 @@ help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to make `List` repre
 
 <span class="caption">示例 15-5：为了拥有已知大小而使用 `Box<T>` 的 `List` 定义</span>
 
-`Cons` 成员将会需要一个 `i32` 的大小加上储存 box 指针数据的空间。`Nil` 成员不储存值，所以它比 `Cons` 成员需要更少的空间。现在我们知道了任何 `List` 值最多需要一个 `i32` 加上 box 指针数据的大小。通过使用 box ，打破了这无限递归的连锁，这样编译器就能够计算出储存 `List` 值需要的大小了。图 15-2 展示了现在 `Cons` 成员看起来像什么：
+`Cons` 成员将会需要一个 `i32` 的大小加上储存 box 指针数据的空间。`Nil` 成员不储存值，所以它比 `Cons` 成员需要更少的空间。现在我们知道了任何 `List` 值最多需要一个 `i32` 加上 box 指针数据的大小。通过使用 box，打破了这无限递归的连锁，这样编译器就能够计算出储存 `List` 值需要的大小了。图 15-2 展示了现在 `Cons` 成员看起来像什么：
 
 <img alt="A finite Cons list" src="img/trpl15-02.svg" class="center" />
 
