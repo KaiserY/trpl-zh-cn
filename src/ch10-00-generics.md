@@ -2,7 +2,7 @@
 
 > [ch10-00-generics.md](https://github.com/rust-lang/book/blob/main/src/ch10-00-generics.md)
 > <br>
-> commit 9c0fa2714859738ff73cbbb829592e4c037d7e46
+> commit 4aa96a3d20570f868bd20e8e3e865b047284be30
 
 每一个编程语言都有高效处理重复概念的工具。在 Rust 中其工具之一就是 **泛型**（*generics*）。泛型是具体类型或其他属性的抽象替代。我们可以表达泛型的属性，比如他们的行为或如何与其他泛型相关联，而不需要在编写和编译代码时知道他们在这里实际上代表什么。
 
