@@ -1,0 +1,14 @@
+name: AutoCorrect
+on: [push, pull_request]
+jobs:
+  autocorrect:
+    name: AutoCorrect Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Lint
+        uses: huacnlee/autocorrect-action@v2.5.8
