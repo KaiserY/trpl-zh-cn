@@ -2,7 +2,7 @@
 
 > [ch08-03-hash-maps.md](https://github.com/rust-lang/book/blob/main/src/ch08-03-hash-maps.md)
 > <br>
-> commit 1fd890031311612e54965f7f800a8c8bd4464663
+> commit 50775360ba3904c41e84176337ff47e6e7d6177c
 
 最后介绍的常用集合类型是 **哈希 map**（*hash map*）。`HashMap<K, V>` 类型储存了一个键类型 `K` 对应一个值类型 `V` 的映射。它通过一个 **哈希函数**（*hashing function*）来实现映射，决定如何将键和值放入内存中。很多编程语言支持这种数据结构，不过通常有不同的名字：哈希、map、对象、哈希表或者关联数组，仅举几例。
 
@@ -24,15 +24,30 @@
 
 像 vector 一样，哈希 map 将它们的数据储存在堆上，这个 `HashMap` 的键类型是 `String` 而值类型是 `i32`。类似于 vector，哈希 map 是同质的：所有的键必须是相同类型，值也必须都是相同类型。
 
-另一个构建哈希 map 的方法是在一个元组的 vector 上使用迭代器（iterator）和 `collect` 方法，其中每个元组包含一个键值对。我们会在[第十三章的 “Processing a Series of Items with Iterators” 部分][iterators]<!-- ignore --> 介绍迭代器及其关联方法。`collect` 方法可以将数据收集进一系列的集合类型，包括 `HashMap`。例如，如果队伍的名字和初始分数分别在两个 vector 中，可以使用 `zip` 方法来创建一个元组的迭代器，其中 “Blue” 与 10 是一对，依此类推。接着就可以使用 `collect` 方法将这个元组的迭代器转换成一个 `HashMap`，如示例 8-21 所示：
+### 访问哈希 map 中的值
+
+可以通过 `get` 方法并提供对应的键来从哈希 map 中获取值，如示例 8-21 所示：
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-21/src/main.rs:here}}
 ```
 
-<span class="caption">示例 8-21：用队伍列表和分数列表创建哈希 map</span>
+<span class="caption">示例 8-21：访问哈希 map 中储存的蓝队分数</span>
 
-这里 `HashMap<_, _>` 类型注解是必要的，因为可能 `collect` 为很多不同的数据结构，而除非显式指定否则 Rust 无从得知你需要的类型。但是对于键和值的类型参数来说，可以使用下划线占位，而 Rust 能够根据 vector 中数据的类型推断出 `HashMap` 所包含的类型。在示例 8-21 中，键（key）类型是 `String`，值（value）类型是 `i32`，与示例 8-20 的类型一样。
+这里，`score` 是与蓝队分数相关的值，应为 `10`。`get` 方法返回 `Option<&V>`，如果某个键在哈希 map 中没有对应的值，`get` 会返回 `None`。程序中通过调用 `copied` 方法来获取一个 `Option<i32>` 而不是 `Option<&i32>`，接着调用 `unwrap_or`，如果 `score` 没有对应键的项将 `score` 设置为零。
+
+可以使用与 vector 类似的方式来遍历哈希 map 中的每一个键值对，也就是 `for` 循环：
+
+```rust
+{{#rustdoc_include ../listings/ch08-common-collections/no-listing-03-iterate-over-hashmap/src/main.rs:here}}
+```
+
+这会以任意顺序打印出每一个键值对：
+
+```text
+Yellow: 50
+Blue: 10
+```
 
 ### 哈希 map 和所有权
 
@@ -48,72 +63,53 @@
 
 如果将值的引用插入哈希 map，这些值本身将不会被移动进哈希 map。但是这些引用指向的值必须至少在哈希 map 有效时也是有效的。第十章 [“生命周期与引用有效性”][validating-references-with-lifetimes] 部分将会更多的讨论这个问题。
 
-### 访问哈希 map 中的值
+### 更新哈希 map
 
-可以通过 `get` 方法并提供对应的键来从哈希 map 中获取值，如示例 8-23 所示：
+尽管键值对的数量是可以增长的，每个唯一的键只能同时关联一个值（反之不一定成立：比如蓝队和黄队的 `scores` 哈希 map 中都可能存储有 10 这个值）。
+
+当我们想要改变哈希 map 中的数据时，必须决定如何处理一个键已经有值了的情况。可以选择完全无视旧值并用新值代替旧值。可以选择保留旧值而忽略新值，并只在键 **没有** 对应值时增加新值。或者可以结合新旧两值。让我们看看这分别该如何处理！
+
+#### 覆盖一个值
+
+如果我们插入了一个键值对，接着用相同的键插入一个不同的值，与这个键相关联的旧值将被替换。即便示例 8-23 中的代码调用了两次 `insert`，哈希 map 也只会包含一个键值对，因为两次都是对蓝队的键插入的值：
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-23/src/main.rs:here}}
 ```
 
-<span class="caption">示例 8-23：访问哈希 map 中储存的蓝队分数</span>
+<span class="caption">示例 8-23：替换以特定键储存的值</span>
 
-这里，`score` 是与蓝队分数相关的值，应为 `Some(10)`。因为 `get` 返回 `Option<V>`，所以结果被装进 `Some`；如果某个键在哈希 map 中没有对应的值，`get` 会返回 `None`。这时就要用某种第六章提到的方法之一来处理 `Option`。
+这会打印出 `{"Blue": 25}`。原始的值 `10` 则被覆盖了。
 
-可以使用与 vector 类似的方式来遍历哈希 map 中的每一个键值对，也就是 `for` 循环：
+#### 只在键没有对应值时插入键值对
 
-```rust
-{{#rustdoc_include ../listings/ch08-common-collections/no-listing-03-iterate-over-hashmap/src/main.rs:here}}
-```
+我们经常会检查某个特定的键是否已经存在于哈希 map 中并进行如下操作：如果哈希 map 中键已经存在则不做任何操作。如果不存在则连同值一块插入。
 
-这会以任意顺序打印出每一个键值对：
-
-```text
-Yellow: 50
-Blue: 10
-```
-
-### 更新哈希 map
-
-尽管键值对的数量是可以增长的，不过任何时候，每个键只能关联一个值。当我们想要改变哈希 map 中的数据时，必须决定如何处理一个键已经有值了的情况。可以选择完全无视旧值并用新值代替旧值。可以选择保留旧值而忽略新值，并只在键 **没有** 对应值时增加新值。或者可以结合新旧两值。让我们看看这分别该如何处理！
-
-#### 覆盖一个值
-
-如果我们插入了一个键值对，接着用相同的键插入一个不同的值，与这个键相关联的旧值将被替换。即便示例 8-24 中的代码调用了两次 `insert`，哈希 map 也只会包含一个键值对，因为两次都是对蓝队的键插入的值：
+为此哈希 map 有一个特有的 API，叫做 `entry`，它获取我们想要检查的键作为参数。`entry` 函数的返回值是一个枚举，`Entry`，它代表了可能存在也可能不存在的值。比如说我们想要检查黄队的键是否关联了一个值。如果没有，就插入值 50，对于蓝队也是如此。使用 `entry` API 的代码看起来像示例 8-24 这样：
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-24/src/main.rs:here}}
 ```
 
-<span class="caption">示例 8-24：替换以特定键储存的值</span>
+<span class="caption">示例 8-24：使用 `entry` 方法只在键没有对应一个值时插入</span>
 
-这会打印出 `{"Blue": 25}`。原始的值 `10` 则被覆盖了。
+`Entry` 的 `or_insert` 方法在键对应的值存在时就返回这个值的可变引用，如果不存在则将参数作为新值插入并返回新值的可变引用。这比编写自己的逻辑要简明的多，另外也与借用检查器结合得更好。
 
-#### 只在键没有对应值时插入
+运行示例 8-24 的代码会打印出 `{"Yellow": 50, "Blue": 10}`。第一个 `entry` 调用会插入黄队的键和值 `50`，因为黄队并没有一个值。第二个 `entry` 调用不会改变哈希 map 因为蓝队已经有了值 `10`。
 
-我们经常会检查某个特定的键是否有值，如果没有就插入一个值。为此哈希 map 有一个特有的 API，叫做 `entry`，它获取我们想要检查的键作为参数。`entry` 函数的返回值是一个枚举，`Entry`，它代表了可能存在也可能不存在的值。比如说我们想要检查黄队的键是否关联了一个值。如果没有，就插入值 50，对于蓝队也是如此。使用 entry API 的代码看起来像示例 8-25 这样：
+#### 根据旧值更新一个值
+
+另一个常见的哈希 map 的应用场景是找到一个键对应的值并根据旧的值更新它。例如，示例 8-25 中的代码计数一些文本中每一个单词分别出现了多少次。我们使用哈希 map 以单词作为键并递增其值来记录我们遇到过几次这个单词。如果是第一次看到某个单词，就插入值 `0`。
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-25/src/main.rs:here}}
 ```
 
-<span class="caption">示例 8-25：使用 `entry` 方法只在键没有对应一个值时插入</span>
+<span class="caption">示例 8-25：通过哈希 map 储存单词和计数来统计出现次数</span>
 
-`Entry` 的 `or_insert` 方法在键对应的值存在时就返回这个值的可变引用，如果不存在则将参数作为新值插入并返回新值的可变引用。这比编写自己的逻辑要简明的多，另外也与借用检查器结合得更好。
+这会打印出 `{"world": 2, "hello": 1, "wonderful": 1}`。你可能会发现相同的键值对以不同的顺序打印：回忆以下[“访问哈希 map 中的值”][access]部分中遍历哈希 map 会以任意顺序进行。
 
-运行示例 8-25 的代码会打印出 `{"Yellow": 50, "Blue": 10}`。第一个 `entry` 调用会插入黄队的键和值 `50`，因为黄队并没有一个值。第二个 `entry` 调用不会改变哈希 map 因为蓝队已经有了值 `10`。
-
-#### 根据旧值更新一个值
-
-另一个常见的哈希 map 的应用场景是找到一个键对应的值并根据旧的值更新它。例如，示例 8-26 中的代码计数一些文本中每一个单词分别出现了多少次。我们使用哈希 map 以单词作为键并递增其值来记录我们遇到过几次这个单词。如果是第一次看到某个单词，就插入值 `0`。
-
-```rust
-{{#rustdoc_include ../listings/ch08-common-collections/listing-08-26/src/main.rs:here}}
-```
-
-<span class="caption">示例 8-26：通过哈希 map 储存单词和计数来统计出现次数</span>
-
-这会打印出 `{"world": 2, "hello": 1, "wonderful": 1}`。`split_whitespace` 方法会迭代 `text` 的值由空格分隔的子 slice。`or_insert` 方法返回这个键的值的一个可变引用（`&mut V`）。这里我们将这个可变引用储存在 `count` 变量中，所以为了赋值必须首先使用星号（`*`）解引用 `count`。这个可变引用在 `for` 循环的结尾离开作用域，这样所有这些改变都是安全的并符合借用规则。
+`split_whitespace` 方法返回一个由空格分隔 `text` 值子 slice 的迭代器。`or_insert` 方法返回这个键的值的一个可变引用（`&mut V`）。这里我们将这个可变引用储存在 `count` 变量中，所以为了赋值必须首先使用星号（`*`）解引用 `count`。这个可变引用在 `for` 循环的结尾离开作用域，这样所有这些改变都是安全的并符合借用规则。
 
 ### 哈希函数
 
@@ -136,3 +132,4 @@ vector、字符串和哈希 map 会在你的程序需要储存、访问和修改
 [iterators]: ch13-02-iterators.html
 [validating-references-with-lifetimes]:
 ch10-03-lifetime-syntax.html#生命周期与引用有效性
+[access]: #访问哈希-map-中的值
