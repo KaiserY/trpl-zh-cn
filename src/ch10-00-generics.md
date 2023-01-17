@@ -20,7 +20,7 @@
 
 考虑一下这个寻找列表中最大值的小程序，如示例 10-1 所示：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-01/src/main.rs:here}}
@@ -32,7 +32,7 @@
 
 如果需要在两个不同的列表中寻找最大值，我们可以重复示例 10-1 中的代码，这样程序中就会存在两段相同逻辑的代码，如示例 10-2 所示：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-02/src/main.rs}}
@@ -46,7 +46,7 @@
 
 在示例 10-3 的程序中将寻找最大值的代码提取到了一个叫做 `largest` 的函数中。这不同于示例 10-1 中的代码只能在一个特定的列表中找到最大的数字，这个程序可以在两个不同的列表中找到最大的数字。
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-03/src/main.rs:here}}

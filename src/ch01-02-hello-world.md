@@ -38,7 +38,7 @@ $ cd hello_world
 
 现在打开刚创建的 *main.rs* 文件，输入示例 1-1 中的代码。
 
-<span class="filename">文件名: main.rs</span>
+<span class="filename">文件名：main.rs</span>
 
 ```rust
 fn main() {

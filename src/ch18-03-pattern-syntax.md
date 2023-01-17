@@ -19,7 +19,7 @@
 
 命名变量是匹配任何值的不可反驳模式，这在之前已经使用过数次。然而当其用于 `match` 表达式时情况会有些复杂。因为 `match` 会开始一个新作用域，`match` 表达式中作为模式的一部分声明的变量会覆盖 `match` 结构之外的同名变量，与所有变量一样。在示例 18-11 中，声明了一个值为 `Some(5)` 的变量 `x` 和一个值为 `10` 的变量 `y`。接着在值 `x` 上创建了一个 `match` 表达式。观察匹配分支中的模式和结尾的 `println!`，并在运行此代码或进一步阅读之前推断这段代码会打印什么。
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-11/src/main.rs:here}}
@@ -75,7 +75,7 @@ Rust 知道 `c` 位于第一个模式的范围内，并会打印出 `early ASCII
 
 示例 18-12 展示带有两个字段 `x` 和 `y` 的结构体 `Point`，可以通过带有模式的 `let` 语句将其分解：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-12/src/main.rs}}
@@ -87,7 +87,7 @@ Rust 知道 `c` 位于第一个模式的范围内，并会打印出 `early ASCII
 
 因为变量名匹配字段名是常见的，同时因为 `let Point { x: x, y: y } = p;` 包含了很多重复，所以对于匹配结构体字段的模式存在简写：只需列出结构体字段的名称，则模式创建的变量会有相同的名称。示例 18-13 展示了与示例 18-12 有着相同行为的代码，不过 `let` 模式创建的变量为 `x` 和 `y` 而不是 `a` 和 `b`：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-13/src/main.rs}}
@@ -101,7 +101,7 @@ Rust 知道 `c` 位于第一个模式的范围内，并会打印出 `early ASCII
 
 示例 18-14 展示了一个 `match` 语句将 `Point` 值分成了三种情况：直接位于 `x` 轴上（此时 `y = 0` 为真）、位于 `y` 轴上（`x = 0`）或不在任何轴上的点。
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-14/src/main.rs:here}}
@@ -119,7 +119,7 @@ Rust 知道 `c` 位于第一个模式的范围内，并会打印出 `early ASCII
 
 本书之前的部分曾经解构过枚举，比如第六章中示例 6-5 中解构了一个 `Option<i32>`。一个当时没有明确提到的细节是解构枚举的模式需要对应枚举所定义的储存数据的方式。让我们以示例 6-2 中的 `Message` 枚举为例，编写一个 `match` 使用模式解构每一个内部值，如示例 18-15 所示：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-15/src/main.rs}}
@@ -147,7 +147,7 @@ Rust 知道 `c` 位于第一个模式的范围内，并会打印出 `early ASCII
 
 <span class="caption">示例 18-16: 匹配嵌套的枚举</span>
 
-`match` 表达式第一个分支的模式匹配一个包含 `Color::Rgb` 枚举成员的 `Message::ChangeColor` 枚举成员，然后模式绑定了 3 个内部的 `i32` 值。第二个分支的模式也匹配一个 `Message::ChangeColor` 枚举成员， 但是其内部的枚举会匹配 `Color::Hsv` 枚举成员。我们可以在一个 `match` 表达式中指定这些复杂条件，即使会涉及到两个枚举。
+`match` 表达式第一个分支的模式匹配一个包含 `Color::Rgb` 枚举成员的 `Message::ChangeColor` 枚举成员，然后模式绑定了 3 个内部的 `i32` 值。第二个分支的模式也匹配一个 `Message::ChangeColor` 枚举成员，但是其内部的枚举会匹配 `Color::Hsv` 枚举成员。我们可以在一个 `match` 表达式中指定这些复杂条件，即使会涉及到两个枚举。
 
 #### 解构结构体和元组
 
@@ -169,7 +169,7 @@ Rust 知道 `c` 位于第一个模式的范围内，并会打印出 `early ASCII
 
 我们已经使用过下划线（`_`）作为匹配但不绑定任何值的通配符模式了。虽然 `_` 模式作为 `match` 表达式最后的分支特别有用，也可以将其用于任意模式，包括函数参数中，如示例 18-17 所示：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-17/src/main.rs}}
@@ -209,7 +209,7 @@ Rust 知道 `c` 位于第一个模式的范围内，并会打印出 `early ASCII
 
 如果你创建了一个变量却不在任何地方使用它，Rust 通常会给你一个警告，因为这可能会是个 bug。但是有时创建一个还未使用的变量是有用的，比如你正在设计原型或刚刚开始一个项目。这时你希望告诉 Rust 不要警告未使用的变量，为此可以用下划线作为变量名的开头。示例 18-20 中创建了两个未使用变量，不过当编译代码时只会得到其中一个的警告：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-20/src/main.rs}}
@@ -251,7 +251,7 @@ Rust 知道 `c` 位于第一个模式的范围内，并会打印出 `early ASCII
 
 `..` 会扩展为所需要的值的数量。示例 18-24 展示了元组中 `..` 的应用：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-24/src/main.rs}}
@@ -263,7 +263,7 @@ Rust 知道 `c` 位于第一个模式的范围内，并会打印出 `early ASCII
 
 然而使用 `..` 必须是无歧义的。如果期望匹配和忽略的值是不明确的，Rust 会报错。示例 18-25 展示了一个带有歧义的 `..` 例子，因此其不能编译：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-25/src/main.rs}}
@@ -299,7 +299,7 @@ Rust 不可能决定在元组中匹配 `second` 值之前应该忽略多少个�
 
 在示例 18-11 中，我们提到可以使用匹配守卫来解决模式中变量覆盖的问题，那里 `match` 表达式的模式中新建了一个变量而不是使用 `match` 之外的同名变量。新变量意味着不能够测试外部变量的值。示例 18-27 展示了如何使用匹配守卫修复这个问题。
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-27/src/main.rs}}

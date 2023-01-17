@@ -8,7 +8,7 @@
 
 例如，我们从示例 7-17 开始，将 `front_of_house` 模块移动到属于它自己的文件 *src/front_of_house.rs* 中，通过改变 crate 根文件，使其包含示例 7-21 所示的代码。在这个例子中，crate 根文件是 *src/lib.rs*，这也同样适用于以 *src/main.rs* 为 crate 根文件的二进制 crate 项。
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/lib.rs}}
@@ -18,7 +18,7 @@
 
 *src/front_of_house.rs* 会获取 `front_of_house` 模块的定义内容，如示例 7-22 所示。
 
-<span class="filename">文件名: src/front_of_house.rs</span>
+<span class="filename">文件名：src/front_of_house.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
@@ -29,7 +29,7 @@
 
 在 `mod front_of_house` 后使用分号，而不是代码块，这将告诉 Rust 在另一个与模块同名的文件中加载模块的内容。继续重构我们例子，将 `hosting` 模块也提取到其自己的文件中，仅对 *src/front_of_house.rs* 包含 `hosting` 模块的声明进行修改：
 
-<span class="filename">文件名: src/front_of_house.rs</span>
+<span class="filename">文件名：src/front_of_house.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house.rs}}
@@ -37,7 +37,7 @@
 
 接着我们创建一个 *src/front_of_house* 目录和一个包含 `hosting` 模块定义的 *src/front_of_house/hosting.rs* 文件：
 
-<span class="filename">文件名: src/front_of_house/hosting.rs</span>
+<span class="filename">文件名：src/front_of_house/hosting.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house/hosting.rs}}

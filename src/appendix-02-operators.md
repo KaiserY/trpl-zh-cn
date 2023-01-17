@@ -33,7 +33,7 @@
 | `+=` | `var += expr` | 算术加法与赋值 | `AddAssign` |
 | `,` | `expr, expr` | 参数以及元素分隔符 | |
 | `-` | `- expr` | 算术取负 | `Neg` |
-| `-` | `expr - expr` | 算术减法| `Sub` |
+| `-` | `expr - expr` | 算术减法 | `Sub` |
 | `-=` | `var -= expr` | 算术减法与赋值 | `SubAssign` |
 | `->` | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | 函数与闭包，返回类型 | |
 | `.` | `expr.ident` | 成员访问 | |
@@ -41,7 +41,7 @@
 | `..=` | `..=expr`, `expr..=expr` | 右闭区间范围模式 | `PartialOrd` |
 | `..` | `..expr` | 结构体更新语法 | |
 | `..` | `variant(x, ..)`, `struct_type { x, .. }` | “与剩余部分” 的模式绑定 | |
-| `...` | `expr...expr` | （Deprecated，请使用 `..=`）在模式中: 闭区间范围模式 | |
+| `...` | `expr...expr` | （Deprecated，请使用 `..=`）在模式中：闭区间范围模式 | |
 | `/` | `expr / expr` | 算术除法 | `Div` |
 | `/=` | `var /= expr` | 算术除法与赋值 | `DivAssign` |
 | `:` | `pat: type`, `ident: type` | 约束 | |
@@ -50,7 +50,7 @@
 | `;` | `expr;` | 语句和语句结束符 | |
 | `;` | `[...; len]` | 固定大小数组语法的部分 | |
 | `<<` | `expr << expr` |左移 | `Shl` |
-| `<<=` | `var <<= expr` | 左移与赋值| `ShlAssign` |
+| `<<=` | `var <<= expr` | 左移与赋值 | `ShlAssign` |
 | `<` | `expr < expr` | 小于比较 | `PartialOrd` |
 | `<=` | `expr <= expr` | 小于等于比较 | `PartialOrd` |
 | `=` | `var = expr`, `ident = type` | 赋值/等值 | |
@@ -102,7 +102,7 @@
 | `self::path` | 与当前模块相对的路径（如一个显式相对路径）|
 | `super::path` | 与父模块相对的路径 |
 | `type::ident`, `<type as trait>::ident` | 关联常量、函数以及类型 |
-| `<type>::...` | 不可以被直接命名的关联项类型（如 `<&T>::...`，`<[T]>::...`， 等） |
+| `<type>::...` | 不可以被直接命名的关联项类型（如 `<&T>::...`，`<[T]>::...`，等） |
 | `trait::method(...)` | 通过命名定义的 trait 来消除方法调用的二义性 |
 | `type::method(...)` | 通过命名定义的类型来消除方法调用的二义性 |
 | `<type as trait>::method(...)` | 通过命名 trait 和类型来消除方法调用的二义性 |
@@ -195,5 +195,5 @@
 | `[...]` | 数组 |
 | `[expr; len]` | 复制了 `len`个 `expr`的数组 |
 | `[type; len]` | 包含 `len`个 `type` 类型的数组|
-| `expr[expr]` | 集合索引。 重载（`Index`, `IndexMut`） |
+| `expr[expr]` | 集合索引。重载（`Index`, `IndexMut`） |
 | `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]` | 集合索引，使用 `Range`，`RangeFrom`，`RangeTo` 或 `RangeFull` 作为索引来代替集合 slice |

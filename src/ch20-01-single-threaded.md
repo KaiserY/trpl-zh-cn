@@ -6,7 +6,7 @@
 
 首先让我们创建一个可运行的单线程 web server，不过在开始之前，我们将快速了解一下构建 web server 所涉及到的协议。这些协议的细节超出了本书的范畴，不过一个简单的概括会提供我们所需的信息。
 
-web server 中涉及到的两个主要协议是 **超文本传输协议**（*Hypertext Transfer Protocol*，*HTTP*）和 **传输控制协议**（*Transmission Control Protocol*，*TCP*）。这两者都是 **请求-响应**（*request-response*）协议，也就是说，有 **客户端**（*client*）来初始化请求，并有 **服务端**（*server*）监听请求并向客户端提供响应。请求与响应的内容由协议本身定义。
+web server 中涉及到的两个主要协议是 **超文本传输协议**（*Hypertext Transfer Protocol*，*HTTP*）和 **传输控制协议**（*Transmission Control Protocol*，*TCP*）。这两者都是 **请求 - 响应**（*request-response*）协议，也就是说，有 **客户端**（*client*）来初始化请求，并有 **服务端**（*server*）监听请求并向客户端提供响应。请求与响应的内容由协议本身定义。
 
 TCP 是一个底层协议，它描述了信息如何从一个 server 到另一个的细节，不过其并不指定信息是什么。HTTP 构建于 TCP 之上，它定义了请求和响应的内容。为此，技术上讲可将 HTTP 用于其他协议之上，不过对于绝大部分情况，HTTP 通过 TCP 传输。我们将要做的就是处理 TCP 和 HTTP 请求与响应的原始字节数据。
 
@@ -22,7 +22,7 @@ $ cd hello
 
 并在 `src/main.rs` 输入示例 20-1 中的代码作为开始。这段代码会在地址 `127.0.0.1:7878` 上监听传入的 TCP 流。当获取到传入的流，它会打印出 `Connection established!`：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-01/src/main.rs}}
@@ -59,7 +59,7 @@ Connection established!
 
 让我们实现读取来自浏览器请求的功能！为了分离获取连接和接下来对连接的操作的相关内容，我们将开始一个新函数来处理连接。在这个新的 `handle_connection` 函数中，我们从 TCP 流中读取数据并打印出来以便观察浏览器发送过来的数据。将代码修改为如示例 20-2 所示：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-02/src/main.rs}}
@@ -112,7 +112,7 @@ message-body
 
 请求行接下来的部分是 */*，它代表客户端请求的 **统一资源标识符**（*Uniform Resource Identifier*，*URI*） —— URI 大体上类似，但也不完全类似于 URL（**统一资源定位符**，*Uniform Resource Locators*）。URI 和 URL 之间的区别对于本章的目的来说并不重要，不过 HTTP 规范使用术语 URI，所以这里可以简单的将 URL 理解为 URI。
 
-最后一部分是客户端使用的HTTP版本，然后请求行以 **CRLF序列** （CRLF代表回车和换行，*carriage return line feed*，这是打字机时代的术语！）结束。CRLF序列也可以写成`\r\n`，其中`\r`是回车符，`\n`是换行符。 CRLF序列将请求行与其余请求数据分开。 请注意，打印CRLF时，我们会看到一个新行，而不是`\r\n`。
+最后一部分是客户端使用的 HTTP 版本，然后请求行以 **CRLF 序列** （CRLF 代表回车和换行，*carriage return line feed*，这是打字机时代的术语！）结束。CRLF 序列也可以写成`\r\n`，其中`\r`是回车符，`\n`是换行符。CRLF 序列将请求行与其余请求数据分开。请注意，打印 CRLF 时，我们会看到一个新行，而不是`\r\n`。
 
 观察目前运行程序所接收到的数据的请求行，可以看到 `GET` 是 method，*/* 是请求 URI，而 `HTTP/1.1` 是版本。
 
@@ -142,7 +142,7 @@ HTTP/1.1 200 OK\r\n\r\n
 
 状态码 200 是一个标准的成功响应。这些文本是一个微型的成功 HTTP 响应。让我们将这些文本写入流作为成功请求的响应！在 `handle_connection` 函数中，我们需要去掉打印请求数据的 `println!`，并替换为示例 20-3 中的代码：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-03/src/main.rs:here}}
@@ -160,7 +160,7 @@ HTTP/1.1 200 OK\r\n\r\n
 
 让我们实现不只是返回空页面的功能。在项目根目录创建一个新文件，*hello.html* —— 也就是说，不是在 `src` 目录。在此可以放入任何你期望的 HTML；列表 20-4 展示了一个可能的文本：
 
-<span class="filename">文件名: hello.html</span>
+<span class="filename">文件名：hello.html</span>
 
 ```html
 {{#include ../listings/ch20-web-server/listing-20-04/hello.html}}
@@ -170,7 +170,7 @@ HTTP/1.1 200 OK\r\n\r\n
 
 这是一个极小化的 HTML5 文档，它有一个标题和一小段文本。为了在 server 接受请求时返回它，需要如示例 20-5 所示修改 `handle_connection` 来读取 HTML 文件，将其加入到响应的 body 中，并发送：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-05/src/main.rs:here}}
@@ -190,7 +190,7 @@ HTTP/1.1 200 OK\r\n\r\n
 
 目前我们的 web server 不管客户端请求什么都会返回相同的 HTML 文件。让我们增加在返回 HTML 文件前检查浏览器是否请求 */*，并在其请求任何其他内容时返回错误的功能。为此需要如示例 20-6 那样修改 `handle_connection`。新代码接收到的请求的内容与已知的 */* 请求的一部分做比较，并增加了 `if` 和 `else` 块来区别处理请求：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-06/src/main.rs:here}}
@@ -206,7 +206,7 @@ HTTP/1.1 200 OK\r\n\r\n
 
 现在向示例 20-7 的 `else` 块增加代码来返回一个带有 404 状态码的响应，这代表了所请求的内容没有找到。接着也会返回一个 HTML 向浏览器终端用户表明此意：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-07/src/main.rs:here}}
@@ -216,7 +216,7 @@ HTTP/1.1 200 OK\r\n\r\n
 
 这里，响应的状态行有状态码 404 和原因短语 `NOT FOUND`。仍然没有返回任何 header，而其 body 将是 *404.html* 文件中的 HTML。需要在 *hello.html* 同级目录创建 *404.html* 文件作为错误页面；这一次也可以随意使用任何 HTML 或使用示例 20-8 中的示例 HTML：
 
-<span class="filename">文件名: 404.html</span>
+<span class="filename">文件名：404.html</span>
 
 ```html
 {{#include ../listings/ch20-web-server/listing-20-08/404.html}}
@@ -230,7 +230,7 @@ HTTP/1.1 200 OK\r\n\r\n
 
 目前 `if` 和 `else` 块中的代码有很多的重复：他们都读取文件并将其内容写入流。唯一的区别是状态行和文件名。为了使代码更为简明，将这些区别分别提取到一行 `if` 和 `else` 中，对状态行和文件名变量赋值；然后在读取文件和写入响应的代码中无条件的使用这些变量。重构后取代了大段 `if` 和 `else` 块代码后的结果如示例 20-9 所示：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-09/src/main.rs:here}}

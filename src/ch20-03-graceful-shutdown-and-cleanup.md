@@ -12,7 +12,7 @@
 
 现在开始为线程池实现 `Drop`。当线程池被丢弃时，应该 join 所有线程以确保他们完成其操作。示例 20-22 展示了 `Drop` 实现的第一次尝试；这些代码还不能够编译：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-22/src/lib.rs:here}}
@@ -32,7 +32,7 @@
 
 为此需要更新 `Worker` 的定义为如下：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-04-update-worker-definition/src/lib.rs:here}}
@@ -46,7 +46,7 @@
 
 让我们修复第二个错误，它指向 `Worker::new` 结尾的代码；当新建 `Worker` 时需要将 `thread` 值封装进 `Some`。做出如下改变以修复问题：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-05-fix-worker-new/src/lib.rs:here}}
@@ -54,7 +54,7 @@
 
 第一个错误位于 `Drop` 实现中。之前提到过要调用 `Option` 上的 `take` 将 `thread` 移动出 `worker`。如下改变会修复问题：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-06-fix-threadpool-drop/src/lib.rs:here}}
@@ -68,7 +68,7 @@
 
 为了修复这个问题，修改线程既监听是否有 `Job` 运行也要监听一个应该停止监听并退出无限循环的信号。所以信道将发送这个枚举的两个成员之一而不是 `Job` 实例：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-07-define-message-enum/src/lib.rs:here}}
@@ -78,7 +78,7 @@
 
 同时需要修改信道来使用 `Message` 类型值而不是 `Job`，如示例 20-23 所示：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-23/src/lib.rs:here}}
@@ -90,7 +90,7 @@
 
 通过这些修改，代码再次能够编译并继续按照示例 20-20 之后相同的行为运行。不过还是会得到一个警告，因为并没有创建任何 `Terminate` 成员的消息。如示例 20-24 所示修改 `Drop` 实现来修复此问题：
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-24/src/lib.rs:here}}
@@ -106,7 +106,7 @@
 
 为了实践这些代码，如示例 20-25 所示修改 `main` 在优雅停机 server 之前只接受两个请求：
 
-<span class="filename">文件名: src/bin/main.rs</span>
+<span class="filename">文件名：src/bin/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-25/src/bin/main.rs:here}}
@@ -140,7 +140,7 @@ Shutting down worker 2
 Shutting down worker 3
 ```
 
-可能会出现不同顺序的 worker 和信息输出。可以从信息中看到服务是如何运行的： worker 0 和 worker 3 获取了头两个请求，接着在第三个请求时，我们停止接收连接。当 `ThreadPool` 在 `main` 的结尾离开作用域时，其 `Drop` 实现开始工作，线程池通知所有线程终止。每个 worker 在收到终止消息时会打印出一个信息，接着线程池调用 `join` 来终止每一个 worker 线程。
+可能会出现不同顺序的 worker 和信息输出。可以从信息中看到服务是如何运行的：worker 0 和 worker 3 获取了头两个请求，接着在第三个请求时，我们停止接收连接。当 `ThreadPool` 在 `main` 的结尾离开作用域时，其 `Drop` 实现开始工作，线程池通知所有线程终止。每个 worker 在收到终止消息时会打印出一个信息，接着线程池调用 `join` 来终止每一个 worker 线程。
 
 这个特定的运行过程中一个有趣的地方在于：注意我们向信道中发出终止消息，而在任何线程收到消息之前，就尝试 join worker 0 了。worker 0 还没有收到终止消息，所以主线程阻塞直到 worker 0 结束。与此同时，每一个线程都收到了终止消息。一旦 worker 0 结束，主线程就等待其他 worker 结束，此时他们都已经收到终止消息并能够停止了。
 
@@ -148,13 +148,13 @@ Shutting down worker 3
 
 如下是完整的代码参考：
 
-<span class="filename">文件名: src/bin/main.rs</span>
+<span class="filename">文件名：src/bin/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-08-final-code/src/bin/main.rs}}
 ```
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-08-final-code/src/lib.rs}}

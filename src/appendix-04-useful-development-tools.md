@@ -30,7 +30,7 @@ $ cargo fmt
 
 如果你编写过 Rust 代码，那么你可能见过那些有很明显修复方式的编译器警告。例如，考虑如下代码：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 fn do_something() {}
@@ -69,7 +69,7 @@ $ cargo fix
 
 如果再次查看 _src/main.rs_，会发现 `cargo fix` 修改了代码：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 fn do_something() {}
@@ -103,7 +103,7 @@ $ cargo clippy
 
 例如，如果程序使用了如 pi 这样数学常数的近似值，如下：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 fn main() {
@@ -128,7 +128,7 @@ error: approximate value of `f{32, 64}::consts::PI` found. Consider using it dir
 
 这告诉我们 Rust 定义了更为精确的常量，而如果使用了这些常量程序将更加准确。如下代码就不会导致 `clippy` 产生任何错误或警告：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 fn main() {

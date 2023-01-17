@@ -26,7 +26,7 @@ $ cargo run searchstring example-filename.txt
 
 使用示例 12-1 中的代码来读取任何传递给 `minigrep` 的命令行参数并将其收集到一个 vector 中。
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-01/src/main.rs}}
@@ -58,7 +58,7 @@ $ cargo run searchstring example-filename.txt
 
 打印出参数 vector 中的值展示了程序可以访问指定为命令行参数的值。现在需要将这两个参数的值保存进变量这样就可以在程序的余下部分使用这些值了。让我们如示例 12-2 这样做：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-02/src/main.rs}}

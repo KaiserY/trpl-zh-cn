@@ -12,20 +12,20 @@
 
 这里我们提供一个简单的参考，用来解释模块、路径、`use`关键词和`pub`关键词如何在编译器中工作，以及大部分开发者如何组织他们的代码。我们将在本章节中举例说明每条规则，不过这是一个解释模块工作方式的良好参考。
 
-- **从crate根节点开始**: 当编译一个crate, 编译器首先在crate根文件（通常，对于一个库crate而言是*src/lib.rs*，对于一个二进制crate而言是*src/main.rs*）中寻找需要被编译的代码。
-- **声明模块**: 在crate根文件中，你可以声明一个新模块；比如，你用`mod garden`声明了一个叫做`garden`的模块。编译器会在下列路径中寻找模块代码：
+- **从 crate 根节点开始**: 当编译一个 crate, 编译器首先在 crate 根文件（通常，对于一个库 crate 而言是*src/lib.rs*，对于一个二进制 crate 而言是*src/main.rs*）中寻找需要被编译的代码。
+- **声明模块**: 在 crate 根文件中，你可以声明一个新模块；比如，你用`mod garden`声明了一个叫做`garden`的模块。编译器会在下列路径中寻找模块代码：
   - 内联，在大括号中，当`mod garden`后方不是一个分号而是一个大括号
   - 在文件 *src/garden.rs*
   - 在文件 *src/garden/mod.rs*
-- **声明子模块**: 在除了crate根节点以外的其他文件中，你可以定义子模块。比如，你可能在*src/garden.rs*中定义了`mod vegetables;`。编译器会在以父模块命名的目录中寻找子模块代码：
-  - 内联, 在大括号中，当`mod vegetables`后方不是一个分号而是一个大括号
+- **声明子模块**: 在除了 crate 根节点以外的其他文件中，你可以定义子模块。比如，你可能在*src/garden.rs*中定义了`mod vegetables;`。编译器会在以父模块命名的目录中寻找子模块代码：
+  - 内联，在大括号中，当`mod vegetables`后方不是一个分号而是一个大括号
   - 在文件 *src/garden/vegetables.rs*
   - 在文件 *src/garden/vegetables/mod.rs*
-- **模块中的代码路径**: 一旦一个模块是你crate的一部分， 你可以在隐私规则允许的前提下，从同一个crate内的任意地方，通过代码路径引用该模块的代码。举例而言，一个garden vegetables模块下的`Asparagus`类型可以在`crate::garden::vegetables::Asparagus`被找到。
+- **模块中的代码路径**: 一旦一个模块是你 crate 的一部分，你可以在隐私规则允许的前提下，从同一个 crate 内的任意地方，通过代码路径引用该模块的代码。举例而言，一个 garden vegetables 模块下的`Asparagus`类型可以在`crate::garden::vegetables::Asparagus`被找到。
 - **私有 vs 公用**: 一个模块里的代码默认对其父模块私有。为了使一个模块公用，应当在声明时使用`pub mod`替代`mod`。为了使一个公用模块内部的成员公用，应当在声明前使用`pub`。
-- **`use` 关键字**: 在一个作用域内，`use`关键字创建了一个成员的快捷方式，用来减少长路径的重复。在任何可以引用`crate::garden::vegetables::Asparagus`的作用域, 你可以通过 `use crate::garden::vegetables::Asparagus;`创建一个快捷方式，然后你就可以在作用域中只写`Asparagus`来使用该类型。
+- **`use` 关键字**: 在一个作用域内，`use`关键字创建了一个成员的快捷方式，用来减少长路径的重复。在任何可以引用`crate::garden::vegetables::Asparagus`的作用域，你可以通过 `use crate::garden::vegetables::Asparagus;`创建一个快捷方式，然后你就可以在作用域中只写`Asparagus`来使用该类型。
 
-这里我们创建一个名为`backyard`的二进制crate来说明这些规则。该crate的路径同样命名为`backyard`，该路径包含了这些文件和目录：
+这里我们创建一个名为`backyard`的二进制 crate 来说明这些规则。该 crate 的路径同样命名为`backyard`，该路径包含了这些文件和目录：
 
 ```text
 backyard
@@ -38,23 +38,23 @@ backyard
     └── main.rs
 ```
 
-这个例子中的crate根文件是*src/main.rs*，该文件包括了：
+这个例子中的 crate 根文件是*src/main.rs*，该文件包括了：
 
-<span class="filename">文件名: src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/main.rs}}
 ```
 
-`pub mod garden;`行告诉编译器应该包含在*src/garden.rs*文件中发现的代码:
+`pub mod garden;`行告诉编译器应该包含在*src/garden.rs*文件中发现的代码：
 
-<span class="filename">文件名: src/garden.rs</span>
+<span class="filename">文件名：src/garden.rs</span>
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden.rs}}
 ```
 
-在此处， `pub mod vegetables;`意味着在*src/garden/vegetables.rs*中的代码也应该被包括。这些代码是:
+在此处， `pub mod vegetables;`意味着在*src/garden/vegetables.rs*中的代码也应该被包括。这些代码是：
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden/vegetables.rs}}
@@ -70,7 +70,7 @@ backyard
 
 我们可以将函数放置到嵌套的模块中，来使我们的 crate 结构与实际的餐厅结构相同。通过执行 `cargo new --lib restaurant`，来创建一个新的名为 `restaurant` 的库。然后将示例 7-1 中所罗列出来的代码放入 *src/lib.rs* 中，来定义一些模块和函数。
 
-<span class="filename">文件名: src/lib.rs</span>
+<span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-01/src/lib.rs}}
@@ -100,6 +100,6 @@ crate
 
 <span class="caption">示例 7-2: 示例 7-1 中代码的模块树</span>
 
-这个树展示了一些模块是如何被嵌入到另一个模块的（例如，`hosting` 嵌套在 `front_of_house` 中）。这个树还展示了一些模块是互为 *兄弟*（*siblings*） 的，这意味着它们定义在同一模块中（`hosting` 和 `serving` 被一起定义在 `front_of_house` 中）。继续沿用家庭关系的比喻，如果一个模块 A 被包含在模块 B 中，我们将模块 A 称为模块 B 的 *子*（*child*），模块 B 则是模块 A 的 *父*（*parent*）。注意，整个模块树都植根于名为 `crate` 的隐式模块下。
+这个树展示了一些模块是如何被嵌入到另一个模块的（例如，`hosting` 嵌套在 `front_of_house` 中）。这个树还展示了一些模块是互为 *兄弟*（*siblings*）的，这意味着它们定义在同一模块中（`hosting` 和 `serving` 被一起定义在 `front_of_house` 中）。继续沿用家庭关系的比喻，如果一个模块 A 被包含在模块 B 中，我们将模块 A 称为模块 B 的 *子*（*child*），模块 B 则是模块 A 的 *父*（*parent*）。注意，整个模块树都植根于名为 `crate` 的隐式模块下。
 
 这个模块树可能会令你想起电脑上文件系统的目录树；这是一个非常恰当的类比！就像文件系统的目录，你可以使用模块来组织你的代码。并且，就像目录中的文件，我们需要一种方法来找到模块。

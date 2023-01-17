@@ -120,7 +120,7 @@
     - [高级函数与闭包](ch19-05-advanced-functions-and-closures.md)
     - [宏](ch19-06-macros.md)
 
-- [最后的项目: 构建多线程 web server](ch20-00-final-project-a-web-server.md)
+- [最后的项目：构建多线程 web server](ch20-00-final-project-a-web-server.md)
     - [建立单线程 web server](ch20-01-single-threaded.md)
     - [将单线程 server 变为多线程 server](ch20-02-multithreaded.md)
     - [优雅停机与清理](ch20-03-graceful-shutdown-and-cleanup.md)
