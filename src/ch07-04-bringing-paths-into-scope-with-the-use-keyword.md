@@ -2,7 +2,7 @@
 
 > [ch07-04-bringing-paths-into-scope-with-the-use-keyword.md](https://github.com/rust-lang/book/blob/main/src/ch07-04-bringing-paths-into-scope-with-the-use-keyword.md)
 > <br>
-> commit 2d605f66b3d891dea0a2f684ece508aa2282b854
+> commit c77d7a1279dbc7a9d76e80c5ac9d742dd529538c
 
 不得不编写路径来调用函数显得不便且重复。在示例 7-7 中，无论我们选择 `add_to_waitlist` 函数的绝对路径还是相对路径，每次我们想要调用 `add_to_waitlist` 时，都必须指定`front_of_house` 和 `hosting`。幸运的是，有一种方法可以简化这个过程。我们可以使用 `use` 关键字创建一个短路径，然后就可以在作用域中的任何地方使用这个更短的名字。
 
