@@ -64,7 +64,7 @@
 
 <span class="caption">示例 12-22：根据 `config.case_sensitive` 的值调用 `search` 或 `search_case_insensitive`</span>
 
-最后需要实际检查环境变量。处理环境变量的函数位于标准库的 `env` 模块中，所以我们需要在 *src/lib.rs* 的开头增加一个 `use std::env;` 行将这个模块引入作用域中。接着在 `Config::new` 中使用 `env` 模块的 `var` 方法来检查一个叫做 `CASE_INSENSITIVE` 的环境变量，如示例 12-23 所示：
+最后需要实际检查环境变量。处理环境变量的函数位于标准库的 `env` 模块中，所以我们需要在 *src/lib.rs* 的开头增加一个 `use std::env;` 行将这个模块引入作用域中。接着在 `Config::new` 中使用 `env` 模块的 `var` 方法来检查一个叫做 `IGNORE_CASE` 的环境变量，如示例 12-23 所示：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -72,11 +72,11 @@
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-23/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 12-23：检查叫做 `CASE_INSENSITIVE` 的环境变量</span>
+<span class="caption">示例 12-23：检查叫做 `IGNORE_CASE` 的环境变量</span>
 
-这里创建了一个新变量 `case_sensitive`。为了设置它的值，需要调用 `env::var` 函数并传递我们需要寻找的环境变量名称，`CASE_INSENSITIVE`。`env::var` 返回一个 `Result`，它在环境变量被设置时返回包含其值的 `Ok` 成员，并在环境变量未被设置时返回 `Err` 成员。
+这里创建了一个新变量 `case_sensitive`。为了设置它的值，需要调用 `env::var` 函数并传递我们需要寻找的环境变量名称，`IGNORE_CASE`。`env::var` 返回一个 `Result`，它在环境变量被设置时返回包含其值的 `Ok` 成员，并在环境变量未被设置时返回 `Err` 成员。
 
-我们使用 `Result` 的 `is_err` 方法来检查其是否是一个 error（也就是环境变量未被设置的情况），这也就意味着我们 **需要** 进行一个大小写敏感搜索。如果`CASE_INSENSITIVE` 环境变量被设置为任何值，`is_err` 会返回 false 并将进行大小写不敏感搜索。我们并不关心环境变量所设置的 **值**，只关心它是否被设置了，所以检查 `is_err` 而不是 `unwrap`、`expect` 或任何我们已经见过的 `Result` 的方法。
+我们使用 `Result` 的 `is_err` 方法来检查其是否是一个 error（也就是环境变量未被设置的情况），这也就意味着我们 **需要** 进行一个大小写敏感搜索。如果`IGNORE_CASE` 环境变量被设置为任何值，`is_err` 会返回 false 并将进行大小写不敏感搜索。我们并不关心环境变量所设置的 **值**，只关心它是否被设置了，所以检查 `is_err` 而不是 `unwrap`、`expect` 或任何我们已经见过的 `Result` 的方法。
 
 我们将变量 `case_sensitive` 的值传递给 `Config` 实例，这样 `run` 函数可以读取其值并决定是否调用 `search` 或者示例 12-22 中实现的 `search_case_insensitive`。
 
@@ -86,18 +86,18 @@
 {{#include ../listings/ch12-an-io-project/listing-12-23/output.txt}}
 ```
 
-看起来程序仍然能够工作！现在将 `CASE_INSENSITIVE` 设置为 `1` 并仍使用相同的查询 `to`。
+看起来程序仍然能够工作！现在将 `IGNORE_CASE` 设置为 `1` 并仍使用相同的查询 `to`。
 
 如果你使用 PowerShell，则需要用两个命令来分别设置环境变量并运行程序：
 
 ```console
-PS> $Env:CASE_INSENSITIVE=1; cargo run to poem.txt
+PS> $Env:IGNORE_CASE=1; cargo run to poem.txt
 ```
 
 这回应该得到包含可能有大写字母的 “to” 的行：
 
 ```console
-$ (CASE_INSENSITIVE=1; cargo run to poem.txt)
+$ (IGNORE_CASE=1; cargo run to poem.txt)
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
