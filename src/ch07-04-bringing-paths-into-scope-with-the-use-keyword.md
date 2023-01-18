@@ -34,7 +34,7 @@
 {{#include ../listings/ch07-managing-growing-projects/listing-07-12/output.txt}}
 ```
 
-注意这里还有一个警告说 `use` 在其作用域内不再被使用！为了修复这个问题，也将 `use` 移动到 `customer` 模块内，或者在父模块通过 `customer` 模块内的 `super::front_of_house::hosting`（原文 `super::hosting`？） 引用这个短路径。
+注意这里还有一个警告说 `use` 在其作用域内不再被使用！为了修复这个问题，也将 `use` 移动到 `customer` 模块内，或者在父模块通过 `customer` 模块内的 `super::front_of_house::hosting`（原文 `super::hosting`？）引用这个短路径。
 
 ### 创建惯用的 `use` 路径
 
