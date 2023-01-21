@@ -2,7 +2,7 @@
 
 > [ch12-06-writing-to-stderr-instead-of-stdout.md](https://github.com/rust-lang/book/blob/main/src/ch12-06-writing-to-stderr-instead-of-stdout.md)
 > <br>
-> commit c5c12e911b20fac20eefc511f6fe8d432a8e5ec2
+> commit 02a168ed346042f07010f8b65b4eeed623dd31d1
 
 目前为止，我们将所有的输出都通过 `println!` 写到了终端。大部分终端都提供了两种输出：**标准输出**（*standard output*，`stdout`）对应一般信息，**标准错误**（*standard error*，`stderr`）则用于错误信息。这种区别允许用户选择将程序正常输出定向到一个文件中并仍将错误信息打印到屏幕上。
 
@@ -12,9 +12,9 @@
 
 首先，让我们观察一下目前 `minigrep` 打印的所有内容是如何被写入标准输出的，包括那些应该被写入标准错误的错误信息。可以通过将标准输出流重定向到一个文件同时有意产生一个错误来做到这一点。我们没有重定向标准错误流，所以任何发送到标准错误的内容将会继续显示在屏幕上。
 
-命令行程序被期望将错误信息发送到标准错误流，这样即便选择将标准输出流重定向到文件中时仍然能看到错误信息。目前我们的程序并不符合期望；相反我们将看到它将错误信息输出保存到了文件中。
+命令行程序被期望将错误信息发送到标准错误流，这样即便选择将标准输出流重定向到文件中时仍然能看到错误信息。目前我们的程序并不符合期望；相反我们将看到它将错误信息输出保存到了文件中！
 
-我们通过 `>` 和文件名 *output.txt* 来运行程序，我们期望重定向标准输出流到该文件中。在这里，我们没有传递任何参数，所以会产生一个错误：
+我们通过 `>` 和文件路径 *output.txt* 来运行程序，我们期望重定向标准输出流到该文件中。在这里，我们没有传递任何参数，所以会产生一个错误：
 
 ```console
 $ cargo run > output.txt
@@ -40,7 +40,7 @@ Problem parsing arguments: not enough arguments
 
 <span class="caption">示例 12-24：使用 `eprintln!` 将错误信息写入标准错误而不是标准输出</span>
 
-将 `println!` 改为 `eprintln!` 之后，让我们再次尝试用同样的方式运行程序，不使用任何参数并通过 `>` 重定向标准输出：
+现在我们再次尝试用同样的方式运行程序，不使用任何参数并通过 `>` 重定向标准输出：
 
 ```console
 $ cargo run > output.txt
@@ -52,7 +52,7 @@ Problem parsing arguments: not enough arguments
 如果使用不会造成错误的参数再次运行程序，不过仍然将标准输出重定向到一个文件，像这样：
 
 ```console
-$ cargo run to poem.txt > output.txt
+$ cargo run -- to poem.txt > output.txt
 ```
 
 我们并不会在终端看到任何输出，同时 `output.txt` 将会包含其结果：
