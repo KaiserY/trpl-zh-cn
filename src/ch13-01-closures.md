@@ -6,6 +6,189 @@
 
 Rust 的 **闭包**（*closures*）是可以保存在一个变量中或作为参数传递给其他函数的匿名函数。可以在一个地方创建闭包，然后在不同的上下文中执行闭包运算。不同于函数，闭包允许捕获被定义时所在作用域中的值。我们将展示闭包的这些功能如何复用代码和自定义行为。
 
+### 闭包会捕获其环境
+
+我们首先了解如何通过闭包捕获定义它的环境中的值以便之后使用。考虑如下场景：有时我们的 T恤公司会赠送一款昂贵的限量版 T恤给邮件列表中的成员作为促销。邮件列表中的成员可选将他们的喜爱的颜色添加到个人信息中。如果被选中的成员设置了喜爱的颜色，他们将获得那个颜色的 T恤。如果他没有设置喜爱的颜色，他们会获得任何公司现有最多的颜色的款式。
+
+有很多种方式来实现这些。例如，使用有 `Red` 和 `Blue` 两个成员的 `ShirtColor` 枚举（出于简单考虑限定为两种颜色）。我们使用 `Inventory` 结构体来代表公司的库存，它有一个 `shirts` 字段包含一个 `Vec<ShirtColor>` 来代表库存中的衬衫的颜色。`Inventory` 上定义的 `giveaway` 方法获取一个可选的免费衬衫得主所喜爱的颜色，并返回其所将获得的颜色。初始代码如示例 13-1 所示：
+
+<span class="filename">文件名： src/main.rs</span>
+
+```rust,noplayground
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-01/src/main.rs}}
+```
+
+<span class="caption">示例 13-1：衬衫公司赠送场景</span>
+
+`main` 函数中定义的 `store` 还剩有两件蓝衬衫和一件红衬衫可供限量赠送。我们用一个期望获得红衬衫和一个没有期望的用户来调用 `giveaway` 方法。
+
+这段代码也可以有多种实现方法，而这里为了专注于闭包。我们会坚持使用已经学习过的概念，除了 `giveaway` 方法体中使用了闭包。`giveaway` 方法中获取了 `Option<ShirtColor>` 类型作为用户的期望颜色并在 `user_preference` 上调用 `unwrap_or_else`。 [`Option<T>` 上的方法 `unwrap_or_else`][unwrap-or-else] 由标准库。它获取一个参数：一个没有任何参数并返回一个值（与 `Option<T>` 的 `Some` 成员所存储的类型一样，在这里是 `ShirtColor`）的闭包。如果 `Option<T>` 是 `Some` 成员，`unwrap_or_else` 返回 `Some` 中的值。如果 `Option<T>` 是 `None` 成员，`unwrap_or_else` 调用闭包并返回闭包的返回值。
+
+我们指定闭包表达式 `|| self.most_stocked()` 作为 `unwrap_or_else` 的参数。这是一个本身不获取参数的闭包（如果闭包有参数，它们会出现在两道竖杠之间）。闭包体调用了 `self.most_stocked()`。我们在这里定义了闭包，而 `unwrap_or_else` 的实现会在之后需要其结果的时候执行闭包。
+
+运行代码会打印出：
+
+```console
+{{#include ../listings/ch13-functional-features/listing-13-01/output.txt}}
+```
+
+这里一个有趣的地方是我们传递了一个会在当前 `Inventory` 实例上调用 `self.most_stocked()` 的闭包。标准库并不需要知道我们定义的 `Inventory` 或 `ShirtColor` 类型。闭包捕获了一个 `Inventory` 实例的不可变引用到 `self`，并连同其它代码传递给 `unwrap_or_else` 方法。另一方面，函数则不能如此捕获其环境。
+
+### 闭包类型推断和注解
+
+函数与闭包之间还有更多区别。闭包并不总是要求像 `fn` 函数那样在参数和返回值上注明类型。函数中需要类型注解是因为他们是暴露给用户的显式接口的一部分。与此相比，闭包并不用于这样暴露在外的接口：他们储存在变量中并被使用，不用命名他们或暴露给库的用户调用。
+
+闭包通常很短，并只关联于小范围的上下文而非任意情境。在这些有限制的上下文中，编译器能可靠的推断参数和返回值的类型，类似于它是如何能够推断大部分变量的类型一样（同时也有编译器需要闭包类型注解的罕见情况）。
+
+类似于变量，如果相比严格的必要性你更希望增加明确性并变得更啰嗦，可以选择增加类型注解；为示例 13-2 中定义的闭包标注类型将看起来像示例 13-1 中的定义：
+
+<span class="filename">文件名：src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-02/src/main.rs:here}}
+```
+
+<span class="caption">示例 13-2：为闭包的参数和返回值增加可选的类型注解</span>
+
+有了类型注解闭包的语法就更类似函数了。如下是一个对其参数加一的函数的定义与拥有相同行为闭包语法的纵向对比。这里增加了一些空格来对齐相应部分。这展示了闭包语法如何类似于函数语法，除了使用竖线而不是括号以及几个可选的语法之外：
+
+```rust,ignore
+fn  add_one_v1   (x: u32) -> u32 { x + 1 }
+let add_one_v2 = |x: u32| -> u32 { x + 1 };
+let add_one_v3 = |x|             { x + 1 };
+let add_one_v4 = |x|               x + 1  ;
+```
+
+第一行展示了一个函数定义，而第二行展示了一个完整标注的闭包定义。第三行闭包定义中省略了类型注解，而第四行去掉了可选的大括号，因为闭包体只有一行。这些都是有效的闭包定义，并在调用时产生相同的行为。调用闭包是 `add_one_v3` 和 `add_one_v4` 能够编译的必要条件，因为类型将从其用法中推断出来。这与 `let v = Vec::new();` 类似，它需要类型注解或一些需要插入 `Vec` 的类型的值以便 Rust 能够推断其类型。
+
+对于闭包的定义，编译器会为每个参数和返回值推断一个具体类型。例如，示例 13-3 中展示了仅仅将参数作为返回值的简短的闭包定义。除了作为示例的目的这个闭包并不是很实用。注意其定义并没有增加任何类型注解：如果尝试调用闭包两次，第一次使用 `String` 类型作为参数而第二次使用 `u32`，则会得到一个错误：
+
+<span class="filename">文件名：src/main.rs</span>
+
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-03/src/main.rs:here}}
+```
+
+<span class="caption">示例 13-8：尝试调用一个被推断为两个不同类型的闭包</span>
+
+编译器给出如下错误：
+
+```console
+{{#include ../listings/ch13-functional-features/listing-13-03/output.txt}}
+```
+
+第一次使用 `String` 值调用 `example_closure` 时，编译器推断 `x` 和此闭包返回值的类型为 `String`。接着这些类型被锁定进闭包 `example_closure` 中，如果尝试对同一闭包使用不同类型则会得到类型错误。
+
+### 捕获引用或者移动所有权
+
+闭包可以通过三种方式捕获其环境，它们直接映射到函数获取参数的三种方式：不可变借用，可变借用和获取所有权。闭包会根据其函数体对捕获的值做何种操作来决定使用哪种方法。
+
+在示例 13-4 中定义了一个捕获名为 `list` 的 vector 的不可变引用的闭包，因为只需不可变引用就能打印其值：
+
+<span class="filename">文件名：src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-04/src/main.rs}}
+```
+
+<span class="caption">示例 13-4：定义并调用一个捕获不可变引用的闭包</span>
+
+这个示例也展示了变量可以绑定一个闭包定义，并且之后可以使用变量名和括号来调用闭包，就像变量名是函数名一样。
+
+因为同时可以有多个 `list` 的不可变引用，闭包定义之前，在闭包定义之后并在调用之前，在闭包定义之后的代码仍然可以访问 `list`。代码可以编译、运行并打印：
+
+```console
+{{#include ../listings/ch13-functional-features/listing-13-04/output.txt}}
+```
+
+接下来在示例 13-5 中，我们修改闭包体以便向 `list` vector 增加一个元素。闭包现在捕获一个可变引用：
+
+<span class="filename">文件名：src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-05/src/main.rs}}
+```
+
+<span class="caption">示例 13-5：定义并调用一个捕获可变引用的闭包</span>
+
+代码可以编译、运行并打印：
+
+```console
+{{#include ../listings/ch13-functional-features/listing-13-05/output.txt}}
+```
+
+注意在 `borrows_mutably` 闭包的定义和调用之间不再有 `println!`，当 `borrows_mutably` 定义时，它捕获了 `list` 的可变引用。
+
+
+
+
+
+
+
+在健身计划生成器的例子中，我们只将闭包作为内联匿名函数来使用。不过闭包还有另一个函数所没有的功能：他们可以捕获其环境并访问其被定义的作用域的变量。
+
+示例 13-12 有一个储存在 `equal_to_x` 变量中闭包的例子，它使用了闭包环境中的变量 `x`：
+
+<span class="filename">文件名：src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-12/src/main.rs}}
+```
+
+<span class="caption">示例 13-12：一个引用了其周围作用域中变量的闭包示例</span>
+
+这里，即便 `x` 并不是 `equal_to_x` 的一个参数，`equal_to_x` 闭包也被允许使用变量 `x`，因为它与 `equal_to_x` 定义于相同的作用域。
+
+函数则不能做到同样的事，如果尝试如下例子，它并不能编译：
+
+<span class="filename">文件名：src/main.rs</span>
+
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch13-functional-features/no-listing-02-functions-cant-capture/src/main.rs}}
+```
+
+这会得到一个错误：
+
+```console
+{{#include ../listings/ch13-functional-features/no-listing-02-functions-cant-capture/output.txt}}
+```
+
+编译器甚至会提示我们这只能用于闭包！
+
+当闭包从环境中捕获一个值，闭包会在闭包体中储存这个值以供使用。这会使用内存并产生额外的开销，在更一般的场景中，当我们不需要闭包来捕获环境时，我们不希望产生这些开销。因为函数从未允许捕获环境，定义和使用函数也就从不会有这些额外开销。
+
+闭包可以通过三种方式捕获其环境，他们直接对应函数的三种获取参数的方式：获取所有权，可变借用和不可变借用。这三种捕获值的方式被编码为如下三个 `Fn` trait：
+
+* `FnOnce` 消费从周围作用域捕获的变量，闭包周围的作用域被称为其 **环境**，*environment*。为了消费捕获到的变量，闭包必须获取其所有权并在定义闭包时将其移动进闭包。其名称的 `Once` 部分代表了闭包不能多次获取相同变量的所有权的事实，所以它只能被调用一次。
+* `FnMut` 获取可变的借用值所以可以改变其环境
+* `Fn` 从其环境获取不可变的借用值
+
+当创建一个闭包时，Rust 根据其如何使用环境中变量来推断我们希望如何引用环境。由于所有闭包都可以被调用至少一次，所以所有闭包都实现了 `FnOnce` 。那些并没有移动被捕获变量的所有权到闭包内的闭包也实现了 `FnMut` ，而不需要对被捕获的变量进行可变访问的闭包则也实现了 `Fn` 。在示例 13-12 中，`equal_to_x` 闭包不可变的借用了 `x`（所以 `equal_to_x` 具有 `Fn` trait），因为闭包体只需要读取 `x` 的值。
+
+如果你希望强制闭包获取其使用的环境值的所有权，可以在参数列表前使用 `move` 关键字。这个技巧在将闭包传递给新线程以便将数据移动到新线程中时最为实用。
+
+> 注意：即使其捕获的值已经被移动了，`move` 闭包仍需要实现 `Fn` 或 `FnMut`。这是因为闭包所实现的 trait 是由闭包所捕获了什么值而不是如何捕获所决定的。而 `move` 关键字仅代表了后者。
+
+第十六章讨论并发时会展示更多 `move` 闭包的例子，不过现在这里修改了示例 13-12 中的代码（作为演示），在闭包定义中增加 `move` 关键字并使用 vector 代替整型，因为整型可以被拷贝而不是移动；注意这些代码还不能编译：
+
+<span class="filename">文件名：src/main.rs</span>
+
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch13-functional-features/no-listing-03-move-closures/src/main.rs}}
+```
+
+这个例子并不能编译，会产生以下错误：
+
+```console
+{{#include ../listings/ch13-functional-features/no-listing-03-move-closures/output.txt}}
+```
+
+`x` 被移动进了闭包，因为闭包使用 `move` 关键字定义。接着闭包获取了 `x` 的所有权，同时 `main` 就不再允许在 `println!` 语句中使用 `x` 了。去掉 `println!` 即可修复问题。
+
+大部分需要指定一个 `Fn` 系列 trait bound 的时候，可以从 `Fn` 开始，而编译器会根据闭包体中的情况告诉你是否需要 `FnMut` 或 `FnOnce`。
+
+为了展示闭包作为函数参数时捕获其环境的作用，让我们继续下一个主题：迭代器。
+
 ### 使用闭包创建行为的抽象
 
 让我们来看一个存储稍后要执行的闭包的示例。其间我们会讨论闭包的语法、类型推断和 trait。
@@ -111,7 +294,7 @@ Rust 的 **闭包**（*closures*）是可以保存在一个变量中或作为参
 
 ### 闭包类型推断和注解
 
-闭包不要求像 `fn` 函数那样在参数和返回值上注明类型。函数中需要类型注解是因为他们是暴露给用户的显式接口的一部分。严格的定义这些接口对于保证所有人都认同函数使用和返回值的类型来说是很重要的。但是闭包并不用于这样暴露在外的接口：他们储存在变量中并被使用，不用命名他们或暴露给库的用户调用。
+闭包不总是要求像 `fn` 函数那样在参数和返回值上注明类型。函数中需要类型注解是因为他们是暴露给用户的显式接口的一部分。严格的定义这些接口对于保证所有人都认同函数使用和返回值的类型来说是很重要的。但是闭包并不用于这样暴露在外的接口：他们储存在变量中并被使用，不用命名他们或暴露给库的用户调用。
 
 闭包通常很短，并只关联于小范围的上下文而非任意情境。在这些有限制的上下文中，编译器能可靠的推断参数和返回值的类型，类似于它是如何能够推断大部分变量的类型一样。
 
