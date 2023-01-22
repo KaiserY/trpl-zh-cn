@@ -2,7 +2,7 @@
 
 > [ch13-01-closures.md](https://github.com/rust-lang/book/blob/main/src/ch13-01-closures.md)
 > <br>
-> commit 8acef6cfd40a36be60a3c62458d9f78e2427e190
+> commit a2cb72d3ad7584cc1ae3b85f715c877872f5e3ab
 
 Rust 的 **闭包**（*closures*）是可以保存在一个变量中或作为参数传递给其他函数的匿名函数。可以在一个地方创建闭包，然后在不同的上下文中执行闭包运算。不同于函数，闭包允许捕获被定义时所在作用域中的值。我们将展示闭包的这些功能如何复用代码和自定义行为。
 
@@ -145,6 +145,7 @@ let add_one_v4 = |x|               x + 1  ;
 
 让我们来看示例 13-1 中使用的在 `Option<T>` 上的 `unwrap_or_else` 方法的定义：
 
+```rust,noplayground
 impl<T> Option<T> {
     pub fn unwrap_or_else<F>(self, f: F) -> T
     where
@@ -156,6 +157,7 @@ impl<T> Option<T> {
         }
     }
 }
+```
 
 回忆 `T` 是表示 `Option` 中 `Some`  成员中的值的类型的范型。类型 `T`  也是 `unwrap_or_else`  函数的返回值类型：举例来说，在 `Option<String>` 上调用 `unwrap_or_else` 会得到一个 `String`。
 
