@@ -32,7 +32,6 @@ Rust 的 **闭包**（*closures*）是可以保存在一个变量中或作为参
 {{#include ../listings/ch13-functional-features/listing-13-01/output.txt}}
 ```
 
-
 这里一个有趣的地方是我们传递了一个会在当前 `Inventory` 实例上调用 `self.most_stocked()` 的闭包。标准库并不需要知道我们定义的 `Inventory` 或 `ShirtColor` 类型或是在这个场景下我们想要用的逻辑。闭包捕获了一个 `Inventory` 实例的不可变引用到 `self`，并连同其它代码传递给 `unwrap_or_else` 方法。相比之下，函数就不能以这种方式捕获其环境。
 
 ### 闭包类型推断和注解
