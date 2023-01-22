@@ -101,7 +101,7 @@ let add_one_v4 = |x|               x + 1  ;
 {{#include ../listings/ch13-functional-features/listing-13-04/output.txt}}
 ```
 
-接下来在示例 13-5 中，我们修改闭包体以便向 `list` vector 增加一个元素。闭包现在捕获一个可变引用：
+接下来在示例 13-5 中，我们修改闭包体让它向 `list` vector 增加一个元素。闭包现在捕获一个可变引用：
 
 <span class="filename">文件名：src/main.rs</span>
 
