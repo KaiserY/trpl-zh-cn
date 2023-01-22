@@ -125,9 +125,11 @@ let add_one_v4 = |x|               x + 1  ;
 
 文件名：src/main.rs
 
+```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-06/src/main.rs}}
+```
 
-示例 13-6：使用 `move` 来强制闭包为线程获取 `list` 的所有权
+<span class="caption">示例 13-6：使用 `move` 来强制闭包为线程获取 `list` 的所有权</span>
 
 我们生成了新的线程，给这个线程一个闭包作为参数运行，闭包体打印出列表。在示例 13-4 中，闭包通过不可变引用捕获 `list`，因为这是打印列表所需的最少的访问。这个例子中，尽管闭包体依然只需要不可变引用，我们还是在闭包定义前写上 `move` 关键字来指明 `list` 应当被移动到闭包中。新线程可能在主线程剩余部分执行完前执行完，或者也可能主线程先执行完。如果主线程维护了 `list` 的所有权但却在新线程之前结束并且丢弃了 `list`，则在线程中的不可变引用将失效。因此，编译器要求 `list` 被移动到在新线程中运行的闭包中，这样引用就是有效的。试着去掉 `move` 关键字或在闭包被定义后在主线程中使用 `list` 看看你会得到什么编译器报错！
 
@@ -165,9 +167,11 @@ impl<T> Option<T> {
 
 现在让我们来看定义在 slice 上的标准库方法 `sort_by_key`，看看它与 `unwrap_or_else` 的区别以及为什么 `sort_by_key` 使用  `FnMut`  而不是 `FnOnce` trait bound。这个闭包以一个 slice 中当前被考虑的元素的引用作为参数，返回一个可以用来排序的 `K` 类型的值。当你想按照 slice 中元素的某个属性来进行排序时这个函数很有用。在示例 13-7 中有一个 `Rectangle` 实例的列表，我们使用 `sort_by_key`  按 `Rectangle` 的  `width`  属性对它们从低到高排序：
 
-文件名：src/main.rs
+<span class="filename">文件名：src/main.rs</span>
 
+```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-07/src/main.rs}}
+```
 
 <span class="caption">示例 13-7：使用  `sort_by_key` 对长方形按宽度排序</span>
 
@@ -181,11 +185,11 @@ impl<T> Option<T> {
 
 作为对比，示例 13-8 展示了一个只实现了  `FnOnce`  trait 的闭包（因为它从环境中移出了一个值）的例子。编译器不允许我们在 `sort_by_key` 上使用这个闭包：
 
-文件名：src/main.rs
+<span class="filename">文件名：src/main.rs</span>
 
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-08/src/main.rs}}
 
-示例 13-8：尝试在 `sort_by_key` 上使用一个 `FnOnce`  闭包
+<span class="caption">示例 13-8：尝试在 `sort_by_key` 上使用一个 `FnOnce`  闭包</span>
 
 这是一个刻意构造的、繁琐的方式，它尝试统计 `sort_by_key` 在排序 `list` 时被调用的次数（并不能工作）。该代码尝试在闭包的环境中向 `sort_operations` vector 放入 `value`— 一个  `String`  来实现计数。闭包捕获了 `value` 然后通过转移 `value` 的所有权的方式将其移出闭包给到 `sort_operations` vector。这个闭包可以被调用一次；尝试调用它第二次将报错，因为这时  `value` 已经不在闭包的环境中，因而无法被再次放到 `sort_operations` 中！因而，这个闭包只实现了 `FnOnce`。由于要求闭包必须实现 `FnMut`，因此尝试编译这个代码将得到报错：`value`  不能被移出闭包：
 
@@ -195,7 +199,7 @@ impl<T> Option<T> {
 
 报错指向了闭包体中将 `value` 移出环境的那一行。要修复这里，我们需要改变闭包体让它不将值移出环境。在环境中保持一个计数器并在闭包体中增加它的值是计算 `sort_by_key` 被调用次数的一个更简单直接的方法。示例 13-9 中的闭包可以在 `sort_by_key` 中使用，因为它只捕获了 `num_sort_operations` 计数器的可变引用，这就可以被调用多次。
 
-文件名：src/main.rs
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-09/src/main.rs}}
