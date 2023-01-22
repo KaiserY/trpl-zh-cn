@@ -155,7 +155,7 @@ impl<T> Option<T> {
     }
 }
 
-回忆 `T` 是一个范型表示 `Option` 中 `Some`  成员中的值的类型。类型 `T`  也是 `unwrap_or_else`  函数的返回值类型：举例来说，在 `Option<String>` 上调用 `unwrap_or_else` 会得到一个 `String`。
+回忆 `T` 是表示 `Option` 中 `Some`  成员中的值的类型的范型。类型 `T`  也是 `unwrap_or_else`  函数的返回值类型：举例来说，在 `Option<String>` 上调用 `unwrap_or_else` 会得到一个 `String`。
 
 接着注意到 `unwrap_or_else`  函数有额外的范型参数 `F`。 `F` 是 `f` 参数（即调用 `unwrap_or_else` 时提供的闭包）的类型。
 
