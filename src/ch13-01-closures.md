@@ -169,11 +169,13 @@ impl<T> Option<T> {
 
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-07/src/main.rs}}
 
-示例 13-7：使用  `sort_by_key` 对长方形按宽度排序
+<span class="caption">示例 13-7：使用  `sort_by_key` 对长方形按宽度排序</span>
 
 代码输出：
 
+```console
 {{#include ../listings/ch13-functional-features/listing-13-07/output.txt}}
+```
 
 `sort_by_key`  被定义为接收一个 `FnMut` 闭包的原因是它会多次调用这个闭包：每个 slice 中的元素调用一次。闭包 `|r| r.width` 不捕获、修改或将任何东西移出它的环境，所以它满足 trait bound 的要求。
 
@@ -187,15 +189,19 @@ impl<T> Option<T> {
 
 这是一个刻意构造的、繁琐的方式，它尝试统计 `sort_by_key` 在排序 `list` 时被调用的次数（并不能工作）。该代码尝试在闭包的环境中向 `sort_operations` vector 放入 `value`— 一个  `String`  来实现计数。闭包捕获了 `value` 然后通过转移 `value` 的所有权的方式将其移出闭包给到 `sort_operations` vector。这个闭包可以被调用一次；尝试调用它第二次将报错，因为这时  `value` 已经不在闭包的环境中，因而无法被再次放到 `sort_operations` 中！因而，这个闭包只实现了 `FnOnce`。由于要求闭包必须实现 `FnMut`，因此尝试编译这个代码将得到报错：`value`  不能被移出闭包：
 
+```console
 {{#include ../listings/ch13-functional-features/listing-13-08/output.txt}}
+```
 
 报错指向了闭包体中将 `value` 移出环境的那一行。要修复这里，我们需要改变闭包体让它不将值移出环境。在环境中保持一个计数器并在闭包体中增加它的值是计算 `sort_by_key` 被调用次数的一个更简单直接的方法。示例 13-9 中的闭包可以在 `sort_by_key` 中使用，因为它只捕获了 `num_sort_operations` 计数器的可变引用，这就可以被调用多次。
 
 文件名：src/main.rs
 
+```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-09/src/main.rs}}
+```
 
-示例 13-9：允许在 `sort_by_key` 上使用一个  `FnMut`  闭包
+<span class="caption">示例 13-9：允许在 `sort_by_key` 上使用一个  `FnMut`  闭包</span>
 
 当定义或使用用到闭包的函数或类型时，`Fn`  trait 十分重要。在下个小节中，我们将会讨论迭代器。许多迭代器方法都接收闭包参数，因而在继续前先下住这些闭包的细节！
  
