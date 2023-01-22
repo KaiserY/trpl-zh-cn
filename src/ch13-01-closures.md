@@ -77,7 +77,7 @@ let add_one_v4 = |x|               x + 1  ;
 {{#include ../listings/ch13-functional-features/listing-13-03/output.txt}}
 ```
 
-第一次使用 `String` 值调用 `example_closure` 时，编译器推断 `x` 和此闭包返回值的类型为 `String`。接着这些类型被锁定进闭包 `example_closure` 中，如果尝试对同一闭包使用不同类型则会得到类型错误。
+第一次使用 `String` 值调用  `example_closure` 时，编译器推断这个闭包中 `x` 的类型以及返回值的类型是 `String`。接着这些类型被锁定进闭包 `example_closure` 中，如果尝试对同一闭包使用不同类型则就会得到类型错误。
 
 ### 捕获引用或者移动所有权
 
