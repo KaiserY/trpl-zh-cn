@@ -117,7 +117,91 @@ let add_one_v4 = |x|               x + 1  ;
 {{#include ../listings/ch13-functional-features/listing-13-05/output.txt}}
 ```
 
-注意在 `borrows_mutably` 闭包的定义和调用之间不再有 `println!`，当 `borrows_mutably` 定义时，它捕获了 `list` 的可变引用。
+注意在 `borrows_mutably` 闭包的定义和调用之间不再有 `println!`，当 `borrows_mutably` 定义时，它捕获了 `list` 的可变引用。闭包在被调用后就不再被使用，这时可变借用结束。因为当可变借用存在时不允许有其它的借用，所以在闭包定义和调用之间不能有不可变引用来进行打印。可以尝试在这里添加  `println!`  看看你会得到什么报错信息！
+
+即使闭包体不严格需要所有权，如果希望强制闭包获取它用到的环境中值的所有权，可以在参数列表前使用  `move`  关键字。
+
+在将闭包传递到一个新的线程时这个技巧很有用，它可以移动数据所有权给新线程。我们将在 16 章讨论并发时详细讨论线程以及为什么你想要使用它们。现在我们先简单探讨用需要 `move` 关键字的闭包来生成新的线程。示例 13-6 修改了示例 13-4 以便在一个新的线程而非主线程中打印 vector：
+
+文件名：src/main.rs
+
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-06/src/main.rs}}
+
+示例 13-6：使用 `move` 来强制闭包为线程获取 `list` 的所有权
+
+我们生成了新的线程，给这个线程一个闭包作为参数运行，闭包体打印出列表。在示例 13-4 中，闭包通过不可变引用捕获 `list`，因为这是打印列表所需的最少的访问。这个例子中，尽管闭包体依然只需要不可变引用，我们还是在闭包定义前写上 `move` 关键字来指明 `list` 应当被移动到闭包中。新线程可能在主线程剩余部分执行完前执行完，或者也可能主线程先执行完。如果主线程维护了 `list` 的所有权但却在新线程之前结束并且丢弃了 `list`，则在线程中的不可变引用将失效。因此，编译器要求 `list` 被移动到在新线程中运行的闭包中，这样引用就是有效的。试着去掉 `move` 关键字或在闭包被定义后在主线程中使用 `list` 看看你会得到什么编译器报错！
+
+### [](https://github.com/rust-lang/book/blob/main/src/ch13-01-closures.md#moving-captured-values-out-of-closures-and-the-fn-traits)将被捕获的值移出闭包和 `Fn`  trait
+
+一旦闭包捕获了它被定义的环境中一个值的引用或者所有权（也就影响了什么会被移_进_闭包，如有)，闭包体中的代码定义了稍后在闭包计算时对引用或值如何操作（也就影响了什么会被移_出_闭包，如有）。闭包体可以做以下任何事：将一个捕获的值移出闭包，修改捕获的值，既不移动也不修改值，或者一开始就不从环境中捕获值。
+
+闭包捕获和处理环境中的值的方式影响闭包实现的 trait。Trait 是函数和结构体指定它们能用的的闭包的类型的方式。取决于闭包体如何处理值，闭包自动、渐进地实现一个、两个或三个 `Fn` trait。
+
+1. `FnOnce` 适用于能被调用一次的闭包，所有闭包都至少实现了这个 trait，因为所有闭包都能被调用。一个会将捕获的值移出闭包体的闭包只实现 `FnOnce` trait，这是因为它只能被调用一次。
+2. `FnMut` 适用于不会将捕获的值移出闭包体的闭包，但它可能会修改被捕获的值。这类闭包可以被调用多次。
+3. `Fn` 适用于既不将被捕获的值移出闭包体也不修改被捕获的值的闭包，当然也包括不从环境中捕获值的闭包。这类闭包可以被调用多次而不改变它们的环境，这在会多次并发调用闭包的场景中十分重要。
+
+让我们来看示例 13-1 中使用的在 `Option<T>` 上的 `unwrap_or_else` 方法的定义：
+
+impl<T> Option<T> {
+    pub fn unwrap_or_else<F>(self, f: F) -> T
+    where
+        F: FnOnce() -> T
+    {
+        match self {
+            Some(x) => x,
+            None => f(),
+        }
+    }
+}
+
+回忆 `T` 是一个范型表示 `Option` 中 `Some`  成员中的值的类型。类型 `T`  也是 `unwrap_or_else`  函数的返回值类型：举例来说，在 `Option<String>` 上调用 `unwrap_or_else` 会得到一个 `String`。
+
+接着注意到 `unwrap_or_else`  函数有额外的范型参数 `F`。 `F` 是 `f` 参数（即调用 `unwrap_or_else` 时提供的闭包）的类型。
+
+范型 `F` 的 trait bound 是 `FnOnce() -> T`，这意味着 `F` 必须能够被调用一次，没有参数并返回一个 `T`。在 trait bound 中使用 `FnOnce`  表示 `unwrap_or_else` 将最多调用  `f` 一次。 在 `unwrap_or_else` 的函数体中可以看到，如果 `Option` 是 `Some`，`f`  不会被调用。如果 `Option` 是 `None`，`f`  将会被调用一次。由于所有的闭包都实现了 `FnOnce`， `unwrap_or_else` 能接收绝大多数不同类型的闭包，十分灵活。
+
+> 注意：函数也可以实现所有的三种 `Fn`  traits。 如果我们要做的事情不需要从环境中捕获值，则可以在需要某种实现了 `Fn`  trait 的东西时使用函数而不是闭包。举个例子，可以在 `Option<Vec<T>>`  的值上调用 `unwrap_or_else(Vec::new)` 以便在值为 `None` 时获取一个新的空的 vector。
+
+现在让我们来看定义在 slice 上的标准库方法 `sort_by_key`，看看它与 `unwrap_or_else` 的区别以及为什么 `sort_by_key` 使用  `FnMut`  而不是 `FnOnce` trait bound。这个闭包以一个 slice 中当前被考虑的元素的引用作为参数，返回一个可以用来排序的 `K` 类型的值。当你想按照 slice 中元素的某个属性来进行排序时这个函数很有用。在示例 13-7 中有一个 `Rectangle` 实例的列表，我们使用 `sort_by_key`  按 `Rectangle` 的  `width`  属性对它们从低到高排序：
+
+文件名：src/main.rs
+
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-07/src/main.rs}}
+
+示例 13-7：使用  `sort_by_key` 对长方形按宽度排序
+
+代码输出：
+
+{{#include ../listings/ch13-functional-features/listing-13-07/output.txt}}
+
+`sort_by_key`  被定义为接收一个 `FnMut` 闭包的原因是它会多次调用这个闭包：每个 slice 中的元素调用一次。闭包 `|r| r.width` 不捕获、修改或将任何东西移出它的环境，所以它满足 trait bound 的要求。
+
+作为对比，示例 13-8 展示了一个只实现了  `FnOnce`  trait 的闭包（因为它从环境中移出了一个值）的例子。编译器不允许我们在 `sort_by_key` 上使用这个闭包：
+
+文件名：src/main.rs
+
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-08/src/main.rs}}
+
+示例 13-8：尝试在 `sort_by_key` 上使用一个 `FnOnce`  闭包
+
+这是一个刻意构造的、繁琐的方式，它尝试统计 `sort_by_key` 在排序 `list` 时被调用的次数（并不能工作）。该代码尝试在闭包的环境中向 `sort_operations` vector 放入 `value`— 一个  `String`  来实现计数。闭包捕获了 `value` 然后通过转移 `value` 的所有权的方式将其移出闭包给到 `sort_operations` vector。这个闭包可以被调用一次；尝试调用它第二次将报错，因为这时  `value` 已经不在闭包的环境中，因而无法被再次放到 `sort_operations` 中！因而，这个闭包只实现了 `FnOnce`。由于要求闭包必须实现 `FnMut`，因此尝试编译这个代码将得到报错：`value`  不能被移出闭包：
+
+{{#include ../listings/ch13-functional-features/listing-13-08/output.txt}}
+
+报错指向了闭包体中将 `value` 移出环境的那一行。要修复这里，我们需要改变闭包体让它不将值移出环境。在环境中保持一个计数器并在闭包体中增加它的值是计算 `sort_by_key` 被调用次数的一个更简单直接的方法。示例 13-9 中的闭包可以在 `sort_by_key` 中使用，因为它只捕获了 `num_sort_operations` 计数器的可变引用，这就可以被调用多次。
+
+文件名：src/main.rs
+
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-09/src/main.rs}}
+
+示例 13-9：允许在 `sort_by_key` 上使用一个  `FnMut`  闭包
+
+当定义或使用用到闭包的函数或类型时，`Fn`  trait 十分重要。在下个小节中，我们将会讨论迭代器。许多迭代器方法都接收闭包参数，因而在继续前先下住这些闭包的细节！
+ 
+
+
+
 
 
 
