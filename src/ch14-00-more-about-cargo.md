@@ -2,7 +2,7 @@
 
 > [ch14-00-more-about-cargo.md](https://github.com/rust-lang/book/blob/main/src/ch14-00-more-about-cargo.md)
 > <br>
-> commit c084bdd9ee328e7e774df19882ccc139532e53d8
+> commit 44e31f9f304e0cd9ace01045d17a2aa01a449528
 
 目前为止我们只使用过 Cargo 构建、运行和测试代码这些最基本的功能，不过它还可以做到更多。本章会讨论 Cargo 其他一些更为高级的功能，我们将展示如何：
 

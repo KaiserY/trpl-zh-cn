@@ -12,7 +12,7 @@ Rust 的 **闭包**（*closures*）是可以保存在一个变量中或作为参
 
 有很多种方式来实现这些。例如，使用有 `Red` 和 `Blue` 两个成员的 `ShirtColor` 枚举（出于简单考虑限定为两种颜色）。我们使用 `Inventory` 结构体来代表公司的库存，它有一个类型为 `Vec<ShirtColor>` 的 `shirts` 字段表示库存中的衬衫的颜色。`Inventory` 上定义的 `giveaway` 方法获取免费衬衫得主所喜爱的颜色（如有），并返回其获得的衬衫的颜色。初始代码如示例 13-1 所示：
 
-<span class="filename">文件名： src/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-01/src/main.rs}}
@@ -161,9 +161,9 @@ impl<T> Option<T> {
 
 接着注意到 `unwrap_or_else`  函数有额外的范型参数 `F`。 `F` 是 `f` 参数（即调用 `unwrap_or_else` 时提供的闭包）的类型。
 
-范型 `F` 的 trait bound 是 `FnOnce() -> T`，这意味着 `F` 必须能够被调用一次，没有参数并返回一个 `T`。在 trait bound 中使用 `FnOnce`  表示 `unwrap_or_else` 将最多调用  `f` 一次。 在 `unwrap_or_else` 的函数体中可以看到，如果 `Option` 是 `Some`，`f`  不会被调用。如果 `Option` 是 `None`，`f`  将会被调用一次。由于所有的闭包都实现了 `FnOnce`， `unwrap_or_else` 能接收绝大多数不同类型的闭包，十分灵活。
+范型 `F` 的 trait bound 是 `FnOnce() -> T`，这意味着 `F` 必须能够被调用一次，没有参数并返回一个 `T`。在 trait bound 中使用 `FnOnce`  表示 `unwrap_or_else` 将最多调用  `f` 一次。在 `unwrap_or_else` 的函数体中可以看到，如果 `Option` 是 `Some`，`f`  不会被调用。如果 `Option` 是 `None`，`f`  将会被调用一次。由于所有的闭包都实现了 `FnOnce`， `unwrap_or_else` 能接收绝大多数不同类型的闭包，十分灵活。
 
-> 注意：函数也可以实现所有的三种 `Fn`  traits。 如果我们要做的事情不需要从环境中捕获值，则可以在需要某种实现了 `Fn`  trait 的东西时使用函数而不是闭包。举个例子，可以在 `Option<Vec<T>>`  的值上调用 `unwrap_or_else(Vec::new)` 以便在值为 `None` 时获取一个新的空的 vector。
+> 注意：函数也可以实现所有的三种 `Fn`  traits。如果我们要做的事情不需要从环境中捕获值，则可以在需要某种实现了 `Fn`  trait 的东西时使用函数而不是闭包。举个例子，可以在 `Option<Vec<T>>`  的值上调用 `unwrap_or_else(Vec::new)` 以便在值为 `None` 时获取一个新的空的 vector。
 
 现在让我们来看定义在 slice 上的标准库方法 `sort_by_key`，看看它与 `unwrap_or_else` 的区别以及为什么 `sort_by_key` 使用  `FnMut`  而不是 `FnOnce` trait bound。这个闭包以一个 slice 中当前被考虑的元素的引用作为参数，返回一个可以用来排序的 `K` 类型的值。当你想按照 slice 中元素的某个属性来进行排序时这个函数很有用。在示例 13-7 中有一个 `Rectangle` 实例的列表，我们使用 `sort_by_key`  按 `Rectangle` 的  `width`  属性对它们从低到高排序：
 
