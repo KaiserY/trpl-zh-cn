@@ -31,11 +31,9 @@
 
 注意你只需在模块树中的某处使用一次 `mod` 声明就可以加载这个文件。一旦编译器知道了这个文件是项目的一部分（并且通过 `mod` 语句的位置知道了代码在模块树中的位置），项目中的其他文件应该使用其所声明的位置的路径来引用那个文件的代码，这在[“引用模块项目的路径”][paths]部分有讲到。换句话说，`mod` **不是** 你可能会在其他编程语言中看到的 "include" 操作。
 
-接下来我们同样将 `hosting` 模块提取到自己的文件中。这个过程会有所不同，因为 `hosting` 是 `front_of_house` 的子模块而不是根模块。我们将 `hosting` 的文件放在一个父级模块树中的同名目录中，在这里是 *src/front_of_house/*。
+接下来我们同样将 `hosting` 模块提取到自己的文件中。这个过程会有所不同，因为 `hosting` 是 `front_of_house` 的子模块而不是根模块。我们将 `hosting` 的文件放在与模块树中它的父级模块同名的目录中，在这里是 *src/front_of_house/*。
 
-`hosting` 的文件将会位于一个模块树中的一个同名目录中。
-
-为了移动 `hosting`，修改 *src/front_of_house.rs* 仅包含 `hosting` 模块的声明。
+为了移动 `hosting`，修改 *src/front_of_house.rs* 使之仅包含 `hosting` 模块的声明。
 
 <span class="filename">文件名：src/front_of_house.rs</span>
 
