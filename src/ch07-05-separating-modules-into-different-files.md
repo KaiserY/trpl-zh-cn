@@ -31,11 +31,9 @@
 
 注意你只需在模块树中的某处使用一次 `mod` 声明就可以加载这个文件。一旦编译器知道了这个文件是项目的一部分（并且通过 `mod` 语句的位置知道了代码在模块树中的位置），项目中的其他文件应该使用其所声明的位置的路径来引用那个文件的代码，这在[“引用模块项目的路径”][paths]部分有讲到。换句话说，`mod` **不是** 你可能会在其他编程语言中看到的 "include" 操作。
 
-接下来我们同样将 `hosting` 模块提取到自己的文件中。这个过程会有所不同，因为 `hosting` 是 `front_of_house` 的子模块而不是根模块。我们将 `hosting` 的文件放在一个父级模块树中的同名目录中，在这里是 *src/front_of_house/*。
+接下来我们同样将 `hosting` 模块提取到自己的文件中。这个过程会有所不同，因为 `hosting` 是 `front_of_house` 的子模块而不是根模块。我们将 `hosting` 的文件放在与模块树中它的父级模块同名的目录中，在这里是 *src/front_of_house/*。
 
-`hosting` 的文件将会位于一个模块树中的一个同名目录中。
-
-为了移动 `hosting`，修改 *src/front_of_house.rs* 仅包含 `hosting` 模块的声明。
+为了移动 `hosting`，修改 *src/front_of_house.rs* 使之仅包含 `hosting` 模块的声明。
 
 <span class="filename">文件名：src/front_of_house.rs</span>
 
@@ -51,7 +49,7 @@
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house/hosting.rs}}
 ```
 
-如果将 *hosting.rs* 放在 *src* 目录，编译器会认为 `hosting` 模块中的 *hosting.rs* 的代码声明于 crate 根，而不是声明为 `front_of_house` 的子模块。编译器所遵循的在模块代码中寻找什么文件的规则，意味着目录和文件更紧密的比配了模块树。
+如果将 *hosting.rs* 放在 *src* 目录，编译器会认为 `hosting` 模块中的 *hosting.rs* 的代码声明于 crate 根，而不是声明为 `front_of_house` 的子模块。编译器所遵循的哪些文件对应哪些模块的代码的规则，意味着目录和文件更接近于模块树。
 
 > ### 另一种文件路径
 >
@@ -68,7 +66,7 @@
 >
 > 如果你对同一模块同时使用这两种路径风格，会得到一个编译错误。在同一项目中的不同模块混用不同的路径风格是允许的，不过这会使他人感到疑惑。
 >
-> 使用 *mod.rs* 文件名的老风格的主要缺点是会导致项目中出现很多 *mod.rs* 文件，当你在编辑器中同时打开他们时会感到疑惑。
+> 使用 *mod.rs* 这一文件名的风格的主要缺点是会导致项目中出现很多 *mod.rs* 文件，当你在编辑器中同时打开他们时会感到疑惑。
 
 我们将各个模块的代码移动到独立文件了，同时模块树依旧相同。`eat_at_restaurant` 中的函数调用也无需修改继续保持有效，即便其定义存在于不同的文件中。这个技巧让你可以在模块代码增长时，将它们移动到新文件中。
 
