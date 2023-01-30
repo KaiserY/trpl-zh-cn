@@ -2,17 +2,17 @@
 
 > [ch19-03-advanced-traits.md](https://github.com/rust-lang/book/blob/main/src/ch19-03-advanced-traits.md)
 > <br>
-> commit 81d05c9a6d06d79f2a85c8ea184f41dc82532d98
+> commit 95e931170404cb98d476b19017cbbdbc00d0834d
 
-第十章 [“trait：定义共享的行为”][traits-defining-shared-behavior] 部分，我们第一次涉及到了 trait，不过就像生命周期一样，我们并没有覆盖一些较为高级的细节。现在我们更加了解 Rust 了，可以深入理解其本质了。
+第十章 [“trait：定义共享的行为”][traits-defining-shared-behavior] 部分，我们第一次涉及到了 trait，不过我们并没有覆盖一些较为高级的细节。现在我们更加了解 Rust 了，可以深入理解其本质了。
 
 ### 关联类型在 trait 定义中指定占位符类型
 
-**关联类型**（*associated types*）是一个将类型占位符与 trait 相关联的方式，这样 trait 的方法签名中就可以使用这些占位符类型。trait 的实现者会针对特定的实现在这个类型的位置指定相应的具体类型。如此可以定义一个使用多种类型的 trait，直到实现此 trait 时都无需知道这些类型具体是什么。
+**关联类型**（*associated types*）是一个将类型占位符与 trait 相关联的方式，这样 trait 的方法签名中就可以使用这些占位符类型。trait 的实现者会针对特定的实现在这个占位符类型指定相应的具体类型。如此可以定义一个使用多种类型的 trait，直到实现此 trait 时都无需知道这些类型具体是什么。
 
 本章所描述的大部分内容都非常少见。关联类型则比较适中；它们比本书其他的内容要少见，不过比本章中的很多内容要更常见。
 
-一个带有关联类型的 trait 的例子是标准库提供的 `Iterator` trait。它有一个叫做 `Item` 的关联类型来替代遍历的值的类型。第十三章的 [“`Iterator` trait 和 `next` 方法”][the-iterator-trait-and-the-next-method] 部分曾提到过 `Iterator` trait 的定义如示例 19-12 所示：
+一个带有关联类型的 trait 的例子是标准库提供的 `Iterator` trait。它有一个叫做 `Item` 的关联类型来替代遍历的值的类型。`Iterator` trait 的定义如示例 19-12 所示：
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-12/src/lib.rs}}
@@ -20,19 +20,17 @@
 
 <span class="caption">示例 19-12: `Iterator` trait 的定义中带有关联类型 `Item`</span>
 
-`Item` 是一个占位类型，同时 `next` 方法定义表明它返回 `Option<Self::Item>` 类型的值。这个 trait 的实现者会指定 `Item` 的具体类型，然而不管实现者指定何种类型，`next` 方法都会返回一个包含了此具体类型值的 `Option`。
+`Item` 是一个占位符类型，同时 `next` 方法定义表明它返回 `Option<Self::Item>` 类型的值。这个 trait 的实现者会指定 `Item` 的具体类型，然而不管实现者指定何种类型，`next` 方法都会返回一个包含了此具体类型值的 `Option`。
 
-关联类型看起来像一个类似泛型的概念，因为它允许定义一个函数而不指定其可以处理的类型。那么为什么要使用关联类型呢？
-
-让我们通过一个在第十三章中出现的 `Counter` 结构体上实现 `Iterator` trait 的例子来检视其中的区别。在示例 13-21 中，指定了 `Item` 的类型为 `u32`：
+关联类型看起来像一个类似泛型的概念，因为它允许定义一个函数而不指定其可以处理的类型。让我们通过在一个 `Counter` 结构体上实现 `Iterator` trait 的例子来检视其中的区别。这个实现中指定了 `Item` 的类型为 `u32`：
 
 <span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-13-21-reproduced/src/lib.rs:ch19}}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-22-iterator-on-counter/src/lib.rs:ch19}}
 ```
 
-这类似于泛型。那么为什么 `Iterator` trait 不像示例 19-13 那样定义呢？
+这个语法类似于泛型。那么为什么 `Iterator` trait 不像示例 19-13 那样定义呢？
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-13/src/lib.rs}}
@@ -44,11 +42,13 @@
 
 通过关联类型，则无需标注类型，因为不能多次实现这个 trait。对于示例 19-12 使用关联类型的定义，我们只能选择一次 `Item` 会是什么类型，因为只能有一个 `impl Iterator for Counter`。当调用 `Counter` 的 `next` 时不必每次指定我们需要 `u32` 值的迭代器。
 
+关联类型也会成为 trait 契约的一部分：trait 的实现必须提供一个类型来替代关联类型占位符。关联类型通常有一个描述类型用途的名字，并且在 API 文档中为关联类型编写文档是一个最佳实践。
+
 ### 默认泛型类型参数和运算符重载
 
 当使用泛型类型参数时，可以为泛型指定一个默认的具体类型。如果默认类型就足够的话，这消除了为具体类型实现 trait 的需要。为泛型类型指定默认类型的语法是在声明泛型类型时使用 `<PlaceholderType=ConcreteType>`。
 
-这种情况的一个非常好的例子是用于运算符重载。**运算符重载**（*Operator overloading*）是指在特定情况下自定义运算符（比如 `+`）行为的操作。
+这种情况的一个非常好的例子是使用 **运算符重载**（*Operator overloading*），这是指在特定情况下自定义运算符（比如 `+`）行为的操作。
 
 Rust 并不允许创建自定义运算符或重载任意运算符，不过 `std::ops` 中所列出的运算符和相应的 trait 可以通过实现运算符相关 trait 来重载。例如，示例 19-14 中展示了如何在 `Point` 结构体上实现 `Add` trait 来重载 `+` 运算符，这样就可以将两个 `Point` 实例相加了：
 
@@ -143,7 +143,7 @@ Rust 既不能避免一个 trait 与另一个 trait 拥有相同名称的方法�
 
 因为 `fly` 方法获取一个 `self` 参数，如果有两个 **类型** 都实现了同一 **trait**，Rust 可以根据 `self` 的类型计算出应该使用哪一个 trait 实现。
 
-然而，关联函数是 trait 的一部分，但没有 `self` 参数。当同一作用域的两个类型实现了同一 trait，Rust 就不能计算出我们期望的是哪一个类型，除非使用 **完全限定语法**（*fully qualified syntax*）。例如，拿示例 19-19 中的 `Animal` trait 来说，它有关联函数 `baby_name`，结构体 `Dog` 实现了 `Animal`，同时有关联函数 `baby_name` 直接定义于 `Dog` 之上：
+然而，不是方法的关联函数没有 `self` 参数。当存在多个类型或者 trait 定义了相同函数名的非方法函数时，Rust 就不总是能计算出我们期望的是哪一个类型，除非使用 **完全限定语法**（*fully qualified syntax*）。例如示例 19-19 中的创建了一个希望将所有小狗叫做 *Spot* 的动物收容所的 trait。`Animal` trait 有一个关联非方法函数 `baby_name`。结构体 `Dog` 实现了 `Animal`，同时又直接提供了关联非方法函数 `baby_name`。
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -153,7 +153,7 @@ Rust 既不能避免一个 trait 与另一个 trait 拥有相同名称的方法�
 
 <span class="caption">示例 19-19: 一个带有关联函数的 trait 和一个带有同名关联函数并实现了此 trait 的类型</span>
 
-这段代码用于一个动物收容所，他们将所有的小狗起名为 Spot，这实现为定义于 `Dog` 之上的关联函数 `baby_name`。`Dog` 类型还实现了 `Animal` trait，它描述了所有动物的共有的特征。小狗被称为 puppy，这表现为 `Dog` 的 `Animal` trait 实现中与 `Animal` trait 相关联的函数 `baby_name`。
+`Dog` 上定义的关联函数 `baby_name` 的实现代码将所有的小狗起名为 Spot。`Dog` 类型还实现了 `Animal` trait，它描述了所有动物的共有的特征。小狗被称为 puppy，这表现为 `Dog` 的 `Animal` trait 实现中与 `Animal` trait 相关联的函数 `baby_name`。
 
 在 `main` 调用了 `Dog::baby_name` 函数，它直接调用了定义于 `Dog` 之上的关联函数。这段代码会打印出：
 
@@ -171,13 +171,13 @@ Rust 既不能避免一个 trait 与另一个 trait 拥有相同名称的方法�
 
 <span class="caption">示例 19-20: 尝试调用 `Animal` trait 的 `baby_name` 函数，不过 Rust 并不知道该使用哪一个实现</span>
 
-因为 `Animal::baby_name` 是关联函数而不是方法，因此它没有 `self` 参数，Rust 无法计算出所需的是哪一个 `Animal::baby_name` 实现。我们会得到这个编译错误：
+因为 `Animal::baby_name` 没有 `self` 参数，同时这可能会有其它类型实现了 `Animal` trait，Rust 无法计算出所需的是哪一个 `Animal::baby_name` 实现。我们会得到这个编译错误：
 
 ```console
 {{#include ../listings/ch19-advanced-features/listing-19-20/output.txt}}
 ```
 
-为了消歧义并告诉 Rust 我们希望使用的是 `Dog` 的 `Animal` 实现，需要使用 **完全限定语法**，这是调用函数时最为明确的方式。示例 19-21 展示了如何使用完全限定语法：
+为了消歧义并告诉 Rust 我们希望使用的是 `Dog` 的 `Animal` 实现而不是其它类型的 `Animal` 实现，需要使用 **完全限定语法**，这是调用函数时最为明确的方式。示例 19-21 展示了如何使用完全限定语法：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -199,13 +199,13 @@ Rust 既不能避免一个 trait 与另一个 trait 拥有相同名称的方法�
 <Type as Trait>::function(receiver_if_method, next_arg, ...);
 ```
 
-对于关联函数，其没有一个 `receiver`，故只会有其他参数的列表。可以选择在任何函数或方法调用处使用完全限定语法。然而，允许省略任何 Rust 能够从程序中的其他信息中计算出的部分。只有当存在多个同名实现而 Rust 需要帮助以便知道我们希望调用哪个实现时，才需要使用这个较为冗长的语法。
+对于不是方法的关联函数，其没有一个 `receiver`，故只会有其他参数的列表。可以选择在任何函数或方法调用处使用完全限定语法。然而，允许省略任何 Rust 能够从程序中的其他信息中计算出的部分。只有当存在多个同名实现而 Rust 需要帮助以便知道我们希望调用哪个实现时，才需要使用这个较为冗长的语法。
 
 ### 父 trait 用于在另一个 trait 中使用某 trait 的功能
 
-有时我们可能会需要某个 trait 使用另一个 trait 的功能。在这种情况下，需要能够依赖相关的 trait 也被实现。这个所需的 trait 是我们实现的 trait 的 **父（超）trait**（*supertrait*）。
+有时我们可能会需要编写一个依赖另一个 trait 的 trait 定义：对于一个实现了第一个 trait 的类型，你希望要求这个类型也实现了第二个 trait。如此就可使 trait 定义使用第二个 trait 的关联项。这个所需的 trait 是我们实现的 trait 的 **父（超）trait**（*supertrait*）。
 
-例如我们希望创建一个带有 `outline_print` 方法的 trait `OutlinePrint`，它会打印出带有星号框的值。也就是说，如果 `Point` 实现了 `Display` 并返回 `(x, y)`，调用以 `1` 作为 `x` 和 `3` 作为 `y` 的 `Point` 实例的 `outline_print` 会显示如下：
+例如我们希望创建一个带有 `outline_print` 方法的 trait `OutlinePrint`，它会将给定的值格式化为带有星号框。也就是说，给定一个实现了标准库 `Display` trait 的并返回 `(x, y)` 的 `Point`，当调用以 `1` 作为 `x` 和 `3` 作为 `y` 的 `Point` 实例的 `outline_print` 会显示如下：
 
 ```text
 **********
@@ -269,11 +269,10 @@ Rust 既不能避免一个 trait 与另一个 trait 拥有相同名称的方法�
 
 此方法的缺点是，因为 `Wrapper` 是一个新类型，它没有定义于其值之上的方法；必须直接在 `Wrapper` 上实现 `Vec<T>` 的所有方法，这样就可以代理到`self.0` 上 —— 这就允许我们完全像 `Vec<T>` 那样对待 `Wrapper`。如果希望新类型拥有其内部类型的每一个方法，为封装类型实现 `Deref` trait（第十五章 [“通过 `Deref` trait 将智能指针当作常规引用处理”][smart-pointer-deref] 部分讨论过）并返回其内部类型是一种解决方案。如果不希望封装类型拥有所有内部类型的方法 —— 比如为了限制封装类型的行为 —— 则必须只自行实现所需的方法。
 
-上面便是 newtype 模式如何与 trait 结合使用的；还有一个不涉及 trait 的实用模式。现在让我们将话题的焦点转移到一些与 Rust 类型系统交互的高级方法上来吧。
+甚至当不涉及 trait 时 newtype 模式也很有用。现在让我们将话题的焦点转移到一些与 Rust 类型系统交互的高级方法上来吧。
 
-[newtype]: ch19-04-advanced-types.html#为了类型安全和抽象而使用-newtype-模式
+[newtype]: ch19-03-advanced-traits.html#newtype-模式用以在外部类型上实现外部-trait
 [implementing-a-trait-on-a-type]: ch10-02-traits.html#为类型实现-trait
-[the-iterator-trait-and-the-next-method]: ch13-02-iterators.html#iterator-trait-和-next-方法
 [traits-defining-shared-behavior]: ch10-02-traits.html#trait定义共享的行为
 [smart-pointer-deref]: ch15-02-deref.html#通过实现-deref-trait-将某类型像引用一样处理
 [tuple-structs]: ch05-01-defining-structs.html#使用没有命名字段的元组结构体来创建不同的类型

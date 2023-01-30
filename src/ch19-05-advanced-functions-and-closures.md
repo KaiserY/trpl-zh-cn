@@ -2,13 +2,15 @@
 
 > [ch19-05-advanced-functions-and-closures.md](https://github.com/rust-lang/book/blob/main/src/ch19-05-advanced-functions-and-closures.md)
 > <br>
-> commit 9e30688e0ac4a1ad86fc60aa380bebfb1c34b8a7
+> commit a8536189d5f1ba2f0b1187bfae787c0d89e2871c
 
-接下来我们将探索一些有关函数和闭包的高级功能：函数指针以及返回值闭包。
+本部分将探索一些有关函数和闭包的高级功能，这包括函数指针以及返回值闭包。
 
 ### 函数指针
 
-我们讨论过了如何向函数传递闭包；也可以向函数传递常规函数！这在我们希望传递已经定义的函数而不是重新定义闭包作为参数时很有用。通过函数指针允许我们使用函数作为另一个函数的参数。函数的类型是 `fn` （使用小写的 “f” ）以免与 `Fn` 闭包 trait 相混淆。`fn` 被称为 **函数指针**（*function pointer*）。指定参数为函数指针的语法类似于闭包，如示例 19-27 所示：
+我们讨论过了如何向函数传递闭包；也可以向函数传递常规函数！这个技术在我们希望传递已经定义的函数而不是重新定义闭包作为参数时很有用。函数满足类型 `fn`（小写的 f），不要与闭包 trait 的 `Fn` 相混淆。`fn` 被称为 **函数指针**（*function pointer*）。通过函数指针允许我们使用函数作为另一个函数的参数。
+
+指定参数为函数指针的语法类似于闭包，如示例 19-27 所示，这里定义了一个 `add_one` 函数将其参数加一。`do_twice` 函数获取两个参数：一个指向任何获取一个 `i32` 参数并返回一个 `i32` 的函数指针，和一个 `i32` 值。`do_twice` 函数传递 `arg` 参数调用 `f` 函数两次，接着将两次函数调用的结果相加。`main` 函数使用 `add_one` 和 `5` 作为参数调用 `do_twice`。
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -40,7 +42,7 @@
 
 注意这里必须使用 [“高级 trait”][advanced-traits] 部分讲到的完全限定语法，因为存在多个叫做 `to_string` 的函数；这里使用了定义于 `ToString` trait 的 `to_string` 函数，标准库为所有实现了 `Display` 的类型实现了这个 trait。
 
-另一个实用的模式暴露了元组结构体和元组结构体枚举成员的实现细节。这些项使用 `()` 作为初始化语法，这看起来就像函数调用，同时它们确实被实现为返回由参数构造的实例的函数。它们也被称为实现了闭包 trait 的函数指针，并可以采用类似如下的方式调用：
+回忆一下第六章 [“枚举值”][enum-values] 部分中定义的每一个枚举成员也变成了一个构造函数。我们可以使用这些构造函数作为实现了闭包 trait 的函数指针，这意味着可以指定构造函数作为接受闭包的方法的参数，如下：
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-17-map-initializer/src/main.rs:here}}
@@ -75,4 +77,5 @@
 接下来让我们学习宏！
 
 [advanced-traits]: ch19-03-advanced-traits.html#高级-trait
+[enum-values]: ch06-01-defining-an-enum.html#枚举值
 [using-trait-objects-that-allow-for-values-of-different-types]: ch17-02-trait-objects.html#为使用不同类型的值而设计的-trait-对象

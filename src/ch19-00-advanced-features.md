@@ -2,7 +2,7 @@
 
 > [ch19-00-advanced-features.md](https://github.com/rust-lang/book/blob/main/src/ch19-00-advanced-features.md)
 > <br>
-> commit 10f89936b02dc366a2d0b34083b97cadda9e0ce4
+> commit a8536189d5f1ba2f0b1187bfae787c0d89e2871c
 
 现在我们已经学习了 Rust 编程语言中最常用的部分。在第二十章开始另一个新项目之前，让我们聊聊一些总有一天你会遇上的部分内容。你可以将本章作为不经意间遇到未知的内容时的参考。本章将要学习的功能在一些非常特定的场景下很有用处。虽然很少会碰到它们，我们希望确保你了解 Rust 提供的所有功能。
 

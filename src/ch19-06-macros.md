@@ -2,7 +2,7 @@
 
 > [ch19-06-macros.md](https://github.com/rust-lang/book/blob/main/src/ch19-06-macros.md)
 > <br>
-> commit acc806a06b5a23c7397b7218aecec0e774619512
+> commit 95e931170404cb98d476b19017cbbdbc00d0834d
 
 我们已经在本书中使用过像 `println!` 这样的宏了，不过还没完全探索什么是宏以及它是如何工作的。**宏**（*Macro*）指的是 Rust 中一系列的功能：使用 `macro_rules!` 的 **声明**（*Declarative*）宏，和三种 **过程**（*Procedural*）宏：
 
@@ -55,11 +55,9 @@ let v: Vec<u32> = vec![1, 2, 3];
 
 `vec!` 宏的结构和 `match` 表达式的结构类似。此处有一个分支模式 `( $( $x:expr ),* )` ，后跟 `=>` 以及和模式相关的代码块。如果模式匹配，该相关代码块将被执行。这里这个宏只有一个模式，那就只有一个有效匹配方向，其他任何模式方向（译者注：不匹配这个模式）都会导致错误。更复杂的宏会有多个分支模式。
 
-宏定义中有效模式语法和在第十八章提及的模式语法是不同的，因为宏模式所匹配的是 Rust 代码结构而不是值。回过头来检查下示例 19-28 中模式片段什么意思。对于全部的宏模式语法，请查阅[参考]。
+宏定义中有效模式语法和在第十八章提及的模式语法是不同的，因为宏模式所匹配的是 Rust 代码结构而不是值。回过头来检查下示例 19-28 中模式片段什么意思。对于全部的宏模式语法，请查阅 [Rust 参考][ref]。
 
-[参考]: https://doc.rust-lang.org/reference/macros-by-example.html
-
-首先，一对括号包含了整个模式。接下来是美元符号（ `$` ），后跟一对括号，其捕获了符合括号内模式的值用以在替代代码中使用。`$()` 内则是 `$x:expr` ，其匹配 Rust 的任意表达式，并将该表达式命名为 `$x`。
+首先，一对括号包含了整个模式。我们使用美元符号（`$`）在宏系统中声明一个变量来包含匹配该模式的 Rust 代码。美元符号明确表明这是一个宏变量而不是普通 Rust 变量。之后是一对括号，其捕获了符合括号内模式的值用以在替代代码中使用。`$()` 内则是 `$x:expr` ，其匹配 Rust 的任意表达式，并将该表达式命名为 `$x`。
 
 `$()` 之后的逗号说明一个可有可无的逗号分隔符可以出现在 `$()` 所匹配的代码之后。紧随逗号之后的 `*` 说明该模式匹配零个或更多个 `*` 之前的任何模式。
 
@@ -79,17 +77,13 @@ let v: Vec<u32> = vec![1, 2, 3];
 
 我们已经定义了一个宏，其可以接收任意数量和类型的参数，同时可以生成能够创建包含指定元素的 vector 的代码。
 
-`macro_rules!` 中有一些奇怪的地方。在将来，会有第二种采用 `macro` 关键字的声明宏，其工作方式类似但修复了这些极端情况。在此之后，`macro_rules!` 实际上就过时（deprecated）了。在此基础之上，同时鉴于大多数 Rust 程序员 **使用** 宏而非 **编写** 宏的事实，此处不再深入探讨 `macro_rules!`。请查阅在线文档或其他资源，如 [“The Little Book of Rust Macros”][tlborm] 来更多地了解如何写宏。
-
-[tlborm]: https://veykril.github.io/tlborm/
+请查阅在线文档或其他资源，如 [“The Little Book of Rust Macros”][tlborm] 来更多地了解如何写宏，该书由 Daniel Keep 开始编写并由 Lukas Wirth 继续维护。
 
 ### 用于从属性生成代码的过程宏
 
-第二种形式的宏被称为 **过程宏**（*procedural macros*），因为它们更像函数（一种过程类型）。过程宏接收 Rust 代码作为输入，在这些代码上进行操作，然后产生另一些代码作为输出，而非像声明式宏那样匹配对应模式然后以另一部分代码替换当前代码。
+第二种形式的宏被称为 **过程宏**（*procedural macros*），因为它们更像函数（一种过程类型）。过程宏接收 Rust 代码作为输入，在这些代码上进行操作，然后产生另一些代码作为输出，而非像声明式宏那样匹配对应模式然后以另一部分代码替换当前代码。有三种类型的过程宏（自定义派生（derive），类属性和类函数），不过它们的工作方式都类似。
 
-有三种类型的过程宏（自定义派生（derive），类属性和类函数），不过它们的工作方式都类似。
-
-创建过程宏时，其定义必须驻留在它们自己的具有特殊 crate 类型的 crate 中。这么做出于复杂的技术原因，将来我们希望能够消除这些限制。使用这些宏需采用类似示例 19-29 所示的代码形式，其中 `some_attribute` 是一个使用特定宏的占位符。
+创建过程宏时，其定义必须驻留在它们自己的具有特殊 crate 类型的 crate 中。这么做出于复杂的技术原因，将来我们希望能够消除这些限制。在示例 19-29 中展示了如何定义过程宏，其中 `some_attribute` 是一个使用特定宏变体的占位符。
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -101,7 +95,7 @@ pub fn some_name(input: TokenStream) -> TokenStream {
 }
 ```
 
-<span class="caption">示例 19-29: 一个使用过程宏的例子</span>
+<span class="caption">示例 19-29: 一个定义过程宏的例子</span>
 
 定义过程宏的函数接收一个 TokenStream 作为输入并生成 TokenStream 作为输出。`TokenStream` 是定义于`proc_macro` crate 里代表一系列 token 的类型，Rust 默认携带了`proc_macro` crate。这就是宏的核心：宏所处理的源代码组成了输入 `TokenStream`，宏生成的代码是输出 `TokenStream`。函数上还有一个属性；这个属性指明了我们创建的过程宏的类型。在同一 crate 中可以有多种的过程宏。
 
@@ -109,7 +103,7 @@ pub fn some_name(input: TokenStream) -> TokenStream {
 
 ### 如何编写自定义 `derive` 宏
 
-让我们创建一个 `hello_macro` crate，其包含名为 `HelloMacro` 的 trait 和关联函数 `hello_macro`。不同于让 crate 的用户为其每一个类型实现 `HelloMacro` trait，我们将会提供一个过程式宏以便用户可以使用 `#[derive(HelloMacro)]` 注解他们的类型来得到 `hello_macro` 函数的默认实现。该默认实现会打印 `Hello, Macro! My name is TypeName!`，其中 `TypeName` 为定义了 trait 的类型名。换言之，我们会创建一个 crate，使程序员能够写类似示例 19-30 中的代码。
+让我们创建一个 `hello_macro` crate，其包含名为 `HelloMacro` 的 trait 和关联函数 `hello_macro`。不同于让用户为其每一个类型实现 `HelloMacro` trait，我们将会提供一个过程式宏以便用户可以使用 `#[derive(HelloMacro)]` 注解他们的类型来得到 `hello_macro` 函数的默认实现。该默认实现会打印 `Hello, Macro! My name is TypeName!`，其中 `TypeName` 为定义了 trait 的类型名。换言之，我们会创建一个 crate，使程序员能够写类似示例 19-30 中的代码。
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -173,9 +167,6 @@ $ cargo new hello_macro_derive --lib
 
 现在，我们已经引入了三个新的 crate：`proc_macro` 、 [`syn`] 和 [`quote`] 。Rust 自带 `proc_macro` crate，因此无需将其加到 *Cargo.toml* 文件的依赖中。`proc_macro` crate 是编译器用来读取和操作我们 Rust 代码的 API。
 
-[`syn`]: https://crates.io/crates/syn
-[`quote`]: https://crates.io/crates/quote
-
 `syn` crate 将字符串中的 Rust 代码解析成为一个可以操作的数据结构。`quote` 则将 `syn` 解析的数据结构转换回 Rust 代码。这些 crate 让解析任何我们所要处理的 Rust 代码变得更简单：为 Rust 编写整个的解析器并不是一件简单的工作。
 
 当用户在一个类型上指定 `#[derive(HelloMacro)]` 时，`hello_macro_derive` 函数将会被调用。因为我们已经使用 `proc_macro_derive` 及其指定名称`HelloMacro`对 `hello_macro_derive` 函数进行了注解，指定名称`HelloMacro`就是 trait 名，这是大多数过程宏遵循的习惯。
@@ -206,8 +197,6 @@ DeriveInput {
 
 该结构体的字段展示了我们解析的 Rust 代码是一个类单元结构体，其 `ident`（identifier，表示名字）为 `Pancakes`。该结构体里面有更多字段描述了所有类型的 Rust 代码，查阅 [`syn` 中 `DeriveInput` 的文档][syn-docs] 以获取更多信息。
 
-[syn-docs]: https://docs.rs/syn/0.14.4/syn/struct.DeriveInput.html
-
 很快我们将定义 `impl_hello_macro` 函数，其用于构建所要包含在内的 Rust 新代码。但在此之前，注意其输出也是 `TokenStream`。所返回的 `TokenStream` 会被加到我们的 crate 用户所写的代码中，因此，当用户编译他们的 crate 时，他们会通过修改后的 `TokenStream` 获取到我们所提供的额外功能。
 
 你可能也注意到了，当调用 `syn::parse` 函数失败时，我们用 `unwrap` 来使 `hello_macro_derive` 函数 panic。在错误时 panic 对过程宏来说是必须的，因为 `proc_macro_derive` 函数必须返回 `TokenStream` 而不是 `Result`，以此来符合过程宏的 API。这里选择用 `unwrap` 来简化了这个例子；在生产代码中，则应该通过 `panic!` 或 `expect` 来提供关于发生何种错误的更加明确的错误信息。
@@ -227,8 +216,6 @@ DeriveInput {
 `quote!` 宏能让我们编写希望返回的 Rust 代码。`quote!` 宏执行的直接结果并不是编译器所期望的所以需要转换为 `TokenStream`。为此需要调用 `into` 方法，它会消费这个中间表示（intermediate representation，IR）并返回所需的 `TokenStream` 类型值。
 
 这个宏也提供了一些非常酷的模板机制；我们可以写 `#name` ，然后 `quote!` 会以名为 `name` 的变量值来替换它。你甚至可以做一些类似常用宏那样的重复代码的工作。查阅 [`quote` crate 的文档][quote-docs] 来获取详尽的介绍。
-
-[quote-docs]: https://docs.rs/quote
 
 我们期望我们的过程式宏能够为通过 `#name` 获取到的用户注解类型生成 `HelloMacro` trait 的实现。该 trait 的实现有一个函数 `hello_macro` ，其函数体包括了我们期望提供的功能：打印 `Hello, Macro! My name is` 和注解的类型名。
 
@@ -268,8 +255,6 @@ pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
 
 类函数（Function-like）宏的定义看起来像函数调用的宏。类似于 `macro_rules!`，它们比函数更灵活；例如，可以接受未知数量的参数。然而 `macro_rules!` 宏只能使用之前 [“使用 `macro_rules!` 的声明宏用于通用元编程”][decl] 介绍的类匹配的语法定义。类函数宏获取 `TokenStream` 参数，其定义使用 Rust 代码操纵 `TokenStream`，就像另两种过程宏一样。一个类函数宏例子是可以像这样被调用的 `sql!` 宏：
 
-[decl]: #使用-macro_rules-的声明宏用于通用元编程
-
 ```rust,ignore
 let sql = sql!(SELECT * FROM posts WHERE id=1);
 ```
@@ -288,3 +273,11 @@ pub fn sql(input: TokenStream) -> TokenStream {
 好的！现在我们学习了 Rust 并不常用但在特定情况下你可能用得着的功能。我们介绍了很多复杂的主题，这样若你在错误信息提示或阅读他人代码时遇到他们，至少可以说之前已经见过这些概念和语法了。你可以使用本章作为一个解决方案的参考。
 
 接下来，我们将再开始一个项目，将本书所学的所有内容付与实践！
+
+[ref]: https://doc.rust-lang.org/reference/macros-by-example.html
+[tlborm]: https://veykril.github.io/tlborm/
+[`syn`]: https://crates.io/crates/syn
+[`quote`]: https://crates.io/crates/quote
+[syn-docs]: https://docs.rs/syn/1.0/syn/struct.DeriveInput.html
+[quote-docs]: https://docs.rs/quote
+[decl]: #使用-macro_rules-的声明宏用于通用元编程
