@@ -34,7 +34,7 @@
 
 <span class="caption">示例 8-21：访问哈希 map 中储存的蓝队分数</span>
 
-这里，`score` 是与蓝队分数相关的值，应为 `10`。`get` 方法返回 `Option<&V>`，如果某个键在哈希 map 中没有对应的值，`get` 会返回 `None`。程序中通过调用 `copied` 方法来获取一个 `Option<i32>` 而不是 `Option<&i32>`，接着调用 `unwrap_or`，如果 `score` 没有对应键的项将 `score` 设置为零。
+这里，`score` 是与蓝队分数相关的值，应为 `10`。`get` 方法返回 `Option<&V>`，如果某个键在哈希 map 中没有对应的值，`get` 会返回 `None`。程序中通过调用 `copied` 方法来获取一个 `Option<i32>` 而不是 `Option<&i32>`，接着调用 `unwrap_or` 在  `score` 中没有该键所对应的项时将其设置为零。
 
 可以使用与 vector 类似的方式来遍历哈希 map 中的每一个键值对，也就是 `for` 循环：
 
@@ -107,7 +107,7 @@ Blue: 10
 
 <span class="caption">示例 8-25：通过哈希 map 储存单词和计数来统计出现次数</span>
 
-这会打印出 `{"world": 2, "hello": 1, "wonderful": 1}`。你可能会发现相同的键值对以不同的顺序打印：回忆以下[“访问哈希 map 中的值”][access]部分中遍历哈希 map 会以任意顺序进行。
+这会打印出 `{"world": 2, "hello": 1, "wonderful": 1}`。你可能会看到相同的键值对以不同的顺序打印：回忆一下[“访问哈希 map 中的值”][access]部分中遍历哈希 map 会以任意顺序进行。
 
 `split_whitespace` 方法返回一个由空格分隔 `text` 值子 slice 的迭代器。`or_insert` 方法返回这个键的值的一个可变引用（`&mut V`）。这里我们将这个可变引用储存在 `count` 变量中，所以为了赋值必须首先使用星号（`*`）解引用 `count`。这个可变引用在 `for` 循环的结尾离开作用域，这样所有这些改变都是安全的并符合借用规则。
 
