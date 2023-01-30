@@ -2,7 +2,7 @@
 
 > [ch18-01-all-the-places-for-patterns.md](https://github.com/rust-lang/book/blob/main/src/ch18-01-all-the-places-for-patterns.md)
 > <br>
-> commit 8a1aad812b90126974853f80d9217e07bd226650
+> commit 0c2d41e2afce734825c3a12087d423e8c2f0ae53
 
 模式出现在 Rust 的很多地方。你已经在不经意间使用了很多模式！本部分是一个所有有效模式位置的参考。
 
@@ -18,6 +18,17 @@ match VALUE {
 }
 ```
 
+例如这是一个来自示例 6-5 中匹配变量 `x` 中 `Option<i32>` 值的 `match` 表达式：
+
+```rust,ignore
+match x {
+    None => None,
+    Some(i) => Some(i + 1),
+}
+```
+
+这个 `match` 表达式中的模式为每个箭头左边的 `None` 和 `Some(i)`。
+
 `match` 表达式必须是 **穷尽**（*exhaustive*）的，意为 `match` 表达式所有可能的值都必须被考虑到。一个确保覆盖每个可能值的方法是在最后一个分支使用捕获所有的模式：比如，一个匹配任何值的名称永远也不会失败，因此可以覆盖所有匹配剩下的情况。
 
 有一个特定的模式 `_` 可以匹配所有情况，不过它从不绑定任何变量。这在例如希望忽略任何未指定值的情况很有用。本章之后的 [“忽略模式中的值”][ignoring-values-in-a-pattern] 部分会详细介绍 `_` 模式的更多细节。
@@ -26,7 +37,7 @@ match VALUE {
 
 第六章讨论过了 `if let` 表达式，以及它是如何主要用于编写等同于只关心一个情况的 `match` 语句简写的。`if let` 可以对应一个可选的带有代码的 `else` 在 `if let` 中的模式不匹配时运行。
 
-示例 18-1 展示了也可以组合并匹配 `if let`、`else if` 和 `else if let` 表达式。这相比 `match` 表达式一次只能将一个值与模式比较提供了更多灵活性；一系列 `if let`、`else if`、`else if let` 分支并不要求其条件相互关联。
+示例 18-1 展示了也可以组合并匹配 `if let`、`else if` 和 `else if let` 表达式。这相比 `match` 表达式一次只能将一个值与模式比较提供了更多灵活性。并且 Rust 并不要求一系列 `if let`、`else if`、`else if let` 分支的条件相互关联。
 
 示例 18-1 中的代码展示了一系列针对不同条件的检查来决定背景颜色应该是什么。为了达到这个例子的目的，我们创建了硬编码值的变量，在真实程序中则可能由询问用户获得。
 
@@ -38,7 +49,7 @@ match VALUE {
 
 <span class="caption">示例 18-1: 结合 `if let`、`else if`、`else if let` 以及 `else`</span>
 
-如果用户指定了中意的颜色，将使用其作为背景颜色。如果今天是星期二，背景颜色将是绿色。如果用户指定了他们的年龄字符串并能够成功将其解析为数字的话，我们将根据这个数字使用紫色或者橙色。最后，如果没有一个条件符合，背景颜色将是蓝色：
+如果用户指定了中意的颜色，将使用其作为背景颜色。如果没有指定中意的颜色且今天是星期二，背景颜色将是绿色。如果用户指定了他们的年龄字符串并能够成功将其解析为数字的话，我们将根据这个数字使用紫色或者橙色。最后，如果没有一个条件符合，背景颜色将是蓝色。
 
 这个条件结构允许我们支持复杂的需求。使用这里硬编码的值，例子会打印出 `Using purple as the background color`。
 
@@ -60,9 +71,7 @@ match VALUE {
 
 ### `for` 循环
 
-如同第三章所讲的，`for` 循环是 Rust 中最常见的循环结构，不过还没有讲到的是 `for` 可以获取一个模式。在 `for` 循环中，模式是 `for` 关键字直接跟随的值，正如 `for x in y` 中的 `x`。
-
-示例 18-3 中展示了如何使用 `for` 循环来解构，或拆开一个元组作为 `for` 循环的一部分：
+在 `for` 循环中，模式是 `for` 关键字直接跟随的值，正如 `for x in y` 中的 `x`。示例 18-3 中展示了如何使用 `for` 循环来解构，或拆开一个元组作为 `for` 循环的一部分：
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-03/src/main.rs:here}}
@@ -86,7 +95,7 @@ match VALUE {
 let x = 5;
 ```
 
-本书进行了不下百次这样的操作，不过你可能没有发觉，这正是在使用模式！`let` 语句更为正式的样子如下：
+不过你可能没有发觉，每一次像这样使用 `let` 语句就是在使用模式！`let` 语句更为正式的样子如下：
 
 ```text
 let PATTERN = EXPRESSION;
@@ -118,7 +127,7 @@ let PATTERN = EXPRESSION;
 {{#include ../listings/ch18-patterns-and-matching/listing-18-05/output.txt}}
 ```
 
-如果希望忽略元组中一个或多个值，也可以使用 `_` 或 `..`，如 [“忽略模式中的值”][ignoring-values-in-a-pattern] 部分所示。如果问题是模式中有太多的变量，则解决方法是通过去掉变量使得变量数与元组中元素数相等。
+为了修复这个错误，可以使用 `_` 或 `..` 来忽略元组中一个或多个值，如 [“忽略模式中的值”][ignoring-values-in-a-pattern] 部分所示。如果问题是模式中有太多的变量，则解决方法是通过去掉变量使得变量数与元组中元素数相等。
 
 ### 函数参数
 
