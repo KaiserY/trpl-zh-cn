@@ -2,7 +2,7 @@
 
 > [ch20-03-graceful-shutdown-and-cleanup.md](https://github.com/rust-lang/book/blob/main/src/ch20-03-graceful-shutdown-and-cleanup.md)
 > <br>
-> commit 322899b375d071e4d96aaf29ce25c1a4b4ec65da
+> commit 3e5105b52f7e8d3d95def07ffade4dcb1cfdee27
 
 示例 20-20 中的代码如期通过使用线程池异步的响应请求。这里有一些警告说 `workers`、`id` 和 `thread` 字段没有直接被使用，这提醒了我们并没有清理所有的内容。当使用不那么优雅的 <span class="keystroke">ctrl-c</span> 终止主线程时，所有其他线程也会立刻停止，即便它们正处于处理请求的过程中。
 
@@ -28,7 +28,7 @@
 {{#include ../listings/ch20-web-server/listing-20-22/output.txt}}
 ```
 
-这告诉我们并不能调用 `join`，因为只有每一个 `worker` 的可变借用，而 `join` 获取其参数的所有权。为了解决这个问题，需要一个方法将 `thread` 移动出拥有其所有权的 `Worker` 实例以便 `join` 可以消费这个线程。示例 17-15 中我们曾见过这么做的方法：如果 `Worker` 存放的是 `Option<thread::JoinHandle<()>`，就可以在 `Option` 上调用 `take` 方法将值从 `Some` 成员中移动出来而对 `None` 成员不做处理。换句话说，正在运行的 `Worker` 的 `thread` 将是 `Some` 成员值，而当需要清理 worker 时，将 `Some` 替换为 `None`，这样 worker 就没有可以运行的线程了。
+这里的错误告诉我们并不能调用 `join`，因为只有每一个 `worker` 的可变借用，而 `join` 获取其参数的所有权。为了解决这个问题，需要一个方法将 `thread` 移动出拥有其所有权的 `Worker` 实例以便 `join` 可以消费这个线程。示例 17-15 中我们曾见过这么做的方法：如果 `Worker` 存放的是 `Option<thread::JoinHandle<()>`，就可以在 `Option` 上调用 `take` 方法将值从 `Some` 成员中移动出来而对 `None` 成员不做处理。换句话说，正在运行的 `Worker` 的 `thread` 将是 `Some` 成员值，而当需要清理 worker 时，将 `Some` 替换为 `None`，这样 worker 就没有可以运行的线程了。
 
 为此需要更新 `Worker` 的定义为如下：
 
@@ -48,7 +48,7 @@
 
 <span class="filename">文件名：src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-05-fix-worker-new/src/lib.rs:here}}
 ```
 
@@ -56,7 +56,7 @@
 
 <span class="filename">文件名：src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,not_desired_behavior
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-06-fix-threadpool-drop/src/lib.rs:here}}
 ```
 
@@ -64,52 +64,36 @@
 
 ### 向线程发送信号使其停止接收任务
 
-有了所有这些修改，代码就能编译且没有任何警告。不过也有坏消息，这些代码还不能以我们期望的方式运行。问题的关键在于 `Worker` 中分配的线程所运行的闭包中的逻辑：调用 `join` 并不会关闭线程，因为他们一直 `loop` 来寻找任务。如果采用这个实现来尝试丢弃 `ThreadPool` ，则主线程会永远阻塞在等待第一个线程结束上。
+有了所有这些修改，代码就能编译且没有任何警告。不过也有坏消息，这些代码还不能以我们期望的方式运行。问题的关键在于 `Worker` 中分配的线程所运行的闭包中的逻辑：调用 `join` 并不会关闭线程，因为他们一直 `loop` 来寻找任务。如果采用这个实现来尝试丢弃 `ThreadPool`，则主线程会永远阻塞在等待第一个线程结束上。
 
-为了修复这个问题，修改线程既监听是否有 `Job` 运行也要监听一个应该停止监听并退出无限循环的信号。所以信道将发送这个枚举的两个成员之一而不是 `Job` 实例：
+为了修复这个问题，我们将修改 `ThreadPool` 的 `drop` 实现并修改 `Worker` 循环。
+
+首先修改 `ThreadPool` 的 `drop` 实现在等待线程结束前显式丢弃 `sender`。示例 20-23 展示了 `ThreadPool` 显式丢弃 `sender` 所作的修改。我们使用了与之前处理线程时相同的 `Option` 和 `take` 技术以便能从 `ThreadPool` 中移动 `sender`：
+
+<span class="filename">文件名：src/lib.rs</span>
+
+```rust,noplayground,not_desired_behavior
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-23/src/lib.rs:here}}
+```
+
+<span class="caption">示例 20-23: 在 join worker 线程之前显式丢弃 `sender`</span>
+
+丢弃 `sender` 会关闭信道，这表明不会有更多的消息被发送。这时 worker 中的无限循环中的所有 `recv` 调用都会返回错误。在示例 20-24 中，我们修改 `Worker` 循环在这种情况下优雅地退出，这意味着当 `ThreadPool` 的 `drop` 实现调用 `join` 时线程会结束。
 
 <span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch20-web-server/no-listing-07-define-message-enum/src/lib.rs:here}}
-```
-
-`Message` 枚举要么是存放了线程需要运行的 `Job` 的 `NewJob` 成员，要么是会导致线程退出循环并终止的 `Terminate` 成员。
-
-同时需要修改信道来使用 `Message` 类型值而不是 `Job`，如示例 20-23 所示：
-
-<span class="filename">文件名：src/lib.rs</span>
-
-```rust,ignore
-{{#rustdoc_include ../listings/ch20-web-server/listing-20-23/src/lib.rs:here}}
-```
-
-<span class="caption">示例 20-23: 收发 `Message` 值并在 `Worker` 收到 `Message::Terminate` 时退出循环</span>
-
-为了适用 `Message` 枚举需要将两个地方的 `Job` 修改为 `Message`：`ThreadPool` 的定义和 `Worker::new` 的签名。`ThreadPool` 的 `execute` 方法需要发送封装进 `Message::NewJob` 成员的任务。然后，在 `Worker::new` 中当从信道接收 `Message` 时，当获取到 `NewJob`成员会处理任务而收到 `Terminate` 成员则会退出循环。
-
-通过这些修改，代码再次能够编译并继续按照示例 20-20 之后相同的行为运行。不过还是会得到一个警告，因为并没有创建任何 `Terminate` 成员的消息。如示例 20-24 所示修改 `Drop` 实现来修复此问题：
-
-<span class="filename">文件名：src/lib.rs</span>
-
-```rust,ignore
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-24/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 20-24：在对每个 worker 线程调用 `join` 之前向 worker 发送 `Message::Terminate`</span>
-
-现在遍历了 worker 两次，一次向每个 worker 发送一个 `Terminate` 消息，一个调用每个 worker 线程上的 `join`。如果尝试在同一循环中发送消息并立即 join 线程，则无法保证当前迭代的 worker 是从信道收到终止消息的 worker。
-
-为了更好的理解为什么需要两个分开的循环，想象一下只有两个 worker 的场景。如果在一个单独的循环中遍历每个 worker，在第一次迭代中向信道发出终止消息并对第一个 worker 线程调用 `join`。如果此时第一个 worker 正忙于处理请求，那么第二个 worker 会收到终止消息并停止。我们会一直等待第一个 worker 结束，不过它永远也不会结束因为第二个线程接收了终止消息。死锁！
-
-为了避免此情况，首先在一个循环中向信道发出所有的 `Terminate` 消息，接着在另一个循环中 join 所有的线程。每个 worker 一旦收到终止消息即会停止从信道接收消息，意味着可以确保如果发送同 worker 数相同的终止消息，在 join 之前每个线程都会收到一个终止消息。
+<span class="caption">示例 20-24：当 `recv` 返回错误时显式退出循环</span>
 
 为了实践这些代码，如示例 20-25 所示修改 `main` 在优雅停机 server 之前只接受两个请求：
 
-<span class="filename">文件名：src/bin/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch20-web-server/listing-20-25/src/bin/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-25/src/main.rs:here}}
 ```
 
 <span class="caption">示例 20-25: 在处理两个请求之后通过退出循环来停止 server</span>
@@ -124,40 +108,38 @@
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
     Finished dev [unoptimized + debuginfo] target(s) in 1.0s
-     Running `target/debug/main`
+     Running `target/debug/hello`
 Worker 0 got a job; executing.
-Worker 3 got a job; executing.
 Shutting down.
-Sending terminate message to all workers.
-Shutting down all workers.
 Shutting down worker 0
-Worker 1 was told to terminate.
-Worker 2 was told to terminate.
-Worker 0 was told to terminate.
-Worker 3 was told to terminate.
+Worker 3 got a job; executing.
+Worker 1 disconnected; shutting down.
+Worker 2 disconnected; shutting down.
+Worker 3 disconnected; shutting down.
+Worker 0 disconnected; shutting down.
 Shutting down worker 1
 Shutting down worker 2
 Shutting down worker 3
 ```
 
-可能会出现不同顺序的 worker 和信息输出。可以从信息中看到服务是如何运行的：worker 0 和 worker 3 获取了头两个请求，接着在第三个请求时，我们停止接收连接。当 `ThreadPool` 在 `main` 的结尾离开作用域时，其 `Drop` 实现开始工作，线程池通知所有线程终止。每个 worker 在收到终止消息时会打印出一个信息，接着线程池调用 `join` 来终止每一个 worker 线程。
+可能会出现不同顺序的 worker 和信息输出。可以从信息中看到服务是如何运行的：worker 0 和 worker 3 获取了头两个请求。server 会在头第二个请求后停止接受请求，`ThreadPool` 的 `Drop` 实现甚至会在 worker 3 开始工作之前就开始执行。丢弃 `sender` 会断开所有 worker 的连接并让它们关闭。每个 worker 在断开时会打印出一个信息，接着线程池调用 `join` 来等待每一个 worker 线程结束。
 
-这个特定的运行过程中一个有趣的地方在于：注意我们向信道中发出终止消息，而在任何线程收到消息之前，就尝试 join worker 0 了。worker 0 还没有收到终止消息，所以主线程阻塞直到 worker 0 结束。与此同时，每一个线程都收到了终止消息。一旦 worker 0 结束，主线程就等待其他 worker 结束，此时他们都已经收到终止消息并能够停止了。
+这个特定的运行过程中一个有趣的地方在于：`ThreadPool` 丢弃 `sender`，而在任何线程收到消息之前，就尝试 join worker 0 了。worker 0 还没有从 `recv` 获得一个错误，所以主线程阻塞直到 worker 0 结束。与此同时，worker 3 接收到一个任务接着所有线程会收到一个错误。一旦 worker 0 结束，主线程就等待余下其他 worker 结束。此时它们都退出了循环并停止。
 
 恭喜！现在我们完成了这个项目，也有了一个使用线程池异步响应请求的基础 web server。我们能对 server 执行优雅停机，它会清理线程池中的所有线程。
 
 如下是完整的代码参考：
 
-<span class="filename">文件名：src/bin/main.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch20-web-server/no-listing-08-final-code/src/bin/main.rs}}
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-07-final-code/src/main.rs}}
 ```
 
 <span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch20-web-server/no-listing-08-final-code/src/lib.rs}}
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-07-final-code/src/lib.rs}}
 ```
 
 这里还有很多可以做的事！如果你希望继续增强这个项目，如下是一些点子：
