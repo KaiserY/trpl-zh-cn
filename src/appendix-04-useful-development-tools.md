@@ -2,7 +2,7 @@
 
 > [appendix-04-useful-development-tools.md](https://github.com/rust-lang/book/blob/main/src/appendix-04-useful-development-tools.md)
 > <br />
-> commit efbafdba3618487fbc9305318fcab9775132ac15
+> commit 5057f157cd0b35bc7d0dc0af6ef622fa4c480996
 
 本附录，我们将讨论 Rust 项目提供的用于开发 Rust 代码的工具。
 
@@ -116,14 +116,15 @@ fn main() {
 在此项目上运行 `cargo clippy` 会导致这个错误：
 
 ```text
-error: approximate value of `f{32, 64}::consts::PI` found. Consider using it directly
+error: approximate value of `f{32, 64}::consts::PI` found
  --> src/main.rs:2:13
   |
 2 |     let x = 3.1415;
   |             ^^^^^^
   |
-  = note: #[deny(clippy::approx_constant)] on by default
-  = help: for further information visit https://rust-lang-nursery.github.io/rust-clippy/master/index.html#approx_constant
+  = note: `#[deny(clippy::approx_constant)]` on by default
+  = help: consider using the constant directly
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#approx_constant
 ```
 
 这告诉我们 Rust 定义了更为精确的常量，而如果使用了这些常量程序将更加准确。如下代码就不会导致 `clippy` 产生任何错误或警告：

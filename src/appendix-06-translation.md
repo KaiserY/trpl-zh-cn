@@ -2,7 +2,7 @@
 
 > [appendix-06-translation.md](https://github.com/rust-lang/book/blob/main/src/appendix-06-translation.md)
 > <br />
-> commit f77e8c47bd04dd68094aaa7483e9dbf4d7386b8c
+> commit 4c8d13c52c51f1c62a80b52d7fbd7cc0b63ada43
 
 一些非英语语言的资源。多数仍在翻译中；查阅 [翻译标签][label] 来帮助翻译，或者添加译本链接！
 
@@ -14,7 +14,7 @@
 - [正體中文](https://github.com/rust-tw/book-tw)
 - [Українська](https://github.com/pavloslav/rust-book-uk-ua)
 - [Español](https://github.com/thecodix/book), [alternate](https://github.com/ManRR/rust-book-es)
-- [Italiano](https://github.com/Ciro-Fusco/book_it)
+- [Italiano](https://github.com/EmanueleGurini/book_it)
 - [Русский](https://github.com/rust-lang-ru/book)
 - [한국어](https://github.com/rinthel/rust-lang-book-ko)
 - [日本語](https://github.com/rust-lang-ja/book-ja)
@@ -27,7 +27,6 @@
 - [Svenska](https://github.com/sebras/book)
 - [Farsi](https://github.com/pomokhtari/rust-book-fa)
 - [Deutsch](https://github.com/rust-lang-de/rustbook-de)
-- [Turkish](https://github.com/RustDili/dokuman/tree/master/ceviriler), [online](https://rustdili.github.io/)
 - [हिंदी](https://github.com/venkatarun95/rust-book-hindi)
 - [ไทย](https://github.com/rust-lang-th/book-th)
 - [Danske](https://github.com/DanKHansen/book-dk)
