@@ -88,7 +88,7 @@ note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose bac
 
 示例 9-2 的输出中，backtrace 的 12 行指向了我们项目中造成问题的行：*src/main.rs* 的第 4 行。如果你不希望程序 panic，第一个提到我们编写的代码行的位置是你应该开始调查的，以便查明是什么值如何在这个地方引起了 panic。在示例 9-1 中，我们故意编写会 panic 的代码来演示如何使用 backtrace，修复这个 panic 的方法就是不要尝试在一个只包含三个项的 vector 中请求索引是 100 的元素。当将来你的代码出现了 panic，你需要搞清楚在这特定的场景下代码中执行了什么操作和什么值导致了 panic，以及应当如何处理才能避免这个问题。
 
-本章后面的小节 [“panic! 还是不 panic!”][to-panic-or-not-to-panic] 会再次回到 `panic!` 并讲解何时应该、何时不应该使用 `panic!` 来处理错误情况。接下来，我们来看看如何使用 `Result` 来从错误中恢复。
+本章后面的小节 [“要不要 panic!”][to-panic-or-not-to-panic] 会再次回到 `panic!` 并讲解何时应该、何时不应该使用 `panic!` 来处理错误情况。接下来，我们来看看如何使用 `Result` 来从错误中恢复。
 
 [to-panic-or-not-to-panic]:
 ch09-03-to-panic-or-not-to-panic.html#panic-还是不-panic
