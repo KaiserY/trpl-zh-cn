@@ -128,7 +128,7 @@
 
 #### 从 `new` 中返回 `Result` 而不是调用 `panic!`
 
-我们可以选择返回一个 `Result` 值，它在成功时会包含一个 `Config` 的实例，而在错误时会描述问题。当 `Config::new` 与 `main` 交流时，可以使用 `Result` 类型来表明这里存在问题。接着修改 `main` 将 `Err` 成员转换为对用户更友好的错误，而不是 `panic!` 调用产生的关于 `thread 'main'` 和 `RUST_BACKTRACE` 的文本。
+我们可以选择返回一个 `Result` 值，它在成功时会包含一个 `Config` 的实例，而在错误时会描述问题。我们还将把函数名从`new`改为`build`，因为许多程序员希望 `new` 函数永远不会失败。当 `Config::new` 与 `main` 交流时，可以使用 `Result` 类型来表明这里存在问题。接着修改 `main` 将 `Err` 成员转换为对用户更友好的错误，而不是 `panic!` 调用产生的关于 `thread 'main'` 和 `RUST_BACKTRACE` 的文本。
 
 示例 12-9 展示了为了返回 `Result` 在 `Config::new` 的返回值和函数体中所需的改变。注意这还不能编译，直到下一个示例同时也更新了 `main` 之后。
 
@@ -138,17 +138,17 @@
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-09/src/main.rs:here}}
 ```
 
-<span class="caption">示例 12-9：从 `Config::new` 中返回 `Result`</span>
+<span class="caption">示例 12-9：从 `Config::build` 中返回 `Result`</span>
 
-现在 `new` 函数返回一个 `Result`，在成功时带有一个 `Config` 实例而在出现错误时带有一个 `&'static str`。回忆一下第十章 “静态生命周期” 中讲到 `&'static str` 是字符串字面值的类型，也是目前的错误信息。
+现在 `build` 函数返回一个 `Result`，在成功时带有一个 `Config` 实例而在出现错误时带有一个 `&'static str`。回忆一下第十章 “静态生命周期” 中讲到 `&'static str` 是字符串字面值的类型，也是目前的错误信息。
 
 `new` 函数体中有两处修改：当没有足够参数时不再调用 `panic!`，而是返回 `Err` 值。同时我们将 `Config` 返回值包装进 `Ok` 成员中。这些修改使得函数符合其新的类型签名。
 
-通过让 `Config::new` 返回一个 `Err` 值，这就允许 `main` 函数处理 `new` 函数返回的 `Result` 值并在出现错误的情况更明确的结束进程。
+通过让 `Config::build` 返回一个 `Err` 值，这就允许 `main` 函数处理 `new` 函数返回的 `Result` 值并在出现错误的情况更明确的结束进程。
 
-#### `Config::new` 调用并处理错误
+#### `Config::build` 调用并处理错误
 
-为了处理错误情况并打印一个对用户友好的信息，我们需要像示例 12-10 那样更新 `main` 函数来处理现在 `Config::new` 返回的 `Result`。另外还需要手动实现原先由 `panic!`负责的工作，即以非零错误码退出命令行工具的工作。非零的退出状态是一个惯例信号，用来告诉调用程序的进程：该程序以错误状态退出了。
+为了处理错误情况并打印一个对用户友好的信息，我们需要像示例 12-10 那样更新 `main` 函数来处理现在 `Config::build` 返回的 `Result`。另外还需要手动实现原先由 `panic!`负责的工作，即以非零错误码退出命令行工具的工作。非零的退出状态是一个惯例信号，用来告诉调用程序的进程：该程序以错误状态退出了。
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -186,7 +186,7 @@
 
 #### 从 `run` 函数中返回错误
 
-通过将剩余的逻辑分离进 `run` 函数而不是留在 `main` 中，就可以像示例 12-9 中的 `Config::new` 那样改进错误处理。不再通过 `expect` 允许程序 panic，`run` 函数将会在出错时返回一个 `Result<T, E>`。这让我们进一步以一种对用户友好的方式统一 `main` 中的错误处理。示例 12-12 展示了 `run` 签名和函数体中的改变：
+通过将剩余的逻辑分离进 `run` 函数而不是留在 `main` 中，就可以像示例 12-9 中的 `Config::build` 那样改进错误处理。不再通过 `expect` 允许程序 panic，`run` 函数将会在出错时返回一个 `Result<T, E>`。这让我们进一步以一种对用户友好的方式统一 `main` 中的错误处理。示例 12-12 展示了 `run` 签名和函数体中的改变：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -214,7 +214,7 @@ Rust 提示我们的代码忽略了 `Result` 值，它可能表明这里存在�
 
 #### 处理 `main` 中 `run` 返回的错误
 
-我们将检查错误并使用类似示例 12-10 中 `Config::new` 处理错误的技术来处理他们，不过有一些细微的不同：
+我们将检查错误并使用类似示例 12-10 中 `Config::build` 处理错误的技术来处理他们，不过有一些细微的不同：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -222,7 +222,7 @@ Rust 提示我们的代码忽略了 `Result` 值，它可能表明这里存在�
 {{#rustdoc_include ../listings/ch12-an-io-project/no-listing-01-handling-errors-in-main/src/main.rs:here}}
 ```
 
-我们使用 `if let` 来检查 `run` 是否返回一个 `Err` 值，不同于 `unwrap_or_else`，并在出错时调用 `process::exit(1)`。`run` 并不返回像 `Config::new` 返回的 `Config` 实例那样需要 `unwrap` 的值。因为 `run` 在成功时返回 `()`，而我们只关心检测错误，所以并不需要 `unwrap_or_else` 来返回未封装的值，因为它只会是 `()`。
+我们使用 `if let` 来检查 `run` 是否返回一个 `Err` 值，不同于 `unwrap_or_else`，并在出错时调用 `process::exit(1)`。`run` 并不返回像 `Config::build` 返回的 `Config` 实例那样需要 `unwrap` 的值。因为 `run` 在成功时返回 `()`，而我们只关心检测错误，所以并不需要 `unwrap_or_else` 来返回未封装的值，因为它只会是 `()`。
 
 不过两个例子中 `if let` 和 `unwrap_or_else` 的函数体都一样：打印出错误并退出。
 
@@ -235,7 +235,7 @@ Rust 提示我们的代码忽略了 `Result` 值，它可能表明这里存在�
 - `run` 函数定义
 - 相关的 `use` 语句
 - `Config` 的定义
-- `Config::new` 函数定义
+- `Config::build` 函数定义
 
 现在 *src/lib.rs* 的内容应该看起来像示例 12-13（为了简洁省略了函数体）。注意直到下一个示例修改完 *src/main.rs* 之后，代码还不能编译：
 
