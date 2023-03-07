@@ -282,7 +282,7 @@ Rust 不可能决定在元组中匹配 `second` 值之前应该忽略多少个�
 
 **匹配守卫**（_match guard_）是一个指定于 `match` 分支模式之后的额外 `if` 条件，它也必须被满足才能选择此分支。匹配守卫用于表达比单独的模式所能允许的更为复杂的情况。
 
-这个条件可以使用模式中创建的变量。示例 18-26 展示了一个 `match`，其中第一个分支有模式 `Some(x)` 还有匹配守卫 `if x < 5`：
+这个条件可以使用模式中创建的变量。示例 18-26 展示了一个 `match`，其中第一个分支有模式 `Some(x)` 还有匹配守卫 `if x % 2 == 5`(当`x`是偶数的时候为真)：
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-26/src/main.rs:here}}
