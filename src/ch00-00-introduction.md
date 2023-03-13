@@ -2,11 +2,11 @@
 
 > [ch00-00-introduction.md](https://github.com/rust-lang/book/blob/main/src/ch00-00-introduction.md)
 > <br>
-> commit ace3550ad8c3da7aeab521f2e1f96a85b5c8f17d
+> commit 4404cbcc354fad516c7ad9b5dea51b2ed876803a
 
 > 注意：此书的英文原版与 [No Starch Press][nsp] 出版的纸质版和电子版《[The Rust Programming Language][nsprust]》一致。
 
-[nsprust]: https://nostarch.com/rust
+[nsprust]: https://nostarch.com/rust-programming-language-2nd-edition
 [nsp]: https://nostarch.com/
 
 欢迎阅读《Rust 程序设计语言》，这是一本 Rust 语言的入门书。Rust 程序设计语言能帮助你编写更快、更可靠的软件。在编程语言设计中，上层的编程效率和底层的细粒度控制往往不能兼得，而 Rust 则试图挑战这一矛盾。Rust 通过平衡技术能力和开发体验，允许你控制内存使用等底层细节，同时也不需要担心底层控制带来的各种麻烦。
