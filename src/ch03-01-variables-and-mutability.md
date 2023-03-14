@@ -2,7 +2,7 @@
 
 > [ch03-01-variables-and-mutability.md](https://github.com/rust-lang/book/blob/main/src/ch03-01-variables-and-mutability.md)
 >
-> commit d0acb2595c891de97a133d06635c50ab449dd65c
+> commit 21a2ed14f4480dab62438dcc1130291bebc65379
 
 正如第二章中[“使用变量储存值”][storing-values-with-variables]<!-- ignore --> 部分提到的那样，变量默认是不可改变的（immutable）。这是 Rust 提供给你的众多优势之一，让你得以充分利用 Rust 提供的安全性和简单并发性来编写代码。不过，你仍然可以使用可变变量。让我们探讨一下 Rust 为何及如何鼓励你利用不可变性，以及何时你会选择不使用不可变性。
 
