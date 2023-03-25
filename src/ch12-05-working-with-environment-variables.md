@@ -64,7 +64,7 @@
 
 <span class="caption">示例 12-22：根据 `config.ignore_case` 的值调用 `search` 或 `search_case_insensitive`</span>
 
-最后需要实际检查环境变量。处理环境变量的函数位于标准库的 `env` 模块中，所以我们需要在 *src/lib.rs* 的开头将这个模块引入作用域中。接着使用 `env` 模块的 `var` 方法来检查一个叫做 `CASE_INSENSITIVE` 的环境变量，如示例 12-23 所示：
+最后需要实际检查环境变量。处理环境变量的函数位于标准库的 `env` 模块中，所以我们需要在 *src/lib.rs* 的开头将这个模块引入作用域中。接着使用 `env` 模块的 `var` 方法来检查一个叫做 `IGNORE_CASE` 的环境变量，如示例 12-23 所示：
 
 <span class="filename">文件名：src/lib.rs</span>
 
