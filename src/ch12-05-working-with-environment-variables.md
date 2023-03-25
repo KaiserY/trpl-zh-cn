@@ -98,6 +98,12 @@ $ IGNORE_CASE=1 cargo run to poem.txt
 PS> $Env:IGNORE_CASE=1; cargo run to poem.txt
 ```
 
+而这会让 `IGNORE_CASE` 的效果在当前 shell 会话中持续生效。可以通过 `Remove-Item` 命令来取消设置：
+
+```console
+PS> Remove-Item Env:IGNORE_CASE
+```
+
 这回应该得到包含可能有大写字母的 “to” 的行：
 
 ```console
