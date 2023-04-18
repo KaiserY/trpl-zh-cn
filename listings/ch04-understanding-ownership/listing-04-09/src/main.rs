@@ -16,7 +16,7 @@ fn first_word(s: &str) -> &str {
 fn main() {
     let my_string = String::from("hello world");
 
-    // `first_word` 适用于 `String`（的 slice），整体或全部
+    // `first_word` 适用于 `String`（的 slice），部分或全部
     let word = first_word(&my_string[0..6]);
     let word = first_word(&my_string[..]);
     // `first_word` 也适用于 `String` 的引用，
@@ -25,7 +25,7 @@ fn main() {
 
     let my_string_literal = "hello world";
 
-    // `first_word` 适用于字符串字面值，整体或全部
+    // `first_word` 适用于字符串字面值，部分或全部
     let word = first_word(&my_string_literal[0..6]);
     let word = first_word(&my_string_literal[..]);
 
