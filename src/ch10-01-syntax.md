@@ -74,7 +74,7 @@ fn largest<T>(list: &[T]) -> T {
 
 <span class="caption">示例 10-7：字段 `x` 和 `y` 的类型必须相同，因为他们都有相同的泛型类型 `T`</span>
 
-在这个例子中，当把整型值 5 赋值给 `x` 时，就告诉了编译器这个 `Point<T>` 实例中的泛型 `T` 是整型的。接着指定 `y` 为 4.0，它被定义为与 `x` 相同类型，就会得到一个像这样的类型不匹配错误：
+在这个例子中，当把整型值 5 赋值给 `x` 时，就告诉了编译器这个 `Point<T>` 实例中的泛型 `T` 全是整型。接着指定 `y` 为浮点值 4.0，因为它`y`被定义为与 `x` 相同类型，所以将会得到一个像这样的类型不匹配错误：
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/output.txt}}
