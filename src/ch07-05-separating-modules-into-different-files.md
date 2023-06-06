@@ -59,6 +59,7 @@
 >
 > * *src/front_of_house.rs*（我们所介绍的）
 > * *src/front_of_house/mod.rs*（老风格，不过仍然支持）
+>
 > 对于 `front_of_house` 的子模块 `hosting`，编译器会在如下位置查找模块代码：
 >
 > * *src/front_of_house/hosting.rs*（我们所介绍的）
