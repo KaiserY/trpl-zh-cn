@@ -163,7 +163,7 @@ $ cargo new hello_macro_derive --lib
 
 <span class="caption">示例 19-31: 大多数过程式宏处理 Rust 代码时所需的代码</span>
 
-注意我们将代码分成了`hello_macro_derive` 和 `impl_macro_derive` 两个函数，前者负责解析 `TokenStream`，后者负责转换语法树：这使得编写过程宏更方便。几乎你看到或者创建的每一个过程宏的外部函数（这里是`hello_macro_derive`）中的代码都跟这里是一样的。你放入内部函数（这里是`impl_macro_derive`）中的代码根据你的过程宏的设计目的会有所不同。
+注意我们将代码分成了`hello_macro_derive` 和 `impl_hello_macro` 两个函数，前者负责解析 `TokenStream`，后者负责转换语法树：这使得编写过程宏更方便。几乎你看到或者创建的每一个过程宏的外部函数（这里是`hello_macro_derive`）中的代码都跟这里是一样的。你放入内部函数（这里是`impl_macro_derive`）中的代码根据你的过程宏的设计目的会有所不同。
 
 现在，我们已经引入了三个新的 crate：`proc_macro` 、 [`syn`] 和 [`quote`] 。Rust 自带 `proc_macro` crate，因此无需将其加到 *Cargo.toml* 文件的依赖中。`proc_macro` crate 是编译器用来读取和操作我们 Rust 代码的 API。
 
