@@ -108,7 +108,7 @@ hi number 4 from the main thread!
 
 诸如将 `join` 放置于何处这样的小细节，会影响线程是否同时运行。
 
-### 线程与 `move` 闭包
+### 将 `move` 闭包与线程一同使用
 
 `move` 关键字经常用于传递给 `thread::spawn` 的闭包，因为闭包会获取从环境中取得的值的所有权，因此会将这些值的所有权从一个线程传送到另一个线程。在第十三章 [“闭包会捕获其环境”][capture] 部分讨论了闭包上下文中的 `move`。现在我们会更专注于 `move` 和 `thread::spawn` 之间的交互。
 
@@ -130,7 +130,7 @@ hi number 4 from the main thread!
 {{#include ../listings/ch16-fearless-concurrency/listing-16-03/output.txt}}
 ```
 
-Rust 会 **推断** 如何捕获 `v`，因为 `println!` 只需要 `v` 的引用，闭包尝试借用 `v`。然而这有一个问题：Rust 不知道这个新建线程会执行多久，所以无法知晓 `v` 的引用是否一直有效。
+Rust 会 **推断** 如何捕获 `v`，因为 `println!` 只需要 `v` 的引用，闭包尝试借用 `v`。然而这有一个问题：Rust 不知道这个新建线程会执行多久，所以无法知晓对 `v` 的引用是否一直有效。
 
 示例 16-4 展示了一个 `v` 的引用很有可能不再有效的场景：
 
