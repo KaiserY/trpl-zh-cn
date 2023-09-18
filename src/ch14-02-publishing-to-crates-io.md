@@ -154,7 +154,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 $ cargo login abcdefghijklmnopqrstuvwxyz012345
 ```
 
-这个命令会通知 Cargo 你的 API token 并将其储存在本地的 _~/.cargo/credentials_ 文件中。注意这个 token 是一个 **秘密**（**secret**）且不应该与其他人共享。如果因为任何原因与他人共享了这个信息，应该立即到 [crates.io](https://crates.io)<!-- ignore --> 重新生成这个 token。
+这个命令会通知 Cargo 你的 API token 并将其储存在本地的 _~/.cargo/credentials_ 文件中。注意这个 token 是一个 **秘密**（**secret**）且不应该与其他人共享。如果因为任何原因与他人共享了这个信息，应该立即到 [crates.io](https://crates.io)<!-- ignore --> 撤销并重新生成一个 token。
 
 ### 向新 crate 添加元信息
 
@@ -183,7 +183,7 @@ Caused by:
   the remote server responded with an error: missing or empty metadata fields: description, license. Please see https://doc.rust-lang.org/cargo/reference/manifest.html for how to upload metadata
 ```
 
-这个错误是因为我们缺少一些关键信息：关于该 crate 用途的描述和用户可能在何种条款下使用该 crate 的 license。在 _Cargo.toml_ 中添加描述，通常是一两句话，因为它会出现在 crate 的搜索结果中和 crate 页面里。对于 `license` 字段，你需要一个 **license 标识符值**（_license identifier value_）。[Linux 基金会的 Software Package Data Exchange (SPDX)][spdx] 列出了可以使用的标识符。例如，为了指定 crate 使用 MIT License，增加 `MIT` 标识符：
+这个错误是因为我们缺少一些关键信息：关于该 crate 用途的描述和用户可能在何种条款下使用该 crate 的 license。在 _Cargo.toml_ 中添加通常是一两句话的描述，因为它将在搜索结果中和你的 crate 一起显示。对于 `license` 字段，你需要一个 **license 标识符值**（_license identifier value_）。[Linux 基金会的 Software Package Data Exchange (SPDX)][spdx] 列出了可以使用的标识符。例如，为了指定 crate 使用 MIT License，增加 `MIT` 标识符：
 
 <span class="filename">文件名：Cargo.toml</span>
 

@@ -22,7 +22,7 @@ Rust 的 **闭包**（*closures*）是可以保存在一个变量中或作为参
 
 `main` 函数中定义的 `store` 还剩有两件蓝衬衫和一件红衬衫可在限量版促销活动中赠送。我们用一个期望获得红衬衫和一个没有期望的用户来调用 `giveaway` 方法。
 
-这段代码也可以有多种实现方法。这里为了专注于闭包，我们会坚持使用已经学习过的概念，除了 `giveaway` 方法体中使用了闭包。`giveaway` 方法获取了 `Option<ShirtColor>` 类型作为用户的期望颜色并在 `user_preference` 上调用 `unwrap_or_else` 方法。 [`Option<T>` 上的方法 `unwrap_or_else`][unwrap-or-else] 由标准库定义，它获取一个没有参数、返回值类型为 `T` （与 `Option<T>` 的 `Some` 成员所存储的值的类型一样，这里是 `ShirtColor`）的闭包作为参数。如果 `Option<T>` 是 `Some` 成员，则 `unwrap_or_else`  返回 `Some` 中的值。 如果 `Option<T>` 是 `None`  成员, 则 `unwrap_or_else`  调用闭包并返回闭包的返回值。
+再次强调，这段代码可以有多种实现方式。这里为了专注于闭包，我们会继续使用已经学习过的概念，除了 `giveaway` 方法体中使用了闭包。`giveaway` 方法获取了 `Option<ShirtColor>` 类型作为用户的期望颜色并在 `user_preference` 上调用 `unwrap_or_else` 方法。 [`Option<T>` 上的方法 `unwrap_or_else`][unwrap-or-else] 由标准库定义，它获取一个没有参数、返回值类型为 `T` （与 `Option<T>` 的 `Some` 成员所存储的值的类型一样，这里是 `ShirtColor`）的闭包作为参数。如果 `Option<T>` 是 `Some` 成员，则 `unwrap_or_else`  返回 `Some` 中的值。 如果 `Option<T>` 是 `None`  成员, 则 `unwrap_or_else`  调用闭包并返回闭包的返回值。
 
 我们将被闭包表达式 `|| self.most_stocked()`  用作 `unwrap_or_else` 的参数。这是一个本身不获取参数的闭包（如果闭包有参数，它们会出现在两道竖杠之间）。闭包体调用了 `self.most_stocked()`。我们在这里定义了闭包，而 `unwrap_or_else` 的实现会在之后需要其结果的时候执行闭包。
 
