@@ -1,6 +1,7 @@
 # Rust 程序设计语言
 
-> [title-page.md](https://github.com/rust-lang/book/blob/main/src/title-page.md) <br>
+> [title-page.md](https://github.com/rust-lang/book/blob/main/src/title-page.md)
+> <br>
 > commit d94e03a18a2590ed3f1c67b859cb11528d2a2d5c
 
 **本书的英文原版作者为 Steve Klabnik 和 Carol Nichols，并由 Rust 社区补充完善。本简体中文译本由 Rust 中文社区翻译。**
