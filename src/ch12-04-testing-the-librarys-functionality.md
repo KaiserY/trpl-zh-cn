@@ -19,7 +19,7 @@
 
 ### 编写失败测试
 
-去掉 *src/lib.rs* 和 *src/main.rs* 中用于检查程序行为的 `println!` 语句，因为不再真正需要他们了。接着我们会像 [第十一章][ch11-anatomy] 那样增加一个 `test` 模块和一个测试函数。测试函数指定了 `search` 函数期望拥有的行为：它会获取一个需要查询的字符串和用来查询的文本，并只会返回包含请求的文本行。示例 12-15 展示了这个测试，它还不能编译：
+去掉 *src/lib.rs* 和 *src/main.rs* 中用于检查程序行为的 `println!` 语句，因为不再真正需要它们了。接着我们会像 [第十一章][ch11-anatomy] 那样增加一个 `test` 模块和一个测试函数。测试函数指定了 `search` 函数期望拥有的行为：它会获取一个需要查询的字符串和用来查询的文本，并只会返回包含请求的文本行。示例 12-15 展示了这个测试，它还不能编译：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -111,7 +111,7 @@ Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 12-19：储存匹配的行以便可以返回他们</span>
+<span class="caption">示例 12-19：储存匹配的行以便可以返回它们</span>
 
 现在 `search` 函数应该返回只包含 `query` 的那些行，而测试应该会通过。让我们运行测试：
 

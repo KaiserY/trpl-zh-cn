@@ -254,7 +254,7 @@ src/libcore/result.rs:906:4
 
 `main` 函数也可以返回任何实现了 [`std::process::Termination` trait][termination] 的类型，它包含了一个返回 `ExitCode` 的 `report` 函数。请查阅标准库文档了解更多为自定义类型实现 `Termination` trait 的细节。
 
-现在我们讨论过了调用 `panic!` 或返回 `Result` 的细节，是时候回到他们各自适合哪些场景的话题了。
+现在我们讨论过了调用 `panic!` 或返回 `Result` 的细节，是时候回到它们各自适合哪些场景的话题了。
 
 [handle_failure]: ch02-00-guessing-game-tutorial.html#使用-result-类型来处理潜在的错误
 [trait-objects]: ch17-02-trait-objects.html#为使用不同类型的值而设计的-trait-对象

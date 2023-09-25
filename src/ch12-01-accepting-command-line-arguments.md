@@ -74,7 +74,7 @@ $ cargo run -- searchstring example-filename.txt
 {{#include ../listings/ch12-an-io-project/listing-12-02/output.txt}}
 ```
 
-好的，它可以工作！我们将所需的参数值保存进了对应的变量中。之后会增加一些错误处理来应对类似用户没有提供参数的情况，不过现在我们将忽略他们并开始增加读取文件功能。
+好的，它可以工作！我们将所需的参数值保存进了对应的变量中。之后会增加一些错误处理来应对类似用户没有提供参数的情况，不过现在我们将忽略它们并开始增加读取文件功能。
 
 [ch13]: ch13-00-functional-features.html
 [ch7-idiomatic-use]: ch07-04-bringing-paths-into-scope-with-the-use-keyword.html#创建惯用的-use-路径

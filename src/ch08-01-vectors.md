@@ -94,7 +94,7 @@ Rust 提供了两种引用元素的方法的原因是当尝试使用现有元素
 
 <span class="caption">示例 8-7：通过 `for` 循环遍历 vector 的元素并打印</span>
 
-我们也可以遍历可变 vector 的每一个元素的可变引用以便能改变他们。示例 8-8 中的 `for` 循环会给每一个元素加 `50`：
+我们也可以遍历可变 vector 的每一个元素的可变引用以便能改变它们。示例 8-8 中的 `for` 循环会给每一个元素加 `50`：
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-08/src/main.rs:here}}

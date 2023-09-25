@@ -8,7 +8,7 @@
 
 ### 使用迭代器并去掉 `clone`
 
-在示例 12-6 中，我们增加了一些代码获取一个 `String` slice 并创建一个 `Config` 结构体的实例，他们索引 slice 中的值并克隆这些值以便 `Config` 结构体可以拥有这些值。在示例 13-17 中重现了第十二章结尾示例 12-23 中 `Config::build` 函数的实现：
+在示例 12-6 中，我们增加了一些代码获取一个 `String` slice 并创建一个 `Config` 结构体的实例，它们索引 slice 中的值并克隆这些值以便 `Config` 结构体可以拥有这些值。在示例 13-17 中重现了第十二章结尾示例 12-23 中 `Config::build` 函数的实现：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -18,7 +18,7 @@
 
 <span class="caption">示例 13-17：重现示例 12-23 的 `Config::build` 函数</span>
 
-那时我们说过不必担心低效的 `clone` 调用了，因为将来可以对他们进行改进。好吧，就是现在！
+那时我们说过不必担心低效的 `clone` 调用了，因为将来可以对它们进行改进。好吧，就是现在！
 
 起初这里需要 `clone` 的原因是参数 `args` 中有一个 `String` 元素的 slice，而 `build` 函数并不拥有 `args`。为了能够返回 `Config` 实例的所有权，我们需要克隆 `Config` 中字段 `query` 和 `file_path` 的值，这样 `Config` 实例就能拥有这些值。
 
