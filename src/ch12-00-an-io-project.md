@@ -20,7 +20,7 @@ Rust 的运行速度、安全性、单二进制文件输出和跨平台支持使
 - 合理的使用 trait 和生命周期（[第十章][ch10]）
 - 测试（[第十一章][ch11]）
 
-另外还会简要的讲到闭包、迭代器和 trait 对象，他们分别会在 [第十三章][ch13] 和 [第十七章][ch17] 中详细介绍。
+另外还会简要的讲到闭包、迭代器和 trait 对象，它们分别会在 [第十三章][ch13] 和 [第十七章][ch17] 中详细介绍。
 
 [ch7]: ch07-00-managing-growing-projects-with-packages-crates-and-modules.html
 [ch8]: ch08-00-common-collections.html
