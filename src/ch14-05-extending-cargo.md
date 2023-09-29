@@ -8,4 +8,4 @@ Cargo 的设计使得开发者可以通过新的子命令来对 Cargo 进行扩�
 
 ## 总结
 
-通过 Cargo 和 [crates.io](https://crates.io/)<!-- ignore --> 来分享代码是使得 Rust 生态环境可以用于许多不同的任务的重要组成部分。Rust 的标准库是小而稳定的，不过 crate 易于分享和使用，并采用一个不同语言自身的时间线来提供改进。不要羞于在 [crates.io](https://crates.io/)<!-- ignore --> 上共享对你有用的代码；因为它很有可能对别人也很有用！
+通过 Cargo 和 [crates.io](https://crates.io/)<!-- ignore --> 来分享代码是使得 Rust 生态环境可以用于许多不同的任务的重要组成部分。Rust 的标准库是小而稳定的，不过 crate 易于分享和使用，并采用一个不同语言自身的时间线来提供改进。不要羞于在 [crates.io](https://crates.io/)<!-- ignore --> 上共享对你有用的代码，因为它很有可能对别人也很有用！

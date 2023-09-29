@@ -4,9 +4,9 @@
 > <br>
 > commit 44e31f9f304e0cd9ace01045d17a2aa01a449528
 
-在 Rust 中 **发布配置**（*release profiles*）是预定义的、可定制的带有不同选项的配置，它们允许程序员更灵活地控制代码编译的多种选项。每一个配置都彼此相互独立。
+在 Rust 中 **发布配置**（*release profiles*）文件是预定义和可定制的，它们包含不同的配置，允许程序员更灵活地控制代码编译的多种选项。每一个配置都相互独立。
 
-Cargo 有两个主要的配置：运行 `cargo build` 时采用的 `dev` 配置和运行 `cargo build --release` 的 `release` 配置。`dev` 配置被定义为开发时的好的默认配置，`release` 配置则有着良好的发布构建的默认配置。
+Cargo 有两个主要的配置：运行 `cargo build` 时采用的 `dev` 配置和运行 `cargo build --release` 的 `release` 配置。`dev` 配置为开发定义了良好的默认配置，`release` 配置则为发布构建定义了良好的默认配置。
 
 这些配置名称可能很眼熟，因为它们出现在构建的输出中：
 
