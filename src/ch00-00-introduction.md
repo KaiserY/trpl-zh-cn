@@ -93,6 +93,6 @@ Rust 适合追求编程语言的速度与稳定性的开发者。对于速度来
 
 [book]: https://github.com/rust-lang/book/tree/main/src
 
-> 译者注：本译本的也有 [GitHub 仓库][trpl-zh-cn]，欢迎提交 Issue 和 PR :)
+> 译者注：此译本也有 [GitHub 仓库][trpl-zh-cn]，欢迎提交 Issue 和 PR :)
 
 [trpl-zh-cn]: https://github.com/KaiserY/trpl-zh-cn
