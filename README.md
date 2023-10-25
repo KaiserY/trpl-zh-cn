@@ -15,30 +15,29 @@ PS:
 
 ## 静态页面构建与文档撰写
 
-![image](./vuepress_page.png)
-
 ### 构建
 
-你可以将本 mdbook 构建成一系列静态 html 页面。这里我们采用 [vuepress](https://vuepress.vuejs.org/zh/) 打包出静态网页。在这之前，你需要安装 [Nodejs](https://nodejs.org/zh-cn/)。
+你可以将本 mdbook 构建成一系列静态 html 页面。这里我们采用 [mdbook](https://rust-lang.github.io/mdBook/index.html) 打包出静态网页。在这之前，你需要安装 [Rust](https://www.rust-lang.org/zh-CN/)。
 
-全局安装 vuepress
+全局安装 mdbook
 
 ``` bash
-npm i -g vuepress
+cargo install mdbook
 ```
 
-cd 到项目目录，然后开始构建。构建好的静态文档会出现在 "./src/.vuepress/dist" 中
+cd 到项目目录，然后开始构建。构建好的静态文档会出现在 "./book/html" 中
 
 ```bash
-vuepress build ./src
+mdbook build
 ```
 
 ### 文档撰写
 
-vuepress 会启动一个本地服务器，并在浏览器对你保存的文档进行实时热更新。
+可以通过任意的 http 服务器来预览构建的文档。举个例子：
 
 ```bash
-vuepress dev ./src
+cargo install simple-http-server
+simple-http-server .\book\html\ -i
 ```
 
 ## 社区资源

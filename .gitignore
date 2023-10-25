@@ -3,3 +3,4 @@ mdbook/
 book/
 dist
 .DS_Store
+.idea
