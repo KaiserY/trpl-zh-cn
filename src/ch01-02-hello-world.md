@@ -139,4 +139,4 @@ $ ./main # Windows 是 .\main.exe
 仅仅使用 `rustc` 编译简单程序是没问题的，不过随着项目的增长，你可能需要管理你项目的方方面面，并让代码易于分享。接下来，我们要介绍一个叫做 Cargo 的工具，它会帮助你编写真实世界中的 Rust 程序。
 
 [troubleshooting]: ch01-01-installation.html#troubleshooting
-[devtools]: appendix-04-useful-development-tools.md
+[devtools]: appendix-04-useful-development-tools.html

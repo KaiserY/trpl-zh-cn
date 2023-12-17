@@ -135,6 +135,6 @@ Can rect1 hold rect3? false
 但结构体并不是创建自定义类型的唯一方法：让我们转向 Rust 的枚举功能，为你的工具箱再添一个工具。
 
 [enums]: ch06-00-enums.html
-[trait-objects]: ch17-02-trait-objects.md
+[trait-objects]: ch17-02-trait-objects.html
 [public]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword
 [modules]: ch07-02-defining-modules-to-control-scope-and-privacy.html
