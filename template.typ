@@ -4,6 +4,8 @@
     "Noto Sans",
     "Noto Sans SC",
     "Noto Sans Arabic",
+    "Noto Sans Hebrew",
+    "Noto Sans Devanagari,
   ),
 )
 
