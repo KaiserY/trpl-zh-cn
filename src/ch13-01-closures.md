@@ -217,4 +217,4 @@ impl<T> Option<T> {
 
 当定义或使用用到闭包的函数或类型时，`Fn`  trait 十分重要。在下个小节中，我们将会讨论迭代器。许多迭代器方法都接收闭包参数，因而在继续前先记住这些闭包的细节！
 
-[unwrap-or-else]: ../std/option/enum.Option.html#method.unwrap_or_else
+[unwrap-or-else]: https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_else

@@ -10,6 +10,5 @@ additional-js = ["ferris.js"]
 git-repository-url = "https://github.com/KaiserY/trpl-zh-cn/tree/main"
 edit-url-template = "https://github.com/KaiserY/trpl-zh-cn/edit/main/{path}"
 
-[output.latex-pdf]
-latex = false
+[output.typst-pdf]
 pdf = true

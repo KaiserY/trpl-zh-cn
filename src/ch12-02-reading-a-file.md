@@ -1,4 +1,4 @@
-### 读取文件
+## 读取文件
 
 > [ch12-02-reading-a-file.md](https://github.com/rust-lang/book/blob/main/src/ch12-02-reading-a-file.md)
 > <br>
