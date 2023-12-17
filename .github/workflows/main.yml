@@ -35,9 +35,34 @@ jobs:
     - name: Install font
       run: |
         echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
-        sudo apt-get -y install msttcorefonts fonts-arphic-ukai fonts-arphic-uming fonts-ipafont-mincho fonts-ipafont-gothic fonts-unfonts-core
-        sudo apt-get -y install ttf-wqy*
-        fc-cache -f -v
+        sudo apt-get -y install msttcorefonts
+        mkdir fonts
+        mkdir -p ~/.local/share/fonts
+        curl -sL -o Noto_Sans.zip https://fonts.google.com/download?family=Noto%20Sans
+        unzip Noto_Sans.zip -d fonts/Noto_Sans
+        curl -sL -o Noto_Sans_SC.zip https://fonts.google.com/download?family=Noto%20Sans%20SC
+        unzip Noto_Sans_SC.zip -d fonts/Noto_Sans_SC
+        curl -sL -o Noto_Sans_Mono.zip https://fonts.google.com/download?family=Noto%20Sans%20Mono
+        unzip Noto_Sans_Mono.zip -d fonts/Noto_Sans_Mono
+        rm -fv fonts/Noto_Sans_Mono/NotoSansMono-VariableFont_wdth,wght.ttf
+        curl -sL -o Noto_Sans_KR.zip https://fonts.google.com/download?family=Noto%20Sans%20KR
+        unzip Noto_Sans_KR.zip -d fonts/Noto_Sans_KR
+        curl -sL -o Noto_Sans_Thai.zip https://fonts.google.com/download?family=Noto%20Sans%20Thai
+        unzip Noto_Sans_Thai.zip -d fonts/Noto_Sans_Thai
+        rm -fv fonts/Noto_Sans_Thai/NotoSansThai-VariableFont_wdth,wght.ttf
+        curl -sL -o Noto_Sans_Arabic.zip https://fonts.google.com/download?family=Noto%20Sans%20Arabic
+        unzip Noto_Sans_Arabic.zip -d fonts/Noto_Sans_Arabic
+        curl -sL -o Noto_Sans_Hebrew.zip https://fonts.google.com/download?family=Noto%20Sans%20Hebrew
+        unzip Noto_Sans_Hebrew.zip -d fonts/Noto_Sans_Hebrew
+        curl -sL -o Noto_Sans_Devanagari.zip https://fonts.google.com/download?family=Noto%20Sans%20Devanagari
+        unzip Noto_Sans_Devanagari.zip -d fonts/Noto_Sans_Devanagari
+        rm -fv fonts/Noto_Sans_Devanagari/NotoSansDevanagari-VariableFont_wdth,wght.ttf
+        curl -sL -o Noto_Emoji.zip https://fonts.google.com/download?family=Noto%20Emoji
+        unzip Noto_Emoji.zip -d fonts/Noto_Emoji
+        curl -sL -o times_sans_serif.zip  https://dl.dafont.com/dl/?f=times_sans_serif
+        unzip times_sans_serif.zip -d fonts/times_sans_serif
+        mv fonts/* ~/.local/share/fonts/
+        fc-cache -rv
     - name: Report versions
       run: |
         rustup --version
