@@ -238,4 +238,4 @@ ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [vectors]: ch08-01-vectors.html
 [unrecoverable-errors-with-panic]: ch09-01-unrecoverable-errors-with-panic.html
 [wrapping]: https://doc.rust-lang.org/std/num/struct.Wrapping.html
-[appendix_b]: appendix-02-operators.md
+[appendix_b]: appendix-02-operators.html

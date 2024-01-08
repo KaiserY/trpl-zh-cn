@@ -269,7 +269,7 @@ Rust 不允许自身或其任何部分实现了 `Drop` trait 的类型使用 `Co
 
 [data-types]: ch03-02-data-types.html#数据类型
 [ch8]: ch08-02-strings.html
-[ch10]: ch10-00-generics.md
+[ch10]: ch10-00-generics.html
 [derivable-traits]: appendix-03-derivable-traits.html
 [method-syntax]: ch05-03-method-syntax.html#方法语法
 [paths-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
