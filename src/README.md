@@ -88,9 +88,9 @@
     - [Cargo 自定义扩展命令](ch14-05-extending-cargo.md)
 
 - [智能指针](ch15-00-smart-pointers.md)
-    - [使用`Box<T>` 指向堆上数据](ch15-01-box.md)
-    - [使用`Deref` Trait 将智能指针当作常规引用处理](ch15-02-deref.md)
-    - [使用`Drop` Trait 运行清理代码](ch15-03-drop.md)
+    - [使用 `Box<T>` 指向堆上数据](ch15-01-box.md)
+    - [使用 `Deref` Trait 将智能指针当作常规引用处理](ch15-02-deref.md)
+    - [使用 `Drop` Trait 运行清理代码](ch15-03-drop.md)
     - [`Rc<T>` 引用计数智能指针](ch15-04-rc.md)
     - [`RefCell<T>` 与内部可变性模式](ch15-05-interior-mutability.md)
     - [引用循环会导致内存泄漏](ch15-06-reference-cycles.md)
@@ -99,7 +99,7 @@
     - [使用线程同时地运行代码](ch16-01-threads.md)
     - [使用消息传递在线程间通信](ch16-02-message-passing.md)
     - [共享状态并发](ch16-03-shared-state.md)
-    - [使用`Sync` 与 `Send` Traits 的可扩展并发：](ch16-04-extensible-concurrency-sync-and-send.md)
+    - [使用 `Sync` 与 `Send` Traits 的可扩展并发：](ch16-04-extensible-concurrency-sync-and-send.md)
 
 - [Rust 的面向对象编程特性](ch17-00-oop.md)
     - [面向对象语言的特点](ch17-01-what-is-oo.md)
