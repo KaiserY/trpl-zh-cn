@@ -11,4 +11,4 @@ jobs:
           fetch-depth: 1
 
       - name: Lint
-        uses: huacnlee/autocorrect-action@v2.5.8
+        uses: huacnlee/autocorrect-action@v2.9.0

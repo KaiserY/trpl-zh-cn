@@ -40,7 +40,7 @@
 {{#rustdoc_include ../listings/ch17-oop/listing-17-02/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 17-2: 在`AveragedCollection` 结构体上实现了`add`、`remove` 和 `average` 公有方法</span>
+<span class="caption">示例 17-2: 在 `AveragedCollection` 结构体上实现了 `add`、`remove` 和 `average` 公有方法</span>
 
 公有方法 `add`、`remove` 和 `average` 是修改 `AveragedCollection` 实例的唯一方式。当使用 `add` 方法把一个元素加入到 `list` 或者使用 `remove` 方法来删除时，这些方法的实现同时会调用私有的 `update_average` 方法来更新 `average` 字段。
 

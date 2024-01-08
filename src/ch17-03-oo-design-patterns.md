@@ -133,7 +133,7 @@
 {{#rustdoc_include ../listings/ch17-oop/listing-17-17/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 17-17: 更新 `Post` 的 `content` 方法来委托调用 `State` 的`content` 方法</span>
+<span class="caption">示例 17-17: 更新 `Post` 的 `content` 方法来委托调用 `State` 的 `content` 方法</span>
 
 因为目标是将所有像这样的规则保持在实现了 `State` 的结构体中，我们将调用 `state` 中的值的 `content` 方法并传递博文实例（也就是 `self`）作为参数。接着返回 `state` 值的 `content` 方法的返回值。
 
