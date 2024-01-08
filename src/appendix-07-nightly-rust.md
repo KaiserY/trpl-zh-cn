@@ -12,9 +12,9 @@
 
 对于这个问题我们的解决方案被称为 “无停滞稳定”（“stability without stagnation”），其指导性原则是：无需担心升级到最新的稳定版 Rust。每次升级应该是无痛的，并应带来新功能，更少的 bug 和更快的编译速度。
 
-### Choo, Choo! ~~（开车啦，逃）~~ 发布通道和发布时刻表（Riding the Trains）
+### Choo, Choo! 发布通道和发布时刻表（Riding the Trains）
 
-Rust 开发运行于一个 ~~车次表~~ **发布时刻表**（_train schedule_）之上。也就是说，所有的开发工作都位于 Rust 仓库的 `master` 分支。发布采用 software release train 模型，其被用于思科 IOS 等其它软件项目。Rust 有三个 **发布通道**（_release channel_）：
+Rust 开发运行于一个 **发布时刻表**（_train schedule_）之上。也就是说，所有的开发工作都位于 Rust 仓库的 `master` 分支。发布采用 software release train 模型，其被用于思科 IOS 等其它软件项目。Rust 有三个 **发布通道**（_release channel_）：
 
 - Nightly
 - Beta
