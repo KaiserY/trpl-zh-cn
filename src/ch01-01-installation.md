@@ -49,7 +49,7 @@ Linux 用户通常需要根据发行版（distribution）文档安装 GCC 或 Cl
 
 本书的余下部分会使用能同时运行于 *cmd.exe* 和 PowerShell 的命令。如果存在特定差异，我们会解释使用哪一个。
 
-### 检查安装是否正确（Troubleshooting）
+### 故障排除（Troubleshooting）
 
 要检查是否正确安装了 Rust，打开命令行并输入：
 

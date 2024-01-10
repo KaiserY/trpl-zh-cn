@@ -154,4 +154,4 @@ Rust 的测试功能提供了一个确保即使你改变了函数的实现方式
 [paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
 [separating-modules-into-files]:
 ch07-05-separating-modules-into-different-files.html
-[alt-paths]: ch07-05-separating-modules-into-different-files.html#alternate-file-paths
+[alt-paths]: ch07-05-separating-modules-into-different-files.html#另一种文件路径

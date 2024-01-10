@@ -136,5 +136,5 @@ Can rect1 hold rect3? false
 
 [enums]: ch06-00-enums.html
 [trait-objects]: ch17-02-trait-objects.html
-[public]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword
+[public]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#使用-pub-关键字暴露路径
 [modules]: ch07-02-defining-modules-to-control-scope-and-privacy.html

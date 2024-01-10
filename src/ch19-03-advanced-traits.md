@@ -4,7 +4,7 @@
 > <br>
 > commit 95e931170404cb98d476b19017cbbdbc00d0834d
 
-第十章 [“trait：定义共享的行为”][traits-defining-shared-behavior] 部分，我们第一次涉及到了 trait，不过我们并没有覆盖一些较为高级的细节。现在我们更加了解 Rust 了，可以深入理解其本质了。
+第十章 [“trait：定义共同行为”][traits-defining-shared-behavior] 部分，我们第一次涉及到了 trait，不过我们并没有覆盖一些较为高级的细节。现在我们更加了解 Rust 了，可以深入理解其本质了。
 
 ### 关联类型在 trait 定义中指定占位符类型
 
@@ -273,6 +273,6 @@ Rust 既不能避免一个 trait 与另一个 trait 拥有相同名称的方法�
 
 [newtype]: ch19-03-advanced-traits.html#newtype-模式用以在外部类型上实现外部-trait
 [implementing-a-trait-on-a-type]: ch10-02-traits.html#为类型实现-trait
-[traits-defining-shared-behavior]: ch10-02-traits.html#trait定义共享的行为
+[traits-defining-shared-behavior]: ch10-02-traits.html#trait定义共同行为
 [smart-pointer-deref]: ch15-02-deref.html#通过实现-deref-trait-将某类型像引用一样处理
 [tuple-structs]: ch05-01-defining-structs.html#使用没有命名字段的元组结构体来创建不同的类型

@@ -164,7 +164,7 @@ $ cargo build
 
 是时候通过构建更实质性的程序来熟悉读写 Rust 代码了。所以在第二章我们会构建一个猜猜看游戏程序。如果你更愿意从学习 Rust 常用的编程概念开始，请阅读第三章，接着再回到第二章。
 
-[installation]: ch01-01-installation.html#installation
+[installation]: ch01-01-installation.html#安装
 [toml]: https://toml.io
 [appendix-e]: appendix-05-editions.html
 [cargo]: https://doc.rust-lang.org/cargo/

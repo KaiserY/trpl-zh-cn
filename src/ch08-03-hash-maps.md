@@ -61,7 +61,7 @@ Blue: 10
 
 当 `insert` 调用将 `field_name` 和 `field_value` 移动到哈希 map 中后，将不能使用这两个绑定。
 
-如果将值的引用插入哈希 map，这些值本身将不会被移动进哈希 map。但是这些引用指向的值必须至少在哈希 map 有效时也是有效的。第十章 [“生命周期与引用有效性”][validating-references-with-lifetimes] 部分将会更多的讨论这个问题。
+如果将值的引用插入哈希 map，这些值本身将不会被移动进哈希 map。但是这些引用指向的值必须至少在哈希 map 有效时也是有效的。第十章 [“生命周期确保引用有效”][validating-references-with-lifetimes] 部分将会更多的讨论这个问题。
 
 ### 更新哈希 map
 
@@ -131,5 +131,5 @@ vector、字符串和哈希 map 会在你的程序需要储存、访问和修改
 
 [iterators]: ch13-02-iterators.html
 [validating-references-with-lifetimes]:
-ch10-03-lifetime-syntax.html#生命周期与引用有效性
+ch10-03-lifetime-syntax.html#生命周期确保引用有效
 [access]: #访问哈希-map-中的值

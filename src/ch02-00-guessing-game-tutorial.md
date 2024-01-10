@@ -536,6 +536,6 @@ You win!
 [doccargo]: http://doc.crates.io
 [doccratesio]: http://doc.crates.io/crates-io.html
 [match]: ch06-02-match.html
-[shadowing]: ch03-01-variables-and-mutability.html#shadowing
+[shadowing]: ch03-01-variables-and-mutability.html#隐藏
 [parse]: https://doc.rust-lang.org/std/primitive.str.html#method.parse
-[integers]: ch03-02-data-types.html#integer-types
+[integers]: ch03-02-data-types.html#整型

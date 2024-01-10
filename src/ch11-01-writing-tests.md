@@ -321,7 +321,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 [concatenation-with-the--operator-or-the-format-macro]:
 ch08-02-strings.html#使用--运算符或-format-宏拼接字符串
 [bench]: https://doc.rust-lang.org/unstable-book/library-features/test.html
-[ignoring]: ch11-02-running-tests.html#ignoring-some-tests-unless-specifically-requested
+[ignoring]: ch11-02-running-tests.html#除非特别指定否则忽略某些测试
 [subset]: ch11-02-running-tests.html#running-a-subset-of-tests-by-name
 [controlling-how-tests-are-run]:
 ch11-02-running-tests.html#控制测试如何运行

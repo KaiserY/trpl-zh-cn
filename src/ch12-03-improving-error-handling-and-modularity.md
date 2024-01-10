@@ -170,7 +170,7 @@
 
 ### 从 `main` 提取逻辑
 
-现在我们完成了配置解析的重构：让我们转向程序的逻辑。正如 [“二进制项目的关注分离”](#separation-of-concerns-for-binary-projects) 部分所展开的讨论，我们将提取一个叫做 `run` 的函数来存放目前 `main` 函数中不属于设置配置或处理错误的所有逻辑。一旦完成这些，`main` 函数将简明得足以通过观察来验证，而我们将能够为所有其他逻辑编写测试。
+现在我们完成了配置解析的重构：让我们转向程序的逻辑。正如 [“二进制项目的关注分离”](#二进制项目的关注分离) 部分所展开的讨论，我们将提取一个叫做 `run` 的函数来存放目前 `main` 函数中不属于设置配置或处理错误的所有逻辑。一旦完成这些，`main` 函数将简明得足以通过观察来验证，而我们将能够为所有其他逻辑编写测试。
 
 示例 12-11 展示了提取出来的 `run` 函数。目前我们只进行小的增量式的提取函数的改进。我们仍将在 *src/main.rs* 中定义这个函数：
 
@@ -266,8 +266,8 @@ Rust 提示我们的代码忽略了 `Result` 值，它可能表明这里存在�
 让我们利用这些新创建的模块的优势来进行一些在旧代码中难以展开的工作，这些工作在新代码中非常容易实现，那就是：编写测试！
 
 [ch13]: ch13-00-functional-features.html
-[ch9-custom-types]: ch09-03-to-panic-or-not-to-panic.html#creating-custom-types-for-validation
-[ch9-error-guidelines]: ch09-03-to-panic-or-not-to-panic.html#guidelines-for-error-handling
+[ch9-custom-types]: ch09-03-to-panic-or-not-to-panic.html#创建自定义类型进行有效性验证
+[ch9-error-guidelines]: ch09-03-to-panic-or-not-to-panic.html#错误处理指导原则
 [ch9-result]: ch09-02-recoverable-errors-with-result.html
 [ch17]: ch17-00-oop.html
-[ch9-question-mark]: ch09-02-recoverable-errors-with-result.html#a-shortcut-for-propagating-errors-the--operator
+[ch9-question-mark]: ch09-02-recoverable-errors-with-result.html#传播错误的简写-运算符

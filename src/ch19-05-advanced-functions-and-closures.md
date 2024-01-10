@@ -72,10 +72,10 @@
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-19-returns-closure-trait-object/src/lib.rs}}
 ```
 
-这段代码正好可以编译。关于 trait 对象的更多内容，请回顾第十七章的 [“为使用不同类型的值而设计的 trait 对象”][using-trait-objects-that-allow-for-values-of-different-types] 部分。
+这段代码正好可以编译。关于 trait 对象的更多内容，请回顾第十七章的 [顾及不同类型值的 trait 对象”][using-trait-objects-that-allow-for-values-of-different-types] 部分。
 
 接下来让我们学习宏！
 
 [advanced-traits]: ch19-03-advanced-traits.html#高级-trait
 [enum-values]: ch06-01-defining-an-enum.html#枚举值
-[using-trait-objects-that-allow-for-values-of-different-types]: ch17-02-trait-objects.html#为使用不同类型的值而设计的-trait-对象
+[using-trait-objects-that-allow-for-values-of-different-types]: ch17-02-trait-objects.html#顾及不同类型值的-trait-对象

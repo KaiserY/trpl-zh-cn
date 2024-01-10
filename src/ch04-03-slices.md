@@ -119,7 +119,7 @@ let slice = &s[0..len];
 let slice = &s[..];
 ```
 
-> 注意：字符串 slice range 的索引必须位于有效的 UTF-8 字符边界内，如果尝试从一个多字节字符的中间位置创建字符串 slice，则程序将会因错误而退出。出于介绍字符串 slice 的目的，本部分假设只使用 ASCII 字符集；第八章的 [“使用字符串存储 UTF-8 编码的文本”][strings] 部分会更加全面的讨论 UTF-8 处理问题。
+> 注意：字符串 slice range 的索引必须位于有效的 UTF-8 字符边界内，如果尝试从一个多字节字符的中间位置创建字符串 slice，则程序将会因错误而退出。出于介绍字符串 slice 的目的，本部分假设只使用 ASCII 字符集；第八章的 [“使用字符串储存 UTF-8 编码的文本”][strings] 部分会更加全面的讨论 UTF-8 处理问题。
 
 在记住所有这些知识后，让我们重写 `first_word` 来返回一个 slice。“字符串 slice” 的类型声明写作 `&str`：
 
@@ -219,5 +219,5 @@ assert_eq!(slice, &[2, 3]);
 
 [ch13]: ch13-02-iterators.html
 [ch6]: ch06-02-match.html#绑定值的模式
-[strings]: ch08-02-strings.html#使用字符串存储-utf-8-编码的文本
+[strings]: ch08-02-strings.html#使用字符串储存-utf-8-编码的文本
 [deref-coercions]: ch15-02-deref.html#函数和方法的隐式-deref-强制转换

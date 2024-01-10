@@ -53,7 +53,7 @@
 
 Rust 不可能知道我们需要的是哪一个参数，所以需要告诉它。因为参数 `contents` 包含了所有的文本而且我们希望返回匹配的那部分文本，所以我们知道 `contents` 是应该要使用生命周期语法来与返回值相关联的参数。
 
-其他语言中并不需要你在函数签名中将参数与返回值相关联。所以这么做可能仍然感觉有些陌生，随着时间的推移这将会变得越来越容易。你可能想要将这个例子与第十章中 [“生命周期与引用有效性”][validating-references-with-lifetimes] 部分做对比。
+其他语言中并不需要你在函数签名中将参数与返回值相关联。所以这么做可能仍然感觉有些陌生，随着时间的推移这将会变得越来越容易。你可能想要将这个例子与第十章中 [“生命周期确保引用有效”][validating-references-with-lifetimes] 部分做对比。
 
 现在运行测试：
 
@@ -159,8 +159,8 @@ Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被
 为了使这个项目更丰满，我们将简要的展示如何处理环境变量和打印到标准错误，这两者在编写命令行程序时都很有用。
 
 [validating-references-with-lifetimes]:
-ch10-03-lifetime-syntax.html#生命周期与引用有效性
-[ch11-anatomy]: ch11-01-writing-tests.html#the-anatomy-of-a-test-function
+ch10-03-lifetime-syntax.html#生命周期确保引用有效
+[ch11-anatomy]: ch11-01-writing-tests.html#测试函数剖析
 [ch10-lifetimes]: ch10-03-lifetime-syntax.html
 [ch3-iter]: ch03-05-control-flow.html#使用-for-遍历集合
 [ch13-iterators]: ch13-02-iterators.html

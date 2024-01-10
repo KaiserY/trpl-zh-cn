@@ -141,4 +141,4 @@ Rust 在编译时就必须准确的知道 vector 中类型的原因在于它需�
 [data-types]: ch03-02-data-types.html#数据类型
 [nomicon]: https://doc.rust-lang.org/nomicon/vec/vec.html
 [vec-api]: https://doc.rust-lang.org/std/vec/struct.Vec.html
-[deref]: ch15-02-deref.html#通过解引用运算符追踪指针的值
+[deref]: ch15-02-deref.html#追踪指针的值
