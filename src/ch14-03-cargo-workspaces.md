@@ -210,7 +210,7 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-输出的第一部分显示 `add_one` crate 的 `it_workstests` 测试通过了。下一个部分显示 `adder` crate 中找到了 0 个测试，最后一部分显示 `add_one` crate 中有 0 个文档测试。
+输出的第一部分显示 `add_one` crate 的 `it_works` 测试通过了。下一个部分显示 `adder` crate 中找到了 0 个测试，最后一部分显示 `add_one` crate 中有 0 个文档测试。
 
 也可以选择运行工作空间中特定 crate 的测试，通过在根目录使用 `-p` 参数并指定希望测试的 crate 名称：
 
