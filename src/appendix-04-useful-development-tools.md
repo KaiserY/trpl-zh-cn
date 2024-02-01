@@ -150,6 +150,6 @@ fn main() {
 [lsp]: http://langserver.org/
 [vscode]: https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer
 
-访问 `rust-analyzer` 项目的 [主页][rust-analyzer] 来了解如何安装安装它，然后为你的 IDE 安装 language server 支持。如此你的 IDE 便会获得如自动补全、跳转到定义和 inline error 之类的功能。
+访问 `rust-analyzer` 项目的 [主页][rust-analyzer] 来了解如何安装它，然后为你的 IDE 安装 language server 支持。如此你的 IDE 便会获得如自动补全、跳转到定义和 inline error 之类的功能。
 
 [rust-analyzer]: https://rust-analyzer.github.io
