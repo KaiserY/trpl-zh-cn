@@ -28,7 +28,7 @@
 
 <span class="caption">示例 7-12: `use` 语句只适用于其所在的作用域</span>
 
-编译器错误显示短路径不在适用于 `customer` 模块中：
+编译器错误显示短路径不再适用于 `customer` 模块中：
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-12/output.txt}}
