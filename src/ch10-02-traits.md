@@ -116,7 +116,7 @@ trait 体中可以有多个方法：一行一个方法签名且都以分号结�
 
 #### Trait Bound 语法
 
-`impl Trait` 语法适用于直观的例子，它实际上是一种较长形式语法的语法糖。我们称为 *trait bound*，它看起来像：
+`impl Trait` 语法适用于直观的例子，它实际上是一种较长形式我们称为 *trait bound*语法的语法糖。它看起来像：
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: &T) {
