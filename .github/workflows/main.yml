@@ -22,14 +22,11 @@ jobs:
         rustup set profile minimal
         rustup toolchain install 1.74.1 -c rust-docs
         rustup default 1.74.1
-    - name: Install mdbook
+    - name: Install mdbook & mdbook-typst-pdf
       run: |
         mkdir bin
         curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.36/mdbook-v0.4.36-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
-        echo "$(pwd)/bin" >> ${GITHUB_PATH}
-    - name: Install mdbook-typst-pdf
-      run: |
-        curl -sSL https://github.com/KaiserY/mdbook-typst-pdf/releases/download/v0.3.1/mdbook-typst-pdf-x86_64-unknown-linux-musl.tar.xz | tar -xf --directory=bin
+        curl -sSL https://github.com/KaiserY/mdbook-typst-pdf/releases/download/v0.3.1/mdbook-typst-pdf-x86_64-unknown-linux-musl.tar.xz | tar -xJ --directory=bin --strip-components 1
         echo "$(pwd)/bin" >> ${GITHUB_PATH}
     - name: Install font
       run: |
