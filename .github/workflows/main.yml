@@ -29,7 +29,7 @@ jobs:
         echo "$(pwd)/bin" >> ${GITHUB_PATH}
     - name: Install mdbook-typst-pdf
       run: |
-        mkdir -p bin
+        mkdir bin
         curl -sSL https://github.com/KaiserY/mdbook-typst-pdf/releases/download/v0.3.1/mdbook-typst-pdf-x86_64-unknown-linux-musl.tar.xz | tar -xf --directory=bin
         chmod +x bin/mdbook-typst-pdf
         echo "$(pwd)/bin" >> ${GITHUB_PATH}
