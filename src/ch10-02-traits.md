@@ -42,7 +42,7 @@ trait 体中可以有多个方法：一行一个方法签名且都以分号结�
 
 <span class="caption">示例 10-13：在 `NewsArticle` 和 `Tweet` 类型上实现 `Summary` trait</span>
 
-在类型上实现 trait 类似于实现与 trait 无关的方法。区别在于 `impl` 关键字之后，我们提供需要实现 trait 的名称，接着是 `for` 和需要实现 trait 的类型的名称。在 `impl` 块中，使用 trait 定义中的方法签名，不过不再后跟分号，而是需要在大括号中编写函数体来为特定类型实现 trait 方法所拥有的行为。
+在类型上实现 trait 类似于实现常规方法。区别在于 `impl` 关键字之后，我们提供需要实现 trait 的名称，接着是 `for` 和需要实现 trait 的类型的名称。在 `impl` 块中，使用 trait 定义中的方法签名，不过不再后跟分号，而是需要在大括号中编写函数体来为特定类型实现 trait 方法所拥有的行为。
 
 现在库在 `NewsArticle` 和 `Tweet` 上实现了`Summary` trait，crate 的用户可以像调用常规方法一样调用 `NewsArticle` 和 `Tweet` 实例的 trait 方法了。唯一的区别是 trait 必须和类型一起引入作用域以便使用额外的 trait 方法。这是一个二进制 crate 如何利用 `aggregator` 库 crate 的例子：
 
