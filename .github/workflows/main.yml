@@ -46,15 +46,15 @@ jobs:
         unzip Noto_Sans_Thai.zip -d fonts/Noto_Sans_Thai
         curl -sL -o Noto_Sans_Arabic.zip https://github.com/notofonts/arabic/releases/download/NotoNaskhArabic-v2.018/NotoNaskhArabic-v2.018.zip
         unzip Noto_Sans_Arabic.zip -d fonts/Noto_Sans_Arabic
-        curl -sOL https://github.com/notofonts/hebrew/releases/download/NotoSansHebrew-v2.003/NotoSansHebrew-v2.003.zip
-        unzip NotoSansHebrew-v2.003.zip
-        mv -v NotoSansHebrew fonts/
         curl -sL -o Noto_Sans_Devanagari.zip https://github.com/notofonts/devanagari/releases/download/NotoSansDevanagari-v2.004/NotoSansDevanagari-v2.004.zip
         unzip Noto_Sans_Devanagari.zip -d fonts/Noto_Sans_Devanagari
         curl -sL -o NotoColorEmoji.ttf https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf
         mv NotoColorEmoji.ttf fonts/NotoColorEmoji.ttf
         curl -sL -o times_sans_serif.zip  https://dl.dafont.com/dl/?f=times_sans_serif
         unzip times_sans_serif.zip -d fonts/times_sans_serif
+        curl -sOL https://github.com/notofonts/hebrew/releases/download/NotoSansHebrew-v2.003/NotoSansHebrew-v2.003.zip
+        unzip -: NotoSansHebrew-v2.003.zip
+        mv -v NotoSansHebrew fonts/
         mv fonts/* ~/.local/share/fonts/
         fc-cache -rv
     - name: Report versions
