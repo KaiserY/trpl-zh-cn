@@ -1,3 +1,0 @@
-We have some weird comments pointing out borrowing scopes that we don't want to change;
-unfortunately I haven't found a way to skip them with rustfmt that works so for now we're going to
-manually skip those listings. See: https://github.com/rust-lang/rustfmt/issues/4028
