@@ -227,7 +227,7 @@ HTTP/1.1 200 OK\r\n\r\n
 <span class="filename">文件名：404.html</span>
 
 ```html
-{{#include ../listings/ch20-web-server/listing-20-08/404.html}}
+{{#include ../listings/ch20-web-server/listing-20-07/404.html}}
 ```
 
 <span class="caption">示例 20-8: 任何 404 响应所返回错误页面内容样例</span>

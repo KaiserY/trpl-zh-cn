@@ -59,7 +59,7 @@
 相反我们可以创建一个新类型来将验证放入创建其实例的函数中，而不是到处重复这些检查。这样就可以安全地在函数签名中使用新类型并相信它们接收到的值。示例 9-13 中展示了一个定义 `Guess` 类型的方法，只有在 `new` 函数接收到 1 到 100 之间的值时才会创建 `Guess` 的实例：
 
 ```rust
-{{#include ../listings/ch09-error-handling/listing-09-13/src/main.rs:here}}
+{{#include ../listings/ch09-error-handling/listing-09-13/src/lib.rs:here}}
 ```
 
 <span class="caption">示例 9-13：一个 `Guess` 类型，它只在值位于 1 和 100 之间时才继续</span>
