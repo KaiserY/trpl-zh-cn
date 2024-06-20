@@ -2,7 +2,7 @@
 
 > [ch09-03-to-panic-or-not-to-panic.md](https://github.com/rust-lang/book/blob/main/src/ch09-03-to-panic-or-not-to-panic.md)
 > <br>
-> commit a87db22c297ff9b029f4458c8f303606df767c0b
+> commit dd8f47a74b67178cea8c832e3b4eaf3bb515bd72
 
 那么，该如何决定何时应该 `panic!` 以及何时应该返回 `Result` 呢？如果代码 panic，就没有恢复的可能。你可以选择对任何错误场景都调用 `panic!`，不管是否有可能恢复，不过这样就是你代替调用者决定了这是不可恢复的。选择返回 `Result` 值的话，就将选择权交给了调用者，而不是代替他们做出决定。调用者可能会选择以符合他们场景的方式尝试恢复，或者也可能干脆就认为 `Err` 是不可恢复的，所以他们也可能会调用 `panic!` 并将可恢复的错误变成了不可恢复的错误。因此返回 `Result` 是定义可能会失败的函数的一个好的默认选择。
 
@@ -48,6 +48,8 @@
 
 一种实现方式是将猜测解析成 `i32` 而不仅仅是 `u32`，来默许输入负数，接着检查数字是否在范围内：
 
+<span class="filename">文件名: src/main.rs</span>
+
 ```rust,ignore
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-09-guess-out-of-range/src/main.rs:here}}
 ```
@@ -58,8 +60,10 @@
 
 相反我们可以创建一个新类型来将验证放入创建其实例的函数中，而不是到处重复这些检查。这样就可以安全地在函数签名中使用新类型并相信它们接收到的值。示例 9-13 中展示了一个定义 `Guess` 类型的方法，只有在 `new` 函数接收到 1 到 100 之间的值时才会创建 `Guess` 的实例：
 
+<span class="filename">文件名: src/lib.rs</span>
+
 ```rust
-{{#rustdoc_include ../listings/ch09-error-handling/listing-09-13/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch09-error-handling/listing-09-13/src/lib.rs}}
 ```
 
 <span class="caption">示例 9-13：一个 `Guess` 类型，它只在值位于 1 和 100 之间时才继续</span>
