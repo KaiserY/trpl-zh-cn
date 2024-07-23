@@ -131,10 +131,10 @@ pub trait Iterator {
 
 <span class="caption">示例 13-16：使用 `filter` 方法和一个捕获 `shoe_size` 的闭包</span>
 
-`shoes_in_my_size` 函数获取一个鞋子 vector 的所有权和一个鞋子大小作为参数。它返回一个只包含指定大小鞋子的 vector。
+`shoes_in_size` 函数获取一个鞋子 vector 的所有权和一个鞋子大小作为参数。它返回一个只包含指定大小鞋子的 vector。
 
-`shoes_in_my_size` 函数体中调用了 `into_iter` 来创建一个获取 vector 所有权的迭代器。接着调用 `filter` 将这个迭代器适配成一个只含有那些闭包返回 `true` 的元素的新迭代器。
+`shoes_in_size` 函数体中调用了 `into_iter` 来创建一个获取 vector 所有权的迭代器。接着调用 `filter` 将这个迭代器适配成一个只含有那些闭包返回 `true` 的元素的新迭代器。
 
 闭包从环境中捕获了 `shoe_size` 变量并使用其值与每一只鞋的大小作比较，只保留指定大小的鞋子。最终，调用 `collect` 将迭代器适配器返回的值收集进一个 vector 并返回。
 
-这个测试展示当调用 `shoes_in_my_size` 时，我们只会得到与指定值相同大小的鞋子。
+这个测试展示当调用 `shoes_in_size` 时，我们只会得到与指定值相同大小的鞋子。
