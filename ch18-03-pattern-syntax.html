@@ -1,0 +1,657 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>模式语法 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Rust 程序设计语言</a></li><li class="chapter-item expanded affix "><a href="foreword.html">前言</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">简介</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> 入门指南</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> 安装</a></li><li class="chapter-item expanded "><a href="ch01-02-hello-world.html"><strong aria-hidden="true">1.2.</strong> Hello, World!</a></li><li class="chapter-item expanded "><a href="ch01-03-hello-cargo.html"><strong aria-hidden="true">1.3.</strong> Hello, Cargo!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-guessing-game-tutorial.html"><strong aria-hidden="true">2.</strong> 写个猜数字游戏</a></li><li class="chapter-item expanded "><a href="ch03-00-common-programming-concepts.html"><strong aria-hidden="true">3.</strong> 常见编程概念</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-variables-and-mutability.html"><strong aria-hidden="true">3.1.</strong> 变量与可变性</a></li><li class="chapter-item expanded "><a href="ch03-02-data-types.html"><strong aria-hidden="true">3.2.</strong> 数据类型</a></li><li class="chapter-item expanded "><a href="ch03-03-how-functions-work.html"><strong aria-hidden="true">3.3.</strong> 函数</a></li><li class="chapter-item expanded "><a href="ch03-04-comments.html"><strong aria-hidden="true">3.4.</strong> 注释</a></li><li class="chapter-item expanded "><a href="ch03-05-control-flow.html"><strong aria-hidden="true">3.5.</strong> 控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-understanding-ownership.html"><strong aria-hidden="true">4.</strong> 认识所有权</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-what-is-ownership.html"><strong aria-hidden="true">4.1.</strong> 什么是所有权？</a></li><li class="chapter-item expanded "><a href="ch04-02-references-and-borrowing.html"><strong aria-hidden="true">4.2.</strong> 引用与借用</a></li><li class="chapter-item expanded "><a href="ch04-03-slices.html"><strong aria-hidden="true">4.3.</strong> Slice 类型</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-structs.html"><strong aria-hidden="true">5.</strong> 使用结构体组织相关联的数据</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-defining-structs.html"><strong aria-hidden="true">5.1.</strong> 结构体的定义和实例化</a></li><li class="chapter-item expanded "><a href="ch05-02-example-structs.html"><strong aria-hidden="true">5.2.</strong> 结构体示例程序</a></li><li class="chapter-item expanded "><a href="ch05-03-method-syntax.html"><strong aria-hidden="true">5.3.</strong> 方法语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch06-00-enums.html"><strong aria-hidden="true">6.</strong> 枚举和模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch06-01-defining-an-enum.html"><strong aria-hidden="true">6.1.</strong> 枚举的定义</a></li><li class="chapter-item expanded "><a href="ch06-02-match.html"><strong aria-hidden="true">6.2.</strong> match 控制流结构</a></li><li class="chapter-item expanded "><a href="ch06-03-if-let.html"><strong aria-hidden="true">6.3.</strong> if let 简洁控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"><strong aria-hidden="true">7.</strong> 使用包、Crate 和模块管理不断增长的项目</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch07-01-packages-and-crates.html"><strong aria-hidden="true">7.1.</strong> 包和 Crate</a></li><li class="chapter-item expanded "><a href="ch07-02-defining-modules-to-control-scope-and-privacy.html"><strong aria-hidden="true">7.2.</strong> 定义模块来控制作用域与私有性</a></li><li class="chapter-item expanded "><a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html"><strong aria-hidden="true">7.3.</strong> 引用模块项目的路径</a></li><li class="chapter-item expanded "><a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html"><strong aria-hidden="true">7.4.</strong> 使用 use 关键字将路径引入作用域</a></li><li class="chapter-item expanded "><a href="ch07-05-separating-modules-into-different-files.html"><strong aria-hidden="true">7.5.</strong> 将模块拆分成多个文件</a></li></ol></li><li class="chapter-item expanded "><a href="ch08-00-common-collections.html"><strong aria-hidden="true">8.</strong> 常见集合</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch08-01-vectors.html"><strong aria-hidden="true">8.1.</strong> 使用 Vector 储存列表</a></li><li class="chapter-item expanded "><a href="ch08-02-strings.html"><strong aria-hidden="true">8.2.</strong> 使用字符串储存 UTF-8 编码的文本</a></li><li class="chapter-item expanded "><a href="ch08-03-hash-maps.html"><strong aria-hidden="true">8.3.</strong> 使用 Hash Map 储存键值对</a></li></ol></li><li class="chapter-item expanded "><a href="ch09-00-error-handling.html"><strong aria-hidden="true">9.</strong> 错误处理</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong aria-hidden="true">9.1.</strong> 用 panic! 处理不可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-02-recoverable-errors-with-result.html"><strong aria-hidden="true">9.2.</strong> 用 Result 处理可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-03-to-panic-or-not-to-panic.html"><strong aria-hidden="true">9.3.</strong> 要不要 panic!</a></li></ol></li><li class="chapter-item expanded "><a href="ch10-00-generics.html"><strong aria-hidden="true">10.</strong> 泛型、Trait 和生命周期</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch10-01-syntax.html"><strong aria-hidden="true">10.1.</strong> 泛型数据类型</a></li><li class="chapter-item expanded "><a href="ch10-02-traits.html"><strong aria-hidden="true">10.2.</strong> Trait：定义共同行为</a></li><li class="chapter-item expanded "><a href="ch10-03-lifetime-syntax.html"><strong aria-hidden="true">10.3.</strong> 生命周期确保引用有效</a></li></ol></li><li class="chapter-item expanded "><a href="ch11-00-testing.html"><strong aria-hidden="true">11.</strong> 编写自动化测试</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch11-01-writing-tests.html"><strong aria-hidden="true">11.1.</strong> 如何编写测试</a></li><li class="chapter-item expanded "><a href="ch11-02-running-tests.html"><strong aria-hidden="true">11.2.</strong> 控制测试如何运行</a></li><li class="chapter-item expanded "><a href="ch11-03-test-organization.html"><strong aria-hidden="true">11.3.</strong> 测试的组织结构</a></li></ol></li><li class="chapter-item expanded "><a href="ch12-00-an-io-project.html"><strong aria-hidden="true">12.</strong> 一个 I/O 项目：构建命令行程序</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch12-01-accepting-command-line-arguments.html"><strong aria-hidden="true">12.1.</strong> 接受命令行参数</a></li><li class="chapter-item expanded "><a href="ch12-02-reading-a-file.html"><strong aria-hidden="true">12.2.</strong> 读取文件</a></li><li class="chapter-item expanded "><a href="ch12-03-improving-error-handling-and-modularity.html"><strong aria-hidden="true">12.3.</strong> 重构以改进模块化与错误处理</a></li><li class="chapter-item expanded "><a href="ch12-04-testing-the-librarys-functionality.html"><strong aria-hidden="true">12.4.</strong> 采用测试驱动开发完善库的功能</a></li><li class="chapter-item expanded "><a href="ch12-05-working-with-environment-variables.html"><strong aria-hidden="true">12.5.</strong> 处理环境变量</a></li><li class="chapter-item expanded "><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong aria-hidden="true">12.6.</strong> 将错误信息输出到标准错误而不是标准输出</a></li></ol></li><li class="chapter-item expanded "><a href="ch13-00-functional-features.html"><strong aria-hidden="true">13.</strong> Rust 中的函数式语言功能：迭代器与闭包</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch13-01-closures.html"><strong aria-hidden="true">13.1.</strong> 闭包：可以捕获其环境的匿名函数</a></li><li class="chapter-item expanded "><a href="ch13-02-iterators.html"><strong aria-hidden="true">13.2.</strong> 使用迭代器处理元素序列</a></li><li class="chapter-item expanded "><a href="ch13-03-improving-our-io-project.html"><strong aria-hidden="true">13.3.</strong> 改进之前的 I/O 项目</a></li><li class="chapter-item expanded "><a href="ch13-04-performance.html"><strong aria-hidden="true">13.4.</strong> 性能比较：循环对迭代器</a></li></ol></li><li class="chapter-item expanded "><a href="ch14-00-more-about-cargo.html"><strong aria-hidden="true">14.</strong> 更多关于 Cargo 和 Crates.io 的内容</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch14-01-release-profiles.html"><strong aria-hidden="true">14.1.</strong> 采用发布配置自定义构建</a></li><li class="chapter-item expanded "><a href="ch14-02-publishing-to-crates-io.html"><strong aria-hidden="true">14.2.</strong> 将 crate 发布到 Crates.io</a></li><li class="chapter-item expanded "><a href="ch14-03-cargo-workspaces.html"><strong aria-hidden="true">14.3.</strong> Cargo 工作空间</a></li><li class="chapter-item expanded "><a href="ch14-04-installing-binaries.html"><strong aria-hidden="true">14.4.</strong> 使用 cargo install 安装二进制文件</a></li><li class="chapter-item expanded "><a href="ch14-05-extending-cargo.html"><strong aria-hidden="true">14.5.</strong> Cargo 自定义扩展命令</a></li></ol></li><li class="chapter-item expanded "><a href="ch15-00-smart-pointers.html"><strong aria-hidden="true">15.</strong> 智能指针</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch15-01-box.html"><strong aria-hidden="true">15.1.</strong> 使用 Box&lt;T&gt; 指向堆上数据</a></li><li class="chapter-item expanded "><a href="ch15-02-deref.html"><strong aria-hidden="true">15.2.</strong> 使用 Deref Trait 将智能指针当作常规引用处理</a></li><li class="chapter-item expanded "><a href="ch15-03-drop.html"><strong aria-hidden="true">15.3.</strong> 使用 Drop Trait 运行清理代码</a></li><li class="chapter-item expanded "><a href="ch15-04-rc.html"><strong aria-hidden="true">15.4.</strong> Rc&lt;T&gt; 引用计数智能指针</a></li><li class="chapter-item expanded "><a href="ch15-05-interior-mutability.html"><strong aria-hidden="true">15.5.</strong> RefCell&lt;T&gt; 与内部可变性模式</a></li><li class="chapter-item expanded "><a href="ch15-06-reference-cycles.html"><strong aria-hidden="true">15.6.</strong> 引用循环会导致内存泄漏</a></li></ol></li><li class="chapter-item expanded "><a href="ch16-00-concurrency.html"><strong aria-hidden="true">16.</strong> 无畏并发</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch16-01-threads.html"><strong aria-hidden="true">16.1.</strong> 使用线程同时地运行代码</a></li><li class="chapter-item expanded "><a href="ch16-02-message-passing.html"><strong aria-hidden="true">16.2.</strong> 使用消息传递在线程间通信</a></li><li class="chapter-item expanded "><a href="ch16-03-shared-state.html"><strong aria-hidden="true">16.3.</strong> 共享状态并发</a></li><li class="chapter-item expanded "><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong aria-hidden="true">16.4.</strong> 使用 Sync 与 Send Traits 的可扩展并发</a></li></ol></li><li class="chapter-item expanded "><a href="ch17-00-oop.html"><strong aria-hidden="true">17.</strong> Rust 的面向对象编程特性</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch17-01-what-is-oo.html"><strong aria-hidden="true">17.1.</strong> 面向对象语言的特点</a></li><li class="chapter-item expanded "><a href="ch17-02-trait-objects.html"><strong aria-hidden="true">17.2.</strong> 顾及不同类型值的 trait 对象</a></li><li class="chapter-item expanded "><a href="ch17-03-oo-design-patterns.html"><strong aria-hidden="true">17.3.</strong> 面向对象设计模式的实现</a></li></ol></li><li class="chapter-item expanded "><a href="ch18-00-patterns.html"><strong aria-hidden="true">18.</strong> 模式与模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch18-01-all-the-places-for-patterns.html"><strong aria-hidden="true">18.1.</strong> 所有可能会用到模式的位置</a></li><li class="chapter-item expanded "><a href="ch18-02-refutability.html"><strong aria-hidden="true">18.2.</strong> Refutability（可反驳性）: 模式是否会匹配失效</a></li><li class="chapter-item expanded "><a href="ch18-03-pattern-syntax.html" class="active"><strong aria-hidden="true">18.3.</strong> 模式语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch19-00-advanced-features.html"><strong aria-hidden="true">19.</strong> 高级特征</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch19-01-unsafe-rust.html"><strong aria-hidden="true">19.1.</strong> 不安全的 Rust</a></li><li class="chapter-item expanded "><a href="ch19-03-advanced-traits.html"><strong aria-hidden="true">19.2.</strong> 高级 trait</a></li><li class="chapter-item expanded "><a href="ch19-04-advanced-types.html"><strong aria-hidden="true">19.3.</strong> 高级类型</a></li><li class="chapter-item expanded "><a href="ch19-05-advanced-functions-and-closures.html"><strong aria-hidden="true">19.4.</strong> 高级函数与闭包</a></li><li class="chapter-item expanded "><a href="ch19-06-macros.html"><strong aria-hidden="true">19.5.</strong> 宏</a></li></ol></li><li class="chapter-item expanded "><a href="ch20-00-final-project-a-web-server.html"><strong aria-hidden="true">20.</strong> 最后的项目：构建多线程 web server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch20-01-single-threaded.html"><strong aria-hidden="true">20.1.</strong> 建立单线程 web server</a></li><li class="chapter-item expanded "><a href="ch20-02-multithreaded.html"><strong aria-hidden="true">20.2.</strong> 将单线程 server 变为多线程 server</a></li><li class="chapter-item expanded "><a href="ch20-03-graceful-shutdown-and-cleanup.html"><strong aria-hidden="true">20.3.</strong> 优雅停机与清理</a></li></ol></li><li class="chapter-item expanded "><a href="appendix-00.html"><strong aria-hidden="true">21.</strong> 附录</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix-01-keywords.html"><strong aria-hidden="true">21.1.</strong> A - 关键字</a></li><li class="chapter-item expanded "><a href="appendix-02-operators.html"><strong aria-hidden="true">21.2.</strong> B - 运算符与符号</a></li><li class="chapter-item expanded "><a href="appendix-03-derivable-traits.html"><strong aria-hidden="true">21.3.</strong> C - 可派生的 trait</a></li><li class="chapter-item expanded "><a href="appendix-04-useful-development-tools.html"><strong aria-hidden="true">21.4.</strong> D - 实用开发工具</a></li><li class="chapter-item expanded "><a href="appendix-05-editions.html"><strong aria-hidden="true">21.5.</strong> E - 版本</a></li><li class="chapter-item expanded "><a href="appendix-06-translation.html"><strong aria-hidden="true">21.6.</strong> F - 本书译本</a></li><li class="chapter-item expanded "><a href="appendix-07-nightly-rust.html"><strong aria-hidden="true">21.7.</strong> G - Rust 是如何开发的与 “Nightly Rust”</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch18-03-pattern-syntax.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="所有的模式语法"><a class="header" href="#所有的模式语法">所有的模式语法</a></h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/main/src/ch18-03-pattern-syntax.md">ch18-03-pattern-syntax.md</a>
+<br>
+commit 6fce661a0938aa0da06526e7b8f98fd7e67a222f</p>
+</blockquote>
+<p>在本节中，我们收集了模式中所有有效的语法，并讨论为什么以及何时你可能要使用这些语法。</p>
+<h3 id="匹配字面值"><a class="header" href="#匹配字面值">匹配字面值</a></h3>
+<p>如第六章所示，可以直接匹配字面值模式。如下代码给出了一些例子：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let x = 1;
+
+    match x {
+        1 =&gt; println!(&quot;one&quot;),
+        2 =&gt; println!(&quot;two&quot;),
+        3 =&gt; println!(&quot;three&quot;),
+        _ =&gt; println!(&quot;anything&quot;),
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>这段代码会打印 <code>one</code> 因为 <code>x</code> 的值是 1。如果希望代码获得特定的具体值，则该语法很有用。</p>
+<h3 id="匹配命名变量"><a class="header" href="#匹配命名变量">匹配命名变量</a></h3>
+<p>命名变量是匹配任何值的不可反驳模式，这在之前已经使用过数次。然而当其用于 <code>match</code> 表达式时情况会有些复杂。因为 <code>match</code> 会开始一个新作用域，<code>match</code> 表达式中作为模式的一部分声明的变量会覆盖 <code>match</code> 结构之外的同名变量，与所有变量一样。在示例 18-11 中，声明了一个值为 <code>Some(5)</code> 的变量 <code>x</code> 和一个值为 <code>10</code> 的变量 <code>y</code>。接着在值 <code>x</code> 上创建了一个 <code>match</code> 表达式。观察匹配分支中的模式和结尾的 <code>println!</code>，并在运行此代码或进一步阅读之前推断这段代码会打印什么。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let x = Some(5);
+    let y = 10;
+
+    match x {
+        Some(50) =&gt; println!(&quot;Got 50&quot;),
+        Some(y) =&gt; println!(&quot;Matched, y = {y}&quot;),
+        _ =&gt; println!(&quot;Default case, x = {x:?}&quot;),
+    }
+
+    println!(&quot;at the end: x = {x:?}, y = {y}&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 18-11: 一个 <code>match</code> 语句其中一个分支引入了覆盖变量 <code>y</code></span></p>
+<p>让我们看看当 <code>match</code> 语句运行的时候发生了什么。第一个匹配分支的模式并不匹配 <code>x</code> 中定义的值，所以代码继续执行。</p>
+<p>第二个匹配分支中的模式引入了一个新变量 <code>y</code>，它会匹配任何 <code>Some</code> 中的值。因为我们在 <code>match</code> 表达式的新作用域中，这是一个新变量，而不是开头声明为值 10 的那个 <code>y</code>。这个新的 <code>y</code> 绑定会匹配任何 <code>Some</code> 中的值，在这里是 <code>x</code> 中的值。因此这个 <code>y</code> 绑定了 <code>x</code> 中 <code>Some</code> 内部的值。这个值是 5，所以这个分支的表达式将会执行并打印出 <code>Matched, y = 5</code>。</p>
+<p>如果 <code>x</code> 的值是 <code>None</code> 而不是 <code>Some(5)</code>，头两个分支的模式不会匹配，所以会匹配下划线。这个分支的模式中没有引入变量 <code>x</code>，所以此时表达式中的 <code>x</code> 会是外部没有被覆盖的 <code>x</code>。在这个假想的例子中，<code>match</code> 将会打印 <code>Default case, x = None</code>。</p>
+<p>一旦 <code>match</code> 表达式执行完毕，其作用域也就结束了，同理内部 <code>y</code> 的作用域也结束了。最后的 <code>println!</code> 会打印 <code>at the end: x = Some(5), y = 10</code>。</p>
+<p>为了创建能够比较外部 <code>x</code> 和 <code>y</code> 的值，而不引入覆盖变量的 <code>match</code> 表达式，我们需要相应地使用带有条件的匹配守卫（match guard）。我们稍后将在 <a href="#%E5%8C%B9%E9%85%8D%E5%AE%88%E5%8D%AB%E6%8F%90%E4%BE%9B%E7%9A%84%E9%A2%9D%E5%A4%96%E6%9D%A1%E4%BB%B6">“匹配守卫提供的额外条件”</a> 这一小节讨论匹配守卫。</p>
+<h3 id="多个模式"><a class="header" href="#多个模式">多个模式</a></h3>
+<p>在 <code>match</code> 表达式中，可以使用 <code>|</code> 语法匹配多个模式，它代表 <strong>或</strong>（<em>or</em>）运算符模式。例如，如下代码将 <code>x</code> 的值与匹配分支相比较，第一个分支有 <strong>或</strong> 选项，意味着如果 <code>x</code> 的值匹配此分支的任一个值，它就会运行：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let x = 1;
+
+    match x {
+        1 | 2 =&gt; println!(&quot;one or two&quot;),
+        3 =&gt; println!(&quot;three&quot;),
+        _ =&gt; println!(&quot;anything&quot;),
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>上面的代码会打印 <code>one or two</code>。</p>
+<h3 id="通过--匹配值的范围"><a class="header" href="#通过--匹配值的范围">通过 <code>..=</code> 匹配值的范围</a></h3>
+<p><code>..=</code> 语法允许你匹配一个闭区间范围内的值。在如下代码中，当模式匹配任何在给定范围内的值时，该分支会执行：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let x = 5;
+
+    match x {
+        1..=5 =&gt; println!(&quot;one through five&quot;),
+        _ =&gt; println!(&quot;something else&quot;),
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>如果 <code>x</code> 是 1、2、3、4 或 5，第一个分支就会匹配。这个语法在匹配多个值时相比使用 <code>|</code> 运算符来表达相同的意思更为方便；如果使用 <code>|</code> 则不得不指定 <code>1 | 2 | 3 | 4 | 5</code>。相反指定范围就简短的多，特别是在希望匹配比如从 1 到 1000 的数字的时候！</p>
+<p>编译器会在编译时检查范围不为空，而 <code>char</code> 和数字值是 Rust 仅有的可以判断范围是否为空的类型，所以范围只允许用于数字或 <code>char</code> 值。</p>
+<p>如下是一个使用 <code>char</code> 类型值范围的例子：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let x = 'c';
+
+    match x {
+        'a'..='j' =&gt; println!(&quot;early ASCII letter&quot;),
+        'k'..='z' =&gt; println!(&quot;late ASCII letter&quot;),
+        _ =&gt; println!(&quot;something else&quot;),
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>Rust 知道 <code>'c'</code> 位于第一个模式的范围内，并会打印出 <code>early ASCII letter</code>。</p>
+<h3 id="解构并分解值"><a class="header" href="#解构并分解值">解构并分解值</a></h3>
+<p>也可以使用模式来解构结构体、枚举和元组，以便使用这些值的不同部分。让我们来分别看一看。</p>
+<h4 id="解构结构体"><a class="header" href="#解构结构体">解构结构体</a></h4>
+<p>示例 18-12 展示带有两个字段 <code>x</code> 和 <code>y</code> 的结构体 <code>Point</code>，可以通过带有模式的 <code>let</code> 语句将其分解：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust">struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let p = Point { x: 0, y: 7 };
+
+    let Point { x: a, y: b } = p;
+    assert_eq!(0, a);
+    assert_eq!(7, b);
+}</code></pre></pre>
+<p><span class="caption">示例 18-12: 解构一个结构体的字段为单独的变量</span></p>
+<p>这段代码创建了变量 <code>a</code> 和 <code>b</code> 来匹配结构体 <code>p</code> 中的 <code>x</code> 和 <code>y</code> 字段。这个例子展示了模式中的变量名不必与结构体中的字段名一致。不过通常希望变量名与字段名一致以便于理解变量来自于哪些字段。因为变量名匹配字段名是常见的，同时因为 <code>let Point { x: x, y: y } = p;</code> 包含了很多重复，所以对于匹配结构体字段的模式存在简写：只需列出结构体字段的名称，则模式创建的变量会有相同的名称。示例 18-13 展示了与示例 18-12 有着相同行为的代码，不过 <code>let</code> 模式创建的变量为 <code>x</code> 和 <code>y</code> 而不是 <code>a</code> 和 <code>b</code>：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust">struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let p = Point { x: 0, y: 7 };
+
+    let Point { x, y } = p;
+    assert_eq!(0, x);
+    assert_eq!(7, y);
+}</code></pre></pre>
+<p><span class="caption">示例 18-13: 使用结构体字段简写来解构结构体字段</span></p>
+<p>这段代码创建了变量 <code>x</code> 和 <code>y</code>，与变量 <code>p</code> 中的 <code>x</code> 和 <code>y</code> 相匹配。其结果是变量 <code>x</code> 和 <code>y</code> 包含结构体 <code>p</code> 中的值。</p>
+<p>也可以使用字面值作为结构体模式的一部分进行解构，而不是为所有的字段创建变量。这允许我们测试一些字段为特定值的同时创建其他字段的变量。</p>
+<p>示例 18-14 展示了一个 <code>match</code> 语句将 <code>Point</code> 值分成了三种情况：直接位于 <code>x</code> 轴上（此时 <code>y = 0</code> 为真）、位于 <code>y</code> 轴上（<code>x = 0</code>）或不在任何轴上的点。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">struct Point {
+</span><span class="boring">    x: i32,
+</span><span class="boring">    y: i32,
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn main() {
+    let p = Point { x: 0, y: 7 };
+
+    match p {
+        Point { x, y: 0 } =&gt; println!(&quot;On the x axis at {x}&quot;),
+        Point { x: 0, y } =&gt; println!(&quot;On the y axis at {y}&quot;),
+        Point { x, y } =&gt; {
+            println!(&quot;On neither axis: ({x}, {y})&quot;);
+        }
+    }
+}</code></pre></pre>
+<p><span class="caption">示例 18-14: 解构和匹配模式中的字面值</span></p>
+<p>第一个分支通过指定字段 <code>y</code> 匹配字面值 <code>0</code> 来匹配任何位于 <code>x</code> 轴上的点。此模式仍然创建了变量 <code>x</code> 以便在分支的代码中使用。</p>
+<p>类似的，第二个分支通过指定字段 <code>x</code> 匹配字面值 <code>0</code> 来匹配任何位于 <code>y</code> 轴上的点，并为字段 <code>y</code> 创建了变量 <code>y</code>。第三个分支没有指定任何字面值，所以其会匹配任何其他的 <code>Point</code> 并为 <code>x</code> 和 <code>y</code> 两个字段创建变量。</p>
+<p>在这个例子中，值 <code>p</code> 因为其 <code>x</code> 包含 0 而匹配第二个分支，因此会打印出 <code>On the y axis at 7</code>。</p>
+<p>记住 <code>match</code> 表达式一旦找到一个匹配的模式就会停止检查其它分支，所以即使 <code>Point { x: 0, y: 0}</code> 在 <code>x</code> 轴上也在 <code>y</code> 轴上，这些代码也只会打印 <code>On the x axis at 0</code>。</p>
+<h4 id="解构枚举"><a class="header" href="#解构枚举">解构枚举</a></h4>
+<p>本书之前曾经解构过枚举（例如第六章示例 6-5），不过当时没有明确提到解构枚举的模式需要对应枚举所定义的储存数据的方式。让我们以示例 6-2 中的 <code>Message</code> 枚举为例，编写一个 <code>match</code> 使用模式解构每一个内部值，如示例 18-15 所示：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust">enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+
+fn main() {
+    let msg = Message::ChangeColor(0, 160, 255);
+
+    match msg {
+        Message::Quit =&gt; {
+            println!(&quot;The Quit variant has no data to destructure.&quot;);
+        }
+        Message::Move { x, y } =&gt; {
+            println!(&quot;Move in the x direction {x} and in the y direction {y}&quot;);
+        }
+        Message::Write(text) =&gt; {
+            println!(&quot;Text message: {text}&quot;);
+        }
+        Message::ChangeColor(r, g, b) =&gt; {
+            println!(&quot;Change the color to red {r}, green {g}, and blue {b}&quot;)
+        }
+    }
+}</code></pre></pre>
+<p><span class="caption">示例 18-15: 解构包含不同类型值成员的枚举</span></p>
+<p>这段代码会打印出 <code>Change the color to red 0, green 160, and blue 255</code>。尝试改变 <code>msg</code> 的值来观察其他分支代码的运行。</p>
+<p>对于像 <code>Message::Quit</code> 这样没有任何数据的枚举成员，不能进一步解构其值。只能匹配其字面值 <code>Message::Quit</code>，因此模式中没有任何变量。</p>
+<p>对于像 <code>Message::Move</code> 这样的类结构体枚举成员，可以采用类似于匹配结构体的模式。在成员名称后，使用大括号并列出字段变量以便将其分解以供此分支的代码使用。这里使用了示例 18-13 所展示的简写。</p>
+<p>对于像 <code>Message::Write</code> 这样的包含一个元素，以及像 <code>Message::ChangeColor</code> 这样包含三个元素的类元组枚举成员，其模式则类似于用于解构元组的模式。模式中变量的数量必须与成员中元素的数量一致。</p>
+<h4 id="解构嵌套的结构体和枚举"><a class="header" href="#解构嵌套的结构体和枚举">解构嵌套的结构体和枚举</a></h4>
+<p>目前为止，所有的例子都只匹配了深度为一级的结构体或枚举，不过当然也可以匹配嵌套的项！例如，我们可以重构列表 18-15 的代码在 <code>ChangeColor</code> 消息中同时支持 RGB 和 HSV 色彩模式，如示例 18-16 所示：</p>
+<pre><pre class="playground"><code class="language-rust">enum Color {
+    Rgb(i32, i32, i32),
+    Hsv(i32, i32, i32),
+}
+
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(Color),
+}
+
+fn main() {
+    let msg = Message::ChangeColor(Color::Hsv(0, 160, 255));
+
+    match msg {
+        Message::ChangeColor(Color::Rgb(r, g, b)) =&gt; {
+            println!(&quot;Change color to red {r}, green {g}, and blue {b}&quot;);
+        }
+        Message::ChangeColor(Color::Hsv(h, s, v)) =&gt; {
+            println!(&quot;Change color to hue {h}, saturation {s}, value {v}&quot;)
+        }
+        _ =&gt; (),
+    }
+}</code></pre></pre>
+<p><span class="caption">示例 18-16: 匹配嵌套的枚举</span></p>
+<p><code>match</code> 表达式第一个分支的模式匹配一个包含 <code>Color::Rgb</code> 枚举成员的 <code>Message::ChangeColor</code> 枚举成员，然后模式绑定了 3 个内部的 <code>i32</code> 值。第二个分支的模式也匹配一个 <code>Message::ChangeColor</code> 枚举成员，但是其内部的枚举会匹配 <code>Color::Hsv</code> 枚举成员。我们可以在一个 <code>match</code> 表达式中指定这些复杂条件，即使会涉及到两个枚举。</p>
+<h4 id="解构结构体和元组"><a class="header" href="#解构结构体和元组">解构结构体和元组</a></h4>
+<p>甚至可以用复杂的方式来混合、匹配和嵌套解构模式。如下是一个复杂结构体的例子，其中结构体和元组嵌套在元组中，并将所有的原始类型解构出来：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span><span class="boring">    struct Point {
+</span><span class="boring">        x: i32,
+</span><span class="boring">        y: i32,
+</span><span class="boring">    }
+</span><span class="boring">
+</span>    let ((feet, inches), Point { x, y }) = ((3, 10), Point { x: 3, y: -10 });
+<span class="boring">}</span></code></pre></pre>
+<p>这将复杂的类型分解成部分组件以便可以单独使用我们感兴趣的值。</p>
+<p>通过模式解构是一个方便利用部分值片段的手段，比如结构体中每个单独字段的值。</p>
+<h3 id="忽略模式中的值"><a class="header" href="#忽略模式中的值">忽略模式中的值</a></h3>
+<p>有时忽略模式中的一些值是有用的，比如 <code>match</code> 中最后捕获全部情况的分支实际上没有做任何事，但是它确实对所有剩余情况负责。有一些简单的方法可以忽略模式中全部或部分值：使用 <code>_</code> 模式（我们已经见过了），在另一个模式中使用 <code>_</code> 模式，使用一个以下划线开始的名称，或者使用 <code>..</code> 忽略所剩部分的值。让我们来分别探索如何以及为什么要这么做。</p>
+<h4 id="使用-_-忽略整个值"><a class="header" href="#使用-_-忽略整个值">使用 <code>_</code> 忽略整个值</a></h4>
+<p>我们已经使用过下划线作为匹配但不绑定任何值的通配符模式了。虽然这作为 <code>match</code> 表达式最后的分支特别有用，也可以将其用于任意模式，包括函数参数中，如示例 18-17 所示：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust">fn foo(_: i32, y: i32) {
+    println!(&quot;This code only uses the y parameter: {y}&quot;);
+}
+
+fn main() {
+    foo(3, 4);
+}</code></pre></pre>
+<p><span class="caption">示例 18-17: 在函数签名中使用 <code>_</code></span></p>
+<p>这段代码会完全忽略作为第一个参数传递的值 <code>3</code>，并会打印出 <code>This code only uses the y parameter: 4</code>。</p>
+<p>大部分情况当你不再需要特定函数参数时，最好修改签名不再包含无用的参数。在一些情况下忽略函数参数会变得特别有用，比如实现 trait 时，当你需要特定类型签名但是函数实现并不需要某个参数时。这样可以避免一个存在未使用的函数参数的编译警告，就跟使用命名参数一样。</p>
+<h4 id="使用嵌套的-_-忽略部分值"><a class="header" href="#使用嵌套的-_-忽略部分值">使用嵌套的 <code>_</code> 忽略部分值</a></h4>
+<p>也可以在一个模式内部使用<code>_</code> 忽略部分值，例如，当只需要测试部分值但在期望运行的代码中没有用到其他部分时。示例 18-18 展示了负责管理设置值的代码。业务需求是用户不允许覆盖现有的自定义设置，但是可以取消设置，也可以在当前未设置时为其提供设置。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let mut setting_value = Some(5);
+    let new_setting_value = Some(10);
+
+    match (setting_value, new_setting_value) {
+        (Some(_), Some(_)) =&gt; {
+            println!(&quot;Can't overwrite an existing customized value&quot;);
+        }
+        _ =&gt; {
+            setting_value = new_setting_value;
+        }
+    }
+
+    println!(&quot;setting is {setting_value:?}&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 18-18: 当不需要 <code>Some</code> 中的值时在模式内使用下划线来匹配 <code>Some</code> 成员</span></p>
+<p>这段代码会打印出 <code>Can't overwrite an existing customized value</code> 接着是 <code>setting is Some(5)</code>。在第一个匹配分支，我们不需要匹配或使用任一个 <code>Some</code> 成员中的值；重要的部分是需要测试 <code>setting_value</code> 和 <code>new_setting_value</code> 都为 <code>Some</code> 成员的情况。在这种情况，我们打印出为何不改变 <code>setting_value</code>，并且不会改变它。</p>
+<p>对于所有其他情况（<code>setting_value</code> 或 <code>new_setting_value</code> 任一为 <code>None</code>），这由第二个分支的 <code>_</code> 模式体现，这时确实希望允许 <code>new_setting_value</code> 变为 <code>setting_value</code>。</p>
+<p>也可以在一个模式中的多处使用下划线来忽略特定值，如示例 18-19 所示，这里忽略了一个五元元组中的第二和第四个值：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let numbers = (2, 4, 8, 16, 32);
+
+    match numbers {
+        (first, _, third, _, fifth) =&gt; {
+            println!(&quot;Some numbers: {first}, {third}, {fifth}&quot;)
+        }
+    }
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 18-19: 忽略元组的多个部分</span></p>
+<p>这会打印出 <code>Some numbers: 2, 8, 32</code>，值 4 和 16 会被忽略。</p>
+<h4 id="通过在名字前以一个-_-开头来忽略未使用的变量"><a class="header" href="#通过在名字前以一个-_-开头来忽略未使用的变量">通过在名字前以一个 <code>_</code> 开头来忽略未使用的变量</a></h4>
+<p>如果你创建了一个变量却不在任何地方使用它，Rust 通常会给你一个警告，因为未使用的变量可能会是个 bug。但是有时创建一个还未使用的变量是有用的，比如你正在设计原型或刚刚开始一个项目。这时你希望告诉 Rust 不要警告未使用的变量，为此可以用下划线作为变量名的开头。示例 18-20 中创建了两个未使用变量，不过当编译代码时只会得到其中一个的警告：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let _x = 5;
+    let y = 10;
+}</code></pre></pre>
+<p><span class="caption">示例 18-20: 以下划线开始变量名以便去掉未使用变量警告</span></p>
+<p>这里得到了警告说未使用变量 <code>y</code>，不过没有警告说使用 <code>_x</code>。</p>
+<p>注意，只使用 <code>_</code> 和使用以下划线开头的名称有些微妙的不同：比如 <code>_x</code> 仍会将值绑定到变量，而 <code>_</code> 则完全不会绑定。为了展示这个区别的意义，示例 18-21 会产生一个错误。</p>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
+</span>    let s = Some(String::from(&quot;Hello!&quot;));
+
+    if let Some(_s) = s {
+        println!(&quot;found a string&quot;);
+    }
+
+    println!(&quot;{s:?}&quot;);
+<span class="boring">}</span></code></pre>
+<p><span class="caption">示例 18-21: 以下划线开头的未使用变量仍然会绑定值，它可能会获取值的所有权</span></p>
+<p>我们会得到一个错误，因为 <code>s</code> 的值仍然会移动进 <code>_s</code>，并阻止我们再次使用 <code>s</code>。然而只使用下划线本身，并不会绑定值。示例 18-22 能够无错编译，因为 <code>s</code> 没有被移动进 <code>_</code>：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let s = Some(String::from(&quot;Hello!&quot;));
+
+    if let Some(_) = s {
+        println!(&quot;found a string&quot;);
+    }
+
+    println!(&quot;{s:?}&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 18-22: 单独使用下划线不会绑定值</span></p>
+<p>上面的代码能很好的运行；因为没有把 <code>s</code> 绑定到任何变量；它没有被移动。</p>
+<h4 id="用--忽略剩余值"><a class="header" href="#用--忽略剩余值">用 <code>..</code> 忽略剩余值</a></h4>
+<p>对于有多个部分的值，可以使用 <code>..</code> 语法来只使用特定部分并忽略其它值，同时避免不得不每一个忽略值列出下划线。<code>..</code> 模式会忽略模式中剩余的任何没有显式匹配的值部分。在示例 18-23 中，有一个 <code>Point</code> 结构体存放了三维空间中的坐标。在 <code>match</code> 表达式中，我们希望只操作 <code>x</code> 坐标并忽略 <code>y</code> 和 <code>z</code> 字段的值：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    struct Point {
+        x: i32,
+        y: i32,
+        z: i32,
+    }
+
+    let origin = Point { x: 0, y: 0, z: 0 };
+
+    match origin {
+        Point { x, .. } =&gt; println!(&quot;x is {x}&quot;),
+    }
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 18-23: 通过使用 <code>..</code> 来忽略 <code>Point</code> 中除 <code>x</code> 以外的字段</span></p>
+<p>这里列出了 <code>x</code> 值，接着仅仅包含了 <code>..</code> 模式。这比不得不列出 <code>y: _</code> 和 <code>z: _</code> 要来得简单，特别是在处理有很多字段的结构体，但只涉及一到两个字段时的情形。</p>
+<p><code>..</code> 会扩展为所需要的值的数量。示例 18-24 展示了元组中 <code>..</code> 的应用：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let numbers = (2, 4, 8, 16, 32);
+
+    match numbers {
+        (first, .., last) =&gt; {
+            println!(&quot;Some numbers: {first}, {last}&quot;);
+        }
+    }
+}</code></pre></pre>
+<p><span class="caption">示例 18-24: 只匹配元组中的第一个和最后一个值并忽略掉所有其它值</span></p>
+<p>这里用 <code>first</code> 和 <code>last</code> 来匹配第一个和最后一个值。<code>..</code> 将匹配并忽略中间的所有值。</p>
+<p>然而使用 <code>..</code> 必须是无歧义的。如果期望匹配和忽略的值是不明确的，Rust 会报错。示例 18-25 展示了一个带有歧义的 <code>..</code> 例子，因此其不能编译：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile">fn main() {
+    let numbers = (2, 4, 8, 16, 32);
+
+    match numbers {
+        (.., second, ..) =&gt; {
+            println!(&quot;Some numbers: {second}&quot;)
+        },
+    }
+}</code></pre>
+<p><span class="caption">示例 18-25: 尝试以有歧义的方式运用 <code>..</code></span></p>
+<p>如果编译上面的例子，会得到下面的错误：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling patterns v0.1.0 (file:///projects/patterns)
+error: `..` can only be used once per tuple pattern
+ --&gt; src/main.rs:5:22
+  |
+5 |         (.., second, ..) =&gt; {
+  |          --          ^^ can only be used once per tuple pattern
+  |          |
+  |          previously used here
+
+error: could not compile `patterns` (bin &quot;patterns&quot;) due to 1 previous error
+</code></pre>
+<p>Rust 不可能决定在元组中匹配 <code>second</code> 值之前应该忽略多少个值，以及在之后忽略多少个值。这段代码可能表明我们意在忽略 <code>2</code>，绑定 <code>second</code> 为 <code>4</code>，接着忽略 <code>8</code>、<code>16</code> 和 <code>32</code>；抑或是意在忽略 <code>2</code> 和 <code>4</code>，绑定 <code>second</code> 为 <code>8</code>，接着忽略 <code>16</code> 和 <code>32</code>，以此类推。变量名 <code>second</code> 对于 Rust 来说并没有任何特殊意义，所以会得到编译错误，因为在这两个地方使用 <code>..</code> 是有歧义的。</p>
+<h3 id="匹配守卫提供的额外条件"><a class="header" href="#匹配守卫提供的额外条件">匹配守卫提供的额外条件</a></h3>
+<p><strong>匹配守卫</strong>（<em>match guard</em>）是一个指定于 <code>match</code> 分支模式之后的额外 <code>if</code> 条件，它也必须被满足才能选择此分支。匹配守卫用于表达比单独的模式所能允许的更为复杂的情况。</p>
+<p>这个条件可以使用模式中创建的变量。示例 18-26 展示了一个 <code>match</code>，其中第一个分支有模式 <code>Some(x)</code> 还有匹配守卫 <code>if x % 2 == 0</code> (当 <code>x</code> 是偶数的时候为真)：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let num = Some(4);
+
+    match num {
+        Some(x) if x % 2 == 0 =&gt; println!(&quot;The number {x} is even&quot;),
+        Some(x) =&gt; println!(&quot;The number {x} is odd&quot;),
+        None =&gt; (),
+    }
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 18-26: 在模式中加入匹配守卫</span></p>
+<p>上例会打印出 <code>The number 4 is even</code>。当 <code>num</code> 与模式中第一个分支比较时，因为 <code>Some(4)</code> 匹配 <code>Some(x)</code> 所以可以匹配。接着匹配守卫检查 <code>x</code> 除以 <code>2</code> 的余数是否等于 <code>0</code>，因为它等于 <code>0</code>，所以第一个分支被选择。</p>
+<p>相反如果 <code>num</code> 为 <code>Some(5)</code>，因为 <code>5</code> 除以 <code>2</code> 的余数是 <code>1</code> 不等于 <code>0</code> 所以第一个分支的匹配守卫为假。接着 Rust 会前往第二个分支，这次匹配因为它没有匹配守卫所以会匹配任何 <code>Some</code> 成员。</p>
+<p>无法在模式中表达类似 <code>if x % 2 == 0</code> 的条件，所以通过匹配守卫提供了表达类似逻辑的能力。这种替代表达方式的缺点是，编译器不会尝试为包含匹配守卫的模式检查穷尽性。</p>
+<p>在示例 18-11 中，我们提到可以使用匹配守卫来解决模式中变量覆盖的问题，那里 <code>match</code> 表达式的模式中新建了一个变量而不是使用 <code>match</code> 之外的同名变量。新变量意味着不能够测试外部变量的值。示例 18-27 展示了如何使用匹配守卫修复这个问题。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let x = Some(5);
+    let y = 10;
+
+    match x {
+        Some(50) =&gt; println!(&quot;Got 50&quot;),
+        Some(n) if n == y =&gt; println!(&quot;Matched, n = {n}&quot;),
+        _ =&gt; println!(&quot;Default case, x = {x:?}&quot;),
+    }
+
+    println!(&quot;at the end: x = {x:?}, y = {y}&quot;);
+}</code></pre></pre>
+<p><span class="caption">示例 18-27: 使用匹配守卫来测试与外部变量的相等性</span></p>
+<p>现在这会打印出 <code>Default case, x = Some(5)</code>。现在第二个匹配分支中的模式不会引入一个覆盖外部 <code>y</code> 的新变量 <code>y</code>，这意味着可以在匹配守卫中使用外部的 <code>y</code>。相比指定会覆盖外部 <code>y</code> 的模式 <code>Some(y)</code>，这里指定为 <code>Some(n)</code>。此新建的变量 <code>n</code> 并没有覆盖任何值，因为 <code>match</code> 外部没有变量 <code>n</code>。</p>
+<p>匹配守卫 <code>if n == y</code> 并不是一个模式所以没有引入新变量。这个 <code>y</code> <strong>正是</strong> 外部的 <code>y</code> 而不是新的覆盖变量 <code>y</code>，这样就可以通过比较 <code>n</code> 和 <code>y</code> 来表达寻找一个与外部 <code>y</code> 相同的值的概念了。</p>
+<p>也可以在匹配守卫中使用 <strong>或</strong> 运算符 <code>|</code> 来指定多个模式，同时匹配守卫的条件会作用于所有的模式。示例 18-28 展示了结合匹配守卫与使用了 <code>|</code> 的模式的优先级。这个例子中重要的部分是匹配守卫 <code>if y</code> 作用于 <code>4</code>、<code>5</code> <strong>和</strong> <code>6</code>，即使这看起来好像 <code>if y</code> 只作用于 <code>6</code>：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let x = 4;
+    let y = false;
+
+    match x {
+        4 | 5 | 6 if y =&gt; println!(&quot;yes&quot;),
+        _ =&gt; println!(&quot;no&quot;),
+    }
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 18-28: 结合多个模式与匹配守卫</span></p>
+<p>这个匹配条件表明此分支值匹配 <code>x</code> 值为 <code>4</code>、<code>5</code> 或 <code>6</code> <strong>同时</strong> <code>y</code> 为 <code>true</code> 的情况。运行这段代码时会发生的是第一个分支的模式因 <code>x</code> 为 <code>4</code> 而匹配，不过匹配守卫 <code>if y</code> 为假，所以第一个分支不会被选择。代码移动到第二个分支，这会匹配，此程序会打印出 <code>no</code>。这是因为 <code>if</code> 条件作用于整个 <code>4 | 5 | 6</code> 模式，而不仅是最后的值 <code>6</code>。换句话说，匹配守卫与模式的优先级关系看起来像这样：</p>
+<pre><code class="language-text">(4 | 5 | 6) if y =&gt; ...
+</code></pre>
+<p>而不是：</p>
+<pre><code class="language-text">4 | 5 | (6 if y) =&gt; ...
+</code></pre>
+<p>可以通过运行代码时的情况看出这一点：如果匹配守卫只作用于由 <code>|</code> 运算符指定的值列表的最后一个值，这个分支就会匹配且程序会打印出 <code>yes</code>。</p>
+<h3 id="-绑定"><a class="header" href="#-绑定"><code>@</code> 绑定</a></h3>
+<p><em>at</em> 运算符（<code>@</code>）允许我们在创建一个存放值的变量的同时测试其值是否匹配模式。示例 18-29 展示了一个例子，这里我们希望测试 <code>Message::Hello</code> 的 <code>id</code> 字段是否位于 <code>3..=7</code> 范围内，同时也希望能将其值绑定到 <code>id_variable</code> 变量中以便此分支相关联的代码可以使用它。可以将 <code>id_variable</code> 命名为 <code>id</code>，与字段同名，不过出于示例的目的这里选择了不同的名称。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    enum Message {
+        Hello { id: i32 },
+    }
+
+    let msg = Message::Hello { id: 5 };
+
+    match msg {
+        Message::Hello {
+            id: id_variable @ 3..=7,
+        } =&gt; println!(&quot;Found an id in range: {id_variable}&quot;),
+        Message::Hello { id: 10..=12 } =&gt; {
+            println!(&quot;Found an id in another range&quot;)
+        }
+        Message::Hello { id } =&gt; println!(&quot;Found some other id: {id}&quot;),
+    }
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 18-29: 使用 <code>@</code> 在模式中绑定值的同时测试它</span></p>
+<p>上例会打印出 <code>Found an id in range: 5</code>。通过在 <code>3..=7</code> 之前指定 <code>id_variable @</code>，我们捕获了任何匹配此范围的值并同时测试其值匹配这个范围模式。</p>
+<p>第二个分支只在模式中指定了一个范围，分支相关代码没有一个包含 <code>id</code> 字段实际值的变量。<code>id</code> 字段的值可以是 10、11 或 12，不过这个模式的代码并不知情也不能使用 <code>id</code> 字段中的值，因为没有将 <code>id</code> 值保存进一个变量。</p>
+<p>最后一个分支指定了一个没有范围的变量，此时确实拥有可以用于分支代码的变量 <code>id</code>，因为这里使用了结构体字段简写语法。不过此分支中没有像头两个分支那样对 <code>id</code> 字段的值进行测试：任何值都会匹配此分支。</p>
+<p>使用 <code>@</code> 可以在一个模式中同时测试和保存变量值。</p>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>模式是 Rust 中一个很有用的功能，它有助于我们区分不同类型的数据。当用于 <code>match</code> 语句时，Rust 确保模式会包含每一个可能的值，否则程序将不能编译。<code>let</code> 语句和函数参数的模式使得这些结构更强大，可以在将值解构为更小部分的同时为变量赋值。可以创建简单或复杂的模式来满足我们的要求。</p>
+<p>接下来，在本书倒数第二章中，我们将介绍一些 Rust 众多功能中较为高级的部分。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch18-02-refutability.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch19-00-advanced-features.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch18-02-refutability.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch19-00-advanced-features.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
