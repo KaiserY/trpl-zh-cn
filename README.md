@@ -13,6 +13,10 @@ PS:
 
 [source]: https://github.com/rust-lang/book/tree/main/src
 
+## 校对
+
+部分翻译采用 ChatGPT 4o 进行翻译校对。提示词详见 [proofreading_prompt.md](proofreading_prompt.md)
+
 ## 静态页面构建与文档撰写
 
 ### 构建
