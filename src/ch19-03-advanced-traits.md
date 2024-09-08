@@ -23,7 +23,7 @@
 `Item` 是一个占位符类型，同时 `next` 方法的定义表明它返回 `Option<Self::Item>` 类型的值。这个 trait 的实现者会指定 `Item` 的具体类型，无论实现者指定何种类型，`next` 方法都会返回一个包含了此具体类型值的 `Option`。
 
 关联类型看起来有点像泛型：后者允许定义一个函数时，暂不指定其可以处理的类型。为了体现这两者的区别，请看下面的例子。
-这个例子为 `Counter` 结构体实现了 `Iterator` trait ，其中指定 `Item` 的类型为 `u32`：
+这个例子为 `Counter` 结构体实现了 `Iterator` trait，其中指定 `Item` 的类型为 `u32`：
 
 <span class="filename">文件名：src/lib.rs</span>
 
