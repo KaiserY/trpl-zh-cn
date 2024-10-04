@@ -1,0 +1,410 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>B - 运算符与符号 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Rust 程序设计语言</a></li><li class="chapter-item expanded affix "><a href="foreword.html">前言</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">简介</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> 入门指南</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> 安装</a></li><li class="chapter-item expanded "><a href="ch01-02-hello-world.html"><strong aria-hidden="true">1.2.</strong> Hello, World!</a></li><li class="chapter-item expanded "><a href="ch01-03-hello-cargo.html"><strong aria-hidden="true">1.3.</strong> Hello, Cargo!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-guessing-game-tutorial.html"><strong aria-hidden="true">2.</strong> 写个猜数字游戏</a></li><li class="chapter-item expanded "><a href="ch03-00-common-programming-concepts.html"><strong aria-hidden="true">3.</strong> 常见编程概念</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-variables-and-mutability.html"><strong aria-hidden="true">3.1.</strong> 变量与可变性</a></li><li class="chapter-item expanded "><a href="ch03-02-data-types.html"><strong aria-hidden="true">3.2.</strong> 数据类型</a></li><li class="chapter-item expanded "><a href="ch03-03-how-functions-work.html"><strong aria-hidden="true">3.3.</strong> 函数</a></li><li class="chapter-item expanded "><a href="ch03-04-comments.html"><strong aria-hidden="true">3.4.</strong> 注释</a></li><li class="chapter-item expanded "><a href="ch03-05-control-flow.html"><strong aria-hidden="true">3.5.</strong> 控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-understanding-ownership.html"><strong aria-hidden="true">4.</strong> 认识所有权</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-what-is-ownership.html"><strong aria-hidden="true">4.1.</strong> 什么是所有权？</a></li><li class="chapter-item expanded "><a href="ch04-02-references-and-borrowing.html"><strong aria-hidden="true">4.2.</strong> 引用与借用</a></li><li class="chapter-item expanded "><a href="ch04-03-slices.html"><strong aria-hidden="true">4.3.</strong> Slice 类型</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-structs.html"><strong aria-hidden="true">5.</strong> 使用结构体组织相关联的数据</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-defining-structs.html"><strong aria-hidden="true">5.1.</strong> 结构体的定义和实例化</a></li><li class="chapter-item expanded "><a href="ch05-02-example-structs.html"><strong aria-hidden="true">5.2.</strong> 结构体示例程序</a></li><li class="chapter-item expanded "><a href="ch05-03-method-syntax.html"><strong aria-hidden="true">5.3.</strong> 方法语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch06-00-enums.html"><strong aria-hidden="true">6.</strong> 枚举和模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch06-01-defining-an-enum.html"><strong aria-hidden="true">6.1.</strong> 枚举的定义</a></li><li class="chapter-item expanded "><a href="ch06-02-match.html"><strong aria-hidden="true">6.2.</strong> match 控制流结构</a></li><li class="chapter-item expanded "><a href="ch06-03-if-let.html"><strong aria-hidden="true">6.3.</strong> if let 简洁控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"><strong aria-hidden="true">7.</strong> 使用包、Crate 和模块管理不断增长的项目</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch07-01-packages-and-crates.html"><strong aria-hidden="true">7.1.</strong> 包和 Crate</a></li><li class="chapter-item expanded "><a href="ch07-02-defining-modules-to-control-scope-and-privacy.html"><strong aria-hidden="true">7.2.</strong> 定义模块来控制作用域与私有性</a></li><li class="chapter-item expanded "><a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html"><strong aria-hidden="true">7.3.</strong> 引用模块项目的路径</a></li><li class="chapter-item expanded "><a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html"><strong aria-hidden="true">7.4.</strong> 使用 use 关键字将路径引入作用域</a></li><li class="chapter-item expanded "><a href="ch07-05-separating-modules-into-different-files.html"><strong aria-hidden="true">7.5.</strong> 将模块拆分成多个文件</a></li></ol></li><li class="chapter-item expanded "><a href="ch08-00-common-collections.html"><strong aria-hidden="true">8.</strong> 常见集合</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch08-01-vectors.html"><strong aria-hidden="true">8.1.</strong> 使用 Vector 储存列表</a></li><li class="chapter-item expanded "><a href="ch08-02-strings.html"><strong aria-hidden="true">8.2.</strong> 使用字符串储存 UTF-8 编码的文本</a></li><li class="chapter-item expanded "><a href="ch08-03-hash-maps.html"><strong aria-hidden="true">8.3.</strong> 使用 Hash Map 储存键值对</a></li></ol></li><li class="chapter-item expanded "><a href="ch09-00-error-handling.html"><strong aria-hidden="true">9.</strong> 错误处理</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong aria-hidden="true">9.1.</strong> 用 panic! 处理不可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-02-recoverable-errors-with-result.html"><strong aria-hidden="true">9.2.</strong> 用 Result 处理可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-03-to-panic-or-not-to-panic.html"><strong aria-hidden="true">9.3.</strong> 要不要 panic!</a></li></ol></li><li class="chapter-item expanded "><a href="ch10-00-generics.html"><strong aria-hidden="true">10.</strong> 泛型、Trait 和生命周期</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch10-01-syntax.html"><strong aria-hidden="true">10.1.</strong> 泛型数据类型</a></li><li class="chapter-item expanded "><a href="ch10-02-traits.html"><strong aria-hidden="true">10.2.</strong> Trait：定义共同行为</a></li><li class="chapter-item expanded "><a href="ch10-03-lifetime-syntax.html"><strong aria-hidden="true">10.3.</strong> 生命周期确保引用有效</a></li></ol></li><li class="chapter-item expanded "><a href="ch11-00-testing.html"><strong aria-hidden="true">11.</strong> 编写自动化测试</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch11-01-writing-tests.html"><strong aria-hidden="true">11.1.</strong> 如何编写测试</a></li><li class="chapter-item expanded "><a href="ch11-02-running-tests.html"><strong aria-hidden="true">11.2.</strong> 控制测试如何运行</a></li><li class="chapter-item expanded "><a href="ch11-03-test-organization.html"><strong aria-hidden="true">11.3.</strong> 测试的组织结构</a></li></ol></li><li class="chapter-item expanded "><a href="ch12-00-an-io-project.html"><strong aria-hidden="true">12.</strong> 一个 I/O 项目：构建命令行程序</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch12-01-accepting-command-line-arguments.html"><strong aria-hidden="true">12.1.</strong> 接受命令行参数</a></li><li class="chapter-item expanded "><a href="ch12-02-reading-a-file.html"><strong aria-hidden="true">12.2.</strong> 读取文件</a></li><li class="chapter-item expanded "><a href="ch12-03-improving-error-handling-and-modularity.html"><strong aria-hidden="true">12.3.</strong> 重构以改进模块化与错误处理</a></li><li class="chapter-item expanded "><a href="ch12-04-testing-the-librarys-functionality.html"><strong aria-hidden="true">12.4.</strong> 采用测试驱动开发完善库的功能</a></li><li class="chapter-item expanded "><a href="ch12-05-working-with-environment-variables.html"><strong aria-hidden="true">12.5.</strong> 处理环境变量</a></li><li class="chapter-item expanded "><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong aria-hidden="true">12.6.</strong> 将错误信息输出到标准错误而不是标准输出</a></li></ol></li><li class="chapter-item expanded "><a href="ch13-00-functional-features.html"><strong aria-hidden="true">13.</strong> Rust 中的函数式语言功能：迭代器与闭包</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch13-01-closures.html"><strong aria-hidden="true">13.1.</strong> 闭包：可以捕获其环境的匿名函数</a></li><li class="chapter-item expanded "><a href="ch13-02-iterators.html"><strong aria-hidden="true">13.2.</strong> 使用迭代器处理元素序列</a></li><li class="chapter-item expanded "><a href="ch13-03-improving-our-io-project.html"><strong aria-hidden="true">13.3.</strong> 改进之前的 I/O 项目</a></li><li class="chapter-item expanded "><a href="ch13-04-performance.html"><strong aria-hidden="true">13.4.</strong> 性能比较：循环对迭代器</a></li></ol></li><li class="chapter-item expanded "><a href="ch14-00-more-about-cargo.html"><strong aria-hidden="true">14.</strong> 更多关于 Cargo 和 Crates.io 的内容</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch14-01-release-profiles.html"><strong aria-hidden="true">14.1.</strong> 采用发布配置自定义构建</a></li><li class="chapter-item expanded "><a href="ch14-02-publishing-to-crates-io.html"><strong aria-hidden="true">14.2.</strong> 将 crate 发布到 Crates.io</a></li><li class="chapter-item expanded "><a href="ch14-03-cargo-workspaces.html"><strong aria-hidden="true">14.3.</strong> Cargo 工作空间</a></li><li class="chapter-item expanded "><a href="ch14-04-installing-binaries.html"><strong aria-hidden="true">14.4.</strong> 使用 cargo install 安装二进制文件</a></li><li class="chapter-item expanded "><a href="ch14-05-extending-cargo.html"><strong aria-hidden="true">14.5.</strong> Cargo 自定义扩展命令</a></li></ol></li><li class="chapter-item expanded "><a href="ch15-00-smart-pointers.html"><strong aria-hidden="true">15.</strong> 智能指针</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch15-01-box.html"><strong aria-hidden="true">15.1.</strong> 使用 Box&lt;T&gt; 指向堆上数据</a></li><li class="chapter-item expanded "><a href="ch15-02-deref.html"><strong aria-hidden="true">15.2.</strong> 使用 Deref Trait 将智能指针当作常规引用处理</a></li><li class="chapter-item expanded "><a href="ch15-03-drop.html"><strong aria-hidden="true">15.3.</strong> 使用 Drop Trait 运行清理代码</a></li><li class="chapter-item expanded "><a href="ch15-04-rc.html"><strong aria-hidden="true">15.4.</strong> Rc&lt;T&gt; 引用计数智能指针</a></li><li class="chapter-item expanded "><a href="ch15-05-interior-mutability.html"><strong aria-hidden="true">15.5.</strong> RefCell&lt;T&gt; 与内部可变性模式</a></li><li class="chapter-item expanded "><a href="ch15-06-reference-cycles.html"><strong aria-hidden="true">15.6.</strong> 引用循环会导致内存泄漏</a></li></ol></li><li class="chapter-item expanded "><a href="ch16-00-concurrency.html"><strong aria-hidden="true">16.</strong> 无畏并发</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch16-01-threads.html"><strong aria-hidden="true">16.1.</strong> 使用线程同时地运行代码</a></li><li class="chapter-item expanded "><a href="ch16-02-message-passing.html"><strong aria-hidden="true">16.2.</strong> 使用消息传递在线程间通信</a></li><li class="chapter-item expanded "><a href="ch16-03-shared-state.html"><strong aria-hidden="true">16.3.</strong> 共享状态并发</a></li><li class="chapter-item expanded "><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong aria-hidden="true">16.4.</strong> 使用 Sync 与 Send Traits 的可扩展并发</a></li></ol></li><li class="chapter-item expanded "><a href="ch17-00-oop.html"><strong aria-hidden="true">17.</strong> Rust 的面向对象编程特性</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch17-01-what-is-oo.html"><strong aria-hidden="true">17.1.</strong> 面向对象语言的特点</a></li><li class="chapter-item expanded "><a href="ch17-02-trait-objects.html"><strong aria-hidden="true">17.2.</strong> 顾及不同类型值的 trait 对象</a></li><li class="chapter-item expanded "><a href="ch17-03-oo-design-patterns.html"><strong aria-hidden="true">17.3.</strong> 面向对象设计模式的实现</a></li></ol></li><li class="chapter-item expanded "><a href="ch18-00-patterns.html"><strong aria-hidden="true">18.</strong> 模式与模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch18-01-all-the-places-for-patterns.html"><strong aria-hidden="true">18.1.</strong> 所有可能会用到模式的位置</a></li><li class="chapter-item expanded "><a href="ch18-02-refutability.html"><strong aria-hidden="true">18.2.</strong> Refutability（可反驳性）: 模式是否会匹配失效</a></li><li class="chapter-item expanded "><a href="ch18-03-pattern-syntax.html"><strong aria-hidden="true">18.3.</strong> 模式语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch19-00-advanced-features.html"><strong aria-hidden="true">19.</strong> 高级特征</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch19-01-unsafe-rust.html"><strong aria-hidden="true">19.1.</strong> 不安全的 Rust</a></li><li class="chapter-item expanded "><a href="ch19-03-advanced-traits.html"><strong aria-hidden="true">19.2.</strong> 高级 trait</a></li><li class="chapter-item expanded "><a href="ch19-04-advanced-types.html"><strong aria-hidden="true">19.3.</strong> 高级类型</a></li><li class="chapter-item expanded "><a href="ch19-05-advanced-functions-and-closures.html"><strong aria-hidden="true">19.4.</strong> 高级函数与闭包</a></li><li class="chapter-item expanded "><a href="ch19-06-macros.html"><strong aria-hidden="true">19.5.</strong> 宏</a></li></ol></li><li class="chapter-item expanded "><a href="ch20-00-final-project-a-web-server.html"><strong aria-hidden="true">20.</strong> 最后的项目：构建多线程 web server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch20-01-single-threaded.html"><strong aria-hidden="true">20.1.</strong> 建立单线程 web server</a></li><li class="chapter-item expanded "><a href="ch20-02-multithreaded.html"><strong aria-hidden="true">20.2.</strong> 将单线程 server 变为多线程 server</a></li><li class="chapter-item expanded "><a href="ch20-03-graceful-shutdown-and-cleanup.html"><strong aria-hidden="true">20.3.</strong> 优雅停机与清理</a></li></ol></li><li class="chapter-item expanded "><a href="appendix-00.html"><strong aria-hidden="true">21.</strong> 附录</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix-01-keywords.html"><strong aria-hidden="true">21.1.</strong> A - 关键字</a></li><li class="chapter-item expanded "><a href="appendix-02-operators.html" class="active"><strong aria-hidden="true">21.2.</strong> B - 运算符与符号</a></li><li class="chapter-item expanded "><a href="appendix-03-derivable-traits.html"><strong aria-hidden="true">21.3.</strong> C - 可派生的 trait</a></li><li class="chapter-item expanded "><a href="appendix-04-useful-development-tools.html"><strong aria-hidden="true">21.4.</strong> D - 实用开发工具</a></li><li class="chapter-item expanded "><a href="appendix-05-editions.html"><strong aria-hidden="true">21.5.</strong> E - 版本</a></li><li class="chapter-item expanded "><a href="appendix-06-translation.html"><strong aria-hidden="true">21.6.</strong> F - 本书译本</a></li><li class="chapter-item expanded "><a href="appendix-07-nightly-rust.html"><strong aria-hidden="true">21.7.</strong> G - Rust 是如何开发的与 “Nightly Rust”</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/appendix-02-operators.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="附录-b运算符与符号"><a class="header" href="#附录-b运算符与符号">附录 B：运算符与符号</a></h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/main/src/appendix-02-operators.md">appendix-02-operators.md</a>
+<br />
+commit 396fdb69de7fb18f24b15c7ad13491b1c1fa7231</p>
+</blockquote>
+<p>该附录包含了 Rust 语法的词汇表，包括运算符以及其他的符号，这些符号单独出现或出现在路径、泛型、trait bounds、宏、属性、注释、元组以及大括号上下文中。</p>
+<h3 id="运算符"><a class="header" href="#运算符">运算符</a></h3>
+<p>表 B-1 包含了 Rust 中的运算符、运算符如何出现在上下文中的示例、简短解释以及该运算符是否可重载。如果一个运算符是可重载的，则该运算符上用于重载的相关 trait 也会列出。</p>
+<p><span class="caption">表 B-1: 运算符</span></p>
+<div class="table-wrapper"><table><thead><tr><th>运算符</th><th>示例</th><th>解释</th><th>是否可重载</th></tr></thead><tbody>
+<tr><td><code>!</code></td><td><code>ident!(...)</code>, <code>ident!{...}</code>, <code>ident![...]</code></td><td>宏展开</td><td></td></tr>
+<tr><td><code>!</code></td><td><code>!expr</code></td><td>按位非或逻辑非</td><td><code>Not</code></td></tr>
+<tr><td><code>!=</code></td><td><code>expr != expr</code></td><td>不等比较</td><td><code>PartialEq</code></td></tr>
+<tr><td><code>%</code></td><td><code>expr % expr</code></td><td>算术取余</td><td><code>Rem</code></td></tr>
+<tr><td><code>%=</code></td><td><code>var %= expr</code></td><td>算术取余与赋值</td><td><code>RemAssign</code></td></tr>
+<tr><td><code>&amp;</code></td><td><code>&amp;expr</code>, <code>&amp;mut expr</code></td><td>借用</td><td></td></tr>
+<tr><td><code>&amp;</code></td><td><code>&amp;type</code>, <code>&amp;mut type</code>, <code>&amp;'a type</code>, <code>&amp;'a mut type</code></td><td>借用指针类型</td><td></td></tr>
+<tr><td><code>&amp;</code></td><td><code>expr &amp; expr</code></td><td>按位与</td><td><code>BitAnd</code></td></tr>
+<tr><td><code>&amp;=</code></td><td><code>var &amp;= expr</code></td><td>按位与及赋值</td><td><code>BitAndAssign</code></td></tr>
+<tr><td><code>&amp;&amp;</code></td><td><code>expr &amp;&amp; expr</code></td><td>短路（Short-circuiting）逻辑与</td><td></td></tr>
+<tr><td><code>*</code></td><td><code>expr * expr</code></td><td>算术乘法</td><td><code>Mul</code></td></tr>
+<tr><td><code>*=</code></td><td><code>var *= expr</code></td><td>算术乘法与赋值</td><td><code>MulAssign</code></td></tr>
+<tr><td><code>*</code></td><td><code>*expr</code></td><td>解引用</td><td><code>Deref</code></td></tr>
+<tr><td><code>*</code></td><td><code>*const type</code>, <code>*mut type</code></td><td>裸指针</td><td></td></tr>
+<tr><td><code>+</code></td><td><code>trait + trait</code>, <code>'a + trait</code></td><td>复合类型限制</td><td></td></tr>
+<tr><td><code>+</code></td><td><code>expr + expr</code></td><td>算术加法</td><td><code>Add</code></td></tr>
+<tr><td><code>+=</code></td><td><code>var += expr</code></td><td>算术加法与赋值</td><td><code>AddAssign</code></td></tr>
+<tr><td><code>,</code></td><td><code>expr, expr</code></td><td>参数以及元素分隔符</td><td></td></tr>
+<tr><td><code>-</code></td><td><code>- expr</code></td><td>算术取负</td><td><code>Neg</code></td></tr>
+<tr><td><code>-</code></td><td><code>expr - expr</code></td><td>算术减法</td><td><code>Sub</code></td></tr>
+<tr><td><code>-=</code></td><td><code>var -= expr</code></td><td>算术减法与赋值</td><td><code>SubAssign</code></td></tr>
+<tr><td><code>-&gt;</code></td><td><code>fn(...) -&gt; type</code>, <code>|...| -&gt; type</code></td><td>函数与闭包，返回类型</td><td></td></tr>
+<tr><td><code>.</code></td><td><code>expr.ident</code></td><td>成员访问</td><td></td></tr>
+<tr><td><code>..</code></td><td><code>..</code>, <code>expr..</code>, <code>..expr</code>, <code>expr..expr</code></td><td>右开区间范围</td><td><code>PartialOrd</code></td></tr>
+<tr><td><code>..=</code></td><td><code>..=expr</code>, <code>expr..=expr</code></td><td>右闭区间范围模式</td><td><code>PartialOrd</code></td></tr>
+<tr><td><code>..</code></td><td><code>..expr</code></td><td>结构体更新语法</td><td></td></tr>
+<tr><td><code>..</code></td><td><code>variant(x, ..)</code>, <code>struct_type { x, .. }</code></td><td>“与剩余部分” 的模式绑定</td><td></td></tr>
+<tr><td><code>...</code></td><td><code>expr...expr</code></td><td>（Deprecated，请使用 <code>..=</code>）在模式中：闭区间范围模式</td><td></td></tr>
+<tr><td><code>/</code></td><td><code>expr / expr</code></td><td>算术除法</td><td><code>Div</code></td></tr>
+<tr><td><code>/=</code></td><td><code>var /= expr</code></td><td>算术除法与赋值</td><td><code>DivAssign</code></td></tr>
+<tr><td><code>:</code></td><td><code>pat: type</code>, <code>ident: type</code></td><td>约束</td><td></td></tr>
+<tr><td><code>:</code></td><td><code>ident: expr</code></td><td>结构体字段初始化</td><td></td></tr>
+<tr><td><code>:</code></td><td><code>'a: loop {...}</code></td><td>循环标志</td><td></td></tr>
+<tr><td><code>;</code></td><td><code>expr;</code></td><td>语句和语句结束符</td><td></td></tr>
+<tr><td><code>;</code></td><td><code>[...; len]</code></td><td>固定大小数组语法的部分</td><td></td></tr>
+<tr><td><code>&lt;&lt;</code></td><td><code>expr &lt;&lt; expr</code></td><td>左移</td><td><code>Shl</code></td></tr>
+<tr><td><code>&lt;&lt;=</code></td><td><code>var &lt;&lt;= expr</code></td><td>左移与赋值</td><td><code>ShlAssign</code></td></tr>
+<tr><td><code>&lt;</code></td><td><code>expr &lt; expr</code></td><td>小于比较</td><td><code>PartialOrd</code></td></tr>
+<tr><td><code>&lt;=</code></td><td><code>expr &lt;= expr</code></td><td>小于等于比较</td><td><code>PartialOrd</code></td></tr>
+<tr><td><code>=</code></td><td><code>var = expr</code>, <code>ident = type</code></td><td>赋值/等值</td><td></td></tr>
+<tr><td><code>==</code></td><td><code>expr == expr</code></td><td>等于比较</td><td><code>PartialEq</code></td></tr>
+<tr><td><code>=&gt;</code></td><td><code>pat =&gt; expr</code></td><td>匹配准备语法的部分</td><td></td></tr>
+<tr><td><code>&gt;</code></td><td><code>expr &gt; expr</code></td><td>大于比较</td><td><code>PartialOrd</code></td></tr>
+<tr><td><code>&gt;=</code></td><td><code>expr &gt;= expr</code></td><td>大于等于比较</td><td><code>PartialOrd</code></td></tr>
+<tr><td><code>&gt;&gt;</code></td><td><code>expr &gt;&gt; expr</code></td><td>右移</td><td><code>Shr</code></td></tr>
+<tr><td><code>&gt;&gt;=</code></td><td><code>var &gt;&gt;= expr</code></td><td>右移与赋值</td><td><code>ShrAssign</code></td></tr>
+<tr><td><code>@</code></td><td><code>ident @ pat</code></td><td>模式绑定</td><td></td></tr>
+<tr><td><code>^</code></td><td><code>expr ^ expr</code></td><td>按位异或</td><td><code>BitXor</code></td></tr>
+<tr><td><code>^=</code></td><td><code>var ^= expr</code></td><td>按位异或与赋值</td><td><code>BitXorAssign</code></td></tr>
+<tr><td><code>|</code></td><td><code>pat | pat</code></td><td>模式选择</td><td></td></tr>
+<tr><td><code>|</code></td><td><code>expr | expr</code></td><td>按位或</td><td><code>BitOr</code></td></tr>
+<tr><td><code>|=</code></td><td><code>var |= expr</code></td><td>按位或与赋值</td><td><code>BitOrAssign</code></td></tr>
+<tr><td><code>||</code></td><td><code>expr || expr</code></td><td>短路（Short-circuiting）逻辑或</td><td></td></tr>
+<tr><td><code>?</code></td><td><code>expr?</code></td><td>错误传播</td><td></td></tr>
+</tbody></table>
+</div>
+<h3 id="非运算符符号"><a class="header" href="#非运算符符号">非运算符符号</a></h3>
+<p>下面的列表中包含了所有和运算符不一样功能的符号；也就是说，它们并不像函数调用或方法调用一样表现。</p>
+<p>表 B-2 展示了以其自身出现以及出现在合法其他各个地方的符号。</p>
+<p><span class="caption">表 B-2：独立语法</span></p>
+<div class="table-wrapper"><table><thead><tr><th>符号</th><th>解释</th></tr></thead><tbody>
+<tr><td><code>'ident</code></td><td>命名生命周期或循环标签</td></tr>
+<tr><td><code>...u8</code>, <code>...i32</code>, <code>...f64</code>, <code>...usize</code> 等</td><td>指定类型的数值常量</td></tr>
+<tr><td><code>&quot;...&quot;</code></td><td>字符串常量</td></tr>
+<tr><td><code>r&quot;...&quot;</code>, <code>r#&quot;...&quot;#</code>, <code>r##&quot;...&quot;##</code>, etc.</td><td>原始字符串字面值，未处理的转义字符</td></tr>
+<tr><td><code>b&quot;...&quot;</code></td><td>字节字符串字面值; 构造一个字节数组类型而非字符串</td></tr>
+<tr><td><code>br&quot;...&quot;</code>, <code>br#&quot;...&quot;#</code>, <code>br##&quot;...&quot;##</code> 等</td><td>原始字节字符串字面值，原始和字节字符串字面值的结合</td></tr>
+<tr><td><code>'...'</code></td><td>字符字面值</td></tr>
+<tr><td><code>b'...'</code></td><td>ASCII 码字节字面值</td></tr>
+<tr><td><code>|...| expr</code></td><td>闭包</td></tr>
+<tr><td><code>!</code></td><td>离散函数的总是为空的类型</td></tr>
+<tr><td><code>_</code></td><td>“忽略” 模式绑定；也用于增强整型字面值的可读性</td></tr>
+</tbody></table>
+</div>
+<p>表 B-3 展示了出现在从模块结构到项的路径上下文中的符号</p>
+<p><span class="caption">表 B-3：路径相关语法</span></p>
+<div class="table-wrapper"><table><thead><tr><th>符号</th><th>解释</th></tr></thead><tbody>
+<tr><td><code>ident::ident</code></td><td>命名空间路径</td></tr>
+<tr><td><code>::path</code></td><td>与 crate 根相对的路径（如一个显式绝对路径）</td></tr>
+<tr><td><code>self::path</code></td><td>与当前模块相对的路径（如一个显式相对路径）</td></tr>
+<tr><td><code>super::path</code></td><td>与父模块相对的路径</td></tr>
+<tr><td><code>type::ident</code>, <code>&lt;type as trait&gt;::ident</code></td><td>关联常量、函数以及类型</td></tr>
+<tr><td><code>&lt;type&gt;::...</code></td><td>不可以被直接命名的关联项类型（如 <code>&lt;&amp;T&gt;::...</code>，<code>&lt;[T]&gt;::...</code>，等）</td></tr>
+<tr><td><code>trait::method(...)</code></td><td>通过命名定义的 trait 来消除方法调用的二义性</td></tr>
+<tr><td><code>type::method(...)</code></td><td>通过命名定义的类型来消除方法调用的二义性</td></tr>
+<tr><td><code>&lt;type as trait&gt;::method(...)</code></td><td>通过命名 trait 和类型来消除方法调用的二义性</td></tr>
+</tbody></table>
+</div>
+<p>表 B-4 展示了出现在泛型类型参数上下文中的符号。</p>
+<p><span class="caption">表 B-4：泛型</span></p>
+<div class="table-wrapper"><table><thead><tr><th>符号</th><th>解释</th></tr></thead><tbody>
+<tr><td><code>path&lt;...&gt;</code></td><td>为一个类型中的泛型指定具体参数（如 <code>Vec&lt;u8&gt;</code>）</td></tr>
+<tr><td><code>path::&lt;...&gt;</code>, <code>method::&lt;...&gt;</code></td><td>为一个泛型、函数或表达式中的方法指定具体参数，通常指 turbofish（如 <code>&quot;42&quot;.parse::&lt;i32&gt;()</code>）</td></tr>
+<tr><td><code>fn ident&lt;...&gt; ...</code></td><td>泛型函数定义</td></tr>
+<tr><td><code>struct ident&lt;...&gt; ...</code></td><td>泛型结构体定义</td></tr>
+<tr><td><code>enum ident&lt;...&gt; ...</code></td><td>泛型枚举定义</td></tr>
+<tr><td><code>impl&lt;...&gt; ...</code></td><td>定义泛型实现</td></tr>
+<tr><td><code>for&lt;...&gt; type</code></td><td>高级生命周期限制</td></tr>
+<tr><td><code>type&lt;ident=type&gt;</code></td><td>泛型，其一个或多个相关类型必须被指定为特定类型（如 <code>Iterator&lt;Item=T&gt;</code>）</td></tr>
+</tbody></table>
+</div>
+<p>表 B-5 展示了出现在使用 trait bounds 约束泛型参数上下文中的符号。</p>
+<p><span class="caption">表 B-5: Trait Bound 约束</span></p>
+<div class="table-wrapper"><table><thead><tr><th>符号</th><th>解释</th></tr></thead><tbody>
+<tr><td><code>T: U</code></td><td>泛型参数 <code>T</code> 约束于实现了 <code>U</code> 的类型</td></tr>
+<tr><td><code>T: 'a</code></td><td>泛型 <code>T</code> 的生命周期必须长于 <code>'a</code>（意味着该类型不能传递包含生命周期短于 <code>'a</code> 的任何引用）</td></tr>
+<tr><td><code>T: 'static</code></td><td>泛型 T 不包含除 'static 之外的借用引用</td></tr>
+<tr><td><code>'b: 'a</code></td><td>泛型 <code>'b</code> 生命周期必须长于泛型 <code>'a</code></td></tr>
+<tr><td><code>T: ?Sized</code></td><td>使用一个不定大小的泛型类型</td></tr>
+<tr><td><code>'a + trait</code>, <code>trait + trait</code></td><td>复合类型限制</td></tr>
+</tbody></table>
+</div>
+<p>表 B-6 展示了在调用或定义宏以及在其上指定属性时的上下文中出现的符号。</p>
+<p><span class="caption">表 B-6: 宏与属性</span></p>
+<div class="table-wrapper"><table><thead><tr><th>符号</th><th>解释</th></tr></thead><tbody>
+<tr><td><code>#[meta]</code></td><td>外部属性</td></tr>
+<tr><td><code>#![meta]</code></td><td>内部属性</td></tr>
+<tr><td><code>$ident</code></td><td>宏替换</td></tr>
+<tr><td><code>$ident:kind</code></td><td>宏捕获</td></tr>
+<tr><td><code>$(…)…</code></td><td>宏重复</td></tr>
+<tr><td><code>ident!(...)</code>, <code>ident!{...}</code>, <code>ident![...]</code></td><td>宏调用</td></tr>
+</tbody></table>
+</div>
+<p>表 B-7 展示了写注释的符号。</p>
+<p><span class="caption">表 B-7: 注释</span></p>
+<div class="table-wrapper"><table><thead><tr><th>符号</th><th>注释</th></tr></thead><tbody>
+<tr><td><code>//</code></td><td>行注释</td></tr>
+<tr><td><code>//!</code></td><td>内部行文档注释</td></tr>
+<tr><td><code>///</code></td><td>外部行文档注释</td></tr>
+<tr><td><code>/*...*/</code></td><td>块注释</td></tr>
+<tr><td><code>/*!...*/</code></td><td>内部块文档注释</td></tr>
+<tr><td><code>/**...*/</code></td><td>外部块文档注释</td></tr>
+</tbody></table>
+</div>
+<p>表 B-8 展示了出现在使用元组时上下文中的符号。</p>
+<p><span class="caption">表 B-8: 元组</span></p>
+<div class="table-wrapper"><table><thead><tr><th>符号</th><th>解释</th></tr></thead><tbody>
+<tr><td><code>()</code></td><td>空元组（亦称单元），即是字面值也是类型</td></tr>
+<tr><td><code>(expr)</code></td><td>括号表达式</td></tr>
+<tr><td><code>(expr,)</code></td><td>单一元素元组表达式</td></tr>
+<tr><td><code>(type,)</code></td><td>单一元素元组类型</td></tr>
+<tr><td><code>(expr, ...)</code></td><td>元组表达式</td></tr>
+<tr><td><code>(type, ...)</code></td><td>元组类型</td></tr>
+<tr><td><code>expr(expr, ...)</code></td><td>函数调用表达式；也用于初始化元组结构体 <code>struct</code> 以及元组枚举 <code>enum</code> 变体</td></tr>
+<tr><td><code>expr.0</code>, <code>expr.1</code>, etc.</td><td>元组索引</td></tr>
+</tbody></table>
+</div>
+<p>表 B-9 展示了使用大括号的上下文。</p>
+<p><span class="caption">表 B-9: 大括号</span></p>
+<div class="table-wrapper"><table><thead><tr><th>符号</th><th>解释</th></tr></thead><tbody>
+<tr><td><code>{...}</code></td><td>块表达式</td></tr>
+<tr><td><code>Type {...}</code></td><td><code>struct</code> 字面值</td></tr>
+</tbody></table>
+</div>
+<p>表 B-10 展示了使用方括号的上下文。</p>
+<p><span class="caption">表 B-10: 方括号</span></p>
+<div class="table-wrapper"><table><thead><tr><th>符号</th><th>解释</th></tr></thead><tbody>
+<tr><td><code>[...]</code></td><td>数组</td></tr>
+<tr><td><code>[expr; len]</code></td><td>复制了 <code>len</code>个 <code>expr</code>的数组</td></tr>
+<tr><td><code>[type; len]</code></td><td>包含 <code>len</code>个 <code>type</code> 类型的数组</td></tr>
+<tr><td><code>expr[expr]</code></td><td>集合索引。重载（<code>Index</code>, <code>IndexMut</code>）</td></tr>
+<tr><td><code>expr[..]</code>, <code>expr[a..]</code>, <code>expr[..b]</code>, <code>expr[a..b]</code></td><td>集合索引，使用 <code>Range</code>，<code>RangeFrom</code>，<code>RangeTo</code> 或 <code>RangeFull</code> 作为索引来代替集合 slice</td></tr>
+</tbody></table>
+</div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="appendix-01-keywords.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="appendix-03-derivable-traits.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="appendix-01-keywords.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="appendix-03-derivable-traits.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>

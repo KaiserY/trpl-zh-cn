@@ -1,0 +1,805 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>重构以改进模块化与错误处理 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Rust 程序设计语言</a></li><li class="chapter-item expanded affix "><a href="foreword.html">前言</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">简介</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> 入门指南</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> 安装</a></li><li class="chapter-item expanded "><a href="ch01-02-hello-world.html"><strong aria-hidden="true">1.2.</strong> Hello, World!</a></li><li class="chapter-item expanded "><a href="ch01-03-hello-cargo.html"><strong aria-hidden="true">1.3.</strong> Hello, Cargo!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-guessing-game-tutorial.html"><strong aria-hidden="true">2.</strong> 写个猜数字游戏</a></li><li class="chapter-item expanded "><a href="ch03-00-common-programming-concepts.html"><strong aria-hidden="true">3.</strong> 常见编程概念</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-variables-and-mutability.html"><strong aria-hidden="true">3.1.</strong> 变量与可变性</a></li><li class="chapter-item expanded "><a href="ch03-02-data-types.html"><strong aria-hidden="true">3.2.</strong> 数据类型</a></li><li class="chapter-item expanded "><a href="ch03-03-how-functions-work.html"><strong aria-hidden="true">3.3.</strong> 函数</a></li><li class="chapter-item expanded "><a href="ch03-04-comments.html"><strong aria-hidden="true">3.4.</strong> 注释</a></li><li class="chapter-item expanded "><a href="ch03-05-control-flow.html"><strong aria-hidden="true">3.5.</strong> 控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-understanding-ownership.html"><strong aria-hidden="true">4.</strong> 认识所有权</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-what-is-ownership.html"><strong aria-hidden="true">4.1.</strong> 什么是所有权？</a></li><li class="chapter-item expanded "><a href="ch04-02-references-and-borrowing.html"><strong aria-hidden="true">4.2.</strong> 引用与借用</a></li><li class="chapter-item expanded "><a href="ch04-03-slices.html"><strong aria-hidden="true">4.3.</strong> Slice 类型</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-structs.html"><strong aria-hidden="true">5.</strong> 使用结构体组织相关联的数据</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-defining-structs.html"><strong aria-hidden="true">5.1.</strong> 结构体的定义和实例化</a></li><li class="chapter-item expanded "><a href="ch05-02-example-structs.html"><strong aria-hidden="true">5.2.</strong> 结构体示例程序</a></li><li class="chapter-item expanded "><a href="ch05-03-method-syntax.html"><strong aria-hidden="true">5.3.</strong> 方法语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch06-00-enums.html"><strong aria-hidden="true">6.</strong> 枚举和模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch06-01-defining-an-enum.html"><strong aria-hidden="true">6.1.</strong> 枚举的定义</a></li><li class="chapter-item expanded "><a href="ch06-02-match.html"><strong aria-hidden="true">6.2.</strong> match 控制流结构</a></li><li class="chapter-item expanded "><a href="ch06-03-if-let.html"><strong aria-hidden="true">6.3.</strong> if let 简洁控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"><strong aria-hidden="true">7.</strong> 使用包、Crate 和模块管理不断增长的项目</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch07-01-packages-and-crates.html"><strong aria-hidden="true">7.1.</strong> 包和 Crate</a></li><li class="chapter-item expanded "><a href="ch07-02-defining-modules-to-control-scope-and-privacy.html"><strong aria-hidden="true">7.2.</strong> 定义模块来控制作用域与私有性</a></li><li class="chapter-item expanded "><a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html"><strong aria-hidden="true">7.3.</strong> 引用模块项目的路径</a></li><li class="chapter-item expanded "><a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html"><strong aria-hidden="true">7.4.</strong> 使用 use 关键字将路径引入作用域</a></li><li class="chapter-item expanded "><a href="ch07-05-separating-modules-into-different-files.html"><strong aria-hidden="true">7.5.</strong> 将模块拆分成多个文件</a></li></ol></li><li class="chapter-item expanded "><a href="ch08-00-common-collections.html"><strong aria-hidden="true">8.</strong> 常见集合</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch08-01-vectors.html"><strong aria-hidden="true">8.1.</strong> 使用 Vector 储存列表</a></li><li class="chapter-item expanded "><a href="ch08-02-strings.html"><strong aria-hidden="true">8.2.</strong> 使用字符串储存 UTF-8 编码的文本</a></li><li class="chapter-item expanded "><a href="ch08-03-hash-maps.html"><strong aria-hidden="true">8.3.</strong> 使用 Hash Map 储存键值对</a></li></ol></li><li class="chapter-item expanded "><a href="ch09-00-error-handling.html"><strong aria-hidden="true">9.</strong> 错误处理</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong aria-hidden="true">9.1.</strong> 用 panic! 处理不可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-02-recoverable-errors-with-result.html"><strong aria-hidden="true">9.2.</strong> 用 Result 处理可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-03-to-panic-or-not-to-panic.html"><strong aria-hidden="true">9.3.</strong> 要不要 panic!</a></li></ol></li><li class="chapter-item expanded "><a href="ch10-00-generics.html"><strong aria-hidden="true">10.</strong> 泛型、Trait 和生命周期</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch10-01-syntax.html"><strong aria-hidden="true">10.1.</strong> 泛型数据类型</a></li><li class="chapter-item expanded "><a href="ch10-02-traits.html"><strong aria-hidden="true">10.2.</strong> Trait：定义共同行为</a></li><li class="chapter-item expanded "><a href="ch10-03-lifetime-syntax.html"><strong aria-hidden="true">10.3.</strong> 生命周期确保引用有效</a></li></ol></li><li class="chapter-item expanded "><a href="ch11-00-testing.html"><strong aria-hidden="true">11.</strong> 编写自动化测试</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch11-01-writing-tests.html"><strong aria-hidden="true">11.1.</strong> 如何编写测试</a></li><li class="chapter-item expanded "><a href="ch11-02-running-tests.html"><strong aria-hidden="true">11.2.</strong> 控制测试如何运行</a></li><li class="chapter-item expanded "><a href="ch11-03-test-organization.html"><strong aria-hidden="true">11.3.</strong> 测试的组织结构</a></li></ol></li><li class="chapter-item expanded "><a href="ch12-00-an-io-project.html"><strong aria-hidden="true">12.</strong> 一个 I/O 项目：构建命令行程序</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch12-01-accepting-command-line-arguments.html"><strong aria-hidden="true">12.1.</strong> 接受命令行参数</a></li><li class="chapter-item expanded "><a href="ch12-02-reading-a-file.html"><strong aria-hidden="true">12.2.</strong> 读取文件</a></li><li class="chapter-item expanded "><a href="ch12-03-improving-error-handling-and-modularity.html" class="active"><strong aria-hidden="true">12.3.</strong> 重构以改进模块化与错误处理</a></li><li class="chapter-item expanded "><a href="ch12-04-testing-the-librarys-functionality.html"><strong aria-hidden="true">12.4.</strong> 采用测试驱动开发完善库的功能</a></li><li class="chapter-item expanded "><a href="ch12-05-working-with-environment-variables.html"><strong aria-hidden="true">12.5.</strong> 处理环境变量</a></li><li class="chapter-item expanded "><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong aria-hidden="true">12.6.</strong> 将错误信息输出到标准错误而不是标准输出</a></li></ol></li><li class="chapter-item expanded "><a href="ch13-00-functional-features.html"><strong aria-hidden="true">13.</strong> Rust 中的函数式语言功能：迭代器与闭包</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch13-01-closures.html"><strong aria-hidden="true">13.1.</strong> 闭包：可以捕获其环境的匿名函数</a></li><li class="chapter-item expanded "><a href="ch13-02-iterators.html"><strong aria-hidden="true">13.2.</strong> 使用迭代器处理元素序列</a></li><li class="chapter-item expanded "><a href="ch13-03-improving-our-io-project.html"><strong aria-hidden="true">13.3.</strong> 改进之前的 I/O 项目</a></li><li class="chapter-item expanded "><a href="ch13-04-performance.html"><strong aria-hidden="true">13.4.</strong> 性能比较：循环对迭代器</a></li></ol></li><li class="chapter-item expanded "><a href="ch14-00-more-about-cargo.html"><strong aria-hidden="true">14.</strong> 更多关于 Cargo 和 Crates.io 的内容</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch14-01-release-profiles.html"><strong aria-hidden="true">14.1.</strong> 采用发布配置自定义构建</a></li><li class="chapter-item expanded "><a href="ch14-02-publishing-to-crates-io.html"><strong aria-hidden="true">14.2.</strong> 将 crate 发布到 Crates.io</a></li><li class="chapter-item expanded "><a href="ch14-03-cargo-workspaces.html"><strong aria-hidden="true">14.3.</strong> Cargo 工作空间</a></li><li class="chapter-item expanded "><a href="ch14-04-installing-binaries.html"><strong aria-hidden="true">14.4.</strong> 使用 cargo install 安装二进制文件</a></li><li class="chapter-item expanded "><a href="ch14-05-extending-cargo.html"><strong aria-hidden="true">14.5.</strong> Cargo 自定义扩展命令</a></li></ol></li><li class="chapter-item expanded "><a href="ch15-00-smart-pointers.html"><strong aria-hidden="true">15.</strong> 智能指针</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch15-01-box.html"><strong aria-hidden="true">15.1.</strong> 使用 Box&lt;T&gt; 指向堆上数据</a></li><li class="chapter-item expanded "><a href="ch15-02-deref.html"><strong aria-hidden="true">15.2.</strong> 使用 Deref Trait 将智能指针当作常规引用处理</a></li><li class="chapter-item expanded "><a href="ch15-03-drop.html"><strong aria-hidden="true">15.3.</strong> 使用 Drop Trait 运行清理代码</a></li><li class="chapter-item expanded "><a href="ch15-04-rc.html"><strong aria-hidden="true">15.4.</strong> Rc&lt;T&gt; 引用计数智能指针</a></li><li class="chapter-item expanded "><a href="ch15-05-interior-mutability.html"><strong aria-hidden="true">15.5.</strong> RefCell&lt;T&gt; 与内部可变性模式</a></li><li class="chapter-item expanded "><a href="ch15-06-reference-cycles.html"><strong aria-hidden="true">15.6.</strong> 引用循环会导致内存泄漏</a></li></ol></li><li class="chapter-item expanded "><a href="ch16-00-concurrency.html"><strong aria-hidden="true">16.</strong> 无畏并发</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch16-01-threads.html"><strong aria-hidden="true">16.1.</strong> 使用线程同时地运行代码</a></li><li class="chapter-item expanded "><a href="ch16-02-message-passing.html"><strong aria-hidden="true">16.2.</strong> 使用消息传递在线程间通信</a></li><li class="chapter-item expanded "><a href="ch16-03-shared-state.html"><strong aria-hidden="true">16.3.</strong> 共享状态并发</a></li><li class="chapter-item expanded "><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong aria-hidden="true">16.4.</strong> 使用 Sync 与 Send Traits 的可扩展并发</a></li></ol></li><li class="chapter-item expanded "><a href="ch17-00-oop.html"><strong aria-hidden="true">17.</strong> Rust 的面向对象编程特性</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch17-01-what-is-oo.html"><strong aria-hidden="true">17.1.</strong> 面向对象语言的特点</a></li><li class="chapter-item expanded "><a href="ch17-02-trait-objects.html"><strong aria-hidden="true">17.2.</strong> 顾及不同类型值的 trait 对象</a></li><li class="chapter-item expanded "><a href="ch17-03-oo-design-patterns.html"><strong aria-hidden="true">17.3.</strong> 面向对象设计模式的实现</a></li></ol></li><li class="chapter-item expanded "><a href="ch18-00-patterns.html"><strong aria-hidden="true">18.</strong> 模式与模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch18-01-all-the-places-for-patterns.html"><strong aria-hidden="true">18.1.</strong> 所有可能会用到模式的位置</a></li><li class="chapter-item expanded "><a href="ch18-02-refutability.html"><strong aria-hidden="true">18.2.</strong> Refutability（可反驳性）: 模式是否会匹配失效</a></li><li class="chapter-item expanded "><a href="ch18-03-pattern-syntax.html"><strong aria-hidden="true">18.3.</strong> 模式语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch19-00-advanced-features.html"><strong aria-hidden="true">19.</strong> 高级特征</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch19-01-unsafe-rust.html"><strong aria-hidden="true">19.1.</strong> 不安全的 Rust</a></li><li class="chapter-item expanded "><a href="ch19-03-advanced-traits.html"><strong aria-hidden="true">19.2.</strong> 高级 trait</a></li><li class="chapter-item expanded "><a href="ch19-04-advanced-types.html"><strong aria-hidden="true">19.3.</strong> 高级类型</a></li><li class="chapter-item expanded "><a href="ch19-05-advanced-functions-and-closures.html"><strong aria-hidden="true">19.4.</strong> 高级函数与闭包</a></li><li class="chapter-item expanded "><a href="ch19-06-macros.html"><strong aria-hidden="true">19.5.</strong> 宏</a></li></ol></li><li class="chapter-item expanded "><a href="ch20-00-final-project-a-web-server.html"><strong aria-hidden="true">20.</strong> 最后的项目：构建多线程 web server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch20-01-single-threaded.html"><strong aria-hidden="true">20.1.</strong> 建立单线程 web server</a></li><li class="chapter-item expanded "><a href="ch20-02-multithreaded.html"><strong aria-hidden="true">20.2.</strong> 将单线程 server 变为多线程 server</a></li><li class="chapter-item expanded "><a href="ch20-03-graceful-shutdown-and-cleanup.html"><strong aria-hidden="true">20.3.</strong> 优雅停机与清理</a></li></ol></li><li class="chapter-item expanded "><a href="appendix-00.html"><strong aria-hidden="true">21.</strong> 附录</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix-01-keywords.html"><strong aria-hidden="true">21.1.</strong> A - 关键字</a></li><li class="chapter-item expanded "><a href="appendix-02-operators.html"><strong aria-hidden="true">21.2.</strong> B - 运算符与符号</a></li><li class="chapter-item expanded "><a href="appendix-03-derivable-traits.html"><strong aria-hidden="true">21.3.</strong> C - 可派生的 trait</a></li><li class="chapter-item expanded "><a href="appendix-04-useful-development-tools.html"><strong aria-hidden="true">21.4.</strong> D - 实用开发工具</a></li><li class="chapter-item expanded "><a href="appendix-05-editions.html"><strong aria-hidden="true">21.5.</strong> E - 版本</a></li><li class="chapter-item expanded "><a href="appendix-06-translation.html"><strong aria-hidden="true">21.6.</strong> F - 本书译本</a></li><li class="chapter-item expanded "><a href="appendix-07-nightly-rust.html"><strong aria-hidden="true">21.7.</strong> G - Rust 是如何开发的与 “Nightly Rust”</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch12-03-improving-error-handling-and-modularity.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="重构改进模块性和错误处理"><a class="header" href="#重构改进模块性和错误处理">重构改进模块性和错误处理</a></h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/main/src/ch12-03-improving-error-handling-and-modularity.md">ch12-03-improving-error-handling-and-modularity.md</a>
+<br>
+commit 83788ff212a3281328e2f8f223ce9e0f69220b97</p>
+</blockquote>
+<p>为了改善我们的程序这里有四个问题需要修复，而且它们都与程序的组织方式和如何处理潜在错误有关。第一，<code>main</code> 现在进行了两个任务：它解析了参数并打开了文件。对于一个这样的小函数，这并不是一个大问题。然而如果 <code>main</code> 中的功能持续增加，<code>main</code> 函数处理的独立任务也会增加。当函数承担了更多责任，它就更难以推导，更难以测试，并且更难以在不破坏其他部分的情况下做出修改。最好能分离出功能以便每个函数就负责一个任务。</p>
+<p>这同时也关系到第二个问题：<code>query</code> 和 <code>file_path</code> 是程序中的配置变量，而像 <code>contents</code> 则用来执行程序逻辑。随着 <code>main</code> 函数的增长，就需要引入更多的变量到作用域中，而当作用域中有更多的变量时，将更难以追踪每个变量的目的。最好能将配置变量组织进一个结构，这样就能使它们的目的更明确了。</p>
+<p>第三个问题是如果打开文件失败我们使用 <code>expect</code> 来打印出错误信息，不过这个错误信息只是说 <code>Should have been able to read the file</code>。读取文件失败的原因有多种：例如文件不存在，或者没有打开此文件的权限。目前，无论处于何种情况，我们只是打印出“文件读取出现错误”的信息，这并没有给予使用者具体的信息！</p>
+<p>第四，我们不停地使用 <code>expect</code> 来处理不同的错误，如果用户没有指定足够的参数来运行程序，他们会从 Rust 得到 <code>index out of bounds</code> 错误，而这并不能明确地解释问题。如果所有的错误处理都位于一处，这样将来的维护者在需要修改错误处理逻辑时就只需要考虑这一处代码。将所有的错误处理都放在一处也有助于确保我们打印的错误信息对终端用户来说是有意义的。</p>
+<p>让我们通过重构项目来解决这些问题。</p>
+<h3 id="二进制项目的关注分离"><a class="header" href="#二进制项目的关注分离">二进制项目的关注分离</a></h3>
+<p><code>main</code> 函数负责多个任务的组织问题在许多二进制项目中很常见。所以 Rust 社区开发出一类在 <code>main</code> 函数开始变得庞大时进行二进制程序的关注分离的指导。这些过程有如下步骤：</p>
+<ul>
+<li>将程序拆分成 <em>main.rs</em> 和 <em>lib.rs</em> 并将程序的逻辑放入 <em>lib.rs</em> 中。</li>
+<li>当命令行解析逻辑比较小时，可以保留在 <em>main.rs</em> 中。</li>
+<li>当命令行解析开始变得复杂时，也同样将其从 <em>main.rs</em> 提取到 <em>lib.rs</em> 中。</li>
+</ul>
+<p>经过这些过程之后保留在 <code>main</code> 函数中的责任应该被限制为：</p>
+<ul>
+<li>使用参数值调用命令行解析逻辑</li>
+<li>设置任何其他的配置</li>
+<li>调用 <em>lib.rs</em> 中的 <code>run</code> 函数</li>
+<li>如果 <code>run</code> 返回错误，则处理这个错误</li>
+</ul>
+<p>这个模式的一切就是为了关注分离：<em>main.rs</em> 处理程序运行，而 <em>lib.rs</em> 处理所有的真正的任务逻辑。因为不能直接测试 <code>main</code> 函数，这个结构通过将所有的程序逻辑移动到 <em>lib.rs</em> 的函数中使得我们可以测试它们。仅仅保留在 <em>main.rs</em> 中的代码将足够小以便阅读就可以验证其正确性。让我们遵循这些步骤来重构程序。</p>
+<h3 id="提取参数解析器"><a class="header" href="#提取参数解析器">提取参数解析器</a></h3>
+<p>首先，我们将解析参数的功能提取到一个 <code>main</code> 将会调用的函数中，为将命令行解析逻辑移动到 <em>src/lib.rs</em> 中做准备。示例 12-5 中展示了新 <code>main</code> 函数的开头，它调用了新函数 <code>parse_config</code>。目前它仍将定义在 <em>src/main.rs</em> 中：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span><span class="boring">
+</span>fn main() {
+    let args: Vec&lt;String&gt; = env::args().collect();
+
+    let (query, file_path) = parse_config(&amp;args);
+
+    // --snip--
+<span class="boring">
+</span><span class="boring">    println!(&quot;Searching for {query}&quot;);
+</span><span class="boring">    println!(&quot;In file {file_path}&quot;);
+</span><span class="boring">
+</span><span class="boring">    let contents = fs::read_to_string(file_path)
+</span><span class="boring">        .expect(&quot;Should have been able to read the file&quot;);
+</span><span class="boring">
+</span><span class="boring">    println!(&quot;With text:\n{contents}&quot;);
+</span>}
+
+fn parse_config(args: &amp;[String]) -&gt; (&amp;str, &amp;str) {
+    let query = &amp;args[1];
+    let file_path = &amp;args[2];
+
+    (query, file_path)
+}</code></pre>
+<p><span class="caption">示例 12-5：从 <code>main</code> 中提取出 <code>parse_config</code> 函数</span></p>
+<p>我们仍然将命令行参数收集进一个 vector，不过不同于在 <code>main</code> 函数中将索引 1 的参数值赋值给变量 <code>query</code> 和将索引 2 的值赋值给变量 <code>file_path</code>，我们将整个 vector 传递给 <code>parse_config</code> 函数。接着 <code>parse_config</code> 函数将包含决定哪个参数该放入哪个变量的逻辑，并将这些值返回到 <code>main</code>。仍然在 <code>main</code> 中创建变量 <code>query</code> 和 <code>file_path</code>，不过 <code>main</code> 不再负责处理命令行参数与变量如何对应。</p>
+<p>这对重构我们这小程序可能有点大材小用，不过我们将采用小的、增量的步骤进行重构。在做出这些改变之后，再次运行程序并验证参数解析是否仍然正常。经常验证你的进展是一个好习惯，这样在遇到问题时能帮助你定位问题的成因。</p>
+<h3 id="组合配置值"><a class="header" href="#组合配置值">组合配置值</a></h3>
+<p>我们可以采取另一个小的步骤来进一步改善这个函数。现在函数返回一个元组，不过立刻又将元组拆成了独立的部分。这是一个我们可能没有进行正确抽象的信号。</p>
+<p>另一个表明还有改进空间的迹象是 <code>parse_config</code> 名称的 <code>config</code> 部分，它暗示了我们返回的两个值是相关的并都是一个配置值的一部分。目前除了将这两个值组合进元组之外并没有表达这个数据结构的意义：我们可以将这两个值放入一个结构体并给每个字段一个有意义的名字。这会让未来的维护者更容易理解不同的值如何相互关联以及它们的目的。</p>
+<blockquote>
+<p>注意：一些同学将这种在复杂类型更为合适的场景下使用基本类型的反模式称为 <strong>基本类型偏执</strong>（<em>primitive obsession</em>）。</p>
+</blockquote>
+<p>示例 12-6 展示了 <code>parse_config</code> 函数的改进。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust should_panic noplayground"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span><span class="boring">
+</span>fn main() {
+    let args: Vec&lt;String&gt; = env::args().collect();
+
+    let config = parse_config(&amp;args);
+
+    println!(&quot;Searching for {}&quot;, config.query);
+    println!(&quot;In file {}&quot;, config.file_path);
+
+    let contents = fs::read_to_string(config.file_path)
+        .expect(&quot;Should have been able to read the file&quot;);
+
+    // --snip--
+<span class="boring">
+</span><span class="boring">    println!(&quot;With text:\n{contents}&quot;);
+</span>}
+
+struct Config {
+    query: String,
+    file_path: String,
+}
+
+fn parse_config(args: &amp;[String]) -&gt; Config {
+    let query = args[1].clone();
+    let file_path = args[2].clone();
+
+    Config { query, file_path }
+}</code></pre>
+<p><span class="caption">示例 12-6：重构 <code>parse_config</code> 返回一个 <code>Config</code> 结构体实例</span></p>
+<p>新定义的结构体 <code>Config</code> 中包含字段 <code>query</code> 和 <code>file_path</code>。
+<code>parse_config</code> 的签名表明它现在返回一个 <code>Config</code> 值。在之前的 <code>parse_config</code> 函数体中，我们返回了引用 <code>args</code> 中 <code>String</code> 值的字符串 slice，现在我们定义 <code>Config</code> 来包含拥有所有权的 <code>String</code> 值。<code>main</code> 中的 <code>args</code> 变量是参数值的所有者并只允许 <code>parse_config</code> 函数借用它们，这意味着如果 <code>Config</code> 尝试获取 <code>args</code> 中值的所有权将违反 Rust 的借用规则。</p>
+<p>还有许多不同的方式可以处理 <code>String</code> 的数据，而最简单但有些不太高效的方式是调用这些值的 <code>clone</code> 方法。这会生成 <code>Config</code> 实例可以拥有的数据的完整拷贝，不过会比储存字符串数据的引用消耗更多的时间和内存。不过拷贝数据使得代码显得更加直白因为无需管理引用的生命周期，所以在这种情况下牺牲一小部分性能来换取简洁性的取舍是值得的。</p>
+<blockquote>
+<h4 id="使用-clone-的权衡取舍"><a class="header" href="#使用-clone-的权衡取舍">使用 <code>clone</code> 的权衡取舍</a></h4>
+<p>由于其运行时消耗，许多 Rustacean 之间有一个趋势是倾向于避免使用 <code>clone</code> 来解决所有权问题。在关于迭代器的第十三章中，我们将会学习如何更有效率的处理这种情况，不过现在，复制一些字符串来取得进展是没有问题的，因为只会进行一次这样的拷贝，而且文件路径和要搜索的字符串都比较短。在第一轮编写时拥有一个可以工作但有点低效的程序要比尝试过度优化代码更好一些。随着你对 Rust 更加熟练，将能更轻松的直奔合适的方法，不过现在调用 <code>clone</code> 是完全可以接受的。</p>
+</blockquote>
+<p>我们更新 <code>main</code> 将 <code>parse_config</code> 返回的 <code>Config</code> 实例放入变量 <code>config</code> 中，并将之前分别使用 <code>query</code> 和 <code>file_path</code> 变量的代码更新为现在的使用 <code>Config</code> 结构体的字段的代码。</p>
+<p>现在代码更明确的表现了我们的意图，<code>query</code> 和 <code>file_path</code> 是相关联的并且它们的目的是配置程序如何工作。任何使用这些值的代码就知道在 <code>config</code> 实例中对应目的的字段名中寻找它们。</p>
+<h3 id="创建一个-config-的构造函数"><a class="header" href="#创建一个-config-的构造函数">创建一个 <code>Config</code> 的构造函数</a></h3>
+<p>目前为止，我们将负责解析命令行参数的逻辑从 <code>main</code> 提取到了 <code>parse_config</code> 函数中，这有助于我们看清值 <code>query</code> 和 <code>file_path</code> 是相互关联的并应该在代码中表现这种关系。接着我们增加了 <code>Config</code> 结构体来描述 <code>query</code> 和 <code>file_path</code> 的相关性，并能够从 <code>parse_config</code> 函数中将这些值的名称作为结构体字段名称返回。</p>
+<p>所以现在 <code>parse_config</code> 函数的目的是创建一个 <code>Config</code> 实例，我们可以将 <code>parse_config</code> 从一个普通函数变为一个叫做 <code>new</code> 的与结构体关联的函数。做出这个改变使得代码更符合习惯：可以像标准库中的 <code>String</code> 调用 <code>String::new</code> 来创建一个该类型的实例那样，将 <code>parse_config</code> 变为一个与 <code>Config</code> 关联的 <code>new</code> 函数。示例 12-7 展示了需要做出的修改：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust should_panic noplayground"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span><span class="boring">
+</span>fn main() {
+    let args: Vec&lt;String&gt; = env::args().collect();
+
+    let config = Config::new(&amp;args);
+<span class="boring">
+</span><span class="boring">    println!(&quot;Searching for {}&quot;, config.query);
+</span><span class="boring">    println!(&quot;In file {}&quot;, config.file_path);
+</span><span class="boring">
+</span><span class="boring">    let contents = fs::read_to_string(config.file_path)
+</span><span class="boring">        .expect(&quot;Should have been able to read the file&quot;);
+</span><span class="boring">
+</span><span class="boring">    println!(&quot;With text:\n{contents}&quot;);
+</span>
+    // --snip--
+}
+
+// --snip--
+
+<span class="boring">struct Config {
+</span><span class="boring">    query: String,
+</span><span class="boring">    file_path: String,
+</span><span class="boring">}
+</span><span class="boring">
+</span>impl Config {
+    fn new(args: &amp;[String]) -&gt; Config {
+        let query = args[1].clone();
+        let file_path = args[2].clone();
+
+        Config { query, file_path }
+    }
+}</code></pre>
+<p><span class="caption">示例 12-7：将 <code>parse_config</code> 变为 <code>Config::new</code></span></p>
+<p>这里将 <code>main</code> 中调用 <code>parse_config</code> 的地方更新为调用 <code>Config::new</code>。我们将 <code>parse_config</code> 的名字改为 <code>new</code> 并将其移动到 <code>impl</code> 块中，这使得 <code>new</code> 函数与 <code>Config</code> 相关联。再次尝试编译并确保它可以工作。</p>
+<h3 id="修复错误处理"><a class="header" href="#修复错误处理">修复错误处理</a></h3>
+<p>现在我们开始修复错误处理。回忆一下之前提到过如果 <code>args</code> vector 包含少于 3 个项并尝试访问 vector 中索引 <code>1</code> 或索引 <code>2</code> 的值会造成程序 panic。尝试不带任何参数运行程序；这将看起来像这样：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.0s
+     Running `target/debug/minigrep`
+thread 'main' panicked at src/main.rs:27:21:
+index out of bounds: the len is 1 but the index is 1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+</code></pre>
+<p><code>index out of bounds: the len is 1 but the index is 1</code> 是一个针对程序员的错误信息，然而这并不能真正帮助终端用户理解发生了什么和他们应该做什么。现在就让我们修复它吧。</p>
+<h4 id="改善错误信息"><a class="header" href="#改善错误信息">改善错误信息</a></h4>
+<p>在示例 12-8 中，在 <code>new</code> 函数中增加了一个检查在访问索引 <code>1</code> 和 <code>2</code> 之前检查 slice 是否足够长。如果 slice 不够长，程序会打印一个更好的错误信息并 panic：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let args: Vec&lt;String&gt; = env::args().collect();
+</span><span class="boring">
+</span><span class="boring">    let config = Config::new(&amp;args);
+</span><span class="boring">
+</span><span class="boring">    println!(&quot;Searching for {}&quot;, config.query);
+</span><span class="boring">    println!(&quot;In file {}&quot;, config.file_path);
+</span><span class="boring">
+</span><span class="boring">    let contents = fs::read_to_string(config.file_path)
+</span><span class="boring">        .expect(&quot;Should have been able to read the file&quot;);
+</span><span class="boring">
+</span><span class="boring">    println!(&quot;With text:\n{contents}&quot;);
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">struct Config {
+</span><span class="boring">    query: String,
+</span><span class="boring">    file_path: String,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Config {
+</span>    // --snip--
+    fn new(args: &amp;[String]) -&gt; Config {
+        if args.len() &lt; 3 {
+            panic!(&quot;not enough arguments&quot;);
+        }
+        // --snip--
+<span class="boring">
+</span><span class="boring">        let query = args[1].clone();
+</span><span class="boring">        let file_path = args[2].clone();
+</span><span class="boring">
+</span><span class="boring">        Config { query, file_path }
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<p><span class="caption">示例 12-8：增加一个参数数量检查</span></p>
+<p>这类似于 <a href="ch09-03-to-panic-or-not-to-panic.html#%E5%88%9B%E5%BB%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B%E8%BF%9B%E8%A1%8C%E6%9C%89%E6%95%88%E6%80%A7%E9%AA%8C%E8%AF%81">示例 9-13 中的 <code>Guess::new</code> 函数</a>，那里如果 <code>value</code> 参数超出了有效值的范围就调用 <code>panic!</code>。不同于检查值的范围，这里检查 <code>args</code> 的长度至少是 <code>3</code>，而函数的剩余部分则可以在假设这个条件成立的基础上运行。如果 <code>args</code> 少于 3 个项，则这个条件将为真，并调用 <code>panic!</code> 立即终止程序。</p>
+<p>有了 <code>new</code> 中这几行额外的代码，再次不带任何参数运行程序并看看现在错误看起来像什么：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.0s
+     Running `target/debug/minigrep`
+thread 'main' panicked at src/main.rs:26:13:
+not enough arguments
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+</code></pre>
+<p>这个输出就好多了，现在有了一个合理的错误信息。然而，还是有一堆额外的信息我们不希望提供给用户。所以在这里使用示例 9-9 中的技术可能不是最好的；正如 <a href="ch09-03-to-panic-or-not-to-panic.html#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E6%8C%87%E5%AF%BC%E5%8E%9F%E5%88%99">第九章</a> 所讲到的一样，<code>panic!</code> 的调用更趋向于程序上的问题而不是使用上的问题。相反我们可以使用第九章学习的另一个技术 —— 返回一个可以表明成功或错误的 <a href="ch09-02-recoverable-errors-with-result.html"><code>Result</code></a>。</p>
+<h4 id="从-new-中返回-result-而不是调用-panic"><a class="header" href="#从-new-中返回-result-而不是调用-panic">从 <code>new</code> 中返回 <code>Result</code> 而不是调用 <code>panic!</code></a></h4>
+<p>我们可以选择返回一个 <code>Result</code> 值，它在成功时会包含一个 <code>Config</code> 的实例，而在错误时会描述问题。我们还将把函数名从<code>new</code>改为<code>build</code>，因为许多程序员希望 <code>new</code> 函数永远不会失败。当 <code>Config::new</code> 与 <code>main</code> 交流时，可以使用 <code>Result</code> 类型来表明这里存在问题。接着修改 <code>main</code> 将 <code>Err</code> 成员转换为对用户更友好的错误，而不是 <code>panic!</code> 调用产生的关于 <code>thread 'main'</code> 和 <code>RUST_BACKTRACE</code> 的文本。</p>
+<p>示例 12-9 展示了为了返回 <code>Result</code> 在 <code>Config::new</code> 的返回值和函数体中所需的改变。注意这还不能编译，直到下一个示例同时也更新了 <code>main</code> 之后。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let args: Vec&lt;String&gt; = env::args().collect();
+</span><span class="boring">
+</span><span class="boring">    let config = Config::new(&amp;args);
+</span><span class="boring">
+</span><span class="boring">    println!(&quot;Searching for {}&quot;, config.query);
+</span><span class="boring">    println!(&quot;In file {}&quot;, config.file_path);
+</span><span class="boring">
+</span><span class="boring">    let contents = fs::read_to_string(config.file_path)
+</span><span class="boring">        .expect(&quot;Should have been able to read the file&quot;);
+</span><span class="boring">
+</span><span class="boring">    println!(&quot;With text:\n{contents}&quot;);
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">struct Config {
+</span><span class="boring">    query: String,
+</span><span class="boring">    file_path: String,
+</span><span class="boring">}
+</span><span class="boring">
+</span>impl Config {
+    fn build(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+        if args.len() &lt; 3 {
+            return Err(&quot;not enough arguments&quot;);
+        }
+
+        let query = args[1].clone();
+        let file_path = args[2].clone();
+
+        Ok(Config { query, file_path })
+    }
+}</code></pre>
+<p><span class="caption">示例 12-9：从 <code>Config::build</code> 中返回 <code>Result</code></span></p>
+<p>现在 <code>build</code> 函数返回一个 <code>Result</code>，在成功时带有一个 <code>Config</code> 实例而在出现错误时带有一个 <code>&amp;'static str</code>。回忆一下第十章 “静态生命周期” 中讲到 <code>&amp;'static str</code> 是字符串字面值的类型，也是目前的错误信息。</p>
+<p><code>build</code> 函数体中有两处修改：当没有足够参数时不再调用 <code>panic!</code>，而是返回 <code>Err</code> 值。同时我们将 <code>Config</code> 返回值包装进 <code>Ok</code> 成员中。这些修改使得函数符合其新的类型签名。</p>
+<p>通过让 <code>Config::build</code> 返回一个 <code>Err</code> 值，这就允许 <code>main</code> 函数处理 <code>build</code> 函数返回的 <code>Result</code> 值并在出现错误的情况更明确的结束进程。</p>
+<h4 id="调用-configbuild-并处理错误"><a class="header" href="#调用-configbuild-并处理错误">调用 <code>Config::build</code> 并处理错误</a></h4>
+<p>为了处理错误情况并打印一个对用户友好的信息，我们需要像示例 12-10 那样更新 <code>main</code> 函数来处理现在 <code>Config::build</code> 返回的 <code>Result</code>。另外还需要手动实现原先由 <code>panic!</code>负责的工作，即以非零错误码退出命令行工具的工作。非零的退出状态是一个惯例信号，用来告诉调用程序的进程：该程序以错误状态退出了。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span>use std::process;
+
+fn main() {
+    let args: Vec&lt;String&gt; = env::args().collect();
+
+    let config = Config::build(&amp;args).unwrap_or_else(|err| {
+        println!(&quot;Problem parsing arguments: {err}&quot;);
+        process::exit(1);
+    });
+
+    // --snip--
+<span class="boring">
+</span><span class="boring">    println!(&quot;Searching for {}&quot;, config.query);
+</span><span class="boring">    println!(&quot;In file {}&quot;, config.file_path);
+</span><span class="boring">
+</span><span class="boring">    let contents = fs::read_to_string(config.file_path)
+</span><span class="boring">        .expect(&quot;Should have been able to read the file&quot;);
+</span><span class="boring">
+</span><span class="boring">    println!(&quot;With text:\n{contents}&quot;);
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">struct Config {
+</span><span class="boring">    query: String,
+</span><span class="boring">    file_path: String,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Config {
+</span><span class="boring">    fn build(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+</span><span class="boring">        if args.len() &lt; 3 {
+</span><span class="boring">            return Err(&quot;not enough arguments&quot;);
+</span><span class="boring">        }
+</span><span class="boring">
+</span><span class="boring">        let query = args[1].clone();
+</span><span class="boring">        let file_path = args[2].clone();
+</span><span class="boring">
+</span><span class="boring">        Ok(Config { query, file_path })
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<p><span class="caption">示例 12-10：如果新建 <code>Config</code> 失败则使用错误码退出</span></p>
+<p>在上面的示例中，使用了一个之前没有详细说明的方法：<code>unwrap_or_else</code>，它定义于标准库的 <code>Result&lt;T, E&gt;</code> 上。使用 <code>unwrap_or_else</code> 可以进行一些自定义的非 <code>panic!</code> 的错误处理。当 <code>Result</code> 是 <code>Ok</code> 时，这个方法的行为类似于 <code>unwrap</code>：它返回 <code>Ok</code> 内部封装的值。然而，当其值是 <code>Err</code> 时，该方法会调用一个 <strong>闭包</strong>（<em>closure</em>），也就是一个我们定义的作为参数传递给 <code>unwrap_or_else</code> 的匿名函数。<a href="ch13-00-functional-features.html">第十三章</a> 会更详细的介绍闭包。现在你需要理解的是 <code>unwrap_or_else</code> 会将 <code>Err</code> 的内部值，也就是示例 12-9 中增加的 <code>not enough arguments</code> 静态字符串的情况，传递给闭包中位于两道竖线间的参数 <code>err</code>。闭包中的代码在其运行时可以使用这个 <code>err</code> 值。</p>
+<p>我们新增了一个 <code>use</code> 行来从标准库中导入 <code>process</code>。在错误的情况闭包中将被运行的代码只有两行：我们打印出了 <code>err</code> 值，接着调用了 <code>std::process::exit</code>。<code>process::exit</code> 会立即停止程序并将传递给它的数字作为退出状态码。这类似于示例 12-8 中使用的基于 <code>panic!</code> 的错误处理，除了不会再得到所有的额外输出了。让我们试试：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.48s
+     Running `target/debug/minigrep`
+Problem parsing arguments: not enough arguments
+</code></pre>
+<p>非常好！现在输出对于用户来说就友好多了。</p>
+<h3 id="从-main-提取逻辑"><a class="header" href="#从-main-提取逻辑">从 <code>main</code> 提取逻辑</a></h3>
+<p>现在我们完成了配置解析的重构：让我们转向程序的逻辑。正如 <a href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%85%B3%E6%B3%A8%E5%88%86%E7%A6%BB">“二进制项目的关注分离”</a> 部分所展开的讨论，我们将提取一个叫做 <code>run</code> 的函数来存放目前 <code>main</code> 函数中不属于设置配置或处理错误的所有逻辑。一旦完成这些，<code>main</code> 函数将简明得足以通过观察来验证，而我们将能够为所有其他逻辑编写测试。</p>
+<p>示例 12-11 展示了提取出来的 <code>run</code> 函数。目前我们只进行小的增量式的提取函数的改进。我们仍将在 <em>src/main.rs</em> 中定义这个函数：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span><span class="boring">use std::process;
+</span><span class="boring">
+</span>fn main() {
+    // --snip--
+
+<span class="boring">    let args: Vec&lt;String&gt; = env::args().collect();
+</span><span class="boring">
+</span><span class="boring">    let config = Config::build(&amp;args).unwrap_or_else(|err| {
+</span><span class="boring">        println!(&quot;Problem parsing arguments: {err}&quot;);
+</span><span class="boring">        process::exit(1);
+</span><span class="boring">    });
+</span><span class="boring">
+</span>    println!(&quot;Searching for {}&quot;, config.query);
+    println!(&quot;In file {}&quot;, config.file_path);
+
+    run(config);
+}
+
+fn run(config: Config) {
+    let contents = fs::read_to_string(config.file_path)
+        .expect(&quot;Should have been able to read the file&quot;);
+
+    println!(&quot;With text:\n{contents}&quot;);
+}
+
+// --snip--
+<span class="boring">
+</span><span class="boring">struct Config {
+</span><span class="boring">    query: String,
+</span><span class="boring">    file_path: String,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Config {
+</span><span class="boring">    fn build(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+</span><span class="boring">        if args.len() &lt; 3 {
+</span><span class="boring">            return Err(&quot;not enough arguments&quot;);
+</span><span class="boring">        }
+</span><span class="boring">
+</span><span class="boring">        let query = args[1].clone();
+</span><span class="boring">        let file_path = args[2].clone();
+</span><span class="boring">
+</span><span class="boring">        Ok(Config { query, file_path })
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<p><span class="caption">示例 12-11：提取 <code>run</code> 函数来包含剩余的程序逻辑</span></p>
+<p>现在 <code>run</code> 函数包含了 <code>main</code> 中从读取文件开始的剩余的所有逻辑。<code>run</code> 函数获取一个 <code>Config</code> 实例作为参数。</p>
+<h4 id="从-run-函数中返回错误"><a class="header" href="#从-run-函数中返回错误">从 <code>run</code> 函数中返回错误</a></h4>
+<p>通过将剩余的逻辑分离进 <code>run</code> 函数而不是留在 <code>main</code> 中，就可以像示例 12-9 中的 <code>Config::build</code> 那样改进错误处理。不再通过 <code>expect</code> 允许程序 panic，<code>run</code> 函数将会在出错时返回一个 <code>Result&lt;T, E&gt;</code>。这让我们进一步以一种对用户友好的方式统一 <code>main</code> 中的错误处理。示例 12-12 展示了 <code>run</code> 签名和函数体中的改变：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore"><span class="boring">use std::env;
+</span><span class="boring">use std::fs;
+</span><span class="boring">use std::process;
+</span>use std::error::Error;
+
+// --snip--
+
+<span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let args: Vec&lt;String&gt; = env::args().collect();
+</span><span class="boring">
+</span><span class="boring">    let config = Config::build(&amp;args).unwrap_or_else(|err| {
+</span><span class="boring">        println!(&quot;Problem parsing arguments: {err}&quot;);
+</span><span class="boring">        process::exit(1);
+</span><span class="boring">    });
+</span><span class="boring">
+</span><span class="boring">    println!(&quot;Searching for {}&quot;, config.query);
+</span><span class="boring">    println!(&quot;In file {}&quot;, config.file_path);
+</span><span class="boring">
+</span><span class="boring">    run(config);
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn run(config: Config) -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
+    let contents = fs::read_to_string(config.file_path)?;
+
+    println!(&quot;With text:\n{contents}&quot;);
+
+    Ok(())
+}
+<span class="boring">
+</span><span class="boring">struct Config {
+</span><span class="boring">    query: String,
+</span><span class="boring">    file_path: String,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Config {
+</span><span class="boring">    fn build(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+</span><span class="boring">        if args.len() &lt; 3 {
+</span><span class="boring">            return Err(&quot;not enough arguments&quot;);
+</span><span class="boring">        }
+</span><span class="boring">
+</span><span class="boring">        let query = args[1].clone();
+</span><span class="boring">        let file_path = args[2].clone();
+</span><span class="boring">
+</span><span class="boring">        Ok(Config { query, file_path })
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<p><span class="caption">示例 12-12：修改 <code>run</code> 函数返回 <code>Result</code></span></p>
+<p>这里我们做出了三个明显的修改。首先，将 <code>run</code> 函数的返回类型变为 <code>Result&lt;(), Box&lt;dyn Error&gt;&gt;</code>。之前这个函数返回 unit 类型 <code>()</code>，现在它仍然保持作为 <code>Ok</code> 时的返回值。</p>
+<p>对于错误类型，使用了 <strong>trait 对象</strong> <code>Box&lt;dyn Error&gt;</code>（在开头使用了 <code>use</code> 语句将 <code>std::error::Error</code> 引入作用域）。<a href="ch17-00-oop.html">第十七章</a> 会涉及 trait 对象。目前只需知道 <code>Box&lt;dyn Error&gt;</code> 意味着函数会返回实现了 <code>Error</code> trait 的类型，不过无需指定具体将会返回的值的类型。这提供了在不同的错误场景可能有不同类型的错误返回值的灵活性。这也就是 <code>dyn</code>，它是 “动态的”（“dynamic”）的缩写。</p>
+<p>第二个改变是去掉了 <code>expect</code> 调用并替换为 <a href="ch09-02-recoverable-errors-with-result.html#%E4%BC%A0%E6%92%AD%E9%94%99%E8%AF%AF%E7%9A%84%E7%AE%80%E5%86%99-%E8%BF%90%E7%AE%97%E7%AC%A6">第九章</a> 讲到的 <code>?</code>。不同于遇到错误就 <code>panic!</code>，<code>?</code> 会从函数中返回错误值并让调用者来处理它。</p>
+<p>第三个修改是现在成功时这个函数会返回一个 <code>Ok</code> 值。因为 <code>run</code> 函数签名中声明成功类型返回值是 <code>()</code>，这意味着需要将 unit 类型值包装进 <code>Ok</code> 值中。<code>Ok(())</code> 一开始看起来有点奇怪，不过这样使用 <code>()</code> 是惯用的做法，表明调用 <code>run</code> 函数只是为了它的副作用；函数并没有返回什么有意义的值。</p>
+<p>上述代码能够编译，不过会有一个警告：</p>
+<pre><code class="language-console">$ cargo run -- the poem.txt
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+warning: unused `Result` that must be used
+  --&gt; src/main.rs:19:5
+   |
+19 |     run(config);
+   |     ^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+   = note: `#[warn(unused_must_use)]` on by default
+help: use `let _ = ...` to ignore the resulting value
+   |
+19 |     let _ = run(config);
+   |     +++++++
+
+warning: `minigrep` (bin &quot;minigrep&quot;) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.71s
+     Running `target/debug/minigrep the poem.txt`
+Searching for the
+In file poem.txt
+With text:
+I'm nobody! Who are you?
+Are you nobody, too?
+Then there's a pair of us - don't tell!
+They'd banish us, you know.
+
+How dreary to be somebody!
+How public, like a frog
+To tell your name the livelong day
+To an admiring bog!
+
+</code></pre>
+<p>Rust 提示我们的代码忽略了 <code>Result</code> 值，它可能表明这里存在一个错误。但我们却没有检查这里是否有一个错误，而编译器提醒我们这里应该有一些错误处理代码！现在就让我们修正这个问题。</p>
+<h4 id="处理-main-中-run-返回的错误"><a class="header" href="#处理-main-中-run-返回的错误">处理 <code>main</code> 中 <code>run</code> 返回的错误</a></h4>
+<p>我们将检查错误并使用类似示例 12-10 中 <code>Config::build</code> 处理错误的技术来处理它们，不过有一些细微的不同：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore"><span class="boring">use std::env;
+</span><span class="boring">use std::error::Error;
+</span><span class="boring">use std::fs;
+</span><span class="boring">use std::process;
+</span><span class="boring">
+</span>fn main() {
+    // --snip--
+
+<span class="boring">    let args: Vec&lt;String&gt; = env::args().collect();
+</span><span class="boring">
+</span><span class="boring">    let config = Config::build(&amp;args).unwrap_or_else(|err| {
+</span><span class="boring">        println!(&quot;Problem parsing arguments: {err}&quot;);
+</span><span class="boring">        process::exit(1);
+</span><span class="boring">    });
+</span><span class="boring">
+</span>    println!(&quot;Searching for {}&quot;, config.query);
+    println!(&quot;In file {}&quot;, config.file_path);
+
+    if let Err(e) = run(config) {
+        println!(&quot;Application error: {e}&quot;);
+        process::exit(1);
+    }
+}
+<span class="boring">
+</span><span class="boring">fn run(config: Config) -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
+</span><span class="boring">    let contents = fs::read_to_string(config.file_path)?;
+</span><span class="boring">
+</span><span class="boring">    println!(&quot;With text:\n{contents}&quot;);
+</span><span class="boring">
+</span><span class="boring">    Ok(())
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">struct Config {
+</span><span class="boring">    query: String,
+</span><span class="boring">    file_path: String,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Config {
+</span><span class="boring">    fn build(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+</span><span class="boring">        if args.len() &lt; 3 {
+</span><span class="boring">            return Err(&quot;not enough arguments&quot;);
+</span><span class="boring">        }
+</span><span class="boring">
+</span><span class="boring">        let query = args[1].clone();
+</span><span class="boring">        let file_path = args[2].clone();
+</span><span class="boring">
+</span><span class="boring">        Ok(Config { query, file_path })
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<p>我们使用 <code>if let</code> 来检查 <code>run</code> 是否返回一个 <code>Err</code> 值，不同于 <code>unwrap_or_else</code>，并在出错时调用 <code>process::exit(1)</code>。<code>run</code> 并不返回像 <code>Config::build</code> 返回的 <code>Config</code> 实例那样需要 <code>unwrap</code> 的值。因为 <code>run</code> 在成功时返回 <code>()</code>，而我们只关心检测错误，所以并不需要 <code>unwrap_or_else</code> 来返回未封装的值，因为它只会是 <code>()</code>。</p>
+<p>不过两个例子中 <code>if let</code> 和 <code>unwrap_or_else</code> 的函数体都一样：打印出错误并退出。</p>
+<h3 id="将代码拆分到库-crate"><a class="header" href="#将代码拆分到库-crate">将代码拆分到库 crate</a></h3>
+<p>现在我们的 <code>minigrep</code> 项目看起来好多了！现在我们将要拆分 <em>src/main.rs</em> 并将一些代码放入 <em>src/lib.rs</em>，这样就能测试它们并拥有一个含有更少功能的 <code>main</code> 函数。</p>
+<p>让我们将所有不是 <code>main</code> 函数的代码从 <em>src/main.rs</em> 移动到新文件 <em>src/lib.rs</em> 中：</p>
+<ul>
+<li><code>run</code> 函数定义</li>
+<li>相关的 <code>use</code> 语句</li>
+<li><code>Config</code> 的定义</li>
+<li><code>Config::build</code> 函数定义</li>
+</ul>
+<p>现在 <em>src/lib.rs</em> 的内容应该看起来像示例 12-13（为了简洁省略了函数体）。注意直到下一个示例修改完 <em>src/main.rs</em> 之后，代码还不能编译：</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile">use std::error::Error;
+use std::fs;
+
+pub struct Config {
+    pub query: String,
+    pub file_path: String,
+}
+
+impl Config {
+    pub fn build(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+        // --snip--
+<span class="boring">        if args.len() &lt; 3 {
+</span><span class="boring">            return Err(&quot;not enough arguments&quot;);
+</span><span class="boring">        }
+</span><span class="boring">
+</span><span class="boring">        let query = args[1].clone();
+</span><span class="boring">        let file_path = args[2].clone();
+</span><span class="boring">
+</span><span class="boring">        Ok(Config { query, file_path })
+</span>    }
+}
+
+pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
+    // --snip--
+<span class="boring">    let contents = fs::read_to_string(config.file_path)?;
+</span><span class="boring">
+</span><span class="boring">    println!(&quot;With text:\n{contents}&quot;);
+</span><span class="boring">
+</span><span class="boring">    Ok(())
+</span>}</code></pre>
+<p><span class="caption">示例 12-13：将 <code>Config</code> 和 <code>run</code> 移动到 <em>src/lib.rs</em></span></p>
+<p>这里使用了公有的 <code>pub</code> 关键字：在 <code>Config</code>、其字段和其 <code>build</code> 方法，以及 <code>run</code> 函数上。现在我们有了一个拥有可以测试的公有 API 的库 crate 了。</p>
+<p>现在需要在 <em>src/main.rs</em> 中将移动到 <em>src/lib.rs</em> 的代码引入二进制 crate 的作用域中，如示例 12-14 所示：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore">use std::env;
+use std::process;
+
+use minigrep::Config;
+
+fn main() {
+    // --snip--
+<span class="boring">    let args: Vec&lt;String&gt; = env::args().collect();
+</span><span class="boring">
+</span><span class="boring">    let config = Config::build(&amp;args).unwrap_or_else(|err| {
+</span><span class="boring">        println!(&quot;Problem parsing arguments: {err}&quot;);
+</span><span class="boring">        process::exit(1);
+</span><span class="boring">    });
+</span><span class="boring">
+</span><span class="boring">    println!(&quot;Searching for {}&quot;, config.query);
+</span><span class="boring">    println!(&quot;In file {}&quot;, config.file_path);
+</span><span class="boring">
+</span>    if let Err(e) = minigrep::run(config) {
+        // --snip--
+<span class="boring">        println!(&quot;Application error: {e}&quot;);
+</span><span class="boring">        process::exit(1);
+</span>    }
+}</code></pre>
+<p><span class="caption">示例 12-14：将 <code>minigrep</code> crate 引入 <em>src/main.rs</em> 的作用域中</span></p>
+<p>我们添加了一行 <code>use minigrep::Config</code>，它将 <code>Config</code> 类型引入作用域，并使用 crate 名称作为 <code>run</code> 函数的前缀。通过这些重构，所有功能应该能够联系在一起并运行了。运行 <code>cargo run</code> 来确保一切都正确的衔接在一起。</p>
+<p>哇哦！我们做了大量的工作，不过我们为将来的成功打下了基础。现在处理错误将更容易，同时代码也更加模块化。从现在开始几乎所有的工作都将在 <em>src/lib.rs</em> 中进行。</p>
+<p>让我们利用这些新创建的模块的优势来进行一些在旧代码中难以展开的工作，这些工作在新代码中非常容易实现，那就是：编写测试！</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch12-02-reading-a-file.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch12-04-testing-the-librarys-functionality.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch12-02-reading-a-file.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch12-04-testing-the-librarys-functionality.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>

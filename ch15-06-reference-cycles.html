@@ -1,0 +1,531 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>引用循环会导致内存泄漏 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Rust 程序设计语言</a></li><li class="chapter-item expanded affix "><a href="foreword.html">前言</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">简介</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> 入门指南</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> 安装</a></li><li class="chapter-item expanded "><a href="ch01-02-hello-world.html"><strong aria-hidden="true">1.2.</strong> Hello, World!</a></li><li class="chapter-item expanded "><a href="ch01-03-hello-cargo.html"><strong aria-hidden="true">1.3.</strong> Hello, Cargo!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-guessing-game-tutorial.html"><strong aria-hidden="true">2.</strong> 写个猜数字游戏</a></li><li class="chapter-item expanded "><a href="ch03-00-common-programming-concepts.html"><strong aria-hidden="true">3.</strong> 常见编程概念</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-variables-and-mutability.html"><strong aria-hidden="true">3.1.</strong> 变量与可变性</a></li><li class="chapter-item expanded "><a href="ch03-02-data-types.html"><strong aria-hidden="true">3.2.</strong> 数据类型</a></li><li class="chapter-item expanded "><a href="ch03-03-how-functions-work.html"><strong aria-hidden="true">3.3.</strong> 函数</a></li><li class="chapter-item expanded "><a href="ch03-04-comments.html"><strong aria-hidden="true">3.4.</strong> 注释</a></li><li class="chapter-item expanded "><a href="ch03-05-control-flow.html"><strong aria-hidden="true">3.5.</strong> 控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-understanding-ownership.html"><strong aria-hidden="true">4.</strong> 认识所有权</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-what-is-ownership.html"><strong aria-hidden="true">4.1.</strong> 什么是所有权？</a></li><li class="chapter-item expanded "><a href="ch04-02-references-and-borrowing.html"><strong aria-hidden="true">4.2.</strong> 引用与借用</a></li><li class="chapter-item expanded "><a href="ch04-03-slices.html"><strong aria-hidden="true">4.3.</strong> Slice 类型</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-structs.html"><strong aria-hidden="true">5.</strong> 使用结构体组织相关联的数据</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-defining-structs.html"><strong aria-hidden="true">5.1.</strong> 结构体的定义和实例化</a></li><li class="chapter-item expanded "><a href="ch05-02-example-structs.html"><strong aria-hidden="true">5.2.</strong> 结构体示例程序</a></li><li class="chapter-item expanded "><a href="ch05-03-method-syntax.html"><strong aria-hidden="true">5.3.</strong> 方法语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch06-00-enums.html"><strong aria-hidden="true">6.</strong> 枚举和模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch06-01-defining-an-enum.html"><strong aria-hidden="true">6.1.</strong> 枚举的定义</a></li><li class="chapter-item expanded "><a href="ch06-02-match.html"><strong aria-hidden="true">6.2.</strong> match 控制流结构</a></li><li class="chapter-item expanded "><a href="ch06-03-if-let.html"><strong aria-hidden="true">6.3.</strong> if let 简洁控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"><strong aria-hidden="true">7.</strong> 使用包、Crate 和模块管理不断增长的项目</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch07-01-packages-and-crates.html"><strong aria-hidden="true">7.1.</strong> 包和 Crate</a></li><li class="chapter-item expanded "><a href="ch07-02-defining-modules-to-control-scope-and-privacy.html"><strong aria-hidden="true">7.2.</strong> 定义模块来控制作用域与私有性</a></li><li class="chapter-item expanded "><a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html"><strong aria-hidden="true">7.3.</strong> 引用模块项目的路径</a></li><li class="chapter-item expanded "><a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html"><strong aria-hidden="true">7.4.</strong> 使用 use 关键字将路径引入作用域</a></li><li class="chapter-item expanded "><a href="ch07-05-separating-modules-into-different-files.html"><strong aria-hidden="true">7.5.</strong> 将模块拆分成多个文件</a></li></ol></li><li class="chapter-item expanded "><a href="ch08-00-common-collections.html"><strong aria-hidden="true">8.</strong> 常见集合</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch08-01-vectors.html"><strong aria-hidden="true">8.1.</strong> 使用 Vector 储存列表</a></li><li class="chapter-item expanded "><a href="ch08-02-strings.html"><strong aria-hidden="true">8.2.</strong> 使用字符串储存 UTF-8 编码的文本</a></li><li class="chapter-item expanded "><a href="ch08-03-hash-maps.html"><strong aria-hidden="true">8.3.</strong> 使用 Hash Map 储存键值对</a></li></ol></li><li class="chapter-item expanded "><a href="ch09-00-error-handling.html"><strong aria-hidden="true">9.</strong> 错误处理</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong aria-hidden="true">9.1.</strong> 用 panic! 处理不可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-02-recoverable-errors-with-result.html"><strong aria-hidden="true">9.2.</strong> 用 Result 处理可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-03-to-panic-or-not-to-panic.html"><strong aria-hidden="true">9.3.</strong> 要不要 panic!</a></li></ol></li><li class="chapter-item expanded "><a href="ch10-00-generics.html"><strong aria-hidden="true">10.</strong> 泛型、Trait 和生命周期</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch10-01-syntax.html"><strong aria-hidden="true">10.1.</strong> 泛型数据类型</a></li><li class="chapter-item expanded "><a href="ch10-02-traits.html"><strong aria-hidden="true">10.2.</strong> Trait：定义共同行为</a></li><li class="chapter-item expanded "><a href="ch10-03-lifetime-syntax.html"><strong aria-hidden="true">10.3.</strong> 生命周期确保引用有效</a></li></ol></li><li class="chapter-item expanded "><a href="ch11-00-testing.html"><strong aria-hidden="true">11.</strong> 编写自动化测试</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch11-01-writing-tests.html"><strong aria-hidden="true">11.1.</strong> 如何编写测试</a></li><li class="chapter-item expanded "><a href="ch11-02-running-tests.html"><strong aria-hidden="true">11.2.</strong> 控制测试如何运行</a></li><li class="chapter-item expanded "><a href="ch11-03-test-organization.html"><strong aria-hidden="true">11.3.</strong> 测试的组织结构</a></li></ol></li><li class="chapter-item expanded "><a href="ch12-00-an-io-project.html"><strong aria-hidden="true">12.</strong> 一个 I/O 项目：构建命令行程序</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch12-01-accepting-command-line-arguments.html"><strong aria-hidden="true">12.1.</strong> 接受命令行参数</a></li><li class="chapter-item expanded "><a href="ch12-02-reading-a-file.html"><strong aria-hidden="true">12.2.</strong> 读取文件</a></li><li class="chapter-item expanded "><a href="ch12-03-improving-error-handling-and-modularity.html"><strong aria-hidden="true">12.3.</strong> 重构以改进模块化与错误处理</a></li><li class="chapter-item expanded "><a href="ch12-04-testing-the-librarys-functionality.html"><strong aria-hidden="true">12.4.</strong> 采用测试驱动开发完善库的功能</a></li><li class="chapter-item expanded "><a href="ch12-05-working-with-environment-variables.html"><strong aria-hidden="true">12.5.</strong> 处理环境变量</a></li><li class="chapter-item expanded "><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong aria-hidden="true">12.6.</strong> 将错误信息输出到标准错误而不是标准输出</a></li></ol></li><li class="chapter-item expanded "><a href="ch13-00-functional-features.html"><strong aria-hidden="true">13.</strong> Rust 中的函数式语言功能：迭代器与闭包</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch13-01-closures.html"><strong aria-hidden="true">13.1.</strong> 闭包：可以捕获其环境的匿名函数</a></li><li class="chapter-item expanded "><a href="ch13-02-iterators.html"><strong aria-hidden="true">13.2.</strong> 使用迭代器处理元素序列</a></li><li class="chapter-item expanded "><a href="ch13-03-improving-our-io-project.html"><strong aria-hidden="true">13.3.</strong> 改进之前的 I/O 项目</a></li><li class="chapter-item expanded "><a href="ch13-04-performance.html"><strong aria-hidden="true">13.4.</strong> 性能比较：循环对迭代器</a></li></ol></li><li class="chapter-item expanded "><a href="ch14-00-more-about-cargo.html"><strong aria-hidden="true">14.</strong> 更多关于 Cargo 和 Crates.io 的内容</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch14-01-release-profiles.html"><strong aria-hidden="true">14.1.</strong> 采用发布配置自定义构建</a></li><li class="chapter-item expanded "><a href="ch14-02-publishing-to-crates-io.html"><strong aria-hidden="true">14.2.</strong> 将 crate 发布到 Crates.io</a></li><li class="chapter-item expanded "><a href="ch14-03-cargo-workspaces.html"><strong aria-hidden="true">14.3.</strong> Cargo 工作空间</a></li><li class="chapter-item expanded "><a href="ch14-04-installing-binaries.html"><strong aria-hidden="true">14.4.</strong> 使用 cargo install 安装二进制文件</a></li><li class="chapter-item expanded "><a href="ch14-05-extending-cargo.html"><strong aria-hidden="true">14.5.</strong> Cargo 自定义扩展命令</a></li></ol></li><li class="chapter-item expanded "><a href="ch15-00-smart-pointers.html"><strong aria-hidden="true">15.</strong> 智能指针</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch15-01-box.html"><strong aria-hidden="true">15.1.</strong> 使用 Box&lt;T&gt; 指向堆上数据</a></li><li class="chapter-item expanded "><a href="ch15-02-deref.html"><strong aria-hidden="true">15.2.</strong> 使用 Deref Trait 将智能指针当作常规引用处理</a></li><li class="chapter-item expanded "><a href="ch15-03-drop.html"><strong aria-hidden="true">15.3.</strong> 使用 Drop Trait 运行清理代码</a></li><li class="chapter-item expanded "><a href="ch15-04-rc.html"><strong aria-hidden="true">15.4.</strong> Rc&lt;T&gt; 引用计数智能指针</a></li><li class="chapter-item expanded "><a href="ch15-05-interior-mutability.html"><strong aria-hidden="true">15.5.</strong> RefCell&lt;T&gt; 与内部可变性模式</a></li><li class="chapter-item expanded "><a href="ch15-06-reference-cycles.html" class="active"><strong aria-hidden="true">15.6.</strong> 引用循环会导致内存泄漏</a></li></ol></li><li class="chapter-item expanded "><a href="ch16-00-concurrency.html"><strong aria-hidden="true">16.</strong> 无畏并发</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch16-01-threads.html"><strong aria-hidden="true">16.1.</strong> 使用线程同时地运行代码</a></li><li class="chapter-item expanded "><a href="ch16-02-message-passing.html"><strong aria-hidden="true">16.2.</strong> 使用消息传递在线程间通信</a></li><li class="chapter-item expanded "><a href="ch16-03-shared-state.html"><strong aria-hidden="true">16.3.</strong> 共享状态并发</a></li><li class="chapter-item expanded "><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong aria-hidden="true">16.4.</strong> 使用 Sync 与 Send Traits 的可扩展并发</a></li></ol></li><li class="chapter-item expanded "><a href="ch17-00-oop.html"><strong aria-hidden="true">17.</strong> Rust 的面向对象编程特性</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch17-01-what-is-oo.html"><strong aria-hidden="true">17.1.</strong> 面向对象语言的特点</a></li><li class="chapter-item expanded "><a href="ch17-02-trait-objects.html"><strong aria-hidden="true">17.2.</strong> 顾及不同类型值的 trait 对象</a></li><li class="chapter-item expanded "><a href="ch17-03-oo-design-patterns.html"><strong aria-hidden="true">17.3.</strong> 面向对象设计模式的实现</a></li></ol></li><li class="chapter-item expanded "><a href="ch18-00-patterns.html"><strong aria-hidden="true">18.</strong> 模式与模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch18-01-all-the-places-for-patterns.html"><strong aria-hidden="true">18.1.</strong> 所有可能会用到模式的位置</a></li><li class="chapter-item expanded "><a href="ch18-02-refutability.html"><strong aria-hidden="true">18.2.</strong> Refutability（可反驳性）: 模式是否会匹配失效</a></li><li class="chapter-item expanded "><a href="ch18-03-pattern-syntax.html"><strong aria-hidden="true">18.3.</strong> 模式语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch19-00-advanced-features.html"><strong aria-hidden="true">19.</strong> 高级特征</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch19-01-unsafe-rust.html"><strong aria-hidden="true">19.1.</strong> 不安全的 Rust</a></li><li class="chapter-item expanded "><a href="ch19-03-advanced-traits.html"><strong aria-hidden="true">19.2.</strong> 高级 trait</a></li><li class="chapter-item expanded "><a href="ch19-04-advanced-types.html"><strong aria-hidden="true">19.3.</strong> 高级类型</a></li><li class="chapter-item expanded "><a href="ch19-05-advanced-functions-and-closures.html"><strong aria-hidden="true">19.4.</strong> 高级函数与闭包</a></li><li class="chapter-item expanded "><a href="ch19-06-macros.html"><strong aria-hidden="true">19.5.</strong> 宏</a></li></ol></li><li class="chapter-item expanded "><a href="ch20-00-final-project-a-web-server.html"><strong aria-hidden="true">20.</strong> 最后的项目：构建多线程 web server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch20-01-single-threaded.html"><strong aria-hidden="true">20.1.</strong> 建立单线程 web server</a></li><li class="chapter-item expanded "><a href="ch20-02-multithreaded.html"><strong aria-hidden="true">20.2.</strong> 将单线程 server 变为多线程 server</a></li><li class="chapter-item expanded "><a href="ch20-03-graceful-shutdown-and-cleanup.html"><strong aria-hidden="true">20.3.</strong> 优雅停机与清理</a></li></ol></li><li class="chapter-item expanded "><a href="appendix-00.html"><strong aria-hidden="true">21.</strong> 附录</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix-01-keywords.html"><strong aria-hidden="true">21.1.</strong> A - 关键字</a></li><li class="chapter-item expanded "><a href="appendix-02-operators.html"><strong aria-hidden="true">21.2.</strong> B - 运算符与符号</a></li><li class="chapter-item expanded "><a href="appendix-03-derivable-traits.html"><strong aria-hidden="true">21.3.</strong> C - 可派生的 trait</a></li><li class="chapter-item expanded "><a href="appendix-04-useful-development-tools.html"><strong aria-hidden="true">21.4.</strong> D - 实用开发工具</a></li><li class="chapter-item expanded "><a href="appendix-05-editions.html"><strong aria-hidden="true">21.5.</strong> E - 版本</a></li><li class="chapter-item expanded "><a href="appendix-06-translation.html"><strong aria-hidden="true">21.6.</strong> F - 本书译本</a></li><li class="chapter-item expanded "><a href="appendix-07-nightly-rust.html"><strong aria-hidden="true">21.7.</strong> G - Rust 是如何开发的与 “Nightly Rust”</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch15-06-reference-cycles.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="引用循环与内存泄漏"><a class="header" href="#引用循环与内存泄漏">引用循环与内存泄漏</a></h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/main/src/ch15-06-reference-cycles.md">ch15-06-reference-cycles.md</a>
+<br>
+commit c06006157b14b3d47b5c716fc392b77f3b2e21ce</p>
+</blockquote>
+<p>Rust 的内存安全性保证使其难以意外地制造永远也不会被清理的内存（被称为 <strong>内存泄漏</strong>（<em>memory leak</em>）），但并不是不可能。Rust 并不保证完全防止内存泄漏，这意味着内存泄漏在 Rust 中被认为是内存安全的。这一点可以通过 <code>Rc&lt;T&gt;</code> 和 <code>RefCell&lt;T&gt;</code> 看出：创建引用循环的可能性是存在的。这会造成内存泄漏，因为每一项的引用计数永远也到不了 0，持有的数据也就永远不会被释放。</p>
+<h3 id="制造引用循环"><a class="header" href="#制造引用循环">制造引用循环</a></h3>
+<p>让我们看看引用循环是如何发生的以及如何避免它。以示例 15-25 中的 <code>List</code> 枚举和 <code>tail</code> 方法的定义开始：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust">use crate::List::{Cons, Nil};
+use std::cell::RefCell;
+use std::rc::Rc;
+
+#[derive(Debug)]
+enum List {
+    Cons(i32, RefCell&lt;Rc&lt;List&gt;&gt;),
+    Nil,
+}
+
+impl List {
+    fn tail(&amp;self) -&gt; Option&lt;&amp;RefCell&lt;Rc&lt;List&gt;&gt;&gt; {
+        match self {
+            Cons(_, item) =&gt; Some(item),
+            Nil =&gt; None,
+        }
+    }
+}
+
+fn main() {}</code></pre></pre>
+<p><span class="caption">示例 15-25: 一个存放 <code>RefCell</code> 的 cons list 定义，这样可以修改 <code>Cons</code> 成员所引用的数据</span></p>
+<p>这里采用了示例 15-5 中 <code>List</code> 定义的另一种变体。现在 <code>Cons</code> 成员的第二个元素是 <code>RefCell&lt;Rc&lt;List&gt;&gt;</code>，这意味着不同于像示例 15-24 那样能够修改 <code>i32</code> 的值，我们希望能够修改 <code>Cons</code> 成员所指向的 <code>List</code>。这里还增加了一个 <code>tail</code> 方法来方便我们在有 <code>Cons</code> 成员的时候访问其第二项。</p>
+<p>在示例 15-26 中增加了一个 <code>main</code> 函数，其使用了示例 15-25 中的定义。这些代码在 <code>a</code> 中创建了一个列表，一个指向 <code>a</code> 中列表的 <code>b</code> 列表，接着修改 <code>a</code> 中的列表指向 <code>b</code> 中的列表，这会创建一个引用循环。在这个过程的多个位置有 <code>println!</code> 语句展示引用计数。</p>
+<p><span class="filename">文件：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">use crate::List::{Cons, Nil};
+</span><span class="boring">use std::cell::RefCell;
+</span><span class="boring">use std::rc::Rc;
+</span><span class="boring">
+</span><span class="boring">#[derive(Debug)]
+</span><span class="boring">enum List {
+</span><span class="boring">    Cons(i32, RefCell&lt;Rc&lt;List&gt;&gt;),
+</span><span class="boring">    Nil,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl List {
+</span><span class="boring">    fn tail(&amp;self) -&gt; Option&lt;&amp;RefCell&lt;Rc&lt;List&gt;&gt;&gt; {
+</span><span class="boring">        match self {
+</span><span class="boring">            Cons(_, item) =&gt; Some(item),
+</span><span class="boring">            Nil =&gt; None,
+</span><span class="boring">        }
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn main() {
+    let a = Rc::new(Cons(5, RefCell::new(Rc::new(Nil))));
+
+    println!(&quot;a initial rc count = {}&quot;, Rc::strong_count(&amp;a));
+    println!(&quot;a next item = {:?}&quot;, a.tail());
+
+    let b = Rc::new(Cons(10, RefCell::new(Rc::clone(&amp;a))));
+
+    println!(&quot;a rc count after b creation = {}&quot;, Rc::strong_count(&amp;a));
+    println!(&quot;b initial rc count = {}&quot;, Rc::strong_count(&amp;b));
+    println!(&quot;b next item = {:?}&quot;, b.tail());
+
+    if let Some(link) = a.tail() {
+        *link.borrow_mut() = Rc::clone(&amp;b);
+    }
+
+    println!(&quot;b rc count after changing a = {}&quot;, Rc::strong_count(&amp;b));
+    println!(&quot;a rc count after changing a = {}&quot;, Rc::strong_count(&amp;a));
+
+    // Uncomment the next line to see that we have a cycle;
+    // it will overflow the stack
+    // println!(&quot;a next item = {:?}&quot;, a.tail());
+}</code></pre></pre>
+<p><span class="caption">示例 15-26：创建一个引用循环：两个 <code>List</code> 值互相指向彼此</span></p>
+<p>这里在变量 <code>a</code> 中创建了一个 <code>Rc&lt;List&gt;</code> 实例来存放初值为 <code>5, Nil</code> 的 <code>List</code> 值。接着在变量 <code>b</code> 中创建了存放包含值 10 和指向列表 <code>a</code> 的 <code>List</code> 的另一个 <code>Rc&lt;List&gt;</code> 实例。</p>
+<p>最后，修改 <code>a</code> 使其指向 <code>b</code> 而不是 <code>Nil</code>，这就创建了一个循环。为此需要使用 <code>tail</code> 方法获取 <code>a</code> 中 <code>RefCell&lt;Rc&lt;List&gt;&gt;</code> 的引用，并放入变量 <code>link</code> 中。接着使用 <code>RefCell&lt;Rc&lt;List&gt;&gt;</code> 的 <code>borrow_mut</code> 方法将其值从存放 <code>Nil</code> 的 <code>Rc&lt;List&gt;</code> 修改为 <code>b</code> 中的 <code>Rc&lt;List&gt;</code>。</p>
+<p>如果保持最后的 <code>println!</code> 行注释并运行代码，会得到如下输出：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling cons-list v0.1.0 (file:///projects/cons-list)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.53s
+     Running `target/debug/cons-list`
+a initial rc count = 1
+a next item = Some(RefCell { value: Nil })
+a rc count after b creation = 2
+b initial rc count = 1
+b next item = Some(RefCell { value: Cons(5, RefCell { value: Nil }) })
+b rc count after changing a = 2
+a rc count after changing a = 2
+</code></pre>
+<p>可以看到将列表 <code>a</code> 修改为指向 <code>b</code> 之后， <code>a</code> 和 <code>b</code> 中的 <code>Rc&lt;List&gt;</code> 实例的引用计数都是 2。在 <code>main</code> 的结尾，Rust 丢弃 <code>b</code>，这会使 <code>b</code> <code>Rc&lt;List&gt;</code> 实例的引用计数从 2 减为 1。然而，<code>b</code> <code>Rc&lt;List&gt;</code> 不能被回收，因为其引用计数是 1 而不是 0。接下来 Rust 会丢弃 <code>a</code> 将 <code>a</code> <code>Rc&lt;List&gt;</code> 实例的引用计数从 2 减为 1。这个实例也不能被回收，因为 <code>b</code> <code>Rc&lt;List&gt;</code> 实例依然引用它，所以其引用计数是 1。这些列表的内存将永远保持未被回收的状态。为了更形象的展示，我们创建了一个如图 15-4 所示的引用循环：</p>
+<img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
+<p><span class="caption">图 15-4: 列表 <code>a</code> 和 <code>b</code> 彼此互相指向形成引用循环</span></p>
+<p>如果取消最后 <code>println!</code> 的注释并运行程序，Rust 会尝试打印出 <code>a</code> 指向 <code>b</code> 指向 <code>a</code> 这样的循环直到栈溢出。</p>
+<p>相比真实世界的程序，这个例子中创建引用循环的结果并不可怕。创建了引用循环之后程序立刻就结束了。如果在更为复杂的程序中并在循环里分配了很多内存并占有很长时间，这个程序会使用多于它所需要的内存，并有可能压垮系统并造成没有内存可供使用。</p>
+<p>创建引用循环并不容易，但也不是不可能。如果你有包含 <code>Rc&lt;T&gt;</code> 的 <code>RefCell&lt;T&gt;</code> 值或类似的嵌套结合了内部可变性和引用计数的类型，请务必小心确保你没有形成一个引用循环；你无法指望 Rust 帮你捕获它们。创建引用循环是一个程序上的逻辑 bug，你应该使用自动化测试、代码评审和其他软件开发最佳实践来使其最小化。</p>
+<p>另一个解决方案是重新组织数据结构，使得一部分引用拥有所有权而另一部分没有。换句话说，循环将由一些拥有所有权的关系和一些无所有权的关系组成，只有所有权关系才能影响值是否可以被丢弃。在示例 15-25 中，我们总是希望 <code>Cons</code> 成员拥有其列表，所以重新组织数据结构是不可能的。让我们看看一个由父节点和子节点构成的图的例子，观察何时是使用无所有权的关系来避免引用循环的合适时机。</p>
+<h3 id="避免引用循环将-rct-变为-weakt"><a class="header" href="#避免引用循环将-rct-变为-weakt">避免引用循环：将 <code>Rc&lt;T&gt;</code> 变为 <code>Weak&lt;T&gt;</code></a></h3>
+<p>到目前为止，我们已经展示了调用 <code>Rc::clone</code> 会增加 <code>Rc&lt;T&gt;</code> 实例的 <code>strong_count</code>，和只在其 <code>strong_count</code> 为 0 时才会被清理的 <code>Rc&lt;T&gt;</code> 实例。你也可以通过调用 <code>Rc::downgrade</code> 并传递 <code>Rc&lt;T&gt;</code> 实例的引用来创建其值的 <strong>弱引用</strong>（<em>weak reference</em>）。强引用代表如何共享 <code>Rc&lt;T&gt;</code> 实例的所有权。弱引用并不属于所有权关系，当 <code>Rc&lt;T&gt;</code> 实例被清理时其计数没有影响。它们不会造成引用循环，因为任何涉及弱引用的循环会在其相关的值的强引用计数为 0 时被打断。</p>
+<p>调用 <code>Rc::downgrade</code> 时会得到 <code>Weak&lt;T&gt;</code> 类型的智能指针。不同于将 <code>Rc&lt;T&gt;</code> 实例的 <code>strong_count</code> 加 1，调用 <code>Rc::downgrade</code> 会将 <code>weak_count</code> 加 1。<code>Rc&lt;T&gt;</code> 类型使用 <code>weak_count</code> 来记录其存在多少个 <code>Weak&lt;T&gt;</code> 引用，类似于 <code>strong_count</code>。其区别在于 <code>weak_count</code> 无需计数为 0 就能使 <code>Rc&lt;T&gt;</code> 实例被清理。</p>
+<p>强引用代表如何共享 <code>Rc&lt;T&gt;</code> 实例的所有权，但弱引用并不属于所有权关系。它们不会造成引用循环，因为任何弱引用的循环会在其相关的强引用计数为 0 时被打断。</p>
+<p>因为 <code>Weak&lt;T&gt;</code> 引用的值可能已经被丢弃了，为了使用 <code>Weak&lt;T&gt;</code> 所指向的值，我们必须确保其值仍然有效。为此可以调用 <code>Weak&lt;T&gt;</code> 实例的 <code>upgrade</code> 方法，这会返回 <code>Option&lt;Rc&lt;T&gt;&gt;</code>。如果 <code>Rc&lt;T&gt;</code> 值还未被丢弃，则结果是 <code>Some</code>；如果 <code>Rc&lt;T&gt;</code> 已被丢弃，则结果是 <code>None</code>。因为 <code>upgrade</code> 返回一个 <code>Option&lt;Rc&lt;T&gt;&gt;</code>，Rust 会确保处理 <code>Some</code> 和 <code>None</code> 的情况，所以它不会返回非法指针。</p>
+<p>我们会创建一个某项知道其子项和父项的树形结构的例子，而不是只知道其下一项的列表。</p>
+<h4 id="创建树形数据结构带有子节点的-node"><a class="header" href="#创建树形数据结构带有子节点的-node">创建树形数据结构：带有子节点的 <code>Node</code></a></h4>
+<p>在最开始，我们将会构建一个带有子节点的树。让我们创建一个用于存放其拥有所有权的 <code>i32</code> 值和其子节点引用的 <code>Node</code>：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust">use std::cell::RefCell;
+use std::rc::Rc;
+
+#[derive(Debug)]
+struct Node {
+    value: i32,
+    children: RefCell&lt;Vec&lt;Rc&lt;Node&gt;&gt;&gt;,
+}
+<span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let leaf = Rc::new(Node {
+</span><span class="boring">        value: 3,
+</span><span class="boring">        children: RefCell::new(vec![]),
+</span><span class="boring">    });
+</span><span class="boring">
+</span><span class="boring">    let branch = Rc::new(Node {
+</span><span class="boring">        value: 5,
+</span><span class="boring">        children: RefCell::new(vec![Rc::clone(&amp;leaf)]),
+</span><span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<p>我们希望 <code>Node</code> 能够拥有其子节点，同时也希望能将所有权共享给变量，以便可以直接访问树中的每一个 <code>Node</code>，为此 <code>Vec&lt;T&gt;</code> 的项的类型被定义为 <code>Rc&lt;Node&gt;</code>。我们还希望能修改其他节点的子节点，所以 <code>children</code> 中 <code>Vec&lt;Rc&lt;Node&gt;&gt;</code> 被放进了 <code>RefCell&lt;T&gt;</code>。</p>
+<p>接下来，使用此结构体定义来创建一个叫做 <code>leaf</code> 的带有值 3 且没有子节点的 <code>Node</code> 实例，和另一个带有值 5 并以 <code>leaf</code> 作为子节点的实例 <code>branch</code>，如示例 15-27 所示：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::cell::RefCell;
+</span><span class="boring">use std::rc::Rc;
+</span><span class="boring">
+</span><span class="boring">#[derive(Debug)]
+</span><span class="boring">struct Node {
+</span><span class="boring">    value: i32,
+</span><span class="boring">    children: RefCell&lt;Vec&lt;Rc&lt;Node&gt;&gt;&gt;,
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn main() {
+    let leaf = Rc::new(Node {
+        value: 3,
+        children: RefCell::new(vec![]),
+    });
+
+    let branch = Rc::new(Node {
+        value: 5,
+        children: RefCell::new(vec![Rc::clone(&amp;leaf)]),
+    });
+}</code></pre></pre>
+<p><span class="caption">示例 15-27：创建没有子节点的 <code>leaf</code> 节点和以 <code>leaf</code> 作为子节点的 <code>branch</code> 节点</span></p>
+<p>这里克隆了 <code>leaf</code> 中的 <code>Rc&lt;Node&gt;</code> 并储存在 <code>branch</code> 中，这意味着 <code>leaf</code> 中的 <code>Node</code> 现在有两个所有者：<code>leaf</code>和<code>branch</code>。可以通过 <code>branch.children</code> 从 <code>branch</code> 中获得 <code>leaf</code>，不过无法从 <code>leaf</code> 到 <code>branch</code>。<code>leaf</code> 没有到 <code>branch</code> 的引用且并不知道它们相互关联。我们希望 <code>leaf</code> 知道 <code>branch</code> 是其父节点。稍后我们会这么做。</p>
+<h4 id="增加从子到父的引用"><a class="header" href="#增加从子到父的引用">增加从子到父的引用</a></h4>
+<p>为了使子节点知道其父节点，需要在 <code>Node</code> 结构体定义中增加一个 <code>parent</code> 字段。问题是 <code>parent</code> 的类型应该是什么。我们知道其不能包含 <code>Rc&lt;T&gt;</code>，因为这样 <code>leaf.parent</code> 将会指向 <code>branch</code> 而 <code>branch.children</code> 会包含 <code>leaf</code> 的指针，这会形成引用循环，会造成其 <code>strong_count</code> 永远也不会为 0。</p>
+<p>现在换一种方式思考这个关系，父节点应该拥有其子节点：如果父节点被丢弃了，其子节点也应该被丢弃。然而子节点不应该拥有其父节点：如果丢弃子节点，其父节点应该依然存在。这正是弱引用的例子！</p>
+<p>所以 <code>parent</code> 使用 <code>Weak&lt;T&gt;</code> 类型而不是 <code>Rc&lt;T&gt;</code>，具体来说是 <code>RefCell&lt;Weak&lt;Node&gt;&gt;</code>。现在 <code>Node</code> 结构体定义看起来像这样：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust">use std::cell::RefCell;
+use std::rc::{Rc, Weak};
+
+#[derive(Debug)]
+struct Node {
+    value: i32,
+    parent: RefCell&lt;Weak&lt;Node&gt;&gt;,
+    children: RefCell&lt;Vec&lt;Rc&lt;Node&gt;&gt;&gt;,
+}
+<span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let leaf = Rc::new(Node {
+</span><span class="boring">        value: 3,
+</span><span class="boring">        parent: RefCell::new(Weak::new()),
+</span><span class="boring">        children: RefCell::new(vec![]),
+</span><span class="boring">    });
+</span><span class="boring">
+</span><span class="boring">    println!(&quot;leaf parent = {:?}&quot;, leaf.parent.borrow().upgrade());
+</span><span class="boring">
+</span><span class="boring">    let branch = Rc::new(Node {
+</span><span class="boring">        value: 5,
+</span><span class="boring">        parent: RefCell::new(Weak::new()),
+</span><span class="boring">        children: RefCell::new(vec![Rc::clone(&amp;leaf)]),
+</span><span class="boring">    });
+</span><span class="boring">
+</span><span class="boring">    *leaf.parent.borrow_mut() = Rc::downgrade(&amp;branch);
+</span><span class="boring">
+</span><span class="boring">    println!(&quot;leaf parent = {:?}&quot;, leaf.parent.borrow().upgrade());
+</span><span class="boring">}</span></code></pre></pre>
+<p>这样，一个节点就能够引用其父节点，但不拥有其父节点。在示例 15-28 中，我们更新 <code>main</code> 来使用新定义以便 <code>leaf</code> 节点可以通过 <code>branch</code> 引用其父节点：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::cell::RefCell;
+</span><span class="boring">use std::rc::{Rc, Weak};
+</span><span class="boring">
+</span><span class="boring">#[derive(Debug)]
+</span><span class="boring">struct Node {
+</span><span class="boring">    value: i32,
+</span><span class="boring">    parent: RefCell&lt;Weak&lt;Node&gt;&gt;,
+</span><span class="boring">    children: RefCell&lt;Vec&lt;Rc&lt;Node&gt;&gt;&gt;,
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn main() {
+    let leaf = Rc::new(Node {
+        value: 3,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![]),
+    });
+
+    println!(&quot;leaf parent = {:?}&quot;, leaf.parent.borrow().upgrade());
+
+    let branch = Rc::new(Node {
+        value: 5,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![Rc::clone(&amp;leaf)]),
+    });
+
+    *leaf.parent.borrow_mut() = Rc::downgrade(&amp;branch);
+
+    println!(&quot;leaf parent = {:?}&quot;, leaf.parent.borrow().upgrade());
+}</code></pre></pre>
+<p><span class="caption">示例 15-28：一个 <code>leaf</code> 节点，其拥有指向其父节点 <code>branch</code> 的 <code>Weak</code> 引用</span></p>
+<p>创建 <code>leaf</code> 节点类似于示例 15-27，除了 <code>parent</code> 字段有所不同：<code>leaf</code> 开始时没有父节点，所以我们新建了一个空的 <code>Weak</code> 引用实例。</p>
+<p>此时，当尝试使用 <code>upgrade</code> 方法获取 <code>leaf</code> 的父节点引用时，会得到一个 <code>None</code> 值。如第一个 <code>println!</code> 输出所示：</p>
+<pre><code class="language-text">leaf parent = None
+</code></pre>
+<p>当创建 <code>branch</code> 节点时，其也会新建一个 <code>Weak&lt;Node&gt;</code> 引用，因为 <code>branch</code> 并没有父节点。<code>leaf</code> 仍然作为 <code>branch</code> 的一个子节点。一旦在 <code>branch</code> 中有了 <code>Node</code> 实例，就可以修改 <code>leaf</code> 使其拥有指向父节点的 <code>Weak&lt;Node&gt;</code> 引用。这里使用了 <code>leaf</code> 中 <code>parent</code> 字段里的 <code>RefCell&lt;Weak&lt;Node&gt;&gt;</code> 的 <code>borrow_mut</code> 方法，接着使用了 <code>Rc::downgrade</code> 函数来从 <code>branch</code> 中的 <code>Rc&lt;Node&gt;</code> 值创建了一个指向 <code>branch</code> 的 <code>Weak&lt;Node&gt;</code> 引用。</p>
+<p>当再次打印出 <code>leaf</code> 的父节点时，这一次将会得到存放了 <code>branch</code> 的 <code>Some</code> 值：现在 <code>leaf</code> 可以访问其父节点了！当打印出 <code>leaf</code> 时，我们也避免了如示例 15-26 中最终会导致栈溢出的循环：<code>Weak&lt;Node&gt;</code> 引用被打印为 <code>(Weak)</code>：</p>
+<pre><code class="language-text">leaf parent = Some(Node { value: 5, parent: RefCell { value: (Weak) },
+children: RefCell { value: [Node { value: 3, parent: RefCell { value: (Weak) },
+children: RefCell { value: [] } }] } })
+</code></pre>
+<p>没有无限的输出表明这段代码并没有造成引用循环。这一点也可以从观察 <code>Rc::strong_count</code> 和 <code>Rc::weak_count</code> 调用的结果看出。</p>
+<h4 id="可视化-strong_count-和-weak_count-的改变"><a class="header" href="#可视化-strong_count-和-weak_count-的改变">可视化 <code>strong_count</code> 和 <code>weak_count</code> 的改变</a></h4>
+<p>让我们通过创建了一个新的内部作用域并将 <code>branch</code> 的创建放入其中，来观察 <code>Rc&lt;Node&gt;</code> 实例的 <code>strong_count</code> 和 <code>weak_count</code> 值的变化。这会展示当 <code>branch</code> 创建和离开作用域被丢弃时会发生什么。这些修改如示例 15-29 所示：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::cell::RefCell;
+</span><span class="boring">use std::rc::{Rc, Weak};
+</span><span class="boring">
+</span><span class="boring">#[derive(Debug)]
+</span><span class="boring">struct Node {
+</span><span class="boring">    value: i32,
+</span><span class="boring">    parent: RefCell&lt;Weak&lt;Node&gt;&gt;,
+</span><span class="boring">    children: RefCell&lt;Vec&lt;Rc&lt;Node&gt;&gt;&gt;,
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn main() {
+    let leaf = Rc::new(Node {
+        value: 3,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![]),
+    });
+
+    println!(
+        &quot;leaf strong = {}, weak = {}&quot;,
+        Rc::strong_count(&amp;leaf),
+        Rc::weak_count(&amp;leaf),
+    );
+
+    {
+        let branch = Rc::new(Node {
+            value: 5,
+            parent: RefCell::new(Weak::new()),
+            children: RefCell::new(vec![Rc::clone(&amp;leaf)]),
+        });
+
+        *leaf.parent.borrow_mut() = Rc::downgrade(&amp;branch);
+
+        println!(
+            &quot;branch strong = {}, weak = {}&quot;,
+            Rc::strong_count(&amp;branch),
+            Rc::weak_count(&amp;branch),
+        );
+
+        println!(
+            &quot;leaf strong = {}, weak = {}&quot;,
+            Rc::strong_count(&amp;leaf),
+            Rc::weak_count(&amp;leaf),
+        );
+    }
+
+    println!(&quot;leaf parent = {:?}&quot;, leaf.parent.borrow().upgrade());
+    println!(
+        &quot;leaf strong = {}, weak = {}&quot;,
+        Rc::strong_count(&amp;leaf),
+        Rc::weak_count(&amp;leaf),
+    );
+}</code></pre></pre>
+<p><span class="caption">示例 15-29：在内部作用域创建 <code>branch</code> 并检查其强弱引用计数</span></p>
+<p>一旦创建了 <code>leaf</code>，其 <code>Rc&lt;Node&gt;</code> 的强引用计数为 1，弱引用计数为 0。在内部作用域中创建了 <code>branch</code> 并与 <code>leaf</code> 相关联，此时 <code>branch</code> 中 <code>Rc&lt;Node&gt;</code> 的强引用计数为 1，弱引用计数为 1（因为 <code>leaf.parent</code> 通过 <code>Weak&lt;Node&gt;</code> 指向 <code>branch</code>）。这里 <code>leaf</code> 的强引用计数为 2，因为现在 <code>branch</code> 的 <code>branch.children</code> 中储存了 <code>leaf</code> 的 <code>Rc&lt;Node&gt;</code> 的拷贝，不过弱引用计数仍然为 0。</p>
+<p>当内部作用域结束时，<code>branch</code> 离开作用域，<code>Rc&lt;Node&gt;</code> 的强引用计数减少为 0，所以其 <code>Node</code> 被丢弃。来自 <code>leaf.parent</code> 的弱引用计数 1 与 <code>Node</code> 是否被丢弃无关，所以并没有产生任何内存泄漏！</p>
+<p>如果在内部作用域结束后尝试访问 <code>leaf</code> 的父节点，会再次得到 <code>None</code>。在程序的结尾，<code>leaf</code> 中 <code>Rc&lt;Node&gt;</code> 的强引用计数为 1，弱引用计数为 0，因为现在 <code>leaf</code> 又是 <code>Rc&lt;Node&gt;</code> 唯一的引用了。</p>
+<p>所有这些管理计数和值的逻辑都内建于 <code>Rc&lt;T&gt;</code> 和 <code>Weak&lt;T&gt;</code> 以及它们的 <code>Drop</code> trait 实现中。通过在 <code>Node</code> 定义中指定从子节点到父节点的关系为一个<code>Weak&lt;T&gt;</code>引用，就能够拥有父节点和子节点之间的双向引用而不会造成引用循环和内存泄漏。</p>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>这一章涵盖了如何使用智能指针来做出不同于 Rust 常规引用默认所提供的保证与取舍。<code>Box&lt;T&gt;</code> 有一个已知的大小并指向分配在堆上的数据。<code>Rc&lt;T&gt;</code> 记录了堆上数据的引用数量以便可以拥有多个所有者。<code>RefCell&lt;T&gt;</code> 和其内部可变性提供了一个可以用于当需要不可变类型但是需要改变其内部值能力的类型，并在运行时而不是编译时检查借用规则。</p>
+<p>我们还介绍了提供了很多智能指针功能的 trait <code>Deref</code> 和 <code>Drop</code>。同时探索了会造成内存泄漏的引用循环，以及如何使用 <code>Weak&lt;T&gt;</code> 来避免它们。</p>
+<p>如果本章内容引起了你的兴趣并希望现在就实现你自己的智能指针的话，请阅读 <a href="https://doc.rust-lang.org/nomicon/index.html">“The Rustonomicon”</a> 来获取更多有用的信息。</p>
+<p>接下来，让我们谈谈 Rust 的并发。届时甚至还会学习到一些新的对并发有帮助的智能指针。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch15-05-interior-mutability.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch16-00-concurrency.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch15-05-interior-mutability.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch16-00-concurrency.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>

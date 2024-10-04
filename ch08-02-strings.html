@@ -1,0 +1,468 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>使用字符串储存 UTF-8 编码的文本 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="Rust 程序设计语言 简体中文版">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Rust 程序设计语言</a></li><li class="chapter-item expanded affix "><a href="foreword.html">前言</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">简介</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> 入门指南</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> 安装</a></li><li class="chapter-item expanded "><a href="ch01-02-hello-world.html"><strong aria-hidden="true">1.2.</strong> Hello, World!</a></li><li class="chapter-item expanded "><a href="ch01-03-hello-cargo.html"><strong aria-hidden="true">1.3.</strong> Hello, Cargo!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-guessing-game-tutorial.html"><strong aria-hidden="true">2.</strong> 写个猜数字游戏</a></li><li class="chapter-item expanded "><a href="ch03-00-common-programming-concepts.html"><strong aria-hidden="true">3.</strong> 常见编程概念</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-variables-and-mutability.html"><strong aria-hidden="true">3.1.</strong> 变量与可变性</a></li><li class="chapter-item expanded "><a href="ch03-02-data-types.html"><strong aria-hidden="true">3.2.</strong> 数据类型</a></li><li class="chapter-item expanded "><a href="ch03-03-how-functions-work.html"><strong aria-hidden="true">3.3.</strong> 函数</a></li><li class="chapter-item expanded "><a href="ch03-04-comments.html"><strong aria-hidden="true">3.4.</strong> 注释</a></li><li class="chapter-item expanded "><a href="ch03-05-control-flow.html"><strong aria-hidden="true">3.5.</strong> 控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-understanding-ownership.html"><strong aria-hidden="true">4.</strong> 认识所有权</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-what-is-ownership.html"><strong aria-hidden="true">4.1.</strong> 什么是所有权？</a></li><li class="chapter-item expanded "><a href="ch04-02-references-and-borrowing.html"><strong aria-hidden="true">4.2.</strong> 引用与借用</a></li><li class="chapter-item expanded "><a href="ch04-03-slices.html"><strong aria-hidden="true">4.3.</strong> Slice 类型</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-structs.html"><strong aria-hidden="true">5.</strong> 使用结构体组织相关联的数据</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-defining-structs.html"><strong aria-hidden="true">5.1.</strong> 结构体的定义和实例化</a></li><li class="chapter-item expanded "><a href="ch05-02-example-structs.html"><strong aria-hidden="true">5.2.</strong> 结构体示例程序</a></li><li class="chapter-item expanded "><a href="ch05-03-method-syntax.html"><strong aria-hidden="true">5.3.</strong> 方法语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch06-00-enums.html"><strong aria-hidden="true">6.</strong> 枚举和模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch06-01-defining-an-enum.html"><strong aria-hidden="true">6.1.</strong> 枚举的定义</a></li><li class="chapter-item expanded "><a href="ch06-02-match.html"><strong aria-hidden="true">6.2.</strong> match 控制流结构</a></li><li class="chapter-item expanded "><a href="ch06-03-if-let.html"><strong aria-hidden="true">6.3.</strong> if let 简洁控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"><strong aria-hidden="true">7.</strong> 使用包、Crate 和模块管理不断增长的项目</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch07-01-packages-and-crates.html"><strong aria-hidden="true">7.1.</strong> 包和 Crate</a></li><li class="chapter-item expanded "><a href="ch07-02-defining-modules-to-control-scope-and-privacy.html"><strong aria-hidden="true">7.2.</strong> 定义模块来控制作用域与私有性</a></li><li class="chapter-item expanded "><a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html"><strong aria-hidden="true">7.3.</strong> 引用模块项目的路径</a></li><li class="chapter-item expanded "><a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html"><strong aria-hidden="true">7.4.</strong> 使用 use 关键字将路径引入作用域</a></li><li class="chapter-item expanded "><a href="ch07-05-separating-modules-into-different-files.html"><strong aria-hidden="true">7.5.</strong> 将模块拆分成多个文件</a></li></ol></li><li class="chapter-item expanded "><a href="ch08-00-common-collections.html"><strong aria-hidden="true">8.</strong> 常见集合</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch08-01-vectors.html"><strong aria-hidden="true">8.1.</strong> 使用 Vector 储存列表</a></li><li class="chapter-item expanded "><a href="ch08-02-strings.html" class="active"><strong aria-hidden="true">8.2.</strong> 使用字符串储存 UTF-8 编码的文本</a></li><li class="chapter-item expanded "><a href="ch08-03-hash-maps.html"><strong aria-hidden="true">8.3.</strong> 使用 Hash Map 储存键值对</a></li></ol></li><li class="chapter-item expanded "><a href="ch09-00-error-handling.html"><strong aria-hidden="true">9.</strong> 错误处理</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong aria-hidden="true">9.1.</strong> 用 panic! 处理不可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-02-recoverable-errors-with-result.html"><strong aria-hidden="true">9.2.</strong> 用 Result 处理可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-03-to-panic-or-not-to-panic.html"><strong aria-hidden="true">9.3.</strong> 要不要 panic!</a></li></ol></li><li class="chapter-item expanded "><a href="ch10-00-generics.html"><strong aria-hidden="true">10.</strong> 泛型、Trait 和生命周期</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch10-01-syntax.html"><strong aria-hidden="true">10.1.</strong> 泛型数据类型</a></li><li class="chapter-item expanded "><a href="ch10-02-traits.html"><strong aria-hidden="true">10.2.</strong> Trait：定义共同行为</a></li><li class="chapter-item expanded "><a href="ch10-03-lifetime-syntax.html"><strong aria-hidden="true">10.3.</strong> 生命周期确保引用有效</a></li></ol></li><li class="chapter-item expanded "><a href="ch11-00-testing.html"><strong aria-hidden="true">11.</strong> 编写自动化测试</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch11-01-writing-tests.html"><strong aria-hidden="true">11.1.</strong> 如何编写测试</a></li><li class="chapter-item expanded "><a href="ch11-02-running-tests.html"><strong aria-hidden="true">11.2.</strong> 控制测试如何运行</a></li><li class="chapter-item expanded "><a href="ch11-03-test-organization.html"><strong aria-hidden="true">11.3.</strong> 测试的组织结构</a></li></ol></li><li class="chapter-item expanded "><a href="ch12-00-an-io-project.html"><strong aria-hidden="true">12.</strong> 一个 I/O 项目：构建命令行程序</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch12-01-accepting-command-line-arguments.html"><strong aria-hidden="true">12.1.</strong> 接受命令行参数</a></li><li class="chapter-item expanded "><a href="ch12-02-reading-a-file.html"><strong aria-hidden="true">12.2.</strong> 读取文件</a></li><li class="chapter-item expanded "><a href="ch12-03-improving-error-handling-and-modularity.html"><strong aria-hidden="true">12.3.</strong> 重构以改进模块化与错误处理</a></li><li class="chapter-item expanded "><a href="ch12-04-testing-the-librarys-functionality.html"><strong aria-hidden="true">12.4.</strong> 采用测试驱动开发完善库的功能</a></li><li class="chapter-item expanded "><a href="ch12-05-working-with-environment-variables.html"><strong aria-hidden="true">12.5.</strong> 处理环境变量</a></li><li class="chapter-item expanded "><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong aria-hidden="true">12.6.</strong> 将错误信息输出到标准错误而不是标准输出</a></li></ol></li><li class="chapter-item expanded "><a href="ch13-00-functional-features.html"><strong aria-hidden="true">13.</strong> Rust 中的函数式语言功能：迭代器与闭包</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch13-01-closures.html"><strong aria-hidden="true">13.1.</strong> 闭包：可以捕获其环境的匿名函数</a></li><li class="chapter-item expanded "><a href="ch13-02-iterators.html"><strong aria-hidden="true">13.2.</strong> 使用迭代器处理元素序列</a></li><li class="chapter-item expanded "><a href="ch13-03-improving-our-io-project.html"><strong aria-hidden="true">13.3.</strong> 改进之前的 I/O 项目</a></li><li class="chapter-item expanded "><a href="ch13-04-performance.html"><strong aria-hidden="true">13.4.</strong> 性能比较：循环对迭代器</a></li></ol></li><li class="chapter-item expanded "><a href="ch14-00-more-about-cargo.html"><strong aria-hidden="true">14.</strong> 更多关于 Cargo 和 Crates.io 的内容</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch14-01-release-profiles.html"><strong aria-hidden="true">14.1.</strong> 采用发布配置自定义构建</a></li><li class="chapter-item expanded "><a href="ch14-02-publishing-to-crates-io.html"><strong aria-hidden="true">14.2.</strong> 将 crate 发布到 Crates.io</a></li><li class="chapter-item expanded "><a href="ch14-03-cargo-workspaces.html"><strong aria-hidden="true">14.3.</strong> Cargo 工作空间</a></li><li class="chapter-item expanded "><a href="ch14-04-installing-binaries.html"><strong aria-hidden="true">14.4.</strong> 使用 cargo install 安装二进制文件</a></li><li class="chapter-item expanded "><a href="ch14-05-extending-cargo.html"><strong aria-hidden="true">14.5.</strong> Cargo 自定义扩展命令</a></li></ol></li><li class="chapter-item expanded "><a href="ch15-00-smart-pointers.html"><strong aria-hidden="true">15.</strong> 智能指针</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch15-01-box.html"><strong aria-hidden="true">15.1.</strong> 使用 Box&lt;T&gt; 指向堆上数据</a></li><li class="chapter-item expanded "><a href="ch15-02-deref.html"><strong aria-hidden="true">15.2.</strong> 使用 Deref Trait 将智能指针当作常规引用处理</a></li><li class="chapter-item expanded "><a href="ch15-03-drop.html"><strong aria-hidden="true">15.3.</strong> 使用 Drop Trait 运行清理代码</a></li><li class="chapter-item expanded "><a href="ch15-04-rc.html"><strong aria-hidden="true">15.4.</strong> Rc&lt;T&gt; 引用计数智能指针</a></li><li class="chapter-item expanded "><a href="ch15-05-interior-mutability.html"><strong aria-hidden="true">15.5.</strong> RefCell&lt;T&gt; 与内部可变性模式</a></li><li class="chapter-item expanded "><a href="ch15-06-reference-cycles.html"><strong aria-hidden="true">15.6.</strong> 引用循环会导致内存泄漏</a></li></ol></li><li class="chapter-item expanded "><a href="ch16-00-concurrency.html"><strong aria-hidden="true">16.</strong> 无畏并发</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch16-01-threads.html"><strong aria-hidden="true">16.1.</strong> 使用线程同时地运行代码</a></li><li class="chapter-item expanded "><a href="ch16-02-message-passing.html"><strong aria-hidden="true">16.2.</strong> 使用消息传递在线程间通信</a></li><li class="chapter-item expanded "><a href="ch16-03-shared-state.html"><strong aria-hidden="true">16.3.</strong> 共享状态并发</a></li><li class="chapter-item expanded "><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong aria-hidden="true">16.4.</strong> 使用 Sync 与 Send Traits 的可扩展并发</a></li></ol></li><li class="chapter-item expanded "><a href="ch17-00-oop.html"><strong aria-hidden="true">17.</strong> Rust 的面向对象编程特性</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch17-01-what-is-oo.html"><strong aria-hidden="true">17.1.</strong> 面向对象语言的特点</a></li><li class="chapter-item expanded "><a href="ch17-02-trait-objects.html"><strong aria-hidden="true">17.2.</strong> 顾及不同类型值的 trait 对象</a></li><li class="chapter-item expanded "><a href="ch17-03-oo-design-patterns.html"><strong aria-hidden="true">17.3.</strong> 面向对象设计模式的实现</a></li></ol></li><li class="chapter-item expanded "><a href="ch18-00-patterns.html"><strong aria-hidden="true">18.</strong> 模式与模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch18-01-all-the-places-for-patterns.html"><strong aria-hidden="true">18.1.</strong> 所有可能会用到模式的位置</a></li><li class="chapter-item expanded "><a href="ch18-02-refutability.html"><strong aria-hidden="true">18.2.</strong> Refutability（可反驳性）: 模式是否会匹配失效</a></li><li class="chapter-item expanded "><a href="ch18-03-pattern-syntax.html"><strong aria-hidden="true">18.3.</strong> 模式语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch19-00-advanced-features.html"><strong aria-hidden="true">19.</strong> 高级特征</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch19-01-unsafe-rust.html"><strong aria-hidden="true">19.1.</strong> 不安全的 Rust</a></li><li class="chapter-item expanded "><a href="ch19-03-advanced-traits.html"><strong aria-hidden="true">19.2.</strong> 高级 trait</a></li><li class="chapter-item expanded "><a href="ch19-04-advanced-types.html"><strong aria-hidden="true">19.3.</strong> 高级类型</a></li><li class="chapter-item expanded "><a href="ch19-05-advanced-functions-and-closures.html"><strong aria-hidden="true">19.4.</strong> 高级函数与闭包</a></li><li class="chapter-item expanded "><a href="ch19-06-macros.html"><strong aria-hidden="true">19.5.</strong> 宏</a></li></ol></li><li class="chapter-item expanded "><a href="ch20-00-final-project-a-web-server.html"><strong aria-hidden="true">20.</strong> 最后的项目：构建多线程 web server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch20-01-single-threaded.html"><strong aria-hidden="true">20.1.</strong> 建立单线程 web server</a></li><li class="chapter-item expanded "><a href="ch20-02-multithreaded.html"><strong aria-hidden="true">20.2.</strong> 将单线程 server 变为多线程 server</a></li><li class="chapter-item expanded "><a href="ch20-03-graceful-shutdown-and-cleanup.html"><strong aria-hidden="true">20.3.</strong> 优雅停机与清理</a></li></ol></li><li class="chapter-item expanded "><a href="appendix-00.html"><strong aria-hidden="true">21.</strong> 附录</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix-01-keywords.html"><strong aria-hidden="true">21.1.</strong> A - 关键字</a></li><li class="chapter-item expanded "><a href="appendix-02-operators.html"><strong aria-hidden="true">21.2.</strong> B - 运算符与符号</a></li><li class="chapter-item expanded "><a href="appendix-03-derivable-traits.html"><strong aria-hidden="true">21.3.</strong> C - 可派生的 trait</a></li><li class="chapter-item expanded "><a href="appendix-04-useful-development-tools.html"><strong aria-hidden="true">21.4.</strong> D - 实用开发工具</a></li><li class="chapter-item expanded "><a href="appendix-05-editions.html"><strong aria-hidden="true">21.5.</strong> E - 版本</a></li><li class="chapter-item expanded "><a href="appendix-06-translation.html"><strong aria-hidden="true">21.6.</strong> F - 本书译本</a></li><li class="chapter-item expanded "><a href="appendix-07-nightly-rust.html"><strong aria-hidden="true">21.7.</strong> G - Rust 是如何开发的与 “Nightly Rust”</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch08-02-strings.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="使用字符串储存-utf-8-编码的文本"><a class="header" href="#使用字符串储存-utf-8-编码的文本">使用字符串储存 UTF-8 编码的文本</a></h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/main/src/ch08-02-strings.md">ch08-02-strings.md</a>
+<br>
+commit 668c64760b5c7ea654facb4ba5fe9faddfda27cc</p>
+</blockquote>
+<p>第四章已经讲过一些字符串的内容，不过现在让我们更深入地了解它。字符串是新晋 Rustacean 们通常会被困住的领域，这是由于三方面理由的结合：Rust 倾向于确保暴露出可能的错误，字符串是比很多程序员所想象的要更为复杂的数据结构，以及 UTF-8。所有这些要素结合起来对于来自其他语言背景的程序员就可能显得很困难了。</p>
+<p>在集合章节中讨论字符串的原因是，字符串就是作为字节的集合外加一些方法实现的，当这些字节被解释为文本时，这些方法提供了实用的功能。在这一部分，我们会讲到 <code>String</code> 中那些任何集合类型都有的操作，比如创建、更新和读取。也会讨论 <code>String</code> 与其他集合不一样的地方，例如索引 <code>String</code> 是很复杂的，由于人和计算机理解 <code>String</code> 数据方式的不同。</p>
+<h3 id="什么是字符串"><a class="header" href="#什么是字符串">什么是字符串？</a></h3>
+<p>在开始深入这些方面之前，我们需要讨论一下术语 <strong>字符串</strong> 的具体意义。Rust 的核心语言中只有一种字符串类型：字符串 slice <code>str</code>，它通常以被借用的形式出现，<code>&amp;str</code>。第四章讲到了 <strong>字符串 slices</strong>：它们是一些对储存在别处的 UTF-8 编码字符串数据的引用。举例来说，由于字符串字面值被储存在程序的二进制输出中，因此字符串字面值也是字符串 slices。</p>
+<p>字符串（<code>String</code>）类型由 Rust 标准库提供，而不是编入核心语言，它是一种可增长、可变、可拥有、UTF-8 编码的字符串类型。当 Rustaceans 提及 Rust 中的 &quot;字符串 &quot;时，他们可能指的是 <code>String</code> 或 string slice <code>&amp;str</code> 类型，而不仅仅是其中一种类型。虽然本节主要讨论 <code>String</code>，但这两种类型在 Rust 的标准库中都有大量使用，而且 <code>String</code> 和 字符串 slices 都是 UTF-8 编码的。</p>
+<h3 id="新建字符串"><a class="header" href="#新建字符串">新建字符串</a></h3>
+<p>很多 <code>Vec</code> 可用的操作在 <code>String</code> 中同样可用，事实上 <code>String</code> 被实现为一个带有一些额外保证、限制和功能的字节 vector 的封装。其中一个同样作用于 <code>Vec&lt;T&gt;</code> 和 <code>String</code> 函数的例子是用来新建一个实例的 <code>new</code> 函数，如示例 8-11 所示。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let mut s = String::new();
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-11：新建一个空的 <code>String</code></span></p>
+<p>这新建了一个叫做 <code>s</code> 的空的字符串，接着我们可以向其中装载数据。通常字符串会有初始数据，因为我们希望一开始就有这个字符串。为此，可以使用 <code>to_string</code> 方法，它能用于任何实现了 <code>Display</code> trait 的类型，比如字符串字面值。示例 8-12 展示了两个例子。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let data = &quot;initial contents&quot;;
+
+    let s = data.to_string();
+
+    // 该方法也可直接用于字符串字面值：
+    let s = &quot;initial contents&quot;.to_string();
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-12：使用 <code>to_string</code> 方法从字符串字面值创建 <code>String</code></span></p>
+<p>这些代码会创建包含 <code>initial contents</code> 的字符串。</p>
+<p>也可以使用 <code>String::from</code> 函数来从字符串字面值创建 <code>String</code>。示例 8-13 中的代码等同于使用 <code>to_string</code>。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let s = String::from(&quot;initial contents&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-13：使用 <code>String::from</code> 函数从字符串字面值创建 <code>String</code></span></p>
+<p>因为字符串应用广泛，这里有很多不同的用于字符串的通用 API 可供选择。其中一些可能看起来多余，不过都有其用武之地！在这个例子中，<code>String::from</code> 和 <code>.to_string</code> 最终做了完全相同的工作，所以如何选择就是代码风格与可读性的问题了。</p>
+<p>记住字符串是 UTF-8 编码的，所以可以包含任何可以正确编码的数据，如示例 8-14 所示。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let hello = String::from(&quot;السلام عليكم&quot;);
+    let hello = String::from(&quot;Dobrý den&quot;);
+    let hello = String::from(&quot;Hello&quot;);
+    let hello = String::from(&quot;שלום&quot;);
+    let hello = String::from(&quot;नमस्ते&quot;);
+    let hello = String::from(&quot;こんにちは&quot;);
+    let hello = String::from(&quot;안녕하세요&quot;);
+    let hello = String::from(&quot;你好&quot;);
+    let hello = String::from(&quot;Olá&quot;);
+    let hello = String::from(&quot;Здравствуйте&quot;);
+    let hello = String::from(&quot;Hola&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-14：在字符串中储存不同语言的问候语</span></p>
+<p>所有这些都是有效的 <code>String</code> 值。</p>
+<h3 id="更新字符串"><a class="header" href="#更新字符串">更新字符串</a></h3>
+<p><code>String</code> 的大小可以增加，其内容也可以改变，就像可以放入更多数据来改变 <code>Vec</code> 的内容一样。另外，可以方便的使用 <code>+</code> 运算符或 <code>format!</code> 宏来拼接 <code>String</code> 值。</p>
+<h4 id="使用-push_str-和-push-附加字符串"><a class="header" href="#使用-push_str-和-push-附加字符串">使用 <code>push_str</code> 和 <code>push</code> 附加字符串</a></h4>
+<p>可以通过 <code>push_str</code> 方法来附加字符串 slice，从而使 <code>String</code> 变长，如示例 8-15 所示。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let mut s = String::from(&quot;foo&quot;);
+    s.push_str(&quot;bar&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-15：使用 <code>push_str</code> 方法向 <code>String</code> 附加字符串 slice</span></p>
+<p>执行这两行代码之后，<code>s</code> 将会包含 <code>foobar</code>。<code>push_str</code> 方法采用字符串 slice，因为我们并不需要获取参数的所有权。例如，示例 8-16 中我们希望在将 <code>s2</code> 的内容附加到 <code>s1</code> 之后还能使用它。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let mut s1 = String::from(&quot;foo&quot;);
+    let s2 = &quot;bar&quot;;
+    s1.push_str(s2);
+    println!(&quot;s2 is {s2}&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-16：将字符串 slice 的内容附加到 <code>String</code> 后使用它</span></p>
+<p>如果 <code>push_str</code> 方法获取了 <code>s2</code> 的所有权，就不能在最后一行打印出其值了。好在代码如我们期望那样工作！</p>
+<p><code>push</code> 方法被定义为获取一个单独的字符作为参数，并附加到 <code>String</code> 中。示例 8-17 展示了使用 <code>push</code> 方法将字母 &quot;l&quot; 加入 <code>String</code> 的代码。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let mut s = String::from(&quot;lo&quot;);
+    s.push('l');
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-17：使用 <code>push</code> 将一个字符加入 <code>String</code> 值中</span></p>
+<p>执行这些代码之后，<code>s</code> 将会包含 “lol”。</p>
+<h4 id="使用--运算符或-format-宏拼接字符串"><a class="header" href="#使用--运算符或-format-宏拼接字符串">使用 <code>+</code> 运算符或 <code>format!</code> 宏拼接字符串</a></h4>
+<p>通常你会希望将两个已知的字符串合并在一起。一种办法是像这样使用 <code>+</code> 运算符，如示例 8-18 所示。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let s1 = String::from(&quot;Hello, &quot;);
+    let s2 = String::from(&quot;world!&quot;);
+    let s3 = s1 + &amp;s2; // 注意 s1 被移动了，不能继续使用
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-18：使用 <code>+</code> 运算符将两个 <code>String</code> 值合并到一个新的 <code>String</code> 值中</span></p>
+<p>执行完这些代码之后，字符串 <code>s3</code> 将会包含 <code>Hello, world!</code>。<code>s1</code> 在相加后不再有效的原因，和使用 <code>s2</code> 的引用的原因，与使用 <code>+</code> 运算符时调用的函数签名有关。<code>+</code> 运算符使用了 <code>add</code> 函数，这个函数签名看起来像这样：</p>
+<pre><code class="language-rust ignore">fn add(self, s: &amp;str) -&gt; String {</code></pre>
+<p>在标准库中你会发现，<code>add</code> 的定义使用了泛型和关联类型。在这里我们替换为了具体类型，这也正是当使用 <code>String</code> 值调用这个方法会发生的。第十章会讨论泛型。这个签名提供了理解 <code>+</code> 运算那微妙部分的线索。</p>
+<p>首先，<code>s2</code> 使用了 <code>&amp;</code>，意味着我们使用第二个字符串的 <strong>引用</strong> 与第一个字符串相加。这是因为 <code>add</code> 函数的 <code>s</code> 参数：只能将 <code>&amp;str</code> 和 <code>String</code> 相加，不能将两个 <code>String</code> 值相加。不过等一下 ——  <code>&amp;s2</code> 的类型是 <code>&amp;String</code>, 而不是 <code>add</code> 第二个参数所指定的 <code>&amp;str</code>。那么为什么示例 8-18 还能编译呢？</p>
+<p>之所以能够在 <code>add</code> 调用中使用 <code>&amp;s2</code> 是因为 <code>&amp;String</code> 可以被 <strong>强转</strong>（<em>coerced</em>）成 <code>&amp;str</code>。当<code>add</code>函数被调用时，Rust 使用了一个被称为 <strong>Deref 强制转换</strong>（<em>deref coercion</em>）的技术，你可以将其理解为它把 <code>&amp;s2</code> 变成了 <code>&amp;s2[..]</code>。第十五章会更深入的讨论 Deref 强制转换。因为 <code>add</code> 没有获取参数的所有权，所以 <code>s2</code> 在这个操作后仍然是有效的 <code>String</code>。</p>
+<p>其次，可以发现签名中 <code>add</code> 获取了 <code>self</code> 的所有权，因为 <code>self</code> <strong>没有</strong> 使用 <code>&amp;</code>。这意味着示例 8-18 中的 <code>s1</code> 的所有权将被移动到 <code>add</code> 调用中，之后就不再有效。所以虽然 <code>let s3 = s1 + &amp;s2;</code> 看起来就像它会复制两个字符串并创建一个新的字符串，而实际上这个语句会获取 <code>s1</code> 的所有权，附加上从 <code>s2</code> 中拷贝的内容，并返回结果的所有权。换句话说，它看起来好像生成了很多拷贝，不过实际上并没有：这个实现比拷贝要更高效。</p>
+<p>如果想要级联多个字符串，<code>+</code> 的行为就显得笨重了：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let s1 = String::from(&quot;tic&quot;);
+    let s2 = String::from(&quot;tac&quot;);
+    let s3 = String::from(&quot;toe&quot;);
+
+    let s = s1 + &quot;-&quot; + &amp;s2 + &quot;-&quot; + &amp;s3;
+<span class="boring">}</span></code></pre></pre>
+<p>这时 <code>s</code> 的内容会是 “tic-tac-toe”。在有这么多 <code>+</code> 和 <code>&quot;</code> 字符的情况下，很难理解具体发生了什么。对于更为复杂的字符串链接，可以使用 <code>format!</code> 宏：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span>    let s1 = String::from(&quot;tic&quot;);
+    let s2 = String::from(&quot;tac&quot;);
+    let s3 = String::from(&quot;toe&quot;);
+
+    let s = format!(&quot;{s1}-{s2}-{s3}&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p>这些代码也会将 <code>s</code> 设置为 “tic-tac-toe”。<code>format!</code> 与 <code>println!</code> 的工作原理相同，不过不同于将输出打印到屏幕上，它返回一个带有结果内容的 <code>String</code>。这个版本就好理解的多，宏 <code>format!</code> 生成的代码使用引用所以不会获取任何参数的所有权。</p>
+<h3 id="索引字符串"><a class="header" href="#索引字符串">索引字符串</a></h3>
+<p>在很多语言中，通过索引来引用字符串中的单独字符是有效且常见的操作。然而在 Rust 中，如果你尝试使用索引语法访问 <code>String</code> 的一部分，会出现一个错误。考虑一下如示例 8-19 中所示的无效代码。</p>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
+</span>    let s1 = String::from(&quot;hello&quot;);
+    let h = s1[0];
+<span class="boring">}</span></code></pre>
+<p><span class="caption">示例 8-19：尝试对字符串使用索引语法</span></p>
+<p>这段代码会导致如下错误：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling collections v0.1.0 (file:///projects/collections)
+error[E0277]: the type `str` cannot be indexed by `{integer}`
+ --&gt; src/main.rs:3:16
+  |
+3 |     let h = s1[0];
+  |                ^ string indices are ranges of `usize`
+  |
+  = help: the trait `SliceIndex&lt;str&gt;` is not implemented for `{integer}`, which is required by `String: Index&lt;_&gt;`
+  = note: you can use `.chars().nth()` or `.bytes().nth()`
+          for more information, see chapter 8 in The Book: &lt;https://doc.rust-lang.org/book/ch08-02-strings.html#indexing-into-strings&gt;
+  = help: the trait `SliceIndex&lt;[_]&gt;` is implemented for `usize`
+  = help: for that trait implementation, expected `[_]`, found `str`
+  = note: required for `String` to implement `Index&lt;{integer}&gt;`
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `collections` (bin &quot;collections&quot;) due to 1 previous error
+</code></pre>
+<p>错误和提示说明了全部问题：Rust 的字符串不支持索引。那么接下来的问题是，为什么不支持呢？为了回答这个问题，我们必须先聊一聊 Rust 是如何在内存中储存字符串的。</p>
+<h4 id="内部表现"><a class="header" href="#内部表现">内部表现</a></h4>
+<p><code>String</code> 是一个 <code>Vec&lt;u8&gt;</code> 的封装。让我们看看示例 8-14 中一些正确编码的字符串的例子。首先是这一个：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span><span class="boring">    let hello = String::from(&quot;السلام عليكم&quot;);
+</span><span class="boring">    let hello = String::from(&quot;Dobrý den&quot;);
+</span><span class="boring">    let hello = String::from(&quot;Hello&quot;);
+</span><span class="boring">    let hello = String::from(&quot;שלום&quot;);
+</span><span class="boring">    let hello = String::from(&quot;नमस्ते&quot;);
+</span><span class="boring">    let hello = String::from(&quot;こんにちは&quot;);
+</span><span class="boring">    let hello = String::from(&quot;안녕하세요&quot;);
+</span><span class="boring">    let hello = String::from(&quot;你好&quot;);
+</span><span class="boring">    let hello = String::from(&quot;Olá&quot;);
+</span><span class="boring">    let hello = String::from(&quot;Здравствуйте&quot;);
+</span>    let hello = String::from(&quot;Hola&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p>在这里，<code>len</code> 的值是 4，这意味着储存字符串 “Hola” 的 <code>Vec</code> 的长度是四个字节：这里每一个字母的 UTF-8 编码都占用一个字节。那下面这个例子又如何呢？（注意这个字符串中的首字母是西里尔字母的 Ze 而不是数字 3。）</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span><span class="boring">    let hello = String::from(&quot;السلام عليكم&quot;);
+</span><span class="boring">    let hello = String::from(&quot;Dobrý den&quot;);
+</span><span class="boring">    let hello = String::from(&quot;Hello&quot;);
+</span><span class="boring">    let hello = String::from(&quot;שלום&quot;);
+</span><span class="boring">    let hello = String::from(&quot;नमस्ते&quot;);
+</span><span class="boring">    let hello = String::from(&quot;こんにちは&quot;);
+</span><span class="boring">    let hello = String::from(&quot;안녕하세요&quot;);
+</span><span class="boring">    let hello = String::from(&quot;你好&quot;);
+</span><span class="boring">    let hello = String::from(&quot;Olá&quot;);
+</span>    let hello = String::from(&quot;Здравствуйте&quot;);
+<span class="boring">    let hello = String::from(&quot;Hola&quot;);
+</span><span class="boring">}</span></code></pre></pre>
+<p>当问及这个字符是多长的时候有人可能会说是 12。然而，Rust 的回答是 24。这是使用 UTF-8 编码 “Здравствуйте” 所需要的字节数，这是因为每个 Unicode 标量值需要两个字节存储。因此一个字符串字节值的索引并不总是对应一个有效的 Unicode 标量值。作为演示，考虑如下无效的 Rust 代码：</p>
+<pre><code class="language-rust ignore does_not_compile">let hello = &quot;Здравствуйте&quot;;
+let answer = &amp;hello[0];</code></pre>
+<p>我们已经知道 <code>answer</code> 不是第一个字符 <code>3</code>。当使用 UTF-8 编码时，（西里尔字母的 Ze）<code>З</code> 的第一个字节是 <code>208</code>，第二个是 <code>151</code>，所以 <code>answer</code> 实际上应该是 <code>208</code>，不过 <code>208</code> 自身并不是一个有效的字母。返回 <code>208</code> 可不是一个请求字符串第一个字母的人所希望看到的，不过它是 Rust 在字节索引 0 位置所能提供的唯一数据。用户通常不会想要一个字节值被返回。即使这个字符串只有拉丁字母，如果 <code>&amp;&quot;hello&quot;[0]</code> 是返回字节值的有效代码，它也会返回 <code>104</code> 而不是 <code>h</code>。</p>
+<p>为了避免返回意外的值并造成不能立刻发现的 bug，Rust 根本不会编译这些代码，并在开发过程中及早杜绝了误会的发生。</p>
+<h4 id="字节标量值和字形簇天呐"><a class="header" href="#字节标量值和字形簇天呐">字节、标量值和字形簇！天呐！</a></h4>
+<p>这引起了关于 UTF-8 的另外一个问题：从 Rust 的角度来讲，事实上有三种相关方式可以理解字符串：字节、标量值和字形簇（最接近人们眼中 <strong>字母</strong> 的概念）。</p>
+<p>比如这个用梵文书写的印度语单词 “नमस्ते”，最终它储存在 vector 中的 <code>u8</code> 值看起来像这样：</p>
+<pre><code class="language-text">[224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224, 164, 164,
+224, 165, 135]
+</code></pre>
+<p>这里有 18 个字节，也就是计算机最终会储存的数据。如果从 Unicode 标量值的角度理解它们，也就像 Rust 的 <code>char</code> 类型那样，这些字节看起来像这样：</p>
+<pre><code class="language-text">['न', 'म', 'स', '्', 'त', 'े']
+</code></pre>
+<p>这里有六个 <code>char</code>，不过第四个和第六个都不是字母，它们是发音符号本身并没有任何意义。最后，如果以字形簇的角度理解，就会得到人们所说的构成这个单词的四个字母：</p>
+<pre><code class="language-text">[&quot;न&quot;, &quot;म&quot;, &quot;स्&quot;, &quot;ते&quot;]
+</code></pre>
+<p>Rust 提供了多种不同的方式来解释计算机储存的原始字符串数据，这样程序就可以选择它需要的表现方式，而无所谓是何种人类语言。</p>
+<p>最后一个 Rust 不允许使用索引获取 <code>String</code> 字符的原因是，索引操作预期总是需要常数时间（O(1)）。但是对于 <code>String</code> 不可能保证这样的性能，因为 Rust 必须从开头到索引位置遍历来确定有多少有效的字符。</p>
+<h3 id="字符串-slice"><a class="header" href="#字符串-slice">字符串 slice</a></h3>
+<p>索引字符串通常是一个坏点子，因为字符串索引应该返回的类型是不明确的：字节值、字符、字形簇或者字符串 slice。因此，如果你真的希望使用索引创建字符串 slice 时，Rust 会要求你更明确一些。为了更明确索引并表明你需要一个字符串 slice，相比使用 <code>[]</code> 和单个值的索引，可以使用 <code>[]</code> 和一个 range 来创建含特定字节的字符串 slice：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let hello = &quot;Здравствуйте&quot;;
+
+let s = &amp;hello[0..4];
+<span class="boring">}</span></code></pre></pre>
+<p>这里，<code>s</code> 会是一个 <code>&amp;str</code>，它包含字符串的头四个字节。早些时候，我们提到了这些字母都是两个字节长的，所以这意味着 <code>s</code> 将会是 “Зд”。</p>
+<p>如果获取 <code>&amp;hello[0..1]</code> 会发生什么呢？答案是：Rust 在运行时会 panic，就跟访问 vector 中的无效索引时一样：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling collections v0.1.0 (file:///projects/collections)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.43s
+     Running `target/debug/collections`
+thread 'main' panicked at src/main.rs:4:19:
+byte index 1 is not a char boundary; it is inside 'З' (bytes 0..2) of `Здравствуйте`
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+</code></pre>
+<p>你应该小心谨慎地使用这个操作，因为这么做可能会使你的程序崩溃。</p>
+<h3 id="遍历字符串的方法"><a class="header" href="#遍历字符串的方法">遍历字符串的方法</a></h3>
+<p>操作字符串每一部分的最好的方法是明确表示需要字符还是字节。对于单独的 Unicode 标量值使用 <code>chars</code> 方法。对 “Зд” 调用 <code>chars</code> 方法会将其分开并返回两个 <code>char</code> 类型的值，接着就可以遍历其结果来访问每一个元素了：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>for c in &quot;Зд&quot;.chars() {
+    println!(&quot;{c}&quot;);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>这些代码会打印出如下内容：</p>
+<pre><code class="language-text">З
+д
+</code></pre>
+<p>另外 <code>bytes</code> 方法返回每一个原始字节，这可能会适合你的使用场景：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>for b in &quot;Зд&quot;.bytes() {
+    println!(&quot;{b}&quot;);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>这些代码会打印出组成 <code>String</code> 的 4 个字节：</p>
+<pre><code class="language-text">208
+151
+208
+180
+</code></pre>
+<p>不过请记住有效的 Unicode 标量值可能会由不止一个字节组成。</p>
+<p>从字符串中获取如同天城文这样的字形簇是很复杂的，所以标准库并没有提供这个功能。<a href="https://crates.io/">crates.io</a><!-- ignore --> 上有些提供这样功能的 crate。</p>
+<h3 id="字符串并不简单"><a class="header" href="#字符串并不简单">字符串并不简单</a></h3>
+<p>总而言之，字符串还是很复杂的。不同的语言选择了不同的向程序员展示其复杂性的方式。Rust 选择了以准确的方式处理 <code>String</code> 数据作为所有 Rust 程序的默认行为，这意味着程序员们必须更多的思考如何预先处理 UTF-8 数据。这种权衡取舍相比其他语言更多的暴露出了字符串的复杂性，不过也使你在开发周期后期免于处理涉及非 ASCII 字符的错误。</p>
+<p>好消息是标准库提供了很多围绕 <code>String</code> 和 <code>&amp;str</code> 构建的功能，来帮助我们正确处理这些复杂场景。请务必查看这些使用方法的文档，例如 <code>contains</code> 来搜索一个字符串，和 <code>replace</code> 将字符串的一部分替换为另一个字符串。</p>
+<p>称作 <code>String</code> 的类型是由标准库提供的，而没有写进核心语言部分，它是可增长的、可变的、有所有权的、UTF-8 编码的字符串类型。当 Rustacean 们谈到 Rust 的 “字符串”时，它们通常指的是 <code>String</code> 或字符串 slice <code>&amp;str</code> 类型，而不特指其中某一个。虽然本部分内容大多是关于 <code>String</code> 的，不过这两个类型在 Rust 标准库中都被广泛使用，<code>String</code> 和字符串 slices 都是 UTF-8 编码的。</p>
+<p>现在让我们转向一些不太复杂的集合：哈希 map！</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch08-01-vectors.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch08-03-hash-maps.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch08-01-vectors.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch08-03-hash-maps.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
