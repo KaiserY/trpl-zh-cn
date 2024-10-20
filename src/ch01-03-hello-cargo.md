@@ -2,7 +2,7 @@
 
 > [ch01-03-hello-cargo.md](https://github.com/rust-lang/book/blob/main/src/ch01-03-hello-cargo.md)
 > <br>
-> commit f801008f555e4e94aae826cf45f3a8011a773098
+> commit 299fd1f3e11dd61ca136fb51d713f6b0ba7515ff
 
 Cargo 是 Rust 的构建系统和包管理器。大多数 Rustacean 们使用 Cargo 来管理他们的 Rust 项目，因为它可以为你处理很多任务，比如构建代码、下载依赖库并编译这些库。（我们把代码所需要的库叫做 **依赖**（*dependencies*））。
 
@@ -35,7 +35,7 @@ $ cd hello_cargo
 
 请自行选用文本编辑器打开 *Cargo.toml* 文件。它应该看起来如示例 1-2 所示：
 
-<span class="filename">文件名：Cargo.toml</span>
+<Listing number="1-2" file-name="Cargo.toml" caption="*cargo new* 命令生成的 *Cargo.toml* 的内容">
 
 ```toml
 [package]
@@ -48,7 +48,7 @@ edition = "2021"
 [dependencies]
 ```
 
-<span class="caption">示例 1-2: *cargo new* 命令生成的 *Cargo.toml* 的内容</span>
+</Listing>
 
 这个文件使用 [*TOML*][toml]<!-- ignore --> (*Tom's Obvious, Minimal Language*) 格式，这是 Cargo 配置文件的格式。
 
@@ -72,7 +72,7 @@ Cargo 为你生成了一个 “Hello, world!” 程序，正如我们之前编�
 
 Cargo 期望源文件存放在 *src* 目录中。项目根目录只存放 README、license 信息、配置文件和其他跟代码无关的文件。使用 Cargo 帮助你保持项目干净整洁，一切井井有条。
 
-如果没有使用 Cargo 开始项目，比如我们创建的 Hello,world! 项目，可以将其转化为一个 Cargo 项目。将代码放入 *src* 目录，并创建一个合适的 *Cargo.toml* 文件。
+如果没有使用 Cargo 开始项目，比如我们创建的 “Hello, world!” 项目，你可以将其转换为使用 Cargo 的项目。将项目代码移入 *src* 目录，并创建一个合适的 *Cargo.toml* 文件。一个简单的创建 *Cargo.toml* 文件的方法是运行 `cargo init`，它会自动为你创建该文件。
 
 ### 构建并运行 Cargo 项目
 

@@ -20,7 +20,7 @@
 
 一个无法被派生的 trait 的例子是为终端用户处理格式化的 `Display` 。你应该时常考虑使用合适的方法来为终端用户显示一个类型。终端用户应该看到类型的什么部分？他们会找出相关部分吗？对他们来说最相关的数据格式是什么样的？Rust 编译器没有这样的洞察力，因此无法为你提供合适的默认行为。
 
-本附录所提供的可派生 trait 列表并不全面：库可以为其自己的 trait 实现 `derive`，可以使用 `derive` 的 trait 列表事实上是无限的。实现 `derive` 涉及到过程宏的应用，这在第十九章的 [“宏”][macros] 有介绍。
+本附录所提供的可派生 trait 列表并不全面：库可以为其自己的 trait 实现 `derive`，可以使用 `derive` 的 trait 列表事实上是无限的。实现 `derive` 涉及到过程宏的应用，这在第二十章的 [“宏”][macros] 有介绍。
 
 ### 用于程序员输出的 `Debug`
 
@@ -91,4 +91,4 @@
 [creating-instances-from-other-instances-with-struct-update-syntax]: ch05-01-defining-structs.html#使用结构体更新语法从其他实例创建实例
 [stack-only-data-copy]: ch04-01-what-is-ownership.html#只在栈上的数据拷贝
 [ways-variables-and-data-interact-clone]: ch04-01-what-is-ownership.html#变量与数据交互的方式二克隆
-[macros]: ch19-06-macros.html#宏
+[macros]: ch20-06-macros.html#宏

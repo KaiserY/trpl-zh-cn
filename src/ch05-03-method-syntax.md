@@ -4,7 +4,7 @@
 > <br>
 > commit d339373a838fd312a8a9bcc9487e1ffbc9e1582f
 
-**方法**（method）与函数类似：它们使用 `fn` 关键字和名称声明，可以拥有参数和返回值，同时包含在某处调用该方法时会执行的代码。不过方法与函数是不同的，因为它们在结构体的上下文中被定义（或者是枚举或 trait 对象的上下文，将分别在[第六章][enums]和[第十七章][trait-objects]讲解），并且它们第一个参数总是 `self`，它代表调用该方法的结构体实例。
+**方法**（method）与函数类似：它们使用 `fn` 关键字和名称声明，可以拥有参数和返回值，同时包含在某处调用该方法时会执行的代码。不过方法与函数是不同的，因为它们在结构体的上下文中被定义（或者是枚举或 trait 对象的上下文，将分别在[第六章][enums]和[第十八章][trait-objects]讲解），并且它们第一个参数总是 `self`，它代表调用该方法的结构体实例。
 
 ### 定义方法
 
@@ -135,6 +135,6 @@ Can rect1 hold rect3? false
 但结构体并不是创建自定义类型的唯一方法：让我们转向 Rust 的枚举功能，为你的工具箱再添一个工具。
 
 [enums]: ch06-00-enums.html
-[trait-objects]: ch17-02-trait-objects.html
+[trait-objects]: ch18-02-trait-objects.html
 [public]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#使用-pub-关键字暴露路径
 [modules]: ch07-02-defining-modules-to-control-scope-and-privacy.html

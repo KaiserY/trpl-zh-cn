@@ -1,7 +1,7 @@
 ## 安装
 
 > [ch01-01-installation.md](https://github.com/rust-lang/book/blob/main/src/ch01-01-installation.md) <br>
-> commit 2bd5d42c9956369132228da6409f0e68da56c51a
+> commit d5eb2f7a8e9c6f51b4478f9cd46f55448e2ca2c1
 
 第一步是安装 Rust。我们会通过 `rustup` 下载 Rust，这是一个管理 Rust 版本和相关工具的命令行工具。下载时需要联网。
 
@@ -39,13 +39,7 @@ Linux 用户通常需要根据发行版（distribution）文档安装 GCC 或 Cl
 
 ### 在 Windows 上安装 `rustup`
 
-在 Windows 上，前往 [https://www.rust-lang.org/install.html][install] 并按照说明安装 Rust。在安装过程的某个步骤，你会收到一个信息说明为什么需要安装 Visual Studio 2013 或其更新版本的 MSVC 构建工具。
-
-要获取构建工具，你需要安装 [Visual Studio 2022][visualstudio]。当被问及需要安装什么工作负载（Workload）的时候，请确保勾选了以下内容：
-
-- “使用 C++ 的桌面开发”（“Desktop Development with C++”）
-- Windows 10（或 11）SDK
-- 英语语言包，以及其他你所需要的语言包
+在 Windows 上，前往 [https://www.rust-lang.org/install.html][install] 并按照说明安装 Rust。在安装过程的某个步骤，你会被提示要安装 Visual Studio。它提供了一个链接器和编译程序所需的原生库。如果你在此步骤需要更多帮助，请访问 [https://rust-lang.github.io/rustup/installation/windows-msvc.html][msvc]。
 
 本书的余下部分会使用能同时运行于 *cmd.exe* 和 PowerShell 的命令。如果存在特定差异，我们会解释使用哪一个。
 
@@ -111,5 +105,5 @@ $ rustup self uninstall
 
 [otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
 [install]: https://www.rust-lang.org/tools/install
-[visualstudio]: https://visualstudio.microsoft.com/downloads/
+[msvc]: https://rust-lang.github.io/rustup/installation/windows-msvc.html
 [community]: https://www.rust-lang.org/community

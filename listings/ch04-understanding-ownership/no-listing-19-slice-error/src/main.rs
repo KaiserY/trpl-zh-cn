@@ -18,6 +18,6 @@ fn main() {
 
     s.clear(); // 错误！
 
-    println!("the first word is: {}", word);
+    println!("the first word is: {word}");
 }
 // ANCHOR_END: here

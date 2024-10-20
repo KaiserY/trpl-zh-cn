@@ -198,7 +198,7 @@
 
 这里我们做出了三个明显的修改。首先，将 `run` 函数的返回类型变为 `Result<(), Box<dyn Error>>`。之前这个函数返回 unit 类型 `()`，现在它仍然保持作为 `Ok` 时的返回值。
 
-对于错误类型，使用了 **trait 对象** `Box<dyn Error>`（在开头使用了 `use` 语句将 `std::error::Error` 引入作用域）。[第十七章][ch17] 会涉及 trait 对象。目前只需知道 `Box<dyn Error>` 意味着函数会返回实现了 `Error` trait 的类型，不过无需指定具体将会返回的值的类型。这提供了在不同的错误场景可能有不同类型的错误返回值的灵活性。这也就是 `dyn`，它是 “动态的”（“dynamic”）的缩写。
+对于错误类型，使用了 **trait 对象** `Box<dyn Error>`（在开头使用了 `use` 语句将 `std::error::Error` 引入作用域）。[第十八章][ch18] 会涉及 trait 对象。目前只需知道 `Box<dyn Error>` 意味着函数会返回实现了 `Error` trait 的类型，不过无需指定具体将会返回的值的类型。这提供了在不同的错误场景可能有不同类型的错误返回值的灵活性。这也就是 `dyn`，它是 “动态的”（“dynamic”）的缩写。
 
 第二个改变是去掉了 `expect` 调用并替换为 [第九章][ch9-question-mark] 讲到的 `?`。不同于遇到错误就 `panic!`，`?` 会从函数中返回错误值并让调用者来处理它。
 
@@ -269,5 +269,5 @@ Rust 提示我们的代码忽略了 `Result` 值，它可能表明这里存在�
 [ch9-custom-types]: ch09-03-to-panic-or-not-to-panic.html#创建自定义类型进行有效性验证
 [ch9-error-guidelines]: ch09-03-to-panic-or-not-to-panic.html#错误处理指导原则
 [ch9-result]: ch09-02-recoverable-errors-with-result.html
-[ch17]: ch17-00-oop.html
+[ch18]: ch18-00-oop.html
 [ch9-question-mark]: ch09-02-recoverable-errors-with-result.html#传播错误的简写-运算符
