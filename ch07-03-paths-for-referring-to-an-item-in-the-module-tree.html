@@ -1,0 +1,454 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>引用模块项目的路径 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Rust 程序设计语言</a></li><li class="chapter-item expanded affix "><a href="foreword.html">前言</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">简介</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> 入门指南</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> 安装</a></li><li class="chapter-item expanded "><a href="ch01-02-hello-world.html"><strong aria-hidden="true">1.2.</strong> Hello, World!</a></li><li class="chapter-item expanded "><a href="ch01-03-hello-cargo.html"><strong aria-hidden="true">1.3.</strong> Hello, Cargo!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-guessing-game-tutorial.html"><strong aria-hidden="true">2.</strong> 写个猜数字游戏</a></li><li class="chapter-item expanded "><a href="ch03-00-common-programming-concepts.html"><strong aria-hidden="true">3.</strong> 常见编程概念</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-variables-and-mutability.html"><strong aria-hidden="true">3.1.</strong> 变量与可变性</a></li><li class="chapter-item expanded "><a href="ch03-02-data-types.html"><strong aria-hidden="true">3.2.</strong> 数据类型</a></li><li class="chapter-item expanded "><a href="ch03-03-how-functions-work.html"><strong aria-hidden="true">3.3.</strong> 函数</a></li><li class="chapter-item expanded "><a href="ch03-04-comments.html"><strong aria-hidden="true">3.4.</strong> 注释</a></li><li class="chapter-item expanded "><a href="ch03-05-control-flow.html"><strong aria-hidden="true">3.5.</strong> 控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-understanding-ownership.html"><strong aria-hidden="true">4.</strong> 认识所有权</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-what-is-ownership.html"><strong aria-hidden="true">4.1.</strong> 什么是所有权？</a></li><li class="chapter-item expanded "><a href="ch04-02-references-and-borrowing.html"><strong aria-hidden="true">4.2.</strong> 引用与借用</a></li><li class="chapter-item expanded "><a href="ch04-03-slices.html"><strong aria-hidden="true">4.3.</strong> Slice 类型</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-structs.html"><strong aria-hidden="true">5.</strong> 使用结构体组织相关联的数据</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-defining-structs.html"><strong aria-hidden="true">5.1.</strong> 结构体的定义和实例化</a></li><li class="chapter-item expanded "><a href="ch05-02-example-structs.html"><strong aria-hidden="true">5.2.</strong> 结构体示例程序</a></li><li class="chapter-item expanded "><a href="ch05-03-method-syntax.html"><strong aria-hidden="true">5.3.</strong> 方法语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch06-00-enums.html"><strong aria-hidden="true">6.</strong> 枚举和模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch06-01-defining-an-enum.html"><strong aria-hidden="true">6.1.</strong> 枚举的定义</a></li><li class="chapter-item expanded "><a href="ch06-02-match.html"><strong aria-hidden="true">6.2.</strong> match 控制流结构</a></li><li class="chapter-item expanded "><a href="ch06-03-if-let.html"><strong aria-hidden="true">6.3.</strong> if let 简洁控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"><strong aria-hidden="true">7.</strong> 使用包、Crate 和模块管理不断增长的项目</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch07-01-packages-and-crates.html"><strong aria-hidden="true">7.1.</strong> 包和 Crate</a></li><li class="chapter-item expanded "><a href="ch07-02-defining-modules-to-control-scope-and-privacy.html"><strong aria-hidden="true">7.2.</strong> 定义模块来控制作用域与私有性</a></li><li class="chapter-item expanded "><a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html" class="active"><strong aria-hidden="true">7.3.</strong> 引用模块项目的路径</a></li><li class="chapter-item expanded "><a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html"><strong aria-hidden="true">7.4.</strong> 使用 use 关键字将路径引入作用域</a></li><li class="chapter-item expanded "><a href="ch07-05-separating-modules-into-different-files.html"><strong aria-hidden="true">7.5.</strong> 将模块拆分成多个文件</a></li></ol></li><li class="chapter-item expanded "><a href="ch08-00-common-collections.html"><strong aria-hidden="true">8.</strong> 常见集合</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch08-01-vectors.html"><strong aria-hidden="true">8.1.</strong> 使用 Vector 储存列表</a></li><li class="chapter-item expanded "><a href="ch08-02-strings.html"><strong aria-hidden="true">8.2.</strong> 使用字符串储存 UTF-8 编码的文本</a></li><li class="chapter-item expanded "><a href="ch08-03-hash-maps.html"><strong aria-hidden="true">8.3.</strong> 使用 Hash Map 储存键值对</a></li></ol></li><li class="chapter-item expanded "><a href="ch09-00-error-handling.html"><strong aria-hidden="true">9.</strong> 错误处理</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong aria-hidden="true">9.1.</strong> 用 panic! 处理不可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-02-recoverable-errors-with-result.html"><strong aria-hidden="true">9.2.</strong> 用 Result 处理可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-03-to-panic-or-not-to-panic.html"><strong aria-hidden="true">9.3.</strong> 要不要 panic!</a></li></ol></li><li class="chapter-item expanded "><a href="ch10-00-generics.html"><strong aria-hidden="true">10.</strong> 泛型、Trait 和生命周期</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch10-01-syntax.html"><strong aria-hidden="true">10.1.</strong> 泛型数据类型</a></li><li class="chapter-item expanded "><a href="ch10-02-traits.html"><strong aria-hidden="true">10.2.</strong> Trait：定义共同行为</a></li><li class="chapter-item expanded "><a href="ch10-03-lifetime-syntax.html"><strong aria-hidden="true">10.3.</strong> 生命周期确保引用有效</a></li></ol></li><li class="chapter-item expanded "><a href="ch11-00-testing.html"><strong aria-hidden="true">11.</strong> 编写自动化测试</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch11-01-writing-tests.html"><strong aria-hidden="true">11.1.</strong> 如何编写测试</a></li><li class="chapter-item expanded "><a href="ch11-02-running-tests.html"><strong aria-hidden="true">11.2.</strong> 控制测试如何运行</a></li><li class="chapter-item expanded "><a href="ch11-03-test-organization.html"><strong aria-hidden="true">11.3.</strong> 测试的组织结构</a></li></ol></li><li class="chapter-item expanded "><a href="ch12-00-an-io-project.html"><strong aria-hidden="true">12.</strong> 一个 I/O 项目：构建命令行程序</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch12-01-accepting-command-line-arguments.html"><strong aria-hidden="true">12.1.</strong> 接受命令行参数</a></li><li class="chapter-item expanded "><a href="ch12-02-reading-a-file.html"><strong aria-hidden="true">12.2.</strong> 读取文件</a></li><li class="chapter-item expanded "><a href="ch12-03-improving-error-handling-and-modularity.html"><strong aria-hidden="true">12.3.</strong> 重构以改进模块化与错误处理</a></li><li class="chapter-item expanded "><a href="ch12-04-testing-the-librarys-functionality.html"><strong aria-hidden="true">12.4.</strong> 采用测试驱动开发完善库的功能</a></li><li class="chapter-item expanded "><a href="ch12-05-working-with-environment-variables.html"><strong aria-hidden="true">12.5.</strong> 处理环境变量</a></li><li class="chapter-item expanded "><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong aria-hidden="true">12.6.</strong> 将错误信息输出到标准错误而不是标准输出</a></li></ol></li><li class="chapter-item expanded "><a href="ch13-00-functional-features.html"><strong aria-hidden="true">13.</strong> Rust 中的函数式语言功能：迭代器与闭包</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch13-01-closures.html"><strong aria-hidden="true">13.1.</strong> 闭包：可以捕获其环境的匿名函数</a></li><li class="chapter-item expanded "><a href="ch13-02-iterators.html"><strong aria-hidden="true">13.2.</strong> 使用迭代器处理元素序列</a></li><li class="chapter-item expanded "><a href="ch13-03-improving-our-io-project.html"><strong aria-hidden="true">13.3.</strong> 改进之前的 I/O 项目</a></li><li class="chapter-item expanded "><a href="ch13-04-performance.html"><strong aria-hidden="true">13.4.</strong> 性能比较：循环对迭代器</a></li></ol></li><li class="chapter-item expanded "><a href="ch14-00-more-about-cargo.html"><strong aria-hidden="true">14.</strong> 更多关于 Cargo 和 Crates.io 的内容</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch14-01-release-profiles.html"><strong aria-hidden="true">14.1.</strong> 采用发布配置自定义构建</a></li><li class="chapter-item expanded "><a href="ch14-02-publishing-to-crates-io.html"><strong aria-hidden="true">14.2.</strong> 将 crate 发布到 Crates.io</a></li><li class="chapter-item expanded "><a href="ch14-03-cargo-workspaces.html"><strong aria-hidden="true">14.3.</strong> Cargo 工作空间</a></li><li class="chapter-item expanded "><a href="ch14-04-installing-binaries.html"><strong aria-hidden="true">14.4.</strong> 使用 cargo install 安装二进制文件</a></li><li class="chapter-item expanded "><a href="ch14-05-extending-cargo.html"><strong aria-hidden="true">14.5.</strong> Cargo 自定义扩展命令</a></li></ol></li><li class="chapter-item expanded "><a href="ch15-00-smart-pointers.html"><strong aria-hidden="true">15.</strong> 智能指针</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch15-01-box.html"><strong aria-hidden="true">15.1.</strong> 使用 Box&lt;T&gt; 指向堆上数据</a></li><li class="chapter-item expanded "><a href="ch15-02-deref.html"><strong aria-hidden="true">15.2.</strong> 使用 Deref Trait 将智能指针当作常规引用处理</a></li><li class="chapter-item expanded "><a href="ch15-03-drop.html"><strong aria-hidden="true">15.3.</strong> 使用 Drop Trait 运行清理代码</a></li><li class="chapter-item expanded "><a href="ch15-04-rc.html"><strong aria-hidden="true">15.4.</strong> Rc&lt;T&gt; 引用计数智能指针</a></li><li class="chapter-item expanded "><a href="ch15-05-interior-mutability.html"><strong aria-hidden="true">15.5.</strong> RefCell&lt;T&gt; 与内部可变性模式</a></li><li class="chapter-item expanded "><a href="ch15-06-reference-cycles.html"><strong aria-hidden="true">15.6.</strong> 引用循环会导致内存泄漏</a></li></ol></li><li class="chapter-item expanded "><a href="ch16-00-concurrency.html"><strong aria-hidden="true">16.</strong> 无畏并发</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch16-01-threads.html"><strong aria-hidden="true">16.1.</strong> 使用线程同时地运行代码</a></li><li class="chapter-item expanded "><a href="ch16-02-message-passing.html"><strong aria-hidden="true">16.2.</strong> 使用消息传递在线程间通信</a></li><li class="chapter-item expanded "><a href="ch16-03-shared-state.html"><strong aria-hidden="true">16.3.</strong> 共享状态并发</a></li><li class="chapter-item expanded "><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong aria-hidden="true">16.4.</strong> 使用 Sync 与 Send Traits 的可扩展并发</a></li></ol></li><li class="chapter-item expanded "><a href="ch17-00-async-await.html"><strong aria-hidden="true">17.</strong> Async 和 await</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch17-01-futures-and-syntax.html"><strong aria-hidden="true">17.1.</strong> Futures 和 async 语法</a></li><li class="chapter-item expanded "><a href="ch17-02-concurrency-with-async.html"><strong aria-hidden="true">17.2.</strong> 并发与 async</a></li><li class="chapter-item expanded "><a href="ch17-03-more-futures.html"><strong aria-hidden="true">17.3.</strong> 使用任意数量的 futures</a></li><li class="chapter-item expanded "><a href="ch17-04-streams.html"><strong aria-hidden="true">17.4.</strong> 流（Streams）</a></li><li class="chapter-item expanded "><a href="ch17-05-traits-for-async.html"><strong aria-hidden="true">17.5.</strong> 深入理解 async 相关的 traits</a></li><li class="chapter-item expanded "><a href="ch17-06-futures-tasks-threads.html"><strong aria-hidden="true">17.6.</strong> Futures，任务（tasks）和线程（threads）</a></li></ol></li><li class="chapter-item expanded "><a href="ch18-00-oop.html"><strong aria-hidden="true">18.</strong> Rust 的面向对象编程特性</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch18-01-what-is-oo.html"><strong aria-hidden="true">18.1.</strong> 面向对象语言的特点</a></li><li class="chapter-item expanded "><a href="ch18-02-trait-objects.html"><strong aria-hidden="true">18.2.</strong> 顾及不同类型值的 trait 对象</a></li><li class="chapter-item expanded "><a href="ch18-03-oo-design-patterns.html"><strong aria-hidden="true">18.3.</strong> 面向对象设计模式的实现</a></li></ol></li><li class="chapter-item expanded "><a href="ch19-00-patterns.html"><strong aria-hidden="true">19.</strong> 模式与模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch19-01-all-the-places-for-patterns.html"><strong aria-hidden="true">19.1.</strong> 所有可能会用到模式的位置</a></li><li class="chapter-item expanded "><a href="ch19-02-refutability.html"><strong aria-hidden="true">19.2.</strong> Refutability（可反驳性）: 模式是否会匹配失效</a></li><li class="chapter-item expanded "><a href="ch19-03-pattern-syntax.html"><strong aria-hidden="true">19.3.</strong> 模式语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch20-00-advanced-features.html"><strong aria-hidden="true">20.</strong> 高级特征</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch20-01-unsafe-rust.html"><strong aria-hidden="true">20.1.</strong> 不安全的 Rust</a></li><li class="chapter-item expanded "><a href="ch20-03-advanced-traits.html"><strong aria-hidden="true">20.2.</strong> 高级 trait</a></li><li class="chapter-item expanded "><a href="ch20-04-advanced-types.html"><strong aria-hidden="true">20.3.</strong> 高级类型</a></li><li class="chapter-item expanded "><a href="ch20-05-advanced-functions-and-closures.html"><strong aria-hidden="true">20.4.</strong> 高级函数与闭包</a></li><li class="chapter-item expanded "><a href="ch20-06-macros.html"><strong aria-hidden="true">20.5.</strong> 宏</a></li></ol></li><li class="chapter-item expanded "><a href="ch21-00-final-project-a-web-server.html"><strong aria-hidden="true">21.</strong> 最后的项目：构建多线程 web server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch21-01-single-threaded.html"><strong aria-hidden="true">21.1.</strong> 建立单线程 web server</a></li><li class="chapter-item expanded "><a href="ch21-02-multithreaded.html"><strong aria-hidden="true">21.2.</strong> 将单线程 server 变为多线程 server</a></li><li class="chapter-item expanded "><a href="ch21-03-graceful-shutdown-and-cleanup.html"><strong aria-hidden="true">21.3.</strong> 优雅停机与清理</a></li></ol></li><li class="chapter-item expanded "><a href="appendix-00.html"><strong aria-hidden="true">22.</strong> 附录</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix-01-keywords.html"><strong aria-hidden="true">22.1.</strong> A - 关键字</a></li><li class="chapter-item expanded "><a href="appendix-02-operators.html"><strong aria-hidden="true">22.2.</strong> B - 运算符与符号</a></li><li class="chapter-item expanded "><a href="appendix-03-derivable-traits.html"><strong aria-hidden="true">22.3.</strong> C - 可派生的 trait</a></li><li class="chapter-item expanded "><a href="appendix-04-useful-development-tools.html"><strong aria-hidden="true">22.4.</strong> D - 实用开发工具</a></li><li class="chapter-item expanded "><a href="appendix-05-editions.html"><strong aria-hidden="true">22.5.</strong> E - 版本</a></li><li class="chapter-item expanded "><a href="appendix-06-translation.html"><strong aria-hidden="true">22.6.</strong> F - 本书译本</a></li><li class="chapter-item expanded "><a href="appendix-07-nightly-rust.html"><strong aria-hidden="true">22.7.</strong> G - Rust 是如何开发的与 “Nightly Rust”</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="引用模块项目的路径"><a class="header" href="#引用模块项目的路径">引用模块项目的路径</a></h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/main/src/ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md">ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md</a>
+<br>
+commit 2b4565662d1a7973d870744a923f58f8f7dcce91</p>
+</blockquote>
+<p>来看一下 Rust 如何在模块树中找到一个项的位置，我们使用路径的方式，就像在文件系统使用路径一样。为了调用一个函数，我们需要知道它的路径。</p>
+<p>路径有两种形式：</p>
+<ul>
+<li><strong>绝对路径</strong>（<em>absolute path</em>）是以 crate 根（root）开头的全路径；对于外部 crate 的代码，是以 crate 名开头的绝对路径，对于当前 crate 的代码，则以字面值 <code>crate</code> 开头。</li>
+<li><strong>相对路径</strong>（<em>relative path</em>）从当前模块开始，以 <code>self</code>、<code>super</code> 或定义在当前模块中的标识符开头。</li>
+</ul>
+<p>绝对路径和相对路径都后跟一个或多个由双冒号（<code>::</code>）分割的标识符。</p>
+<p>回到示例 7-1，假设我们希望调用 <code>add_to_waitlist</code> 函数。还是同样的问题，<code>add_to_waitlist</code> 函数的路径是什么？在示例 7-3 中删除了一些模块和函数。</p>
+<p>我们在 crate 根定义了一个新函数 <code>eat_at_restaurant</code>，并在其中展示调用 <code>add_to_waitlist</code> 函数的两种方法。<code>eat_at_restaurant</code> 函数是我们 crate 库的一个公共 API，所以我们使用 <code>pub</code> 关键字来标记它。在 <a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#%E4%BD%BF%E7%94%A8-pub-%E5%85%B3%E9%94%AE%E5%AD%97%E6%9A%B4%E9%9C%B2%E8%B7%AF%E5%BE%84">“使用 <code>pub</code> 关键字暴露路径”</a> 一节，我们将详细介绍 <code>pub</code>。注意，这个例子无法编译通过，我们稍后会解释原因。</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile">mod front_of_house {
+    mod hosting {
+        fn add_to_waitlist() {}
+    }
+}
+
+pub fn eat_at_restaurant() {
+    // 绝对路径
+    crate::front_of_house::hosting::add_to_waitlist();
+
+    // 相对路径
+    front_of_house::hosting::add_to_waitlist();
+}</code></pre>
+<p><span class="caption">示例 7-3: 使用绝对路径和相对路径来调用 <code>add_to_waitlist</code> 函数</span></p>
+<p>第一种方式，我们在 <code>eat_at_restaurant</code> 中调用 <code>add_to_waitlist</code> 函数，使用的是绝对路径。<code>add_to_waitlist</code> 函数与 <code>eat_at_restaurant</code> 被定义在同一 crate 中，这意味着我们可以使用 <code>crate</code> 关键字为起始的绝对路径。</p>
+<p>在 <code>crate</code> 后面，我们持续地嵌入模块，直到我们找到 <code>add_to_waitlist</code>。你可以想象出一个相同结构的文件系统，我们通过指定路径 <code>/front_of_house/hosting/add_to_waitlist</code> 来执行 <code>add_to_waitlist</code> 程序。我们使用 <code>crate</code> 从 crate 根开始就类似于在 shell 中使用 <code>/</code> 从文件系统根开始。</p>
+<p>第二种方式，我们在 <code>eat_at_restaurant</code> 中调用 <code>add_to_waitlist</code>，使用的是相对路径。这个路径以 <code>front_of_house</code> 为起始，这个模块在模块树中，与 <code>eat_at_restaurant</code> 定义在同一层级。与之等价的文件系统路径就是 <code>front_of_house/hosting/add_to_waitlist</code>。以模块名开头意味着该路径是相对路径。</p>
+<p>选择使用相对路径还是绝对路径，要取决于你的项目，也取决于你是更倾向于将项的定义代码与使用该项的代码分开来移动，还是一起移动。举一个例子，如果我们要将 <code>front_of_house</code> 模块和 <code>eat_at_restaurant</code> 函数一起移动到一个名为 <code>customer_experience</code> 的模块中，我们需要更新 <code>add_to_waitlist</code> 的绝对路径，但是相对路径还是可用的。然而，如果我们要将 <code>eat_at_restaurant</code> 函数单独移到一个名为 <code>dining</code> 的模块中，还是可以使用原本的绝对路径来调用 <code>add_to_waitlist</code>，但是相对路径必须要更新。我们更倾向于使用绝对路径，因为把代码定义和项调用各自独立地移动是更常见的。</p>
+<p>让我们试着编译一下示例 7-3，并查明为何不能编译！示例 7-4 展示了这个错误。</p>
+<pre><code class="language-console">$ cargo build
+   Compiling restaurant v0.1.0 (file:///projects/restaurant)
+error[E0603]: module `hosting` is private
+ --&gt; src/lib.rs:9:28
+  |
+9 |     crate::front_of_house::hosting::add_to_waitlist();
+  |                            ^^^^^^^  --------------- function `add_to_waitlist` is not publicly re-exported
+  |                            |
+  |                            private module
+  |
+note: the module `hosting` is defined here
+ --&gt; src/lib.rs:2:5
+  |
+2 |     mod hosting {
+  |     ^^^^^^^^^^^
+
+error[E0603]: module `hosting` is private
+  --&gt; src/lib.rs:12:21
+   |
+12 |     front_of_house::hosting::add_to_waitlist();
+   |                     ^^^^^^^  --------------- function `add_to_waitlist` is not publicly re-exported
+   |                     |
+   |                     private module
+   |
+note: the module `hosting` is defined here
+  --&gt; src/lib.rs:2:5
+   |
+2  |     mod hosting {
+   |     ^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0603`.
+error: could not compile `restaurant` (lib) due to 2 previous errors
+</code></pre>
+<p><span class="caption">示例 7-4: 构建示例 7-3 出现的编译器错误</span></p>
+<p>错误信息说 <code>hosting</code> 模块是私有的。换句话说，我们拥有 <code>hosting</code> 模块和 <code>add_to_waitlist</code> 函数的正确路径，但是 Rust 不让我们使用，因为它不能访问私有片段。在 Rust 中，默认所有项（函数、方法、结构体、枚举、模块和常量）对父模块都是私有的。如果希望创建一个私有函数或结构体，你可以将其放入一个模块。</p>
+<p>父模块中的项不能使用子模块中的私有项，但是子模块中的项可以使用它们父模块中的项。这是因为子模块封装并隐藏了它们的实现详情，但是子模块可以看到它们定义的上下文。继续拿餐馆作比喻，把私有性规则想象成餐馆的后台办公室：餐馆内的事务对餐厅顾客来说是不可知的，但办公室经理可以洞悉其经营的餐厅并在其中做任何事情。</p>
+<p>Rust 选择以这种方式来实现模块系统功能，因此默认隐藏内部实现细节。这样一来，你就知道可以更改内部代码的哪些部分而不会破坏外部代码。不过 Rust 也确实提供了通过使用 <code>pub</code> 关键字来创建公共项，使子模块的内部部分暴露给上级模块。</p>
+<h3 id="使用-pub-关键字暴露路径"><a class="header" href="#使用-pub-关键字暴露路径">使用 <code>pub</code> 关键字暴露路径</a></h3>
+<p>让我们回头看一下示例 7-4 的错误，它告诉我们 <code>hosting</code> 模块是私有的。我们想让父模块中的 <code>eat_at_restaurant</code> 函数可以访问子模块中的 <code>add_to_waitlist</code> 函数，因此我们使用 <code>pub</code> 关键字来标记 <code>hosting</code> 模块，如示例 7-5 所示。</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile">mod front_of_house {
+    pub mod hosting {
+        fn add_to_waitlist() {}
+    }
+}
+
+pub fn eat_at_restaurant() {
+    // 绝对路径
+    crate::front_of_house::hosting::add_to_waitlist();
+
+    // 相对路径
+    front_of_house::hosting::add_to_waitlist();
+}</code></pre>
+<p><span class="caption">示例 7-5: 使用 <code>pub</code> 关键字声明 <code>hosting</code> 模块使其可在 <code>eat_at_restaurant</code> 使用</span></p>
+<p>不幸的是，示例 7-5 的代码编译仍然有错误，如示例 7-6 所示。</p>
+<pre><code class="language-console">$ cargo build
+   Compiling restaurant v0.1.0 (file:///projects/restaurant)
+error[E0603]: function `add_to_waitlist` is private
+ --&gt; src/lib.rs:9:37
+  |
+9 |     crate::front_of_house::hosting::add_to_waitlist();
+  |                                     ^^^^^^^^^^^^^^^ private function
+  |
+note: the function `add_to_waitlist` is defined here
+ --&gt; src/lib.rs:3:9
+  |
+3 |         fn add_to_waitlist() {}
+  |         ^^^^^^^^^^^^^^^^^^^^
+
+error[E0603]: function `add_to_waitlist` is private
+  --&gt; src/lib.rs:12:30
+   |
+12 |     front_of_house::hosting::add_to_waitlist();
+   |                              ^^^^^^^^^^^^^^^ private function
+   |
+note: the function `add_to_waitlist` is defined here
+  --&gt; src/lib.rs:3:9
+   |
+3  |         fn add_to_waitlist() {}
+   |         ^^^^^^^^^^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0603`.
+error: could not compile `restaurant` (lib) due to 2 previous errors
+</code></pre>
+<p><span class="caption">示例 7-6: 构建示例 7-5 出现的编译器错误</span></p>
+<p>发生了什么？在 <code>mod hosting</code> 前添加了 <code>pub</code> 关键字，使其变成公有的。伴随着这种变化，如果我们可以访问 <code>front_of_house</code>，那我们也可以访问 <code>hosting</code>。但是 <code>hosting</code> 的 <em>内容</em>（<em>contents</em>）仍然是私有的；这表明使模块公有并不使其内容也是公有的。模块上的 <code>pub</code> 关键字只允许其父模块引用它，而不允许访问内部代码。因为模块是一个容器，只是将模块变为公有能做的其实并不太多；同时需要更深入地选择将一个或多个项变为公有。</p>
+<p>示例 7-6 中的错误说，<code>add_to_waitlist</code> 函数是私有的。私有性规则不但应用于模块，还应用于结构体、枚举、函数和方法。</p>
+<p>让我们继续将 <code>pub</code> 关键字放置在 <code>add_to_waitlist</code> 函数的定义之前，使其变成公有。如示例 7-7 所示。</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust noplayground test_harness">mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+
+pub fn eat_at_restaurant() {
+    // 绝对路径
+    crate::front_of_house::hosting::add_to_waitlist();
+
+    // 相对路径
+    front_of_house::hosting::add_to_waitlist();
+}</code></pre>
+<p><span class="caption">示例 7-7: 为 <code>mod hosting</code>
+和 <code>fn add_to_waitlist</code> 添加 <code>pub</code> 关键字使它们可以在
+<code>eat_at_restaurant</code> 函数中被调用</span></p>
+<p>现在代码可以编译通过了！为了了解为何增加 <code>pub</code> 关键字使得我们可以在 <code>add_to_waitlist</code> 中调用这些路径与私有性规则有关，让我们看看绝对路径和相对路径。</p>
+<p>在绝对路径，我们从 <code>crate</code> 也就是 crate 根开始。crate 根中定义了 <code>front_of_house</code> 模块。虽然 <code>front_of_house</code> 模块不是公有的，不过因为 <code>eat_at_restaurant</code> 函数与 <code>front_of_house</code> 定义于同一模块中（即，<code>eat_at_restaurant</code> 和 <code>front_of_house</code> 是兄弟），我们可以从 <code>eat_at_restaurant</code> 中引用 <code>front_of_house</code>。接下来是使用 <code>pub</code> 标记的 <code>hosting</code> 模块。我们可以访问 <code>hosting</code> 的父模块，所以可以访问 <code>hosting</code>。最后，<code>add_to_waitlist</code> 函数被标记为 <code>pub</code> ，我们可以访问其父模块，所以这个函数调用是有效的！</p>
+<p>在相对路径，其逻辑与绝对路径相同，除了第一步：不同于从 crate 根开始，路径从 <code>front_of_house</code> 开始。<code>front_of_house</code> 模块与 <code>eat_at_restaurant</code> 定义于同一模块，所以从 <code>eat_at_restaurant</code> 中开始定义的该模块相对路径是有效的。接下来因为 <code>hosting</code> 和 <code>add_to_waitlist</code> 被标记为 <code>pub</code>，路径其余的部分也是有效的，因此函数调用也是有效的！</p>
+<p>如果你计划共享你的库 crate 以便其它项目可以使用你的代码，公有 API 将是决定 crate 用户如何与你代码交互的契约。关于管理公有 API 的修改以便被人更容易依赖你的库有着很多考量。这些考量超出了本书的范畴；如果你对这些话题感兴趣，请查阅 <a href="https://rust-lang.github.io/api-guidelines/">The Rust API Guidelines</a></p>
+<blockquote>
+<h3 id="二进制和库-crate-包的最佳实践"><a class="header" href="#二进制和库-crate-包的最佳实践">二进制和库 crate 包的最佳实践</a></h3>
+<p>我们提到过包（package）可以同时包含一个 <em>src/main.rs</em> 二进制 crate 根和一个 <em>src/lib.rs</em> 库 crate 根，并且这两个 crate 默认以包名来命名。通常，这种包含二进制 crate 和库 crate 的模式的包，在二进制 crate 中只保留足以生成一个可执行文件的代码，并由可执行文件调用库 crate 的代码。又因为库 crate 可以共享，这使得其它项目从包提供的大部分功能中受益。</p>
+<p>模块树应该定义在 <em>src/lib.rs</em> 中。这样通过以包名开头的路径，公有项就可以在二进制 crate 中使用。二进制 crate 就变得同其它在该 crate 之外的、使用库 crate 的用户一样：二者都只能使用公有 API。这有助于你设计一个好的 API；你不仅仅是作者，也是用户！</p>
+<p>在<a href="ch12-00-an-io-project.html">第十二章</a>我们会通过一个同时包含二进制 crate 和库 crate 的命令行程序来展示这些包组织上的实践。</p>
+</blockquote>
+<h3 id="super-开始的相对路径"><a class="header" href="#super-开始的相对路径"><code>super</code> 开始的相对路径</a></h3>
+<p>我们可以通过在路径的开头使用 <code>super</code> ，从父模块开始构建相对路径，而不是从当前模块或者 crate 根开始。这类似以 <code>..</code> 语法开始一个文件系统路径。使用 <code>super</code> 允许我们引用父模块中的已知项，这使得重新组织模块树变得更容易 —— 当模块与父模块关联的很紧密，但某天父模块可能要移动到模块树的其它位置。</p>
+<p>考虑一下示例 7-8 中的代码，它模拟了厨师更正了一个错误订单，并亲自将其提供给客户的情况。<code>back_of_house</code> 模块中的定义的 <code>fix_incorrect_order</code> 函数通过指定的 <code>super</code> 起始的 <code>deliver_order</code> 路径，来调用父模块中的 <code>deliver_order</code> 函数：</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust noplayground test_harness">fn deliver_order() {}
+
+mod back_of_house {
+    fn fix_incorrect_order() {
+        cook_order();
+        super::deliver_order();
+    }
+
+    fn cook_order() {}
+}</code></pre>
+<p><span class="caption">示例 7-8: 使用以 <code>super</code> 开头的相对路径从父目录开始调用函数</span></p>
+<p><code>fix_incorrect_order</code> 函数在 <code>back_of_house</code> 模块中，所以我们可以使用 <code>super</code> 进入 <code>back_of_house</code> 父模块，也就是本例中的 <code>crate</code> 根。在这里，我们可以找到 <code>deliver_order</code>。成功！我们认为 <code>back_of_house</code> 模块和 <code>deliver_order</code> 函数之间可能具有某种关联关系，并且，如果我们要重新组织这个 crate 的模块树，需要一起移动它们。因此，我们使用 <code>super</code>，这样一来，如果这些代码被移动到了其他模块，我们只需要更新很少的代码。</p>
+<h3 id="创建公有的结构体和枚举"><a class="header" href="#创建公有的结构体和枚举">创建公有的结构体和枚举</a></h3>
+<p>我们还可以使用 <code>pub</code> 来设计公有的结构体和枚举，不过关于在结构体和枚举上使用 <code>pub</code> 还有一些额外的细节需要注意。如果我们在一个结构体定义的前面使用了 <code>pub</code> ，这个结构体会变成公有的，但是这个结构体的字段仍然是私有的。我们可以根据情况决定每个字段是否公有。在示例 7-9 中，我们定义了一个公有结构体 <code>back_of_house:Breakfast</code>，其中有一个公有字段 <code>toast</code> 和私有字段 <code>seasonal_fruit</code>。这个例子模拟的情况是，在一家餐馆中，顾客可以选择随餐附赠的面包类型，但是厨师会根据季节和库存情况来决定随餐搭配的水果。餐馆可用的水果变化是很快的，所以顾客不能选择水果，甚至无法看到他们将会得到什么水果。</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust noplayground">mod back_of_house {
+    pub struct Breakfast {
+        pub toast: String,
+        seasonal_fruit: String,
+    }
+
+    impl Breakfast {
+        pub fn summer(toast: &amp;str) -&gt; Breakfast {
+            Breakfast {
+                toast: String::from(toast),
+                seasonal_fruit: String::from("peaches"),
+            }
+        }
+    }
+}
+
+pub fn eat_at_restaurant() {
+    // 在夏天订购一个黑麦土司作为早餐
+    let mut meal = back_of_house::Breakfast::summer("Rye");
+    // 改变主意更换想要面包的类型
+    meal.toast = String::from("Wheat");
+    println!("I'd like {} toast please", meal.toast);
+
+    // 如果取消下一行的注释代码不能编译；
+    // 不允许查看或修改早餐附带的季节水果
+    // meal.seasonal_fruit = String::from("blueberries");
+}</code></pre>
+<p><span class="caption">示例 7-9: 带有公有和私有字段的结构体</span></p>
+<p>因为 <code>back_of_house::Breakfast</code> 结构体的 <code>toast</code> 字段是公有的，所以我们可以在 <code>eat_at_restaurant</code> 中使用点号来随意的读写 <code>toast</code> 字段。注意，我们不能在 <code>eat_at_restaurant</code> 中使用 <code>seasonal_fruit</code> 字段，因为 <code>seasonal_fruit</code> 是私有的。尝试去除那一行修改 <code>seasonal_fruit</code> 字段值的代码的注释，看看你会得到什么错误！</p>
+<p>还请注意一点，因为 <code>back_of_house::Breakfast</code> 具有私有字段，所以这个结构体需要提供一个公共的关联函数来构造 <code>Breakfast</code> 的实例 (这里我们命名为 <code>summer</code>)。如果 <code>Breakfast</code> 没有这样的函数，我们将无法在 <code>eat_at_restaurant</code> 中创建 <code>Breakfast</code> 实例，因为我们不能在 <code>eat_at_restaurant</code> 中设置私有字段 <code>seasonal_fruit</code> 的值。</p>
+<p>与之相反，如果我们将枚举设为公有，则它的所有成员都将变为公有。我们只需要在 <code>enum</code> 关键字前面加上 <code>pub</code>，就像示例 7-10 展示的那样。</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust noplayground">mod back_of_house {
+    pub enum Appetizer {
+        Soup,
+        Salad,
+    }
+}
+
+pub fn eat_at_restaurant() {
+    let order1 = back_of_house::Appetizer::Soup;
+    let order2 = back_of_house::Appetizer::Salad;
+}</code></pre>
+<p><span class="caption">示例 7-10: 设计公有枚举，使其所有成员公有</span></p>
+<p>因为我们创建了名为 <code>Appetizer</code> 的公有枚举，所以我们可以在 <code>eat_at_restaurant</code> 中使用 <code>Soup</code> 和 <code>Salad</code> 成员。</p>
+<p>如果枚举成员不是公有的，那么枚举会显得用处不大；给枚举的所有成员挨个添加 <code>pub</code> 是很令人恼火的，因此枚举成员默认就是公有的。结构体通常使用时，不必将它们的字段公有化，因此结构体遵循常规，内容全部是私有的，除非使用 <code>pub</code> 关键字。</p>
+<p>还有一种使用 <code>pub</code> 的场景我们还没有涉及到，那就是我们最后要讲的模块功能：<code>use</code> 关键字。我们将先单独介绍 <code>use</code>，然后展示如何结合使用 <code>pub</code> 和 <code>use</code>。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch07-02-defining-modules-to-control-scope-and-privacy.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch07-02-defining-modules-to-control-scope-and-privacy.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
