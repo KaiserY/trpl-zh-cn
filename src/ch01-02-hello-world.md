@@ -38,7 +38,9 @@ $ cd hello_world
 
 现在打开刚创建的 *main.rs* 文件，输入示例 1-1 中的代码。
 
-<Listing number="1-1" file-name="main.rs" caption="一个打印 `Hello, world!` 的程序">
+<figure class="listing">
+
+<span class="file-name">文件名：main.rs</span>
 
 ```rust
 fn main() {
@@ -46,7 +48,10 @@ fn main() {
 }
 ```
 
-</Listing>
+<figcaption>示例 1-1：一个打印 `Hello, world!` 的程序</figcaption>
+
+</figure>
+
 
 保存文件，并回到当前目录为“~/projects/hello_world”的终端窗口。在 Linux 或 macOS 上，输入如下命令，编译并运行文件：
 

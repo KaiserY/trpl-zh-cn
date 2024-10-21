@@ -35,7 +35,9 @@ $ cd hello_cargo
 
 请自行选用文本编辑器打开 *Cargo.toml* 文件。它应该看起来如示例 1-2 所示：
 
-<Listing number="1-2" file-name="Cargo.toml" caption="*cargo new* 命令生成的 *Cargo.toml* 的内容">
+<figure class="listing">
+
+<span class="file-name">文件名：Cargo.toml</span>
 
 ```toml
 [package]
@@ -48,7 +50,9 @@ edition = "2021"
 [dependencies]
 ```
 
-</Listing>
+<figcaption>示例 1-2：*cargo new* 命令生成的 *Cargo.toml* 的内容</figcaption>
+
+</figure>
 
 这个文件使用 [*TOML*][toml]<!-- ignore --> (*Tom's Obvious, Minimal Language*) 格式，这是 Cargo 配置文件的格式。
 

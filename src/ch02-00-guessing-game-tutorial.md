@@ -49,13 +49,17 @@ $ cd guessing_game
 
 猜数字程序的第一部分请求和处理用户输入，并检查输入是否符合预期的格式。首先，我们会允许玩家输入一个猜测。在 _src/main.rs_ 中输入示例 2-1 中的代码。
 
-<Listing number="2-1" file-name="src/main.rs" caption="获取用户猜测并打印的代码">
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:all}}
 ```
 
-</Listing>
+<figcaption>示例 2-1：获取用户猜测并打印的代码</figcaption>
+
+</figure>
 
 这些代码包含很多信息，我们一行一行地过一遍。为了获取用户输入并打印结果作为输出，我们需要将 `io` 输入/输出库引入当前作用域。`io` 库来自于标准库，也被称为 `std`：
 
@@ -219,7 +223,7 @@ Cargo 认为这些版本与 `0.8.5` 版本的公有 API 相兼容，这样的版
 
 现在，不修改任何代码，构建项目，如示例 2-2 所示。
 
-<Listing number="2-2" caption="将 rand crate 添加为依赖之后运行 `cargo build` 的输出">
+<figure class="listing">
 
 ```console
 $ cargo build
@@ -242,7 +246,9 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 2.53s
 ```
 
-</Listing>
+<figcaption>示例 2-2：将 rand crate 添加为依赖之后运行 `cargo build` 的输出</figcaption>
+
+</figure>
 
 可能会出现不同的版本号（多亏了语义化版本，它们与代码是兼容的！），并且显示的行数可能会有所不同（取决于操作系统），行的顺序也可能会不同。
 
@@ -293,13 +299,17 @@ rand = "0.9.0"
 
 让我们开始使用 `rand` 来生成一个猜数字随机数。下一步是更新 *src/main.rs*，如示例 2-3 所示。
 
-<Listing number="2-3" file-name="src/main.rs" caption="添加生成随机数的代码">
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:all}}
 ```
 
-</Listing>
+<figcaption>示例 2-3：添加生成随机数的代码</figcaption>
+
+</figure>
 
 首先，我们新增了一行 `use rand::Rng;`。`Rng` 是一个 trait，它定义了随机数生成器应实现的方法，想使用这些方法的话，此 trait 必须在作用域中。第十章会详细介绍 trait。
 
@@ -338,13 +348,17 @@ You guessed: 5
 
 现在有了用户输入和一个随机数，我们可以比较它们。这个步骤如示例 2-4 所示。注意这段代码还不能通过编译，我们稍后会解释。
 
-<Listing number="2-4" file-name="src/main.rs" caption="处理比较两个数字可能的返回值">
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-04/src/main.rs:here}}
 ```
 
-</Listing>
+<figcaption>示例 2-4：处理比较两个数字可能的返回值</figcaption>
+
+</figure>
 
 首先我们增加了另一个 `use` 声明，从标准库引入了一个叫做 `std::cmp::Ordering` 的类型到作用域中。 `Ordering` 也是一个枚举，不过它的成员是 `Less`、`Greater` 和 `Equal`。这是比较两个值时可能出现的三种结果。
 
@@ -464,13 +478,17 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 为了进一步改善游戏性，不要在用户输入非数字时崩溃，需要忽略非数字，让用户可以继续猜测。可以通过修改 `guess` 将 `String` 转化为 `u32` 那部分代码来实现，如示例 2-5 所示：
 
-<Listing number="2-5" file-name="src/main.rs" caption="忽略非数字的猜测并重新请求数字而不是让程序崩溃">
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:here}}
 ```
 
-</Listing>
+<figcaption>示例 2-5：忽略非数字的猜测并重新请求数字而不是让程序崩溃</figcaption>
+
+</figure>
 
 我们将 `expect` 调用换成 `match` 语句，以从遇到错误就崩溃转换为处理错误。须知 `parse` 返回一个 `Result` 类型，而 `Result` 是一个拥有 `Ok` 或 `Err` 成员的枚举。这里使用的 `match` 表达式，和之前处理 `cmp` 方法返回 `Ordering` 时用的一样。
 
@@ -505,13 +523,17 @@ You win!
 
 太棒了！再有最后一个小的修改，就能完成猜数字游戏了：还记得程序依然会打印出秘密数字。在测试时还好，但正式发布时会毁了游戏。删掉打印秘密数字的 `println!`。示例 2-6 为最终代码：
 
-<Listing number="2-6" file-name="src/main.rs" caption="猜数字游戏的完整代码">
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-06/src/main.rs}}
 ```
 
-</Listing>
+<figcaption>示例 2-6：猜数字游戏的完整代码</figcaption>
+
+</figure>
 
 此时此刻，你顺利完成了猜数字游戏。恭喜！
 
