@@ -21,7 +21,7 @@ Rust 异步编程的关键元素是 *futures* 和 Rust 的 `async` 与 `await` �
 为了保持本章的内容专注于学习 async，而不是处理生态系统的部分组件，我们已经创建了一个 `trpl` crate（`trpl` 是 “The Rust Programming Language” 的缩写）。它重导出了你需要的所有类型、traits 和函数，它们主要来自于 [`futures`][futures-crate] 和 [`tokio`][tokio] crates。
 
 - `futures` crate 是一个 Rust 异步代码实验的官方仓库，也正是 `Future` 最初设计的地方。
--  Tokio 是目前 Rust 中应用最广泛的异步运行时（async runtime），特别是（但不仅是！） web 应用。这里还有其他优秀的运行时，它们可能更适合你的需求。我们在 `trpl` 的底层使用 Tokio 是因为它经过了充分测试且广泛使用。
+-  Tokio 是目前 Rust 中应用最广泛的异步运行时（async runtime），特别是（但不仅是！）web 应用。这里还有其他优秀的运行时，它们可能更适合你的需求。我们在 `trpl` 的底层使用 Tokio 是因为它经过了充分测试且广泛使用。
 
 在一些场景中，`trpl` 也会重命名或者封装原始 API 以便我们专注于与本章相关的细节。如果你想了解该 crate 的具体功能，我们鼓励你查看[其源码][crate-source]。你可以看到每个重导出的内容来自哪个 crate，我们留下了大量注释来解释这个 crate 的用途。
 
@@ -35,7 +35,7 @@ $ cargo add trpl
 
 现在我们可以利用 `trpl` 提供的多种组件来编写第一个异步程序。我们构建了一个小的命令行工具来抓取两个网页，拉取各自的 `<title>` 元素，并打印出第一个完成全部过程的标题。
 
-让我们开始编写一个函数，它获取一个网页 URL 作为参数，请求该 URL并返回标题元素的文本：
+让我们开始编写一个函数，它获取一个网页 URL 作为参数，请求该 URL 并返回标题元素的文本：
 
 <figure class="listing">
 
