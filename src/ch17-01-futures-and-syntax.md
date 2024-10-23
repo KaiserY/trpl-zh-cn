@@ -55,7 +55,108 @@ $ cargo add trpl
 
 > 注意：这不同于上一章节中 `thread::spawn` 的行为，当时传递给另一个线程的闭包会立即开始运行。这也与许多其他语言处理异步的方式不同！但对于 Rust 而言，这一点非常重要。稍后我们会解释原因。
 
+当我们有了 `response_text` 函数，就可以使用 `Html::parse` 将其解析为一个 `Html` 类型的实例。不同于原始字符串，现在我们有了一个可以将 HTML 作为更丰富数据结构来操作的数据类型。特别是我们可以使用 `select_first` 方法来找出给定 CSS 选择器（selector）中第一个匹配元素。通过传递字符串 `"title"`，我们会得到文档中的第一个 `<title>` 元素，如果它存在的话。由于可能没有任何匹配的元素，`select_first` 返回一个 `Option<ElementRef>`。最后我们使用 `Option::map` 方法，它允许我们在 `Option` 中有元素时对其进行处理，而在没有时则什么也不做。（这里也可以使用一个 `match` 表达式，但 `map` 更符合惯用的写法。）在传递给 `map` 的函数体中，我们调用了 `title_element` 上的 `inner_html` 来获取其内容，这是一个 `String`。当上面所讲的都完成后，我们会得到一个 `Option<String>`。
 
+注意 Rust 的 `await` 关键字出现在需要等待的表达式之后而不是之前。也就是说，这是一个 *后缀关键字*（*postfix keyword*）。如果你在其它语言中使用过 async 的话，这可能与你所熟悉的有所不同。Rust 如此选择是因为这使得方法的链式调用更加简洁。因此，我们可以修改 `page_url_for` 的函数体来链式调用 `trpl::get` 和 `text` 并在其之间使用 `await`，如示例 17-2 所示：
+
+
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-02/src/main.rs:chaining}}
+```
+
+<figcaption>示例 17-2：使用 `await` 关键字的链式调用</figcaption>
+
+</figure>
+
+这样我们就成功编写了第一个异步函数！在我们向 `main` 加入一些代码调用它之前，让我们再多了解下我们写了什么以及它的意义。
+
+当 Rust 遇到一个 `async` 关键字标记的代码块时，会将其编译为一个实现了 `Future` trait 的唯一的、匿名的数据类型。当 Rust 遇到一个被标记为 `async` 的函数时，会将其编译进一个拥有异步代码块的非异步函数。异步函数的返回值类型是编译器为异步代码块所创建的匿名数据类型。
+
+因此，编写 `async fn` 就等同于编写一个返回类型的 *future* 的函数。当编译器遇到类似示例 17-1 中 `async fn page_title` 的函数定义时，它等价于以下定义的非异步函数：
+
+```rust
+# extern crate trpl; // required for mdbook test
+use std::future::Future;
+use trpl::Html;
+
+fn page_title(url: &str) -> impl Future<Output = Option<String>> + '_ {
+    async move {
+        let text = trpl::get(url).await.text().await;
+        Html::parse(&text)
+            .select_first("title")
+            .map(|title| title.inner_html())
+    }
+}
+```
+
+让我们挨个看一下转换后版本的每一个部分：
+
+- 它使用了之前第十章 [“trait 作为参数”][impl-trait] 部分讨论过的 `impl Trait` 语法
+- 它返回的 trait 是一个 `Future`，它有一个关联类型 `Output`。注意 `Output` 的类型是 `Option<String>`，这与 `async fn` 版本的 `page_title` 的原始返回值类型相同。
+- 所有原始函数中被调用的代码被封装进一个 `async move` 块。回忆一下，代码块是表达式。这整个块就是函数所返回的表达式
+- 如上所述，这个异步代码块产生一个 `Option<String>` 类型的值。这个值与返回类型中的 `Output` 类型一致。这正类似于你已经见过的其它代码块。
+- 新版函数的函数体是一个 `async move` 代码块，因为它如何使用 `url` 参数决定了这一点。（本章后续部分将更详细地讨论 `async` 和 `async move` 之间的区别。）
+- 新版本的函数在返回类型中使用了一种我们之前未见过的生命周期标记：`'_`。因为函数返回的 `Future` 指向一个引用（在这个例子中是指向 `url` 参数的引用）我们需要告诉 Rust 引用的生命周期。这里无需命名该生命周期，因为 Rust 足够智能到能理解这里只涉及到唯一一个引用，不过我们 *必须* 明确指出返回的 `Future` 受该生命周期的约束。
+
+现在我们可以在 `main` 中调用 `page_title`。首先，我们只会获取一个页面的标题。在示例 17-3 中，我们沿用了第十二章中获取命令行参数的相同模式。接着我们传递第一个 URL 给 `page_title`，并等待结果。因为 future 产生的值是一个 `Option<String>`，我们使用 `match` 表达式来根据页面是否有 `<title>` 来打印不同的信息。
+
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
+
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-03/src/main.rs:main}}
+```
+
+<figcaption>示例 17-3：在 `main` 中通过一个用户提供的参数调用 `page_title` 函数</figcaption>
+
+</figure>
+
+很不幸的是这还不能编译。唯一可以使用 `await` 关键字的地方是异步函数或者代码块中，同时 Rust 不允许将特殊的 `main` 函数标记为 `async`。
+
+<!-- manual-regeneration
+cd listings/ch17-async-await/listing-17-03
+cargo build
+copy just the compiler error
+-->
+
+```text
+error[E0752]: `main` function is not allowed to be `async`
+ --> src/main.rs:6:1
+  |
+6 | async fn main() {
+  | ^^^^^^^^^^^^^^^ `main` function is not allowed to be `async`
+```
+
+`main` 不能标记为 `async` 的原因是异步代码需要一个 *运行时*：即一个管理执行异步代码细节的 Rust crate。一个程序的 `main` 函数可以 *初始化* 一个运行时，但是其 *自身* 并不是一个运行时。（稍后我们会进一步解释原因。）每一个执行异步代码的 Rust 程序必须至少有一个设置运行时并执行 futures 的地方。
+
+大部分支持异步的语言会打包一个运行时在语言中。Rust 则不是，相这里有很多不同的异步运行时，每一个都有适合其目标的权衡取舍。例如，一个拥有很多核心和大量内存的高吞吐 web server 与一个单核、少量内存并且没有堆分配能力的微控制器相比有着截然不同的需求。提供这些运行时的 crate 通常也提供了例如文件或者网络 IO 这类常用功能的异步版本。
+
+从这里到本章余下部分，我们会使用 `trpl` crate 的 `run` 函数，它获取一个 future 作为参数并运行到结束。在内部，调用 `run` 会设置一个运行时来运行传递的 future。一旦 future 完成，`run` 返回 future 返回的任何值。
+
+我们可以将 `page_title` 返回的 future 直接传递给 `run`。一旦其完成，我们能够匹配返回的 `Option<String>`，正如示例 17-3 我们尝试的那样。然而，在本章的大部分示例中（以及大多数实际应用中的异步代码中！），我们会执行不止一次异步函数调用，所以相反我们会传递一个 `async` 块并显式地等待 `page_title` 调用的结果，如示例 17-4 所示。
+
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
+
+```rust,should_panic,noplayground
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-04/src/main.rs:run}}
+```
+
+<figcaption>示例 17-4：等待一个使用异步代码块的 `trpl::run`</figcaption>
+
+</figure>
+
+当我们运行代码，我们会得到最初预想的行为：
+
+```console
+{{#include ../listings/ch17-async-await/listing-17-04/output.txt}}
+```
 
 [impl-trait]: ch10-02-traits.html#trait-作为参数
 [iterators-lazy]: ch13-02-iterators.html
