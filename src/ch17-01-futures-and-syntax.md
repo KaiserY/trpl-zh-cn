@@ -6,7 +6,7 @@
 
 Rust 异步编程的关键元素是 *futures* 和 Rust 的 `async` 与 `await` 关键字。
 
-*future* 是一个现在可能还没有准备好但将在未来某个时刻准备好的值。（相同的概念也出现在很多语言中，有时被称为 “task” 或者 “promise”。）Rust 提供了 `Future` trait 作为基础组件，这样不同的异步操作就可以在不同的数据结构上实现。在 Rust 中，我们称实现了 `Future` trait 的类型为 futures。每一个实现了 `Future` 的类型会维护自己的进度状态信息和 "ready" 的定义。
+*future* 是一个现在可能还没有准备好但将在未来某个时刻准备好的值。（相同的概念也出现在很多语言中，有时被称为 “task” 或者 “promise”。）Rust 提供了 `Future` trait 作为基础组件，这样不同的异步操作就可以在不同的数据结构上实现。在 Rust 中，我们称实现了 `Future` trait 的类型为 futures。每一个实现了 `Future` 的类型会维护自己的进度状态信息和 “ready” 的定义。
 
 `async` 关键字可以用于代码块和函数，表明它们可以被中断并恢复。在一个 async 块或 async 函数中，可以使用 `await` 关键字来等待一个 future 准备就绪，这一过程称为 *等待一个 future*。async 块或 async 函数中每一个等待 future 的地方都可能是一个 async 块或 async 函数中断并随后恢复的点。检查一个 future 并查看其值是否已经准备就绪的过程被称为 *轮询*（polling）。
 
@@ -157,6 +157,57 @@ error[E0752]: `main` function is not allowed to be `async`
 ```console
 {{#include ../listings/ch17-async-await/listing-17-04/output.txt}}
 ```
+
+我们终于有了一些可以正常工作的异步代码！现在它们可以成功编译并运行。在我们添加代码让两个网址进行竞争之前，让我们简要地回顾一下 future 是如何工作的。
+
+每一个 *await point*，也就是代码使用 `await` 关键字的地方，代表将控制权交还给运行时的地方。为此 Rust 需要记录异步代码块中涉及的状态，这样运行时可以去执行其他工作，并在准备好时回来继续推进当前的任务。这就像你通过编写一个枚举来保存每一个 `await` point 的状态一样：
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/no-listing-state-machine/src/lib.rs:enum}}
+```
+
+编写代码来手动控制不同状态之间的转换是非常乏味且容易出错的，特别是之后增加了更多功能和状态的时候。相反，Rust 编译器自动创建并管理异步代码的状态机数据结构。如果你感兴趣的话：是的，正常的借用和所有权也全部适用于这些数据结构。幸运的是，编译器也会为我们处理这些检查，并提供友好的错误信息。本章稍后会讲解一些相关内容！
+
+最终需要某个组件来执行状态机。这就是运行时。（这也是为什么在了解运行时的时候，你可能会看到 *executors* 这个词：executor 是运行时中负责执行异步代码的部分。）
+
+现在我们能够理解了之前示例 17-3 中为何编译器阻止我们将 `main` 本身标记为异步函数了。如果 `main` 是一个异步函数，需要有其它组件来管理 `main` futrue 返回的状态机，但是 `main` 是程序的入口点！为此我们在 `main` 函数中调用 `trpl::run`，它设置了一个运行时并运行 `async` 块返回的 future 并等待它返回 `Ready`。
+
+> 注意：一些运行时提供了相关的宏所以你 *可以* 编写一个异步 `main` 函数。这些宏将 `async fn main() { ... }` 重写为正常的 `fn main`，执行的逻辑与我们在示例 17-5 中手动实现的一样：像 `trpl::run` 一样调用一个函数运行 future 直到结束。
+
+让我们将这些代码片段整理一下来看看如何编写并发代码，这里通过两个来自命令行的不同 URL 来调用 `page_title` 并使其相互竞争。
+
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
+
+<!-- should_panic,noplayground because mdbook does not pass args -->
+
+```rust,should_panic,noplayground
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-05/src/main.rs:all}}
+```
+
+<figcaption>示例 17-5</figcaption>
+
+</figure>
+
+示例 17-5 中以分别由用户提供的 URL 调用 `page_title` 开始。我们将调用 `page_title` 产生的 future 分别保存为 `title_fut_1` 和 `title_fut_2`。请记住，它们还没有进行任何工作，因为 future 是惰性的，并且我们还没有 `await` 它们。接着我们将 futures 传递给 `trpl::race`，它返回一个值表明哪个传递的 future 最先返回。
+
+> 注意：在内部 `race` 构建在一个更通用的函数 `select` 之上，你会在真实的 Rust 代码中更常遇到它。`select` 函数可以做很多 `trpl::race` 函数做不了的事，不过它也有一些额外的复杂性，所以目前我们先略过介绍。
+
+由于任何一个 future 都可以合理地 “获胜”，所以返回 `Result` 没有意义。相反 `race` 返回了一个我们之前没有见过的类型 `trpl::Either`。`Either` 类型有点类似于 `Result`，它也有两个成员。但是不同于 `Either`，`Either` 没有内置成功或者失败的概念。相反它使用 `Left` 和 `Right` 来表示 “一个或另一个”。
+
+```rust
+enum Either<A, B> {
+    Left(A),
+    Right(B),
+}
+```
+
+`race` 函数返回 `Left`， 如果第一个参数先完成，并包含该 future 的输出，如果 *第二个* future 先完成，则返回 `Right` 和第二个 future 的输出。这匹配调用函数时参数出现的顺序：第一个参数在第二个参数的左边。
+
+我们还更新了 `page_title` 来返回与传递时相同的 URL。如此如果首先返回的页面没有可以解析的 `<title>`，仍然可以打印出有意义的信息。有了这些信息，我们对 `println!` 的输出进行了封装和更新，以表明哪个 URL 最先完成，并在页面有 `<title>` 时打印出它的内容。
+
+现在我们完成一个小型网页爬虫的构建了！挑选一对 URL并运行命令行工具。你会发现某些网站稳定地快于其它网站，而有些情况哪些网站会 *赢* 则每次都不同。更重要的是，你已经掌握了处理 futures 的基础知识，因此我们现在可以进一步探索更多异步操作的可能性了。
 
 [impl-trait]: ch10-02-traits.html#trait-作为参数
 [iterators-lazy]: ch13-02-iterators.html
