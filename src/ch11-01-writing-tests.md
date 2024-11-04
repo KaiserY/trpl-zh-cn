@@ -79,7 +79,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 <span class="filename">文件名：src/lib.rs</span>
 
 ```rust,panics,noplayground
-{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-03/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-03/src/lib.rs}}
 ```
 
 <span class="caption">示例 11-3：增加第二个因调用了 `panic!` 而失败的测试</span>
