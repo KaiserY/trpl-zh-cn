@@ -78,7 +78,7 @@ error[E0308]: mismatched types
 
 为了使代码能够正常工作，我们需要使用 *trait objects*，正如我们在第十二章的 [“从 `run` 函数中返回错误”][dyn] 中做的那样。（第十八章会详细介绍 trait objects。）使用 trait objects 允许我们将这些类型所产生的不同的匿名 future 视为相同的类型，因为它们都实现了 `Future` trait。
 
-> 注意：在第八章中，我们讨论过另一种将多种类型包含进一个 `Vec` 的方式：使用一个枚举来代表每个可以出现在向量中的不同类型。不过这里我们不能这么做。首先，没有方法来命名这些不同的类型，因为它们是匿名的。其次，我们最开始采用向量和 `join_all` 的原因是为了处理一个直到运行时之前都不知道是什么的 future 的动态集合。
+> 注意：在第八章中，我们讨论过另一种将多种类型包含进一个 `Vec` 的方式：使用一个枚举来代表每个可以出现在向量中的不同类型。不过这里我们不能这么做。一方面，没有方法来命名这些不同的类型，因为它们是匿名的。另一方面，我们最开始采用向量和 `join_all` 的原因是为了处理一个直到运行时之前都不知道是什么的 future 的动态集合。
 
 我们以将 `vec!` 中的每个 future 用 `Box::new` 封装来作为开始，如示例 17-16 所示。
 
@@ -94,7 +94,7 @@ error[E0308]: mismatched types
 
 </figure>
 
-不幸的是，代码仍然不能编译。事实上，这里犯了与之前相同的基本错误，不过我们会在第二个和第三个 `Box::new` 调用处得到两个错误，而且还会得到一个提及 `Unpin` trait 的新错误。我们一会再回到 `Unpin` 错误上。首先，让我们通过显式指定 `futures` 的类型来修复 `Box::new` 调用的类型错误：
+不幸的是，代码仍然不能编译。事实上，我们遇到了与之前相同的基本错误，不过这次我们会在第二个和第三个 `Box::new` 调用处各得到一个错误，同时还会得到一个提及 `Unpin` trait 的新错误。我们一会再回到 `Unpin` 错误上。首先，让我们通过显式标注 `futures` 的类型来修复 `Box::new` 调用的类型错误：
 
 <figure class="listing">
 
@@ -108,9 +108,9 @@ error[E0308]: mismatched types
 
 </figure>
 
-这里必须编写的类型有一点复杂，让我们整体过一遍：
+这里必须编写的类型有一点复杂，让我们逐步过一遍：
 
-- 最内层的类型是 future 本身。
+- 最内层的类型是 future 本身。我们显式地指出 future 的输出类型是单元类型 `()`，其编写为 `Future<Output = ()>`。
 - 接着使用 `dyn` 将 trait 标记为动态的。
 - 整个 trait 引用被封装进一个 `Box`。
 - 最后，我们显式表明 `futures` 是一个包含这些项的 `Vec`。
@@ -217,9 +217,9 @@ received 'you'
 
 （长舒一口气！）
 
-这里还有一些我们可以探索的内容。首先，因为通过 `Box` 来将这些 futures 放到堆上，使用 `Pin<Box<T>>` 会带来少量的额外开销，而我们这么做仅仅是为了对齐它们的类型。毕竟实际上这里并不 *需要* 堆分配：这些 futures 对于这个特定的函数来说是本地的。如上所示，`Pin` 本身是一个封装类型，所以我们可以获得拥有单一类型 `Vec` 的好处（也就是使用 `Box` 的初始原因）而不用堆分配。我们可以通过 `std::pin::pin` 宏来直接对每个 future 使用 `Pin`。
+这里还有一些我们可以进一步探索的内容。首先，因为通过 `Box` 来将这些 futures 放到堆上，使用 `Pin<Box<T>>` 会带来少量的额外开销，而我们这么做仅仅是为了使类型对齐。毕竟这里实际上并不 *需要* 堆分配：这些 futures 对于这个特定的函数来说是本地的。如上所述，`Pin` 本身是一个封装类型，因此我们可以在 `Vec` 中拥有单一类型的好处（也就是使用 `Box` 的初始原因）而不用堆分配。我们可以通过 `std::pin::pin` 宏来直接对每个 future 使用 `Pin`。
 
-然而，我们仍然必须现实地知道被 pin 住的引用的类型：否则 Rust 仍然不知道如何将它们解释为动态 trait objects，这是将它们放进 `Vec` 所需的。因此我们在定义每个 future 的时候使用 `pin!`，并将 `futures` 定义为一个包含被 pin 住的动态 `Future` 类型的可变引用的 `Vec`，如示例 17-19 所示。
+然而，我们仍然必须现实地知道被 pin 的引用的类型：否则 Rust 仍然不知道如何将它们解释为动态 trait objects，这是将它们放进 `Vec` 所需的。因此我们在定义每个 future 的时候使用 `pin!`，并将 `futures` 定义为一个包含被 pin 的动态 `Future` 类型的可变引用的 `Vec`，如示例 17-19 所示。
 
 <figure class="listing">
 
@@ -247,8 +247,34 @@ received 'you'
 
 </figure>
 
-我们可以使用 `trpl::join!` 来 await 它们，因为它允许你传递多个 future 类型并产生一个这些类型的元组。
+我们可以使用 `trpl::join!` 来 await 它们，因为它允许你传递多个 future 类型并产生一个这些类型的元组。我们 *不能* 使用 `trpl::join_all`，因为它要求传递的 future 都拥有相同的类型。请记住，那个错误正式我们开启 `Pin` 探索之旅的原因！
+
+这是一个基础的权衡取舍：要么我们可以使用 `join_all` 处理动态数量的 future，只要它们都有相同的类型；要么我们可以使用 `join` 函数或者 `join!` 宏来处理固定数量的 future，哪怕它们有着不同的类型。不过这与 Rust 处理任何其它类型是一样的。Future 并不特殊，即便我们采用了一些友好的语法来处理它们，而这其实是好事。
+
+### future 竞争
+
+当我们使用 `join` 系列函数和宏来 “join” future 时，我们要求它们 *全部* 结束才能继续。虽然有时我们只需要 *部分* future 结束就能继续，这有点像一个 future 与另一个 future 竞争。
+
+在示例 17-21 中，我们再次使用 `trpl::race` 来运行 `slow` 和 `fast` 两个 future 并相互竞争。它们每一个都会在开始运行时打印一条消息，通过调用并 await `sleep` 暂停一段时间，接着在其结束时打印另一条消息。然后我们将它们传递给 `trpl::race` 并等待其中一个结束。（结果不会令人意外：`fast` 会赢！）不同于我们在[第一个异步程序][async-program]中使用 `race` 的时候，这里忽略了其返回的 `Either` 实例，因为所有有趣的行为都发生在异步代码块中。
+
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-21/src/main.rs:here}}
+```
+
+<figcaption>示例 17-21：使用 `race` 来获取哪个 future 最先结束的结果</figcaption>
+
+</figure>
+
+请注意如果你反转 `race` 参数的顺序，“started” 消息的顺序会改变，即使 `fast` future 总是第一个结束。这是因为这个特定的 `race` 函数实现并不是公平的。它总是以传递的参数的顺序来运行传递的 futures。其它的实现 *是* 公平的，并且会随机选择首先轮询的 future。不过无论我们使用的 race 实现是否公平，其中 *一个* future 会在另一个任务开始之前一直运行到异步代码块中第一个 `await` 为止。
+
+回忆一下[第一个异步程序][async-program]中提到在每一个 await point，如果被 await 的 future 还没有就绪，Rust 会给运行时一个机会来暂停该任务并切换到另一个。这反过来也是正确的：Rust *只会* 在一个 await point 暂停异步代码块并将控制权交还给运行时。await points 之间的一切都是同步。
+
+这意味着如果你在异步代码块中做了一堆工作而没有一个 await point，则那个 future 会阻塞其它任何 future 继续进行。
 
 [collections]: ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: ch12-03-improving-error-handling-and-modularity.html
-[async-program]: ch17-01-futures-and-syntax.html#our-first-async-program
+[async-program]: ch17-01-futures-and-syntax.html#第一个异步程序
