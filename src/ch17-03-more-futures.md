@@ -295,7 +295,94 @@ received 'you'
 
 </figure>
 
-在示例 17-22 中，我们使用 `slow` 在几个 future 中模拟这类 CPU 密集型工作。首先
+在示例 17-22 中，我们使用 `slow` 在几个 future 中模拟这类 CPU 密集型工作。首先，每个 future 只会在进行了一系列缓慢操作 *之后* 才将控制权交还给运行时。
+
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-23/src/main.rs:slow-futures}}
+```
+
+<figcaption>示例 17-23：使用 `thread::sleep` 来模拟缓慢的操作</figcaption>
+
+</figure>
+
+如果运行代码，你会看到这些输出：
+
+<!-- manual-regeneration
+cd listings/ch17-async-await/listing-17-24/
+cargo run
+copy just the output
+-->
+
+```text
+'a' started.
+'a' ran for 30ms
+'a' ran for 10ms
+'a' ran for 20ms
+'b' started.
+'b' ran for 75ms
+'b' ran for 10ms
+'b' ran for 15ms
+'b' ran for 350ms
+'a' finished.
+```
+
+与上一个示例一样，`race` 仍然在 `a` 完成后就立刻结束了。两个 future 之间没有交叉。`a` future 一直进行其工作直到 `trpl::sleep` 调用被 await，然后 `b` future 一直进行其工作直到它自己的 `trpl::sleep` 调用被 await，再然后 `a` future 完成。为了使两个 future 在其缓慢任务之间继续进行，我们需要 await point 才能将控制权交还给运行时。这意味着我们需要一些可以 await 的东西！
+
+我们已经在示例 17-23 中见过这类交接发生：如果去掉 `a` future 结尾的 `trpl::sleep`，那么当它完成时 `b` future *完全* 不会运行。也许我们可以使用 `sleep` 函数来作为开始呢？
+
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-24/src/main.rs:here}}
+```
+
+<figcaption>示例 17-24：使用 `sleep` 让操作切换以继续进行</figcaption>
+
+</figure>
+
+在示例 17-24 中，我们在 `slow` 调用之间增加了 `trpl::sleep` 调用和 await points。现在两个 future 的工作会相互交叉：
+
+<!-- manual-regeneration
+cd listings/ch17-async-await/listing-17-24
+cargo run
+copy just the output
+-->
+
+```text
+'a' started.
+'a' ran for 30ms
+'b' started.
+'b' ran for 75ms
+'a' ran for 10ms
+'b' ran for 10ms
+'a' ran for 20ms
+'b' ran for 15ms
+'a' finished.
+```
+
+`a` future 仍然会在交还控制权给 `b` 之前运行一会，因为它在调用 `trpl::sleep` 之前就调用了 `slow`，不过在这之后两个 future 会在触发 await point 时来回切换。在这个例子中，我们在 `slow` 之后这么做，不过我们可以在任何合适的地方拆分任务。
+
+但是我们并不希望在这里 *休眠*：我们希望尽可能快地取得进展。我们仅仅是需要交还控制权给运行时。我们可以使用 `yield_now` 函数来直接这么做。在示例 17-25 中，我们将所有的 `sleep` 调用替换为 `yield_now`。
+
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-25/src/main.rs:yields}}
+```
+
+<figcaption>示例 17-25：使用 `yield_now` 让操作切换以继续进行</figcaption>
+
+</figure>
+
+这不仅更为清楚地表明了实际的意图而且更显著地快于使用 `sleep`，
 
 [collections]: ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: ch12-03-improving-error-handling-and-modularity.html
