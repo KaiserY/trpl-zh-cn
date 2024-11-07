@@ -382,7 +382,86 @@ copy just the output
 
 </figure>
 
-这不仅更为清楚地表明了实际的意图而且更显著地快于使用 `sleep`，
+这不仅更为清楚地表明了实际的意图而且更显著地快于使用 `sleep`，因为像这样使用 `sleep` 的定时器通常受限于其控制粒度。例如我们使用的 `sleep` 版本，会至少休眠一毫秒，哪怕我们传递一纳秒的 `Duration`。而且，现代计算机非常 *快速*：它们可以在一毫秒内做很多事！
+
+你可以自行设置一些基准测试来验证这一点，例如示例 17-26 中的这个。（这并不是一个特别严谨的进行性能测试的方法，不过用来展示这里的区别是足够的。）这里，我们省略了所有的状态打印，传递一纳秒的 `Duration` 给 `trpl::sleep`，并让每一个 future 各自运行，不在 future 之间切换。接着我们运行 1000 次迭代并对比下使用 `trpl::sleep` 的 future 和使用 `trpl::yield_now` 的 future 的运行时间。
+
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-26/src/main.rs:here}}
+```
+
+<figcaption>示例 17-26：对比 `sleep` 和 `yield_now` 的性能</figcaption>
+
+</figure>
+
+使用 `yield_now` 的版本要 *快得多*！
+
+这意味着取决于程序所作的其它工作，异步哪怕在计算密集型任务中也有作用，因为它提供了一个结构化程序中不同部分之间关系的实用工具。这是一种形式的 *协同多任务处理*（*cooperative multitasking*），每个 futrue 有权通过 await point 来决定何时交还控制权。因此每个 future 也有责任避免阻塞太长时间。在一些基于 Rust 的嵌入式系统中，这是 *唯一* 的多任务处理类型。
+
+当然，在真实代码中，通常你无需在每一行代码上使用 await points 交替函数调用。虽然这样控制 yielding 相对来说更为廉价，但也不是毫无代价的！在很多情况下，尝试分解计算密集型任务可能使其显著减速，所以有时为了 *整体* 性能让一个操作简单阻塞是更好的选择。你应该总是通过测量来观察代码真正的性能瓶颈是什么。不过其底层的考量在于重要的是要牢记你是否 *确实* 观察到了很多期望并发进行的工作在串行地进行。
+
+### 构建我们自己的异步抽象
+
+我们也可以将 futures 组合起来形成一个新模式。例如，我们可以使用已有的异步代码块构建一个 `timeout` 函数。当我们完成时，其结果将是另一个可以用来构建进一步异步抽象的代码块。
+
+示例 17-27 展示了我们预期 `timeout` 如何处理一个缓慢 future。
+
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
+
+```rust,ignore
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-27/src/main.rs:here}}
+```
+
+<figcaption>示例 17-27：使用假想的 `timeout` 来运行一个缓慢操作并设置一个时限</figcaption>
+
+</figure>
+
+让我们来实现它！首先，让我们考虑一下 `timeout` 的 API：
+
+- 它需要是一个 async 函数以便可以 await。
+- 它的第一个参数应该是需要运行的 future。我们可以使用泛型以便可以处理任意 future。
+- 它的第二个参数将是需要等待的最大时间。如果我们使用 `Duration` 的话，将会使得将其直接传递给 `trpl::sleep` 变得简单。
+- 它应该返回一个 `Result`。如果 future 成功完成，`Result` 将是 `Ok` 和 future 所产生的值。如果超时先到了，`Result` 将会是 `Err` 和超时所等待的持续时间。
+
+示例 17-28 展示了这个抽象。
+
+<!-- This is not tested because it intentionally does not compile. -->
+
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
+
+```rust,ignore
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-28/src/main.rs:declaration}}
+```
+
+<figcaption>示例 17-28：定义 `timeout` 的签名</figcaption>
+
+</figure>
+
+这满足了我们对类型的目标。现在让我们思考下所需的 *行为*：我们需要传递进来的 future 在持续时间内相互竞争。我们可以使用 `trpl::sleep` 和 duration 来创建一个定时器 future，并使用 `trpl::race` 来运行定时器 future 和调用者传递进来的 future。
+
+我们还知道 `race` 是不公平的，并按照传递的顺序轮询参数。因此，我们首先传递 `future_to_try` 给 `race` 以便哪怕 `max_time` 是一个非常短的持续时间它也能有机会完成。如果 `future_to_try` 首先完成，`race` 会返回 `Left` 和 `future` 的输出。如果 `timer` 首先完成，`race` 会返回 `Right` 和定时器的输出 `()`。
+
+在示例 17-29 中，我们匹配 await `trpl::race` 的结果。如果 `future_to_try` 成功并得到一个 `Left(output)`，我们返回 `Ok(output)`。相反如果休眠定时器超时了并得到一个 `Right(())`，则我们通过 `_` 忽略 `()` 并返回 `Err(max_time)`。
+
+<figure class="listing">
+
+<span class="file-name">文件名：src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-29/src/main.rs:implementation}}
+```
+
+<figcaption>示例 17-29：使用 `race` 和 `sleep` 来定义 `timeout`</figcaption>
+
+</figure>
 
 [collections]: ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: ch12-03-improving-error-handling-and-modularity.html
