@@ -281,7 +281,7 @@ received 'you'
 
 ### Yielding
 
-让我们模拟一个长时间运行的操作。示例 17-22 引入了一个 `slow` 函数。它使用 `std::thread::sleep` 而不是 `trpl::sleep` 因此 `slow` 调用会阻塞当前线程若干毫秒。我们可以用 `slow` 来代表现实世界中的长时间运行并阻塞的操作。
+让我们模拟一个长时间运行的操作。示例 17-22 引入了一个 `slow` 函数。它使用 `std::thread::sleep` 而不是 `trpl::sleep` 因此 `slow` 调用会阻塞当前线程若干毫秒。我们可以用 `slow` 来代表现实世界中的长时间运行并且会阻塞的操作。
 
 <figure class="listing">
 
@@ -330,7 +330,7 @@ copy just the output
 'a' finished.
 ```
 
-与上一个示例一样，`race` 仍然在 `a` 完成后就立刻结束了。两个 future 之间没有交叉。`a` future 一直进行其工作直到 `trpl::sleep` 调用被 await，然后 `b` future 一直进行其工作直到它自己的 `trpl::sleep` 调用被 await，再然后 `a` future 完成。为了使两个 future 在其缓慢任务之间继续进行，我们需要 await point 才能将控制权交还给运行时。这意味着我们需要一些可以 await 的东西！
+与上一个示例一样，`race` 仍然在 `a` 完成后就立刻结束了。两个 future 之间没有交替运行。`a` future 一直进行其工作直到 `trpl::sleep` 调用被 await，然后 `b` future 一直进行其工作直到它自己的 `trpl::sleep` 调用被 await，再然后 `a` future 才完成。为了使两个 future 在各自缓慢任务之间都能有所进展，我们需要 await point 才能将控制权交还给运行时。这意味着我们需要一些可以 await 的东西！
 
 我们已经在示例 17-23 中见过这类交接发生：如果去掉 `a` future 结尾的 `trpl::sleep`，那么当它完成时 `b` future *完全* 不会运行。也许我们可以使用 `sleep` 函数来作为开始呢？
 
@@ -346,7 +346,7 @@ copy just the output
 
 </figure>
 
-在示例 17-24 中，我们在 `slow` 调用之间增加了 `trpl::sleep` 调用和 await points。现在两个 future 的工作会相互交叉：
+在示例 17-24 中，我们在 `slow` 调用之间增加了 `trpl::sleep` 调用和 await points。现在两个 future 的工作会相互交替运行：
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-24
@@ -366,9 +366,9 @@ copy just the output
 'a' finished.
 ```
 
-`a` future 仍然会在交还控制权给 `b` 之前运行一会，因为它在调用 `trpl::sleep` 之前就调用了 `slow`，不过在这之后两个 future 会在触发 await point 时来回切换。在这个例子中，我们在 `slow` 之后这么做，不过我们可以在任何合适的地方拆分任务。
+`a` future 仍然会在交还控制权给 `b` 之前运行一会儿，因为它在调用 `trpl::sleep` 之前就调用了 `slow`，不过在这之后两个 future 会在触发 await point 时来回切换。在这个例子中，我们在 `slow` 之后这么做，不过我们可以在任何合适的地方拆分任务。
 
-但是我们并不希望在这里 *休眠*：我们希望尽可能快地取得进展。我们仅仅是需要交还控制权给运行时。我们可以使用 `yield_now` 函数来直接这么做。在示例 17-25 中，我们将所有的 `sleep` 调用替换为 `yield_now`。
+不过我们并不是真的想在这里 *休眠*：我们希望尽可能快地取得进展。我们仅仅是需要交还控制权给运行时。我们可以使用 `yield_now` 函数来直接这么做。在示例 17-25 中，我们将所有的 `sleep` 调用替换为 `yield_now`。
 
 <figure class="listing">
 
@@ -382,7 +382,7 @@ copy just the output
 
 </figure>
 
-这不仅更为清楚地表明了实际的意图而且更显著地快于使用 `sleep`，因为像这样使用 `sleep` 的定时器通常受限于其控制粒度。例如我们使用的 `sleep` 版本，会至少休眠一毫秒，哪怕我们传递一纳秒的 `Duration`。而且，现代计算机非常 *快速*：它们可以在一毫秒内做很多事！
+这不仅更为清楚地表明了实际的意图而且更显著地快于使用 `sleep`，因为像这样使用 `sleep` 的定时器通常受限于其控制粒度。例如我们使用的 `sleep` 版本，会至少休眠一毫秒，哪怕我们传递一纳秒的 `Duration`。而且，现代计算机非常 *快速*：它们可以在一毫秒内完成很多工作！
 
 你可以自行设置一些基准测试来验证这一点，例如示例 17-26 中的这个。（这并不是一个特别严谨的进行性能测试的方法，不过用来展示这里的区别是足够的。）这里，我们省略了所有的状态打印，传递一纳秒的 `Duration` 给 `trpl::sleep`，并让每一个 future 各自运行，不在 future 之间切换。接着我们运行 1000 次迭代并对比下使用 `trpl::sleep` 的 future 和使用 `trpl::yield_now` 的 future 的运行时间。
 
@@ -400,15 +400,15 @@ copy just the output
 
 使用 `yield_now` 的版本要 *快得多*！
 
-这意味着取决于程序所作的其它工作，异步哪怕在计算密集型任务中也有作用，因为它提供了一个结构化程序中不同部分之间关系的实用工具。这是一种形式的 *协同多任务处理*（*cooperative multitasking*），每个 futrue 有权通过 await point 来决定何时交还控制权。因此每个 future 也有责任避免阻塞太长时间。在一些基于 Rust 的嵌入式系统中，这是 *唯一* 的多任务处理类型。
+这意味着取决于程序所作的其它工作，异步操作甚至在计算密集型任务中也有用处，因为它提供了一个结构化程序中不同部分之间关系的实用工具。这是一种形式的 *协同多任务处理*（*cooperative multitasking*），每个 futrue 有权通过 await point 来决定何时交还控制权。因此每个 future 也有责任避免长时间阻塞。在一些基于 Rust 的嵌入式系统中，这是 *唯一* 的多任务处理类型！
 
-当然，在真实代码中，通常你无需在每一行代码上使用 await points 交替函数调用。虽然这样控制 yielding 相对来说更为廉价，但也不是毫无代价的！在很多情况下，尝试分解计算密集型任务可能使其显著减速，所以有时为了 *整体* 性能让一个操作简单阻塞是更好的选择。你应该总是通过测量来观察代码真正的性能瓶颈是什么。不过其底层的考量在于重要的是要牢记你是否 *确实* 观察到了很多期望并发进行的工作在串行地进行。
+当然，在真实代码中，你通常不会在每一行上都交替使用 await 点来调用函数。虽然这样控制 yielding 相对来说更为廉价，但也不是毫无代价的！在很多情况下，尝试将计算密集型任务拆分可能会显著降低其速度，所以有时为了 *整体* 性能简单地让一个操作阻塞是更好的选择。你应该总是通过测量来观察代码真正的性能瓶颈是什么。不过其底层的考量在于重要的是要牢记你是否 *确实* 观察到了很多期望并发进行的工作在串行地进行。
 
 ### 构建我们自己的异步抽象
 
 我们也可以将 futures 组合起来形成一个新模式。例如，我们可以使用已有的异步代码块构建一个 `timeout` 函数。当我们完成时，其结果将是另一个可以用来构建进一步异步抽象的代码块。
 
-示例 17-27 展示了我们预期 `timeout` 如何处理一个缓慢 future。
+示例 17-27 展示了我们预期 `timeout` 如何处理一个缓慢运行的 future。
 
 <figure class="listing">
 
@@ -418,7 +418,7 @@ copy just the output
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-27/src/main.rs:here}}
 ```
 
-<figcaption>示例 17-27：使用假想的 `timeout` 来运行一个缓慢操作并设置一个时限</figcaption>
+<figcaption>示例 17-27：使用假想的 `timeout` 来运行一个缓慢运行的操作并设置一个时限</figcaption>
 
 </figure>
 
@@ -427,7 +427,7 @@ copy just the output
 - 它需要是一个 async 函数以便可以 await。
 - 它的第一个参数应该是需要运行的 future。我们可以使用泛型以便可以处理任意 future。
 - 它的第二个参数将是需要等待的最大时间。如果我们使用 `Duration` 的话，将会使得将其直接传递给 `trpl::sleep` 变得简单。
-- 它应该返回一个 `Result`。如果 future 成功完成，`Result` 将是 `Ok` 和 future 所产生的值。如果超时先到了，`Result` 将会是 `Err` 和超时所等待的持续时间。
+- 它应该返回一个 `Result`。如果 `future` 成功完成，`Result` 将会是包含 `future` 所产生的值的 `Ok`。如果超时先发生，`Result` 将会是包含超时等待的持续时间的 `Err`。
 
 示例 17-28 展示了这个抽象。
 
@@ -462,6 +462,21 @@ copy just the output
 <figcaption>示例 17-29：使用 `race` 和 `sleep` 来定义 `timeout`</figcaption>
 
 </figure>
+
+于是我们有了一个由另外两个帮助函数构成的可以工作的 `timeout`。如果我们运行代码，它会在超时之后打印失败模式：
+
+```text
+Failed after 2 seconds
+```
+
+由于 future 可以和其他 future 组合，你可以使用更小的异步代码块来构建非常强力的工具。例如，可以使用相同的方式来组合超时和重试，并转而将其用于类似网络调用的工作，这正是本章开头的一个示例！
+
+在实践中，你会直接处理 `async` 和 `await`，其次才是类似 `join`、`join_all`、`race` 等函数和宏，在使用这些 API 时你只会偶尔遇到 `pin`。
+
+现在我们见过了一系列同时处理多个 future 的方法了。接下来，我们来看看如何通过（*流*）*streams* 处理一个时间序列的多个 future。不过，在此之前，这里有几个你可能想要先考虑的问题：
+
+- 我们在 `Vec` 上使用了 `join_all` 来等待一组中的所有 future 完成。相反该如何使用 `Vec` 来依次处理一个序列的 future 呢？这么做有哪些权衡取舍呢？
+- 仔细观察 `futures` crate 中的 `futures::stream::FuturesUnordered` 类型。使用它与使用 `Vec` 又有什么区别呢？（不用担心它来自与 crate 的 `stream` 部分的事实；它刚好能处理任何 future 的集合。）
 
 [collections]: ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: ch12-03-improving-error-handling-and-modularity.html
