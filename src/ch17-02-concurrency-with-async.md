@@ -165,7 +165,7 @@ hi number 9 from the first task!
 <span class="file-name">文件名：src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:channel}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:many-messages}}
 ```
 
 <figcaption>示例 17-10：通过异步信道发送和接收多个消息并在每个消息之间通过 `await` 休眠</figcaption>
