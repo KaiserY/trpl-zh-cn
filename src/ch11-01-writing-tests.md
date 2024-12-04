@@ -107,7 +107,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 <span class="filename">文件名：src/lib.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-05/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-05/src/lib.rs}}
 ```
 
 <span class="caption">示例 11-5：第五章中 `Rectangle` 结构体和其 `can_hold` 方法</span>
