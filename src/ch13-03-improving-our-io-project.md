@@ -44,7 +44,7 @@
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-18/src/main.rs:here}}
 ```
 
-<span class="caption">示例 13-25：将 `env::args` 的返回值传递给 `Config::build`</span>
+<span class="caption">示例 13-18：将 `env::args` 的返回值传递给 `Config::build`</span>
 
 `env::args` 函数返回一个迭代器！不同于将迭代器的值收集到一个 vector 中接着传递一个 slice 给 `Config::build`，现在我们直接将 `env::args` 返回的迭代器的所有权传递给 `Config::build`。
 
