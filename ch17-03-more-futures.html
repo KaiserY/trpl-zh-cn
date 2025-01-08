@@ -1,0 +1,1094 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>使用任意数量的 futures - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Rust 程序设计语言</a></li><li class="chapter-item expanded affix "><a href="foreword.html">前言</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">简介</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> 入门指南</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> 安装</a></li><li class="chapter-item expanded "><a href="ch01-02-hello-world.html"><strong aria-hidden="true">1.2.</strong> Hello, World!</a></li><li class="chapter-item expanded "><a href="ch01-03-hello-cargo.html"><strong aria-hidden="true">1.3.</strong> Hello, Cargo!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-guessing-game-tutorial.html"><strong aria-hidden="true">2.</strong> 写个猜数字游戏</a></li><li class="chapter-item expanded "><a href="ch03-00-common-programming-concepts.html"><strong aria-hidden="true">3.</strong> 常见编程概念</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-variables-and-mutability.html"><strong aria-hidden="true">3.1.</strong> 变量与可变性</a></li><li class="chapter-item expanded "><a href="ch03-02-data-types.html"><strong aria-hidden="true">3.2.</strong> 数据类型</a></li><li class="chapter-item expanded "><a href="ch03-03-how-functions-work.html"><strong aria-hidden="true">3.3.</strong> 函数</a></li><li class="chapter-item expanded "><a href="ch03-04-comments.html"><strong aria-hidden="true">3.4.</strong> 注释</a></li><li class="chapter-item expanded "><a href="ch03-05-control-flow.html"><strong aria-hidden="true">3.5.</strong> 控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-understanding-ownership.html"><strong aria-hidden="true">4.</strong> 认识所有权</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-what-is-ownership.html"><strong aria-hidden="true">4.1.</strong> 什么是所有权？</a></li><li class="chapter-item expanded "><a href="ch04-02-references-and-borrowing.html"><strong aria-hidden="true">4.2.</strong> 引用与借用</a></li><li class="chapter-item expanded "><a href="ch04-03-slices.html"><strong aria-hidden="true">4.3.</strong> Slice 类型</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-structs.html"><strong aria-hidden="true">5.</strong> 使用结构体组织相关联的数据</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-defining-structs.html"><strong aria-hidden="true">5.1.</strong> 结构体的定义和实例化</a></li><li class="chapter-item expanded "><a href="ch05-02-example-structs.html"><strong aria-hidden="true">5.2.</strong> 结构体示例程序</a></li><li class="chapter-item expanded "><a href="ch05-03-method-syntax.html"><strong aria-hidden="true">5.3.</strong> 方法语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch06-00-enums.html"><strong aria-hidden="true">6.</strong> 枚举和模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch06-01-defining-an-enum.html"><strong aria-hidden="true">6.1.</strong> 枚举的定义</a></li><li class="chapter-item expanded "><a href="ch06-02-match.html"><strong aria-hidden="true">6.2.</strong> match 控制流结构</a></li><li class="chapter-item expanded "><a href="ch06-03-if-let.html"><strong aria-hidden="true">6.3.</strong> if let 简洁控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"><strong aria-hidden="true">7.</strong> 使用包、Crate 和模块管理不断增长的项目</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch07-01-packages-and-crates.html"><strong aria-hidden="true">7.1.</strong> 包和 Crate</a></li><li class="chapter-item expanded "><a href="ch07-02-defining-modules-to-control-scope-and-privacy.html"><strong aria-hidden="true">7.2.</strong> 定义模块来控制作用域与私有性</a></li><li class="chapter-item expanded "><a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html"><strong aria-hidden="true">7.3.</strong> 引用模块项目的路径</a></li><li class="chapter-item expanded "><a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html"><strong aria-hidden="true">7.4.</strong> 使用 use 关键字将路径引入作用域</a></li><li class="chapter-item expanded "><a href="ch07-05-separating-modules-into-different-files.html"><strong aria-hidden="true">7.5.</strong> 将模块拆分成多个文件</a></li></ol></li><li class="chapter-item expanded "><a href="ch08-00-common-collections.html"><strong aria-hidden="true">8.</strong> 常见集合</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch08-01-vectors.html"><strong aria-hidden="true">8.1.</strong> 使用 Vector 储存列表</a></li><li class="chapter-item expanded "><a href="ch08-02-strings.html"><strong aria-hidden="true">8.2.</strong> 使用字符串储存 UTF-8 编码的文本</a></li><li class="chapter-item expanded "><a href="ch08-03-hash-maps.html"><strong aria-hidden="true">8.3.</strong> 使用 Hash Map 储存键值对</a></li></ol></li><li class="chapter-item expanded "><a href="ch09-00-error-handling.html"><strong aria-hidden="true">9.</strong> 错误处理</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong aria-hidden="true">9.1.</strong> 用 panic! 处理不可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-02-recoverable-errors-with-result.html"><strong aria-hidden="true">9.2.</strong> 用 Result 处理可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-03-to-panic-or-not-to-panic.html"><strong aria-hidden="true">9.3.</strong> 要不要 panic!</a></li></ol></li><li class="chapter-item expanded "><a href="ch10-00-generics.html"><strong aria-hidden="true">10.</strong> 泛型、Trait 和生命周期</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch10-01-syntax.html"><strong aria-hidden="true">10.1.</strong> 泛型数据类型</a></li><li class="chapter-item expanded "><a href="ch10-02-traits.html"><strong aria-hidden="true">10.2.</strong> Trait：定义共同行为</a></li><li class="chapter-item expanded "><a href="ch10-03-lifetime-syntax.html"><strong aria-hidden="true">10.3.</strong> 生命周期确保引用有效</a></li></ol></li><li class="chapter-item expanded "><a href="ch11-00-testing.html"><strong aria-hidden="true">11.</strong> 编写自动化测试</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch11-01-writing-tests.html"><strong aria-hidden="true">11.1.</strong> 如何编写测试</a></li><li class="chapter-item expanded "><a href="ch11-02-running-tests.html"><strong aria-hidden="true">11.2.</strong> 控制测试如何运行</a></li><li class="chapter-item expanded "><a href="ch11-03-test-organization.html"><strong aria-hidden="true">11.3.</strong> 测试的组织结构</a></li></ol></li><li class="chapter-item expanded "><a href="ch12-00-an-io-project.html"><strong aria-hidden="true">12.</strong> 一个 I/O 项目：构建命令行程序</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch12-01-accepting-command-line-arguments.html"><strong aria-hidden="true">12.1.</strong> 接受命令行参数</a></li><li class="chapter-item expanded "><a href="ch12-02-reading-a-file.html"><strong aria-hidden="true">12.2.</strong> 读取文件</a></li><li class="chapter-item expanded "><a href="ch12-03-improving-error-handling-and-modularity.html"><strong aria-hidden="true">12.3.</strong> 重构以改进模块化与错误处理</a></li><li class="chapter-item expanded "><a href="ch12-04-testing-the-librarys-functionality.html"><strong aria-hidden="true">12.4.</strong> 采用测试驱动开发完善库的功能</a></li><li class="chapter-item expanded "><a href="ch12-05-working-with-environment-variables.html"><strong aria-hidden="true">12.5.</strong> 处理环境变量</a></li><li class="chapter-item expanded "><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong aria-hidden="true">12.6.</strong> 将错误信息输出到标准错误而不是标准输出</a></li></ol></li><li class="chapter-item expanded "><a href="ch13-00-functional-features.html"><strong aria-hidden="true">13.</strong> Rust 中的函数式语言功能：迭代器与闭包</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch13-01-closures.html"><strong aria-hidden="true">13.1.</strong> 闭包：可以捕获其环境的匿名函数</a></li><li class="chapter-item expanded "><a href="ch13-02-iterators.html"><strong aria-hidden="true">13.2.</strong> 使用迭代器处理元素序列</a></li><li class="chapter-item expanded "><a href="ch13-03-improving-our-io-project.html"><strong aria-hidden="true">13.3.</strong> 改进之前的 I/O 项目</a></li><li class="chapter-item expanded "><a href="ch13-04-performance.html"><strong aria-hidden="true">13.4.</strong> 性能比较：循环对迭代器</a></li></ol></li><li class="chapter-item expanded "><a href="ch14-00-more-about-cargo.html"><strong aria-hidden="true">14.</strong> 更多关于 Cargo 和 Crates.io 的内容</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch14-01-release-profiles.html"><strong aria-hidden="true">14.1.</strong> 采用发布配置自定义构建</a></li><li class="chapter-item expanded "><a href="ch14-02-publishing-to-crates-io.html"><strong aria-hidden="true">14.2.</strong> 将 crate 发布到 Crates.io</a></li><li class="chapter-item expanded "><a href="ch14-03-cargo-workspaces.html"><strong aria-hidden="true">14.3.</strong> Cargo 工作空间</a></li><li class="chapter-item expanded "><a href="ch14-04-installing-binaries.html"><strong aria-hidden="true">14.4.</strong> 使用 cargo install 安装二进制文件</a></li><li class="chapter-item expanded "><a href="ch14-05-extending-cargo.html"><strong aria-hidden="true">14.5.</strong> Cargo 自定义扩展命令</a></li></ol></li><li class="chapter-item expanded "><a href="ch15-00-smart-pointers.html"><strong aria-hidden="true">15.</strong> 智能指针</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch15-01-box.html"><strong aria-hidden="true">15.1.</strong> 使用 Box&lt;T&gt; 指向堆上数据</a></li><li class="chapter-item expanded "><a href="ch15-02-deref.html"><strong aria-hidden="true">15.2.</strong> 使用 Deref Trait 将智能指针当作常规引用处理</a></li><li class="chapter-item expanded "><a href="ch15-03-drop.html"><strong aria-hidden="true">15.3.</strong> 使用 Drop Trait 运行清理代码</a></li><li class="chapter-item expanded "><a href="ch15-04-rc.html"><strong aria-hidden="true">15.4.</strong> Rc&lt;T&gt; 引用计数智能指针</a></li><li class="chapter-item expanded "><a href="ch15-05-interior-mutability.html"><strong aria-hidden="true">15.5.</strong> RefCell&lt;T&gt; 与内部可变性模式</a></li><li class="chapter-item expanded "><a href="ch15-06-reference-cycles.html"><strong aria-hidden="true">15.6.</strong> 引用循环会导致内存泄漏</a></li></ol></li><li class="chapter-item expanded "><a href="ch16-00-concurrency.html"><strong aria-hidden="true">16.</strong> 无畏并发</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch16-01-threads.html"><strong aria-hidden="true">16.1.</strong> 使用线程同时地运行代码</a></li><li class="chapter-item expanded "><a href="ch16-02-message-passing.html"><strong aria-hidden="true">16.2.</strong> 使用消息传递在线程间通信</a></li><li class="chapter-item expanded "><a href="ch16-03-shared-state.html"><strong aria-hidden="true">16.3.</strong> 共享状态并发</a></li><li class="chapter-item expanded "><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong aria-hidden="true">16.4.</strong> 使用 Sync 与 Send Traits 的可扩展并发</a></li></ol></li><li class="chapter-item expanded "><a href="ch17-00-async-await.html"><strong aria-hidden="true">17.</strong> Async 和 await</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch17-01-futures-and-syntax.html"><strong aria-hidden="true">17.1.</strong> Futures 和 async 语法</a></li><li class="chapter-item expanded "><a href="ch17-02-concurrency-with-async.html"><strong aria-hidden="true">17.2.</strong> 并发与 async</a></li><li class="chapter-item expanded "><a href="ch17-03-more-futures.html" class="active"><strong aria-hidden="true">17.3.</strong> 使用任意数量的 futures</a></li><li class="chapter-item expanded "><a href="ch17-04-streams.html"><strong aria-hidden="true">17.4.</strong> 流（Streams）</a></li><li class="chapter-item expanded "><a href="ch17-05-traits-for-async.html"><strong aria-hidden="true">17.5.</strong> 深入理解 async 相关的 traits</a></li><li class="chapter-item expanded "><a href="ch17-06-futures-tasks-threads.html"><strong aria-hidden="true">17.6.</strong> Futures，任务（tasks）和线程（threads）</a></li></ol></li><li class="chapter-item expanded "><a href="ch18-00-oop.html"><strong aria-hidden="true">18.</strong> Rust 的面向对象编程特性</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch18-01-what-is-oo.html"><strong aria-hidden="true">18.1.</strong> 面向对象语言的特点</a></li><li class="chapter-item expanded "><a href="ch18-02-trait-objects.html"><strong aria-hidden="true">18.2.</strong> 顾及不同类型值的 trait 对象</a></li><li class="chapter-item expanded "><a href="ch18-03-oo-design-patterns.html"><strong aria-hidden="true">18.3.</strong> 面向对象设计模式的实现</a></li></ol></li><li class="chapter-item expanded "><a href="ch19-00-patterns.html"><strong aria-hidden="true">19.</strong> 模式与模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch19-01-all-the-places-for-patterns.html"><strong aria-hidden="true">19.1.</strong> 所有可能会用到模式的位置</a></li><li class="chapter-item expanded "><a href="ch19-02-refutability.html"><strong aria-hidden="true">19.2.</strong> Refutability（可反驳性）: 模式是否会匹配失效</a></li><li class="chapter-item expanded "><a href="ch19-03-pattern-syntax.html"><strong aria-hidden="true">19.3.</strong> 模式语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch20-00-advanced-features.html"><strong aria-hidden="true">20.</strong> 高级特征</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch20-01-unsafe-rust.html"><strong aria-hidden="true">20.1.</strong> 不安全的 Rust</a></li><li class="chapter-item expanded "><a href="ch20-03-advanced-traits.html"><strong aria-hidden="true">20.2.</strong> 高级 trait</a></li><li class="chapter-item expanded "><a href="ch20-04-advanced-types.html"><strong aria-hidden="true">20.3.</strong> 高级类型</a></li><li class="chapter-item expanded "><a href="ch20-05-advanced-functions-and-closures.html"><strong aria-hidden="true">20.4.</strong> 高级函数与闭包</a></li><li class="chapter-item expanded "><a href="ch20-06-macros.html"><strong aria-hidden="true">20.5.</strong> 宏</a></li></ol></li><li class="chapter-item expanded "><a href="ch21-00-final-project-a-web-server.html"><strong aria-hidden="true">21.</strong> 最后的项目：构建多线程 web server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch21-01-single-threaded.html"><strong aria-hidden="true">21.1.</strong> 建立单线程 web server</a></li><li class="chapter-item expanded "><a href="ch21-02-multithreaded.html"><strong aria-hidden="true">21.2.</strong> 将单线程 server 变为多线程 server</a></li><li class="chapter-item expanded "><a href="ch21-03-graceful-shutdown-and-cleanup.html"><strong aria-hidden="true">21.3.</strong> 优雅停机与清理</a></li></ol></li><li class="chapter-item expanded "><a href="appendix-00.html"><strong aria-hidden="true">22.</strong> 附录</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix-01-keywords.html"><strong aria-hidden="true">22.1.</strong> A - 关键字</a></li><li class="chapter-item expanded "><a href="appendix-02-operators.html"><strong aria-hidden="true">22.2.</strong> B - 运算符与符号</a></li><li class="chapter-item expanded "><a href="appendix-03-derivable-traits.html"><strong aria-hidden="true">22.3.</strong> C - 可派生的 trait</a></li><li class="chapter-item expanded "><a href="appendix-04-useful-development-tools.html"><strong aria-hidden="true">22.4.</strong> D - 实用开发工具</a></li><li class="chapter-item expanded "><a href="appendix-05-editions.html"><strong aria-hidden="true">22.5.</strong> E - 版本</a></li><li class="chapter-item expanded "><a href="appendix-06-translation.html"><strong aria-hidden="true">22.6.</strong> F - 本书译本</a></li><li class="chapter-item expanded "><a href="appendix-07-nightly-rust.html"><strong aria-hidden="true">22.7.</strong> G - Rust 是如何开发的与 “Nightly Rust”</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch17-03-more-futures.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="使用任意数量的-futures"><a class="header" href="#使用任意数量的-futures">使用任意数量的 futures</a></h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/main/src/ch17-03-more-futures.md">ch17-03-more-futures.md</a>
+<br>
+commit 9e85fcc9938e8f8c935d0ad8b4db7f45caaa2ca4</p>
+</blockquote>
+<p>当我们在上一部分从使用两个 future 到三个 future 的时候，我们也必须从使用 <code>join</code> 切换到 <code>join3</code>。每次我们想要改变 join 的 future 数量时都不得不调用一个不同的函数是很烦人的。令人高兴的是，我们有一个宏版本的 <code>join</code> 可以传递任意数量的参数。它还会自行处理 await 这些 future。因此，我们可以重写示例 17-13 中的代码来使用 <code>join!</code> 而不是 <code>join3</code>，如示例 17-14 所示：</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span><span class="boring">        let (tx, mut rx) = trpl::channel();
+</span><span class="boring">
+</span><span class="boring">        let tx1 = tx.clone();
+</span><span class="boring">        let tx1_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("hi"),
+</span><span class="boring">                String::from("from"),
+</span><span class="boring">                String::from("the"),
+</span><span class="boring">                String::from("future"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx1.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let rx_fut = async {
+</span><span class="boring">            while let Some(value) = rx.recv().await {
+</span><span class="boring">                println!("received '{value}'");
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let tx_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("more"),
+</span><span class="boring">                String::from("messages"),
+</span><span class="boring">                String::from("for"),
+</span><span class="boring">                String::from("you"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span>        trpl::join!(tx1_fut, tx_fut, rx_fut);
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-14：使用 `join!` 来等待多个 future</figcaption>
+</figure>
+<p>相比于需要在 <code>join</code> 和 <code>join3</code> 和  <code>join4</code> 等等之间切换来说这绝对是一个进步！然而，即便是这个宏形式也只能用于我们提前知道 future 的数量的情况。不过，在现实世界的 Rust 中，将 futures 放进一个集合并接着等待集合中的一些或者全部 future 完成是一个常见的模式。</p>
+<p>为了检查一些集合中的所有 future，我们需要遍历并 join <em>全部</em> 的 future。<code>trpl::join_all</code> 函数接受任何实现了 <code>Iterator</code> trait 的类型，我们在之前的第十三章中学习过它们，所以这正是我们需要的。让我们将 futures 放进一个向量，并将 <code>join!</code> 替换为 <code>join_all</code>。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span><span class="boring">        let (tx, mut rx) = trpl::channel();
+</span><span class="boring">
+</span><span class="boring">        let tx1 = tx.clone();
+</span><span class="boring">        let tx1_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("hi"),
+</span><span class="boring">                String::from("from"),
+</span><span class="boring">                String::from("the"),
+</span><span class="boring">                String::from("future"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx1.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let rx_fut = async {
+</span><span class="boring">            while let Some(value) = rx.recv().await {
+</span><span class="boring">                println!("received '{value}'");
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let tx_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("more"),
+</span><span class="boring">                String::from("messages"),
+</span><span class="boring">                String::from("for"),
+</span><span class="boring">                String::from("you"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span>        let futures = vec![tx1_fut, rx_fut, tx_fut];
+
+        trpl::join_all(futures).await;
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre>
+<figcaption>示例 17-15：将匿名 futures 储存在一个向量中并调用 `join_all`</figcaption>
+</figure>
+<p>不幸的是这还不能编译。相反我们会得到这个错误：</p>
+<!-- manual-regeneration
+cd listings/ch17-async-await/listing-17-16/
+cargo build
+copy just the compiler error
+-->
+<pre><code class="language-text">error[E0308]: mismatched types
+  --&gt; src/main.rs:43:37
+   |
+8  |           let tx1_fut = async move {
+   |  _______________________-
+9  | |             let vals = vec![
+10 | |                 String::from("hi"),
+11 | |                 String::from("from"),
+...  |
+19 | |             }
+20 | |         };
+   | |_________- the expected `async` block
+21 |
+22 |           let rx_fut = async {
+   |  ______________________-
+23 | |             while let Some(value) = rx.recv().await {
+24 | |                 println!("received '{value}'");
+25 | |             }
+26 | |         };
+   | |_________- the found `async` block
+...
+43 |           let futures = vec![tx1_fut, rx_fut, tx_fut];
+   |                                       ^^^^^^ expected `async` block, found a different `async` block
+   |
+   = note: expected `async` block `{async block@src/main.rs:8:23: 20:10}`
+              found `async` block `{async block@src/main.rs:22:22: 26:10}`
+   = note: no two async blocks, even if identical, have the same type
+   = help: consider pinning your async block and and casting it to a trait object
+</code></pre>
+<p>这可能有点令人惊讶。毕竟没有一个 future 返回了任何值，所以每个代码块都会产生一个 <code>Future&lt;Output = ()&gt;</code>。然而，<code>Future</code> 是一个 trait，而不是一个具体类型。其具体类型是编译器为各个异步代码块生成的（不同的）数据结构。你不能将两个不同的手写的 struct 放进同一个 <code>Vec</code>，同样的原理也适用于编译器生成的不同 struct。</p>
+<p>为了使代码能够正常工作，我们需要使用 <em>trait objects</em>，正如我们在第十二章的 <a href="ch12-03-improving-error-handling-and-modularity.html">“从 <code>run</code> 函数中返回错误”</a> 中做的那样。（第十八章会详细介绍 trait objects。）使用 trait objects 允许我们将这些类型所产生的不同的匿名 future 视为相同的类型，因为它们都实现了 <code>Future</code> trait。</p>
+<blockquote>
+<p>注意：在第八章中，我们讨论过另一种将多种类型包含进一个 <code>Vec</code> 的方式：使用一个枚举来代表每个可以出现在向量中的不同类型。不过这里我们不能这么做。一方面，没有方法来命名这些不同的类型，因为它们是匿名的。另一方面，我们最开始采用向量和 <code>join_all</code> 的原因是为了处理一个直到运行时之前都不知道是什么的 future 的动态集合。</p>
+</blockquote>
+<p>我们以将 <code>vec!</code> 中的每个 future 用 <code>Box::new</code> 封装来作为开始，如示例 17-16 所示。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span><span class="boring">        let (tx, mut rx) = trpl::channel();
+</span><span class="boring">
+</span><span class="boring">        let tx1 = tx.clone();
+</span><span class="boring">        let tx1_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("hi"),
+</span><span class="boring">                String::from("from"),
+</span><span class="boring">                String::from("the"),
+</span><span class="boring">                String::from("future"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx1.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let rx_fut = async {
+</span><span class="boring">            while let Some(value) = rx.recv().await {
+</span><span class="boring">                println!("received '{value}'");
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let tx_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("more"),
+</span><span class="boring">                String::from("messages"),
+</span><span class="boring">                String::from("for"),
+</span><span class="boring">                String::from("you"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span>        let futures =
+            vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
+
+        trpl::join_all(futures).await;
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre>
+<figcaption>示例 17-16：尝试用 `Box::new` 来对齐 `Vec` 中 future 的类型</figcaption>
+</figure>
+<p>不幸的是，代码仍然不能编译。事实上，我们遇到了与之前相同的基本错误，不过这次我们会在第二个和第三个 <code>Box::new</code> 调用处各得到一个错误，同时还会得到一个提及 <code>Unpin</code> trait 的新错误。我们一会再回到 <code>Unpin</code> 错误上。首先，让我们通过显式标注 <code>futures</code> 的类型来修复 <code>Box::new</code> 调用的类型错误：</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{future::Future, time::Duration};
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span><span class="boring">        let (tx, mut rx) = trpl::channel();
+</span><span class="boring">
+</span><span class="boring">        let tx1 = tx.clone();
+</span><span class="boring">        let tx1_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("hi"),
+</span><span class="boring">                String::from("from"),
+</span><span class="boring">                String::from("the"),
+</span><span class="boring">                String::from("future"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx1.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let rx_fut = async {
+</span><span class="boring">            while let Some(value) = rx.recv().await {
+</span><span class="boring">                println!("received '{value}'");
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let tx_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("more"),
+</span><span class="boring">                String::from("messages"),
+</span><span class="boring">                String::from("for"),
+</span><span class="boring">                String::from("you"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span>        let futures: Vec&lt;Box&lt;dyn Future&lt;Output = ()&gt;&gt;&gt; =
+            vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
+<span class="boring">
+</span><span class="boring">        trpl::join_all(futures).await;
+</span><span class="boring">    });
+</span><span class="boring">}</span></code></pre>
+<figcaption>示例 17-17：通过使用一个显式类型声明来修复余下的类型不匹配错误</figcaption>
+</figure>
+<p>这里必须编写的类型有一点复杂，让我们逐步过一遍：</p>
+<ul>
+<li>最内层的类型是 future 本身。我们显式地指出 future 的输出类型是单元类型 <code>()</code>，其编写为 <code>Future&lt;Output = ()&gt;</code>。</li>
+<li>接着使用 <code>dyn</code> 将 trait 标记为动态的。</li>
+<li>整个 trait 引用被封装进一个 <code>Box</code>。</li>
+<li>最后，我们显式表明 <code>futures</code> 是一个包含这些项的 <code>Vec</code>。</li>
+</ul>
+<p>这已经有了很大的区别。现在当我们运行编译器时，就只会有提到 <code>Unpin</code> 的错误了。虽然这里有三个错误，但请注意它们每个的内容都非常相似。</p>
+<!-- manual-regeneration
+cd listings/ch17-async-await/listing-17-17
+cargo build
+copy *only* the errors
+-->
+<pre><code class="language-text">error[E0277]: `{async block@src/main.rs:8:23: 20:10}` cannot be unpinned
+   --&gt; src/main.rs:46:24
+    |
+46  |         trpl::join_all(futures).await;
+    |         -------------- ^^^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:8:23: 20:10}`, which is required by `Box&lt;{async block@src/main.rs:8:23: 20:10}&gt;: std::future::Future`
+    |         |
+    |         required by a bound introduced by this call
+    |
+    = note: consider using the `pin!` macro
+            consider using `Box::pin` if you need to access the pinned value outside of the current scope
+    = note: required for `Box&lt;{async block@src/main.rs:8:23: 20:10}&gt;` to implement `std::future::Future`
+note: required by a bound in `join_all`
+   --&gt; /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:105:14
+    |
+102 | pub fn join_all&lt;I&gt;(iter: I) -&gt; JoinAll&lt;I::Item&gt;
+    |        -------- required by a bound in this function
+...
+105 |     I::Item: Future,
+    |              ^^^^^^ required by this bound in `join_all`
+
+error[E0277]: `{async block@src/main.rs:8:23: 20:10}` cannot be unpinned
+  --&gt; src/main.rs:46:9
+   |
+46 |         trpl::join_all(futures).await;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:8:23: 20:10}`, which is required by `Box&lt;{async block@src/main.rs:8:23: 20:10}&gt;: std::future::Future`
+   |
+   = note: consider using the `pin!` macro
+           consider using `Box::pin` if you need to access the pinned value outside of the current scope
+   = note: required for `Box&lt;{async block@src/main.rs:8:23: 20:10}&gt;` to implement `std::future::Future`
+note: required by a bound in `JoinAll`
+  --&gt; /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
+   |
+27 | pub struct JoinAll&lt;F&gt;
+   |            ------- required by a bound in this struct
+28 | where
+29 |     F: Future,
+   |        ^^^^^^ required by this bound in `JoinAll`
+
+error[E0277]: `{async block@src/main.rs:8:23: 20:10}` cannot be unpinned
+  --&gt; src/main.rs:46:33
+   |
+46 |         trpl::join_all(futures).await;
+   |                                 ^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:8:23: 20:10}`, which is required by `Box&lt;{async block@src/main.rs:8:23: 20:10}&gt;: std::future::Future`
+   |
+   = note: consider using the `pin!` macro
+           consider using `Box::pin` if you need to access the pinned value outside of the current scope
+   = note: required for `Box&lt;{async block@src/main.rs:8:23: 20:10}&gt;` to implement `std::future::Future`
+note: required by a bound in `JoinAll`
+  --&gt; /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
+   |
+27 | pub struct JoinAll&lt;F&gt;
+   |            ------- required by a bound in this struct
+28 | where
+29 |     F: Future,
+   |        ^^^^^^ required by this bound in `JoinAll`
+
+Some errors have detailed explanations: E0277, E0308.
+For more information about an error, try `rustc --explain E0277`.
+</code></pre>
+<p>这里有 <em>很多</em> 内容需要分析，所以让我们拆开来看。信息的第一部分告诉我们第一个异步代码块（<code>src/main.rs:8:23: 20:10</code>）没有实现 <code>Unpin</code> trait，并建议使用 <code>pin!</code> 或 <code>Box::pin</code> 来修复，在本章的稍后部分我们会深入 <code>Pin</code>  和 <code>Unpin</code> 的一些更多细节。不过现在我们可以仅仅遵循编译器的建议来解困！在示例 17-18 中，我们以更新 <code>futures</code> 的类型声明作为开始，用 <code>Pin</code> 来封装每个 <code>Box</code>。其次，我们使用 <code>Box::pin</code> 来 pin 住 futures 自身。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{
+</span><span class="boring">    future::Future,
+</span><span class="boring">    pin::{pin, Pin},
+</span><span class="boring">    time::Duration,
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span><span class="boring">        let (tx, mut rx) = trpl::channel();
+</span><span class="boring">
+</span><span class="boring">        let tx1 = tx.clone();
+</span><span class="boring">        let tx1_fut = pin!(async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("hi"),
+</span><span class="boring">                String::from("from"),
+</span><span class="boring">                String::from("the"),
+</span><span class="boring">                String::from("future"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx1.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        });
+</span><span class="boring">
+</span><span class="boring">        let rx_fut = pin!(async {
+</span><span class="boring">            while let Some(value) = rx.recv().await {
+</span><span class="boring">                println!("received '{value}'");
+</span><span class="boring">            }
+</span><span class="boring">        });
+</span><span class="boring">
+</span><span class="boring">        let tx_fut = pin!(async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("more"),
+</span><span class="boring">                String::from("messages"),
+</span><span class="boring">                String::from("for"),
+</span><span class="boring">                String::from("you"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        });
+</span><span class="boring">
+</span>        let futures: Vec&lt;Pin&lt;Box&lt;dyn Future&lt;Output = ()&gt;&gt;&gt;&gt; =
+            vec![Box::pin(tx1_fut), Box::pin(rx_fut), Box::pin(tx_fut)];
+<span class="boring">
+</span><span class="boring">        trpl::join_all(futures).await;
+</span><span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-18：使用 `Pin` 和 `Box::pin` 来约束 `Vec` 的类型</figcaption>
+</figure>
+<p>如果编译并运行代码，我们终于会得到我们期望的输出：</p>
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+<pre><code class="language-text">received 'hi'
+received 'more'
+received 'from'
+received 'messages'
+received 'the'
+received 'for'
+received 'future'
+received 'you'
+</code></pre>
+<p>（长舒一口气！）</p>
+<p>这里还有一些我们可以进一步探索的内容。首先，因为通过 <code>Box</code> 来将这些 futures 放到堆上，使用 <code>Pin&lt;Box&lt;T&gt;&gt;</code> 会带来少量的额外开销，而我们这么做仅仅是为了使类型对齐。毕竟这里实际上并不 <em>需要</em> 堆分配：这些 futures 对于这个特定的函数来说是本地的。如上所述，<code>Pin</code> 本身是一个封装类型，因此我们可以在 <code>Vec</code> 中拥有单一类型的好处（也就是使用 <code>Box</code> 的初始原因）而不用堆分配。我们可以通过 <code>std::pin::pin</code> 宏来直接对每个 future 使用 <code>Pin</code>。</p>
+<p>然而，我们仍然必须现实地知道被 pin 的引用的类型：否则 Rust 仍然不知道如何将它们解释为动态 trait objects，这是将它们放进 <code>Vec</code> 所需的。因此我们在定义每个 future 的时候使用 <code>pin!</code>，并将 <code>futures</code> 定义为一个包含被 pin 的动态 <code>Future</code> 类型的可变引用的 <code>Vec</code>，如示例 17-19 所示。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{
+</span><span class="boring">    future::Future,
+</span><span class="boring">    pin::{pin, Pin},
+</span><span class="boring">    time::Duration,
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span><span class="boring">        let (tx, mut rx) = trpl::channel();
+</span><span class="boring">
+</span><span class="boring">        let tx1 = tx.clone();
+</span>        let tx1_fut = pin!(async move {
+            // --snip--
+<span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("hi"),
+</span><span class="boring">                String::from("from"),
+</span><span class="boring">                String::from("the"),
+</span><span class="boring">                String::from("future"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx1.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span>        });
+
+        let rx_fut = pin!(async {
+            // --snip--
+<span class="boring">            while let Some(value) = rx.recv().await {
+</span><span class="boring">                println!("received '{value}'");
+</span><span class="boring">            }
+</span>        });
+
+        let tx_fut = pin!(async move {
+            // --snip--
+<span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("more"),
+</span><span class="boring">                String::from("messages"),
+</span><span class="boring">                String::from("for"),
+</span><span class="boring">                String::from("you"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span>        });
+
+        let futures: Vec&lt;Pin&lt;&amp;mut dyn Future&lt;Output = ()&gt;&gt;&gt; =
+            vec![tx1_fut, rx_fut, tx_fut];
+<span class="boring">
+</span><span class="boring">        trpl::join_all(futures).await;
+</span><span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-19：通过 `pin!` 宏来直接使用 `Pin` 以避免不必要的堆分配</figcaption>
+</figure>
+<p>目前为止我们一直忽略了可能有不同 <code>Output</code> 类型的事实。例如，在示例 17-20 中，匿名 future <code>a</code> 实现了 <code>Future&lt;Output = u32&gt;</code>，匿名 future <code>b</code> 实现了 <code>Future&lt;Output = &amp;str&gt;</code>，而匿名 future <code>c</code> 实现了 <code>Future&lt;Output = bool&gt;</code>。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span>        let a = async { 1u32 };
+        let b = async { "Hello!" };
+        let c = async { true };
+
+        let (a_result, b_result, c_result) = trpl::join!(a, b, c);
+        println!("{a_result}, {b_result}, {c_result}");
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-20：三个不同类型的 futures</figcaption>
+</figure>
+<p>我们可以使用 <code>trpl::join!</code> 来 await 它们，因为它允许你传递多个 future 类型并产生一个这些类型的元组。我们 <em>不能</em> 使用 <code>trpl::join_all</code>，因为它要求传递的 future 都拥有相同的类型。请记住，那个错误正是我们开启 <code>Pin</code> 探索之旅的原因！</p>
+<p>这是一个基础的权衡取舍：要么我们可以使用 <code>join_all</code> 处理动态数量的 future，只要它们都有相同的类型；要么我们可以使用 <code>join</code> 函数或者 <code>join!</code> 宏来处理固定数量的 future，哪怕它们有着不同的类型。不过这与 Rust 处理任何其它类型是一样的。Future 并不特殊，即便我们采用了一些友好的语法来处理它们，而这其实是好事。</p>
+<h3 id="future-竞争"><a class="header" href="#future-竞争">future 竞争</a></h3>
+<p>当我们使用 <code>join</code> 系列函数和宏来 “join” future 时，我们要求它们 <em>全部</em> 结束才能继续。虽然有时我们只需要 <em>部分</em> future 结束就能继续，这有点像一个 future 与另一个 future 竞争。</p>
+<p>在示例 17-21 中，我们再次使用 <code>trpl::race</code> 来运行 <code>slow</code> 和 <code>fast</code> 两个 future 并相互竞争。它们每一个都会在开始运行时打印一条消息，通过调用并 await <code>sleep</code> 暂停一段时间，接着在其结束时打印另一条消息。然后我们将它们传递给 <code>trpl::race</code> 并等待其中一个结束。（结果不会令人意外：<code>fast</code> 会赢！）不同于我们在<a href="ch17-01-futures-and-syntax.html#%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%BC%82%E6%AD%A5%E7%A8%8B%E5%BA%8F">第一个异步程序</a>中使用 <code>race</code> 的时候，这里忽略了其返回的 <code>Either</code> 实例，因为所有有趣的行为都发生在异步代码块中。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span>        let slow = async {
+            println!("'slow' started.");
+            trpl::sleep(Duration::from_millis(100)).await;
+            println!("'slow' finished.");
+        };
+
+        let fast = async {
+            println!("'fast' started.");
+            trpl::sleep(Duration::from_millis(50)).await;
+            println!("'fast' finished.");
+        };
+
+        trpl::race(slow, fast).await;
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-21：使用 `race` 来获取哪个 future 最先结束的结果</figcaption>
+</figure>
+<p>请注意如果你反转 <code>race</code> 参数的顺序，“started” 消息的顺序会改变，即使 <code>fast</code> future 总是第一个结束。这是因为这个特定的 <code>race</code> 函数实现并不是公平的。它总是以传递的参数的顺序来运行传递的 futures。其它的实现 <em>是</em> 公平的，并且会随机选择首先轮询的 future。不过无论我们使用的 race 实现是否公平，其中 <em>一个</em> future 会在另一个任务开始之前一直运行到异步代码块中第一个 <code>await</code> 为止。</p>
+<p>回忆一下<a href="ch17-01-futures-and-syntax.html#%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%BC%82%E6%AD%A5%E7%A8%8B%E5%BA%8F">第一个异步程序</a>中提到在每一个 await point，如果被 await 的 future 还没有就绪，Rust 会给运行时一个机会来暂停该任务并切换到另一个任务。反过来也是正确的：Rust <em>只会</em> 在一个 await point 暂停异步代码块并将控制权交还给运行时。await points 之间的一切都是同步。</p>
+<p>这意味着如果你在异步代码块中做了一堆工作而没有一个 await point，则那个 future 会阻塞其它任何 future 继续进行。有时你可能会听说这称为一个 future <em>starving</em> 其它 future。在一些情况中，这可能不是什么大问题。不过，如果你在进行某种昂贵的设置或者长时间运行的任务，亦或有一个 future 会无限持续运行某些特定任务的话，你会需要思考在何时何地将控制权交还运行时。</p>
+<p>同样地，如果你有长时间运行的阻塞操作，异步可能是一个提供了将程序的不同部分相互关联起来的实用工具。</p>
+<p>不过在这种情况下 <em>如何</em> 将控制权交还运行时呢？</p>
+<h3 id="yielding"><a class="header" href="#yielding">Yielding</a></h3>
+<p>让我们模拟一个长时间运行的操作。示例 17-22 引入了一个 <code>slow</code> 函数。它使用 <code>std::thread::sleep</code> 而不是 <code>trpl::sleep</code> 因此 <code>slow</code> 调用会阻塞当前线程若干毫秒。我们可以用 <code>slow</code> 来代表现实世界中的长时间运行并且会阻塞的操作。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{thread, time::Duration};
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span><span class="boring">        // We will call `slow` here later
+</span><span class="boring">    });
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn slow(name: &amp;str, ms: u64) {
+    thread::sleep(Duration::from_millis(ms));
+    println!("'{name}' ran for {ms}ms");
+}</code></pre></pre>
+<figcaption>示例 17-22：使用 `thread::sleep` 来模拟缓慢的操作</figcaption>
+</figure>
+<p>在示例 17-22 中，我们使用 <code>slow</code> 在几个 future 中模拟这类 CPU 密集型工作。首先，每个 future 只会在进行了一系列缓慢操作 <em>之后</em> 才将控制权交还给运行时。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{thread, time::Duration};
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span>        let a = async {
+            println!("'a' started.");
+            slow("a", 30);
+            slow("a", 10);
+            slow("a", 20);
+            trpl::sleep(Duration::from_millis(50)).await;
+            println!("'a' finished.");
+        };
+
+        let b = async {
+            println!("'b' started.");
+            slow("b", 75);
+            slow("b", 10);
+            slow("b", 15);
+            slow("b", 350);
+            trpl::sleep(Duration::from_millis(50)).await;
+            println!("'b' finished.");
+        };
+
+        trpl::race(a, b).await;
+<span class="boring">    });
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn slow(name: &amp;str, ms: u64) {
+</span><span class="boring">    thread::sleep(Duration::from_millis(ms));
+</span><span class="boring">    println!("'{name}' ran for {ms}ms");
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-23：使用 `thread::sleep` 来模拟缓慢的操作</figcaption>
+</figure>
+<p>如果运行代码，你会看到这些输出：</p>
+<!-- manual-regeneration
+cd listings/ch17-async-await/listing-17-24/
+cargo run
+copy just the output
+-->
+<pre><code class="language-text">'a' started.
+'a' ran for 30ms
+'a' ran for 10ms
+'a' ran for 20ms
+'b' started.
+'b' ran for 75ms
+'b' ran for 10ms
+'b' ran for 15ms
+'b' ran for 350ms
+'a' finished.
+</code></pre>
+<p>与上一个示例一样，<code>race</code> 仍然在 <code>a</code> 完成后就立刻结束了。两个 future 之间没有交替运行。<code>a</code> future 一直进行其工作直到 <code>trpl::sleep</code> 调用被 await，然后 <code>b</code> future 一直进行其工作直到它自己的 <code>trpl::sleep</code> 调用被 await，再然后 <code>a</code> future 才完成。为了使两个 future 在各自缓慢任务之间都能有所进展，我们需要 await point 才能将控制权交还给运行时。这意味着我们需要一些可以 await 的东西！</p>
+<p>我们已经在示例 17-23 中见过这类交接发生：如果去掉 <code>a</code> future 结尾的 <code>trpl::sleep</code>，那么当它完成时 <code>b</code> future <em>完全</em> 不会运行。也许我们可以使用 <code>sleep</code> 函数来作为开始呢？</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{thread, time::Duration};
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span>        let one_ms = Duration::from_millis(1);
+
+        let a = async {
+            println!("'a' started.");
+            slow("a", 30);
+            trpl::sleep(one_ms).await;
+            slow("a", 10);
+            trpl::sleep(one_ms).await;
+            slow("a", 20);
+            trpl::sleep(one_ms).await;
+            println!("'a' finished.");
+        };
+
+        let b = async {
+            println!("'b' started.");
+            slow("b", 75);
+            trpl::sleep(one_ms).await;
+            slow("b", 10);
+            trpl::sleep(one_ms).await;
+            slow("b", 15);
+            trpl::sleep(one_ms).await;
+            slow("b", 35);
+            trpl::sleep(one_ms).await;
+            println!("'b' finished.");
+        };
+<span class="boring">
+</span><span class="boring">        trpl::race(a, b).await;
+</span><span class="boring">    });
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn slow(name: &amp;str, ms: u64) {
+</span><span class="boring">    thread::sleep(Duration::from_millis(ms));
+</span><span class="boring">    println!("'{name}' ran for {ms}ms");
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-24：使用 `sleep` 让操作切换以继续进行</figcaption>
+</figure>
+<p>在示例 17-24 中，我们在 <code>slow</code> 调用之间增加了 <code>trpl::sleep</code> 调用和 await points。现在两个 future 的工作会相互交替运行：</p>
+<!-- manual-regeneration
+cd listings/ch17-async-await/listing-17-24
+cargo run
+copy just the output
+-->
+<pre><code class="language-text">'a' started.
+'a' ran for 30ms
+'b' started.
+'b' ran for 75ms
+'a' ran for 10ms
+'b' ran for 10ms
+'a' ran for 20ms
+'b' ran for 15ms
+'a' finished.
+</code></pre>
+<p><code>a</code> future 仍然会在交还控制权给 <code>b</code> 之前运行一会儿，因为它在调用 <code>trpl::sleep</code> 之前就调用了 <code>slow</code>，不过在这之后两个 future 会在触发 await point 时来回切换。在这个例子中，我们在 <code>slow</code> 之后这么做，不过我们可以在任何合适的地方拆分任务。</p>
+<p>不过我们并不是真的想在这里 <em>休眠</em>：我们希望尽可能快地取得进展。我们仅仅是需要交还控制权给运行时。我们可以使用 <code>yield_now</code> 函数来直接这么做。在示例 17-25 中，我们将所有的 <code>sleep</code> 调用替换为 <code>yield_now</code>。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{thread, time::Duration};
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span>        let a = async {
+            println!("'a' started.");
+            slow("a", 30);
+            trpl::yield_now().await;
+            slow("a", 10);
+            trpl::yield_now().await;
+            slow("a", 20);
+            trpl::yield_now().await;
+            println!("'a' finished.");
+        };
+
+        let b = async {
+            println!("'b' started.");
+            slow("b", 75);
+            trpl::yield_now().await;
+            slow("b", 10);
+            trpl::yield_now().await;
+            slow("b", 15);
+            trpl::yield_now().await;
+            slow("b", 35);
+            trpl::yield_now().await;
+            println!("'b' finished.");
+        };
+<span class="boring">
+</span><span class="boring">        trpl::race(a, b).await;
+</span><span class="boring">    });
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn slow(name: &amp;str, ms: u64) {
+</span><span class="boring">    thread::sleep(Duration::from_millis(ms));
+</span><span class="boring">    println!("'{name}' ran for {ms}ms");
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-25：使用 `yield_now` 让操作切换以继续进行</figcaption>
+</figure>
+<p>这不仅更为清楚地表明了实际的意图而且更显著地快于使用 <code>sleep</code>，因为像这样使用 <code>sleep</code> 的定时器通常受限于其控制粒度。例如我们使用的 <code>sleep</code> 版本，会至少休眠一毫秒，哪怕我们传递一纳秒的 <code>Duration</code>。而且，现代计算机非常 <em>快速</em>：它们可以在一毫秒内完成很多工作！</p>
+<p>你可以自行设置一些基准测试来验证这一点，例如示例 17-26 中的这个。（这并不是一个特别严谨的进行性能测试的方法，不过用来展示这里的区别是足够的。）这里，我们省略了所有的状态打印，传递一纳秒的 <code>Duration</code> 给 <code>trpl::sleep</code>，并让每一个 future 各自运行，不在 future 之间切换。接着我们运行 1000 次迭代并对比下使用 <code>trpl::sleep</code> 的 future 和使用 <code>trpl::yield_now</code> 的 future 的运行时间。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::{Duration, Instant};
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span>        let one_ns = Duration::from_nanos(1);
+        let start = Instant::now();
+        async {
+            for _ in 1..1000 {
+                trpl::sleep(one_ns).await;
+            }
+        }
+        .await;
+        let time = Instant::now() - start;
+        println!(
+            "'sleep' version finished after {} seconds.",
+            time.as_secs_f32()
+        );
+
+        let start = Instant::now();
+        async {
+            for _ in 1..1000 {
+                trpl::yield_now().await;
+            }
+        }
+        .await;
+        let time = Instant::now() - start;
+        println!(
+            "'yield' version finished after {} seconds.",
+            time.as_secs_f32()
+        );
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-26：对比 `sleep` 和 `yield_now` 的性能</figcaption>
+</figure>
+<p>使用 <code>yield_now</code> 的版本要 <em>快得多</em>！</p>
+<p>这意味着取决于程序所作的其它工作，异步操作甚至在计算密集型任务中也有用处，因为它提供了一个结构化程序中不同部分之间关系的实用工具。这是一种形式的 <em>协同多任务处理</em>（<em>cooperative multitasking</em>），每个 futrue 有权通过 await point 来决定何时交还控制权。因此每个 future 也有责任避免长时间阻塞。在一些基于 Rust 的嵌入式系统中，这是 <em>唯一</em> 的多任务处理类型！</p>
+<p>当然，在真实代码中，你通常不会在每一行上都交替使用 await 点来调用函数。虽然这样控制 yielding 相对来说更为廉价，但也不是毫无代价的！在很多情况下，尝试将计算密集型任务拆分可能会显著降低其速度，所以有时为了 <em>整体</em> 性能简单地让一个操作阻塞是更好的选择。你应该总是通过测量来观察代码真正的性能瓶颈是什么。不过其底层的考量在于重要的是要牢记你是否 <em>确实</em> 观察到了很多期望并发进行的工作在串行地进行。</p>
+<h3 id="构建我们自己的异步抽象"><a class="header" href="#构建我们自己的异步抽象">构建我们自己的异步抽象</a></h3>
+<p>我们也可以将 futures 组合起来形成一个新模式。例如，我们可以使用已有的异步代码块构建一个 <code>timeout</code> 函数。当我们完成时，其结果将是另一个可以用来构建进一步异步抽象的代码块。</p>
+<p>示例 17-27 展示了我们预期 <code>timeout</code> 如何处理一个缓慢运行的 future。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span>        let slow = async {
+            trpl::sleep(Duration::from_millis(100)).await;
+            "I finished!"
+        };
+
+        match timeout(slow, Duration::from_millis(10)).await {
+            Ok(message) =&gt; println!("Succeeded with '{message}'"),
+            Err(duration) =&gt; {
+                println!("Failed after {} seconds", duration.as_secs())
+            }
+        }
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre>
+<figcaption>示例 17-27：使用假想的 `timeout` 来运行一个缓慢运行的操作并设置一个时限</figcaption>
+</figure>
+<p>让我们来实现它！首先，让我们考虑一下 <code>timeout</code> 的 API：</p>
+<ul>
+<li>它需要是一个 async 函数以便可以 await。</li>
+<li>它的第一个参数应该是需要运行的 future。我们可以使用泛型以便可以处理任意 future。</li>
+<li>它的第二个参数将是需要等待的最大时间。如果我们使用 <code>Duration</code> 的话，将会使得将其直接传递给 <code>trpl::sleep</code> 变得简单。</li>
+<li>它应该返回一个 <code>Result</code>。如果 <code>future</code> 成功完成，<code>Result</code> 将会是包含 <code>future</code> 所产生的值的 <code>Ok</code>。如果超时先发生，<code>Result</code> 将会是包含超时等待的持续时间的 <code>Err</code>。</li>
+</ul>
+<p>示例 17-28 展示了这个抽象。</p>
+<!-- This is not tested because it intentionally does not compile. -->
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{future::Future, time::Duration};
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span><span class="boring">        let slow = async {
+</span><span class="boring">            trpl::sleep(Duration::from_secs(5)).await;
+</span><span class="boring">            "Finally finished"
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        match timeout(slow, Duration::from_millis(10)).await {
+</span><span class="boring">            Ok(message) =&gt; println!("Succeeded with '{message}'"),
+</span><span class="boring">            Err(duration) =&gt; {
+</span><span class="boring">                println!("Failed after {} seconds", duration.as_secs())
+</span><span class="boring">            }
+</span><span class="boring">        }
+</span><span class="boring">    });
+</span><span class="boring">}
+</span><span class="boring">
+</span>async fn timeout&lt;F: Future&gt;(
+    future_to_try: F,
+    max_time: Duration,
+) -&gt; Result&lt;F::Output, Duration&gt; {
+    // Here is where our implementation will go!
+}</code></pre>
+<figcaption>示例 17-28：定义 `timeout` 的签名</figcaption>
+</figure>
+<p>这满足了我们对类型的目标。现在让我们思考下所需的 <em>行为</em>：我们需要传递进来的 future 在持续时间内相互竞争。我们可以使用 <code>trpl::sleep</code> 和 duration 来创建一个定时器 future，并使用 <code>trpl::race</code> 来运行定时器 future 和调用者传递进来的 future。</p>
+<p>我们还知道 <code>race</code> 是不公平的，并按照传递的顺序轮询参数。因此，我们首先传递 <code>future_to_try</code> 给 <code>race</code> 以便哪怕 <code>max_time</code> 是一个非常短的持续时间它也能有机会完成。如果 <code>future_to_try</code> 首先完成，<code>race</code> 会返回 <code>Left</code> 和 <code>future</code> 的输出。如果 <code>timer</code> 首先完成，<code>race</code> 会返回 <code>Right</code> 和定时器的输出 <code>()</code>。</p>
+<p>在示例 17-29 中，我们匹配 await <code>trpl::race</code> 的结果。如果 <code>future_to_try</code> 成功并得到一个 <code>Left(output)</code>，我们返回 <code>Ok(output)</code>。相反如果休眠定时器超时了并得到一个 <code>Right(())</code>，则我们通过 <code>_</code> 忽略 <code>()</code> 并返回 <code>Err(max_time)</code>。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{future::Future, time::Duration};
+</span><span class="boring">
+</span>use trpl::Either;
+
+// --snip--
+
+fn main() {
+    trpl::run(async {
+        let slow = async {
+            trpl::sleep(Duration::from_secs(5)).await;
+            "Finally finished"
+        };
+
+        match timeout(slow, Duration::from_secs(2)).await {
+            Ok(message) =&gt; println!("Succeeded with '{message}'"),
+            Err(duration) =&gt; {
+                println!("Failed after {} seconds", duration.as_secs())
+            }
+        }
+    });
+}
+
+async fn timeout&lt;F: Future&gt;(
+    future_to_try: F,
+    max_time: Duration,
+) -&gt; Result&lt;F::Output, Duration&gt; {
+    match trpl::race(future_to_try, trpl::sleep(max_time)).await {
+        Either::Left(output) =&gt; Ok(output),
+        Either::Right(_) =&gt; Err(max_time),
+    }
+<span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-29：使用 `race` 和 `sleep` 来定义 `timeout`</figcaption>
+</figure>
+<p>于是我们有了一个由另外两个帮助函数构成的可以工作的 <code>timeout</code>。如果我们运行代码，它会在超时之后打印失败模式：</p>
+<pre><code class="language-text">Failed after 2 seconds
+</code></pre>
+<p>由于 future 可以和其他 future 组合，你可以使用更小的异步代码块来构建非常强力的工具。例如，可以使用相同的方式来组合超时和重试，并转而将其用于类似网络调用的工作，这正是本章开头的一个示例！</p>
+<p>在实践中，你会直接处理 <code>async</code> 和 <code>await</code>，其次才是类似 <code>join</code>、<code>join_all</code>、<code>race</code> 等函数和宏，在使用这些 API 时你只会偶尔遇到 <code>pin</code>。</p>
+<p>现在我们见过了一系列同时处理多个 future 的方法了。接下来，我们来看看如何通过（<em>流</em>）<em>streams</em> 处理一个时间序列的多个 future。不过，在此之前，这里有几个你可能想要先考虑的问题：</p>
+<ul>
+<li>我们在 <code>Vec</code> 上使用了 <code>join_all</code> 来等待一组中的所有 future 完成。相反该如何使用 <code>Vec</code> 来依次处理一个序列的 future 呢？这么做有哪些权衡取舍呢？</li>
+<li>仔细观察 <code>futures</code> crate 中的 <code>futures::stream::FuturesUnordered</code> 类型。使用它与使用 <code>Vec</code> 又有什么区别呢？（不用担心它来自与 crate 的 <code>stream</code> 部分的事实；它刚好能处理任何 future 的集合。）</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch17-02-concurrency-with-async.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch17-04-streams.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch17-02-concurrency-with-async.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch17-04-streams.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>

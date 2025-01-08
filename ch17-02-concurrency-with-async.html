@@ -1,0 +1,604 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>并发与 async - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Rust 程序设计语言</a></li><li class="chapter-item expanded affix "><a href="foreword.html">前言</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">简介</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> 入门指南</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> 安装</a></li><li class="chapter-item expanded "><a href="ch01-02-hello-world.html"><strong aria-hidden="true">1.2.</strong> Hello, World!</a></li><li class="chapter-item expanded "><a href="ch01-03-hello-cargo.html"><strong aria-hidden="true">1.3.</strong> Hello, Cargo!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-guessing-game-tutorial.html"><strong aria-hidden="true">2.</strong> 写个猜数字游戏</a></li><li class="chapter-item expanded "><a href="ch03-00-common-programming-concepts.html"><strong aria-hidden="true">3.</strong> 常见编程概念</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-variables-and-mutability.html"><strong aria-hidden="true">3.1.</strong> 变量与可变性</a></li><li class="chapter-item expanded "><a href="ch03-02-data-types.html"><strong aria-hidden="true">3.2.</strong> 数据类型</a></li><li class="chapter-item expanded "><a href="ch03-03-how-functions-work.html"><strong aria-hidden="true">3.3.</strong> 函数</a></li><li class="chapter-item expanded "><a href="ch03-04-comments.html"><strong aria-hidden="true">3.4.</strong> 注释</a></li><li class="chapter-item expanded "><a href="ch03-05-control-flow.html"><strong aria-hidden="true">3.5.</strong> 控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-understanding-ownership.html"><strong aria-hidden="true">4.</strong> 认识所有权</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-what-is-ownership.html"><strong aria-hidden="true">4.1.</strong> 什么是所有权？</a></li><li class="chapter-item expanded "><a href="ch04-02-references-and-borrowing.html"><strong aria-hidden="true">4.2.</strong> 引用与借用</a></li><li class="chapter-item expanded "><a href="ch04-03-slices.html"><strong aria-hidden="true">4.3.</strong> Slice 类型</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-structs.html"><strong aria-hidden="true">5.</strong> 使用结构体组织相关联的数据</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-defining-structs.html"><strong aria-hidden="true">5.1.</strong> 结构体的定义和实例化</a></li><li class="chapter-item expanded "><a href="ch05-02-example-structs.html"><strong aria-hidden="true">5.2.</strong> 结构体示例程序</a></li><li class="chapter-item expanded "><a href="ch05-03-method-syntax.html"><strong aria-hidden="true">5.3.</strong> 方法语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch06-00-enums.html"><strong aria-hidden="true">6.</strong> 枚举和模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch06-01-defining-an-enum.html"><strong aria-hidden="true">6.1.</strong> 枚举的定义</a></li><li class="chapter-item expanded "><a href="ch06-02-match.html"><strong aria-hidden="true">6.2.</strong> match 控制流结构</a></li><li class="chapter-item expanded "><a href="ch06-03-if-let.html"><strong aria-hidden="true">6.3.</strong> if let 简洁控制流</a></li></ol></li><li class="chapter-item expanded "><a href="ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"><strong aria-hidden="true">7.</strong> 使用包、Crate 和模块管理不断增长的项目</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch07-01-packages-and-crates.html"><strong aria-hidden="true">7.1.</strong> 包和 Crate</a></li><li class="chapter-item expanded "><a href="ch07-02-defining-modules-to-control-scope-and-privacy.html"><strong aria-hidden="true">7.2.</strong> 定义模块来控制作用域与私有性</a></li><li class="chapter-item expanded "><a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html"><strong aria-hidden="true">7.3.</strong> 引用模块项目的路径</a></li><li class="chapter-item expanded "><a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html"><strong aria-hidden="true">7.4.</strong> 使用 use 关键字将路径引入作用域</a></li><li class="chapter-item expanded "><a href="ch07-05-separating-modules-into-different-files.html"><strong aria-hidden="true">7.5.</strong> 将模块拆分成多个文件</a></li></ol></li><li class="chapter-item expanded "><a href="ch08-00-common-collections.html"><strong aria-hidden="true">8.</strong> 常见集合</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch08-01-vectors.html"><strong aria-hidden="true">8.1.</strong> 使用 Vector 储存列表</a></li><li class="chapter-item expanded "><a href="ch08-02-strings.html"><strong aria-hidden="true">8.2.</strong> 使用字符串储存 UTF-8 编码的文本</a></li><li class="chapter-item expanded "><a href="ch08-03-hash-maps.html"><strong aria-hidden="true">8.3.</strong> 使用 Hash Map 储存键值对</a></li></ol></li><li class="chapter-item expanded "><a href="ch09-00-error-handling.html"><strong aria-hidden="true">9.</strong> 错误处理</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong aria-hidden="true">9.1.</strong> 用 panic! 处理不可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-02-recoverable-errors-with-result.html"><strong aria-hidden="true">9.2.</strong> 用 Result 处理可恢复的错误</a></li><li class="chapter-item expanded "><a href="ch09-03-to-panic-or-not-to-panic.html"><strong aria-hidden="true">9.3.</strong> 要不要 panic!</a></li></ol></li><li class="chapter-item expanded "><a href="ch10-00-generics.html"><strong aria-hidden="true">10.</strong> 泛型、Trait 和生命周期</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch10-01-syntax.html"><strong aria-hidden="true">10.1.</strong> 泛型数据类型</a></li><li class="chapter-item expanded "><a href="ch10-02-traits.html"><strong aria-hidden="true">10.2.</strong> Trait：定义共同行为</a></li><li class="chapter-item expanded "><a href="ch10-03-lifetime-syntax.html"><strong aria-hidden="true">10.3.</strong> 生命周期确保引用有效</a></li></ol></li><li class="chapter-item expanded "><a href="ch11-00-testing.html"><strong aria-hidden="true">11.</strong> 编写自动化测试</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch11-01-writing-tests.html"><strong aria-hidden="true">11.1.</strong> 如何编写测试</a></li><li class="chapter-item expanded "><a href="ch11-02-running-tests.html"><strong aria-hidden="true">11.2.</strong> 控制测试如何运行</a></li><li class="chapter-item expanded "><a href="ch11-03-test-organization.html"><strong aria-hidden="true">11.3.</strong> 测试的组织结构</a></li></ol></li><li class="chapter-item expanded "><a href="ch12-00-an-io-project.html"><strong aria-hidden="true">12.</strong> 一个 I/O 项目：构建命令行程序</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch12-01-accepting-command-line-arguments.html"><strong aria-hidden="true">12.1.</strong> 接受命令行参数</a></li><li class="chapter-item expanded "><a href="ch12-02-reading-a-file.html"><strong aria-hidden="true">12.2.</strong> 读取文件</a></li><li class="chapter-item expanded "><a href="ch12-03-improving-error-handling-and-modularity.html"><strong aria-hidden="true">12.3.</strong> 重构以改进模块化与错误处理</a></li><li class="chapter-item expanded "><a href="ch12-04-testing-the-librarys-functionality.html"><strong aria-hidden="true">12.4.</strong> 采用测试驱动开发完善库的功能</a></li><li class="chapter-item expanded "><a href="ch12-05-working-with-environment-variables.html"><strong aria-hidden="true">12.5.</strong> 处理环境变量</a></li><li class="chapter-item expanded "><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong aria-hidden="true">12.6.</strong> 将错误信息输出到标准错误而不是标准输出</a></li></ol></li><li class="chapter-item expanded "><a href="ch13-00-functional-features.html"><strong aria-hidden="true">13.</strong> Rust 中的函数式语言功能：迭代器与闭包</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch13-01-closures.html"><strong aria-hidden="true">13.1.</strong> 闭包：可以捕获其环境的匿名函数</a></li><li class="chapter-item expanded "><a href="ch13-02-iterators.html"><strong aria-hidden="true">13.2.</strong> 使用迭代器处理元素序列</a></li><li class="chapter-item expanded "><a href="ch13-03-improving-our-io-project.html"><strong aria-hidden="true">13.3.</strong> 改进之前的 I/O 项目</a></li><li class="chapter-item expanded "><a href="ch13-04-performance.html"><strong aria-hidden="true">13.4.</strong> 性能比较：循环对迭代器</a></li></ol></li><li class="chapter-item expanded "><a href="ch14-00-more-about-cargo.html"><strong aria-hidden="true">14.</strong> 更多关于 Cargo 和 Crates.io 的内容</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch14-01-release-profiles.html"><strong aria-hidden="true">14.1.</strong> 采用发布配置自定义构建</a></li><li class="chapter-item expanded "><a href="ch14-02-publishing-to-crates-io.html"><strong aria-hidden="true">14.2.</strong> 将 crate 发布到 Crates.io</a></li><li class="chapter-item expanded "><a href="ch14-03-cargo-workspaces.html"><strong aria-hidden="true">14.3.</strong> Cargo 工作空间</a></li><li class="chapter-item expanded "><a href="ch14-04-installing-binaries.html"><strong aria-hidden="true">14.4.</strong> 使用 cargo install 安装二进制文件</a></li><li class="chapter-item expanded "><a href="ch14-05-extending-cargo.html"><strong aria-hidden="true">14.5.</strong> Cargo 自定义扩展命令</a></li></ol></li><li class="chapter-item expanded "><a href="ch15-00-smart-pointers.html"><strong aria-hidden="true">15.</strong> 智能指针</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch15-01-box.html"><strong aria-hidden="true">15.1.</strong> 使用 Box&lt;T&gt; 指向堆上数据</a></li><li class="chapter-item expanded "><a href="ch15-02-deref.html"><strong aria-hidden="true">15.2.</strong> 使用 Deref Trait 将智能指针当作常规引用处理</a></li><li class="chapter-item expanded "><a href="ch15-03-drop.html"><strong aria-hidden="true">15.3.</strong> 使用 Drop Trait 运行清理代码</a></li><li class="chapter-item expanded "><a href="ch15-04-rc.html"><strong aria-hidden="true">15.4.</strong> Rc&lt;T&gt; 引用计数智能指针</a></li><li class="chapter-item expanded "><a href="ch15-05-interior-mutability.html"><strong aria-hidden="true">15.5.</strong> RefCell&lt;T&gt; 与内部可变性模式</a></li><li class="chapter-item expanded "><a href="ch15-06-reference-cycles.html"><strong aria-hidden="true">15.6.</strong> 引用循环会导致内存泄漏</a></li></ol></li><li class="chapter-item expanded "><a href="ch16-00-concurrency.html"><strong aria-hidden="true">16.</strong> 无畏并发</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch16-01-threads.html"><strong aria-hidden="true">16.1.</strong> 使用线程同时地运行代码</a></li><li class="chapter-item expanded "><a href="ch16-02-message-passing.html"><strong aria-hidden="true">16.2.</strong> 使用消息传递在线程间通信</a></li><li class="chapter-item expanded "><a href="ch16-03-shared-state.html"><strong aria-hidden="true">16.3.</strong> 共享状态并发</a></li><li class="chapter-item expanded "><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong aria-hidden="true">16.4.</strong> 使用 Sync 与 Send Traits 的可扩展并发</a></li></ol></li><li class="chapter-item expanded "><a href="ch17-00-async-await.html"><strong aria-hidden="true">17.</strong> Async 和 await</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch17-01-futures-and-syntax.html"><strong aria-hidden="true">17.1.</strong> Futures 和 async 语法</a></li><li class="chapter-item expanded "><a href="ch17-02-concurrency-with-async.html" class="active"><strong aria-hidden="true">17.2.</strong> 并发与 async</a></li><li class="chapter-item expanded "><a href="ch17-03-more-futures.html"><strong aria-hidden="true">17.3.</strong> 使用任意数量的 futures</a></li><li class="chapter-item expanded "><a href="ch17-04-streams.html"><strong aria-hidden="true">17.4.</strong> 流（Streams）</a></li><li class="chapter-item expanded "><a href="ch17-05-traits-for-async.html"><strong aria-hidden="true">17.5.</strong> 深入理解 async 相关的 traits</a></li><li class="chapter-item expanded "><a href="ch17-06-futures-tasks-threads.html"><strong aria-hidden="true">17.6.</strong> Futures，任务（tasks）和线程（threads）</a></li></ol></li><li class="chapter-item expanded "><a href="ch18-00-oop.html"><strong aria-hidden="true">18.</strong> Rust 的面向对象编程特性</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch18-01-what-is-oo.html"><strong aria-hidden="true">18.1.</strong> 面向对象语言的特点</a></li><li class="chapter-item expanded "><a href="ch18-02-trait-objects.html"><strong aria-hidden="true">18.2.</strong> 顾及不同类型值的 trait 对象</a></li><li class="chapter-item expanded "><a href="ch18-03-oo-design-patterns.html"><strong aria-hidden="true">18.3.</strong> 面向对象设计模式的实现</a></li></ol></li><li class="chapter-item expanded "><a href="ch19-00-patterns.html"><strong aria-hidden="true">19.</strong> 模式与模式匹配</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch19-01-all-the-places-for-patterns.html"><strong aria-hidden="true">19.1.</strong> 所有可能会用到模式的位置</a></li><li class="chapter-item expanded "><a href="ch19-02-refutability.html"><strong aria-hidden="true">19.2.</strong> Refutability（可反驳性）: 模式是否会匹配失效</a></li><li class="chapter-item expanded "><a href="ch19-03-pattern-syntax.html"><strong aria-hidden="true">19.3.</strong> 模式语法</a></li></ol></li><li class="chapter-item expanded "><a href="ch20-00-advanced-features.html"><strong aria-hidden="true">20.</strong> 高级特征</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch20-01-unsafe-rust.html"><strong aria-hidden="true">20.1.</strong> 不安全的 Rust</a></li><li class="chapter-item expanded "><a href="ch20-03-advanced-traits.html"><strong aria-hidden="true">20.2.</strong> 高级 trait</a></li><li class="chapter-item expanded "><a href="ch20-04-advanced-types.html"><strong aria-hidden="true">20.3.</strong> 高级类型</a></li><li class="chapter-item expanded "><a href="ch20-05-advanced-functions-and-closures.html"><strong aria-hidden="true">20.4.</strong> 高级函数与闭包</a></li><li class="chapter-item expanded "><a href="ch20-06-macros.html"><strong aria-hidden="true">20.5.</strong> 宏</a></li></ol></li><li class="chapter-item expanded "><a href="ch21-00-final-project-a-web-server.html"><strong aria-hidden="true">21.</strong> 最后的项目：构建多线程 web server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch21-01-single-threaded.html"><strong aria-hidden="true">21.1.</strong> 建立单线程 web server</a></li><li class="chapter-item expanded "><a href="ch21-02-multithreaded.html"><strong aria-hidden="true">21.2.</strong> 将单线程 server 变为多线程 server</a></li><li class="chapter-item expanded "><a href="ch21-03-graceful-shutdown-and-cleanup.html"><strong aria-hidden="true">21.3.</strong> 优雅停机与清理</a></li></ol></li><li class="chapter-item expanded "><a href="appendix-00.html"><strong aria-hidden="true">22.</strong> 附录</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix-01-keywords.html"><strong aria-hidden="true">22.1.</strong> A - 关键字</a></li><li class="chapter-item expanded "><a href="appendix-02-operators.html"><strong aria-hidden="true">22.2.</strong> B - 运算符与符号</a></li><li class="chapter-item expanded "><a href="appendix-03-derivable-traits.html"><strong aria-hidden="true">22.3.</strong> C - 可派生的 trait</a></li><li class="chapter-item expanded "><a href="appendix-04-useful-development-tools.html"><strong aria-hidden="true">22.4.</strong> D - 实用开发工具</a></li><li class="chapter-item expanded "><a href="appendix-05-editions.html"><strong aria-hidden="true">22.5.</strong> E - 版本</a></li><li class="chapter-item expanded "><a href="appendix-06-translation.html"><strong aria-hidden="true">22.6.</strong> F - 本书译本</a></li><li class="chapter-item expanded "><a href="appendix-07-nightly-rust.html"><strong aria-hidden="true">22.7.</strong> G - Rust 是如何开发的与 “Nightly Rust”</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch17-02-concurrency-with-async.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="并发与-async"><a class="header" href="#并发与-async">并发与 async</a></h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/main/src/ch17-02-concurrency-with-async.md">ch17-02-concurrency-with-async.md</a>
+<br>
+commit 62d441060d66f9a1c3d3cdfffa8eed40f817d1aa</p>
+</blockquote>
+<p>在这一部分，我们将使用异步来应对一些与第十六章中通过线程解决的相同的并发问题。因为之前我们已经讨论了很多关键理念了，这一部分我们会专注于线程与 future 的区别。</p>
+<p>在很多情况下，使用异步处理并发的 API 与使用线程的非常相似。在其它的一些情况，它们则非常不同。即便线程与异步的的 API <em>看起来</em> 很类似，通常它们有着不同的行为，同时它们几乎总是有着不同的性能特点。</p>
+<h3 id="计数"><a class="header" href="#计数">计数</a></h3>
+<p>第十六章中我们应付的第一个任务是在两个不同的线程中计数。让我们用异步来完成相同的任务。<code>trpl</code> crate 提供了一个 <code>spawn_task</code> 函数，它看起来非常像 <code>thread::spawn</code> API，和一个 <code>sleep</code> 函数，这是 <code>thread::sleep</code> API 的异步版本。我们可以将它们结合使用，实现与线程示例相同的计数功能，如示例 17-6 所示。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span>use std::time::Duration;
+
+fn main() {
+    trpl::run(async {
+        trpl::spawn_task(async {
+            for i in 1..10 {
+                println!("hi number {i} from the first task!");
+                trpl::sleep(Duration::from_millis(500)).await;
+            }
+        });
+
+        for i in 1..5 {
+            println!("hi number {i} from the second task!");
+            trpl::sleep(Duration::from_millis(500)).await;
+        }
+    });
+}</code></pre></pre>
+<figcaption>示例 17-6：使用 `spawn_task` 启动两个计数任务</figcaption>
+</figure>
+<p>作为开始，我们在 <code>main</code> 函数中使用 <code>trpl::run</code>，这样我们的顶层函数可以是异步的。</p>
+<blockquote>
+<p>注意：本章从现在开始，每一个示例的 <code>main</code> 中都会包含几乎相同的 <code>trpl::run</code> 封装代码，所以我们经常会连同 <code>main</code> 一同省略。别忘了在你的代码中加入它们！</p>
+</blockquote>
+<p>接着我们在代码块中编写了两个循环，每个其中都有一个 <code>trpl::sleep</code> 调用，每一个都在发送下一个信息之前等待半秒（500 毫秒）。我们将一个循环放到 <code>trpl::spawn_task</code> 中并将另一个放在顶层的 <code>for</code> 循环中。我们也在 <code>sleep</code> 调用之后加入了一个 <code>await</code>。</p>
+<p>这个实现与基于线程的版本类似，包括在运行时，你可能会在终端中看到消息以不同顺序出现的情况。</p>
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+<pre><code class="language-text">hi number 1 from the second task!
+hi number 1 from the first task!
+hi number 2 from the first task!
+hi number 2 from the second task!
+hi number 3 from the first task!
+hi number 3 from the second task!
+hi number 4 from the first task!
+hi number 4 from the second task!
+hi number 5 from the first task!
+</code></pre>
+<p>这个版本在 main 中的异步代码块中 for 循环结束后就停止了，因为当 main 函数结束时 <code>spawn_task</code> 产生的任务就会关闭。如果运行该任务直到结束，你需要使用一个 join 句柄（join handle）来等待第一个任务完成。对于线程来说，可以使用 <code>join</code> 方法来 “阻塞” 直到线程结束运行。在示例 17-7 中，我们可以使用 <code>await</code> 来实现相同的效果，因为任务句柄本身是一个 future。它的 <code>Output</code> 类型是一个 <code>Result</code>，所以我们还需要 unwrap 来 await 它。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span>        let handle = trpl::spawn_task(async {
+            for i in 1..10 {
+                println!("hi number {i} from the first task!");
+                trpl::sleep(Duration::from_millis(500)).await;
+            }
+        });
+
+        for i in 1..5 {
+            println!("hi number {i} from the second task!");
+            trpl::sleep(Duration::from_millis(500)).await;
+        }
+
+        handle.await.unwrap();
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-7：在一个 join 句柄上使用 `await` 使得任务运行直到结束</figcaption>
+</figure>
+<p>更新后的版本会运行 <em>两个</em> 循环直到结束。</p>
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+<pre><code class="language-text">hi number 1 from the second task!
+hi number 1 from the first task!
+hi number 2 from the first task!
+hi number 2 from the second task!
+hi number 3 from the first task!
+hi number 3 from the second task!
+hi number 4 from the first task!
+hi number 4 from the second task!
+hi number 5 from the first task!
+hi number 6 from the first task!
+hi number 7 from the first task!
+hi number 8 from the first task!
+hi number 9 from the first task!
+</code></pre>
+<p>目前为止，看起来异步和线程版本给出了基本一样的输出，它们只是使用了不同的语法：在 join 句柄上使用 <code>await</code> 而不是调用 <code>join</code>，和 await <code>sleep</code> 调用。</p>
+<p>最大的区别在于无需再产生另一个操作系统线程来进行工作。事实上，我们甚至不需要产生一个任务。因为异步代码块会编译为匿名 future，我们可以将每一个循环放进一个异步代码块并使用 <code>trpl::join</code> 方法来让运行时将它们两个都运行至完成。</p>
+<p>在第十六章中，我们展示了如何在 <code>std::thread::spawn</code> 调用返回的 <code>JoinHandle</code> 类型上调用 <code>join</code> 方法。<code>trpl::join</code> 函数也类似，不过它作用于 future。当你传递两个 future，它会产生单独一个 future 但它的输出是一个元组，当 <em>两者</em> 都完成时其中有每一个传递给它的 future 的输出。因此，在示例 17-8 中，我们使用 <code>trpl::join</code> 来等待 <code>fut1</code> 和 <code>fut2</code> 都结束。我们 <em>没有</em> await <code>fut1</code> 和 <code>fut2</code>，而是等待 <code>trpl::join</code> 新产生的 future。我们忽略其输出，因为它只是一个包含两个单元值（unit value）的元组。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span>        let fut1 = async {
+            for i in 1..10 {
+                println!("hi number {i} from the first task!");
+                trpl::sleep(Duration::from_millis(500)).await;
+            }
+        };
+
+        let fut2 = async {
+            for i in 1..5 {
+                println!("hi number {i} from the second task!");
+                trpl::sleep(Duration::from_millis(500)).await;
+            }
+        };
+
+        trpl::join(fut1, fut2).await;
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-8：使用 `trpl::join` 来 await 两个匿名 future</figcaption>
+</figure>
+<p>当运行代码我们会看到两个 future 会运行至结束：</p>
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+<pre><code class="language-text">hi number 1 from the first task!
+hi number 1 from the second task!
+hi number 2 from the first task!
+hi number 2 from the second task!
+hi number 3 from the first task!
+hi number 3 from the second task!
+hi number 4 from the first task!
+hi number 4 from the second task!
+hi number 5 from the first task!
+hi number 6 from the first task!
+hi number 7 from the first task!
+hi number 8 from the first task!
+hi number 9 from the first task!
+</code></pre>
+<p>这里，你每次都会看到完全相同的顺序，这与我们在线程中看到的情况非常不同。这是因为 <code>trpl::join</code> 函数是 <em>公平的</em>（<em>fair</em>），这意味着它以相同的频率检查每一个 future，使它们交替执行，绝不会让一个任务在另一个任务准备好时抢先执行。对于线程来说，操作系统会决定该检查哪个线程和会让它运行多长时间。对于异步 Rust 来说，运行时决定检查哪一个任务。（在实践中，细节会更为复杂，因为异步运行时可能在底层使用操作系统线程来作为其并发管理的一部分，因此要保证公平性可能会增加运行时的工作量，但这仍然是可行的！）运行时无需为任何操作保证公平性，同时运行时也经常提供不同的 API 来让你选择是否需要公平性。</p>
+<p>尝试这些不同的 await future 的变体来观察它们的效果：</p>
+<ul>
+<li>去掉一个或者两个循环外的异步代码块。</li>
+<li>在定义两个异步代码块后立刻 await 它们。</li>
+<li>只将第一个循环封装进异步代码块，并在第二个循环体之后 await 作为结果的 future。</li>
+</ul>
+<p>作为额外的挑战，看看你能否在运行代码 <em>之前</em> 想出每个情况下的输出！</p>
+<h3 id="消息传递"><a class="header" href="#消息传递">消息传递</a></h3>
+<p>在 future 之间共享数据也与线程类似：我们会再次使用消息传递，不过这次使用的是异步版本的类型和函数。我们会采用与之前第十六章中使用的稍微不同的方法，来展示一些基于线程的并发与基于 future 的并发之间的关键差异。在示例 17-9 中，我们会从仅有一个异步代码块开始，<em>不像</em> 之前产生独立线程那样产生一个独立的任务。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span>        let (tx, mut rx) = trpl::channel();
+
+        let val = String::from("hi");
+        tx.send(val).unwrap();
+
+        let received = rx.recv().await.unwrap();
+        println!("Got: {received}");
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-9：创建一个异步信道（async channel）并赋值其两端为 `tx` 和 `rx`</figcaption>
+</figure>
+<p>这里我们使用了 <code>trpl::channel</code>，一个第十六章用于线程的多生产者、单消费者信道 API 的异步版本。异步版本的 API 与基于线程的版本只有一点微小的区别：它使用一个可变的而不是不可变的 <code>rx</code>，并且它的 <code>recv</code> 方法产生一个需要 await 的 future 而不是直接返回值。现在我们可以发送端向接收端发送消息了。注意我们无需产生一个独立的线程或者任务；只需等待（await） <code>rx.recv</code> 调用。</p>
+<p><code>std::mpsc::channel</code> 中的同步 <code>Receiver::recv</code> 方法阻塞执行直到它接收一个消息。<code>trpl::Receiver::recv</code> 则不会阻塞，因为它是异步的。不同于阻塞，它将控制权交还给运行时，直到接收到一个消息或者信道的发送端关闭。相比之下，我们不用 await <code>send</code>，因为它不会阻塞。也无需阻塞，因为信道的发送端的数量是没有限制的。</p>
+<blockquote>
+<p>注意：因为所有这些异步代码都运行在一个 <code>trpl::run</code> 调用的异步代码块中，其中的所有代码可以避免阻塞。然而，<em>外面</em> 的代码会阻塞到 <code>run</code> 函数返回。这正是 <code>trpl::run</code> 函数的全部意义：它允许你 <em>选择</em> 在何处阻塞一部分异步代码，也就是在何处进行同步和异步代码的转换。这正是在大部分运行时中 <code>run</code> 实际上被命名为 <code>block_on</code> 的原因。</p>
+</blockquote>
+<p>请注意这个示例中的两个地方：首先，消息立刻就会到达！其次，虽然我们使用了 future，但是这里还没有并发。示例中的所有事情都是顺序发生的，就像没涉及到 future 时一样。</p>
+<p>让我们通过发送一系列消息并在之间休眠来解决第一个问题，如示例 17-10 所示：</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span>        let (tx, mut rx) = trpl::channel();
+
+        let vals = vec![
+            String::from("hi"),
+            String::from("from"),
+            String::from("the"),
+            String::from("future"),
+        ];
+
+        for val in vals {
+            tx.send(val).unwrap();
+            trpl::sleep(Duration::from_millis(500)).await;
+        }
+
+        while let Some(value) = rx.recv().await {
+            println!("received '{value}'");
+        }
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-10：通过异步信道发送和接收多个消息并在每个消息之间通过 `await` 休眠</figcaption>
+</figure>
+<p>除了发送消息之外，我们还需要接收它们。在这个例子中我们可以手动接收，就是调用四次 <code>rx.recv().await</code>，因为我们知道进来了多少条消息。然而，在现实世界中，我们通常会等待 <em>未知</em> 数量的消息。这时我们需要一直等待直到可以确认没有更多消息了为止。</p>
+<p>在示例 16-10 中，我们使用了 <code>for</code> 循坏来处理从异步信道接收的所有消息。然而，Rust 目前还没有在 <em>异步</em> 序列上编写 <code>for</code> 循环的方法。取而代之的是，我们需要一个我们还没有见过的新循环类型，即 <code>while let</code> 条件循环。<code>while let</code> 循环是我们在第六章中见过的 <code>if let</code> 结构的循环版本。只要其指定的模式持续匹配循环就会一直执行。</p>
+<p><code>rx.recv</code> 调用产生一个 <code>Future</code>，我们会 await 它。运行时会暂停 <code>Future</code> 直到它就绪。一旦消息到达，future 会解析为 <code>Some(message)</code>，每次消息到达时都会如此。。当信道关闭时，不管是否有 <em>任何</em> 消息到达，future 都会解析为 <code>None</code> 来表明没有更多的值了，我们也就应该停止轮询，也就是停止等待。</p>
+<p><code>while let</code> 循环将上述逻辑整合在一起。如果 <code>rx.recv().await</code> 调用的结果是 <code>Some(message)</code>，我们会得到消息并可以在循环体中使用它，就像使用 <code>if let</code> 一样。如果结果是 <code>None</code>，则循环停止。每次循环执行完毕，它会再次触发 await point，如此运行时会再次暂停直到另一条消息到达。</p>
+<p>现在代码可以成功发送和接收所有的消息了。不幸的是，这里还有一些问题。首先，消息并不是按照半秒的间隔到达的。它们在程序启动后两秒（2000 毫秒）后立刻一起到达。其次，程序永远也不会退出！相反它会永远等待新消息。你会需要使用 <span class="keystroke">ctrl-c</span> 来关闭它。</p>
+<p>让我们开始理解为何消息在全部延迟后立刻一起到达，而不是逐个在延迟后到达。在一个给定的异步代码块，<code>await</code> 关键字在代码中出现的顺序也就是程序执行时其发生的顺序。</p>
+<p>示例 17-10 中只有一个异步代码块，所以所有的代码线性地执行。这里仍然没有并发。所有 <code>tx.send</code> 调用与 <code>trpl::sleep</code> 调用及其相关的 await point 是依次进行的。只有在此之后 <code>while let</code> 循环才开始执行 <code>recv</code> 调用上的 <code>await</code> point。</p>
+<p>为了得到我们需要的行为，在接收每条消息之间引入休眠延迟，我们需要将 <code>tx</code> 和 <code>rx</code> 操作放置于它们各自的异步代码块中。这样运行时就可以使用 <code>trpl::join</code> 来分别执行它们，就像在计数示例中一样。我们再一次 await <code>trpl::join</code> 调用的结果，而不是它们各自的 future。如果我们顺序地 await 单个 future，则就又回到了一个顺序流，这正是我们 <em>不</em> 希望做的。</p>
+<!-- We cannot test this one because it never stops! -->
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span><span class="boring">        let (tx, mut rx) = trpl::channel();
+</span><span class="boring">
+</span>        let tx_fut = async {
+            let vals = vec![
+                String::from("hi"),
+                String::from("from"),
+                String::from("the"),
+                String::from("future"),
+            ];
+
+            for val in vals {
+                tx.send(val).unwrap();
+                trpl::sleep(Duration::from_millis(500)).await;
+            }
+        };
+
+        let rx_fut = async {
+            while let Some(value) = rx.recv().await {
+                println!("received '{value}'");
+            }
+        };
+
+        trpl::join(tx_fut, rx_fut).await;
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre>
+<figcaption>示例 17-11：将 `send` 和 `recv` 分隔到其各自的 `async` 代码块中并 await 这些代码块的 future</figcaption>
+</figure>
+<p>采用示例 17-11 中的更新后的代码，消息会以 500 毫秒的间隔打印，而不是在两秒后就全部一起打印。</p>
+<p>但是程序仍然永远也不会退出，这是由于 <code>while let</code> 循环与 <code>trpl::join</code> 的交互方式所致：</p>
+<ul>
+<li><code>trpl::join</code> 返回的 future 只会完成一次，即传递的 <em>两个</em> future 都完成的时候。</li>
+<li><code>tx</code> future 在发送 <code>vals</code> 中最后一条消息之后的休眠结束后立刻完成。</li>
+<li><code>rx</code> future 直到 <code>while let</code> 循环结束之前都不会完成。</li>
+<li>当信道的另一端关闭后 await <code>rx.recv</code> 将只会返回 <code>None</code>。</li>
+<li>信道只有在调用 <code>rx.close</code> 或者发送端 <code>tx</code> 被丢弃时才会关闭。</li>
+<li>我们没有在任何地方调用 <code>rx.close</code>，并且 <code>tx</code> 直到传递给 <code>trpl::run</code> 的最外层异步代码块结束前都不会被丢弃。</li>
+<li>代码块不能结束是因为它阻塞在了等待 <code>trpl::join</code> 完成，这就又回到了列表的开头！</li>
+</ul>
+<p>我们可以在代码的某处调用 <code>rx.close</code> 来手动关闭 <code>rx</code>，不过这并没有太多意义。在处理了任意数量的消息后停止可以使程序停止，但是可能会丢失消息。我们需要其它的手段来确保 <code>tx</code> 在函数的结尾 <em>之前</em> 被丢弃。</p>
+<p>目前发送消息的异步代码块只是借用了 <code>tx</code>，因为发送消息并不需要其所有权，但是如果我们可以将 <code>tx</code> 移动（move）进异步代码快，它会在代码块结束后立刻被丢弃。在第十三章中我们学习了如何在闭包上使用 <code>move</code> 关键字，在第十六章中，我们知道了使用线程时经常需要移动数据进闭包。同样的基本原理也适用于异步代码块，因此 <code>move</code> 关键字也能像闭包那样作用于异步代码块。</p>
+<p>在示例 17-12 中，我们将发送消息的异步代码块从普通的 <code>async</code> 代码块修改为 <code>async move</code> 代码块。当运行 <em>这个</em> 版本的代码时，它会在发送和接收完最后一条消息后优雅地关闭。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span>        let (tx, mut rx) = trpl::channel();
+
+        let tx_fut = async move {
+            let vals = vec![
+                String::from("hi"),
+                String::from("from"),
+                String::from("the"),
+                String::from("future"),
+            ];
+
+            for val in vals {
+                tx.send(val).unwrap();
+                trpl::sleep(Duration::from_millis(500)).await;
+            }
+        };
+
+        let rx_fut = async {
+            while let Some(value) = rx.recv().await {
+                eprintln!("received '{value}'");
+            }
+        };
+
+        trpl::join(tx_fut, rx_fut).await;
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-12：一个可以工作的在 future 之间接收和发送消息的示例，其在结束后会正确地关闭</figcaption>
+</figure>
+<p>这个异步信道也是一个多生产者信道，所以如果希望从多个 future 发送消息可以调用 <code>tx</code> 上的 <code>clone</code> 方法。在示例 17-13 中，我们克隆了 <code>tx</code>，在第一个异步代码块外面创建 <code>tx1</code>。我们像第一个 <code>tx</code> 一样将 <code>tx1</code> 移动进代码块。接下来，将原始的 <code>tx</code> 移动进一个 <em>新的</em> 异步代码块，其中会用一个稍微更长的延迟发送更多的消息。我们碰巧将新代码块放在接收消息的异步代码块之后，不过也可以放在之前。关键在于 future 被 await 的顺序，而不是它们创建的顺序。</p>
+<p>两个发送消息的异步代码块需要是 <code>async move</code> 代码块，如此 <code>tx</code> 和 <code>tx1</code> 都会在代码块结束后被丢弃。否则我们就会陷入到开始时同样的无限循环。最后，我们从 <code>trpl::join</code> 切换到 <code>trpl::join3</code> 来处理额外的 future。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span>        let (tx, mut rx) = trpl::channel();
+
+        let tx1 = tx.clone();
+        let tx1_fut = async move {
+            let vals = vec![
+                String::from("hi"),
+                String::from("from"),
+                String::from("the"),
+                String::from("future"),
+            ];
+
+            for val in vals {
+                tx1.send(val).unwrap();
+                trpl::sleep(Duration::from_millis(500)).await;
+            }
+        };
+
+        let rx_fut = async {
+            while let Some(value) = rx.recv().await {
+                println!("received '{value}'");
+            }
+        };
+
+        let tx_fut = async move {
+            let vals = vec![
+                String::from("more"),
+                String::from("messages"),
+                String::from("for"),
+                String::from("you"),
+            ];
+
+            for val in vals {
+                tx.send(val).unwrap();
+                trpl::sleep(Duration::from_millis(1500)).await;
+            }
+        };
+
+        trpl::join3(tx1_fut, tx_fut, rx_fut).await;
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>示例 17-13：通过多个异步代码块使用多个发送者</figcaption>
+</figure>
+<p>现在我们会看到所有来在两个发送 future 的消息。因为发送 future 采用了稍微不同的发送延迟，消息也会以这些不同的延迟接收。</p>
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+<pre><code class="language-text">received 'hi'
+received 'more'
+received 'from'
+received 'the'
+received 'messages'
+received 'future'
+received 'for'
+received 'you'
+</code></pre>
+<p>这是一个良好的开始，不过它将我们限制到少数几个 future：<code>join</code> 两个，或者 <code>join3</code> 三个。让我们看下如何处理更多的 future。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch17-01-futures-and-syntax.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch17-03-more-futures.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch17-01-futures-and-syntax.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch17-03-more-futures.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
