@@ -121,7 +121,7 @@
     - [Refutability（可反驳性）: 模式是否会匹配失效](ch19-02-refutability.md)
     - [模式语法](ch19-03-pattern-syntax.md)
 
-- [高级特征](ch20-00-advanced-features.md)
+- [高级特性](ch20-00-advanced-features.md)
     - [不安全的 Rust](ch20-01-unsafe-rust.md)
     - [高级 trait](ch20-03-advanced-traits.md)
     - [高级类型](ch20-04-advanced-types.md)

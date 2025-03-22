@@ -1,4 +1,4 @@
-# 高级特征
+# 高级特性
 
 > [ch20-00-advanced-features.md](https://github.com/rust-lang/book/blob/main/src/ch20-00-advanced-features.md)
 > <br>
