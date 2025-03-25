@@ -254,7 +254,7 @@ Rust 既不能避免一个 trait 与另一个 trait 拥有相同名称的方法�
 
 ### newtype 模式用以在外部类型上实现外部 trait
 
-在第十章的 [“为类型实现 trait”][implementing-a-trait-on-a-type] 部分，我们提到了孤儿规则（orphan rule），它说明只要 trait 或类型对于当前 crate 是本地的话就可以在此类型上实现该 trait。一个绕开这个限制的方法是使用 **newtype 模式**（*newtype pattern*），它涉及到在一个元组结构体（第五章 [“用没有命名字段的元组结构体来创建不同的类型”][tuple-structs] 部分介绍了元组结构体）中创建一个新类型。这个元组结构体带有一个字段作为希望实现 trait 的类型的简单封装。接着这个封装类型对于 crate 是本地的，这样就可以在这个封装上实现 trait。*Newtype* 是一个源自 Haskell 编程语言的概念。使用这个模式没有运行时性能惩罚，这个封装类型在编译时就被省略了。
+在第十章的 [“为类型实现 trait”][implementing-a-trait-on-a-type] 部分，我们提到了孤儿规则（orphan rule），它说明只有 trait 或类型对于当前 crate 是本地时，才可以在此类型上实现该 trait。一个绕开这个限制的方法是使用 **newtype 模式**（*newtype pattern*），它涉及到在一个元组结构体（第五章 [“用没有命名字段的元组结构体来创建不同的类型”][tuple-structs] 部分介绍了元组结构体）中创建一个新类型。这个元组结构体带有一个字段作为希望实现 trait 的类型的简单封装。接着这个封装类型对于 crate 是本地的，这样就可以在这个封装上实现 trait。*Newtype* 是一个源自 Haskell 编程语言的概念。使用这个模式没有运行时性能惩罚，这个封装类型在编译时就被省略了。
 
 例如，如果想要在 `Vec<T>` 上实现 `Display`，而孤儿规则阻止我们直接这么做，因为 `Display` trait 和 `Vec<T>` 都定义于我们的 crate 之外。可以创建一个包含 `Vec<T>` 实例的 `Wrapper` 结构体，接着可以如列表 19-23 那样在 `Wrapper` 上实现 `Display` 并使用 `Vec<T>` 的值：
 
@@ -270,7 +270,7 @@ Rust 既不能避免一个 trait 与另一个 trait 拥有相同名称的方法�
 
 此方法的缺点是，因为 `Wrapper` 是一个新类型，它没有定义于其值之上的方法；必须直接在 `Wrapper` 上实现 `Vec<T>` 的所有方法，这样就可以代理到`self.0` 上 —— 这就允许我们完全像 `Vec<T>` 那样对待 `Wrapper`。如果希望新类型拥有其内部类型的每一个方法，为封装类型实现 `Deref` trait（第十五章 [“通过 `Deref` trait 将智能指针当作常规引用处理”][smart-pointer-deref] 部分讨论过）并返回其内部类型是一种解决方案。如果不希望封装类型拥有所有内部类型的方法 —— 比如为了限制封装类型的行为 —— 则必须只自行实现所需的方法。
 
-甚至当不涉及 trait 时 newtype 模式也很有用。现在让我们将话题的焦点转移到一些与 Rust 类型系统交互的高级方法上来吧。
+甚至当不涉及 trait 时 newtype 模式也很有用。现在让我们将话题的焦点转移到一些与 Rust 类型系统交互的高级方式上来吧。
 
 [newtype]: ch20-03-advanced-traits.html#newtype-模式用以在外部类型上实现外部-trait
 [implementing-a-trait-on-a-type]: ch10-02-traits.html#为类型实现-trait
