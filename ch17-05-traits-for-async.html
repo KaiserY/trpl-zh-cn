@@ -1,0 +1,277 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>深入理解 async 相关的 traits - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch17-05-traits-for-async.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="深入理解-async-相关的-traits"><a class="header" href="#深入理解-async-相关的-traits">深入理解 async 相关的 traits</a></h2>
+<blockquote>
+<p><a href="https://github.com/rust-lang/book/blob/main/src/ch17-05-traits-for-async.md">ch17-05-traits-for-async.md</a>
+<br>
+commit 56ec353290429e6547109e88afea4de027b0f1a9</p>
+</blockquote>
+<p>贯穿本章，我们通过多种方式使用了 <code>Future</code>、<code>Pin</code>、<code>Unpin</code>、<code>Stream</code> 和 <code>StreamExt</code> trait。但是直到目前为止，我们避免过多地了解它们如何工作或者如何组合在一起的细节，这对你日常的 Rust 开发而言通常是没问题的。不过有时你会遇到需要了解更多细节的场景。在本小节，我们会足够深入以便理解这些场景，并仍会将 <em>真正</em> 有深度的内容留给其它文档。</p>
+<h3 id="future-trait"><a class="header" href="#future-trait"><code>Future</code> trait</a></h3>
+<p>让我们以更深入地了解 <code>Future</code> trait 作为开始。这里是 Rust 中其如何定义的：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::pin::Pin;
+use std::task::{Context, Poll};
+
+pub trait Future {
+    type Output;
+
+    fn poll(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;'_&gt;) -&gt; Poll&lt;Self::Output&gt;;
+}
+<span class="boring">}</span></code></pre></pre>
+<p>trait 定义中包含一些的新类型和我们之前没有见过新语法，所以让我们逐步详细地解析一下这个定义。</p>
+<p>首先， <code>Future</code> 的关联类型 <code>Output</code> 表明 future 最终解析出的类型。这类似于 <code>Iterator</code> trait 的关联类型 <code>Item</code>。其次，<code>Future</code> 还有一个 <code>poll</code> 方法，其有一个特殊的 <code>self</code> 参数的 <code>Pin</code> 引用和一个 <code>Context</code> 类型的可变引用，并返回一个 <code>Poll&lt;Self::Output&gt;</code>。稍后我们再细说  <code>Pin</code> 和 <code>Context</code>。现在让我们专注于方法返回的 <code>Poll</code> 类型：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum Poll&lt;T&gt; {
+    Ready(T),
+    Pending,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>Poll</code> 类型类似于一个 <code>Option</code>。它有一个包含值的变体 <code>Ready(T)</code>，和一个没有值的变体 <code>Pending</code>。不过 <code>Poll</code> 所代表的意义与 <code>Option</code> 非常不同！<code>Pending</code> 变体表明 future 仍然还有工作要进行，所有调用者稍后需要再次检查。<code>Ready</code> 变体表明 future 已经完成了其工作并且 <code>T</code> 的值是可用的。</p>
+<blockquote>
+<p>注意：对于大部分功能，调用者不应在 future 返回 <code>Ready</code> 后再次调用 <code>poll</code>。很多 future 在完成后再次轮询会 panic。可以安全地再次轮询的 future 会在文档中显示地说明。这类似于 <code>Iterator::next</code> 的行为。</p>
+</blockquote>
+<p>当你见到使用 <code>await</code> 的代码时，Rust 会在底层将其编译为调用 <code>poll</code> 的代码。如果你回头看下示例 17-4，其在一个单个 URL 解析完成后打印出页面标题，Rust 将其编译为一些类似（虽然不完全是）这样的代码：</p>
+<pre><code class="language-rust ignore">match page_title(url).poll() {
+    Ready(page_title) =&gt; match page_title {
+        Some(title) =&gt; println!("The title for {url} was {title}"),
+        None =&gt; println!("{url} had no title"),
+    }
+    Pending =&gt; {
+        // But what goes here?
+    }
+}</code></pre>
+<p>如果 future 仍然是 <code>Pending</code> 的话我们应该做什么呢？我们需要某种方式不断重试，直到 future 最终准备好。换句话说，我们需要一个循环：</p>
+<pre><code class="language-rust ignore">let mut page_title_fut = page_title(url);
+loop {
+    match page_title_fut.poll() {
+        Ready(value) =&gt; match page_title {
+            Some(title) =&gt; println!("The title for {url} was {title}"),
+            None =&gt; println!("{url} had no title"),
+        }
+        Pending =&gt; {
+            // continue
+        }
+    }
+}</code></pre>
+<p>但是如何 Rust 将其编译为正好如此的代码的话，每一个 <code>await</code> 都会阻塞 -- 这与我们期望的完全不同！相反，Rust 确保循环可以将控制权交给一些可以暂停当前 future 并处理其它 future 并在之后再次检查的内容。如你所见，它就是异步运行时，这种安排和协调的工作是其主要工作之一。</p>
+<p>在本章的开头，我们描述了等待 <code>rx.recv</code>。<code>recv</code> 调用返回一个 future，并等待轮询它的 future。我们注意到当信道关闭时运行时会暂停 future 直到它就绪并返回 <code>Some(message)</code> 或 <code>None</code>。随着我们对 <code>Future</code> trait，尤其是 <code>Future::poll</code> 的理解的深入，我们可以看出其是如何工作的。运行时知道 future 返回 <code>Poll::Pending</code> 时没有完成。反过来说，当 <code>poll</code> 返回 <code>Poll::Ready(Some(message))</code> 或 <code>Poll::Ready(None)</code> 时运行时知道 future <strong>已经</strong>完成了并继续运行。</p>
+<p>运行时如何工作的具体细节超出了本书的范畴。不过关键在于理解 future 的基本机制：运行时<strong>轮询</strong>其所负责的每一个 future，在它们还没有完成时使其休眠。</p>
+<h3 id="pin-和-unpin-traits"><a class="header" href="#pin-和-unpin-traits"><code>Pin</code> 和 <code>Unpin</code> traits</a></h3>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch17-04-streams.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch17-06-futures-tasks-threads.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch17-04-streams.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch17-06-futures-tasks-threads.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
