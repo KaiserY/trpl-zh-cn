@@ -67,10 +67,58 @@ loop {
 }
 ```
 
-但是如何 Rust 将其编译为正好如此的代码的话，每一个 `await` 都会阻塞 -- 这与我们期望的完全不同！相反，Rust 确保循环可以将控制权交给一些可以暂停当前 future 并处理其它 future 并在之后再次检查的内容。如你所见，它就是异步运行时，这种安排和协调的工作是其主要工作之一。
+不过，如果 Rust 真的将代码精确地编译成那样，那么每一个 `await` 都会变成阻塞操作 -- 这恰恰与我们的目标相反！相反，Rust 确保循环可以将控制权交给一些可以暂停当前 future 转而去处理其它 future 并在之后再次检查当前 future 的内容。如你所见，这就是异步运行时，这种安排和协调的工作是其主要工作之一。
 
-在本章的开头，我们描述了等待 `rx.recv`。`recv` 调用返回一个 future，并等待轮询它的 future。我们注意到当信道关闭时运行时会暂停 future 直到它就绪并返回 `Some(message)` 或 `None`。随着我们对 `Future` trait，尤其是 `Future::poll` 的理解的深入，我们可以看出其是如何工作的。运行时知道 future 返回 `Poll::Pending` 时没有完成。反过来说，当 `poll` 返回 `Poll::Ready(Some(message))` 或 `Poll::Ready(None)` 时运行时知道 future **已经**完成了并继续运行。
+在本章前面的内容中，我们描述了等待 `rx.recv`。`recv` 调用返回一个 future，并 await 轮询它的 future。我们注意到当信道关闭时运行时会暂停 future 直到它就绪并返回 `Some(message)` 或 `None` 为止。随着我们对 `Future` trait，尤其是 `Future::poll` 的理解的深入，我们可以看出其是如何工作的。运行时知道 future 返回 `Poll::Pending` 时它还没有完成。反过来说，当 `poll` 返回 `Poll::Ready(Some(message))` 或 `Poll::Ready(None)` 时运行时知道 future **已经**完成了并继续运行。
 
 运行时如何工作的具体细节超出了本书的范畴。不过关键在于理解 future 的基本机制：运行时**轮询**其所负责的每一个 future，在它们还没有完成时使其休眠。
 
 ### `Pin` 和 `Unpin` traits
+
+当我们在示例 17-16 中引入 pin 的概念时，我们遇到了一个很不友好的错误信息。这里再次展示其中相关的部分：
+
+<!-- manual-regeneration
+cd listings/ch17-async-await/listing-17-16
+cargo build
+copy *only* the final `error` block from the errors
+-->
+
+```text
+error[E0277]: `{async block@src/main.rs:10:23: 10:33}` cannot be unpinned
+  --> src/main.rs:48:33
+   |
+48 |         trpl::join_all(futures).await;
+   |                                 ^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`
+   |
+   = note: consider using the `pin!` macro
+           consider using `Box::pin` if you need to access the pinned value outside of the current scope
+   = note: required for `Box<{async block@src/main.rs:10:23: 10:33}>` to implement `Future`
+note: required by a bound in `futures_util::future::join_all::JoinAll`
+  --> file:///home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-util-0.3.30/src/future/join_all.rs:29:8
+   |
+27 | pub struct JoinAll<F>
+   |            ------- required by a bound in this struct
+28 | where
+29 |     F: Future,
+   |        ^^^^^^ required by this bound in `JoinAll`
+```
+
+这个错误信息不仅告诉我们需要 ping 住这个值而且还告诉我们为何 pin 是必须的。`trpl::join_all` 函数返回一个叫做 `JoinAll` 的结构体。这个结构体是一个 `F` 类型的泛型，它被限制为需要实现 `Future` trait。通过 `await` 直接 await 一个 future 会隐式地 pin 住这个函数。这也就是为什么我们不需要在任何想要 await future 的地方使用 `pin!`。
+
+然而，这里我们没有直接 await 一个 future。相反我们通过向 `join_all` 函数传递一个 future 集合来构建了一个新 future `JoinAll`。`join_all` 的签名要求集合中项的类型都要实现 `Future` trait，而 `Box<T>` 只有在其封装的 `T` 是一个实现了 `Unpin` trait 的 future 时才会实现 `Future`。
+
+这有很多需要吸收的知识！为了真正地理解它，让我们稍微深入理解 `Future` 实际上是如何工作的，特别是 *pinning* 那一部分。
+
+再次观察 `Future` trait 的定义：
+
+```rust
+use std::pin::Pin;
+use std::task::{Context, Poll};
+
+pub trait Future {
+    type Output;
+
+    // Required method
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>;
+}
+```
