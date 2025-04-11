@@ -83,7 +83,7 @@ Rust 选择以这种方式来实现模块系统功能，因此默认隐藏内部
 和 `fn add_to_waitlist` 添加 `pub` 关键字使它们可以在
 `eat_at_restaurant` 函数中被调用</span>
 
-现在代码可以编译通过了！为了了解为何增加 `pub` 关键字使得我们可以在 `add_to_waitlist` 中调用这些路径与私有性规则有关，让我们看看绝对路径和相对路径。
+现在代码可以编译通过了！为了了解为何增加 `pub` 关键字使得我们可以在 `eat_at_restaurant` 中调用这些路径与私有性规则有关，让我们看看绝对路径和相对路径。
 
 在绝对路径，我们从 `crate` 也就是 crate 根开始。crate 根中定义了 `front_of_house` 模块。虽然 `front_of_house` 模块不是公有的，不过因为 `eat_at_restaurant` 函数与 `front_of_house` 定义于同一模块中（即，`eat_at_restaurant` 和 `front_of_house` 是兄弟），我们可以从 `eat_at_restaurant` 中引用 `front_of_house`。接下来是使用 `pub` 标记的 `hosting` 模块。我们可以访问 `hosting` 的父模块，所以可以访问 `hosting`。最后，`add_to_waitlist` 函数被标记为 `pub` ，我们可以访问其父模块，所以这个函数调用是有效的！
 
