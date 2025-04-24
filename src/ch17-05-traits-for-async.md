@@ -103,7 +103,7 @@ note: required by a bound in `futures_util::future::join_all::JoinAll`
    |        ^^^^^^ required by this bound in `JoinAll`
 ```
 
-这个错误信息不仅告诉我们需要 ping 住这个值而且还告诉我们为何 pin 是必须的。`trpl::join_all` 函数返回一个叫做 `JoinAll` 的结构体。这个结构体是一个 `F` 类型的泛型，它被限制为需要实现 `Future` trait。通过 `await` 直接 await 一个 future 会隐式地 pin 住这个函数。这也就是为什么我们不需要在任何想要 await future 的地方使用 `pin!`。
+这个错误信息不仅告诉我们需要对这些值进行 pin 操作，还解释了为什么 pin 是必要的。`trpl::join_all` 函数返回一个叫做 `JoinAll` 的结构体。这个结构体是一个 `F` 类型的泛型，它被限制为需要实现 `Future` trait。通过 `await` 直接 await 一个 future 会隐式地 pin 住这个函数。这也就是为什么我们不需要在任何想要 await future 的地方使用 `pin!`。
 
 然而，这里我们没有直接 await 一个 future。相反我们通过向 `join_all` 函数传递一个 future 集合来构建了一个新 future `JoinAll`。`join_all` 的签名要求集合中项的类型都要实现 `Future` trait，而 `Box<T>` 只有在其封装的 `T` 是一个实现了 `Unpin` trait 的 future 时才会实现 `Future`。
 
@@ -122,3 +122,22 @@ pub trait Future {
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>;
 }
 ```
+
+这里的 `cx` 参数及其 `Context` 类型，是运行时如何在仍保持 lazy 的情况下实际知道何时去检查任何给定的 future 的关键。同样，它们是如何工作的细节超出了本章的范畴，通常你只有在编写自定义 `Future` 实现时才需要思考它。相反我们将关注 `self` 的类型，因为这是第一次见到 `self` 有类型注解的方法。`self` 的类型注解与其它参数的类型注解类似，但有两个关键区别：
+
+- 它告诉 Rust 在调用该方法时 `self` 必须具备的类型。
+- 它不能是任意类型。这限制了实现了该方法的类型，是一个该类型的引用或者智能指针，或者一个封装了该类型引用的 `Pin`。
+
+我们会在 [第十八章][ch-18] 更多地看到这个语法。现在，知道如果要轮询一个 future 来检查它是 `Pending` 或者 `Ready(Output)`，我们需要一个 `Pin` 封装的该类型的可变引用就够了。
+
+`Pin` 是一个类指针类型的封装，比如 `&`，`&mut`，`Box` 和 `Rc`。（从技术上来说，`Pin` 适用于实现了 `Deref` 或 `DerefMut` trait 的类型，不过这实际上等同于只能适用于指针。）`Pin` 本身并不是一个指针并且也不具备类似 `Rc` 和 `Arc` 那样引用技术的功能；它单纯地是一个编译器可以用来约束指针使用的工具。
+
+回忆一下 `await` 的实现是基于对 `poll` 的调用，这有助于解释之前见到的错误信息，不过那是关于 `Unpin` 的。所以 `Pin` 具体与 `Unpin` 有何关联，又为什么 `Future` 需要 `self` 在一个 `Pin` 类型中才能调用 `poll`？
+
+
+[ch-18]: ch18-00-oop.html
+[async-book]: https://rust-lang.github.io/async-book/
+[under-the-hood]: https://rust-lang.github.io/async-book/02_execution/01_chapter.html
+[pinning]: https://rust-lang.github.io/async-book/04_pinning/01_chapter.html
+[first-async]: ch17-01-futures-and-syntax.html#第一个异步程序
+[any-number-futures]: ch17-03-more-futures.html#使用任意数量的-futures

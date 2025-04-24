@@ -4,7 +4,7 @@
 
 ## 状态
 
-- 新增 ch17 async & await 施工中
+- 新增 ch17 async & await & 2024 edtion 施工中，若示例代码有误请见谅。
 
 PS:
 
@@ -15,7 +15,7 @@ PS:
 
 ## 校对
 
-部分章节采用 ChatGPT 4.5 进行翻译校对。提示词详见 [proofreading_prompt.md](proofreading_prompt.md)
+部分章节采用 ChatGPT o4-mini 进行翻译校对。提示词详见 [proofreading_prompt.md](proofreading_prompt.md)
 
 ## 静态页面构建与文档撰写
 
