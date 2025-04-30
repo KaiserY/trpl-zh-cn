@@ -180,6 +180,36 @@ pub trait Future {
 
 </figure>
 
+然而，大部分类型是可以非常安全地移动的，即便是它们刚好位于 `Pin` 封装之后。只有当项中含有内部引用的时候才需要考虑 pin。像数字或者布尔值这样的基本类型值是安全的因为很明显它们没有任何内部引用。大部分 Rust 中常用的类型也没有。例如你可以移动一个 `Vec` 而不用担心。考虑到目前我们所见到的，如果有一个 `Pin<Vec<String>>`，你就不得不通过 `Pin` 提供的安全但有限的 API 来操作，即使在没有其它引用的情况下 `Vec<String>` 是可以安全移动的。我们需要一个方法来告诉编译器在类似这种情况下移动项是可以的 -- 这就是 `Unpin` 的用武之地了。
+
+`Unpin` 是一个标记 trait（marker trait），类似于我们在第十六章见过的 `Send` 和 `Sync` trait，因此它们自身没有能力。标记 trait 的存在只是为了告诉编译器在给定上下文中可以安全地使用实现了给定 trait 的类型。`Unpin` 告知编译器这个给定类型**无需**维护被提及的值是否可以安全地移动的任何保证。
+
+正如 `Send` 和 `Sync` 一样，编译器自动为所有被证明为安全的类型实现 `Unpin`。同样类似于 `Send` 和 `Sync`，有一个特殊的例子**不会**为类型实现 `Unpin`。这个例子的符号是 <code>impl !Unpin for <em>SomeType</em></code>，这里 <code><em>SomeType</em></code> 是一个当指向它的指针被用于 `Pin` 时**无需**维护安全保证的类型的名字。
+
+换句话说，关于 `Pin` 和 `Unpin` 的关系需要思考两个问题。首先，`Unpin` 用于 “正常”情况，而 `!Unpin` 用于特殊情况。其次，一个类型是否实现了 `Unpin` 或 `!Unpin` 只在于你是否使用了一个被 pin 住的指向类似 <code>Pin<&mut <em>SomeType</em>></code> 类型的指针。
+
+更具体地说，考虑一个 `String`：它有一个长度和组成它的 Unicode 字符。我们可以将 `String` 封装进 `Pin` 中，如图 17-8 所示。然而，就像 Rust 中大部分其它类型一样，`String` 自动实现了 `Unpin`。
+
+<figure>
+
+<img alt="Concurrent work flow" src="img/trpl17-08.svg" class="center" />
+
+<figcaption>图 17-8: pin 住一个 `String`；虚线表示实现了 `Unpin` trait 的 `String`，因此它没有被 pin 住。</figcaption>
+
+</figure>
+
+因此，如果 `String` 实现了 `!Unpin` 我们可以做一些非法的事，比如像图 17-9 这样在完全相同的内存位置将一个字符串替换为另一个字符串。这并不违反 `Pin` 的规则，因为 `String` 没有内部引用这使得它可以安全地移动！这这是为何它实现了 `Unpin` 而不是 `!Unpin` 的原因。
+
+<figure>
+
+<img alt="Concurrent work flow" src="img/trpl17-09.svg" class="center" />
+
+<figcaption>图 17-9: 将内存中的 `String` 替换为另一个完全不同的 `String`</figcaption>
+
+</figure>
+
+现在我们知道足够的知识来理解之前示例 17-17 中 `join_all` 调用所报告的错误了。
+
 [ch-18]: ch18-00-oop.html
 [async-book]: https://rust-lang.github.io/async-book/
 [under-the-hood]: https://rust-lang.github.io/async-book/02_execution/01_chapter.html
