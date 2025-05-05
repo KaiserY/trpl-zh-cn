@@ -180,15 +180,15 @@ pub trait Future {
 
 </figure>
 
-然而，大部分类型是可以非常安全地移动的，即便是它们刚好位于 `Pin` 封装之后。只有当项中含有内部引用的时候才需要考虑 pin。像数字或者布尔值这样的基本类型值是安全的因为很明显它们没有任何内部引用。大部分 Rust 中常用的类型也没有。例如你可以移动一个 `Vec` 而不用担心。考虑到目前我们所见到的，如果有一个 `Pin<Vec<String>>`，你就不得不通过 `Pin` 提供的安全但有限的 API 来操作，即使在没有其它引用的情况下 `Vec<String>` 是可以安全移动的。我们需要一个方法来告诉编译器在类似这种情况下移动项是可以的 -- 这就是 `Unpin` 的用武之地了。
+然而，大多数类型即使被封装在 `Pin` 后面，也完全可以安全地移动。只有当项中含有内部引用的时候才需要考虑 pin。像数字或者布尔值这样的基本类型值是安全的因为很明显它们没有任何内部引用。大多数你在 Rust 中常用的类型也同样如此。例如你可以移动一个 `Vec` 而不用担心。考虑到目前我们所见到的，如果有一个 `Pin<Vec<String>>`，即便在没有其他引用的情况下 `Vec<String>` 始终可以安全移动，你仍然必须通过 `Pin` 提供的安全但有限的 API 来进行所有操作。我们需要一个方法来告诉编译器在类似这种情况下移动项是可以的 -- 这就是 `Unpin` 的用武之地了。
 
-`Unpin` 是一个标记 trait（marker trait），类似于我们在第十六章见过的 `Send` 和 `Sync` trait，因此它们自身没有能力。标记 trait 的存在只是为了告诉编译器在给定上下文中可以安全地使用实现了给定 trait 的类型。`Unpin` 告知编译器这个给定类型**无需**维护被提及的值是否可以安全地移动的任何保证。
+`Unpin` 是一个标记 trait（marker trait），类似于我们在第十六章见过的 `Send` 和 `Sync` trait，因此它们自身没有功能。标记 trait 的存在只是为了告诉编译器在给定上下文中可以安全地使用实现了给定 trait 的类型。`Unpin` 告知编译器这个给定类型**无需**维护被提及的值是否可以安全地移动的任何保证。
 
-正如 `Send` 和 `Sync` 一样，编译器自动为所有被证明为安全的类型实现 `Unpin`。同样类似于 `Send` 和 `Sync`，有一个特殊的例子**不会**为类型实现 `Unpin`。这个例子的符号是 <code>impl !Unpin for <em>SomeType</em></code>，这里 <code><em>SomeType</em></code> 是一个当指向它的指针被用于 `Pin` 时**无需**维护安全保证的类型的名字。
+正如 `Send` 和 `Sync` 一样，编译器自动为所有被证明为安全的类型实现 `Unpin`。同样类似于 `Send` 和 `Sync`，有一个特殊的例子**不会**为类型实现 `Unpin`。这个例子的符号是 <code>impl !Unpin for <em>SomeType</em></code>，这里 <code><em>SomeType</em></code> 是一个当指向它的指针被用于 `Pin` 时**必须**维护安全保证的类型的名字。
 
-换句话说，关于 `Pin` 和 `Unpin` 的关系需要思考两个问题。首先，`Unpin` 用于 “正常”情况，而 `!Unpin` 用于特殊情况。其次，一个类型是否实现了 `Unpin` 或 `!Unpin` 只在于你是否使用了一个被 pin 住的指向类似 <code>Pin<&mut <em>SomeType</em>></code> 类型的指针。
+换句话说，关于 `Pin` 与 `Unpin` 的关系有两点需要牢记。首先，`Unpin` 用于 “正常” 情况，而 `!Unpin` 用于特殊情况。其次，一个类型是否实现了 `Unpin` 或 `!Unpin` **只在于**你是否使用了一个被 pin 住的指向类似 <code>Pin<&mut <em>SomeType</em>></code> 类型的指针。
 
-更具体地说，考虑一个 `String`：它有一个长度和组成它的 Unicode 字符。我们可以将 `String` 封装进 `Pin` 中，如图 17-8 所示。然而，就像 Rust 中大部分其它类型一样，`String` 自动实现了 `Unpin`。
+更具体地说，考虑一下 `String`：它包含一个长度和构成它的 Unicode 字符。我们可以将 `String` 封装进 `Pin` 中，如图 17-8 所示。然而，就像 Rust 中大部分其它类型一样，`String` 自动实现了 `Unpin`。
 
 <figure>
 
@@ -208,7 +208,17 @@ pub trait Future {
 
 </figure>
 
-现在我们知道足够的知识来理解之前示例 17-17 中 `join_all` 调用所报告的错误了。
+现在我们已经掌握足够的知识来理解示例 17-17 中对 `join_all` 调用所报告的错误了。最初我们尝试将异步代码块产生的 future 移动进 `Vec<Box<dyn Future<Output = ()>>>` 中，不过正如之前所见，这些 future 可能包含内部引用，因此它们并未实现 `Unpin`。它们需要被 pin 住，接下来就可以将 `Pin` 类型传入 `Vec`，并确信 future 底层的数据**不会**被移动。
+
+`Pin` 和 `Unpin` 在编写底层代码库，或者在你自己编写运行时的时候最为重要，而不是在日常的 Rust 代码中。不过，现在当你在错误信息中看到这些 trait 时，就能想出更好的方式如何来修复代码了！
+
+> 注意：`Pin` 与 `Unpin` 的组合使得可以安全地实现在 Rust 中原本因自引用而难以实现的一整类复杂类型。要求 `Pin` 的类型在如今的异步 Rust 中最为常见，不过偶尔你也会在其它上下文中见到它们。
+>
+> `Pin` 和 `Unpin` 如何工作的细节，以及它们要求维护的规则，在 `std::pin` 的 API 文档中有详尽的介绍，所以如果你有兴趣学习更多，这是一个很好的起点。
+>
+> 如果你更深入地理解底层是如何实现的细节，请查看 [_Asynchronous Programming in Rust_][async-book] 的[第二章][under-the-hood]和[第四章][pinning]。
+
+### `Stream` trait
 
 [ch-18]: ch18-00-oop.html
 [async-book]: https://rust-lang.github.io/async-book/
