@@ -1,5 +1,5 @@
 use std::{
-    sync::{mpsc, Arc, Mutex},
+    sync::{Arc, Mutex, mpsc},
     thread,
 };
 
@@ -61,12 +61,10 @@ impl Drop for ThreadPool {
     fn drop(&mut self) {
         drop(self.sender.take());
 
-        for worker in &mut self.workers {
+        for worker in self.workers.drain(..) {
             println!("Shutting down worker {}", worker.id);
 
-            if let Some(thread) = worker.thread.take() {
-                thread.join().unwrap();
-            }
+            worker.thread.join().unwrap();
         }
     }
 }
@@ -74,22 +72,21 @@ impl Drop for ThreadPool {
 
 struct Worker {
     id: usize,
-    thread: Option<thread::JoinHandle<()>>,
+    thread: thread::JoinHandle<()>,
 }
 
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        let thread = thread::spawn(move || loop {
-            let job = receiver.lock().unwrap().recv().unwrap();
+        let thread = thread::spawn(move || {
+            loop {
+                let job = receiver.lock().unwrap().recv().unwrap();
 
-            println!("Worker {id} got a job; executing.");
+                println!("Worker {id} got a job; executing.");
 
-            job();
+                job();
+            }
         });
 
-        Worker {
-            id,
-            thread: Some(thread),
-        }
+        Worker { id, thread }
     }
 }

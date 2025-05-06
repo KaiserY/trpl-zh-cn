@@ -6,6 +6,6 @@ struct MoveMessage {
 }
 struct WriteMessage(String); // 元组结构体
 struct ChangeColorMessage(i32, i32, i32); // 元组结构体
-                                          // ANCHOR_END: here
+// ANCHOR_END: here
 
 fn main() {}

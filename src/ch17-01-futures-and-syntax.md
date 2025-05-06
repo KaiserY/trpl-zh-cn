@@ -155,7 +155,11 @@ error[E0752]: `main` function is not allowed to be `async`
 当我们运行代码，我们会得到最初预想的行为：
 
 ```console
-{{#include ../listings/ch17-async-await/listing-17-04/output.txt}}
+$ cargo run -- https://www.rust-lang.org
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running `target/debug/async_await 'https://www.rust-lang.org'`
+The title for https://www.rust-lang.org was
+            Rust Programming Language
 ```
 
 我们终于有了一些可以正常工作的异步代码！现在它们可以成功编译并运行。在我们添加代码让两个网址进行竞争之前，让我们简要地回顾一下 future 是如何工作的。

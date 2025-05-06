@@ -63,7 +63,7 @@
 <span class="filename">文件名：src/lib.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch09-error-handling/listing-09-13/src/lib.rs}}
+{{#rustdoc_include ../listings/ch09-error-handling/listing-09-13/src/guessing_game.rs}}
 ```
 
 <span class="caption">示例 9-13：一个 `Guess` 类型，它只在值位于 1 和 100 之间时才继续</span>

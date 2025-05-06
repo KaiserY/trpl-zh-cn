@@ -1,4 +1,4 @@
-pub fn add(left: usize, right: usize) -> usize {
+pub fn add(left: u64, right: u64) -> u64 {
     left + right
 }
 
@@ -16,7 +16,7 @@ mod tests {
     #[test]
     #[ignore]
     fn expensive_test() {
-        // 需要运行一个小时的代码
+        // code that takes an hour to run
     }
 }
 // ANCHOR_END: here

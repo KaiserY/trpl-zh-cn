@@ -20,14 +20,15 @@ $ cd add
 <span class="filename">文件名：Cargo.toml</span>
 
 ```toml
-{{#include ../listings/ch14-more-about-cargo/no-listing-01-workspace-with-adder-crate/add/Cargo.toml}}
+{{#include ../listings/ch14-more-about-cargo/no-listing-01-workspace/add/Cargo.toml}}
 ```
 
 接下来，在 *add* 目录运行 `cargo new` 新建 `adder` 二进制 crate：
 
 ```console
 $ cargo new adder
-     Created binary (application) `adder` package
+    Creating binary (application) `adder` package
+      Adding `adder` as member of workspace at `file:///projects/add`
 ```
 
 到此为止，可以运行 `cargo build` 来构建工作空间。*add* 目录中的文件应该看起来像这样：
