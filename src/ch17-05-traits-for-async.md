@@ -220,6 +220,50 @@ pub trait Future {
 
 ### `Stream` trait
 
+现在你对 `Future`、`Pin` 和 `Unpin` trait 有更深刻的理解了，我们可以将注意力转向 `Stream` trait。如你在本章之前所学的，流类似于异步迭代器。但是不同于 `Iterator` 和 `Future`，当前本书编写时 `Stream` 在标准库中并无定义，不过在 `futures` crate 中**有**一个很常用的定义被用于整个生态系统。
+
+在学习 `Stream` trait 如何能够将 `Iterator` 和 `Future` trait 结合在一起之前，让我们评审一下 `Iterator` 和 `Future` trait 的定义。从 `Iterator` 中我们学习到序列的概念：其 `next` 方法提供一个 `Option<Self::Item>`。从 `Future` 中我们学习到随时间就绪的概念：其 `poll` 方法提供一个 `Poll<Self::Output>`。为了表示一个随着时间就绪的项的序列，我们定义了一个将这些功能结合到一起的 `Stream` trait：
+
+```rust
+use std::pin::Pin;
+use std::task::{Context, Poll};
+
+trait Stream {
+    type Item;
+
+    fn poll_next(
+        self: Pin<&mut Self>,
+        cx: &mut Context<'_>
+    ) -> Poll<Option<Self::Item>>;
+}
+```
+
+`Stream` trait 定义了一个名为 `Item` 的关联类型来作为流所产生项的类型。这类似于 `Iterator`，其中可能含有零个到多个项，同时不同于 `Future`，它总是有一个单独的 `Output`，即便是 unit 类型 `()`。
+
+`Stream` 也定义了一个获取这些项的方法。我们称之为 `poll_next`，来明确它以 `Future::poll` 同样的方式轮询并以 `Iterator::next` 同样的方式产生一系列的项。其返回类型用 `Option`组合了 `Poll`。外部类型是 `Poll`，因为它必须检查可用性，就像 future 一样。内部类型是 `Option`，因为它需要表明是否有更多消息，就像迭代器一样。
+
+一些非常类似这个定义的代码最终非常可能成为 Rust 标准库的一部分。目前，它是大部分运行时工具箱的一部分，所以你可以依赖它，并且接下来所讲一切应该也是适用的！
+
+不过，在这一部分我们之前见过的关于流的示例中，我们没有使用 `poll_next` **或** `Stream`，相反我们使用了 `next` 和 `StreamExt`。当然，我们**可以**通过手写自己的 `Stream` 状态机来直接处理 `poll_next` API，就像**可以**通过 `poll` 方法直接处理 future 一样。不过，使用 `await` 更加优雅，同时 `StreamExt` trait 提供了 `next` 方法以便我们可以这样做：
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/no-listing-stream-ext/src/lib.rs:here}}
+```
+
+> 注意：本章之前用到的实际定义与这个看起来稍微有点不同，因为它支持还不支持在 trait 中使用异步函数的 Rust 版本。因此，它看起来像这样：
+>
+> ```rust,ignore
+> fn next(&mut self) -> Next<'_, Self> where Self: Unpin;
+> ```
+>
+> `Next` 类型是一个实现了 `Future` 并通过 `Next<'_, Self>` 允许我们命名 `self` 引用生命周期的 `struct`，因此 `await` 可以处理这个方法。
+
+`StreamExt` trait 也是所有可用于流的有趣方法的乐园。`StreamExt` 自动为所有实现了 `Stream` 的方法实现，不过这些 trait 是分别定义的以便社区可以迭代便利的工具而不会影响基础 trait。
+
+在 `trpl` crate 所用到的 `StreamExt` 版本中，该 trait 不仅定义了 `next` 方法而且提供了一个正确处理 `Stream::poll_next` 细节的 `next` 方法默认实现。这意味着即便当你编写自己的流数据类型时，**只需**实现 `Stream`，接着任何使用你数据类型的人就自动地可以使用 `StreamExt` 和其方法。
+
+这就是我们要涉及的这些 trait 的底层细节的全部了。作为总结，让我们考虑一下如何将 future（包括流）、任务和线程全部结合在一起！
+
 [ch-18]: ch18-00-oop.html
 [async-book]: https://rust-lang.github.io/async-book/
 [under-the-hood]: https://rust-lang.github.io/async-book/02_execution/01_chapter.html
