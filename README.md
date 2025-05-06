@@ -4,7 +4,8 @@
 
 ## 状态
 
-- 新增 ch17 async & await & 2024 edtion 施工中，若示例代码有误请见谅。
+- ch17 async & await 施工完毕。
+- 2024 edtion 施工中，若示例代码有误请见谅。
 
 PS:
 
