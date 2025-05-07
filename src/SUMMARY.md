@@ -123,10 +123,10 @@
 
 - [高级特性](ch20-00-advanced-features.md)
   - [不安全的 Rust](ch20-01-unsafe-rust.md)
-  - [高级 trait](ch20-03-advanced-traits.md)
-  - [高级类型](ch20-04-advanced-types.md)
-  - [高级函数与闭包](ch20-05-advanced-functions-and-closures.md)
-  - [宏](ch20-06-macros.md)
+  - [高级 trait](ch20-02-advanced-traits.md)
+  - [高级类型](ch20-03-advanced-types.md)
+  - [高级函数与闭包](ch20-04-advanced-functions-and-closures.md)
+  - [宏](ch20-05-macros.md)
 
 - [最后的项目：构建多线程 web server](ch21-00-final-project-a-web-server.md)
   - [建立单线程 web server](ch21-01-single-threaded.md)

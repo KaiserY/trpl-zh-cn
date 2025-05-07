@@ -1,6 +1,6 @@
 ## 高级类型
 
-> [ch20-04-advanced-types.md](https://github.com/rust-lang/book/blob/main/src/ch20-04-advanced-types.md)
+> [ch20-03-advanced-types.md](https://github.com/rust-lang/book/blob/main/src/ch20-03-advanced-types.md)
 > <br>
 > commit 95e931170404cb98d476b19017cbbdbc00d0834d
 

@@ -34,8 +34,8 @@
 
 <span class="filename">文件名：src/lib.rs</span>
 
-```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch21-web-server/no-listing-04-update-worker-definition/src/lib.rs:here}}
+```rust
+{{#rustdoc_include ../listings/ch21-web-server/no-listing-04-update-drop-definition/src/lib.rs:here}}
 ```
 
 现在依靠编译器来找出其他需要修改的地方。check 代码会得到两个错误：

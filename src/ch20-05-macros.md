@@ -1,6 +1,6 @@
 ## 宏
 
-> [ch20-06-macros.md](https://github.com/rust-lang/book/blob/main/src/ch20-06-macros.md)
+> [ch20-05-macros.md](https://github.com/rust-lang/book/blob/main/src/ch20-05-macros.md)
 > <br>
 > commit 95e931170404cb98d476b19017cbbdbc00d0834d
 
