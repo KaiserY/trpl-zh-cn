@@ -76,6 +76,6 @@
 
 接下来让我们学习宏！
 
-[advanced-traits]: ch20-03-advanced-traits.html#高级-trait
+[advanced-traits]: ch20-02-advanced-traits.html#高级-trait
 [enum-values]: ch06-01-defining-an-enum.html#枚举值
 [using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#顾及不同类型值的-trait-对象

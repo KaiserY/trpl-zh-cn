@@ -272,7 +272,7 @@ Rust 既不能避免一个 trait 与另一个 trait 拥有相同名称的方法�
 
 甚至当不涉及 trait 时 newtype 模式也很有用。现在让我们将话题的焦点转移到一些与 Rust 类型系统交互的高级方式上来吧。
 
-[newtype]: ch20-03-advanced-traits.html#newtype-模式用以在外部类型上实现外部-trait
+[newtype]: ch20-02-advanced-traits.html#newtype-模式用以在外部类型上实现外部-trait
 [implementing-a-trait-on-a-type]: ch10-02-traits.html#为类型实现-trait
 [traits-defining-shared-behavior]: ch10-02-traits.html#trait定义共同行为
 [smart-pointer-deref]: ch15-02-deref.html#通过实现-deref-trait-将某类型像引用一样处理

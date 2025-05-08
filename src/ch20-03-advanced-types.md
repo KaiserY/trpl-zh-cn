@@ -169,4 +169,4 @@ ch18-01-what-is-oo.html#封装隐藏了实现细节
 ch06-02-match.html#match-控制流结构
 [using-trait-objects-that-allow-for-values-of-different-types]:
 ch18-02-trait-objects.html#顾及不同类型值的-trait-对象
-[using-the-newtype-pattern]: ch20-03-advanced-traits.html#newtype-模式用以在外部类型上实现外部-trait
+[using-the-newtype-pattern]: ch20-02-advanced-traits.html#newtype-模式用以在外部类型上实现外部-trait

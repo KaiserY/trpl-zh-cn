@@ -91,4 +91,4 @@
 [creating-instances-from-other-instances-with-struct-update-syntax]: ch05-01-defining-structs.html#使用结构体更新语法从其他实例创建实例
 [stack-only-data-copy]: ch04-01-what-is-ownership.html#只在栈上的数据拷贝
 [ways-variables-and-data-interact-clone]: ch04-01-what-is-ownership.html#变量与数据交互的方式二克隆
-[macros]: ch20-06-macros.html#宏
+[macros]: ch20-05-macros.html#宏
