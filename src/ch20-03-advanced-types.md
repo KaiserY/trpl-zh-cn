@@ -6,7 +6,7 @@
 
 Rust 的类型系统有一些我们曾经提到但没有讨论过的功能。首先我们从一个关于为什么 newtype 与类型一样有用的更宽泛的讨论开始。接着会转向类型别名（type aliases），一个类似于 newtype 但有着稍微不同的语义的功能。我们还会讨论 `!` 类型和动态大小类型。
 
-> 这一部分假设你已经阅读了之前的 [“newtype 模式用于在外部类型上实现外部 trait”][using-the-newtype-pattern] 部分。
+> 这一部分假设你已经阅读了之前的 [“使用 newtype 模式在外部类型上实现外部 trait”][using-the-newtype-pattern] 部分。
 
 ### 为了类型安全和抽象而使用 newtype 模式
 
@@ -169,4 +169,4 @@ ch18-01-what-is-oo.html#封装隐藏了实现细节
 ch06-02-match.html#match-控制流结构
 [using-trait-objects-that-allow-for-values-of-different-types]:
 ch18-02-trait-objects.html#顾及不同类型值的-trait-对象
-[using-the-newtype-pattern]: ch20-02-advanced-traits.html#newtype-模式用以在外部类型上实现外部-trait
+[using-the-newtype-pattern]: ch20-02-advanced-traits.html#使用-newtype-模式在外部类型上实现外部-trait
