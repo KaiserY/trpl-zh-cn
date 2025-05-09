@@ -159,7 +159,7 @@ Rust 的借用检查器无法理解我们要借用这个 slice 的两个不同�
 
 有时你的 Rust 代码可能需要与其他语言编写的代码交互。为此 Rust 有一个关键字，`extern`，有助于创建和使用 **外部函数接口**（*Foreign Function Interface*，FFI）。外部函数接口是一个编程语言用以定义函数的方式，其允许不同（外部）编程语言调用这些函数。
 
-示例 20-8 展示了如何集成 C 标准库中的 `abs` 函数。`extern` 块中声明的函数在 Rust 代码中总是不安全的。因为其他语言不会强制执行 Rust 的规则且 Rust 无法检查它们，所以确保其安全是程序员的责任：
+示例 20-8 展示了如何集成 C 标准库中的 `abs` 函数。`extern` 块中声明的函数在 Rust 代码中通常是不安全的因此 `extern` 块本身也必须标注 `unsafe`。之所以如此，是因为其他语言不会强制执行 Rust 的规则，Rust 也无法检查这些约束，因此程序员有责任确保调用的安全性。
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -169,36 +169,52 @@ Rust 的借用检查器无法理解我们要借用这个 slice 的两个不同�
 
 <span class="caption">示例 20-8: 声明并调用另一个语言中定义的 `extern` 函数</span>
 
-在 `extern "C"` 块中，列出了我们希望能够调用的另一个语言中的外部函数的签名和名称。`"C"` 部分定义了外部函数所使用的 **应用二进制接口**（*application binary interface*，ABI） —— ABI 定义了如何在汇编语言层面调用此函数。`"C"` ABI 是最常见的，并遵循 C 编程语言的 ABI。
+在 `unsafe extern "C"` 块中，我们列出了希望能够调用的另一个语言中的外部函数的签名和名称。`"C"` 部分定义了外部函数所使用的 **应用二进制接口**（*application binary interface*，ABI） —— ABI 定义了如何在汇编语言层面调用此函数。`"C"` ABI 是最常见的，并遵循 C 编程语言的 ABI。有关 Rust 支持的所有 ABI 的信息请参见 [the Rust Reference][ABI]。
 
-> #### 从其它语言调用 Rust 函数
->
-> 也可以使用 `extern` 来创建一个允许其他语言调用 Rust 函数的接口。不同于创建整个 `extern` 块，就在 `fn` 关键字之前增加 `extern` 关键字并为相关函数指定所用到的 ABI。还需增加 `#[no_mangle]` 注解来告诉 Rust 编译器不要 mangle 此函数的名称。*Mangling* 发生于当编译器将我们指定的函数名修改为不同的名称时，这会增加用于其他编译过程的额外信息，不过会使其名称更难以阅读。每一个编程语言的编译器都会以稍微不同的方式 mangle 函数名，所以为了使 Rust 函数能在其他语言中指定，必须禁用 Rust 编译器的 name mangling。
->
-> 在如下的例子中，一旦其编译为动态库并从 C 语言中链接，`call_from_c` 函数就能够在 C 代码中访问：
->
-> ```rust
-> #[no_mangle]
-> pub extern "C" fn call_from_c() {
->     println!("Just called a Rust function from C!");
-> }
-> ```
->
-> `extern` 的使用无需 `unsafe`。
+`unsafe extern` 中声明的任何项都隐式地是 `unsafe` 的。然而，一些 FFI 函数**可以**安全地调用。例如，C 标准库中的 `abs` 函数没有任何内存安全方面的考量并且我们知道它可以使用任何 `i32` 调用。在类似这样的例子中，我们可以使用 `safe` 关键字来表明这个特定的函数即便是在 `unsafe extern` 块中也是可以安全调用的。一旦我们做出这个修改，调用它不再需要 `unsafe` 块，如示例 20-9 所示。
 
-### 访问或修改可变静态变量
+<figure class="listing">
 
-目前为止全书都尽量避免讨论 **全局变量**（*global variables*），Rust 确实支持它们，不过这对于 Rust 的所有权规则来说是有问题的。如果有两个线程访问相同的可变全局变量，则可能会造成数据竞争。
-
-全局变量在 Rust 中被称为 **静态**（*static*）变量。示例 20-9 展示了一个拥有字符串 slice 值的静态变量的声明和应用：
-
-<span class="filename">文件名：src/main.rs</span>
+<span class="file-name">文件名：src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-09/src/main.rs}}
 ```
 
-<span class="caption">示例 20-9: 定义和使用一个不可变静态变量</span>
+<figcaption>示例 20-9：在 `unsafe extern` 块中显式地标记一个函数为 `safe` 并安全地调用它</figcaption>
+
+</figure>
+
+将一个函数标记为 `safe` 并不会固有地使其变得安全！相反，这像是一个对 Rust 的承诺表明它**是**安全的。确保履行这个承诺仍然是你的责任！
+
+> #### 从其它语言调用 Rust 函数
+>
+> 也可以使用 `extern` 来创建一个允许其它语言调用 Rust 函数的接口。不同于创建整个 `extern` 块，就在 `fn` 关键字之前增加 `extern` 关键字并为相关函数指定所用到的 ABI。还需增加 `#[no_mangle]` 注解来告诉 Rust 编译器不要 mangle 此函数的名称。*Mangling* 指编译器将我们命名的函数名更改为包含更多供其他编译过程使用的信息的名称，不过可读性较差。每一个编程语言的编译器都会以稍微不同的方式 mangle 函数名，所以为了使 Rust 函数能在其他语言中指定，必须禁用 Rust 编译器的 name mangling。这是不安全的因为在没有内置 mangling 的时候在库之间可能有命名冲突，所以确保所选的名称可以不用 mangling 地安全导出是我们的责任。
+>
+> 在如下的例子中，一旦其编译为动态库并从 C 语言中链接，`call_from_c` 函数就能够在 C 代码中访问：
+>
+> ```rust
+> #[unsafe(no_mangle)]
+> pub extern "C" fn call_from_c() {
+>     println!("Just called a Rust function from C!");
+> }
+> ```
+>
+> 这种 `extern` 用法只在属性中需要 `unsafe`，而不需要在 `extern` 块本身使用 `unsafe`。
+
+### 访问或修改可变静态变量
+
+在本书中，我们尚未讨论过 **全局变量**（*global variables*），Rust 确实支持它们，不过这对于 Rust 的所有权规则来说是有问题的。如果有两个线程访问相同的可变全局变量，则可能会造成数据竞争。
+
+全局变量在 Rust 中被称为 **静态**（*static*）变量。示例 20-9 展示了一个拥有字符串 slice 值的静态变量的声明和使用：
+
+<span class="filename">文件名：src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-10/src/main.rs}}
+```
+
+<span class="caption">示例 20-10: 定义和使用一个不可变静态变量</span>
 
 静态（`static`）变量类似于第三章 [“变量和常量的区别”][differences-between-variables-and-constants] 部分讨论的常量。通常静态变量的名称采用 `SCREAMING_SNAKE_CASE` 写法。静态变量只能储存拥有 `'static` 生命周期的引用，这意味着 Rust 编译器可以自己计算出其生命周期而无需显式标注。访问不可变静态变量是安全的。
 
@@ -207,39 +223,68 @@ Rust 的借用检查器无法理解我们要借用这个 slice 的两个不同�
 <span class="filename">文件名：src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-10/src/main.rs}}
-```
-
-<span class="caption">示例 20-10: 读取或修改一个可变静态变量是不安全的</span>
-
-就像常规变量一样，我们使用 `mut` 关键来指定可变性。任何读写 `COUNTER` 的代码都必须位于 `unsafe` 块中。这段代码可以编译并如期打印出 `COUNTER: 3`，因为这是单线程的。拥有多个线程访问 `COUNTER` 则可能导致数据竞争。
-
-拥有可以全局访问的可变数据，难以保证不存在数据竞争，这就是为何 Rust 认为可变静态变量是不安全的。任何可能的情况，请优先使用第十六章讨论的并发技术和线程安全智能指针，这样编译器就能检测不同线程间的数据访问是否是安全的。
-
-### 实现不安全 trait
-
-`unsafe` 的另一个操作用例是实现不安全 trait。当 trait 中至少有一个方法中包含编译器无法验证的不变式（invariant）时 trait 是不安全的。可以在 `trait` 之前增加 `unsafe` 关键字将 trait 声明为 `unsafe`，同时 trait 的实现也必须标记为 `unsafe`，如示例 20-11 所示：
-
-```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-11/src/main.rs}}
 ```
 
-<span class="caption">示例 20-11: 定义并实现不安全 trait</span>
+<span class="caption">示例 20-11: 读取或修改一个可变静态变量是不安全的</span>
 
-通过 `unsafe impl`，我们承诺将保证编译器所不能验证的不变量。
+就像常规变量一样，我们使用 `mut` 关键字来指定可变性。任何读写 `COUNTER` 的代码都必须位于 `unsafe` 块中。这段代码可以编译并如期打印出 `COUNTER: 3`，因为这是单线程的。拥有多个线程访问 `COUNTER` 则可能导致数据竞争，所以这是未定义行为。因此，我们需要将整个函数标记为 `unsafe`，并在文档注释中说明其安全性限制，以便调用者明确哪些操作是安全的、哪些是不安全的。
 
-作为一个例子，回忆第十六章 [“使用 `Sync` 和 `Send` trait 的可扩展并发”][extensible-concurrency-with-the-sync-and-send-traits] 部分中的 `Sync` 和 `Send` 标记 trait，编译器会自动为完全由 `Send` 和 `Sync` 类型组成的类型自动实现它们。如果实现了一个包含一些不是 `Send` 或 `Sync` 的类型，比如裸指针，并希望将此类型标记为 `Send` 或 `Sync`，则必须使用 `unsafe`。Rust 不能验证我们的类型保证可以安全的跨线程发送或在多线程间访问，所以需要我们自己进行检查并通过 `unsafe` 表明。
+每当我们编写一个不安全函数，惯常做法是编写一个以 `SAFETY` 开头的注释并解释调用者需要做什么才可以安全地调用该方法。同理，当我们进行不安全操作时，惯常做法是编写一个以 `SAFETY` 开头并解释安全性规则是如何维护的。
+
+另外，编译器不会允许你创建一个可变静态变量的引用。你只能通过用裸指针解引用操作符创建的裸指针访问它。这包括引用的创建时不可见的情况，例如这个代码示例中用于 `println!` 的情况。可变静态变量只能通过裸指针创建的要求有助于确保使用它们的安全要求更为明确。
+
+拥有可以全局访问的可变数据，难以保证不存在数据竞争，这就是为何 Rust 认为可变静态变量是不安全的。在任何可能的情况下，请优先使用第十六章讨论的并发技术和线程安全智能指针，这样编译器就能检测不同线程间的数据访问是否是安全的。
+
+### 实现不安全 trait
+
+我们可以使用 `unsafe` 来实现一个不安全 trait。当 trait 中至少有一个方法中包含编译器无法验证的不变式（invariant）时该 trait 就是不安全的。可以在 `trait` 之前增加 `unsafe` 关键字将 trait 声明为 `unsafe`，同时 trait 的实现也必须标记为 `unsafe`，如示例 20-12 所示：
+
+```rust
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-12/src/main.rs:here}}
+```
+
+<span class="caption">示例 20-12: 定义并实现不安全 trait</span>
+
+通过 `unsafe impl`，我们承诺将保证编译器所不能验证的不变式。
+
+作为一个例子，回忆第十六章 [“使用 `Sync` 和 `Send` trait 的可扩展并发”][extensible-concurrency-with-the-sync-and-send-traits] 部分中的 `Sync` 和 `Send` 标记 trait：如果我们的类型完全由实现了 `Send` 与 `Sync` 的其他类型组成，编译器会自动为其实现这些 trait。如果我们定义的类型包含某些未实现 `Send` 或 `Sync` 的类型，例如裸指针，但又想将该类型标记为 `Send` 或 `Sync`，就必须使用 `unsafe`。Rust 不能验证我们的类型保证可以安全的跨线程发送或在多线程间访问，所以需要我们自己进行检查并通过 `unsafe` 表明。
 
 ### 访问联合体中的字段
 
-仅适用于 `unsafe` 的最后一个操作是访问 **联合体** 中的字段，`union` 和 `struct` 类似，但是在一个实例中同时只能使用一个声明的字段。联合体主要用于和 C 代码中的联合体交互。访问联合体的字段是不安全的，因为 Rust 无法保证当前存储在联合体实例中数据的类型。可以查看 [参考 Rust 文档][reference] 了解有关联合体的更多信息。
+最后一个只能在 `unsafe` 块中执行的操作是访问（union）中的字段。`union` 和 `struct` 类似，但是在一个实例中同时只能使用一个已声明的字段。联合体主要用于和 C 代码中的联合体进行交互。访问联合体的字段是不安全的，因为 Rust 无法保证当前存储在联合体实例中数据的类型。可以查看 [the Rust Reference][unions] 了解有关联合体的更多信息。
+
+### 使用 miri 检查不安全代码
+
+当编写不安全代码时，你可能会想要检查编写的代码是否真的安全正确。最好的方式之一是使用 miri，一个用来检测未定义行为的 Rust 官方工具。鉴于借用检查器是一个在编译时工作的**静态**工具，miri 是一个在运行时工作的**动态**工具。它通过运行程序，或者测试集来检查代码，并检测你是否违反了它理解的 Rust 应该如何工作的规则。
+
+使用 miri 要求使用 nightly 版本的 Rust（我们在[附录 G：Rust 是如何开发的与 “Nightly Rust”][nightly]中详细介绍它）。你可以通过输入 `rustu +nightly component add miri` 来同时安装 nightly 版本的 Rust 和 miri。这并不会改变你项目所使用的 Rust 版本；它只是为你的系统增加了这个工具所以你可以在需要的时候使用它。你可以通过输入 `cargo +nightly miri run` or `cargo +nightly miri test` 在项目中使用 miri。
+
+作为一个它是如何有帮助的例子，考虑一下对示例 20-11 运行它时会发生什么。
+
+```console
+{{#include ../listings/ch20-advanced-features/listing-20-11/output.txt}}
+```
+
+miri 正确地警告了我们共享了可变数据的引用。这里，miri 只是发出了一个警告因为在这个例子中并不能保证是未定义行为，它也没有告诉我们如何修复问题。但是至少我们知道这里有未定义行为的风险并接着可以思考如何使代码变得安全。在一些例子中，miri 也可以检测真正的错误 -- **确定**是错误的代码模式 -- 并提出如何修复这些错误的推荐方案。
+
+miri 并不能捕获所有你编写不安全代码时的错误。miri 是一个动态分析工具，所以它只能捕获代码真正运行时的问题。这意味着需要将其与良好的测试技术相结合以增强你对编写的不安全代码的信心。miri 也不能覆盖代码所有的不可靠的地方。
+
+换句话说：如果 miri **可以**捕获一个问题，你知道这里有个 bug，不过仅仅是因为 miri **没有**捕获一个 bug 并不意味着这里没有问题。但是它可以捕获很多问题。尝试对本章中的其它不安全代码示例运行它来看看它会说些什么！
+
+你可以在 [miri 的 GitHub 仓库][miri]了解更多。
 
 ### 何时使用不安全代码
 
 使用 `unsafe` 来进行这五个操作（超能力）之一是没有问题的，甚至是不需要深思熟虑的，不过使得 `unsafe` 代码正确也实属不易，因为编译器不能帮助保证内存安全。当有理由使用 `unsafe` 代码时，是可以这么做的，通过使用显式的 `unsafe` 标注可以更容易地在错误发生时追踪问题的源头。
 
 [dangling-references]: ch04-02-references-and-borrowing.html#悬垂引用dangling-references
+[ABI]: https://doc.rust-lang.org/reference/items/external-blocks.html#abi
 [differences-between-variables-and-constants]: ch03-01-variables-and-mutability.html#常量
 [extensible-concurrency-with-the-sync-and-send-traits]: ch16-04-extensible-concurrency-sync-and-send.html#使用-sync-和-send-trait-的可扩展并发
 [the-slice-type]: ch04-03-slices.html#slice-类型
-[reference]: https://doc.rust-lang.org/reference/items/unions.html
+[unions]: https://doc.rust-lang.org/reference/items/unions.html
+[miri]: https://github.com/rust-lang/miri
+[editions]: appendix-05-editions.html
+[nightly]: appendix-07-nightly-rust.html
+[nomicon]: https://doc.rust-lang.org/nomicon/
