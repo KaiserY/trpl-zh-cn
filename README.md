@@ -1,4 +1,4 @@
-# Rust 程序设计语言（2021 edition）简体中文版
+# Rust 程序设计语言（2024 edition）简体中文版
 
 ![Build Status](https://github.com/KaiserY/trpl-zh-cn/workflows/CI/badge.svg)
 
