@@ -25,8 +25,8 @@ jobs:
     - name: Install mdbook & mdbook-typst-pdf
       run: |
         mkdir bin
-        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.46/mdbook-v0.4.46-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
-        curl -sSL https://github.com/KaiserY/mdbook-typst-pdf/releases/download/v0.6.0/mdbook-typst-pdf-x86_64-unknown-linux-musl.tar.xz | tar -xJ --directory=bin --strip-components 1
+        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.49/mdbook-v0.4.49-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        curl -sSL https://github.com/KaiserY/mdbook-typst-pdf/releases/download/v0.6.1/mdbook-typst-pdf-x86_64-unknown-linux-musl.tar.xz | tar -xJ --directory=bin --strip-components 1
         echo "$(pwd)/bin" >> ${GITHUB_PATH}
     - name: Install font
       run: |

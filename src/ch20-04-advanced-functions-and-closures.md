@@ -1,8 +1,7 @@
 ## 高级函数与闭包
 
-> [ch20-04-advanced-functions-and-closures.md](https://github.com/rust-lang/book/blob/main/src/ch20-04-advanced-functions-and-closures.md)
-> <br>
-> commit 56ec353290429e6547109e88afea4de027b0f1a9
+<!-- https://github.com/rust-lang/book/blob/main/src/ch20-04-advanced-functions-and-closures.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
 
 本部分将探索一些有关函数和闭包的高级特性，这包括函数指针以及返回闭包。
 

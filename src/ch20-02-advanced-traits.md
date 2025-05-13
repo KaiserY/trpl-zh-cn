@@ -1,8 +1,7 @@
 ## 高级 trait
 
-> [ch20-02-advanced-traits.md](https://github.com/rust-lang/book/blob/main/src/ch20-02-advanced-traits.md)
-> <br>
-> commit 56ec353290429e6547109e88afea4de027b0f1a9
+<!-- https://github.com/rust-lang/book/blob/main/src/ch20-02-advanced-traits.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
 
 在第十章[“trait：定义共同行为”][traits-defining-shared-behavior]部分，我们第一次涉及到了 trait，不过我们并没有覆盖一些较为高级的细节。现在你对 Rust 已经有了更多了解，我们可以深入探究了。
 

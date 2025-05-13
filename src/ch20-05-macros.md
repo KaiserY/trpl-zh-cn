@@ -1,8 +1,7 @@
 ## 宏
 
-> [ch20-05-macros.md](https://github.com/rust-lang/book/blob/main/src/ch20-05-macros.md)
-> <br>
-> commit 1d1424ba1c30b8efab636c911be0a215df305eea
+<!-- https://github.com/rust-lang/book/blob/main/src/ch20-05-macros.md -->
+<!-- commit 1d1424ba1c30b8efab636c911be0a215df305eea -->
 
 我们已经在本书中使用过像 `println!` 这样的宏了，不过尚未深入探讨什么是宏以及它是如何工作的。**宏**（*Macro*）指的是 Rust 中一系列的功能：使用 `macro_rules!` 的 **声明宏**（*declarative macro*），和三种 **过程宏**（*procedural macro*）：
 

@@ -1,8 +1,7 @@
 ## 不安全 Rust
 
-> [ch20-01-unsafe-rust.md](https://github.com/rust-lang/book/blob/main/src/ch20-01-unsafe-rust.md)
-> <br>
-> commit 4b2590f90c1d72002278a8a426a94a9eadd4d498
+<!-- https://github.com/rust-lang/book/blob/main/src/ch20-01-unsafe-rust.md -->
+<!-- commit 4b2590f90c1d72002278a8a426a94a9eadd4d498 -->
 
 目前为止讨论过的代码都有 Rust 在编译时会强制执行的内存安全保证。然而，Rust 还隐藏有第二种语言，它不会强制执行这类内存安全保证：这被称为 **不安全 Rust**（*unsafe Rust*）。它与常规 Rust 代码无异，但是会提供额外的超能力。
 

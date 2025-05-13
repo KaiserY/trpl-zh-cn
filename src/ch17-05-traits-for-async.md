@@ -1,8 +1,7 @@
 ## 深入理解 async 相关的 traits
 
-> [ch17-05-traits-for-async.md](https://github.com/rust-lang/book/blob/main/src/ch17-05-traits-for-async.md)
-> <br>
-> commit 56ec353290429e6547109e88afea4de027b0f1a9
+<!-- https://github.com/rust-lang/book/blob/main/src/ch17-05-traits-for-async.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
 
 贯穿本章，我们通过多种方式使用了 `Future`、`Pin`、`Unpin`、`Stream` 和 `StreamExt` trait。但是直到目前为止，我们避免过多地了解它们如何工作或者如何组合在一起的细节，这对你日常的 Rust 开发而言通常是没问题的。不过有时你会遇到需要了解更多细节的场景。在本小节，我们会足够深入以便理解这些场景，并仍会将 *真正* 有深度的内容留给其它文档。
 

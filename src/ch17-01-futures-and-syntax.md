@@ -1,8 +1,7 @@
 ## Futures 和 async 语法
 
-> [ch17-01-futures-and-syntax.md](https://github.com/rust-lang/book/blob/main/src/ch17-01-futures-and-syntax.md)
-> <br>
-> commit e95efa05706c5c4309df9ed47d5e91d8ed342b7d
+<!-- https://github.com/rust-lang/book/blob/main/src/ch17-01-futures-and-syntax.md -->
+<!-- commit e95efa05706c5c4309df9ed47d5e91d8ed342b7d -->
 
 Rust 异步编程的关键元素是 *futures* 和 Rust 的 `async` 与 `await` 关键字。
 

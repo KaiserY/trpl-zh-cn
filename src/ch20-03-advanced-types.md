@@ -1,8 +1,7 @@
 ## 高级类型
 
-> [ch20-03-advanced-types.md](https://github.com/rust-lang/book/blob/main/src/ch20-03-advanced-types.md)
-> <br>
-> commit 56ec353290429e6547109e88afea4de027b0f1a9
+<!-- https://github.com/rust-lang/book/blob/main/src/ch20-03-advanced-types.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
 
 Rust 的类型系统有一些我们曾经提到但尚未讨论过的特性。首先我们将从一般意义上讨论 newtype 并探讨它们作为类型为何有用。接着会转向类型别名（type aliases），一个类似于 newtype 但有着稍微不同的语义的功能。我们还会讨论 `!` 类型和动态大小类型。
 

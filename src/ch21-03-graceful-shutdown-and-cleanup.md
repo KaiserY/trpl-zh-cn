@@ -1,8 +1,7 @@
 ## 优雅停机与清理
 
-> [ch21-03-graceful-shutdown-and-cleanup.md](https://github.com/rust-lang/book/blob/main/src/ch21-03-graceful-shutdown-and-cleanup.md)
-> <br>
-> commit 5d22a358fb2380aa3f270d7b6269b67b8e44849e
+<!-- https://github.com/rust-lang/book/blob/main/src/ch21-03-graceful-shutdown-and-cleanup.md -->
+<!-- commit 5d22a358fb2380aa3f270d7b6269b67b8e44849e -->
 
 示例 21-20 中的代码如期通过使用线程池异步的响应请求。这里有一些警告说 `workers`、`id` 和 `thread` 字段没有直接被使用，这提醒了我们并没有清理所有的内容。当使用不那么优雅的 <kbd>ctrl</kbd>-<kbd>c</kbd> 终止主线程时，所有其他线程也会立刻停止，即便它们正处于处理请求的过程中。
 

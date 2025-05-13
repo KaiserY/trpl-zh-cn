@@ -1,8 +1,7 @@
 ## 将单线程 server 变为多线程 server
 
-> [ch21-02-multithreaded.md](https://github.com/rust-lang/book/blob/main/src/ch21-02-multithreaded.md)
-> <br>
-> commit 56ec353290429e6547109e88afea4de027b0f1a9
+<!-- https://github.com/rust-lang/book/blob/main/src/ch21-02-multithreaded.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
 
 目前服务端会依次处理每一个请求，意味着它在完成第一个连接的处理之前不会处理第二个连接。如果服务端正接收越来越多的请求，这类串行操作会使性能越来越差。如果一个请求花费很长时间来处理，随后而来的请求则不得不等待这个长请求结束，即便这些新请求可以很快就处理完。我们需要修复这种情况，不过首先让我们实际尝试一下这个问题。
 

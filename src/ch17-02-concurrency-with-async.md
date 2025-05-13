@@ -1,8 +1,7 @@
 ## 并发与 async
 
-> [ch17-02-concurrency-with-async.md](https://github.com/rust-lang/book/blob/main/src/ch17-02-concurrency-with-async.md)
-> <br>
-> commit 62d441060d66f9a1c3d3cdfffa8eed40f817d1aa
+<!-- https://github.com/rust-lang/book/blob/main/src/ch17-02-concurrency-with-async.md -->
+<!-- commit 62d441060d66f9a1c3d3cdfffa8eed40f817d1aa -->
 
 在这一部分，我们将使用异步来应对一些与第十六章中通过线程解决的相同的并发问题。因为之前我们已经讨论了很多关键理念了，这一部分我们会专注于线程与 future 的区别。
 

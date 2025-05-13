@@ -1,8 +1,7 @@
 ## 结合使用 future、任务和线程
 
-> [ch17-06-futures-tasks-threads.md](https://github.com/rust-lang/book/blob/main/src/ch17-06-futures-tasks-threads.md)
-> <br>
-> commit 06d73f3935dfec895aec9790127dc8b6fc827ce1
+<!-- https://github.com/rust-lang/book/blob/main/src/ch17-06-futures-tasks-threads.md -->
+<!-- commit 06d73f3935dfec895aec9790127dc8b6fc827ce1 -->
 
 正如我们在[第十六章][ch16]所见，线程提供了一种并发的方式。在这一章节我们见过了另一种方式：通过 future 和流来使用异步。如果你好奇何时选择一个而不是另一个，答案是：视具体情况而定！同时在很多场景下，选择并非线程**或**异步而是线程**和**异步。
 

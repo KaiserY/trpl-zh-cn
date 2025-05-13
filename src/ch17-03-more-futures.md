@@ -1,8 +1,7 @@
 ## 使用任意数量的 futures
 
-> [ch17-03-more-futures.md](https://github.com/rust-lang/book/blob/main/src/ch17-03-more-futures.md)
-> <br>
-> commit 9e85fcc9938e8f8c935d0ad8b4db7f45caaa2ca4
+<!-- https://github.com/rust-lang/book/blob/main/src/ch17-03-more-futures.md -->
+<!-- commit 9e85fcc9938e8f8c935d0ad8b4db7f45caaa2ca4 -->
 
 当我们在上一部分从使用两个 future 到三个 future 的时候，我们也必须从使用 `join` 切换到 `join3`。每次我们想要改变 join 的 future 数量时都不得不调用一个不同的函数是很烦人的。令人高兴的是，我们有一个宏版本的 `join` 可以传递任意数量的参数。它还会自行处理 await 这些 future。因此，我们可以重写示例 17-13 中的代码来使用 `join!` 而不是 `join3`，如示例 17-14 所示：
 
