@@ -1,14 +1,13 @@
 ## 控制流
 
-> [ch03-05-control-flow.md](https://github.com/rust-lang/book/blob/main/src/ch03-05-control-flow.md)
-> <br>
-> commit d0acb2595c891de97a133d06635c50ab449dd65c
+<!-- https://github.com/rust-lang/book/blob/main/src/ch03-05-control-flow.md -->
+<!-- commit a619cc5f073b1b59c026cf0f92ab061a46716325 -->
 
 根据条件是否为真来决定是否执行某些代码，以及根据条件是否为真来重复运行一段代码的能力是大部分编程语言的基本组成部分。Rust 代码中最常见的用来控制执行流的结构是 `if` 表达式和循环。
 
 ### `if` 表达式
 
-`if` 表达式允许根据条件执行不同的代码分支。你提供一个条件并表示 “如果条件满足，运行这段代码；如果条件不满足，不运行这段代码。
+`if` 表达式允许根据条件执行不同的代码分支。你提供一个条件并表示 “如果条件满足，运行这段代码；如果条件不满足，不运行这段代码。”
 
 在 *projects* 目录新建一个叫做 *branches* 的项目，来学习 `if` 表达式。在 *src/main.rs* 文件中，输入如下内容：
 
@@ -40,7 +39,7 @@
 {{#include ../listings/ch03-common-programming-concepts/no-listing-27-if-false/output.txt}}
 ```
 
-另外值得注意的是代码中的条件 **必须** 是 `bool` 值。如果条件不是 `bool` 值，我们将得到一个错误。例如，尝试运行以下代码：
+另外值得注意的是代码中的条件**必须**是 `bool` 值。如果条件不是 `bool` 值，我们将得到一个错误。例如，尝试运行以下代码：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -136,12 +135,12 @@ Rust 有三种循环：`loop`、`while` 和 `for`。我们每一个都试试。
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-loop/src/main.rs}}
 ```
 
-当运行这个程序时，我们会看到连续的反复打印 `again!`，直到我们手动停止程序。大部分终端都支持一个快捷键，<span class="keystroke">ctrl-c</span>，来终止一个陷入无限循环的程序。尝试一下：
+当运行这个程序时，我们会看到连续的反复打印 `again!`，直到我们手动停止程序。大部分终端都支持键盘快捷键 <kbd>ctrl</kbd>-<kbd>c</kbd> 来终止一个陷入无限循环的程序。尝试一下：
 
 ```console
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.29s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.08s
      Running `target/debug/loops`
 again!
 again!
@@ -150,7 +149,7 @@ again!
 ^Cagain!
 ```
 
-符号 `^C` 代表你在这按下了<span class="keystroke">ctrl-c</span>。在 `^C` 之后你可能看到也可能看不到 `again!` ，这取决于在接收到终止信号时代码执行到了循环的何处。
+符号 `^C` 代表你在这按下了 <kbd>ctrl</kbd>-<kbd>c</kbd>。在 `^C` 之后你可能看到也可能看不到 `again!` ，这取决于在接收到终止信号时代码执行到了循环的何处。
 
 幸运的是，Rust 提供了一种从代码中跳出循环的方法。可以使用 `break` 关键字来告诉程序何时停止循环。回忆一下在第二章猜猜看游戏的 [“猜测正确后退出”][quitting-after-a-correct-guess] 部分使用过它来在用户猜对数字赢得游戏后退出程序。
 
@@ -158,7 +157,7 @@ again!
 
 #### 从循环返回值
 
-`loop` 的一个用例是重试可能会失败的操作，比如检查线程是否完成了任务。然而你可能会需要将操作的结果传递给其它的代码。如果将返回值加入你用来停止循环的 `break` 表达式，它会被停止的循环返回：
+`loop` 的一个用例是重试可能会失败的操作，比如检查线程是否完成了任务。然而你可能会需要将操作的结果传递给其它的代码。要实现这一点，可以在用于停止循环的 `break` 表达式后添加你希望返回的值；这个值就会作为循环的返回值返回，这样你就可以使用它，如下所示：
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-33-return-value-from-loop/src/main.rs}}
@@ -168,7 +167,7 @@ again!
 
 #### 循环标签：在多个循环之间消除歧义
 
-如果存在嵌套循环，`break` 和 `continue` 应用于此时最内层的循环。你可以选择在一个循环上指定一个 **循环标签**（*loop label*），然后将标签与 `break` 或 `continue` 一起使用，使这些关键字应用于已标记的循环而不是最内层的循环。下面是一个包含两个嵌套循环的示例
+如果存在嵌套循环，`break` 和 `continue` 应用于此时最内层的循环。你可以选择在一个循环上指定一个 **循环标签**（*loop label*），然后将标签与 `break` 或 `continue` 一起使用，使这些关键字应用于已标记的循环而不是最内层的循环。下面是一个包含两个嵌套循环的示例：
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/src/main.rs}}
@@ -182,9 +181,7 @@ again!
 
 #### `while` 条件循环
 
-在程序中计算循环的条件也很常见。当条件为 `true`，执行循环。当条件不再为 `true`，调用 `break` 停止循环。这个循环类型可以通过组合 `loop`、`if`、`else` 和 `break` 来实现；如果你喜欢的话，现在就可以在程序中试试。
-
-然而，这个模式太常用了，Rust 为此内置了一个语言结构，它被称为 `while` 循环。示例 3-3 使用了 `while`：程序循环三次，每次数字都减一。接着，在循环结束后，打印出另一个信息并退出。
+在程序中计算循环的条件也很常见。当条件为 `true`，执行循环。当条件不再为 `true`，调用 `break` 停止循环。这个循环类型可以通过组合 `loop`、`if`、`else` 和 `break` 来实现；如果你喜欢的话，现在就可以在程序中试试。然而，这个模式太常用了，Rust 为此内置了一个语言结构，它被称为 `while` 循环。在示例 3-3 中，使用了 `while` 程序循环三次，每次数字都减一。接着，在循环结束后，打印出另一个信息并退出。
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -192,7 +189,7 @@ again!
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-03/src/main.rs}}
 ```
 
-<span class="caption">示例 3-3: 当条件为真时，使用 `while` 循环运行代码</span>
+<span class="caption">示例 3-3: 当条件为 `true` 时，使用 `while` 循环运行代码</span>
 
 这种结构消除了很多使用 `loop`、`if`、`else` 和 `break` 时所必须的嵌套，这样更加清晰。当条件为 `true` 就执行，否则退出循环。
 
