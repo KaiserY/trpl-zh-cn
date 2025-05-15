@@ -195,7 +195,7 @@ again!
 
 #### 使用 `for` 遍历集合
 
-可以使用 `while` 结构来遍历集合中的元素，比如数组。例如，看看示例 3-4。
+可以使用 `while` 结构来遍历集合中的元素，比如数组。例如，示例 3-4 中的循环会打印数组 `a` 中的每一个元素。
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -203,15 +203,15 @@ again!
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-04/src/main.rs}}
 ```
 
-<span class="caption">示例 3-4：使用 `while` 循环遍历集合中的元素</span>
+<span class="caption">示例 3-4：使用 `while` 循环遍历集合中的每一个元素</span>
 
-这里，代码对数组中的元素进行计数。它从索引 `0` 开始，并接着循环直到遇到数组的最后一个索引（这时，`index < 5` 不再为真）。运行这段代码会打印出数组中的每一个元素：
+这里，代码对数组中的元素进行计数。它从索引 `0` 开始，并接着循环直到遇到数组的最后一个索引（这时，`index < 5` 不再为 `true`）。运行这段代码会打印出数组中的每一个元素：
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/listing-03-04/output.txt}}
 ```
 
-数组中的所有五个元素都如期被打印出来。尽管 `index` 在某一时刻会到达值 `5`，不过循环在其尝试从数组获取第六个值（会越界）之前就停止了。
+数组中的所有五个元素都如期出现在终端中。尽管 `index` 在某一时刻会到达值 `5`，不过循环在其尝试从数组获取第六个值（会越界）之前就停止了。
 
 但这个过程很容易出错；如果索引长度或测试条件不正确会导致程序 panic。例如，如果将 `a` 数组的定义改为包含 4 个元素而忘记了更新条件 `while index < 4`，则代码会 panic。这也使程序更慢，因为编译器增加了运行时代码来对每次循环进行条件检查，以确定在循环的每次迭代中索引是否在数组的边界内。
 
@@ -233,8 +233,6 @@ again!
 
 下面是一个使用 `for` 循环来倒计时的例子，它还使用了一个我们还未讲到的方法，`rev`，用来反转 range。
 
-注意：以下代码不会踏足到数字 4，仅从一个数字开始到另一个数字之前。
-
 <span class="filename">文件名：src/main.rs</span>
 
 ```rust
@@ -251,7 +249,7 @@ again!
 * 生成第 n 个斐波那契数。
 * 打印圣诞颂歌 “The Twelve Days of Christmas” 的歌词，并利用歌曲中的重复部分（编写循环）。
 
-当你准备好继续的时候，让我们讨论一个其他语言中 **并不** 常见的概念：所有权（ownership）。
+当你准备好继续的时候，让我们讨论一个其他语言中**并不**常见的概念：所有权（ownership）。
 
 [comparing-the-guess-to-the-secret-number]:
 ch02-00-guessing-game-tutorial.html#比较猜测的数字和秘密数字
