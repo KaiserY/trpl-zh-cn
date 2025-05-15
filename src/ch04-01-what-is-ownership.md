@@ -177,15 +177,29 @@ access the heap data." src="img/trpl04-04.svg" class="center" style="width:
 
 #### 作用域与赋值
 
-作用域、所有权和内存的关系反过来也是对的，它们也会被 `drop` 函数释放。当你给一个已有的变量赋一个全新的值时，Rust 将会立即调用 `drop` 并释放原始值的内存。例如，考虑如下代码：
+作用域、所有权和通过 `drop` 函数释放内存之间的关系反过来也同样成立。当你给一个已有的变量赋一个全新的值时，Rust 将会立即调用 `drop` 并释放原始值的内存。例如，考虑如下代码：
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04b-replacement-drop/src/main.rs:here}}
 ```
 
-#### 变量与数据交互的方式（二）：克隆
+起初我们声明了变量 `s` 并绑定为一个 `"hello"` 值的 `String`。接着立即创建了一个值为 `"ahoy"` 的 `String` 并赋值给 `s`。在这里，完全没有任何内容指向了原始堆上的值。
 
-如果我们 **确实** 需要深度复制 `String` 中堆上的数据，而不仅仅是栈上的数据，可以使用一个叫做 `clone` 的通用函数。第五章会讨论方法语法，不过因为方法在很多语言中是一个常见功能，所以之前你可能已经见过了。
+<img alt="One table s representing the string value on the stack, pointing to
+the second piece of string data (ahoy) on the heap, with the original string
+data (hello) grayed out because it cannot be accessed anymore."
+src="img/trpl04-05.svg"
+class="center"
+style="width: 50%;"
+/>
+
+<span class="caption">图 4-5: 当初始值被整体替换后的内存表现</span>
+
+因此原始的字符串立刻就离开了作用域。Rust 会在其上运行 `drop` 函数同时内存会马上释放。当结尾打印其值时，将会是 `"ahoy, world!"`。
+
+#### 使用克隆的变量与数据交互
+
+如果我们 **确实** 需要深度复制 `String` 中堆上的数据，而不仅仅是栈上的数据，可以使用一个叫做 `clone` 的常用方法。第五章会讨论方法语法，不过因为方法在很多语言中是一个常见功能，所以之前你可能已经见过了。
 
 这是一个实际使用 `clone` 方法的例子：
 
@@ -193,13 +207,13 @@ access the heap data." src="img/trpl04-04.svg" class="center" style="width:
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-05-clone/src/main.rs:here}}
 ```
 
-这段代码能正常运行，并且明确产生图 4-3 中行为，这里堆上的数据 **确实** 被复制了。
+这段代码能正常运行，并且明确产生图 4-3 中行为，这里堆上的数据**确实**被复制了。
 
 当出现 `clone` 调用时，你知道一些特定的代码被执行而且这些代码可能相当消耗资源。你很容易察觉到一些不寻常的事情正在发生。
 
 #### 只在栈上的数据：拷贝
 
-这里还有一个没有提到的小窍门。这些代码使用了整型并且是有效的，它们是示例 4-2 中的一部分：
+这里还有一个没有提到的细节。这些代码使用了整型并且是有效的，它们是示例 4-2 中的一部分：
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-06-copy/src/main.rs:here}}
@@ -209,7 +223,7 @@ access the heap data." src="img/trpl04-04.svg" class="center" style="width:
 
 原因是像整型这样的在编译时已知大小的类型被整个存储在栈上，所以拷贝其实际的值是快速的。这意味着没有理由在创建变量 `y` 后使 `x` 无效。换句话说，这里没有深浅拷贝的区别，所以这里调用 `clone` 并不会与通常的浅拷贝有什么不同，我们可以不用管它。
 
-Rust 有一个叫做 `Copy` trait 的特殊注解，可以用在类似整型这样的存储在栈上的类型上（[第十章][ch10]将会详细讲解 trait）。如果一个类型实现了 `Copy` trait，那么一个旧的变量在将其赋值给其他变量后仍然可用。
+Rust 有一个叫做 `Copy` trait 的特殊注解，可以用在类似整型这样的存储在栈上的类型上（[第十章][ch10]将会详细讲解 trait）。如果一个类型实现了 `Copy` trait，那么一个旧的变量在将其赋值给其他变量后仍然有效。
 
 Rust 不允许自身或其任何部分实现了 `Drop` trait 的类型使用 `Copy` trait。如果我们对其值离开作用域时需要特殊处理的类型使用 `Copy` 注解，将会出现一个编译时错误。要学习如何为你的类型添加 `Copy` 注解以实现该 trait，请阅读附录 C 中的 [“可派生的 trait”][derivable-traits]。
 
@@ -247,7 +261,7 @@ Rust 不允许自身或其任何部分实现了 `Drop` trait 的类型使用 `Co
 
 <span class="caption">示例 4-4: 转移返回值的所有权</span>
 
-变量的所有权总是遵循相同的模式：将值赋给另一个变量时移动它。当持有堆中数据值的变量离开作用域时，其值将通过 `drop` 被清理掉，除非数据被移动为另一个变量所有。
+变量的所有权总是遵循相同的模式：将值赋给另一个变量时它会移动。当持有堆中数据值的变量离开作用域时，其值将通过 `drop` 被清理掉，除非数据被移动为另一个变量所有。
 
 虽然这样是可以的，但是在每一个函数中都获取所有权并接着返回所有权有些啰嗦。如果我们想要函数使用一个值但不获取所有权该怎么办呢？如果我们还要接着使用它的话，每次都传进去再返回来就有点烦人了，除此之外，我们也可能想返回函数体中产生的一些数据。
 

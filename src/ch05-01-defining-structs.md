@@ -90,7 +90,7 @@
 
 示例 5-7 中的代码也在 `user2` 中创建了一个新实例，但该实例中 `email` 字段的值与 `user1` 不同，而 `username`、 `active` 和 `sign_in_count` 字段的值与 `user1` 相同。`..user1` 必须放在最后，以指定其余的字段应从 `user1` 的相应字段中获取其值，但我们可以选择以任何顺序为任意字段指定值，而不用考虑结构体定义中字段的顺序。
 
-请注意，结构更新语法就像带有 `=` 的赋值，因为它移动了数据，就像我们在[“变量与数据交互的方式（一）：移动”][move]部分讲到的一样。在这个例子中，总体上说我们在创建 `user2` 后就不能再使用 `user1` 了，因为 `user1` 的 `username` 字段中的 `String` 被移到 `user2` 中。如果我们给 `user2` 的 `email` 和 `username` 都赋予新的 `String` 值，从而只使用 `user1` 的 `active` 和 `sign_in_count` 值，那么 `user1` 在创建 `user2` 后仍然有效。`active` 和 `sign_in_count` 的类型是实现 `Copy` trait 的类型，所以我们在[“变量与数据交互的方式（二）：克隆”][copy] 部分讨论的行为同样适用。
+请注意，结构更新语法就像带有 `=` 的赋值，因为它移动了数据，就像我们在[“使用移动的变量与数据交互”][move]部分讲到的一样。在这个例子中，总体上说我们在创建 `user2` 后就不能再使用 `user1` 了，因为 `user1` 的 `username` 字段中的 `String` 被移到 `user2` 中。如果我们给 `user2` 的 `email` 和 `username` 都赋予新的 `String` 值，从而只使用 `user1` 的 `active` 和 `sign_in_count` 值，那么 `user1` 在创建 `user2` 后仍然有效。`active` 和 `sign_in_count` 的类型是实现 `Copy` trait 的类型，所以我们在[“使用克隆的变量与数据交互”][copy] 部分讨论的行为同样适用。
 
 ### 使用没有命名字段的元组结构体来创建不同的类型
 
@@ -183,5 +183,5 @@
 > 第十章会讲到如何修复这个问题以便在结构体中存储引用，不过现在，我们会使用像 `String` 这类拥有所有权的类型来替代 `&str` 这样的引用以修正这个错误。
 
 [tuples]: ch03-02-data-types.html#元组类型
-[move]: ch04-01-what-is-ownership.html#变量与数据交互的方式一移动
-[copy]: ch04-01-what-is-ownership.html#变量与数据交互的方式二克隆
+[move]: ch04-01-what-is-ownership.html#使用移动的变量与数据交互
+[copy]: ch04-01-what-is-ownership.html#使用克隆的变量与数据交互

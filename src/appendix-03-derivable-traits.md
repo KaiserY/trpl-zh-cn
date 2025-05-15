@@ -58,7 +58,7 @@
 
 ### 复制值的 `Clone` 和 `Copy`
 
-`Clone` trait 可以明确地创建一个值的深拷贝（deep copy），复制过程可能包含任意代码的执行以及堆上数据的复制。查阅第四章 [“变量与数据交互的方式（二）：克隆”][ways-variables-and-data-interact-clone] 以获取有关 `Clone` 的更多信息。
+`Clone` trait 可以明确地创建一个值的深拷贝（deep copy），复制过程可能包含任意代码的执行以及堆上数据的复制。查阅第四章 [“使用克隆的变量与数据交互”][ways-variables-and-data-interact-clone] 以获取有关 `Clone` 的更多信息。
 
 派生 `Clone` 实现了 `clone` 方法，其为整个的类型实现时，在类型的每一部分上调用了 `clone` 方法。这意味着类型中所有字段或值也必须实现了 `Clone`，这样才能够派生 `Clone` 。
 
@@ -90,5 +90,5 @@
 
 [creating-instances-from-other-instances-with-struct-update-syntax]: ch05-01-defining-structs.html#使用结构体更新语法从其他实例创建实例
 [stack-only-data-copy]: ch04-01-what-is-ownership.html#只在栈上的数据拷贝
-[ways-variables-and-data-interact-clone]: ch04-01-what-is-ownership.html#变量与数据交互的方式二克隆
+[ways-variables-and-data-interact-clone]: ch04-01-what-is-ownership.html#使用克隆的变量与数据交互
 [macros]: ch20-05-macros.html#宏

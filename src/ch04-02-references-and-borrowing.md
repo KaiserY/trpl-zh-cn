@@ -1,11 +1,9 @@
 ## 引用与借用
 
-> [ch04-02-references-and-borrowing.md](https://github.com/rust-lang/book/blob/main/src/ch04-02-references-and-borrowing.md)
-> <br>
-> commit 3d51f70c78162faaebcab0da0de2ddd333e7a8ed
+<!-- https://github.com/rust-lang/book/blob/main/src/ch04-02-references-and-borrowing.md -->
+<!-- commit b8b94b3d93ddd5186efa079913a78cb49a679a13 -->
 
-示例 4-5 中的元组代码有这样一个问题：我们必须将 `String` 返回给调用函数，以便在调用 `calculate_length` 后仍能使用 `String`，因为 `String` 被移动到了 `calculate_length` 内。相反我们可以提供一个 `String` 值的引用（reference）。**引用**（*reference*）像一个指针，因为它是一个地址，我们可以由此访问储存于该地址的属于其他变量的数据。
-与指针不同，引用确保指向某个特定类型的有效值。
+示例 4-5 中的元组代码有这样一个问题：我们必须将 `String` 返回给调用函数，以便在调用 `calculate_length` 后仍能使用 `String`，因为 `String` 被移动到了 `calculate_length` 内。相反我们可以提供一个 `String` 值的引用（reference）。**引用**（*reference*）像一个指针，因为它是一个地址，我们可以由此访问储存于该地址的属于其他变量的数据。与指针不同，引用在其生命周期内保证指向某个特定类型的有效值。
 
 下面是如何定义并使用一个（新的）`calculate_length` 函数，它以一个对象的引用作为参数而不是获取值的所有权：
 
@@ -23,7 +21,7 @@ string data on the heap." src="img/trpl04-06.svg" class="center" />
 
 <span class="caption">图 4-6：`&String s` 指向 `String s1` 示意图</span>
 
-> 注意：与使用 `&` 引用相反的操作是 **解引用**（*dereferencing*），它使用解引用运算符，`*`。我们将会在第八章遇到一些解引用运算符，并在第十五章详细讨论解引用。
+> 注意：与使用 `&` 引用相反的操作是 **解引用**（*dereferencing*），它使用解引用运算符 `*` 实现。我们将会在第八章遇到一些解引用运算符，并在第十五章详细讨论解引用。
 
 仔细看看这个函数调用：
 
@@ -31,7 +29,7 @@ string data on the heap." src="img/trpl04-06.svg" class="center" />
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-07-reference/src/main.rs:here}}
 ```
 
-`&s1` 语法让我们创建一个 **指向** 值 `s1` 的引用，但是并不拥有它。因为并不拥有这个值，所以当引用停止使用时，它所指向的值也不会被丢弃。
+`&s1` 语法让我们创建一个**指向**值 `s1` 的引用，但是并不拥有它。因为并不拥有这个值，所以当引用停止使用时，它所指向的值也不会被丢弃。
 
 同理，函数签名使用 `&` 来表明参数 `s` 的类型是一个引用。让我们增加一些解释性的注释：
 
@@ -95,15 +93,15 @@ string data on the heap." src="img/trpl04-06.svg" class="center" />
 * 至少有一个指针被用来写入数据。
 * 没有同步数据访问的机制。
 
-数据竞争会导致未定义行为，难以在运行时追踪，并且难以诊断和修复；Rust 避免了这种情况的发生，因为它甚至不会编译存在数据竞争的代码！
+数据竞争会导致未定义行为，难以在运行时追踪，并且难以诊断和修复；Rust 通过拒绝编译存在数据竞争的代码来避免此问题！
 
-一如既往，可以使用大括号来创建一个新的作用域，以允许拥有多个可变引用，只是不能 **同时** 拥有：
+一如既往，可以使用大括号来创建一个新的作用域，以允许拥有多个可变引用，只是不能**同时**拥有：
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-11-muts-in-separate-scopes/src/main.rs:here}}
 ```
 
-Rust 在同时使用可变与不可变引用时也采用的类似的规则。这些代码会导致一个错误：
+Rust 在同时使用可变与不可变引用时也强制采用类似的规则。这些代码会导致一个错误：
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/src/main.rs:here}}
@@ -115,25 +113,25 @@ Rust 在同时使用可变与不可变引用时也采用的类似的规则。这
 {{#include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/output.txt}}
 ```
 
-哇哦！我们 **也** 不能在拥有不可变引用的同时拥有可变引用。
+呼！我们**也**不能在拥有不可变引用的同时拥有可变引用。
 
 不可变引用的借用者可不希望在借用时值会突然发生改变！然而，多个不可变引用是可以的，因为没有哪个只能读取数据的引用者能够影响其他引用者读取到的数据。
 
-注意一个引用的作用域从声明的地方开始一直持续到最后一次使用为止。例如，因为最后一次使用不可变引用（`println!`)，发生在声明可变引用之前，所以如下代码是可以编译的：
+注意一个引用的作用域从声明的地方开始一直持续到最后一次使用为止。例如，因为最后一次使用不可变引用的位置在 `println!`，它发生在声明可变引用之前，所以如下代码是可以编译的：
 
-```rust,edition2021
+```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-13-reference-scope-ends/src/main.rs:here}}
 ```
 
-不可变引用 `r1` 和 `r2` 的作用域在 `println!` 最后一次使用之后结束，这也是创建可变引用 `r3` 的地方。因为它们的作用域没有重叠，所以代码是可以编译的。编译器可以在作用域结束之前判断不再使用的引用。
+不可变引用 `r1` 和 `r2` 的作用域在 `println!` 最后一次使用之后结束，这发生在可变引用 `r3` 被创建之前。因为它们的作用域没有重叠，所以代码是可以编译的。编译器可以在作用域结束之前判断不再使用的引用。
 
-尽管这些错误有时使人沮丧，但请牢记这是 Rust 编译器在提前指出一个潜在的 bug（在编译时而不是在运行时）并精准显示问题所在。这样你就不必去跟踪为何数据并不是你想象中的那样。
+尽管借用错误有时令人沮丧，但请牢记这是 Rust 编译器在提前指出一个潜在的 bug（在编译时而不是在运行时）并精准显示问题所在。这样你就不必去跟踪为何数据并不是你想象中的那样。
 
 ### 悬垂引用（Dangling References）
 
-在具有指针的语言中，很容易通过释放内存时保留指向它的指针而错误地生成一个 **悬垂指针**（*dangling pointer*），所谓悬垂指针是其指向的内存可能已经被分配给其它持有者。相比之下，在 Rust 中编译器确保引用永远也不会变成悬垂状态：当你拥有一些数据的引用，编译器确保数据不会在其引用之前离开作用域。
+在具有指针的语言中，很容易通过释放内存时保留指向它的指针而错误地生成一个**悬垂指针**（*dangling pointer*）—— 指向可能已被分配给其他用途的内存位置的指针。相比之下，在 Rust 中编译器确保引用永远也不会变成悬垂引用：当你拥有一些数据的引用，编译器确保数据不会在其引用之前离开作用域。
 
-让我们尝试创建一个悬垂引用，Rust 会通过一个编译时错误来避免：
+让我们尝试创建一个悬垂引用，看看 Rust 如何通过通过一个编译时错误来防止它：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -154,7 +152,7 @@ this function's return type contains a borrowed value, but there is no value
 for it to be borrowed from
 ```
 
-让我们仔细看看我们的 `dangle` 代码的每一步到底发生了什么：
+让我们仔细看看我们的 `dangle` 代码的每个阶段到底发生了什么：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -176,7 +174,7 @@ for it to be borrowed from
 
 让我们概括一下之前对引用的讨论：
 
-* 在任意给定时间，**要么** 只能有一个可变引用，**要么** 只能有多个不可变引用。
+* 在任意给定时间，**要么**只能有一个可变引用，**要么**只能有多个不可变引用。
 * 引用必须总是有效的。
 
 接下来，我们来看看另一种不同类型的引用：slice。
