@@ -1,8 +1,7 @@
 ## 结构体示例程序
 
-> [ch05-02-example-structs.md](https://github.com/rust-lang/book/blob/main/src/ch05-02-example-structs.md)
-> <br>
-> commit 8612c4a5801b61f8d2e952f8bbbb444692ff1ec2
+<!-- https://github.com/rust-lang/book/blob/main/src/ch05-02-example-structs.md -->
+<!-- commit 02e053cdbbb3bf9edd9ad32ed49eb533404350a9 -->
 
 为了理解何时会需要使用结构体，让我们编写一个计算长方形面积的程序。我们会从单独的变量开始，接着重构程序直到使用结构体替代它们为止。
 
