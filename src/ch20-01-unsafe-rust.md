@@ -282,7 +282,7 @@ Miri 并不能捕获编写不安全代码时可能出现的所有错误。Miri �
 [dangling-references]: ch04-02-references-and-borrowing.html#悬垂引用dangling-references
 [ABI]: https://doc.rust-lang.org/reference/items/external-blocks.html#abi
 [differences-between-variables-and-constants]: ch03-01-variables-and-mutability.html#常量
-[extensible-concurrency-with-the-sync-and-send-traits]: ch16-04-extensible-concurrency-sync-and-send.html#使用-sync-和-send-trait-的可扩展并发
+[extensible-concurrency-with-the-sync-and-send-traits]: ch16-04-extensible-concurrency-sync-and-send.html#使用-send-和-sync-trait-的可扩展并发
 [the-slice-type]: ch04-03-slices.html#slice-类型
 [unions]: https://doc.rust-lang.org/reference/items/unions.html
 [miri]: https://github.com/rust-lang/miri
