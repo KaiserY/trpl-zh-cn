@@ -33,7 +33,7 @@
 - [枚举和模式匹配](ch06-00-enums.md)
   - [枚举的定义](ch06-01-defining-an-enum.md)
   - [`match` 控制流结构](ch06-02-match.md)
-  - [`if let` 简洁控制流](ch06-03-if-let.md)
+  - [`if let` 和 `let else` 简洁控制流](ch06-03-if-let.md)
 
 ## 基本 Rust 技能
 
