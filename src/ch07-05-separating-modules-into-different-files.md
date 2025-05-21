@@ -1,8 +1,7 @@
 ## 将模块拆分成多个文件
 
-> [ch07-05-separating-modules-into-different-files.md](https://github.com/rust-lang/book/blob/main/src/ch07-05-separating-modules-into-different-files.md)
-> <br>
-> commit 2b4565662d1a7973d870744a923f58f8f7dcce91
+<!-- https://github.com/rust-lang/book/blob/main/src/ch07-05-separating-modules-into-different-files.md -->
+<!-- commit 3a30e4c1fbe641afc066b3af9eb01dcdf5ed8b24 -->
 
 到目前为止，本章所有的例子都在一个文件中定义多个模块。当模块变得更大时，你可能想要将它们的定义移动到单独的文件中，从而使代码更容易阅读。
 
@@ -26,12 +25,11 @@
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
 ```
 
-<span class="caption">示例 7-22: 在 *src/front_of_house.rs* 中定义 `front_of_house`
-模块</span>
+<span class="caption">示例 7-22: 在 *src/front_of_house.rs* 中定义 `front_of_house` 模块</span>
 
-注意你只需在模块树中的某处使用一次 `mod` 声明就可以加载这个文件。一旦编译器知道了这个文件是项目的一部分（并且通过 `mod` 语句的位置知道了代码在模块树中的位置），项目中的其他文件应该使用其所声明的位置的路径来引用那个文件的代码，这在[“引用模块项目的路径”][paths]部分有讲到。换句话说，`mod` **不是** 你可能会在其他编程语言中看到的 "include" 操作。
+注意你只需在模块树中的某处使用一次 `mod` 声明就可以加载这个文件。一旦编译器知道了这个文件是项目的一部分（并且通过 `mod` 语句的位置知道了代码在模块树中的位置），项目中的其他文件应该使用其所声明的位置的路径来引用那个文件的代码，这在[“引用模块项目的路径”][paths]部分有讲到。换句话说，`mod` **不是**你可能会在其他编程语言中看到的 “include” 操作。
 
-接下来我们同样将 `hosting` 模块提取到自己的文件中。这个过程会有所不同，因为 `hosting` 是 `front_of_house` 的子模块而不是根模块。我们将 `hosting` 的文件放在与模块树中它的父级模块同名的目录中，在这里是 *src/front_of_house/*。
+接下来我们同样将 `hosting` 模块提取到自己的文件中。这个过程会有所不同，因为 `hosting` 是 `front_of_house` 的子模块而不是根模块。我们将 `hosting` 的文件放在与模块树中它的父模块同名的目录中，在这里是 *src/front_of_house/*。
 
 为了移动 `hosting`，修改 *src/front_of_house.rs* 使之仅包含 `hosting` 模块的声明。
 
@@ -49,11 +47,11 @@
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house/hosting.rs}}
 ```
 
-如果将 *hosting.rs* 放在 *src* 目录，编译器会认为 `hosting` 模块中的 *hosting.rs* 的代码声明于 crate 根，而不是声明为 `front_of_house` 的子模块。编译器所遵循的哪些文件对应哪些模块的代码的规则，意味着目录和文件更接近于模块树。
+如果将 *hosting.rs* 放在 *src* 目录，编译器会认为 `hosting` 模块中的 *hosting.rs* 的代码声明于 crate 根，而不是声明为 `front_of_house` 的子模块。编译器所遵循的哪些文件对应哪些模块的代码的规则，意味着目录和文件更紧密地贴合模块树。
 
 > ### 另一种文件路径
 >
-> 目前为止我们介绍了 Rust 编译器所最常用的文件路径；不过一种更老的文件路径也仍然是支持的。
+> 目前为止我们介绍了 Rust 编译器所最常用的文件路径，但 Rust 也支持一种更老的路径风格。
 >
 > 对于声明于 crate 根的 `front_of_house` 模块，编译器会在如下位置查找模块代码：
 >
@@ -69,14 +67,14 @@
 >
 > 使用 *mod.rs* 这一文件名的风格的主要缺点是会导致项目中出现很多 *mod.rs* 文件，当你在编辑器中同时打开它们时会感到疑惑。
 
-我们将各个模块的代码移动到独立文件了，同时模块树依旧相同。`eat_at_restaurant` 中的函数调用也无需修改继续保持有效，即便其定义存在于不同的文件中。这个技巧让你可以在模块代码增长时，将它们移动到新文件中。
+我们将各个模块的代码移动到独立文件了，同时模块树保持不变。`eat_at_restaurant` 中的函数调用也无需修改继续保持有效，即便其定义存在于不同的文件中。这个技巧让你可以在模块代码增长时，将它们移动到新文件中。
 
-注意，*src/lib.rs* 中的 `pub use crate::front_of_house::hosting` 语句也并未发生改变。use 也不会对哪些文件会被编译为 crate 的一部分有任何影响。`mod` 关键字声明了模块，而 Rust 会在与模块同名的文件中查找模块的代码。
+注意，*src/lib.rs* 中的 `pub use crate::front_of_house::hosting` 语句也并未发生改变，`use` 也不会对哪些文件会被编译为 crate 的一部分有任何影响。`mod` 关键字声明了模块，而 Rust 会在与模块同名的文件中查找模块的代码。
 
 
 ## 总结
 
-Rust 提供了将包分成多个 crate，将 crate 分成模块，以及通过指定绝对或相对路径从一个模块引用另一个模块中定义的项的方式。你可以通过使用 `use` 语句将路径引入作用域，这样在多次使用时可以使用更短的路径。模块定义的代码默认是私有的，不过可以选择增加 `pub` 关键字使其定义变为公有。
+Rust 允许你将一个包拆分为多个 crate，并将一个 crate 拆分为若干模块，从而可以在一个模块中引用另一个模块中定义的项。你可以使用绝对路径或相对路径来实现这一点。你可以通过使用 `use` 语句将路径引入作用域，这样在多次使用时可以使用更短的路径。模块定义的代码默认是私有的，不过可以选择增加 `pub` 关键字使其定义变为公有。
 
 接下来，让我们看看一些标准库提供的集合数据类型，你可以利用它们编写出漂亮整洁的代码。
 

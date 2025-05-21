@@ -85,13 +85,13 @@
 
 <span class="caption">示例 7-16: 使用 `as` 关键字重命名引入作用域的类型</span>
 
-在第二个 `use` 语句中，我们选择 `IoResult` 作为 `std::io::Result` 的新名称，它与从 `std::fmt` 引入作用域的 `Result` 并不冲突。示例 7-15 和示例 7-16 都是惯用的，如何选择都取决于你！
+在第二个 `use` 语句中，我们选择 `IoResult` 作为 `std::io::Result` 的新名称，它与从 `std::fmt` 引入作用域的 `Result` 并不冲突。示例 7-15 和示例 7-16 都是惯用写法，如何选择都取决于你！
 
 ### 使用 `pub use` 重导出名称
 
-使用 `use` 关键字，将某个名称导入当前作用域后，这个名称在此作用域中就可以使用了，但它对此作用域之外还是私有的。如果想让其他人调用我们的代码时，也能够正常使用这个名称，就好像它本来就在当前作用域一样，那我们可以将 `pub` 和 `use` 合起来使用。这种技术被称为 “*重导出*（*re-exporting*）”：我们不仅将一个名称导入了当前作用域，还允许别人把它导入他们自己的作用域。
+使用 `use` 关键字，将某个名称导入当前作用域后，该名称对此作用域之外还是私有的。若要让作用域之外的代码能够像在当前作用域中一样使用该名称，可以将 `pub` 与 `use` 组合使用。这种技术被称为**重导出**（*re-exporting*），因为在把某个项目导入当前作用域的同时，也将其暴露给其他作用域。
 
-示例 7-17 将示例 7-11 根模块中的 `use` 改为 `pub use` 。
+示例 7-17 将示例 7-11 根模块中的 `use` 改为 `pub use` 的代码。
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -101,13 +101,13 @@
 
 <span class="caption">示例 7-17: 通过 `pub use` 使名称可从新作用域中被导入至任何代码</span>
 
-在这个修改之前，外部代码需要使用路径 `restaurant::front_of_house::hosting::add_to_waitlist()` 来调用 `add_to_waitlist` 函数。现在这个 `pub use` 从根模块重导出了 `hosting` 模块，外部代码现在可以使用路径 `restaurant::hosting::add_to_waitlist`。
+在这个修改之前，外部代码需要使用路径 `restaurant::front_of_house::hosting::add_to_waitlist()` 来调用 `add_to_waitlist` 函数，并且还需要将 `front_of_house` 模块标记为 `pub`。现在这个 `pub use` 从根模块重导出了 `hosting` 模块，外部代码现在可以使用路径 `restaurant::hosting::add_to_waitlist`。
 
 当你代码的内部结构与调用你代码的程序员所想象的结构不同时，重导出会很有用。例如，在这个餐馆的比喻中，经营餐馆的人会想到“前台”和“后台”。但顾客在光顾一家餐馆时，可能不会以这些术语来考虑餐馆的各个部分。使用 `pub use`，我们可以使用一种结构编写代码，却将不同的结构形式暴露出来。这样做使我们的库井井有条，也使开发这个库的程序员和调用这个库的程序员都更加方便。在[“使用 `pub use` 导出合适的公有 API”][ch14-pub-use]部分让我们再看另一个 `pub use` 的例子来了解这如何影响 crate 的文档。
 
 ### 使用外部包
 
-在第二章中我们编写了一个猜猜看游戏。那个项目使用了一个外部包，`rand`，来生成随机数。为了在项目中使用 `rand`，在 *Cargo.toml* 中加入了如下行：
+在第二章中我们编写了一个猜猜看游戏。那个项目使用了一个外部包 `rand` 来生成随机数。为了在项目中使用 `rand`，在 *Cargo.toml* 中加入了如下行：
 
 <span class="filename">文件名：Cargo.toml</span>
 
@@ -117,7 +117,7 @@
 
 在 *Cargo.toml* 中加入 `rand` 依赖告诉了 Cargo 要从 [crates.io](https://crates.io) 下载 `rand` 和其依赖，并使其可在项目代码中使用。
 
-接着，为了将 `rand` 定义引入项目包的作用域，我们加入一行 `use` 起始的包名，它以 `rand` 包名开头并列出了需要引入作用域的项。回忆一下第二章的 “生成一个随机数” 部分，我们曾将 `Rng` trait 引入作用域并调用了 `rand::thread_rng` 函数：
+接着，为了将 `rand` 定义引入项目包的作用域，我们加入一行 `use` 起始的包名，它以 `rand` 包名开头并列出了需要引入作用域的项。回忆一下第二章的“生成一个随机数”部分，我们曾将 `Rng` trait 引入作用域并调用了 `rand::thread_rng` 函数：
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:ch07-04}}
@@ -125,7 +125,7 @@
 
 [crates.io](https://crates.io) 上有很多 Rust 社区成员发布的包，将其引入你自己的项目都需要一道相同的步骤：在 *Cargo.toml* 列出它们并通过 `use` 将其中定义的项引入项目包的作用域中。
 
-注意 `std` 标准库对于你的包来说也是外部 crate。因为标准库随 Rust 语言一同分发，无需修改 *Cargo.toml* 来引入 `std`，不过需要通过 `use` 将标准库中定义的项引入项目包的作用域中来引用它们，比如我们使用的 `HashMap`：
+注意 `std` 标准库对于你的包来说也是外部 crate。因为标准库随 Rust 语言一同分发，无需修改 *Cargo.toml* 来引入 `std`，不过需要通过 `use` 将标准库中定义的项引入项目包的作用域中来引用它们。例如，对于 `HashMap`，我们会使用以下语句：
 
 ```rust
 use std::collections::HashMap;
@@ -133,9 +133,9 @@ use std::collections::HashMap;
 
 这是一个以标准库 crate 名 `std` 开头的绝对路径。
 
-### 嵌套路径来消除大量的 `use` 行
+### 使用嵌套路径来清理大量的 `use` 列表
 
-当需要引入很多定义于相同包或相同模块的项时，为每一项单独列出一行会占用源码很大的空间。例如猜猜看章节示例 2-4 中有两行 `use` 语句都从 `std` 引入项到作用域：
+当需要引入很多定义于相同包或相同模块的项时，为每一项单独列出一行会占用源码大量的垂直空间。例如猜猜看章节示例 2-4 中有两行 `use` 语句都从 `std` 引入项到作用域：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -177,9 +177,9 @@ use std::collections::HashMap;
 
 这一行便将 `std::io` 和 `std::io::Write` 同时引入作用域。
 
-### 通过 glob 运算符将所有的公有定义引入作用域
+### glob 运算符
 
-如果希望将一个路径下 **所有** 公有项引入作用域，可以指定路径后跟 `*`，glob 运算符：
+如果希望将一个路径下**所有**公有项引入作用域，可以指定路径后跟 `*` glob 运算符：
 
 ```rust
 use std::collections::*;
@@ -187,7 +187,7 @@ use std::collections::*;
 
 这个 `use` 语句将 `std::collections` 中定义的所有公有项引入当前作用域。使用 glob 运算符时请多加小心！Glob 会使得我们难以推导作用域中有什么名称和它们是在何处定义的。
 
-glob 运算符经常用于测试模块 `tests` 中，这时会将所有内容引入作用域；我们将在第十一章 “如何编写测试” 部分讲解。glob 运算符有时也用于 prelude 模式；查看 [标准库中的文档](https://doc.rust-lang.org/std/prelude/index.html#other-preludes) 了解这个模式的更多细节。
+glob 运算符经常用于测试模块 `tests` 中，这时会将所有内容引入作用域；我们将在第十一章“如何编写测试”部分讲解。glob 运算符有时也用于 prelude 模式；查看[标准库中的文档](https://doc.rust-lang.org/std/prelude/index.html#other-preludes)了解这个模式的更多细节。
 
 [ch14-pub-use]: ch14-02-publishing-to-crates-io.html#使用-pub-use-导出合适的公有-api
 [rand]: ch02-00-guessing-game-tutorial.html#生成一个随机数
