@@ -189,7 +189,7 @@ fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-06-impl-trait-returns-one-type/src/lib.rs:here}}
 ```
 
-这里尝试返回 `NewsArticle` 或 `SocialPost` 是不被允许的，原因在于编译器中 `impl Trait` 语法的实现限制。。第十八章的 [“顾及不同类型值的 trait 对象”][using-trait-objects-that-allow-for-values-of-different-types] 部分会介绍如何编写这样一个函数。
+这里尝试返回 `NewsArticle` 或 `SocialPost` 是不被允许的，原因在于编译器中 `impl Trait` 语法的实现限制。第十八章的 [“顾及不同类型值的 trait 对象”][using-trait-objects-that-allow-for-values-of-different-types] 部分会介绍如何编写这样一个函数。
 
 ### 使用 trait bound 有条件地实现方法
 
