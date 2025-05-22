@@ -270,4 +270,4 @@ Rust 提示我们的代码忽略了 `Result` 值，它可能表明这里存在�
 [ch9-error-guidelines]: ch09-03-to-panic-or-not-to-panic.html#错误处理指导原则
 [ch9-result]: ch09-02-recoverable-errors-with-result.html
 [ch18]: ch18-00-oop.html
-[ch9-question-mark]: ch09-02-recoverable-errors-with-result.html#传播错误的简写-运算符
+[ch9-question-mark]: ch09-02-recoverable-errors-with-result.html#传播错误的快捷方式-运算符
