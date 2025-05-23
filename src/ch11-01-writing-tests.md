@@ -57,7 +57,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 
 `0 measured` 统计是针对性能测试的。性能测试（benchmark tests）在编写本书时，仍只能用于 Rust 开发版（nightly Rust）。请查看 [性能测试的文档][bench] 了解更多。
 
-我们可以将参数传递给 `cargo test` 命令，以便只运行名称与字符串匹配的测试；这就是所谓的**过滤**（_filtering_），我们会在 [“通过指定名字来运行部分测试”][subset] 讨论这一点。这里我们没有过滤需要运行的测试，所以摘要中会显示`0 filtered out`。
+我们可以将参数传递给 `cargo test` 命令，以便只运行名称与字符串匹配的测试；这就是所谓的**过滤**（_filtering_），我们会在 [“通过名称运行部分测试”][subset] 讨论这一点。这里我们没有过滤需要运行的测试，所以摘要中会显示`0 filtered out`。
 
 测试输出中的以 `Doc-tests adder` 开头的这一部分是所有文档测试的结果。我们现在并没有任何文档测试，不过 Rust 会编译任何在 API 文档中的代码示例。这个功能帮助我们使文档和代码保持同步！在第十四章的 [“文档注释作为测试”][doc-comments] 部分会讲到如何编写文档测试。现在我们将忽略 `Doc-tests` 部分的输出。
 
@@ -323,7 +323,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 ch08-02-strings.html#使用--运算符或-format-宏拼接字符串
 [bench]: https://doc.rust-lang.org/unstable-book/library-features/test.html
 [ignoring]: ch11-02-running-tests.html#除非特别指定否则忽略某些测试
-[subset]: ch11-02-running-tests.html#通过指定名字来运行部分测试
+[subset]: ch11-02-running-tests.html#通过名称运行部分测试
 [controlling-how-tests-are-run]:
 ch11-02-running-tests.html#控制测试如何运行
 [derivable-traits]: appendix-03-derivable-traits.html
