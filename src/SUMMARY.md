@@ -74,7 +74,7 @@
 
 ## Rust 编程思想
 
-- [Rust 中的函数式语言功能：迭代器与闭包](ch13-00-functional-features.md)
+- [函数式语言特性：迭代器与闭包](ch13-00-functional-features.md)
   - [闭包：可以捕获其环境的匿名函数](ch13-01-closures.md)
   - [使用迭代器处理元素序列](ch13-02-iterators.md)
   - [改进之前的 I/O 项目](ch13-03-improving-our-io-project.md)

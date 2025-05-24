@@ -1,16 +1,15 @@
 ## 闭包：可以捕获环境的匿名函数
 
-> [ch13-01-closures.md](https://github.com/rust-lang/book/blob/main/src/ch13-01-closures.md)
-> <br>
-> commit a2cb72d3ad7584cc1ae3b85f715c877872f5e3ab
+<!-- https://github.com/rust-lang/book/blob/main/src/ch13-01-closures.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
 
 Rust 的 **闭包**（*closures*）是可以保存在变量中或作为参数传递给其他函数的匿名函数。你可以在一个地方创建闭包，然后在不同的上下文中执行闭包运算。不同于函数，闭包允许捕获其被定义时所在作用域中的值。我们将展示这些闭包特性如何支持代码复用和行为定制。
 
-### 闭包会捕获其环境
+### 使用闭包捕获环境
 
 我们首先了解如何通过闭包捕获定义它的环境中的值以便之后使用。考虑如下场景：我们的 T 恤公司偶尔会向邮件列表中的某位成员赠送一件限量版的独家 T 恤作为促销。邮件列表中的成员可以选择将他们的喜爱的颜色添加到个人信息中。如果被选中的成员设置了喜爱的颜色，他们将获得那个颜色的 T 恤。如果他没有设置喜爱的颜色，他们会获赠公司当前库存最多的颜色的款式。
 
-有很多种方式来实现这一点。例如，使用有 `Red` 和 `Blue` 两个成员的 `ShirtColor` 枚举（出于简单考虑限定为两种颜色）。我们使用 `Inventory` 结构体来代表公司的库存，它有一个类型为 `Vec<ShirtColor>` 的 `shirts` 字段表示库存中的衬衫的颜色。`Inventory` 上定义的 `giveaway` 方法获取免费衬衫得主所喜爱的颜色（如有），并返回其获得的衬衫的颜色。初始代码如示例 13-1 所示：
+有很多种方式来实现这一点。例如，使用有 `Red` 和 `Blue` 两个变体的 `ShirtColor` 枚举（出于简单考虑限定为两种颜色）。我们使用 `Inventory` 结构体来代表公司的库存，它有一个类型为 `Vec<ShirtColor>` 的 `shirts` 字段表示库存中的衬衫的颜色。`Inventory` 上定义的 `giveaway` 方法获取免费衬衫得主所喜爱的颜色（如有），并返回其获得的衬衫的颜色。初始代码如示例 13-1 所示：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -22,7 +21,7 @@ Rust 的 **闭包**（*closures*）是可以保存在变量中或作为参数传
 
 `main` 函数中定义的 `store` 还剩下两件蓝衬衫和一件红衬衫，可以在限量版促销活动中赠送。我们通过调用 `giveaway` 方法，为一个期望红衬衫的用户和一个没有特定偏好的用户进行赠送。
 
-再次强调，这段代码有多种实现方式。这里为了专注于闭包，我们继续使用已经学习过的概念，除了 `giveaway` 方法体中使用了闭包。在 `giveaway` 方法中，我们将用户偏好作为 `Option<ShirtColor>` 类型的参数获取，并在 `user_preference` 上调用 `unwrap_or_else` 方法。[`Option<T>` 上的 `unwrap_or_else` 方法][unwrap-or-else] 由标准库定义。它接受一个无参闭包作为参数，该闭包返回一个 `T` 类型的值（与 `Option<T>` 的 `Some` 变体中存储的值类型相同，这里是 `ShirtColor`）。如果 `Option<T>` 是 `Some` 成员，则 `unwrap_or_else`  返回 `Some` 中的值。如果 `Option<T>` 是 `None`  成员，则 `unwrap_or_else`  调用闭包并返回闭包的返回值。
+再次强调，这段代码有多种实现方式。这里为了专注于闭包，我们继续使用已经学习过的概念，除了 `giveaway` 方法体中使用了闭包。在 `giveaway` 方法中，我们将用户偏好作为 `Option<ShirtColor>` 类型的参数获取，并在 `user_preference` 上调用 `unwrap_or_else` 方法。[`Option<T>` 上的 `unwrap_or_else` 方法][unwrap-or-else]由标准库定义。它接受一个无参闭包作为参数，该闭包返回一个 `T` 类型的值（与 `Option<T>` 的 `Some` 变体中存储的值类型相同，这里是 `ShirtColor`）。如果 `Option<T>` 是 `Some` 变体，则 `unwrap_or_else`  返回 `Some` 中的值。如果 `Option<T>` 是 `None` 变体，则 `unwrap_or_else` 调用闭包并返回闭包的返回值。
 
 我们将闭包表达式 `|| self.most_stocked()` 作为 `unwrap_or_else` 的参数。这是一个本身不获取参数的闭包（如果闭包有参数，它们会出现在两道竖杠之间）。闭包体调用了 `self.most_stocked()`。我们在这里定义了闭包，而 `unwrap_or_else` 的实现会在之后需要其结果的时候执行闭包。
 
@@ -50,7 +49,7 @@ Rust 的 **闭包**（*closures*）是可以保存在变量中或作为参数传
 
 <span class="caption">示例 13-2：为闭包的参数和返回值增加可选的类型注解</span>
 
-有了类型注解，闭包的语法看起来就更像函数的语法了。如下是一个对其参数加一的函数的定义与拥有相同行为闭包语法的纵向对比。这里增加了一些空格来对齐相应部分。这展示了除了使用竖线以及一些可选语法外，闭包语法与函数语法有多么地相似：
+有了类型注解，闭包的语法看起来就更像函数的语法了。如下是一个对其参数加一的函数的定义与拥有相同行为闭包语法的纵向对比。这里增加了一些空格来对齐相应部分。这展示了除了使用管道符（|，pipes）以及一些可选语法外，闭包语法与函数语法有多么地相似：
 
 ```rust,ignore
 fn  add_one_v1   (x: u32) -> u32 { x + 1 }
@@ -77,9 +76,9 @@ let add_one_v4 = |x|               x + 1  ;
 {{#include ../listings/ch13-functional-features/listing-13-03/output.txt}}
 ```
 
-第一次使用 `String` 值调用 `example_closure` 时，编译器推断出 `x` 的类型以及闭包的返回类型为 `String`。接着这些类型被锁定进闭包 `example_closure` 中，如果尝试对同一闭包使用不同类型则就会得到类型错误。
+第一次使用 `String` 值调用 `example_closure` 时，编译器推断出 `x` 的类型以及闭包的返回类型为 `String`。接着这些类型被锁定进闭包 `example_closure` 闭包中，如果尝试对同一闭包使用不同类型则就会得到类型错误。
 
-### 捕获引用或者移动所有权
+### 捕获引用或移动所有权
 
 闭包可以通过三种方式捕获其环境中的值，它们直接对应到函数获取参数的三种方式：不可变借用、可变借用和获取所有权。闭包将根据函数体中对捕获值的操作来决定使用哪种方式。
 
@@ -163,7 +162,7 @@ impl<T> Option<T> {
 }
 ```
 
-回忆一下，`T` 是表示 `Option` 中 `Some` 成员中的值的类型的泛型。类型 `T` 也是 `unwrap_or_else` 函数的返回值类型：举例来说，在 `Option<String>` 上调用 `unwrap_or_else` 会得到一个 `String`。
+回忆一下，`T` 是表示 `Option` 中 `Some` 变体中的值的类型的泛型。类型 `T` 也是 `unwrap_or_else` 函数的返回值类型：举例来说，在 `Option<String>` 上调用 `unwrap_or_else` 会得到一个 `String`。
 
 接着注意到 `unwrap_or_else` 函数有额外的泛型参数 `F`。`F` 是参数 `f` 的类型，`f` 是调用 `unwrap_or_else` 时提供的闭包。
 

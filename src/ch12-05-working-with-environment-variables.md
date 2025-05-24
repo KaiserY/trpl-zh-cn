@@ -1,10 +1,9 @@
 ## 处理环境变量
 
-> [ch12-05-working-with-environment-variables.md](https://github.com/rust-lang/book/blob/main/src/ch12-05-working-with-environment-variables.md)
-> <br>
-> commit 9c0fa2714859738ff73cbbb829592e4c037d7e46
+<!-- https://github.com/rust-lang/book/blob/main/src/ch12-05-working-with-environment-variables.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
 
-我们将增加一个额外的功能来改进 `minigrep`：用户可以通过设置环境变量来设置搜索是否是大小写敏感的。当然，我们也可以将其设计为一个命令行参数并要求用户每次需要时都加上它，不过在这里我们将使用环境变量。这允许用户设置环境变量一次之后在整个终端会话中所有的搜索都将是大小写不敏感的。
+我们将增加一个额外的功能来改进 `minigrep`：用户可以通过设置环境变量来设置搜索是否是大小写敏感的选项。当然，我们也可以将其设计为一个命令行参数并要求用户每次需要时都加上它，不过在这里我们将使用环境变量。这允许用户设置环境变量一次之后在整个终端会话中所有的搜索都将是大小写不敏感的。
 
 ### 编写一个大小写不敏感 `search` 函数的失败测试
 
@@ -18,9 +17,9 @@
 
 <span class="caption">示例 12-20：为准备添加的大小写不敏感函数新增失败测试</span>
 
-注意我们也改变了老测试中 `contents` 的值。还新增了一个含有文本 `"Duct tape."` 的行，它有一个大写的 D，这在大小写敏感搜索时不应该匹配 "duct"。我们修改这个测试以确保不会意外破坏已经实现的大小写敏感搜索功能；这个测试现在应该能通过并在处理大小写不敏感搜索时应该能一直通过。
+注意我们也改变了老测试中 `contents` 的值。还新增了一个含有文本 `"Duct tape."` 的行，它有一个大写的 D，这在大小写敏感搜索时不应该匹配 `"duct"`。我们修改这个测试以确保不会意外破坏已经实现的大小写敏感搜索功能；这个测试现在应该能通过并在处理大小写不敏感搜索时应该能一直通过。
 
-大小写 **不敏感** 搜索的新测试使用 `"rUsT"` 作为其查询字符串。在我们将要增加的 `search_case_insensitive` 函数中，`"rUsT"` 查询应该包含带有一个大写 R 的 `"Rust:"` 还有 `"Trust me."` 这两行，即便它们与查询的大小写都不同。这个测试现在不能编译，因为还没有定义 `search_case_insensitive` 函数。请随意增加一个总是返回空 vector 的骨架实现，正如示例 12-16 中 `search` 函数为了使测试通过编译并失败时所做的那样。
+大小写**不敏感**搜索的新测试使用 `"rUsT"` 作为其查询字符串。在我们将要增加的 `search_case_insensitive` 函数中，`"rUsT"` 查询应该包含带有一个大写 R 的 `"Rust:"` 还有 `"Trust me."` 这两行，即便它们与查询的大小写都不同。这个测试现在不能编译，因为还没有定义 `search_case_insensitive` 函数。请随意增加一个总是返回空 vector 的骨架实现，正如示例 12-16 中 `search` 函数为了使测试通过编译并失败时所做的那样。
 
 ### 实现 `search_case_insensitive` 函数
 
@@ -34,7 +33,7 @@
 
 <span class="caption">示例 12-21：定义 `search_case_insensitive` 函数，它在比较查询和每一行之前将它们都转换为小写</span>
 
-首先我们将 `query` 字符串转换为小写，并将其覆盖到同名的变量中。对查询字符串调用 `to_lowercase` 是必需的，这样不管用户的查询是 `"rust"`、`"RUST"`、`"Rust"` 或者 `"rUsT"`，我们都将其当作 `"rust"` 处理并对大小写不敏感。虽然 `to_lowercase` 可以处理基本的 Unicode，但它不是 100% 准确。如果编写真实的程序的话，我们还需多做一些工作，不过这一部分是关于环境变量而不是 Unicode 的，所以这样就够了。
+首先我们将 `query` 字符串转换为小写，并将其覆盖到同名的变量中，遮蔽原来的 `query`。对查询字符串调用 `to_lowercase` 是必需的，这样不管用户的查询是 `"rust"`、`"RUST"`、`"Rust"` 或者 `"rUsT"`，我们都将其当作 `"rust"` 处理并对大小写不敏感。虽然 `to_lowercase` 可以处理基本的 Unicode，但它不是 100% 准确。如果编写真实的程序的话，我们还需多做一些工作，不过这一部分是关于环境变量而不是 Unicode 的，所以这样就够了。
 
 注意 `query` 现在是一个 `String` 而不是字符串 slice，因为调用 `to_lowercase` 是在创建新数据，而不是引用现有数据。如果查询字符串是 `"rUsT"`，这个字符串 slice 并不包含可供我们使用的小写的 `u` 或 `t`，所以必需分配一个包含 `"rust"` 的新 `String`。现在当我们将 `query` 作为一个参数传递给 `contains` 方法时，需要增加一个 & 因为 `contains` 的签名被定义为获取一个字符串 slice。
 
@@ -46,7 +45,7 @@
 {{#include ../listings/ch12-an-io-project/listing-12-21/output.txt}}
 ```
 
-好的！现在，让我们在 `run` 函数中实际调用新 `search_case_insensitive` 函数。首先，我们将在 `Config` 结构体中增加一个配置项来切换大小写敏感和大小写不敏感搜索。增加这些字段会导致编译错误，因为我们还没有在任何地方初始化这些字段：
+太好了！测试都通过了。现在，让我们在 `run` 函数中实际调用新 `search_case_insensitive` 函数。首先，我们将在 `Config` 结构体中增加一个配置项来切换大小写敏感和大小写不敏感搜索。增加这些字段会导致编译错误，因为我们还没有在任何地方初始化这些字段：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -54,7 +53,7 @@
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/lib.rs:here}}
 ```
 
-这里增加了 `ignore_case` 字符来存放一个布尔值。接着我们需要 `run` 函数检查 `case_sensitive` 字段的值并使用它来决定是否调用 `search` 函数或 `search_case_insensitive` 函数，如示例 12-22 所示。注意这还不能编译：
+这里增加了 `ignore_case` 字段来存放一个布尔值。接着我们需要 `run` 函数检查 `case_sensitive` 字段的值并使用它来决定是否调用 `search` 函数或 `search_case_insensitive` 函数，如示例 12-22 所示。注意这还不能编译：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -74,11 +73,11 @@
 
 <span class="caption">示例 12-23：检查叫做 `IGNORE_CASE` 的环境变量</span>
 
-这里创建了一个新变量 `ignore_case`。为了设置它的值，需要调用 `env::var` 函数并传递我们需要寻找的环境变量名称，`IGNORE_CASE`。`env::var` 返回一个 `Result`，它在环境变量被设置时返回包含其值的 `Ok` 成员，并在环境变量未被设置时返回 `Err` 成员。
+这里创建了一个新变量 `ignore_case`。为了设置它的值，需要调用 `env::var` 函数并传递我们需要寻找的环境变量名称，`IGNORE_CASE`。`env::var` 返回一个 `Result`，它在环境变量被设置时返回包含其值的 `Ok` 变体，并在环境变量未被设置时返回 `Err` 变体。
 
-我们使用 `Result` 的 `is_ok` 方法来检查环境变量是否被设置，这也就意味着我们 **需要** 进行一个大小写不敏感的搜索。如果`IGNORE_CASE` 环境变量没有被设置为任何值，`is_ok` 会返回 false 并将进行大小写敏感的搜索。我们并不关心环境变量所设置的 **值**，只关心它是否被设置了，所以检查 `is_ok` 而不是 `unwrap`、`expect` 或任何我们已经见过的 `Result` 的方法。
+我们使用 `Result` 的 `is_ok` 方法来检查环境变量是否被设置，这也就意味着程序应该进行一个大小写不敏感的搜索。如果 `IGNORE_CASE` 环境变量没有被设置为任何值，`is_ok` 会返回 `false` 并将进行大小写敏感的搜索。我们并不关心环境变量所设置的**值**，只关心它是否被设置了，所以检查 `is_ok` 而不是 `unwrap`、`expect` 或任何我们已经见过的 `Result` 的方法。
 
-我们将变量 `ignore_case` 的值传递给 `Config` 实例，这样 `run` 函数可以读取其值并决定是否调用 `search` 或者示例 12-22 中实现的 `search_case_insensitive`。
+我们将变量 `ignore_case` 的值传递给 `Config` 实例，这样 `run` 函数可以读取其值并决定是否调用示例 12-22 中实现的 `search_case_insensitive` 或者 `search`。
 
 让我们试一试吧！首先不设置环境变量并使用查询 `to` 运行程序，这应该会匹配任何全小写的单词 “to” 的行：
 
@@ -86,25 +85,25 @@
 {{#include ../listings/ch12-an-io-project/listing-12-23/output.txt}}
 ```
 
-看起来程序仍然能够工作！现在将 `IGNORE_CASE` 设置为 `1` 并仍使用相同的查询 `to`。
+看起来程序仍然能够工作！现在将 `IGNORE_CASE` 设置为 `1` 并仍使用相同的查询 *to* 来运行程序：
 
 ```console
-$ IGNORE_CASE=1 cargo run to poem.txt
+$ IGNORE_CASE=1 cargo run -- to poem.txt
 ```
 
 如果你使用 PowerShell，则需要用两个命令来分别设置环境变量并运行程序：
 
 ```console
-PS> $Env:IGNORE_CASE=1; cargo run to poem.txt
+PS> $Env:IGNORE_CASE=1; cargo run -- to poem.txt
 ```
 
-而这会让 `IGNORE_CASE` 的效果在当前 shell 会话中持续生效。可以通过 `Remove-Item` 命令来取消设置：
+而这会让 `IGNORE_CASE` 的效果在当前 shell 会话中持续生效。可以通过 `Remove-Item` cmdlet 来取消设置：
 
 ```console
 PS> Remove-Item Env:IGNORE_CASE
 ```
 
-这回应该得到包含可能有大写字母的 “to” 的行：
+这回应该得到包含可能有大写字母的 *to* 的行：
 
 ```console
 Are you nobody, too?
@@ -113,8 +112,8 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-好极了，我们也得到了包含 “To” 的行！现在 `minigrep` 程序可以通过环境变量控制进行大小写不敏感搜索了。现在你知道了如何管理由命令行参数或环境变量设置的选项了！
+好极了，我们也得到了包含 *to* 的行！现在 `minigrep` 程序可以通过环境变量控制进行大小写不敏感搜索了。现在你知道了如何管理由命令行参数或环境变量设置的选项了！
 
-一些程序允许对相同配置同时使用参数 **和** 环境变量。在这种情况下，程序来决定参数和环境变量的优先级。作为一个留给你的测试，尝试通过一个命令行参数或一个环境变量来控制大小写敏感搜索。并在运行程序时遇到矛盾值时决定命令行参数和环境变量的优先级。
+一些程序允许对相同配置同时使用参数**和**环境变量。在这种情况下，程序来决定参数和环境变量的优先级。作为一个留给你的测试，尝试通过一个命令行参数或一个环境变量来控制大小写敏感搜索。并在运行程序时遇到矛盾值时决定命令行参数和环境变量的优先级。
 
-`std::env` 模块还包含了更多处理环境变量的实用功能；请查看官方文档来了解其可用的功能。
+`std::env` 模块还包含了更多处理环境变量的实用功能；请查看其文档来了解其可用的功能。
