@@ -266,12 +266,12 @@ Rust 既不能避免一个 trait 与另一个 trait 拥有相同名称的方法�
 
 `Display` 的实现使用 `self.0` 来访问其内部的 `Vec<T>`，因为 `Wrapper` 是元组结构体而 `Vec<T>` 是结构体总位于索引 0 的项。接着就可以使用 `Wrapper` 中 `Display` 的功能了。
 
-这种做法的缺点在于因为 `Wrapper` 是一个新类型，它并不具备其所封装值的方法。必须直接在 `Wrapper` 上实现 `Vec<T>` 的所有方法，这样就可以代理到`self.0` 上，这就允许我们完全像 `Vec<T>` 那样对待 `Wrapper`。如果希望新类型拥有其内部类型的每一个方法，为封装类型实现 `Deref` trait（第十五章 [“通过 `Deref` trait 将智能指针当作常规引用处理”][smart-pointer-deref] 部分讨论过）并返回其内部类型是一种解决方案。如果不希望封装类型拥有所有内部类型的方法 —— 比如为了限制封装类型的行为 —— 则只需自行实现所需的方法即可。
+这种做法的缺点在于因为 `Wrapper` 是一个新类型，它并不具备其所封装值的方法。必须直接在 `Wrapper` 上实现 `Vec<T>` 的所有方法，这样就可以代理到`self.0` 上，这就允许我们完全像 `Vec<T>` 那样对待 `Wrapper`。如果希望新类型拥有其内部类型的每一个方法，为封装类型实现 `Deref` trait（第十五章 [“使用 `Deref` Trait 将智能指针当作常规引用处理”][smart-pointer-deref] 部分讨论过）并返回其内部类型是一种解决方案。如果不希望封装类型拥有所有内部类型的方法 —— 比如为了限制封装类型的行为 —— 则只需自行实现所需的方法即可。
 
 甚至当不涉及 trait 时 newtype 模式也很有用。现在让我们将关注点转移到一些与 Rust 类型系统交互的高级方式上来吧。
 
 [newtype]: ch20-02-advanced-traits.html#使用-newtype-模式在外部类型上实现外部-trait
 [implementing-a-trait-on-a-type]: ch10-02-traits.html#为类型实现-trait
 [traits-defining-shared-behavior]: ch10-02-traits.html#trait定义共同行为
-[smart-pointer-deref]: ch15-02-deref.html#通过实现-deref-trait-将某类型像引用一样处理
+[smart-pointer-deref]: ch15-02-deref.html#使用-deref-trait-将智能指针当作常规引用处理
 [tuple-structs]: ch05-01-defining-structs.html#使用没有命名字段的元组结构体来创建不同的类型
