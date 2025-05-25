@@ -1,12 +1,11 @@
 ## 改进 I/O 项目
 
-> [ch13-03-improving-our-io-project.md](https://github.com/rust-lang/book/blob/main/src/ch13-03-improving-our-io-project.md)
-> <br>
-> commit 2cd1b5593d26dc6a03c20f8619187ad4b2485552
+<!-- https://github.com/rust-lang/book/blob/main/src/ch13-03-improving-our-io-project.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
 
 掌握了这些关于迭代器的新知识后，我们可以使用迭代器来改进第十二章中 I/O 项目的实现来使得代码更简洁明了。接下来，让我们看看迭代器如何改进 `Config::build` 函数和 `search` 函数的实现。
 
-### 使用迭代器去除 `clone`
+### 使用迭代器消除 `clone`
 
 在示例 12-6 中，我们增加了一些代码获取一个 `String` 类型的 slice 并创建一个 `Config` 结构体的实例，它们索引 slice 中的值并克隆这些值以便 `Config` 结构体可以拥有这些值。在示例 13-17 中重现了第十二章结尾示例 12-23 中 `Config::build` 函数的实现：
 
@@ -20,7 +19,7 @@
 
 当时我们说过不必担心低效的 `clone` 调用，因为我们以后会将其移除。好吧，就是现在！
 
-起初这里需要 `clone` 的原因是参数 `args` 中有一个 `String` 元素的 slice，而 `build` 函数并不拥有 `args`。为了能够返回 `Config` 实例的所有权，我们需要克隆 `Config` 中字段 `query` 和 `file_path` 的值，这样 `Config` 实例就能拥有这些值。
+起初这里需要 `clone` 的原因是参数 `args` 中有一个 `String` 元素的 slice，而 `build` 函数并不拥有 `args`。为了能够返回 `Config` 实例的所有权，我们不得不克隆 `Config` 中字段 `query` 和 `file_path` 的值，这样 `Config` 实例就能拥有这些值。
 
 在学习了迭代器之后，我们可以将 `build` 函数改为获取一个有所有权的迭代器作为参数，而不是借用 slice。我们将使用迭代器功能代替之前检查 slice 长度和索引特定位置的代码。这样可以更清晰地表达 `Config::build` 函数的操作，因为迭代器会负责访问这些值。
 
@@ -60,11 +59,11 @@
 
 `env::args` 函数的标准库文档显示，它返回的迭代器的类型为 `std::env::Args`，并且这个类型实现了 `Iterator` trait 并返回 `String` 值。
 
-我们已经更新了 `Config::build` 函数的签名，因此参数 `args` 有一个带有 trait bounds `impl Iterator<Item = String>` 的泛型类型，而不是 `&[String]`。这里用到了第十章 [“trait 作为参数”][impl-trait] 部分讨论过的 `impl Trait` 语法，这意味着 `args` 可以是任何实现了 `Iterator` trait 并返回 `String` 项（item）的类型。
+我们已经更新了 `Config::build` 函数的签名，因此参数 `args` 有一个带有 trait bound `impl Iterator<Item = String>` 的泛型类型，而不是 `&[String]`。这里用到了第十章[“trait 作为参数”][impl-trait]部分讨论过的 `impl Trait` 语法，这意味着 `args` 可以是任何实现了 `Iterator` trait 并返回 `String` 项（item）的类型。
 
 由于我们获取了 `args` 的所有权，并且将通过迭代来修改 `args`，因此我们可以在 `args` 参数的声明中添加 `mut` 关键字，使其可变。
 
-#### 使用 `Iterator` trait 代替索引
+#### 使用 `Iterator` trait 方法代替索引
 
 接下来，我们将修改 `Config::build` 的函数体。因为 `args` 实现了 `Iterator` trait，因此我们知道可以对其调用 `next` 方法！示例 13-20 更新了示例 12-23 中的代码，以使用 `next` 方法：
 
@@ -76,9 +75,9 @@
 
 <span class="caption">示例 13-20：修改 `Config::build` 的函数体来使用迭代器方法</span>
 
-请记住 `env::args` 返回值的第一个值是程序的名称。我们希望忽略它并获取下一个值，所以首先调用 `next` 且不对其返回值做任何操作。然后，我们再次调用 `next` 来获取要放入 `Config` 结构体的 `query` 字段的值。如果 `next` 返回 `Some`，使用 `match` 来提取其值。如果它返回 `None`，则意味着没有提供足够的参数并通过 `Err` 值提早返回。我们对对 `file_path` 的值也进行同样的操作。
+请记住 `env::args` 返回值的第一个值是程序的名称。我们希望忽略它并获取下一个值，所以首先调用 `next` 且不对其返回值做任何操作。然后，我们再次调用 `next` 来获取要放入 `Config` 结构体的 `query` 字段的值。如果 `next` 返回 `Some`，使用 `match` 来提取其值。如果它返回 `None`，则意味着没有提供足够的参数并通过 `Err` 值提早返回。我们对 `file_path` 的值也进行同样的操作。
 
-### 使用迭代器适配器来使代码更简明
+### 使用迭代器适配器让代码更清晰
 
 I/O 项目中其他可以利用迭代器的地方是 `search` 函数，示例 13-21 中重现了第十二章结尾示例 12-19 中此函数的定义：
 
@@ -90,7 +89,7 @@ I/O 项目中其他可以利用迭代器的地方是 `search` 函数，示例 13
 
 <span class="caption">示例 13-21：示例 12-19 中 `search` 函数的定义</span>
 
-可以通过使用迭代器适配器方法来编写更简明的代码。这样做还可以避免使用一个可变的中间 `results` vector。函数式编程风格倾向于最小化可变状态的数量来使代码更简洁。去除可变状态可能会使未来的并行搜索优化变得更容易，因为我们不必管理对 `results` vector 的并发访问。示例 13-22 展示了这一变化：
+可以通过使用迭代器适配器方法来编写更简明的代码。这样做还可以避免使用一个可变的中间 `results` vector。函数式编程风格倾向于最小化可变状态的数量来使代码更清晰。去除可变状态可能会使未来的并行搜索优化变得更容易，因为我们不必管理对 `results` vector 的并发访问。示例 13-22 展示了这一变化：
 
 <span class="filename">文件名：src/lib.rs</span>
 

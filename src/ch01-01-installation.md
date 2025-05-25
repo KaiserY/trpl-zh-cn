@@ -1,7 +1,7 @@
 ## 安装
 
-> [ch01-01-installation.md](https://github.com/rust-lang/book/blob/main/src/ch01-01-installation.md) <br>
-> commit d5eb2f7a8e9c6f51b4478f9cd46f55448e2ca2c1
+<!-- https://github.com/rust-lang/book/blob/main/src/ch01-01-installation.md -->
+<!-- a4f94174155ff413f23af936c3a31ab71f11cb6f -->
 
 第一步是安装 Rust。我们会通过 `rustup` 下载 Rust，这是一个管理 Rust 版本和相关工具的命令行工具。下载时需要联网。
 
@@ -11,7 +11,7 @@
 
 > ### 命令行标记
 >
-> 本章和全书中，我们会展示一些在终端中使用的命令。所有需要输入到终端的行都以 `$` 开头。你不需要输入`$`字符；这里显示的`$`字符表示命令行提示符，仅用于提示每行命令的起点。不以 `$` 起始的行通常展示前一个命令的输出。另外，PowerShell 专用的示例会采用 `>` 而不是 `$`。
+> 本章和全书中，我们会展示一些在终端中使用的命令。所有需要输入到终端的行都以 `$` 开头。你不需要输入 `$` 字符；这里显示的 `$` 字符表示命令行提示符，仅用于提示每行命令的起点。不以 `$` 起始的行通常展示前一个命令的输出。另外，PowerShell 专用的示例会采用 `>` 而不是 `$`。
 
 ### 在 Linux 或 macOS 上安装 `rustup`
 
@@ -27,7 +27,7 @@ $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 Rust is installed now. Great!
 ```
 
-另外，你还需要一个 *链接器（linker）*，这是 Rust 用来将其编译的输出连接到一个文件中的程序。很可能你已经有一个了。如果你遇到了链接器错误，请尝试安装一个 C 编译器，它通常包括一个链接器。C 编译器也很有用，因为一些常见的 Rust 包依赖于 C 代码，因此需要安装一个 C 编译器。
+另外，你还需要一个 *链接器（linker）*，这是 Rust 用来将其编译的输出连接成一个文件中的程序。很可能你已经有一个了。如果你遇到了链接器错误，请尝试安装一个 C 编译器，它通常包括一个链接器。C 编译器也很有用，因为一些常见的 Rust 包依赖于 C 代码，因此需要安装一个 C 编译器。
 
 在 macOS 上，你可以通过运行以下命令获得 C 语言编译器：
 
@@ -57,11 +57,7 @@ $ rustc --version
 rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
-如果看到了这样的信息，就说明 Rust 已经安装成功了！
-
-> 译者：恭喜入坑！（此处应该有掌声！）
-
-如果没看到，请按照下面说明的方法检查 Rust 是否在您的 `%PATH%` 系统变量中。
+如果看到了这样的信息，就说明 Rust 已经安装成功了！如果没看到，请按照下面说明的方法检查 Rust 是否在您的 `%PATH%` 系统变量中。
 
 在 Windows CMD 中，请使用命令：
 
@@ -85,7 +81,7 @@ $ echo $PATH
 
 ## 更新与卸载
 
-通过 `rustup` 安装了 Rust 之后，更新到最新版本就很简单了，只需要在您对应的命令行中运行如下更新脚本：
+通过 `rustup` 安装了 Rust 之后，更新到最新版本就很简单了。只需要在您对应的命令行中运行如下更新脚本：
 
 ```console
 $ rustup update
@@ -103,7 +99,24 @@ $ rustup self uninstall
 
 任何时候，如果你拿不准标准库中的类型或函数的用途和用法，请查阅应用程序接口（application programming interface，API）文档！
 
+### 文本编辑器和集成开发环境（Integrated Development Environments, IDE）
+
+本书不会假设你使用何种工具来编写 Rust 代码。几乎任何文本编辑器都可以搞定！然而，很多文本编辑器和集成开发环境（IDE）内置了 Rust 支持。你总是可以在 Rust 官网的[工具页面][tools]找到很多相对流行的编辑器和 IDE 列表。
+
+### 离线使用本书
+
+在很多示例中，我们会使用多于标准库的 Rust 包。为了处理这些示例，要么需要网络连接要么需要提前下载这些依赖。为了提前下载这些依赖，可以运行如下命令。（我们稍后会详细解释 `cargo` 是什么以及这每一个命令在干什么。）
+
+```console
+$ cargo new get-dependencies
+$ cd get-dependencies
+$ cargo add rand@0.8.5 trpl@0.2.0
+```
+
+这会缓存这些包的下载所以之后你不用再下载它们。一旦你运行了这些命令，就可以在本书之后所有的 `cargo` 命令中使用 `--offline` 参数来使用这些缓存的版本而不是尝试使用网络。
+
 [otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
 [install]: https://www.rust-lang.org/tools/install
 [msvc]: https://rust-lang.github.io/rustup/installation/windows-msvc.html
 [community]: https://www.rust-lang.org/community
+[tools]: https://www.rust-lang.org/tools

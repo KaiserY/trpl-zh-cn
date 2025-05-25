@@ -1,10 +1,9 @@
 ## 测试的组织结构
 
-> [ch11-03-test-organization.md](https://github.com/rust-lang/book/blob/main/src/ch11-03-test-organization.md)
-> <br>
-> commit 654d8902d380dbb8dd94ed2e548dfc0aa80c07cb
+<!-- https://github.com/rust-lang/book/blob/main/src/ch11-03-test-organization.md -->
+<!-- commit 5d22a358fb2380aa3f270d7b6269b67b8e44849e -->
 
-本章一开始就提到，测试是一个复杂的概念，而且不同的开发者也采用不同的技术和组织。Rust 社区倾向于根据测试的两个主要分类来考虑问题：**单元测试**（*unit tests*）与 **集成测试**（*integration tests*）。单元测试倾向于更小而更集中，在隔离的环境中一次测试一个模块，或者是测试私有接口。而集成测试对于你的库来说则完全是外部的。它们与其他外部代码一样，通过相同的方式使用你的代码，只测试公有接口而且每个测试都有可能会测试多个模块。
+本章一开始就提到，测试是一个复杂的概念，而且不同的开发者也采用不同的术语和组织。Rust 社区倾向于根据测试的两个主要分类来考虑问题：**单元测试**（*unit tests*）与**集成测试**（*integration tests*）。单元测试倾向于更小而更集中，在隔离的环境中一次测试一个模块，并且可以测试私有接口。而**集成测试**对于你的库来说则完全是外部的。它们与其他外部代码一样，通过相同的方式使用你的代码，只测试公有接口而且每个测试都有可能会测试多个模块。
 
 为了保证你的库能够按照你的预期运行，从独立和整体的角度编写这两类测试都是非常重要的。
 
@@ -24,11 +23,11 @@
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-01/src/lib.rs}}
 ```
 
-上述代码就是自动生成的测试模块。`cfg` 属性代表*配置*（*configuration*） ，它告诉 Rust，接下来的项，只有在给定特定配置选项时，才会被包含。在这种情况下，配置选项是 `test`，即 Rust 所提供的用于编译和运行测试的配置选项。通过使用 `cfg` 属性，Cargo 只会在我们主动使用 `cargo test` 运行测试时才编译测试代码。这包括测试模块中可能存在的帮助函数，以及标注为 `#[test]` 的函数。
+上述代码就是自动生成的测试模块。`cfg` 属性代表**配置**（*configuration*），它告诉 Rust 接下来的项只有在给定特定配置选项时，才会被包含。在这种情况下，配置选项是 `test`，即 Rust 所提供的用于编译和运行测试的配置选项。通过使用 `cfg` 属性，Cargo 只会在我们主动使用 `cargo test` 运行测试时才编译测试代码。这包括测试模块中可能存在的辅助函数，以及标注为 `#[test]` 的函数。
 
 #### 测试私有函数
 
-测试社区中一直存在关于是否应该对私有函数直接进行测试的论战，而在其他语言中想要测试私有函数是一件困难的，甚至是不可能的事。不过无论你坚持哪种测试意识形态，Rust 的私有性规则确实允许你测试私有函数。考虑示例 11-12 中带有私有函数 `internal_adder` 的代码：
+测试社区中一直存在关于是否应该对私有函数直接进行测试的论战，而在其他语言中想要测试私有函数是一件困难的，甚至是不可能的事。不过无论你坚持哪种测试意识形态，Rust 的私有性规则确实允许你测试私有函数。考虑示例 11-12 中带有私有函数 `internal_adder` 的代码。
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -38,7 +37,7 @@
 
 <span class="caption">示例 11-12：测试私有函数</span>
 
-注意 `internal_adder` 函数并没有标记为 `pub`。测试也不过是 Rust 代码，同时 `tests` 也仅仅是另一个模块。正如 [“路径用于引用模块树中的项”][paths] 部分所说，子模块的项可以使用其上级模块的项。在测试中，我们通过 `use super::*` 将 `test` 模块的父模块的所有项引入了作用域，接着测试调用了 `internal_adder`。如果你并不认为应该测试私有函数，Rust 也不会强迫你这么做。
+注意 `internal_adder` 函数并没有标记为 `pub`。测试也不过是 Rust 代码，同时 `tests` 也仅仅是另一个模块。正如[“路径用于引用模块树中的项”][paths] 部分所说，子模块的项可以使用其上级模块的项。在测试中，我们通过 `use super::*` 将 `tests` 模块的父模块的所有项引入了作用域，接着测试调用了 `internal_adder`。如果你并不认为应该测试私有函数，Rust 也不会强迫你这么做。
 
 ### 集成测试
 
@@ -55,7 +54,7 @@ adder
 ├── Cargo.lock
 ├── Cargo.toml
 ├── src
-│   └── lib.rs
+│   └── lib.rs
 └── tests
     └── integration_test.rs
 ```
@@ -70,7 +69,7 @@ adder
 
 <span class="caption">示例 11-13：一个 `adder` crate 中函数的集成测试</span>
 
-因为每一个 `tests` 目录中的测试文件都是完全独立的 crate，所以需要在每一个文件中导入库。为此与单元测试不同，我们需要在文件顶部添加 `use adder`。
+因为每一个 *tests* 目录中的测试文件都是完全独立的 crate，所以需要将库引入到每个测试 crate 的作用域中。为此与单元测试不同，我们需要在文件顶部添加 `use adder::add_two;`，这在单元测试中是不需要的。
 
 并不需要将 *tests/integration_test.rs* 中的任何代码标注为 `#[cfg(test)]`。 `tests` 文件夹在 Cargo 中是一个特殊的文件夹，Cargo 只会在运行 `cargo test` 时编译这个目录中的文件。现在就运行 `cargo test` 试试：
 
@@ -92,13 +91,13 @@ adder
 {{#include ../listings/ch11-writing-automated-tests/output-only-05-single-integration/output.txt}}
 ```
 
-这个命令只运行了 *tests* 目录中我们指定的文件 `integration_test.rs` 中的测试。
+这个命令只运行 *tests/integration_test.rs* 文件中的测试。
 
 #### 集成测试中的子模块
 
-随着集成测试的增加，你可能希望在 `tests` 目录创建更多文件以便更好地组织它们，例如根据测试的功能来将测试分组。如前所述，*tests* 目录中的每一个文件都被编译成一个单独的 crate，这有助于创建独立的作用域，以便更接近于最终用户使用你的 crate 的方式。但这意味着，*tests* 目录中的文件的行为，和你在第七章中学习如何将代码分为模块和文件时，学到的 *src* 中的文件的行为不一样。
+随着集成测试的增加，你可能希望在 `tests` 目录创建更多文件以便更好地组织它们；例如根据测试的功能来将测试分组。如前所述，*tests* 目录中的每一个文件都被编译成一个单独的 crate，这有助于创建独立的作用域，以便更接近于最终用户使用你的 crate 的方式。但这意味着，*tests* 目录中的文件的行为，和你在第七章中学习如何将代码分为模块和文件时，学到的 *src* 中的文件的行为不一样。
 
-当你有一些在多个集成测试文件都会用到的帮助函数，而你尝试按照第七章 [“将模块移动到其他文件”][separating-modules-into-files] 部分的步骤将它们提取到一个通用的模块中时， *tests* 目录中文件行为的不同就会凸显出来。例如，如果我们可以创建 一个*tests/common.rs* 文件并创建一个名叫 `setup` 的函数，我们希望这个函数能被多个测试文件的测试函数调用：
+当你有一些在多个集成测试文件都会用到的帮助函数，而你尝试按照第七章[“将模块移动到其他文件”][separating-modules-into-files]部分的步骤将它们提取到一个通用的模块中时，*tests* 目录中文件行为的不同就会凸显出来。例如，如果我们在 *tests/common.rs* 中创建一个名为 `setup` 的函数，并希望在多个测试文件的测试函数中调用它，就可以在 `setup` 中添加想要复用的代码：
 
 <span class="filename">文件名：tests/common.rs</span>
 
@@ -112,24 +111,22 @@ adder
 {{#include ../listings/ch11-writing-automated-tests/no-listing-12-shared-test-code-problem/output.txt}}
 ```
 
-我们并不想要`common` 出现在测试结果中显示 `running 0 tests` 。我们只是希望其能被其他多个集成测试文件中调用罢了。
-
-为了不让 `common` 出现在测试输出中，我们将创建 *tests/common/mod.rs* ，而不是创建 *tests/common.rs* 。现在项目目录结构看起来像这样：
+我们并不想要 `common` 出现在测试结果中显示 `running 0 tests`。我们只是想与其他集成测试文件共享一些代码而已。为了不让 `common` 出现在测试输出中，我们将创建 *tests/common/mod.rs*，而不是创建 *tests/common.rs* 。现在项目目录结构看起来像这样：
 
 ```text
 ├── Cargo.lock
 ├── Cargo.toml
 ├── src
-│   └── lib.rs
+│   └── lib.rs
 └── tests
     ├── common
-    │   └── mod.rs
+    │   └── mod.rs
     └── integration_test.rs
 ```
 
-这是一种老的命名规范，正如第七章 [“另一种文件路径”][alt-paths] 中提到的 Rust 仍然理解它们。这样命名告诉 Rust 不要将 `common` 看作一个集成测试文件。将 `setup` 函数代码移动到 *tests/common/mod.rs* 并删除 *tests/common.rs* 文件之后，测试输出中将不会出现这一部分。*tests* 目录中的子目录不会被作为单独的 crate 编译或作为一个测试结果部分出现在测试输出中。
+这是一种老的命名规范，正如第七章[“另一种文件路径”][alt-paths]中提到的 Rust 仍然理解它们。这样命名告诉 Rust 不要将 `common` 看作一个集成测试文件。将 `setup` 函数代码移动到 *tests/common/mod.rs* 并删除 *tests/common.rs* 文件之后，测试输出中将不会出现这一部分。*tests* 目录中的子目录不会被作为单独的 crate 编译或作为一个测试结果部分出现在测试输出中。
 
-一旦拥有了 *tests/common/mod.rs*，就可以将其作为模块以便在任何集成测试文件中使用。这里是一个 *tests/integration_test.rs* 中调用 `setup` 函数的 `it_adds_two` 测试的例子：
+一旦创建了 *tests/common/mod.rs*，就可以将其作为模块以便在任何集成测试文件中使用。这里是一个 *tests/integration_test.rs* 中调用 `setup` 函数的 `it_adds_two` 测试的示例：
 
 <span class="filename">文件名：tests/integration_test.rs</span>
 
@@ -141,15 +138,15 @@ adder
 
 #### 二进制 crate 的集成测试
 
-如果项目是二进制 crate 并且只包含 *src/main.rs* 而没有 *src/lib.rs*，这样就不可能在 *tests* 目录创建集成测试并使用 `extern crate` 导入 *src/main.rs* 中定义的函数。只有库 crate 才会向其他 crate 暴露了可供调用和使用的函数；二进制 crate 只意在单独运行。
+如果项目是二进制 crate 并且只包含 *src/main.rs* 而没有 *src/lib.rs*，这样就不可能在 *tests* 目录创建集成测试并也无法通过 `use` 语句将 *src/main.rs* 中定义的函数引入作用域。只有库 crate 才会向其他 crate 暴露了可供调用和使用的函数；二进制 crate 只意在单独运行。
 
-这就是许多 Rust 二进制项目使用一个简单的 *src/main.rs* 调用 *src/lib.rs* 中的逻辑的原因之一。因为通过这种结构，集成测试 **就可以** 通过 `extern crate` 测试库 crate 中的主要功能了，而如果这些重要的功能没有问题的话，*src/main.rs* 中的少量代码也就会正常工作且不需要测试。
+这就是许多 Rust 二进制项目使用一个简单的 *src/main.rs* 调用 *src/lib.rs* 中的逻辑的原因之一。因为通过这种结构，集成测试**就可以**通过 `use` 来测试库 crate 中的重要功能了。而如果这些重要的功能没有问题的话，*src/main.rs* 中的少量代码也就会正常工作且不需要测试。
 
 ## 总结
 
-Rust 的测试功能提供了一个确保即使你改变了函数的实现方式，也能继续以期望的方式运行的途径。单元测试独立地验证库的不同部分，也能够测试私有函数实现细节。集成测试则检查多个部分是否能结合起来正确地工作，并像其他外部代码那样测试库的公有 API。即使 Rust 的类型系统和所有权规则可以帮助避免一些 bug，不过测试对于减少代码中不符合期望行为的逻辑 bug 仍然是很重要的。
+Rust 的测试功能提供了一个确保即使你改变了函数的实现方式，也能继续以期望的方式运行的途径。单元测试独立地验证库的不同部分，也能够测试私有函数实现细节。集成测试则检查多个部分是否能结合起来正确地工作，并像其他外部代码那样测试库的公有 API。即使 Rust 的类型系统和所有权规则可以帮助避免某些类型的 bug，不过测试对于减少代码中不符合期望行为的逻辑 bug 仍然是很重要的。
 
-让我们将本章和其他之前章节所学的知识组合起来，在下一章一起编写一个项目！
+让我们将本章和其前面各章所学的知识组合起来，在下一章一起编写一个项目！
 
 [paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
 [separating-modules-into-files]:

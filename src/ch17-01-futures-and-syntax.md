@@ -1,8 +1,7 @@
 ## Futures 和 async 语法
 
-> [ch17-01-futures-and-syntax.md](https://github.com/rust-lang/book/blob/main/src/ch17-01-futures-and-syntax.md)
-> <br>
-> commit e95efa05706c5c4309df9ed47d5e91d8ed342b7d
+<!-- https://github.com/rust-lang/book/blob/main/src/ch17-01-futures-and-syntax.md -->
+<!-- commit e95efa05706c5c4309df9ed47d5e91d8ed342b7d -->
 
 Rust 异步编程的关键元素是 *futures* 和 Rust 的 `async` 与 `await` 关键字。
 
@@ -51,7 +50,7 @@ $ cargo add trpl
 
 在示例 17-1 中，我们定义了一个名为 `page_title` 的函数，并使用了 `async` 关键字标记。接着我们使用 `trpl::get` 函数来获取传入的任意 URL，然后使用 `await` 关键字来等待响应。接着我们调用其 `text` 方法来获取响应的文本，这里再一次使用 `await` 关键字等待。这两个步骤都是异步的。对于 `get` 来说，我们需要等待服务器发送回其响应的第一部分，这会包含 HTTP 头（headers）、cookies 等。这部分响应可以独立于响应体发送。特别是在响应体非常大时候，接收完整响应可能会花费一些时间。因此我们不得不等待响应 *整体* 返回，所以 `text` 方法也是异步。
 
-我们必须显示地等待这两个 futures，因为 Rust 中的 futures 是 *惰性*（*lazy*）的：在你使用 `await` 请求之前它们不会执行任何操作。（事实上，如果你不使用一个 futures，Rust 会显示一个编译警告）这应该会让你想起[之前第十三章][iterators-lazy]关于迭代器的讨论。直到你调用迭代器的 `next` 方法（直接调用或者使用 `for` 循环或者类似 `map` 这类在底层使用 `next` 的方法）之前它们什么也不会做。对于 futures 来说，同样的基本理念也是适用的：除非你显式地请求，否则它们不会执行。惰性使得 Rust 可以避免提前运行异步代码，直到真正需要时才执行。
+我们必须显式地等待这两个 futures，因为 Rust 中的 futures 是 *惰性*（*lazy*）的：在你使用 `await` 请求之前它们不会执行任何操作。（事实上，如果你不使用一个 futures，Rust 会显示一个编译警告）这应该会让你想起[之前第十三章][iterators-lazy]关于迭代器的讨论。直到你调用迭代器的 `next` 方法（直接调用或者使用 `for` 循环或者类似 `map` 这类在底层使用 `next` 的方法）之前它们什么也不会做。对于 futures 来说，同样的基本理念也是适用的：除非你显式地请求，否则它们不会执行。惰性使得 Rust 可以避免提前运行异步代码，直到真正需要时才执行。
 
 > 注意：这不同于上一章节中 `thread::spawn` 的行为，当时传递给另一个线程的闭包会立即开始运行。这也与许多其他语言处理异步的方式不同！但对于 Rust 而言，这一点非常重要。稍后我们会解释原因。
 
@@ -134,7 +133,7 @@ error[E0752]: `main` function is not allowed to be `async`
 
 `main` 不能标记为 `async` 的原因是异步代码需要一个 *运行时*：即一个管理执行异步代码细节的 Rust crate。一个程序的 `main` 函数可以 *初始化* 一个运行时，但是其 *自身* 并不是一个运行时。（稍后我们会进一步解释原因。）每一个执行异步代码的 Rust 程序必须至少有一个设置运行时并执行 futures 的地方。
 
-大部分支持异步的语言会打包一个运行时在语言中。Rust 则不是，相这里有很多不同的异步运行时，每一个都有适合其目标的权衡取舍。例如，一个拥有很多核心和大量内存的高吞吐 web server 与一个单核、少量内存并且没有堆分配能力的微控制器相比有着截然不同的需求。提供这些运行时的 crate 通常也提供了例如文件或者网络 IO 这类常用功能的异步版本。
+大部分支持异步的语言会打包一个运行时在语言中，Rust 则不是。相反，这里有很多不同的异步运行时，每一个都有适合其目标的权衡取舍。例如，一个拥有很多核心和大量内存的高吞吐 web server 与一个单核、少量内存并且没有堆分配能力的微控制器相比有着截然不同的需求。提供这些运行时的 crate 通常也提供了例如文件或者网络 IO 这类常用功能的异步版本。
 
 从这里到本章余下部分，我们会使用 `trpl` crate 的 `run` 函数，它获取一个 future 作为参数并运行到结束。在内部，调用 `run` 会设置一个运行时来运行传递的 future。一旦 future 完成，`run` 返回 future 返回的任何值。
 
@@ -155,7 +154,11 @@ error[E0752]: `main` function is not allowed to be `async`
 当我们运行代码，我们会得到最初预想的行为：
 
 ```console
-{{#include ../listings/ch17-async-await/listing-17-04/output.txt}}
+$ cargo run -- https://www.rust-lang.org
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running `target/debug/async_await 'https://www.rust-lang.org'`
+The title for https://www.rust-lang.org was
+            Rust Programming Language
 ```
 
 我们终于有了一些可以正常工作的异步代码！现在它们可以成功编译并运行。在我们添加代码让两个网址进行竞争之前，让我们简要地回顾一下 future 是如何工作的。

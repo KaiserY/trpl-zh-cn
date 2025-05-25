@@ -1,8 +1,7 @@
 ## 并发与 async
 
-> [ch17-02-concurrency-with-async.md](https://github.com/rust-lang/book/blob/main/src/ch17-02-concurrency-with-async.md)
-> <br>
-> commit 62d441060d66f9a1c3d3cdfffa8eed40f817d1aa
+<!-- https://github.com/rust-lang/book/blob/main/src/ch17-02-concurrency-with-async.md -->
+<!-- commit 62d441060d66f9a1c3d3cdfffa8eed40f817d1aa -->
 
 在这一部分，我们将使用异步来应对一些与第十六章中通过线程解决的相同的并发问题。因为之前我们已经讨论了很多关键理念了，这一部分我们会专注于线程与 future 的区别。
 
@@ -130,7 +129,7 @@ hi number 9 from the first task!
 
 - 去掉一个或者两个循环外的异步代码块。
 - 在定义两个异步代码块后立刻 await 它们。
-- 直将第一个循环封装进异步代码块，并在第二个循环体之后 await 作为结果的 future。
+- 只将第一个循环封装进异步代码块，并在第二个循环体之后 await 作为结果的 future。
 
 作为额外的挑战，看看你能否在运行代码 *之前* 想出每个情况下的输出！
 
@@ -174,7 +173,7 @@ hi number 9 from the first task!
 
 除了发送消息之外，我们还需要接收它们。在这个例子中我们可以手动接收，就是调用四次 `rx.recv().await`，因为我们知道进来了多少条消息。然而，在现实世界中，我们通常会等待 *未知* 数量的消息。这时我们需要一直等待直到可以确认没有更多消息了为止。
 
-在示例 16-10 中，我们使用了 `for` 循坏来处理从异步信道接收的所有消息。然而，Rust 目前还没有在 *异步* 序列上编写 `for` 循环的方法。取而代之的是，我们需要一个我们还没有见过的新循环类型，即 `while let` 条件循环。`while let` 循环是我们在第六章中见过的 `if let` 结构的循环版本。只要其指定的模式持续匹配循环就会一直执行。
+在示例 16-10 中，我们使用了 `for` 循环来处理从异步信道接收的所有消息。然而，Rust 目前还没有在 *异步* 序列上编写 `for` 循环的方法。取而代之的是，我们需要一个我们还没有见过的新循环类型，即 `while let` 条件循环。`while let` 循环是我们在第六章中见过的 `if let` 结构的循环版本。只要其指定的模式持续匹配循环就会一直执行。
 
 `rx.recv` 调用产生一个 `Future`，我们会 await 它。运行时会暂停 `Future` 直到它就绪。一旦消息到达，future 会解析为 `Some(message)`，每次消息到达时都会如此。。当信道关闭时，不管是否有 *任何* 消息到达，future 都会解析为 `None` 来表明没有更多的值了，我们也就应该停止轮询，也就是停止等待。
 

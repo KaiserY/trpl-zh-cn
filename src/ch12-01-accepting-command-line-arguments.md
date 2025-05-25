@@ -1,10 +1,9 @@
 ## 接受命令行参数
 
-> [ch12-01-accepting-command-line-arguments.md](https://github.com/rust-lang/book/blob/main/src/ch12-01-accepting-command-line-arguments.md)
-> <br>
-> commit 02a168ed346042f07010f8b65b4eeed623dd31d1
+<!-- https://github.com/rust-lang/book/blob/main/src/ch12-01-accepting-command-line-arguments.md -->
+<!-- commit 8880eacd339876c9a53d606720176bb02a4e5b3f -->
 
-一如既往使用 `cargo new` 新建一个项目，我们称之为 `minigrep` 以便与可能已经安装在系统上的 `grep` 工具相区别：
+一如既往使用 `cargo new` 新建一个项目，我们称之为 `minigrep` 以便与可能已经安装在系统上的 `grep` 工具相区分。
 
 ```console
 $ cargo new minigrep
@@ -12,19 +11,19 @@ $ cargo new minigrep
 $ cd minigrep
 ```
 
-第一个任务是让 `minigrep` 能够接受两个命令行参数：文件路径和要搜索的字符串。也就是说我们希望能够使用 `cargo run`、要搜索的字符串和被搜索的文件的路径来运行程序，像这样：
+第一个任务是让 `minigrep` 能够接受两个命令行参数：文件路径和要搜索的字符串。也就是说我们希望能够使用 `cargo run`，两个连字符来表明后面的参数是要传递给程序而不是 `cargo`，要搜索的字符串和被搜索的文件的路径来运行程序，像这样：
 
 ```console
 $ cargo run -- searchstring example-filename.txt
 ```
 
-现在 `cargo new` 生成的程序忽略任何传递给它的参数。[Crates.io](https://crates.io/) 上有一些现成的库可以帮助我们接受命令行参数，不过我们正在学习这些内容，让我们自己来实现一个。
+现在 `cargo new` 生成的程序无法处理传递给它的参数。[Crates.io](https://crates.io/) 上有一些现成的库可以帮助我们接受命令行参数，不过我们正在学习这一概念，就让我们自己实现这个功能。
 
 ### 读取参数值
 
-为了确保 `minigrep` 能够获取传递给它的命令行参数的值，我们需要一个 Rust 标准库提供的函数 `std::env::args`。这个函数返回一个传递给程序的命令行参数的 **迭代器**（*iterator*）。我们会在 [第十三章][ch13] 全面的介绍它们。但是现在只需理解迭代器的两个细节：迭代器生成一系列的值，可以在迭代器上调用 `collect` 方法将其转换为一个集合，比如包含所有迭代器产生元素的 vector。
+为了确保 `minigrep` 能够获取传递给它的命令行参数的值，我们需要一个 Rust 标准库提供的 `std::env::args` 函数。这个函数返回一个传递给程序的命令行参数的**迭代器**（*iterator*）。我们会在[第十三章][ch13]全面介绍迭代器。但是现在只需理解迭代器的两个细节：迭代器生成一系列的值，可以在迭代器上调用 `collect` 方法将其转换为一个集合，比如包含所有迭代器产生元素的 vector。
 
-示例 12-1 中允许 `minigrep` 程序读取任何传递给它的命令行参数并将其收集到一个 vector 中。
+示例 12-1 中的代码允许 `minigrep` 程序读取任何传递给它的命令行参数并将其收集到一个 vector 中。
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -34,7 +33,7 @@ $ cargo run -- searchstring example-filename.txt
 
 <span class="caption">示例 12-1：将命令行参数收集到一个 vector 中并打印出来</span>
 
-首先使用 `use` 语句来将 `std::env` 模块引入作用域以便可以使用它的 `args` 函数。注意 `std::env::args` 函数被嵌套进了两层模块中。正如 [第七章][ch7-idiomatic-use] 讲到的，当所需函数嵌套了多于一层模块时，通常将父模块引入作用域，而不是其自身。这便于我们利用 `std::env` 中的其他函数。这比增加了 `use std::env::args;` 后仅仅使用 `args` 调用函数要更明确一些，因为 `args` 容易被错认成一个定义于当前模块的函数。
+首先使用 `use` 语句来将 `std::env` 模块引入作用域以便可以使用它的 `args` 函数。注意 `std::env::args` 函数被嵌套进了两层模块中。正如[第七章][ch7-idiomatic-use]讲到的，当所需函数嵌套了多于一层模块时，通常将父模块引入作用域而不是其自身。这便于我们利用 `std::env` 中的其他函数。这比增加了 `use std::env::args;` 后仅仅使用 `args` 调用函数要更明确一些，因为 `args` 容易被错认成一个定义于当前模块的函数。
 
 > ### `args` 函数和无效的 Unicode
 >
@@ -42,7 +41,7 @@ $ cargo run -- searchstring example-filename.txt
 
 在 `main` 函数的第一行，我们调用了 `env::args`，并立即使用 `collect` 来创建了一个包含迭代器所有值的 vector。`collect` 可以被用来创建很多类型的集合，所以这里显式注明 `args` 的类型来指定我们需要一个字符串 vector。虽然在 Rust 中我们很少会需要注明类型，然而 `collect` 是一个经常需要注明类型的函数，因为 Rust 不能推断出你想要什么类型的集合。
 
-最后，我们使用调试宏打印出 vector。让我们尝试分别用两种方式（不包含参数和包含参数）运行代码：
+最后，我们使用调试宏打印出 vector。让我们先在不传递任何参数的情况下运行一次代码，然后再传入两个参数运行一次：
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-01/output.txt}}
@@ -74,7 +73,7 @@ $ cargo run -- searchstring example-filename.txt
 {{#include ../listings/ch12-an-io-project/listing-12-02/output.txt}}
 ```
 
-好的，它可以工作！我们将所需的参数值保存进了对应的变量中。之后会增加一些错误处理来应对类似用户没有提供参数的情况，不过现在我们将忽略它们并开始增加读取文件功能。
+太好了，程序正常工作！我们将所需的参数值保存进了对应的变量中。之后会增加一些错误处理来应对类似用户没有提供参数的情况。不过现在我们将忽略它们并开始增加读取文件功能。
 
 [ch13]: ch13-00-functional-features.html
 [ch7-idiomatic-use]: ch07-04-bringing-paths-into-scope-with-the-use-keyword.html#创建惯用的-use-路径

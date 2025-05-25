@@ -21,6 +21,7 @@ edit-url-template = "https://github.com/KaiserY/trpl-zh-cn/edit/main/{path}"
 [output.typst-pdf]
 pdf = true
 section-number = true
+rust-book = true
 
 [rust]
 edition = "2021"

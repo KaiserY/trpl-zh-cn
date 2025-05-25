@@ -1,8 +1,7 @@
 ## Hello, World!
 
-> [ch01-02-hello-world.md](https://github.com/rust-lang/book/blob/main/src/ch01-02-hello-world.md)
-> <br>
-> commit 1fb74c3f1d8aeba39373e9f4cdb9a4bdca95604f
+<!-- https://github.com/rust-lang/book/blob/main/src/ch01-02-hello-world.md -->
+<!-- commit aba1ee29dca6c90a1737c996efd7c870957aefb8 -->
 
 既然安装好了 Rust，是时候来编写第一个 Rust 程序了。当学习一门新语言的时候，使用该语言在屏幕上打印 `Hello, world!` 是一项传统，我们将沿用这一传统！
 
@@ -25,7 +24,7 @@ $ cd hello_world
 
 对于 Windows CMD，输入：
 
-```doscon
+```cmd
 > mkdir "%USERPROFILE%\projects"
 > cd /d "%USERPROFILE%\projects"
 > mkdir hello_world
@@ -53,7 +52,7 @@ fn main() {
 </figure>
 
 
-保存文件，并回到当前目录为“~/projects/hello_world”的终端窗口。在 Linux 或 macOS 上，输入如下命令，编译并运行文件：
+保存文件，并回到当前目录为 *~/projects/hello_world* 的终端窗口。在 Linux 或 macOS 上，输入如下命令，编译并运行文件：
 
 ```console
 $ rustc main.rs
@@ -65,7 +64,7 @@ Hello, world!
 
 ```powershell
 > rustc main.rs
-> .\main.exe
+> .\main
 Hello, world!
 ```
 
@@ -73,7 +72,7 @@ Hello, world!
 
 如果 `Hello, world!` 出现了，恭喜你！你已经正式编写了一个 Rust 程序。现在你成为一名 Rust 程序员，欢迎！
 
-### 分析这个 Rust 程序
+### Rust 程序的结构
 
 现在，让我们回过头来仔细看看这个 “Hello, world!” 程序。这是第一块拼图：
 
@@ -89,19 +88,19 @@ fn main() {
 
 > 注：如果你希望在 Rust 项目中保持一种标准风格，可以使用名为 `rustfmt` 的自动格式化工具将代码格式化为特定的风格（更多内容详见[附录 D][devtools] 中的 `rustfmt`<!-- ignore -->）。Rust 团队已经在标准的 Rust 发行版中包含了这个工具，就像 `rustc` 一样。所以它应该已经安装在你的电脑中了！
 
-在 `main` 函数中有如下代码：
+在 `main` 函数体中有如下代码：
 
 ```rust
-    println!("Hello, world!");
+println!("Hello, world!");
 ```
 
-这行代码完成这个简单程序的所有工作：在屏幕上打印文本。这里有四个重要的细节需要注意。首先 Rust 的缩进风格使用 4 个空格，而不是 1 个制表符（tab）。
+这行代码完成这个简单程序的所有工作：在屏幕上打印文本。这里有三个重要的细节需要注意。
 
-第二，`println!` 调用了一个 Rust 宏（macro）。如果是调用函数，则应输入 `println`（没有`!`）。我们将在第二十章详细讨论宏。现在你只需记住，当看到符号 `!` 的时候，就意味着调用的是宏而不是普通函数，并且宏并不总是遵循与函数相同的规则。
+首先，`println!` 调用了一个 Rust 宏（macro）。如果是调用函数，则应输入 `println`（没有`!`）。我们将在[第二十章][ch20-macros]详细讨论宏。现在你只需记住，当看到符号 `!` 的时候，就意味着调用的是宏而不是普通函数，并且宏并不总是遵循与函数相同的规则。
 
-第三，`"Hello, world!"` 是一个字符串。我们把这个字符串作为一个参数传递给 `println!`，字符串将被打印到屏幕上。
+第二，`"Hello, world!"` 是一个字符串。我们把这个字符串作为一个参数传递给 `println!`，字符串将被打印到屏幕上。
 
-第四，该行以分号结尾（`;`），这代表一个表达式的结束和下一个表达式的开始。大部分 Rust 代码行以分号结尾。
+第三，该行以分号结尾（`;`），这代表一个表达式的结束和下一个表达式可以开始。大部分 Rust 代码行以分号结尾。
 
 ### 编译和运行是彼此独立的步骤
 
@@ -122,9 +121,9 @@ $ ls
 main  main.rs
 ```
 
-在 Linux 和 macOS，你会看到两个文件。在 Windows PowerShell 中，你会看到同使用 CMD 相同的三个文件。在 Windows 的 CMD 上，则输入如下内容：
+在 Linux 和 macOS，你会看到两个文件。在 Windows PowerShell 中，你会看到同使用 CMD 相同的三个文件。在 Windows 的 CMD 上，则输入如下命令：
 
-```doscon
+```cmd
 > dir /B %= the /B option says to only show the file names =%
 main.exe
 main.pdb
@@ -145,3 +144,4 @@ $ ./main # Windows 是 .\main.exe
 
 [troubleshooting]: ch01-01-installation.html#故障排除troubleshooting
 [devtools]: appendix-04-useful-development-tools.html
+[ch20-macros]: ch20-05-macros.html

@@ -1,10 +1,9 @@
 ## 采用发布配置自定义构建
 
-> [ch14-01-release-profiles.md](https://github.com/rust-lang/book/blob/main/src/ch14-01-release-profiles.md)
-> <br>
-> commit 44e31f9f304e0cd9ace01045d17a2aa01a449528
+<!-- https://github.com/rust-lang/book/blob/main/src/ch14-01-release-profiles.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
 
-在 Rust 中 **发布配置**（*release profiles*）文件是预定义和可定制的，它们包含不同的配置，允许程序员更灵活地控制代码编译的多种选项。每一个配置都相互独立。
+在 Rust 中**发布配置**（*release profiles*）文件是预定义和可定制的，它们包含不同的配置，允许程序员更灵活地控制代码编译的多种选项。每一个配置都相互独立。
 
 Cargo 有两个主要的配置：运行 `cargo build` 时采用的 `dev` 配置和运行 `cargo build --release` 的 `release` 配置。`dev` 配置为开发定义了良好的默认配置，`release` 配置则为发布构建定义了良好的默认配置。
 
@@ -12,9 +11,9 @@ Cargo 有两个主要的配置：运行 `cargo build` 时采用的 `dev` 配置�
 
 ```console
 $ cargo build
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.00s
 $ cargo build --release
-    Finished release [optimized] target(s) in 0.0s
+    Finished `release` profile [optimized] target(s) in 0.32s
 ```
 
 构建输出中的 `dev` 和 `release` 表明编译器在使用不同的配置。
@@ -44,4 +43,4 @@ opt-level = 1
 
 这会覆盖默认的设置 `0`。现在运行 `cargo build` 时，Cargo 将会使用 `dev` 的默认配置加上定制的 `opt-level`。因为 `opt-level` 设置为 `1`，Cargo 会比默认进行更多的优化，但是没有发布构建那么多。
 
-对于每个配置的设置和其默认值的完整列表，请查看 [Cargo 的文档](https://doc.rust-lang.org/cargo/reference/profiles.html)。
+对于每个配置的设置和其默认值的完整列表，请参阅[Cargo 的文档](https://doc.rust-lang.org/cargo/reference/profiles.html)。

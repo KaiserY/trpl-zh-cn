@@ -1,8 +1,7 @@
 # Async 和 await
 
-> [ch17-00-async-await.md](https://github.com/rust-lang/book/blob/main/src/ch17-00-async-await.md)
-> <br>
-> commit 3111eda07a4a4692bf69e3aaad999d840ac9c138
+<!-- https://github.com/rust-lang/book/blob/main/src/ch17-00-async-await.md -->
+<!-- commit 3111eda07a4a4692bf69e3aaad999d840ac9c138 -->
 
 很多我们要求计算机处理的操作都需要一定的时间才能完成。例如，如果你使用视频编辑器来创建一个家庭聚会的视频，导出视频可能会花费几分钟到几小时不等。同样，从家庭成员那里下载共享的视频也可能需要很长时间。如果我们能在等待这些长时间运行的操作完成期间做点其他事情，那就太好了。
 

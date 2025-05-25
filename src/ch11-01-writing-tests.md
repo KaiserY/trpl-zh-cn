@@ -1,14 +1,13 @@
 ## 如何编写测试
 
-> [ch11-01-writing-tests.md](https://github.com/rust-lang/book/blob/main/src/ch11-01-writing-tests.md)
-> <br>
-> commit 6e2fe7c0f085989cc498cec139e717e2af172cb7
+<!-- https://github.com/rust-lang/book/blob/main/src/ch11-01-writing-tests.md -->
+<!-- commit 02e053cdbbb3bf9edd9ad32ed49eb533404350a9 -->
 
 Rust 中的测试函数是用来验证非测试代码是否是按照期望的方式运行的。测试函数体通常执行如下三种操作：
 
-1. 设置任何所需的数据或状态
-2. 运行需要测试的代码
-3. 断言其结果是我们所期望的
+- 设置任何所需的数据或状态
+- 运行需要测试的代码
+- 断言其结果是我们所期望的
 
 让我们看看 Rust 提供的专门用来编写测试的功能：`test` 属性、一些宏和 `should_panic` 属性。
 
@@ -28,7 +27,7 @@ $ cargo new adder --lib
 $ cd adder
 ```
 
-adder 库中 `src/lib.rs` 的内容应该看起来如示例 11-1 所示：
+`adder` 库中 _src/lib.rs_ 的内容应该看起来如示例 11-1 所示：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -38,9 +37,11 @@ adder 库中 `src/lib.rs` 的内容应该看起来如示例 11-1 所示：
 
 <span class="caption">示例 11-1：由 `cargo new` 自动生成的测试模块和函数</span>
 
-现在让我们暂时忽略 `tests` 模块和 `#[cfg(test)]` 注解并只关注函数本身。注意 `fn` 行之前的 `#[test]`：这个属性表明这是一个测试函数，这样测试执行者就知道将其作为测试处理。`tests` 模块中也可以有非测试的函数来帮助我们建立通用场景或进行常见操作，必须每次都标明哪些函数是测试。
+文件以一个示例 `add` 函数开头，这样我们就有东西可以测试。
 
-示例函数体通过使用 `assert_eq!` 宏来断言 2 加 2 等于 4。一个典型的测试的格式，就是像这个例子中的断言一样。接下来运行就可以看到测试通过。
+现在让我们只关注 `it_works` 函数本身。注意 `fn` 行之前的 `#[test]`：这个属性表明这是一个测试函数，这样测试执行者就知道将其作为测试处理。`tests` 模块中也可以有非测试的函数来帮助我们建立通用场景或进行常见操作，必须每次都标明哪些函数是测试。
+
+示例函数体通过使用 `assert_eq!` 宏来断言 `result`（其中包含 2 加 2 的结果）等于 4。这个断言示例展示了典型测试的格式。接下来运行就可以看到测试通过。
 
 `cargo test` 命令会运行项目中所有的测试，如示例 11-2 所示：
 
@@ -50,13 +51,13 @@ adder 库中 `src/lib.rs` 的内容应该看起来如示例 11-1 所示：
 
 <span class="caption">示例 11-2：运行自动生成测试的输出</span>
 
-Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下一行显示了生成的测试函数的名称，它是 `it_works`，以及测试的运行结果，`ok`。接着可以看到全体测试运行结果的摘要：`test result: ok.` 意味着所有测试都通过了。`1 passed; 0 failed` 表示通过或失败的测试数量。
+Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下一行显示了生成的测试函数的名称，`tests::it_works`，以及测试的运行结果，`ok`。接着可以看到全体测试运行结果的摘要：`test result: ok.` 意味着所有测试都通过了。`1 passed; 0 failed` 表示通过或失败的测试数量。
 
-可以将一个测试标记为忽略这样在特定情况下它就不会运行；本章之后的[“除非特别指定否则忽略某些测试”][ignoring]部分会介绍它。因为之前我们并没有将任何测试标记为忽略，所以摘要中会显示 `0 ignored`。我们也没有过滤需要运行的测试，所以摘要中会显示`0 filtered out`。在下一部分 [“控制测试如何运行”][controlling-how-tests-are-run] 会讨论忽略和过滤测试。
+可以将一个测试标记为忽略以便在特定情况下它就不会运行；本章之后的[“除非特别指定否则忽略某些测试”][ignoring]部分会介绍它。因为之前我们并没有将任何测试标记为忽略，所以摘要中会显示 `0 ignored`。
 
 `0 measured` 统计是针对性能测试的。性能测试（benchmark tests）在编写本书时，仍只能用于 Rust 开发版（nightly Rust）。请查看 [性能测试的文档][bench] 了解更多。
 
-
+我们可以将参数传递给 `cargo test` 命令，以便只运行名称与字符串匹配的测试；这就是所谓的**过滤**（_filtering_），我们会在 [“通过名称运行部分测试”][subset] 讨论这一点。这里我们没有过滤需要运行的测试，所以摘要中会显示`0 filtered out`。
 
 测试输出中的以 `Doc-tests adder` 开头的这一部分是所有文档测试的结果。我们现在并没有任何文档测试，不过 Rust 会编译任何在 API 文档中的代码示例。这个功能帮助我们使文档和代码保持同步！在第十四章的 [“文档注释作为测试”][doc-comments] 部分会讲到如何编写文档测试。现在我们将忽略 `Doc-tests` 部分的输出。
 
@@ -74,7 +75,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 {{#include ../listings/ch11-writing-automated-tests/no-listing-01-changing-test-name/output.txt}}
 ```
 
-现在让我们增加另一个测试，不过这一次是一个会失败的测试！当测试函数中出现 panic 时测试就失败了。每一个测试都在一个新线程中运行，当主线程发现测试线程异常了，就将对应测试标记为失败。第九章讲到了最简单的造成 panic 的方法：调用 `panic!` 宏。写入新测试 `another` 后， `src/lib.rs` 现在看起来如示例 11-3 所示：
+现在让我们增加另一个测试，不过这一次是一个会失败的测试！当测试函数中出现 panic 时测试就失败了。每一个测试都在一个新线程中运行，当主线程发现测试线程异常了，就将对应测试标记为失败。第九章讲到了最简单的造成 panic 的方法：调用 `panic!` 宏。写入新测试 `another` 后，_src/lib.rs_ 现在看起来如示例 11-3 所示：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -92,7 +93,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 
 <span class="caption">示例 11-4：一个测试通过和一个测试失败的测试结果</span>
 
-`test tests::another` 这一行是 `FAILED` 而不是 `ok` 了。在单独测试结果和摘要之间多了两个新的部分：第一个部分显示了测试失败的详细原因。在这个例子中，我们看到 `another` 因为在 *src/lib.rs* 的第 10 行 `panicked at 'Make this test fail'` 而失败的详细信息。下一部分列出了所有失败的测试，这在有很多测试和很多失败测试的详细输出时很有帮助。我们可以通过使用失败测试的名称来只运行这个测试，以便调试；下一部分 [“控制测试如何运行”][controlling-how-tests-are-run] 会讲到更多运行测试的方法。
+`test tests::another` 这一行是 `FAILED` 而不是 `ok` 了。在单独测试结果和摘要之间多了两个新的部分：第一个部分显示了测试失败的详细原因。在这个例子中，我们看到 `another` 因为在 _src/lib.rs_ 的第 10 行 `panicked at 'Make this test fail'` 而失败的详细信息。下一部分列出了所有失败的测试，这在有很多测试和很多失败测试的详细输出时很有帮助。我们可以通过使用失败测试的名称来只运行这个测试，以便调试；下一部分 [“控制测试如何运行”][controlling-how-tests-are-run] 会讲到更多运行测试的方法。
 
 最后是摘要行：总体上讲，测试结果是 `FAILED`。有一个测试通过和一个测试失败。
 
@@ -102,7 +103,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 
 `assert!` 宏由标准库提供，在希望确保测试中一些条件为 `true` 时非常有用。需要向 `assert!` 宏提供一个求值为布尔值的参数。如果值是 `true`，`assert!` 什么也不做，同时测试会通过。如果值为 `false`，`assert!` 调用 `panic!` 宏，这会导致测试失败。`assert!` 宏帮助我们检查代码是否以期望的方式运行。
 
-回忆一下第五章中，示例 5-15 中有一个 `Rectangle` 结构体和一个 `can_hold` 方法，在示例 11-5 中再次使用它们。将它们放进 *src/lib.rs* 并使用 `assert!` 宏编写一些测试。
+回忆一下第五章中，示例 5-15 中有一个 `Rectangle` 结构体和一个 `can_hold` 方法，在示例 11-5 中再次使用它们。将它们放进 _src/lib.rs_ 并使用 `assert!` 宏编写一些测试。
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -112,7 +113,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 
 <span class="caption">示例 11-5：第五章中 `Rectangle` 结构体和其 `can_hold` 方法</span>
 
-`can_hold` 方法返回一个布尔值，这意味着它完美符合 `assert!` 宏的使用场景。在示例 11-6 中，让我们编写一个 `can_hold` 方法的测试来作为练习，这里创建一个长为 8 宽为 7 的 `Rectangle` 实例，并假设它可以放得下另一个长为 5 宽为 1 的 `Rectangle` 实例：
+`can_hold` 方法返回一个布尔值，这意味着它完美符合 `assert!` 宏的使用场景。在示例 11-6 中，让我们编写一个 `can_hold` 方法的测试来作为练习，这里创建一个宽为 8 高为 7 的 `Rectangle` 实例，并假设它可以放得下另一个宽为 5 高为 1 的 `Rectangle` 实例：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -122,7 +123,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 
 <span class="caption">示例 11-6：一个 `can_hold` 的测试，检查一个较大的矩形确实能放得下一个较小的矩形</span>
 
-注意在 `tests` 模块中新增加了一行：`use super::*;`。`tests` 是一个普通的模块，它遵循第七章 [“路径用于引用模块树中的项”][paths-for-referring-to-an-item-in-the-module-tree] 部分介绍的可见性规则。因为这是一个内部模块，要测试外部模块中的代码，需要将其引入到内部模块的作用域中。这里选择使用 glob 全局导入，以便在 `tests` 模块中使用所有在外部模块定义的内容。
+注意在 `tests` 模块中新增加了一行：`use super::*;`。`tests` 是一个普通的模块，它遵循第七章 [“路径用于引用模块树中的项”][paths-for-referring-to-an-item-in-the-module-tree] 部分介绍的可见性规则。因为 `tests` 模块是一个内部模块，要测试外部模块中的代码，需要将其引入到内部模块的作用域中。这里选择使用 glob 全局导入，以便在 `tests` 模块中使用所有在外部模块定义的内容。
 
 我们将测试命名为 `larger_can_hold_smaller`，并创建所需的两个 `Rectangle` 实例。接着调用 `assert!` 宏并传递 `larger.can_hold(&smaller)` 调用的结果作为参数。这个表达式预期会返回 `true`，所以测试应该通过。让我们拭目以待！
 
@@ -144,23 +145,23 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 {{#include ../listings/ch11-writing-automated-tests/no-listing-02-adding-another-rectangle-test/output.txt}}
 ```
 
-两个通过的测试！现在让我们看看如果引入一个 bug 的话测试结果会发生什么。将 `can_hold` 方法中比较长度时本应使用大于号的地方改成小于号：
+两个测试通过了！现在让我们看看如果引入一个 bug 的话测试结果会发生什么。将 `can_hold` 方法中比较宽度时本应使用大于号的地方改成小于号：
 
 ```rust,not_desired_behavior,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-03-introducing-a-bug/src/lib.rs:here}}
 ```
 
-现在运行测试会产生：
+现在运行测试会产生以下结果：
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-03-introducing-a-bug/output.txt}}
 ```
 
-我们的测试捕获了 bug！因为 `larger.length` 是 8 而 `smaller.length` 是 5，`can_hold` 中的长度比较现在因为 8 不小于 5 而返回 `false`。
+我们的测试捕获了 bug！因为 `larger.width` 是 8 而 `smaller.width` 是 5，`can_hold` 中的宽度比较现在因为 8 不小于 5 而返回 `false`：8 并不小于 5。
 
-### 使用 `assert_eq!` 和 `assert_ne!` 宏来测试相等
+### 使用 `assert_eq!` 和 `assert_ne!` 宏测试相等
 
-测试功能的一个常用方法是将需要测试代码的值与期望值做比较，并检查是否相等。可以通过向 `assert!` 宏传递一个使用 `==` 运算符的表达式来做到。不过这个操作实在是太常见了，以至于标准库提供了一对宏来更方便的处理这些操作 —— `assert_eq!` 和 `assert_ne!`。这两个宏分别比较两个值是相等还是不相等。当断言失败时它们也会打印出这两个值具体是什么，以便于观察测试 **为什么** 失败，而 `assert!` 只会打印出它从 `==` 表达式中得到了 `false` 值，而不是打印导致 `false` 的两个值。
+测试功能的一个常用方法是将需要测试代码的值与期望值做比较，并检查是否相等。可以通过向 `assert!` 宏传递一个使用 `==` 运算符的表达式来做到。不过这个操作实在是太常见了，以至于标准库提供了一对宏来更方便的处理这些操作 —— `assert_eq!` 和 `assert_ne!`。这两个宏分别比较两个值是相等还是不相等。当断言失败时它们也会打印出这两个值具体是什么，以便于观察测试**为什么**失败，而 `assert!` 只会打印出它从 `==` 表达式中得到了 `false` 值，而不是打印导致 `false` 的具体值。
 
 示例 11-7 中，让我们编写一个对其参数加二并返回结果的函数 `add_two`。接着使用 `assert_eq!` 宏测试这个函数。
 
@@ -178,7 +179,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 {{#include ../listings/ch11-writing-automated-tests/listing-11-07/output.txt}}
 ```
 
-我们传递给 `assert_eq!` 宏的第一个参数 `4` ，它等于调用 `add_two(2)` 的结果。测试中的这一行 `test tests::it_adds_two ... ok` 中 `ok` 表明测试通过！
+我们创建一个名为 `result` 的变量，用于保存调用 `add_two(2)` 的结果。然后我们将 `result` 和 `4` 作为参数传递给 `assert_eq!`。测试中的这一行 `test tests::it_adds_two ... ok` 中 `ok` 表明测试通过！
 
 在代码中引入一个 bug 来看看使用 `assert_eq!` 的测试失败是什么样的。修改 `add_two` 函数的实现使其加 `3`：
 
@@ -192,11 +193,11 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 {{#include ../listings/ch11-writing-automated-tests/no-listing-04-bug-in-add-two/output.txt}}
 ```
 
-测试捕获到了 bug！`it_adds_two` 测试失败，错误信息告诉我们断言失败了，它告诉我们 `` assertion failed: `(left == right)` `` 以及 `left` 和 `right` 的值是什么。这个错误信息有助于我们开始调试：它说 `assert_eq!` 的 `left` 参数是 `4`，而 `right` 参数，也就是 `add_two(2)` 的结果，是 `5`。可以想象当有很多测试在运行时这些信息是多么的有用。
+测试捕获到了 bug！`it_adds_two` 测试失败，错误信息告诉我们断言失败了，它告诉我们 ``assertion `left == right` failed`` 以及 `left` 和 `right` 的值是什么。这个错误信息有助于我们开始调试：它说 `assert_eq!` 的 `left` 参数（也就是 `add_two(2)` 的结果）是 `5`，而 `right` 参数是 `4`。可以想象当有很多测试在运行时这些信息是多么的有用。
 
-需要注意的是，在一些语言和测试框架中，断言两个值相等的函数的参数被称为 `expected` 和 `actual`，而且指定参数的顺序非常重要。然而在 Rust 中，它们则叫做 `left` 和 `right`，同时指定期望的值和被测试代码产生的值的顺序并不重要。这个测试中的断言也可以写成 `assert_eq!(add_two(2), 4)`，这时失败信息仍同样是 `` assertion failed: `(left == right)` ``。
+需要注意的是，在一些语言和测试框架中，断言两个值相等的函数的参数被称为 `expected` 和 `actual`，而且指定参数的顺序非常重要。然而在 Rust 中，它们则叫做 `left` 和 `right`，同时指定期望的值和被测试代码产生的值的顺序并不重要。这个测试中的断言也可以写成 `assert_eq!(add_two(2), result)`，这时失败信息仍同样是 `` assertion failed: `(left == right)` ``。
 
-`assert_ne!` 宏在传递给它的两个值不相等时通过，而在相等时失败。在代码按预期运行，我们不确定值 **会** 是什么，不过能确定值绝对 **不会** 是什么的时候，这个宏最有用处。例如，如果一个函数保证会以某种方式改变其输出，不过这种改变方式是由运行测试时是星期几来决定的，这时最好的断言可能就是函数的输出不等于其输入。
+`assert_ne!` 宏在传递给它的两个值不相等时通过，而在相等时失败。当我们不确定值**会**是什么，不过能确定值绝对**不会**_ **是什么的时候，这个宏最有用处。例如，如果一个函数保证会以某种方式改变其输入，不过这种改变方式是由运行测试时是星期几来决定的，这时最好的断言可能就是函数的输出不等于其输入。
 
 `assert_eq!` 和 `assert_ne!` 宏在底层分别使用了 `==` 和 `!=`。当断言失败时，这些宏会使用调试格式打印出其参数，这意味着被比较的值必须实现了 `PartialEq` 和 `Debug` trait。所有的基本类型和大部分标准库类型都实现了这些 trait。对于自定义的结构体和枚举，需要实现 `PartialEq` 才能断言它们的值是否相等。需要实现 `Debug` 才能在断言失败时打印它们的值。因为这两个 trait 都是派生 trait，如第五章示例 5-12 所提到的，通常可以直接在结构体或枚举上添加 `#[derive(PartialEq, Debug)]` 注解。附录 C [“可派生 trait”][derivable-traits] 中有更多关于这些和其他派生 trait 的详细信息。
 
@@ -238,15 +239,15 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 {{#include ../listings/ch11-writing-automated-tests/no-listing-07-custom-failure-message/output.txt}}
 ```
 
-可以在测试输出中看到所取得的确切的值，这会帮助我们理解真正发生了什么，而不是期望发生什么。
+可以在测试输出中看到所取得的确切的值，这会帮助我们调试真正发生了什么，而不是期望发生什么。
 
 ### 使用 `should_panic` 检查 panic
 
-除了检查返回值之外，检查代码是否按照期望处理错误也是很重要的。例如，考虑第九章示例 9-10 创建的 `Guess` 类型。其他使用 `Guess` 的代码都是基于 `Guess` 实例仅有的值范围在 1 到 100 的前提。可以编写一个测试来确保创建一个超出范围的值的 `Guess` 实例会 panic。
+除了检查返回值之外，检查代码是否按照期望处理错误也是很重要的。例如，考虑第九章示例 9-13 创建的 `Guess` 类型。其他使用 `Guess` 的代码都是基于 `Guess` 实例仅有的值范围在 1 到 100 的前提。可以编写一个测试来确保创建一个超出范围的值的 `Guess` 实例会 panic。
 
 可以通过对函数增加另一个属性 `should_panic` 来实现这些。这个属性在函数中的代码 panic 时会通过，而在其中的代码没有 panic 时失败。
 
-示例 11-8 展示了一个检查 `Guess::new` 是否按照我们的期望出错的测试：
+示例 11-8 展示了一个测试，检查 `Guess::new` 在错误条件下是否如我们所料那样。
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -284,9 +285,9 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-09/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 11-9：一个会带有特定错误信息的 `panic!` 条件的测试</span>
+<span class="caption">示例 11-9：一个错误信息包含特定子字符串的 `panic!` 条件的测试</span>
 
-这个测试会通过，因为 `should_panic` 属性中 `expected` 参数提供的值是 `Guess::new` 函数 panic 信息的子串。我们可以指定期望的整个 panic 信息，在这个例子中是 `Guess value must be less than or equal to 100, got 200.` 。 `expected` 信息的选择取决于 panic 信息有多独特或动态，和你希望测试有多准确。在这个例子中，错误信息的子字符串足以确保函数在 `else if value > 100` 的情况下运行。
+这个测试会通过，因为 `should_panic` 属性中 `expected` 参数提供的值是 `Guess::new` 函数 panic 信息的子串。我们可以指定期望的整个 panic 信息，在这个例子中是 `Guess value must be less than or equal to 100, got 200` 。信息的选择取决于 panic 信息有多独特或动态，和你希望测试有多准确。在这个例子中，错误信息的子字符串足以确保函数在 `else if value > 100` 的情况下运行。
 
 为了观察带有 `expected` 信息的 `should_panic` 测试失败时会发生什么，让我们再次引入一个 bug，将 `if value < 1` 和 `else if value > 100` 的代码块对换：
 
@@ -300,21 +301,21 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 {{#include ../listings/ch11-writing-automated-tests/no-listing-09-guess-with-panic-msg-bug/output.txt}}
 ```
 
-失败信息表明测试确实如期望 panic 了，不过 panic 信息中并没有包含 `expected` 信息 `'Guess value must be less than or equal to 100'`。而我们得到的 panic 信息是 `'Guess value must be greater than or equal to 1, got 200.'`。这样就可以开始寻找 bug 在哪了！
+失败信息表明测试确实如期望 panic 了，不过 panic 信息中并没有包含期望的信息 `less than or equal to 100`。而我们得到的 panic 信息是 `Guess value must be greater than or equal to 1, got 200.`。这样就可以开始寻找 bug 在哪了！
 
-### 将 `Result<T, E>` 用于测试
+### 在测试中使用 `Result<T, E>`
 
 目前为止，我们编写的测试在失败时都会 panic。我们也可以使用 `Result<T, E>` 编写测试！这是一个延伸自示例 11-1 的测试，使用 `Result<T, E>` 重写，并在失败时返回 `Err` 而非 panic：
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-10-result-in-tests/src/lib.rs}}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-10-result-in-tests/src/lib.rs:here}}
 ```
 
 现在 `it_works` 函数的返回值类型为 `Result<(), String>`。在函数体中，不同于调用 `assert_eq!` 宏，而是在测试通过时返回 `Ok(())`，在测试失败时返回带有 `String` 的 `Err`。
 
 这样编写测试来返回 `Result<T, E>` 就可以在函数体中使用问号运算符，如此可以方便的编写任何运算符会返回 `Err` 成员的测试。
 
-不能对这些使用 `Result<T, E>` 的测试使用 `#[should_panic]` 注解。为了断言一个操作返回 `Err` 成员，**不要**使用对 `Result<T, E>` 值使用问号表达式（`?`）。而是使用 `assert!(value.is_err())`。
+不能对这些使用 `Result<T, E>` 的测试使用 `#[should_panic]` 注解。为了断言一个操作返回 `Err` 成员，**不要**对 `Result<T, E>` 值使用问号表达式（`?`）。而是使用 `assert!(value.is_err())`。
 
 现在你知道了几种编写测试的方法，让我们看看运行测试时会发生什么，以及可以用于 `cargo test` 的不同选项。
 
@@ -322,7 +323,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 ch08-02-strings.html#使用--运算符或-format-宏拼接字符串
 [bench]: https://doc.rust-lang.org/unstable-book/library-features/test.html
 [ignoring]: ch11-02-running-tests.html#除非特别指定否则忽略某些测试
-[subset]: ch11-02-running-tests.html#running-a-subset-of-tests-by-name
+[subset]: ch11-02-running-tests.html#通过名称运行部分测试
 [controlling-how-tests-are-run]:
 ch11-02-running-tests.html#控制测试如何运行
 [derivable-traits]: appendix-03-derivable-traits.html

@@ -1,14 +1,13 @@
 ## 将单线程 server 变为多线程 server
 
-> [ch21-02-multithreaded.md](https://github.com/rust-lang/book/blob/main/src/ch21-02-multithreaded.md)
-> <br>
-> commit 98c6225e5fb8255349ec0dc235433530ed3fb534
+<!-- https://github.com/rust-lang/book/blob/main/src/ch21-02-multithreaded.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
 
-目前 server 会依次处理每一个请求，意味着它在完成第一个连接的处理之前不会处理第二个连接。如果 server 正接收越来越多的请求，这类串行操作会使性能越来越差。如果一个请求花费很长时间来处理，随后而来的请求则不得不等待这个长请求结束，即便这些新请求可以很快就处理完。我们需要修复这种情况，不过首先让我们实际尝试一下这个问题。
+目前服务端会依次处理每一个请求，意味着它在完成第一个连接的处理之前不会处理第二个连接。如果服务端正接收越来越多的请求，这类串行操作会使性能越来越差。如果一个请求花费很长时间来处理，随后而来的请求则不得不等待这个长请求结束，即便这些新请求可以很快就处理完。我们需要修复这种情况，不过首先让我们实际尝试一下这个问题。
 
-### 在当前 server 实现中模拟慢请求
+### 在当前服务端实现中模拟慢请求
 
-让我们看看一个慢请求如何影响当前 server 实现中的其他请求。示例 20-10 通过模拟慢响应实现了 */sleep* 请求处理，它会使 server 在响应之前休眠五秒。
+让我们看看一个慢请求如何影响当前服务端实现中的其他请求。示例 21-10 通过模拟慢响应实现了 */sleep* 请求处理，它会使服务端在响应之前休眠五秒。
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -16,36 +15,35 @@
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-10/src/main.rs:here}}
 ```
 
-<span class="caption">示例 20-10: 通过休眠五秒来模拟慢请求</span>
+<span class="caption">示例 21-10: 通过休眠五秒来模拟慢请求</span>
 
-从 `if` 切换到 `match` 后现在有三个分支了。我们需要显式匹配一个 slice 的 `request_line` 以匹配字符串字面值的模式。`match` 不会像相等方法那样自动引用和解引用。
+从 `if` 切换到 `match` 后现在有三个分支了。我们需要显式地匹配一个 slice 的 `request_line` 以模式匹配字符串字面值。`match` 不会像相等方法那样自动引用和解引用。
 
-第一个分支与示例 20-9 中的 `if` 代码块相同。第二个分支匹配一个 */sleep* 请求。当接收到这个请求时，server 在渲染成功 HTML 页面之前会先休眠五秒。第三个分支与示例 20-9 中的 `else` 代码块相同。
+第一个分支与示例 21-9 中的 `if` 代码块相同。第二个分支匹配一个 */sleep* 请求。当接收到这个请求时，server 在渲染成功 HTML 页面之前会先休眠五秒。第三个分支与示例 21-9 中的 `else` 代码块相同。
 
-现在就可以真切的看出我们的 server 有多么的原始：真实的库将会以更简洁的方式处理多请求识别问题！
+现在就可以真切的看出我们的服务端有多么的原始：真实的库将会以更简洁的方式处理多个请求的识别！
 
-使用 `cargo run` 启动 server，并接着打开两个浏览器窗口：一个请求 *http://127.0.0.1:7878/* 而另一个请求 *http://127.0.0.1:7878/sleep* 。如果像之前一样多次请求 */*，会发现响应的比较快速。不过如果请求 */sleep* 之后再请求 */*，就会看到 */* 会等待直到 `sleep` 休眠完五秒之后才出现。
+使用 `cargo run` 启动服务端，并接着打开两个浏览器窗口：一个请求 *http://127.0.0.1:7878/* 而另一个请求 *http://127.0.0.1:7878/sleep* 。如果像之前一样多次请求 */*，会发现响应的比较快速。不过如果请求 */sleep* 之后再请求 */*，就会看到 */* 会等待直到 `sleep` 休眠完五秒之后才响应。
 
-
-有多种技术可以用来避免所有请求都排在慢请求之后；我们将要实现的一个便是线程池。
+有多种技术可以用来避免所有请求都排在慢请求之后，包括我们在第十七章中所使用的异步；我们将要实现的一个便是线程池。
 
 ### 使用线程池改善吞吐量
 
-**线程池**（*thread pool*）是一组预先分配的等待或准备处理任务的线程。当程序收到一个新任务，线程池中的一个线程会被分配任务，这个线程会离开并处理任务。其余的线程则可用于处理在第一个线程处理任务的同时处理其他接收到的任务。当第一个线程处理完任务时，它会返回空闲线程池中等待处理新任务。线程池允许我们并发处理连接，增加 server 的吞吐量。
+**线程池**（*thread pool*）是一组预先分配的等待或准备处理任务的线程。当程序收到一个新任务，线程池中的一个线程会被分配该任务，并负责处理它。其余线程在该线程处理任务的同时可以处理任何其他接收到的任务。当第一个线程处理完任务时，它会返回空闲线程池中等待处理新任务。线程池允许我们并发处理连接，提高服务端的吞吐量。
 
-我们会将池中线程限制为较少的数量，以防拒绝服务（Denial of Service，DoS）攻击；如果程序为每一个接收的请求都新建一个线程，某人向 server 发起千万级的请求时会耗尽服务器的资源并导致所有请求的处理都被终止。
+我们会将池中线程限制为较少的数量，以防拒绝服务（Denial of Service，DoS）攻击；如果程序为每一个接收的请求都新建一个线程，某人向服务端发起千万级的请求时会耗尽服务器的资源并导致请求处理陷入停滞。
 
-不同于分配无限的线程，线程池中将有固定数量的等待线程。当新进请求时，将请求发送到线程池中做处理。线程池会维护一个接收请求的队列。每一个线程会从队列中取出一个请求，处理请求，接着向队列索取另一个请求。通过这种设计，则可以并发处理 `N` 个请求，其中 `N` 为线程数。如果每一个线程都在响应慢请求，之后的请求仍然会阻塞队列，不过相比之前增加了能处理的慢请求的数量。
+不同于分配无限的线程，线程池中将有固定数量的等待线程。当新进请求时，将请求发送到线程池中做处理。线程池会维护一个接收请求的队列。每一个线程会从队列中取出一个请求，处理请求，接着向队列获取下一个请求。通过这种设计，则可以并发处理 *`N`* 个请求，其中 *`N`* 为线程数。如果每一个线程都在响应慢请求，之后的请求仍然会阻塞队列，不过相比之前已经增加了能处理的慢请求的数量。
 
-这个设计仅仅是多种改善 web server 吞吐量的方法之一。其他可供探索的方法有 **fork/join 模型**（*fork/join model*）、**单线程异步 I/O 模型**（*single-threaded async I/O model*）或者**多线程异步 I/O 模型**（*multi-threaded async I/O model*）。如果你对这个主题感兴趣，则可以阅读更多关于其他解决方案的内容并尝试实现它们；对于一个像 Rust 这样的底层语言，所有这些方法都是可能的。
+这个设计仅仅是多种改善 web 服务端吞吐量的方法之一。其他可供探索的方法有 fork/join 模型（fork/join model）、单线程异步 I/O 模型（single-threaded async I/O model）或者多线程异步 I/O 模型（multi-threaded async I/O model）。如果你对这个主题感兴趣，则可以阅读更多关于其他解决方案的内容并尝试实现它们；对于一个像 Rust 这样的底层语言，所有这些方法都是可行的。
 
-在开始之前，让我们讨论一下线程池应用看起来怎样。当尝试设计代码时，首先编写客户端接口确实有助于指导代码设计。以期望的调用方式来构建 API 代码的结构，接着在这个结构之内实现功能，而不是先实现功能再设计公有 API。
+在开始之前，让我们讨论一下线程池应用看起来如何。当尝试设计代码时，首先编写客户端接口（client interface）有助于指导代码设计。以期望的调用方式来构建 API 代码的结构，接着在这个结构之内实现功能，而不是先实现功能再设计公有 API。
 
-类似于第十二章项目中使用的测试驱动开发。这里将要使用编译器驱动开发（compiler-driven development）。我们将编写调用所期望的函数的代码，接着观察编译器错误告诉我们接下来需要修改什么使得代码可以工作。不过在开始之前，我们将探索不会作为起点的技术。
+类似于第十二章项目中使用的测试驱动开发。这里将要使用编译器驱动开发（compiler-driven development）。我们将编写调用所期望的函数的代码，接着观察编译器错误告诉我们接下来需要修改什么使得代码可以工作。不过在开始之前，我们将探索不会作为起点使用的技术。
 
 #### 为每一个请求分配线程
 
-首先，让我们探索一下为每一个连接都创建一个线程的代码看起来如何。这并不是最终方案，因为正如之前讲到的它会潜在的分配无限的线程，不过这是一个可用的多线程 server 的起点。接着我们会增加线程池作为改进，这样比较两个方案将会更容易。示例 20-11 展示了 `main` 的改变，它在 `for` 循环中为每一个流分配了一个新线程进行处理：
+首先，让我们探索一下如果为每一个连接都创建一个线程的代码看起来如何。这并不是最终方案，因为正如之前讲到的它会潜在的分配无限的线程，不过这是一个可用的多线程服务端的起点。接着我们会增加线程池作为改进，这样比较两个方案将会更容易。示例 21-11 展示了 `main` 的改变，它在 `for` 循环中为每一个流分配了一个新线程进行处理：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -53,13 +51,15 @@
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-11/src/main.rs:here}}
 ```
 
-<span class="caption">示例 20-11: 为每一个流新建一个线程</span>
+<span class="caption">示例 21-11: 为每一个流新建一个线程</span>
 
-正如第十六章讲到的，`thread::spawn` 会创建一个新线程并在其中运行闭包中的代码。如果运行这段代码并在在浏览器中加载 */sleep*，接着在另两个浏览器标签页中加载 */*，确实会发现 */* 请求不必等待 */sleep* 结束。不过正如之前提到的，这最终会使系统崩溃因为我们无限制的创建新线程。
+正如第十六章讲到的，`thread::spawn` 会创建一个新线程并在其中运行闭包中的代码。如果运行这段代码并在在浏览器中加载 */sleep*，接着在另两个浏览器标签页中加载 */*，确实会发现 */* 请求不必等待 */sleep* 结束。不过正如之前提到的，这最终会使系统崩溃因为我们会无限制地创建新线程。
+
+你可能也会回想起第十七章中正是这一类情况才是 async 和 await 真正闪光的地方！在我们用线程池构建项目时请记住并思考这与异步有什么不同或相同的地方。
 
 #### 创建有限数量的线程
 
-我们期望线程池以类似且熟悉的方式工作，以便从线程切换到线程池并不会对使用该 API 的代码做出较大的修改。示例 20-12 展示我们希望用来替换 `thread::spawn` 的 `ThreadPool` 结构体的假想接口：
+我们期望线程池以类似且熟悉的方式工作，以便从线程切换到线程池并不会对使用该 API 的代码做出大幅修改。示例 21-12 展示我们希望用来替换 `thread::spawn` 的 `ThreadPool` 结构体的假想接口：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -67,19 +67,19 @@
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-12/src/main.rs:here}}
 ```
 
-<span class="caption">示例 20-12: 假想的 `ThreadPool` 接口</span>
+<span class="caption">示例 21-12: 假想的 `ThreadPool` 接口</span>
 
-这里使用 `ThreadPool::new` 来创建一个新的线程池，它有一个可配置的线程数的参数，在这里是四。这样在 `for` 循环中，`pool.execute` 有着类似 `thread::spawn` 的接口，它获取一个线程池运行于每一个流的闭包。`pool.execute` 需要实现为获取闭包并传递给池中的线程运行。这段代码还不能编译，不过通过尝试，编译器会指导我们如何修复它。
+我们使用 `ThreadPool::new` 创建一个具有可配置线程数的新线程池，在这里是四。这样在 `for` 循环中，`pool.execute` 有着类似 `thread::spawn` 的接口，它获取一个线程池运行于每一个流的闭包。我们需要实现 `pool.execute`，使其能够接收闭包并将其传递给线程池中的线程执行。这段代码还不能编译，但我们可以尝试让编译器指导我们如何修复它。
 
-#### 采用编译器驱动构建 `ThreadPool`
+#### 采用编译器驱动开发构建 `ThreadPool`
 
-继续并对示例 20-12 中的 *src/main.rs* 做出修改，并利用来自 `cargo check` 的编译器错误来驱动开发。下面是我们得到的第一个错误：
+继续并对示例 21-12 中的 *src/main.rs* 做出修改，并利用来自 `cargo check` 的编译器错误来驱动开发。下面是我们得到的第一个错误：
 
 ```console
 {{#include ../listings/ch21-web-server/listing-21-12/output.txt}}
 ```
 
-好的，这告诉我们需要一个 `ThreadPool` 类型或模块，所以我们将构建一个。`ThreadPool` 的实现会与 web server 的特定工作相独立，所以让我们从 `hello` crate 切换到存放 `ThreadPool` 实现的新库 crate。这也意味着可以在任何工作中使用这个单独的线程池库，而不仅仅是处理网络请求。
+太好了！这个错误告诉我们需要一个 `ThreadPool` 类型或模块，所以我们现在就来构建一个。`ThreadPool` 的实现会与 web 服务端的特定工作相独立。所以让我们从 `hello` crate 切换到存放 `ThreadPool` 实现的新库 crate。切换为库 crate 之后，我们就可以在任何工作中使用这个单独的线程池库，而不仅仅是处理网络请求。
 
 创建 *src/lib.rs* 文件，它包含了目前可用的最简单的 `ThreadPool` 定义：
 
@@ -103,7 +103,7 @@
 {{#include ../listings/ch21-web-server/no-listing-01-define-threadpool-struct/output.txt}}
 ```
 
-这告诉我们下一步是为 `ThreadPool` 创建一个叫做 `new` 的关联函数。我们还知道 `new` 需要有一个参数可以接受 `4`，而且 `new` 应该返回 `ThreadPool` 实例。让我们实现拥有此特征的最小化 `new` 函数：
+此错误表明下一步是为 `ThreadPool` 创建一个叫做 `new` 的关联函数。我们还知道 `new` 需要有一个参数可以接受 `4`，而且 `new` 应该返回 `ThreadPool` 实例。让我们实现拥有此特征的最小化 `new` 函数：
 
 <span class="filename">文件夹：src/lib.rs</span>
 
@@ -111,7 +111,7 @@
 {{#rustdoc_include ../listings/ch21-web-server/no-listing-02-impl-threadpool-new/src/lib.rs}}
 ```
 
-这里选择 `usize` 作为 `size` 参数的类型，因为我们知道为负的线程数没有意义。我们还知道将使用 4 作为线程集合的元素数量，这也就是使用 `usize` 类型的原因，如第三章 [“整型”][integer-types] 部分所讲。
+这里选择 `usize` 作为 `size` 参数的类型，因为我们知道线程数为负没有意义。我们还知道将使用 `4` 作为线程集合的元素数量，这也就是使用 `usize` 类型的原因，如第三章 [“整型”][integer-types] 部分所讲。
 
 再次编译检查这段代码：
 
@@ -119,9 +119,9 @@
 {{#include ../listings/ch21-web-server/no-listing-02-impl-threadpool-new/output.txt}}
 ```
 
-现在有了一个警告和一个错误。暂时先忽略警告，发生错误是因为并没有 `ThreadPool` 上的 `execute` 方法。回忆 [“创建有限数量的线程”](#创建有限数量的线程) 部分我们决定线程池应该有与 `thread::spawn` 类似的接口，同时我们将实现 `execute` 函数来获取传递的闭包并将其传递给池中的空闲线程执行。
+这里发生错误是因为并没有 `ThreadPool` 上的 `execute` 方法。回忆 [“创建有限数量的线程”](#创建有限数量的线程) 部分我们决定线程池应该有与 `thread::spawn` 类似的接口，同时我们将实现 `execute` 函数来获取传递的闭包并将其传递给池中的空闲线程执行。
 
-我们会在 `ThreadPool` 上定义 `execute` 函数来获取一个闭包参数。回忆第十三章的 [“将被捕获的值移出闭包和 `Fn` trait”][fn-traits] 部分，闭包作为参数时可以使用三个不同的 trait：`Fn`、`FnMut` 和 `FnOnce`。我们需要决定这里应该使用哪种闭包。最终需要实现的类似于标准库的 `thread::spawn`，所以我们可以观察 `thread::spawn` 的签名在其参数中使用了何种 bound。查看文档会发现：
+我们会在 `ThreadPool` 上定义 `execute` 函数来获取一个闭包参数。回忆第十三章的 [“将捕获的值移出闭包和 `Fn` trait”][fn-traits] 部分，闭包作为参数时可以使用三个不同的 trait：`Fn`、`FnMut` 和 `FnOnce`。我们需要决定这里应该使用哪种闭包。最终需要实现的类似于标准库的 `thread::spawn`，所以我们可以观察 `thread::spawn` 的签名在其参数中使用了何种 bound。查看文档会发现：
 
 ```rust,ignore
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
@@ -151,11 +151,13 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 现在就只有警告了！这意味着能够编译了！注意如果尝试 `cargo run` 运行程序并在浏览器中发起请求，仍会在浏览器中出现在本章开始时那样的错误。这个库实际上还没有调用传递给 `execute` 的闭包！
 
-> 一个你可能听说过的关于像 Haskell 和 Rust 这样有严格编译器的语言的说法是 “如果代码能够编译，它就能工作”。这是一个提醒大家的好时机，实际上这并不是普适的。我们的项目可以编译，不过它完全没有做任何工作！如果构建一个真实且功能完整的项目，则需花费大量的时间来开始编写单元测试来检查代码能否编译 **并且** 拥有期望的行为。
+> 一个你可能听说过的关于像 Haskell 和 Rust 这样有严格编译器的语言的说法是 “如果代码能够编译，它就能工作”。不过这个说法并不是普适的。我们的项目可以编译，不过它完全没有做任何工作！如果构建一个真实且功能完整的项目，则需花费大量的时间来开始编写单元测试来检查代码能否编译 **并且** 拥有期望的行为。
 
-#### 在 `new` 中验证池中线程数量
+思考一下：如果这里要执行的是一个 `future` 而不是闭包会有什么不同？
 
-这里仍然存在警告是因为其并没有对 `new` 和 `execute` 的参数做任何操作。让我们用期望的行为来实现这些函数。以考虑 `new` 作为开始。之前选择使用无符号类型作为 `size` 参数的类型，因为线程数为负的线程池没有意义。然而，线程数为零的线程池同样没有意义，不过零是一个完全有效的 `usize` 值。让我们增加在返回 `ThreadPool` 实例之前检查 `size` 是否大于零的代码，并使用 `assert!` 宏在得到零时 panic，如示例 20-13 所示：
+#### 在 `new` 中验证线程池的线程数量
+
+这里并没有对 `new` 和 `execute` 的参数做任何操作。让我们用期望的行为来实现这些函数。以考虑 `new` 作为开始。之前选择使用无符号类型作为 `size` 参数的类型，因为线程数为负的线程池没有意义。然而，线程数为零的线程池同样没有意义，不过零是一个完全有效的 `usize` 值。让我们增加在返回 `ThreadPool` 实例之前检查 `size` 是否大于零的代码，并使用 `assert!` 宏在得到零时 panic，如示例 21-13 所示：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -163,7 +165,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-13/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 20-13: 实现 `ThreadPool::new` 在 `size` 为零时 panic</span>
+<span class="caption">示例 21-13: 实现 `ThreadPool::new` 在 `size` 为零时 panic</span>
 
 这里也用文档注释为 `ThreadPool` 增加了一些文档。注意这里遵循了良好的文档实践并增加了一个部分来提示函数会 panic 的情况，正如第十四章所讨论的。尝试运行 `cargo doc --open` 并点击 `ThreadPool` 结构体来查看生成的 `new` 的文档看起来如何！
 
@@ -173,9 +175,9 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 pub fn build(size: usize) -> Result<ThreadPool, PoolCreationError> {
 ```
 
-#### 分配空间以储存线程
+#### 分配空间以存储线程
 
-现在有了一个有效的线程池线程数，就可以实际创建这些线程并在返回结构体之前将它们储存在 `ThreadPool` 结构体中。不过如何 “储存” 一个线程？让我们再看看 `thread::spawn` 的签名：
+现在我们已经有了一种方法来确保线程池中的线程数有效，就可以实际创建这些线程并在返回结构体之前将它们存储在 `ThreadPool` 结构体中。不过如何 “存储” 一个线程？让我们再看看 `thread::spawn` 的签名：
 
 ```rust,ignore
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
@@ -187,7 +189,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 `spawn` 返回 `JoinHandle<T>`，其中 `T` 是闭包返回的类型。尝试使用 `JoinHandle` 来看看会发生什么。在我们的情况中，传递给线程池的闭包会处理连接并不返回任何值，所以 `T` 将会是单元类型 `()`。
 
-示例 20-14 中的代码可以编译，不过实际上还并没有创建任何线程。我们改变了 `ThreadPool` 的定义来存放一个 `thread::JoinHandle<()>` 的 vector 实例，使用 `size` 容量来初始化，并设置一个 `for` 循环来运行创建线程的代码，并返回包含这些线程的 `ThreadPool` 实例：
+示例 21-14 中的代码可以编译，不过实际上还并没有创建任何线程。我们改变了 `ThreadPool` 的定义来存放一个 `thread::JoinHandle<()>` 的 vector 实例，使用 `size` 容量来初始化，并设置一个 `for` 循环来运行创建线程的代码，并返回包含这些线程的 `ThreadPool` 实例：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -195,7 +197,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-14/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 20-14: 为 `ThreadPool` 创建一个 vector 来存放线程</span>
+<span class="caption">示例 21-14: 为 `ThreadPool` 创建一个 vector 来存放线程</span>
 
 这里将 `std::thread` 引入库 crate 的作用域，因为使用了 `thread::JoinHandle` 作为 `ThreadPool` 中 vector 元素的类型。
 
@@ -203,24 +205,26 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 如果再次运行 `cargo check`，它应该会成功。
 
-#### `Worker` 结构体负责从 `ThreadPool` 中将代码传递给线程
+#### `Worker` 结构体负责将代码从 `ThreadPool` 传递给线程
 
-示例 20-14 的 `for` 循环中留下了一个关于创建线程的注释。如何实际创建线程呢？这是一个难题。标准库提供的创建线程的方法，`thread::spawn`，它期望获取一些一旦创建线程就应该执行的代码。然而，我们希望开始线程并使其等待稍后传递的代码。标准库的线程实现并没有包含这么做的方法；我们必须自己实现。
+示例 21-14 的 `for` 循环中留下了一个关于创建线程的注释。这里，我们来看看如何实际创建线程。标准库提供了 `thread::spawn` 作为创建线程的方法，`thread::spawn` 期望获取一些一旦创建线程就应该执行的代码。然而，我们希望开始线程并使其等待稍后传递的代码。标准库的线程实现并没有包含这么做的方法；我们必须手动实现。
 
-我们将要实现的行为是创建线程并稍后发送代码，这会在 `ThreadPool` 和线程间引入一个新数据类型来管理这种新行为。这个数据结构称为 *Worker*，这是一个池实现中的常见概念。想象一下在餐馆厨房工作的员工：员工等待来自客户的订单，他们负责接受这些订单并完成它们。
+我们将要实现的行为是创建线程并稍后发送代码，这会在 `ThreadPool` 和线程间引入一个新数据类型来管理这种新行为。这个数据结构称为 *Worker*，这是一个池实现中的常见概念。`Worker` 会获取需要运行的代码，并在该 worker 的线程中运行该代码。
 
-不同于在线程池中储存一个 `JoinHandle<()>` 实例的 vector，我们会储存 `Worker` 结构体的实例。每一个 `Worker` 会储存一个单独的 `JoinHandle<()>` 实例。接着会在 `Worker` 上实现一个方法，它会获取需要允许代码的闭包并将其发送给已经运行的线程执行。我们还会赋予每一个 worker `id`，这样就可以在日志和调试中区别线程池中的不同 worker。
+想象一下在餐馆厨房工作的员工：员工等待来自顾客的订单，他们负责接单并完成它们。
+
+不同于在线程池中储存一个 `JoinHandle<()>` 实例的 vector，我们会储存 `Worker` 结构体的实例。每一个 `Worker` 会储存一个单独的 `JoinHandle<()>` 实例。接着会在 `Worker` 上实现一个方法，该方法将闭包发送到已经运行的线程中执行。我们还会赋予每个 worker 一个 `id`，这样就可以在日志和调试中区别线程池中的不同 `Worker` 的实例。
 
 如下是创建 `ThreadPool` 时会发生的新过程。在通过如下方式设置完 `Worker` 之后，我们会实现向线程发送闭包的代码：
 
-1. 定义 `Worker` 结构体存放 `id` 和 `JoinHandle<()>`
-2. 修改 `ThreadPool` 存放一个 `Worker` 实例的 vector
-3. 定义 `Worker::new` 函数，它获取一个 `id` 数字并返回一个带有 `id` 和用空闭包分配的线程的 `Worker` 实例
-4. 在 `ThreadPool::new` 中，使用 `for` 循环计数生成 `id`，使用这个 `id` 新建 `Worker`，并储存进 vector 中
+1. 定义存放 `id` 和 `JoinHandle<()>` 的 `Worker` 结构体。
+2. 修改 `ThreadPool` 存放一个 `Worker` 实例的 vector。
+3. 定义 `Worker::new` 函数，它获取一个 `id` 数字并返回一个带有 `id` 和用空闭包分配的线程的 `Worker` 实例。
+4. 在 `ThreadPool::new` 中，使用 `for` 循环计数生成 `id`，使用这个 `id` 新建 `Worker`，并储存进 vector 中。
 
-如果你渴望挑战，在查示例 20-15 中的代码之前尝试自己实现这些修改。
+如果你渴望挑战，在查示例 21-15 中的代码之前尝试自己实现这些修改。
 
-准备好了吗？示例 20-15 就是一个做出了这些修改的例子：
+准备好了吗？示例 21-15 就是一个做出了上述修改的例子：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -228,31 +232,31 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-15/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 20-15: 修改 `ThreadPool` 存放 `Worker` 实例而不是直接存放线程</span>
+<span class="caption">示例 21-15: 修改 `ThreadPool` 存放 `Worker` 实例而不是直接存放线程</span>
 
-这里将 `ThreadPool` 中字段名从 `threads` 改为 `workers`，因为它现在储存 `Worker` 而不是 `JoinHandle<()>`。使用 `for` 循环中的计数作为 `Worker::new` 的参数，并将每一个新建的 `Worker` 储存在叫做 `workers` 的 vector 中。
+这里将 `ThreadPool` 中字段名从 `threads` 改为 `workers`，因为它现在存储 `Worker` 而不是 `JoinHandle<()>`。使用 `for` 循环中的计数作为 `Worker::new` 的参数，并将每一个新建的 `Worker` 存储在叫做 `workers` 的 vector 中。
 
-`Worker` 结构体和其 `new` 函数是私有的，因为外部代码（比如 *src/main.rs* 中的 server）并不需要知道关于 `ThreadPool` 中使用 `Worker` 结构体的实现细节。`Worker::new` 函数使用 `id` 参数并储存了使用一个空闭包创建的 `JoinHandle<()>`。
+`Worker` 结构体和其 `new` 函数是私有的，因为外部代码（比如 *src/main.rs* 中的 server）并不需要知道关于 `ThreadPool` 中使用 `Worker` 结构体的实现细节。`Worker::new` 函数使用 `id` 参数并存储了使用一个空闭包创建的 `JoinHandle<()>` 实例。
 
 > 注意：如果操作系统因为没有足够的系统资源而无法创建线程时，`thread::spawn` 会 panic。这会导致整个 server panic，即使一些线程可能创建成功了。出于简单的考虑，这个行为是可行的，不过在一个生产级别的线程池实现中，你可能会希望使用 [`std::thread::Builder`][builder] 和其 [`spawn`][builder-spawn] 方法来返回一个 `Result`。
 
-这段代码能够编译并用指定给 `ThreadPool::new` 的参数创建储存了一系列的 `Worker` 实例，不过 **仍然** 没有处理 `execute` 中得到的闭包。让我们聊聊接下来怎么做。
+这段代码能够编译并用指定给 `ThreadPool::new` 的参数创建存储了一系列的 `Worker` 实例，不过 **仍然** 没有处理 `execute` 中得到的闭包。让我们聊聊接下来怎么做。
 
 #### 使用信道向线程发送请求
 
-下一个需要解决的问题是传递给 `thread::spawn` 的闭包完全没有做任何工作。目前，我们在 `execute` 方法中获得期望执行的闭包，不过在创建 `ThreadPool` 的过程中创建每一个 `Worker` 时需要向 `thread::spawn` 传递一个闭包。
+下一个需要解决的问题是传递给 `thread::spawn` 的闭包完全没有做任何工作。目前，我们在 `execute` 方法中获得期望执行的闭包，不过在创建 `ThreadPool` 的过程中创建每一个 `Worker` 时需要向 `thread::spawn` 传递一个要运行的闭包。
 
-我们希望刚创建的 `Worker` 结构体能够从 `ThreadPool` 的队列中获取需要执行的代码，并发送到线程中执行它们。
+我们希望刚创建的 `Worker` 结构体能够从 `ThreadPool` 的队列中获取需要执行的代码，并发送到线程中执行。
 
-在第十六章，我们学习了 **信道** —— 一个沟通两个线程的简单手段 —— 对于这个例子来说则是绝佳的。这里信道将充当任务队列的作用，`execute` 将通过 `ThreadPool` 向其中线程正在寻找工作的 `Worker` 实例发送任务。如下是这个计划：
+在第十六章，我们学习了 **信道** —— 一个沟通两个线程的简单手段 —— 对于这个例子来说则是绝佳的选择。这里信道将充当任务队列的作用，`execute` 将通过 `ThreadPool` 向其中线程正在寻找工作的 `Worker` 实例发送任务。计划如下：
 
-1. `ThreadPool` 会创建一个信道并充当发送者。
-2. 每个 `Worker` 将会充当接收者。
+1. `ThreadPool` 会创建一个信道并持有发送端。
+2. 每个 `Worker` 将持有接收端。
 3. 新建一个 `Job` 结构体来存放用于向信道中发送的闭包。
-4. `execute` 方法会在发送者发出期望执行的任务。
-5. 在线程中，`Worker` 会遍历接收者并执行任何接收到的任务。
+4. `execute` 方法会在发送者发出期望执行的工作。
+5. 在线程中，`Worker` 会遍历接收者并执行任何接收到的工作。
 
-让我们以在 `ThreadPool::new` 中创建信道并让 `ThreadPool` 实例充当发送者开始，如示例 20-16 所示。`Job` 是将在信道中发出的类型，目前它是一个没有任何内容的结构体：
+让我们以在 `ThreadPool::new` 中创建信道并让 `ThreadPool` 实例充当发送者开始，如示例 21-16 所示。`Job` 结构体目前为空，但它将作为我们通过通道发送的类型：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -260,11 +264,11 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-16/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 20-16: 修改 `ThreadPool` 来储存一个传输 `Job` 实例的发送者</span>
+<span class="caption">示例 21-16: 修改 `ThreadPool` 来储存一个传输 `Job` 实例的发送者</span>
 
 在 `ThreadPool::new` 中，新建了一个信道，并接着让线程池在接收端等待。这段代码能够成功编译。
 
-让我们尝试在线程池创建每个 worker 时将接收者传递给它们。须知我们希望在 worker 所分配的线程中使用接收者，所以将在闭包中引用 `receiver` 参数。示例 20-17 中展示的代码还不能编译：
+让我们尝试在线程池创建每个 worker 时将接收端传递给它们。须知我们希望在 worker 所分配的线程中使用接收者，所以将在闭包中引用 `receiver` 参数。示例 21-17 中展示的代码还不能编译：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -272,9 +276,9 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-17/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 20-17: 将信道的接收端传递给 worker</span>
+<span class="caption">示例 21-17: 将信道的接收端传递给 worker</span>
 
-这是一些小而直观的修改：将接收者传递进了 `Worker::new`，并接着在闭包中使用它。
+这是一些简单而直观的修改：将接收端传递进了 `Worker::new`，并接着在闭包中使用它。
 
 如果尝试 check 代码，会得到这个错误：
 
@@ -286,7 +290,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 另外，从信道队列中取出任务涉及到修改 `receiver`，所以这些线程需要一个能安全的共享和修改 `receiver` 的方式，否则可能导致竞争状态（参考第十六章）。
 
-回忆一下第十六章讨论的线程安全智能指针，为了在多个线程间共享所有权并允许线程修改其值，需要使用 `Arc<Mutex<T>>`。`Arc` 使得多个 worker 拥有接收端，而 `Mutex` 则确保一次只有一个 worker 能从接收端得到任务。示例 20-18 展示了所需的修改：
+回忆一下第十六章讨论的线程安全智能指针，为了在多个线程间共享所有权并允许线程修改其值，需要使用 `Arc<Mutex<T>>`。`Arc` 使得多个 `Worker` 实例拥有接收端，而 `Mutex` 则确保一次只有一个 `Worker` 能从接收端得到任务。示例 21-18 展示了所需的修改：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -294,15 +298,15 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-18/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 20-18: 使用 `Arc` 和 `Mutex` 在 worker 间共享接收者</span>
+<span class="caption">示例 21-18: 使用 `Arc` 和 `Mutex` 在 worker 间共享接收者</span>
 
-在 `ThreadPool::new` 中，将接收者放入一个 `Arc` 和一个 `Mutex` 中。对于每一个新 worker，克隆 `Arc` 来增加引用计数，如此这些 worker 就可以共享接收者的所有权了。
+在 `ThreadPool::new` 中，将接收端放入 `Arc` 和 `Mutex` 中。对于每一个新 `Worker` `Arc` 来增加引用计数，如此这些 `Worker` 实例就可以共享接收者的所有权了。
 
-通过这些修改，代码可以编译了！我们做到了！
+通过这些修改，代码可以编译了！我们已经快完成了！
 
 #### 实现 `execute` 方法
 
-最后让我们实现 `ThreadPool` 上的 `execute` 方法。同时也要修改 `Job` 结构体：它将不再是结构体，`Job` 将是一个有着 `execute` 接收到的闭包类型的 trait 对象的类型别名。第二十章 [“类型别名用来创建类型同义词”][creating-type-synonyms-with-type-aliases] 部分提到过，类型别名允许将长的类型变短。观察示例 20-19：
+最后让我们实现 `ThreadPool` 上的 `execute` 方法。同时也要修改 `Job` 结构体：它将不再是结构体，`Job` 将是一个有着 `execute` 接收到的闭包类型的 trait 对象的类型别名。第二十章 [“使用类型别名创建类型同义词”][creating-type-synonyms-with-type-aliases] 部分提到过，类型别名允许将长的类型变短。观察示例 21-19：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -310,11 +314,11 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-19/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 20-19: 为存放每一个闭包的 `Box` 创建一个 `Job` 类型别名，接着在信道中发出任务</span>
+<span class="caption">示例 21-19: 为存放每一个闭包的 `Box` 创建一个 `Job` 类型别名，接着在信道中发出任务</span>
 
-在使用 `execute` 得到的闭包新建 `Job` 实例之后，将这些任务从信道的发送端发出。这里调用 `send` 上的 `unwrap`，因为发送可能会失败，这可能发生于例如停止了所有线程执行的情况，这意味着接收端停止接收新消息了。不过目前我们无法停止线程执行；只要线程池存在它们就会一直执行。使用 `unwrap` 是因为我们知道失败不可能发生，即便编译器不这么认为。
+在使用 `execute` 得到的闭包新建 `Job` 实例之后，将这些任务从信道的发送端发出。这里调用 `send` 上的 `unwrap`，因为发送可能会失败，这可能发生于例如停止了所有线程执行的情况，这意味着接收端停止接收新消息了。不过目前我们无法停止线程执行；只要线程池存在它们就会一直执行。使用 `unwrap` 是因为我们知道失败不可能发生，不过编译器不知道这些。
 
-不过到此事情还没有结束！在 worker 中，传递给 `thread::spawn` 的闭包仍然还只是 **引用** 了信道的接收端。相反我们需要闭包一直循环，向信道的接收端请求任务，并在得到任务时执行它们。如示例 20-20 对 `Worker::new` 做出修改：
+不过到此事情还没有结束！在 `Worker` 中，传递给 `thread::spawn` 的闭包仍然还只是 **引用** 了信道的接收端。相反我们需要闭包一直循环，向信道的接收端请求任务，并在得到任务时执行它们。如示例 21-20 对 `Worker::new` 做出修改：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -322,7 +326,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-20/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 20-20: 在 worker 线程中接收并执行任务</span>
+<span class="caption">示例 21-20: 在 worker 线程中接收并执行任务</span>
 
 这里，首先在 `receiver` 上调用了 `lock` 来获取互斥器，接着 `unwrap` 在出现任何错误时 panic。如果互斥器处于一种叫做 **被污染**（*poisoned*）的状态时获取锁可能会失败，这可能发生于其他线程在持有锁时 panic 了且没有释放锁。在这种情况下，调用 `unwrap` 使其 panic 是正确的行为。请随意将 `unwrap` 改为包含有意义错误信息的 `expect`。
 
@@ -335,28 +339,28 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 ```console
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
-warning: field is never read: `workers`
+warning: field `workers` is never read
  --> src/lib.rs:7:5
   |
+6 | pub struct ThreadPool {
+  |            ---------- field in this struct
 7 |     workers: Vec<Worker>,
-  |     ^^^^^^^^^^^^^^^^^^^^
+  |     ^^^^^^^
   |
   = note: `#[warn(dead_code)]` on by default
 
-warning: field is never read: `id`
+warning: fields `id` and `thread` are never read
   --> src/lib.rs:48:5
    |
+47 | struct Worker {
+   |        ------ fields in this struct
 48 |     id: usize,
-   |     ^^^^^^^^^
-
-warning: field is never read: `thread`
-  --> src/lib.rs:49:5
-   |
+   |     ^^
 49 |     thread: thread::JoinHandle<()>,
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |     ^^^^^^
 
-warning: `hello` (lib) generated 3 warnings
-    Finished dev [unoptimized + debuginfo] target(s) in 1.40s
+warning: `hello` (lib) generated 2 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.91s
      Running `target/debug/hello`
 Worker 0 got a job; executing.
 Worker 2 got a job; executing.
@@ -370,11 +374,11 @@ Worker 0 got a job; executing.
 Worker 2 got a job; executing.
 ```
 
-成功了！现在我们有了一个可以异步执行连接的线程池！它绝不会创建超过四个线程，所以当 server 收到大量请求时系统也不会负担过重。如果请求 */sleep*，server 也能够通过另外一个线程处理其他请求。
+成功了！现在我们有了一个可以异步执行连接的线程池！它绝不会创建超过四个线程，所以当服务端收到大量请求时系统也不会负担过重。如果请求 */sleep*，server 也能够通过另外一个线程处理其他请求。
 
-> 注意如果同时在多个浏览器窗口打开 */sleep*，它们可能会彼此间隔地加载 5 秒，因为一些浏览器出于缓存的原因会顺序执行相同请求的多个实例。这些限制并不是由于我们的 web server 造成的。
+> 注意如果同时在多个浏览器窗口打开 */sleep*，它们可能会彼此间隔地加载 5 秒，因为一些浏览器出于缓存的原因会顺序执行相同请求的多个实例。这些限制并不是由于我们的 web 服务端造成的。
 
-在学习了第十七章和第十八章的 `while let` 循环之后，你可能会好奇为何不能如此编写 worker 线程，如示例 20-21 所示：
+在学习了第十七章和第十八章的 `while let` 循环之后，你可能会好奇为何不能如此编写 worker 线程，如示例 21-21 所示：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -382,15 +386,15 @@ Worker 2 got a job; executing.
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-21/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 20-21: 一个使用 `while let` 的 `Worker::new` 替代实现</span>
+<span class="caption">示例 21-21: 一个使用 `while let` 的 `Worker::new` 替代实现</span>
 
 这段代码可以编译和运行，但是并不会产生所期望的线程行为：一个慢请求仍然会导致其他请求等待执行。其原因有些微妙：`Mutex` 结构体没有公有 `unlock` 方法，因为锁的所有权依赖 `lock` 方法返回的 `LockResult<MutexGuard<T>>` 中 `MutexGuard<T>` 的生命周期。这允许借用检查器在编译时确保绝不会在没有持有锁的情况下访问由 `Mutex` 守护的资源，不过如果没有认真的思考 `MutexGuard<T>` 的生命周期的话，也可能会导致比预期更久的持有锁。
 
-示例 20-20 中的代码使用的 `let job = receiver.lock().unwrap().recv().unwrap();` 之所以可以工作是因为对于 `let` 来说，当 `let` 语句结束时任何表达式中等号右侧使用的临时值都会立即被丢弃。然而 `while let`（`if let` 和 `match`）直到相关的代码块结束都不会丢弃临时值。在示例 20-21 中，`job()` 调用期间锁一直持续，这也意味着其他的 worker 无法接受任务。
+示例 21-20 中的代码使用的 `let job = receiver.lock().unwrap().recv().unwrap();` 之所以可以工作是因为对于 `let` 来说，当 `let` 语句结束时任何表达式中等号右侧使用的临时值都会立即被丢弃。然而 `while let`（`if let` 和 `match`）直到相关的代码块结束都不会丢弃临时值。在示例 21-21 中，`job()` 调用期间锁一直持续，这也意味着其他的 `Worker` 实例无法接收任务。
 
 [creating-type-synonyms-with-type-aliases]:
-ch20-04-advanced-types.html#类型别名用来创建类型同义词
+ch20-03-advanced-types.html#使用类型别名创建类型同义词
 [integer-types]: ch03-02-data-types.html#整型
-[fn-traits]: ch13-01-closures.html#将被捕获的值移出闭包和-fn-trait
+[fn-traits]: ch13-01-closures.html#将捕获的值移出闭包和-fn-trait
 [builder]: https://doc.rust-lang.org/std/thread/struct.Builder.html
 [builder-spawn]: https://doc.rust-lang.org/std/thread/struct.Builder.html#method.spawn

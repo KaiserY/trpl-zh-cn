@@ -128,6 +128,6 @@
 
 [performance-of-code-using-generics]:
 ch10-01-syntax.html#泛型代码的性能
-[dynamically-sized]: ch20-04-advanced-types.html#动态大小类型和-sized-trait
+[dynamically-sized]: ch20-03-advanced-types.html#动态大小类型和-sized-trait
 [Rust RFC 255 ref]: https://github.com/rust-lang/rfcs/blob/master/text/0255-object-safety.md
 [Rust Reference ref]: https://doc.rust-lang.org/reference/items/traits.html#object-safety
