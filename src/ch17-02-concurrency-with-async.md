@@ -243,7 +243,7 @@ hi number 9 from the first task!
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-13/src/main.rs:here}}
 ```
 
-<figcaption>示例 17-13：通过多个异步代码块使用多个发送者</figcaption>
+<figcaption>示例 17-13：通过多个异步代码块使用多个发送端</figcaption>
 
 </figure>
 
