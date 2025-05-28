@@ -109,7 +109,7 @@
   - [深入理解 async 相关的 traits](ch17-05-traits-for-async.md)
   - [future、任务和线程](ch17-06-futures-tasks-threads.md)
 
-- [Rust 的面向对象编程特性](ch18-00-oop.md)
+- [面向对象编程特性](ch18-00-oop.md)
   - [面向对象语言的特点](ch18-01-what-is-oo.md)
   - [顾及不同类型值的 trait 对象](ch18-02-trait-objects.md)
   - [面向对象设计模式的实现](ch18-03-oo-design-patterns.md)
