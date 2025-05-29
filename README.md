@@ -4,13 +4,12 @@
 
 ## 状态
 
-- ch17 async & await 施工完毕。
-- 2024 edtion 施工中，若示例代码有误请见谅。
+- 2024 edtion 施工完毕。
 
 PS:
 
 * 对照源码位置：[https://github.com/rust-lang/book/tree/main/src][source]
-* 每章翻译开头都带有官方链接和 commit hash，若发现与官方不一致，欢迎 Issue 或 PR :)
+* 每章翻译开头都带有官方链接和 commit hash 的注释，若发现与官方不一致，欢迎 Issue 或 PR
 
 [source]: https://github.com/rust-lang/book/tree/main/src
 

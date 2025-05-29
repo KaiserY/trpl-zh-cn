@@ -1,81 +1,81 @@
 ## 附录 A：关键字
 
-> [appendix-01-keywords.md](https://github.com/rust-lang/book/blob/main/src/appendix-01-keywords.md)
-> <br>
-> commit efbafdba3618487fbc9305318fcab9775132ac15
+<!-- https://github.com/rust-lang/book/blob/main/src/appendix-01-keywords.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
 
-下面的列表包含 Rust 中正在使用或者以后会用到的关键字。因此，这些关键字不能被用作标识符（除了 “[原始标识符][raw-identifiers]” 部分介绍的原始标识符），这包括函数、变量、参数、结构体字段、模块、crate、常量、宏、静态值、属性、类型、trait 或生命周期
+下面的列表包含 Rust 中正在使用或者将来会用到的关键字。因此，这些关键字不能被用作标识符（除了 “[原始标识符][raw-identifiers]” 部分介绍的原始标识符），这包括函数、变量、参数、结构体字段、模块、crate、常量、宏、静态值、属性、类型、trait 或生命周期
 的名字。
 
 [raw-identifiers]: #原始标识符
 
 ### 目前正在使用的关键字
 
-如下关键字目前有对应其描述的功能。
+如下为目前正在使用的关键字及其功能描述的列表。
 
-* `as` - 强制类型转换，消除特定包含项的 trait 的歧义，或者对 `use` 语句中的项重命名
-* `async` - 返回一个 `Future` 而不是阻塞当前线程
-* `await` - 暂停执行直到 `Future` 的结果就绪
-* `break` - 立刻退出循环
-* `const` - 定义常量或不变裸指针（constant raw pointer）
-* `continue` - 继续进入下一次循环迭代
-* `crate` - 在模块路径中，代指 crate root
-* `dyn` - 动态分发 trait 对象
-* `else` - 作为 `if` 和 `if let` 控制流结构的 fallback
-* `enum` - 定义一个枚举
-* `extern` - 链接一个外部函数或变量
-* `false` - 布尔字面值 `false`
-* `fn` - 定义一个函数或 **函数指针类型** (*function pointer type*)
-* `for` - 遍历一个迭代器或实现一个 trait 或者指定一个更高级的生命周期
-* `if` - 基于条件表达式的结果分支
-* `impl` - 实现自有或 trait 功能
-* `in` - `for` 循环语法的一部分
-* `let` - 绑定一个变量
-* `loop` - 无条件循环
-* `match` - 模式匹配
-* `mod` - 定义一个模块
-* `move` - 使闭包获取其所捕获项的所有权
-* `mut` - 表示引用、裸指针或模式绑定的可变性
-* `pub` - 表示结构体字段、`impl` 块或模块的公有可见性
-* `ref` - 通过引用绑定
-* `return` - 从函数中返回
-* `Self` - 定义或实现 trait 的类型的类型别名
-* `self` - 表示方法本身或当前模块
-* `static` - 表示全局变量或在整个程序执行期间保持其生命周期
-* `struct` - 定义一个结构体
-* `super` - 表示当前模块的父模块
-* `trait` - 定义一个 trait
-* `true` - 布尔字面值 `true`
-* `type` - 定义一个类型别名或关联类型
-* `union` - 定义一个 [union] 并且是 union 声明中唯一用到的关键字
-* `unsafe` - 表示不安全的代码、函数、trait 或实现
-* `use` - 引入外部空间的符号
-* `where` - 表示一个约束类型的从句
-* `while` - 基于一个表达式的结果判断是否进行循环
+- `as` - 原始类型转换，消除特定包含项的 trait 的歧义，或者对 `use` 语句中的项重命名
+- `async` - 返回一个 `Future` 而不是阻塞当前线程
+- `await` - 暂停执行直到 `Future` 的结果就绪
+- `break` - 立刻退出循环
+- `const` - 定义常量或常量裸指针（constant raw pointer）
+- `continue` - 继续进入下一次循环迭代
+- `crate` - 在模块路径中，代指 crate root
+- `dyn` - 动态分发 trait 对象
+- `else` - 作为 `if` 和 `if let` 控制流结构的 fallback
+- `enum` - 定义一个枚举
+- `extern` - 链接一个外部函数或变量
+- `false` - 布尔字面值 `false`
+- `fn` - 定义一个函数或 **函数指针类型** (*function pointer type*)
+- `for` - 遍历一个迭代器或实现一个 trait 或者指定一个更高级的生命周期
+- `if` - 基于条件表达式的结果分支
+- `impl` - 实现自有或 trait 功能
+- `in` - `for` 循环语法的一部分
+- `let` - 绑定一个变量
+- `loop` - 无条件循环
+- `match` - 模式匹配
+- `mod` - 定义一个模块
+- `move` - 使闭包获取其所捕获项的所有权
+- `mut` - 表示引用、裸指针或模式绑定的可变性
+- `pub` - 表示结构体字段、`impl` 块或模块的公有可见性
+- `ref` - 通过引用绑定
+- `return` - 从函数中返回
+- `Self` - 定义或实现 trait 的类型的类型别名
+- `self` - 表示方法本身或当前模块
+- `static` - 表示全局变量或在整个程序执行期间保持其生命周期
+- `struct` - 定义一个结构体
+- `super` - 表示当前模块的父模块
+- `trait` - 定义一个 trait
+- `true` - 布尔字面值 `true`
+- `type` - 定义一个类型别名或关联类型
+- `union` - 定义一个 [union]；仅在 union 声明中作为关键字
+- `unsafe` - 表示不安全的代码、函数、trait 或实现
+- `use` - 将符号引入作用域；为泛型和生命周期约束指定精确捕获
+- `where` - 表示一个约束类型的从句
+- `while` - 根据表达式的结果进行条件循环
 
 [union]: https://doc.rust-lang.org/reference/items/unions.html
 
-### 保留做将来使用的关键字
+### 为将来使用保留的关键字
 
-如下关键字没有任何功能，不过由 Rust 保留以备将来的应用。
+以下关键字目前尚无任何功能，但已被 Rust 保留以备将来使用。
 
-* `abstract`
-* `become`
-* `box`
-* `do`
-* `final`
-* `macro`
-* `override`
-* `priv`
-* `try`
-* `typeof`
-* `unsized`
-* `virtual`
-* `yield`
+- `abstract`
+- `become`
+- `box`
+- `do`
+- `final`
+- `gen`
+- `macro`
+- `override`
+- `priv`
+- `try`
+- `typeof`
+- `unsized`
+- `virtual`
+- `yield`
 
 ### 原始标识符
 
-原始标识符（Raw identifiers）允许你使用通常不能使用的关键字，其带有 `r#` 前缀。
+**原始标识符**（_Raw identifiers_）是一种允许你使用通常不能使用的关键字的语法。通过在关键字前加上 `r#` 前缀来使用原始标识符。
 
 例如，`match` 是关键字。如果尝试编译如下使用 `match` 作为名字的函数：
 
@@ -95,7 +95,7 @@ error: expected identifier, found keyword `match`
   |    ^^^^^ expected identifier, found keyword
 ```
 
-该错误表示你不能将关键字 `match` 用作函数标识符。你可以使用原始标识符将 `match` 作为函数名称使用：
+该错误表示你不能将关键字 `match` 用作函数标识符。要将 `match` 用作函数名称，需要使用原始标识符语法，如下所示：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -111,6 +111,6 @@ fn main() {
 
 此代码编译没有任何错误。注意 `r#` 前缀需同时用于函数名定义和 `main` 函数中的调用。
 
-原始标识符允许使用你选择的任何单词作为标识符，即使该单词恰好是保留关键字。这给予了我们更大的自由来选择名字，这样与其他语言交互式就不用考虑到关键字问题，在要交互的语言中这个名字不是关键字。此外，原始标识符允许你使用以不同于你的 crate 使用的 Rust 版本编写的库。比如，`try` 在 2015 edition 中不是关键字，而在 2018 edition 则是。所以如果用 2015 edition 编写的库中带有 `try` 函数，在 2018 edition 中调用时就需要使用原始标识符语法，在这里是 `r#try`。有关版本的更多信息，请参见[附录 E][appendix-e]。
+原始标识符允许使用你选择的任何单词作为标识符，即使该单词恰好是保留关键字。这给予了我们更大的自由来选择名字，这样与其他语言交互式就不用考虑到关键字问题，在要交互的语言中这个名字不是关键字。此外，原始标识符允许你使用以不同于你的 crate 使用的 Rust 版本编写的库。比如，`try` 在 2015 edition 中不是关键字，而在 2018、2021 和 2024 editio 则是。所以如果用 2015 edition 编写的库中带有 `try` 函数，在 2018 edition 中调用时就需要使用原始标识符语法，在这里是 `r#try`。有关版本的更多信息，请参见[附录 E][appendix-e]。
 
 [appendix-e]: appendix-05-editions.html

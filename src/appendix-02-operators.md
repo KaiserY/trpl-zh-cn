@@ -1,10 +1,9 @@
 ## 附录 B：运算符与符号
 
-> [appendix-02-operators.md](https://github.com/rust-lang/book/blob/main/src/appendix-02-operators.md)
-> <br />
-> commit 396fdb69de7fb18f24b15c7ad13491b1c1fa7231
+<!-- https://github.com/rust-lang/book/blob/main/src/appendix-02-operators.md -->
+<!-- commit 0833386eab8f37c60b8d80e05fabc4a97d0628ee -->
 
-该附录包含了 Rust 语法的词汇表，包括运算符以及其他的符号，这些符号单独出现或出现在路径、泛型、trait bounds、宏、属性、注释、元组以及大括号上下文中。
+该附录包含了 Rust 语法的词汇表，包括运算符以及其它符号，这些符号单独出现或出现在路径、泛型、trait bounds、宏、属性、注释、元组以及大括号上下文中。
 
 ### 运算符
 
@@ -35,10 +34,12 @@
 | `-` | `- expr` | 算术取负 | `Neg` |
 | `-` | `expr - expr` | 算术减法 | `Sub` |
 | `-=` | `var -= expr` | 算术减法与赋值 | `SubAssign` |
-| `->` | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | 函数与闭包，返回类型 | |
-| `.` | `expr.ident` | 成员访问 | |
-| `..` | `..`, `expr..`, `..expr`, `expr..expr` | 右开区间范围 | `PartialOrd` |
-| `..=` | `..=expr`, `expr..=expr` | 右闭区间范围模式 | `PartialOrd` |
+| `->` | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | 函数与闭包的返回类型 | |
+| `.` | `expr.ident` | 字段访问 | |
+| `.` | `expr.ident(expr, ...)` | 方法调用 | |
+| `.` | `expr.0`, `expr.1`, etc. | 元组索引 | |
+| `..` | `..`, `expr..`, `..expr`, `expr..expr` | 右开区间范围字面值 | `PartialOrd` |
+| `..=` | `..=expr`, `expr..=expr` | 右闭区间范围字面值 | `PartialOrd` |
 | `..` | `..expr` | 结构体更新语法 | |
 | `..` | `variant(x, ..)`, `struct_type { x, .. }` | “与剩余部分” 的模式绑定 | |
 | `...` | `expr...expr` | （Deprecated，请使用 `..=`）在模式中：闭区间范围模式 | |
@@ -55,15 +56,15 @@
 | `<=` | `expr <= expr` | 小于等于比较 | `PartialOrd` |
 | `=` | `var = expr`, `ident = type` | 赋值/等值 | |
 | `==` | `expr == expr` | 等于比较 | `PartialEq` |
-| `=>` | `pat => expr` | 匹配准备语法的部分 | |
+| `=>` | `pat => expr` | 匹配分支语法的部分 | |
 | `>` | `expr > expr` | 大于比较 | `PartialOrd` |
-| `>=` | `expr >= expr` | 大于等于比较 | `PartialOrd` |
+| `>=` | `expr >= expr` | 大于或等于比较 | `PartialOrd` |
 | `>>` | `expr >> expr` | 右移 | `Shr` |
 | `>>=` | `var >>= expr` | 右移与赋值 | `ShrAssign` |
 | `@` | `ident @ pat` | 模式绑定 | |
 | `^` | `expr ^ expr` | 按位异或 | `BitXor` |
 | `^=` | `var ^= expr` | 按位异或与赋值 | `BitXorAssign` |
-| <code>&vert;</code> | <code>pat &vert; pat</code> | 模式选择 | |
+| <code>&vert;</code> | <code>pat &vert; pat</code> | 模式替代 | |
 | <code>&vert;</code> | <code>expr &vert; expr</code> | 按位或 | `BitOr` |
 | <code>&vert;=</code> | <code>var &vert;= expr</code> | 按位或与赋值 | `BitOrAssign` |
 | <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code> | 短路（Short-circuiting）逻辑或 | |
@@ -71,7 +72,7 @@
 
 ### 非运算符符号
 
-下面的列表中包含了所有和运算符不一样功能的符号；也就是说，它们并不像函数调用或方法调用一样表现。
+下面的列表中包含了所有和运算符不一样功能的符号；也就是说，它们不表现为函数或方法调用。
 
 表 B-2 展示了以其自身出现以及出现在合法其他各个地方的符号。
 
@@ -81,7 +82,7 @@
 |--------|-------------|
 | `'ident` | 命名生命周期或循环标签 |
 | `...u8`, `...i32`, `...f64`, `...usize` 等 | 指定类型的数值常量 |
-| `"..."` | 字符串常量 |
+| `"..."` | 字符串字面值 |
 | `r"..."`, `r#"..."#`, `r##"..."##`, etc. | 原始字符串字面值，未处理的转义字符 |
 | `b"..."` | 字节字符串字面值; 构造一个字节数组类型而非字符串 |
 | `br"..."`, `br#"..."#`, `br##"..."##` 等 | 原始字节字符串字面值，原始和字节字符串字面值的结合 |
@@ -98,9 +99,9 @@
 | 符号 | 解释 |
 |--------|-------------|
 | `ident::ident` | 命名空间路径 |
-| `::path` | 与 crate 根相对的路径（如一个显式绝对路径） |
-| `self::path` | 与当前模块相对的路径（如一个显式相对路径）|
-| `super::path` | 与父模块相对的路径 |
+| `::path` | 与 extern prelude 相对的路径，其他所有 crate 都以此为根（即一个包含 crate 名称的显式绝对路径） |
+| `self::path` | 与当前模块相对的路径（即一个显式相对路径）|
+| `super::path` | 与当前模块的父模块相对的路径 |
 | `type::ident`, `<type as trait>::ident` | 关联常量、函数以及类型 |
 | `<type>::...` | 不可以被直接命名的关联项类型（如 `<&T>::...`，`<[T]>::...`，等） |
 | `trait::method(...)` | 通过命名定义的 trait 来消除方法调用的二义性 |
@@ -108,7 +109,7 @@
 | `<type as trait>::method(...)` | 通过命名 trait 和类型来消除方法调用的二义性 |
 
 
-表 B-4 展示了出现在泛型类型参数上下文中的符号。
+表 B-4 展示了用于泛型类型参数上下文中的符号。
 
 <span class="caption">表 B-4：泛型</span>
 
@@ -123,7 +124,7 @@
 | `for<...> type` | 高级生命周期限制 |
 | `type<ident=type>` | 泛型，其一个或多个相关类型必须被指定为特定类型（如 `Iterator<Item=T>`）|
 
-表 B-5 展示了出现在使用 trait bounds 约束泛型参数上下文中的符号。
+表 B-5 展示了出现在使用 trait bound 约束泛型参数上下文中的符号。
 
 <span class="caption">表 B-5: Trait Bound 约束</span>
 
@@ -131,12 +132,12 @@
 |--------|-------------|
 | `T: U` | 泛型参数 `T` 约束于实现了 `U` 的类型 |
 | `T: 'a` | 泛型 `T` 的生命周期必须长于 `'a`（意味着该类型不能传递包含生命周期短于 `'a` 的任何引用）|
-| `T: 'static` | 泛型 T 不包含除 'static 之外的借用引用 |
+| `T: 'static` | 泛型 T 不包含除 `'static` 之外的借用引用 |
 | `'b: 'a` | 泛型 `'b` 生命周期必须长于泛型 `'a` |
 | `T: ?Sized` | 使用一个不定大小的泛型类型 |
 | `'a + trait`, `trait + trait` | 复合类型限制 |
 
-表 B-6 展示了在调用或定义宏以及在其上指定属性时的上下文中出现的符号。
+表 B-6 展示了在调用或定义宏以及在项上指定属性的上下文中出现的符号。
 
 <span class="caption">表 B-6: 宏与属性</span>
 
@@ -149,7 +150,7 @@
 | `$(…)…` | 宏重复 |
 | `ident!(...)`, `ident!{...}`, `ident![...]` | 宏调用 |
 
-表 B-7 展示了写注释的符号。
+表 B-7 展示了创建注释的符号。
 
 <span class="caption">表 B-7: 注释</span>
 
@@ -162,9 +163,9 @@
 | `/*!...*/` | 内部块文档注释 |
 | `/**...*/` | 外部块文档注释 |
 
-表 B-8 展示了出现在使用元组时上下文中的符号。
+表 B-8 展示了出现在使用圆括号上下文中的符号。
 
-<span class="caption">表 B-8: 元组</span>
+<span class="caption">表 B-8: 圆括号</span>
 
 | 符号 | 解释 |
 |--------|-------------|
@@ -175,7 +176,6 @@
 | `(expr, ...)` | 元组表达式 |
 | `(type, ...)` | 元组类型 |
 | `expr(expr, ...)` | 函数调用表达式；也用于初始化元组结构体 `struct` 以及元组枚举 `enum` 变体 |
-| `expr.0`, `expr.1`, etc. | 元组索引 |
 
 表 B-9 展示了使用大括号的上下文。
 
@@ -192,8 +192,8 @@
 
 | 符号 | 解释 |
 |---------|-------------|
-| `[...]` | 数组 |
-| `[expr; len]` | 复制了 `len`个 `expr`的数组 |
-| `[type; len]` | 包含 `len`个 `type` 类型的数组|
+| `[...]` | 数组字面值 |
+| `[expr; len]` | 复制了 `len` 个 `expr` 的数组 |
+| `[type; len]` | 包含 `len` 个 `type` 类型的数组|
 | `expr[expr]` | 集合索引。重载（`Index`, `IndexMut`） |
 | `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]` | 集合索引，使用 `Range`，`RangeFrom`，`RangeTo` 或 `RangeFull` 作为索引来代替集合 slice |
