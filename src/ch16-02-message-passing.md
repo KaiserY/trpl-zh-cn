@@ -3,7 +3,7 @@
 <!-- https://github.com/rust-lang/book/blob/main/src/ch16-02-message-passing.md -->
 <!-- commit 36383b4da21dbd0a0781473bc8ad7ef0ed1b6751 -->
 
-一个日益流行的确保安全并发的方式是**消息传递**（_message passing_），这里线程或 actor 通过发送包含数据的消息来相互沟通。这个思想来源于 [Go 编程语言文档中](https://golang.org/doc/effective_go.html#concurrency) 的口号：“不要通过共享内存来通讯；而要通过通讯来共享内存。”（“Do not communicate by sharing memory; instead, share memory by communicating.”）
+一个日益流行的确保安全并发的方式是**消息传递**（_message passing_），这里线程或 actor 通过发送包含数据的消息来相互沟通。这个思想来源于 [Go 编程语言文档](https://golang.org/doc/effective_go.html#concurrency) 中的口号：“不要通过共享内存来通讯；而要通过通讯来共享内存。”（“Do not communicate by sharing memory; instead, share memory by communicating.”）
 
 为了实现消息传递并发，Rust 标准库提供了一个**信道**（_channel_）实现。信道是一个通用编程概念，表示数据从一个线程发送到另一个线程。
 
