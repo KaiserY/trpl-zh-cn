@@ -1,8 +1,7 @@
 # 高级特性
 
-> [ch20-00-advanced-features.md](https://github.com/rust-lang/book/blob/main/src/ch20-00-advanced-features.md)
-> <br>
-> commit 3a30e4c1fbe641afc066b3af9eb01dcdf5ed8b24
+<!-- https://github.com/rust-lang/book/blob/main/src/ch20-00-advanced-features.md -->
+<!-- commit 3a30e4c1fbe641afc066b3af9eb01dcdf5ed8b24 -->
 
 现在我们已经学习了 Rust 编程语言中最常用的部分。在第二十一章开始另一个新项目之前，我们先来了解一些你偶尔可能会遇到，但并不会每天都用的语言特性。你可以将本章作为不经意间遇到未知的内容时的参考。本章将要学习的功能在一些非常特定的场景下非常有用。虽然很少会碰到它们，我们希望确保你了解 Rust 提供的所有功能。
 
