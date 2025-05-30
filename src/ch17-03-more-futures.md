@@ -254,7 +254,7 @@ received 'you'
 
 当我们使用 `join` 系列函数和宏来 “join” future 时，我们要求它们 *全部* 结束才能继续。虽然有时我们只需要 *部分* future 结束就能继续，这有点像一个 future 与另一个 future 竞争。
 
-在示例 17-21 中，我们再次使用 `trpl::race` 来运行 `slow` 和 `fast` 两个 future 并相互竞争。它们每一个都会在开始运行时打印一条消息，通过调用并 await `sleep` 暂停一段时间，接着在其结束时打印另一条消息。然后我们将它们传递给 `trpl::race` 并等待其中一个结束。（结果不会令人意外：`fast` 会赢！）不同于我们在[第一个异步程序][async-program]中使用 `race` 的时候，这里忽略了其返回的 `Either` 实例，因为所有有趣的行为都发生在异步代码块中。
+在示例 17-21 中，我们再次使用 `trpl::race` 来运行 `slow` 和 `fast` 两个 future 并相互竞争。它们每一个都会在开始运行时打印一条消息，并通过调用 await `sleep` 暂停一段时间，接着在其结束时打印另一条消息。然后我们将它们传递给 `trpl::race` 并等待其中一个结束。（结果不会令人意外：`fast` 会赢！）不同于我们在[第一个异步程序][async-program]中使用 `race` 的时候，这里忽略了其返回的 `Either` 实例，因为所有有趣的行为都发生在异步代码块中。
 
 <figure class="listing">
 
@@ -270,7 +270,7 @@ received 'you'
 
 请注意如果你反转 `race` 参数的顺序，“started” 消息的顺序会改变，即使 `fast` future 总是第一个结束。这是因为这个特定的 `race` 函数实现并不是公平的。它总是以传递的参数的顺序来运行传递的 futures。其它的实现 *是* 公平的，并且会随机选择首先轮询的 future。不过无论我们使用的 race 实现是否公平，其中 *一个* future 会在另一个任务开始之前一直运行到异步代码块中第一个 `await` 为止。
 
-回忆一下[第一个异步程序][async-program]中提到在每一个 await point，如果被 await 的 future 还没有就绪，Rust 会给运行时一个机会来暂停该任务并切换到另一个任务。反过来也是正确的：Rust *只会* 在一个 await point 暂停异步代码块并将控制权交还给运行时。await points 之间的一切都是同步。
+回忆一下[第一个异步程序][async-program]中提到在每一个 await point，如果被 await 的 future 还没有就绪，Rust 会给运行时一个机会来暂停该任务并切换到另一个任务。反过来也是正确的：Rust *只会* 在一个 await point 暂停异步代码块并将控制权交还给运行时。await points 之间的一切都是同步的。
 
 这意味着如果你在异步代码块中做了一堆工作而没有一个 await point，则那个 future 会阻塞其它任何 future 继续进行。有时你可能会听说这称为一个 future *starving* 其它 future。在一些情况中，这可能不是什么大问题。不过，如果你在进行某种昂贵的设置或者长时间运行的任务，亦或有一个 future 会无限持续运行某些特定任务的话，你会需要思考在何时何地将控制权交还运行时。
 
