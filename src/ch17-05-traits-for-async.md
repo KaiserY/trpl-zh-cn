@@ -209,13 +209,13 @@ pub trait Future {
 
 现在我们已经掌握足够的知识来理解示例 17-17 中对 `join_all` 调用所报告的错误了。最初我们尝试将异步代码块产生的 future 移动进 `Vec<Box<dyn Future<Output = ()>>>` 中，不过正如之前所见，这些 future 可能包含内部引用，因此它们并未实现 `Unpin`。它们需要被 pin 住，接下来就可以将 `Pin` 类型传入 `Vec`，并确信 future 底层的数据**不会**被移动。
 
-`Pin` 和 `Unpin` 在编写底层代码库或你自己编写运行时的时候最为重要，而不是在日常的 Rust 代码中。不过，现在当你在错误信息中看到这些 trait 时，就能想出更好的方式如何来修复代码了！
+`Pin` 和 `Unpin` 在编写底层代码库或你自己编写运行时的时候最为重要，而不是在日常的 Rust 代码中。不过，现在当你在错误信息中看到这些 trait 时，就能想出更好的方式来修复代码了！
 
 > 注意：`Pin` 与 `Unpin` 的组合使得可以安全地实现在 Rust 中原本因自引用而难以实现的一整类复杂类型。要求 `Pin` 的类型在如今的异步 Rust 中最为常见，不过偶尔你也会在其它上下文中见到它们。
 >
 > `Pin` 和 `Unpin` 如何工作的细节，以及它们要求维护的规则，在 `std::pin` 的 API 文档中有详尽的介绍，所以如果你有兴趣学习更多，这是一个很好的起点。
 >
-> 如果你更深入地理解底层是如何实现的细节，请查看 [_Asynchronous Programming in Rust_][async-book] 的[第二章][under-the-hood]和[第四章][pinning]。
+> 如果你希望更深入地理解底层是如何实现的细节，请查看 [_Asynchronous Programming in Rust_][async-book] 的[第二章][under-the-hood]和[第四章][pinning]。
 
 ### `Stream` trait
 
