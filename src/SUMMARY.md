@@ -110,7 +110,7 @@
   - [future、任务和线程](ch17-06-futures-tasks-threads.md)
 
 - [面向对象编程特性](ch18-00-oop.md)
-  - [面向对象语言的特点](ch18-01-what-is-oo.md)
+  - [面向对象语言的特征](ch18-01-what-is-oo.md)
   - [顾及不同类型值的 trait 对象](ch18-02-trait-objects.md)
   - [面向对象设计模式的实现](ch18-03-oo-design-patterns.md)
 
@@ -122,7 +122,7 @@
   - [模式语法](ch19-03-pattern-syntax.md)
 
 - [高级特性](ch20-00-advanced-features.md)
-  - [不安全的 Rust](ch20-01-unsafe-rust.md)
+  - [不安全 Rust](ch20-01-unsafe-rust.md)
   - [高级 trait](ch20-02-advanced-traits.md)
   - [高级类型](ch20-03-advanced-types.md)
   - [高级函数与闭包](ch20-04-advanced-functions-and-closures.md)

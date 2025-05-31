@@ -1,7 +1,7 @@
 fn main() {
     // ANCHOR: here
-    let x = 5 else {
-        return;
+    if let x = 5 {
+        println!("{x}");
     };
     // ANCHOR_END: here
 }

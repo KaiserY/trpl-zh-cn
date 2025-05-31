@@ -102,7 +102,7 @@
     - [使用 `Sync` 与 `Send` Traits 的可扩展并发：](ch16-04-extensible-concurrency-sync-and-send.md)
 
 - [Rust 的面向对象编程特性](ch17-00-oop.md)
-    - [面向对象语言的特点](ch17-01-what-is-oo.md)
+    - [面向对象语言的特征](ch17-01-what-is-oo.md)
     - [顾及不同类型值的 trait 对象](ch17-02-trait-objects.md)
     - [面向对象设计模式的实现](ch17-03-oo-design-patterns.md)
 
@@ -114,7 +114,7 @@
     - [模式语法](ch18-03-pattern-syntax.md)
 
 - [高级特征](ch19-00-advanced-features.md)
-    - [不安全的 Rust](ch19-01-unsafe-rust.md)
+    - [不安全 Rust](ch19-01-unsafe-rust.md)
     - [高级 trait](ch19-03-advanced-traits.md)
     - [高级类型](ch19-04-advanced-types.md)
     - [高级函数与闭包](ch19-05-advanced-functions-and-closures.md)
