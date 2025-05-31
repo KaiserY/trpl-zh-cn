@@ -1,0 +1,305 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Hello, World! - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch01-02-hello-world.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="hello-world"><a class="header" href="#hello-world">Hello, World!</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch01-02-hello-world.md -->
+<!-- commit aba1ee29dca6c90a1737c996efd7c870957aefb8 -->
+<p>既然安装好了 Rust，是时候来编写第一个 Rust 程序了。当学习一门新语言的时候，使用该语言在屏幕上打印 <code>Hello, world!</code> 是一项传统，我们将沿用这一传统！</p>
+<blockquote>
+<p>注意：本书假设你熟悉基本的命令行操作。Rust 对于你的编辑器、工具，以及代码位于何处并没有特定的要求，如果你更倾向于使用集成开发环境（IDE），而不是命令行，请尽管使用你喜欢的 IDE。目前很多 IDE 都在一定程度上支持 Rust；查看 IDE 文档以了解更多细节。Rust 团队一直致力于借助 <code>rust-analyzer</code> 提供强大的 IDE 支持。详见<a href="appendix-04-useful-development-tools.html">附录 D</a><!-- ignore -->。</p>
+</blockquote>
+<h3 id="创建项目目录"><a class="header" href="#创建项目目录">创建项目目录</a></h3>
+<p>首先创建一个存放 Rust 代码的目录。Rust 并不关心代码的存放位置，不过对于本书的练习和项目来说，我们建议你在 home 目录中创建 <em>projects</em> 目录，并将你的所有项目存放在这里。</p>
+<p>打开终端并输入如下命令创建 <em>projects</em> 目录，并在 <em>projects</em> 目录中为 “Hello, world!” 项目创建一个目录。</p>
+<p>对于 Linux、macOS 和 Windows PowerShell，输入：</p>
+<pre><code class="language-console">$ mkdir ~/projects
+$ cd ~/projects
+$ mkdir hello_world
+$ cd hello_world
+</code></pre>
+<p>对于 Windows CMD，输入：</p>
+<pre><code class="language-cmd">&gt; mkdir "%USERPROFILE%\projects"
+&gt; cd /d "%USERPROFILE%\projects"
+&gt; mkdir hello_world
+&gt; cd hello_world
+</code></pre>
+<h3 id="编写并运行-rust-程序"><a class="header" href="#编写并运行-rust-程序">编写并运行 Rust 程序</a></h3>
+<p>接下来，新建一个源文件，命名为 <em>main.rs</em>。Rust 源文件总是以 <em>.rs</em> 扩展名结尾。如果文件名包含多个单词，那么按照命名习惯，应当使用下划线来分隔单词。例如命名为 <em>hello_world.rs</em>，而不是 <em>helloworld.rs</em>。</p>
+<p>现在打开刚创建的 <em>main.rs</em> 文件，输入示例 1-1 中的代码。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
+    println!("Hello, world!");
+}</code></pre></pre>
+<figcaption>示例 1-1：一个打印 `Hello, world!` 的程序</figcaption>
+</figure>
+<p>保存文件，并回到当前目录为 <em>~/projects/hello_world</em> 的终端窗口。在 Linux 或 macOS 上，输入如下命令，编译并运行文件：</p>
+<pre><code class="language-console">$ rustc main.rs
+$ ./main
+Hello, world!
+</code></pre>
+<p>在 Windows 上，输入命令 <code>.\main.exe</code>，而不是 <code>./main</code>：</p>
+<pre><code class="language-powershell">&gt; rustc main.rs
+&gt; .\main
+Hello, world!
+</code></pre>
+<p>不管使用何种操作系统，终端应该打印字符串 <code>Hello, world!</code>。如果没有看到这些输出，回到安装部分的 <a href="ch01-01-installation.html#%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4troubleshooting">“故障排除”</a> 小节查找有帮助的方法。</p>
+<p>如果 <code>Hello, world!</code> 出现了，恭喜你！你已经正式编写了一个 Rust 程序。现在你成为一名 Rust 程序员，欢迎！</p>
+<h3 id="rust-程序的结构"><a class="header" href="#rust-程序的结构">Rust 程序的结构</a></h3>
+<p>现在，让我们回过头来仔细看看这个 “Hello, world!” 程序。这是第一块拼图：</p>
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
+
+}</code></pre></pre>
+<p>这几行定义了一个名叫 <code>main</code> 的函数。<code>main</code> 函数是一个特殊的函数：在可执行的 Rust 程序中，它总是最先运行的代码。第一行代码声明了一个叫做 <code>main</code> 的函数，它没有参数也没有返回值。如果有参数的话，它们的名称应该出现在小括号 <code>()</code> 中。</p>
+<p>函数体被包裹在 <code>{}</code> 中。Rust 要求所有函数体都要用花括号包裹起来。一般来说，将左花括号与函数声明置于同一行并以空格分隔，是良好的代码风格。</p>
+<blockquote>
+<p>注：如果你希望在 Rust 项目中保持一种标准风格，可以使用名为 <code>rustfmt</code> 的自动格式化工具将代码格式化为特定的风格（更多内容详见<a href="appendix-04-useful-development-tools.html">附录 D</a> 中的 <code>rustfmt</code><!-- ignore -->）。Rust 团队已经在标准的 Rust 发行版中包含了这个工具，就像 <code>rustc</code> 一样。所以它应该已经安装在你的电脑中了！</p>
+</blockquote>
+<p>在 <code>main</code> 函数体中有如下代码：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>println!("Hello, world!");
+<span class="boring">}</span></code></pre></pre>
+<p>这行代码完成这个简单程序的所有工作：在屏幕上打印文本。这里有三个重要的细节需要注意。</p>
+<p>首先，<code>println!</code> 调用了一个 Rust 宏（macro）。如果是调用函数，则应输入 <code>println</code>（没有<code>!</code>）。我们将在<a href="ch20-05-macros.html">第二十章</a>详细讨论宏。现在你只需记住，当看到符号 <code>!</code> 的时候，就意味着调用的是宏而不是普通函数，并且宏并不总是遵循与函数相同的规则。</p>
+<p>第二，<code>"Hello, world!"</code> 是一个字符串。我们把这个字符串作为一个参数传递给 <code>println!</code>，字符串将被打印到屏幕上。</p>
+<p>第三，该行以分号结尾（<code>;</code>），这代表一个表达式的结束和下一个表达式可以开始。大部分 Rust 代码行以分号结尾。</p>
+<h3 id="编译和运行是彼此独立的步骤"><a class="header" href="#编译和运行是彼此独立的步骤">编译和运行是彼此独立的步骤</a></h3>
+<p>你刚刚运行了一个新创建的程序，那么让我们检查此过程中的每一个步骤。</p>
+<p>在运行 Rust 程序之前，必须先使用 Rust 编译器编译它，即输入 <code>rustc</code> 命令并传入源文件名称，如下：</p>
+<pre><code class="language-console">$ rustc main.rs
+</code></pre>
+<p>如果你有 C 或 C++ 背景，就会发现这与 <code>gcc</code> 和 <code>clang</code> 类似。编译成功后，Rust 会输出一个二进制的可执行文件。</p>
+<p>在 Linux、macOS 或 Windows 的 PowerShell 上，在 shell 中输入 <code>ls</code> 命令可以看见这个可执行文件。</p>
+<pre><code class="language-console">$ ls
+main  main.rs
+</code></pre>
+<p>在 Linux 和 macOS，你会看到两个文件。在 Windows PowerShell 中，你会看到同使用 CMD 相同的三个文件。在 Windows 的 CMD 上，则输入如下命令：</p>
+<pre><code class="language-cmd">&gt; dir /B %= the /B option says to only show the file names =%
+main.exe
+main.pdb
+main.rs
+</code></pre>
+<p>这展示了扩展名为 <em>.rs</em> 的源文件、可执行文件（在 Windows 下是 <em>main.exe</em>，其它平台是 <em>main</em>），以及当使用 CMD 时会有一个包含调试信息、扩展名为 <em>.pdb</em> 的文件。从这里开始运行 <em>main</em> 或 <em>main.exe</em> 文件，如下：</p>
+<pre><code class="language-console">$ ./main # Windows 是 .\main.exe
+</code></pre>
+<p>如果这里的 <em>main.rs</em> 是上文所述的 “Hello, world!” 程序，那么在终端上就会打印出 <code>Hello, world!</code>。</p>
+<p>如果你更熟悉动态语言，如 Ruby、Python 或 JavaScript，则可能不习惯将编译和运行分为两个单独的步骤。Rust 是一种 <strong>预编译静态类型</strong>（<em>ahead-of-time compiled</em>）语言，这意味着你可以编译程序，并将可执行文件送给其他人，他们甚至不需要安装 Rust 就可以运行。如果你给他人一个 <em>.rb</em>、<em>.py</em> 或 <em>.js</em> 文件，他们需要先分别安装 Ruby，Python，JavaScript 实现（运行时环境，VM）。不过在这些语言中，只需要一句命令就可以编译和运行程序。这一切都是语言设计上的权衡取舍。</p>
+<p>仅仅使用 <code>rustc</code> 编译简单程序是没问题的，不过随着项目的增长，你可能需要管理你项目的方方面面，并让代码易于分享。接下来，我们要介绍一个叫做 Cargo 的工具，它会帮助你编写真实世界中的 Rust 程序。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch01-01-installation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch01-03-hello-cargo.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch01-01-installation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch01-03-hello-cargo.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
