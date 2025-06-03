@@ -220,7 +220,7 @@ hello.txt should be included in this project: Os { code: 2, kind: NotFound, mess
 
 这个错误指出只能在返回 `Result`、`Option` 或者其它实现了 `FromResidual` 的类型的函数中使用 `?` 运算符。
 
-为了修复这个错误，有两个选择。一个是，如果没有限制的话将函数的返回值改为改为与你在 `?` 运算符所作用的值兼容的类型。另一个是使用 `match` 或者 `Result<T, E>` 类型的方法，以适当的方式处理 `Result<T, E>`。
+为了修复这个错误，有两个选择。一个是，如果没有限制的话将函数的返回值改为与你在 `?` 运算符所作用的值兼容的类型。另一个是使用 `match` 或者 `Result<T, E>` 类型的方法，以适当的方式处理 `Result<T, E>`。
 
 错误信息也提到 `?` 也可用于 `Option<T>` 值。如同对 `Result` 使用 `?` 一样，只能在返回 `Option` 的函数中对 `Option` 使用 `?`。在 `Option<T>` 上调用 `?` 运算符的行为与 `Result<T, E>` 类似：如果值是 `None`，此时 `None` 会从函数中提前返回。如果值是 `Some`，`Some` 中的值作为表达式的返回值同时函数继续。示例 9-11 中有一个从给定文本中返回第一行最后一个字符的函数的例子：
 
