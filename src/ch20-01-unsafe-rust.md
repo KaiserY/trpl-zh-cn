@@ -257,7 +257,7 @@ Rust 的借用检查器无法理解我们要借用这个 slice 的两个不同�
 
 当编写不安全代码时，你可能会想要检查编写的代码是否真的安全正确。最好的方式之一是使用 Miri，一个用来检测未定义行为的 Rust 官方工具。鉴于借用检查器是一个在编译时工作的**静态**工具，Miri 是一个在运行时工作的**动态**工具。它通过运行程序，或者测试集来检查代码，并检测你是否违反了它理解的 Rust 应该如何工作的规则。
 
-使用 Miri 要求使用 nightly 版本的 Rust（我们在[附录 G：Rust 是如何开发的与 “Nightly Rust”][nightly]中有更多讨论）。你可以通过输入 `rustu +nightly component add miri` 来同时安装 nightly 版本的 Rust 和 Miri。这并不会改变你项目正在使用的 Rust 版本；它只是为你的系统增加了这个工具所以你可以在需要的时候使用它。你可以通过输入 `cargo +nightly miri run` or `cargo +nightly miri test` 在项目中使用 Miri。
+使用 Miri 要求使用 nightly 版本的 Rust（我们在[附录 G：Rust 是如何开发的与 “Nightly Rust”][nightly]中有更多讨论）。你可以通过输入 `rustup +nightly component add miri` 来同时安装 nightly 版本的 Rust 和 Miri。这并不会改变你项目正在使用的 Rust 版本；它只是为你的系统增加了这个工具所以你可以在需要的时候使用它。你可以通过输入 `cargo +nightly miri run` or `cargo +nightly miri test` 在项目中使用 Miri。
 
 作为一个它是如何有用的例子，考虑一下对示例 20-11 运行它时会发生什么。
 
