@@ -19,6 +19,7 @@ git-repository-url = "https://github.com/KaiserY/trpl-zh-cn/tree/main"
 edit-url-template = "https://github.com/KaiserY/trpl-zh-cn/edit/main/{path}"
 
 [output.typst-pdf]
+custom-template = "custom-template.typ"
 pdf = true
 section-number = true
 rust-book = true
