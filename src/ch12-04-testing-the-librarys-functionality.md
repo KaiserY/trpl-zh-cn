@@ -160,7 +160,6 @@ Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被
 为了使这个项目更丰满，我们将简要的展示如何处理环境变量和打印到标准错误，这两者在编写命令行程序时都很有用。
 
 
-最后，让我们确保当搜索一个在诗中不存在的单词时，不会返回任何行，例如 _monomorphization_：
 
 [validating-references-with-lifetimes]:
 ch10-03-lifetime-syntax.html#生命周期确保引用有效
