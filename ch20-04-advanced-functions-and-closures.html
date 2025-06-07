@@ -1,0 +1,353 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>高级函数与闭包 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch20-04-advanced-functions-and-closures.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="高级函数与闭包"><a class="header" href="#高级函数与闭包">高级函数与闭包</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch20-04-advanced-functions-and-closures.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
+<p>本部分将探索一些有关函数和闭包的高级特性，这包括函数指针以及返回闭包。</p>
+<h3 id="函数指针"><a class="header" href="#函数指针">函数指针</a></h3>
+<p>我们讨论过了如何向函数传递闭包；也可以将普通函数传递给函数！这个技术在我们希望传递已经定义的函数而不是重新定义闭包作为参数时很有用。函数会被强制转换为 <code>fn</code> 类型（小写的 f），不要与闭包 trait 的 <code>Fn</code> 相混淆。<code>fn</code> 被称为 <strong>函数指针</strong>（<em>function pointer</em>）。通过函数指针允许我们使用函数作为其它函数的参数。</p>
+<p>指定参数为函数指针的语法类似于闭包，如示例 20-28 所示，这里定义了一个 <code>add_one</code> 函数用于将其参数加一。<code>do_twice</code> 函数获取两个参数：一个指向任何获取一个 <code>i32</code> 参数并返回一个 <code>i32</code> 的函数指针，和一个 <code>i32</code> 值。<code>do_twice</code> 函数传入 <code>arg</code> 参数调用 <code>f</code> 函数两次，接着将两次函数调用的结果相加。<code>main</code> 函数使用 <code>add_one</code> 和 <code>5</code> 作为参数调用 <code>do_twice</code>。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">fn add_one(x: i32) -&gt; i32 {
+    x + 1
+}
+
+fn do_twice(f: fn(i32) -&gt; i32, arg: i32) -&gt; i32 {
+    f(arg) + f(arg)
+}
+
+fn main() {
+    let answer = do_twice(add_one, 5);
+
+    println!("The answer is: {answer}");
+}</code></pre></pre>
+<p><span class="caption">示例 20-28: 使用 <code>fn</code> 类型接受函数指针作为参数</span></p>
+<p>这段代码会打印出 <code>The answer is: 12</code>。<code>do_twice</code> 中的 <code>f</code> 被指定为一个接受一个 <code>i32</code> 参数并返回 <code>i32</code> 的 <code>fn</code>。接着就可以在 <code>do_twice</code> 函数体中调用 <code>f</code>。在 <code>main</code> 中，可以将函数名 <code>add_one</code> 作为第一个参数传递给 <code>do_twice</code>。</p>
+<p>不同于闭包，<code>fn</code> 是一个类型而不是一个 trait，所以直接指定 <code>fn</code> 作为参数而不是声明一个带有 <code>Fn</code> 作为 trait bound 的泛型参数。</p>
+<p>函数指针实现了所有三个闭包 trait（<code>Fn</code>、<code>FnMut</code> 和 <code>FnOnce</code>），所以总是可以在调用期望闭包的函数时传递函数指针作为参数。倾向于编写使用泛型和闭包 trait 的函数，这样它就能接受函数或闭包作为参数。</p>
+<p>尽管如此，一个只期望接受 <code>fn</code> 而不接受闭包的情况的例子是与不存在闭包的外部代码交互时：C 语言的函数可以接受函数作为参数，但 C 语言没有闭包。</p>
+<p>作为一个既可以使用内联定义的闭包又可以使用命名函数的例子，让我们看看一个标准库中 <code>Iterator</code> trait 提供的 <code>map</code> 方法的应用。使用 <code>map</code> 函数将一个数字 vector 转换为一个字符串 vector，就可以使用闭包，如示例 20-29 所示：</p>
+<figure class="listing">
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let list_of_numbers = vec![1, 2, 3];
+    let list_of_strings: Vec&lt;String&gt; =
+        list_of_numbers.iter().map(|i| i.to_string()).collect();
+<span class="boring">}</span></code></pre></pre>
+<figcaption>示例 20-29：使用闭包和 `map` 方法将数字转换为字符串</figcaption>
+</figure>
+<p>或者可以将函数作为 <code>map</code> 的参数来代替闭包，如示例 20-30 所示：</p>
+<figure class="listing">
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let list_of_numbers = vec![1, 2, 3];
+    let list_of_strings: Vec&lt;String&gt; =
+        list_of_numbers.iter().map(ToString::to_string).collect();
+<span class="boring">}</span></code></pre></pre>
+<figcaption>示例 20-30：使用 `String::to_string` 方法将数字转换为字符串</figcaption>
+</figure>
+<p>注意这里必须使用 <a href="ch20-02-advanced-traits.html#%E9%AB%98%E7%BA%A7-trait">“高级 trait”</a> 部分讲到的完全限定语法，因为存在多个叫做 <code>to_string</code> 的函数。</p>
+<p>这里使用了定义于 <code>ToString</code> trait 的 <code>to_string</code> 函数，标准库为所有实现了 <code>Display</code> 的类型实现了这个 trait。</p>
+<p>回忆一下第六章 <a href="ch06-01-defining-an-enum.html#%E6%9E%9A%E4%B8%BE%E5%80%BC">“枚举值”</a> 部分中定义的每一个枚举成员也变成了一个构造函数。我们可以使用这些构造函数作为实现了闭包 trait 的函数指针，这意味着可以指定构造函数作为接受闭包的方法的参数，如示例 20-31 所示：</p>
+<figure class="listing">
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    enum Status {
+        Value(u32),
+        Stop,
+    }
+
+    let list_of_statuses: Vec&lt;Status&gt; = (0u32..20).map(Status::Value).collect();
+<span class="boring">}</span></code></pre></pre>
+<figcaption>示例 20-31：使用枚举构造函数和 `map` 方法从数字创建 `Status` 实例</figcaption>
+</figure>
+<p>这里，我们通过 <code>Status::Value</code> 的初始化函数，对 <code>map</code> 所作用的范围内每个 <code>u32</code> 值创建 <code>Status::Value</code> 实例。一些人倾向于函数式风格，一些人喜欢闭包。它们会编译成相同的代码，因此请选择对你来说更清晰的那一种。</p>
+<h3 id="返回闭包"><a class="header" href="#返回闭包">返回闭包</a></h3>
+<p>闭包表现为 trait，这意味着不能直接返回闭包。对于大部分需要返回 trait 的场景中，可以使用实现了期望返回的 trait 的具体类型来替代函数的返回值。但是这不能用于闭包，因为它们没有一个可返回的具体类型；例如，当闭包从其作用域捕获任何值时，就不允许使用函数指针 <code>fn</code> 作为返回类型。</p>
+<p>相反，可以正常地使用第十章所学的 <code>impl Trait</code> 语法。可以使用 <code>Fn</code>、<code>FnOnce</code> 和 <code>FnMut</code> 返回任何函数类型。例如，示例 20-32 中的代码就可以正常工作。</p>
+<figure class="listing">
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn returns_closure() -&gt; impl Fn(i32) -&gt; i32 {
+    |x| x + 1
+}
+<span class="boring">}</span></code></pre></pre>
+<figcaption>示例 20-32：使用 `impl Trait` 语法从函数返回闭包</figcaption>
+</figure>
+<p>然而，如我们在 <a href="ch13-01-closures.html#%E9%97%AD%E5%8C%85%E7%B1%BB%E5%9E%8B%E6%8E%A8%E6%96%AD%E5%92%8C%E6%B3%A8%E8%A7%A3">“闭包类型推断和注解”</a> 中所注意到的，每一个闭包也有其独立的类型。如果你需要处理多个拥有相同签名但是不同实现的函数，就需要使用 trait 对象。考虑一下如果编写类似示例 20-33 中所示代码会发生什么。</p>
+<figure class="listing">
+<pre><code class="language-rust ignore does_not_compile">fn main() {
+    let handlers = vec![returns_closure(), returns_initialized_closure(123)];
+    for handler in handlers {
+        let output = handler(5);
+        println!("{output}");
+    }
+}
+
+fn returns_closure() -&gt; impl Fn(i32) -&gt; i32 {
+    |x| x + 1
+}
+
+fn returns_initialized_closure(init: i32) -&gt; impl Fn(i32) -&gt; i32 {
+    move |x| x + init
+}</code></pre>
+<figcaption>示例 20-33：创建一个由返回 `impl Fn` 的函数定义的闭包的 `Vec<T>`</figcaption>
+</figure>
+<p>这里有两个函数，<code>returns_closure</code> 和 <code>returns_initialized_closure</code>，它们都返回 <code>impl Fn(i32) -&gt; i32</code>。注意它们返回的闭包是不同的，即使它们实现了相同的类型。如果尝试编译这段代码，Rust 会告诉我们这不可行：</p>
+<pre><code class="language-text">$ cargo build
+   Compiling functions-example v0.1.0 (file:///projects/functions-example)
+error[E0308]: mismatched types
+  --&gt; src/main.rs:2:44
+   |
+2  |     let handlers = vec![returns_closure(), returns_initialized_closure(123)];
+   |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected opaque type, found a different opaque type
+...
+9  | fn returns_closure() -&gt; impl Fn(i32) -&gt; i32 {
+   |                         ------------------- the expected opaque type
+...
+13 | fn returns_initialized_closure(init: i32) -&gt; impl Fn(i32) -&gt; i32 {
+   |                                              ------------------- the found opaque type
+   |
+   = note: expected opaque type `impl Fn(i32) -&gt; i32` (opaque type at &lt;src/main.rs:9:25&gt;)
+              found opaque type `impl Fn(i32) -&gt; i32` (opaque type at &lt;src/main.rs:13:46&gt;)
+   = note: distinct uses of `impl Trait` result in different opaque types
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `functions-example` (bin "functions-example") due to 1 previous error
+</code></pre>
+<p>错误信息告诉我们每当返回一个 <code>impl Trait</code> Rust 会创建一个独特的<strong>不透明类型</strong>（<em>opaque type</em>），这是一个无法看清 Rust 为我们构建了什么细节的类型。所以即使这些函数都返回了实现了相同 trait（ <code>Fn(i32) -&gt; i32</code>）的闭包，Rust 为我们生成的不透明类型也是不同的。这类似于 Rust 如何为不同的异步代码块生成不同的具体类型，即使它们有着相同的输出类型，如第十七章 <a href="ch17-03-more-futures.html">“使用任意数量的 futures”</a> 所示。我们已经多次看到这个问题的解决方案：我们可以使用 trait 对象，如示例 20-34 所示。</p>
+<figure class="listing">
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span><span class="boring">    let handlers = vec![returns_closure(), returns_initialized_closure(123)];
+</span><span class="boring">    for handler in handlers {
+</span><span class="boring">        let output = handler(5);
+</span><span class="boring">        println!("{output}");
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn returns_closure() -&gt; Box&lt;dyn Fn(i32) -&gt; i32&gt; {
+    Box::new(|x| x + 1)
+}
+
+fn returns_initialized_closure(init: i32) -&gt; Box&lt;dyn Fn(i32) -&gt; i32&gt; {
+    Box::new(move |x| x + init)
+}</code></pre></pre>
+<figcaption>示例 20-34：创建一个由返回 `Box<dyn Fn>` 的函数定义的闭包的 `Vec<T>` 以便它们有相同的类型</figcaption>
+</figure>
+<p>这段代码正好可以编译。关于 trait 对象的更多内容，请回顾第十八章的 <a href="ch18-02-trait-objects.html#%E9%A1%BE%E5%8F%8A%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E5%80%BC%E7%9A%84-trait-%E5%AF%B9%E8%B1%A1">顾及不同类型值的 trait 对象”</a> 部分。</p>
+<p>接下来让我们学习宏！</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch20-03-advanced-types.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch20-05-macros.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch20-03-advanced-types.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch20-05-macros.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>

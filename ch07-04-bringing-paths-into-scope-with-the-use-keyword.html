@@ -1,0 +1,478 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>使用 use 关键字将路径引入作用域 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch07-04-bringing-paths-into-scope-with-the-use-keyword.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="使用-use-关键字将路径引入作用域"><a class="header" href="#使用-use-关键字将路径引入作用域">使用 <code>use</code> 关键字将路径引入作用域</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch07-04-bringing-paths-into-scope-with-the-use-keyword.md -->
+<!-- commit 72ad14e4acb12438aa467c4cf256e0bc55df585a -->
+<p>不得不编写路径来调用函数显得繁琐且重复。在示例 7-7 中，无论我们选择 <code>add_to_waitlist</code> 函数的绝对路径还是相对路径，每次我们想要调用 <code>add_to_waitlist</code> 时，都必须指定<code>front_of_house</code> 和 <code>hosting</code>。幸运的是，有一种方法可以简化这个过程。我们可以使用 <code>use</code> 关键字创建一个捷径，然后就可以在作用域中的任何地方使用这个更短的名字。</p>
+<p>在示例 7-11 中，我们将 <code>crate::front_of_house::hosting</code> 模块引入了 <code>eat_at_restaurant</code> 函数的作用域，而我们只需要指定 <code>hosting::add_to_waitlist</code> 即可在 <code>eat_at_restaurant</code> 中调用 <code>add_to_waitlist</code> 函数。</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust noplayground test_harness">mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+
+use crate::front_of_house::hosting;
+
+pub fn eat_at_restaurant() {
+    hosting::add_to_waitlist();
+}</code></pre>
+<p><span class="caption">示例 7-11: 使用 <code>use</code> 将模块引入作用域</span></p>
+<p>在作用域中增加 <code>use</code> 和路径类似于在文件系统中创建软连接（符号连接，symbolic link）。通过在 crate 根增加 <code>use crate::front_of_house::hosting</code>，现在 <code>hosting</code> 在作用域中就是有效的名称了，如同 <code>hosting</code> 模块被定义于 crate 根一样。通过 <code>use</code> 引入作用域的路径也会检查私有性，同其它路径一样。</p>
+<p>注意 <code>use</code> 只能创建 <code>use</code> 所在的特定作用域内的捷径。示例 7-12 将 <code>eat_at_restaurant</code> 函数移动到了一个叫 <code>customer</code> 的子模块，这又是一个不同于 <code>use</code> 语句的作用域，所以函数体不能编译。</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust noplayground test_harness does_not_compile ignore">mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+
+use crate::front_of_house::hosting;
+
+mod customer {
+    pub fn eat_at_restaurant() {
+        hosting::add_to_waitlist();
+    }
+}</code></pre>
+<p><span class="caption">示例 7-12: <code>use</code> 语句只适用于其所在的作用域</span></p>
+<p>编译器错误显示捷径不再适用于 <code>customer</code> 模块中：</p>
+<pre><code class="language-console">$ cargo build
+   Compiling restaurant v0.1.0 (file:///projects/restaurant)
+error[E0433]: failed to resolve: use of undeclared crate or module `hosting`
+  --&gt; src/lib.rs:11:9
+   |
+11 |         hosting::add_to_waitlist();
+   |         ^^^^^^^ use of undeclared crate or module `hosting`
+   |
+help: consider importing this module through its public re-export
+   |
+10 +     use crate::hosting;
+   |
+
+warning: unused import: `crate::front_of_house::hosting`
+ --&gt; src/lib.rs:7:5
+  |
+7 | use crate::front_of_house::hosting;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+For more information about this error, try `rustc --explain E0433`.
+warning: `restaurant` (lib) generated 1 warning
+error: could not compile `restaurant` (lib) due to 1 previous error; 1 warning emitted
+</code></pre>
+<p>注意这里还有一个警告说 <code>use</code> 在其作用域内不再被使用！为了修复这个问题，可以将 <code>use</code> 移动到 <code>customer</code> 模块内，或者在子模块 <code>customer</code> 内通过 <code>super::hosting</code> 引用父模块中的这个捷径。</p>
+<h3 id="创建惯用的-use-路径"><a class="header" href="#创建惯用的-use-路径">创建惯用的 <code>use</code> 路径</a></h3>
+<p>在示例 7-11 中，你可能会比较疑惑，为什么我们是指定 <code>use crate::front_of_house::hosting</code>，然后在 <code>eat_at_restaurant</code> 中调用 <code>hosting::add_to_waitlist</code> ，而不是通过指定一直到 <code>add_to_waitlist</code> 函数的 <code>use</code> 路径来得到相同的结果，如示例 7-13 所示。</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust noplayground test_harness">mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+
+use crate::front_of_house::hosting::add_to_waitlist;
+
+pub fn eat_at_restaurant() {
+    add_to_waitlist();
+}</code></pre>
+<p><span class="caption">示例 7-13: 使用 <code>use</code> 将 <code>add_to_waitlist</code> 函数引入作用域，这并不符合习惯</span></p>
+<p>虽然示例 7-11 和 7-13 都完成了相同的任务，但示例 7-11 是使用 <code>use</code> 将函数引入作用域的习惯用法。要想使用 <code>use</code> 将函数的父模块引入作用域，我们必须在调用函数时指定父模块，这样可以清晰地表明函数不是在本地定义的，同时使完整路径的重复度最小化。示例 7-13 中的代码不清楚 <code>add_to_waitlist</code> 是在哪里被定义的。</p>
+<p>另一方面，使用 <code>use</code> 引入结构体、枚举和其他项时，习惯是指定它们的完整路径。示例 7-14 展示了将 <code>HashMap</code> 结构体引入二进制 crate 作用域的习惯用法。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">use std::collections::HashMap;
+
+fn main() {
+    let mut map = HashMap::new();
+    map.insert(1, 2);
+}</code></pre></pre>
+<p><span class="caption">示例 7-14: 将 <code>HashMap</code> 引入作用域的习惯用法</span></p>
+<p>这种习惯用法背后没有什么硬性要求：它只是一种惯例，人们已经习惯了以这种方式阅读和编写 Rust 代码。</p>
+<p>这个习惯用法有一个例外，那就是我们想使用 <code>use</code> 语句将两个具有相同名称的项带入作用域，因为 Rust 不允许这样做。示例 7-15 展示了如何将两个具有相同名称但不同父模块的 <code>Result</code> 类型引入作用域，以及如何引用它们。</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust noplayground">use std::fmt;
+use std::io;
+
+fn function1() -&gt; fmt::Result {
+    // --snip--
+<span class="boring">    Ok(())
+</span>}
+
+fn function2() -&gt; io::Result&lt;()&gt; {
+    // --snip--
+<span class="boring">    Ok(())
+</span>}</code></pre>
+<p><span class="caption">示例 7-15: 使用父模块将两个具有相同名称的类型引入同一作用域</span></p>
+<p>如你所见，使用父模块可以区分这两个 <code>Result</code> 类型。如果我们是指定 <code>use std::fmt::Result</code> 和 <code>use std::io::Result</code>，我们将在同一作用域拥有了两个 <code>Result</code> 类型，当我们使用 <code>Result</code> 时，Rust 则不知道我们要用的是哪个。</p>
+<h3 id="使用-as-关键字提供新的名称"><a class="header" href="#使用-as-关键字提供新的名称">使用 <code>as</code> 关键字提供新的名称</a></h3>
+<p>使用 <code>use</code> 将两个同名类型引入同一作用域这个问题还有另一个解决办法：在这个类型的路径后面，我们使用 <code>as</code> 指定一个新的本地名称或者<strong>别名</strong>。示例 7-16 展示了另一个编写示例 7-15 中代码的方法，通过 <code>as</code> 重命名其中一个 <code>Result</code> 类型。</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust noplayground">use std::fmt::Result;
+use std::io::Result as IoResult;
+
+fn function1() -&gt; Result {
+    // --snip--
+<span class="boring">    Ok(())
+</span>}
+
+fn function2() -&gt; IoResult&lt;()&gt; {
+    // --snip--
+<span class="boring">    Ok(())
+</span>}</code></pre>
+<p><span class="caption">示例 7-16: 使用 <code>as</code> 关键字重命名引入作用域的类型</span></p>
+<p>在第二个 <code>use</code> 语句中，我们选择 <code>IoResult</code> 作为 <code>std::io::Result</code> 的新名称，它与从 <code>std::fmt</code> 引入作用域的 <code>Result</code> 并不冲突。示例 7-15 和示例 7-16 都是惯用写法，如何选择都取决于你！</p>
+<h3 id="使用-pub-use-重导出名称"><a class="header" href="#使用-pub-use-重导出名称">使用 <code>pub use</code> 重导出名称</a></h3>
+<p>使用 <code>use</code> 关键字，将某个名称导入当前作用域后，该名称对此作用域之外还是私有的。若要让作用域之外的代码能够像在当前作用域中一样使用该名称，可以将 <code>pub</code> 与 <code>use</code> 组合使用。这种技术被称为<strong>重导出</strong>（<em>re-exporting</em>），因为在把某个项目导入当前作用域的同时，也将其暴露给其他作用域。</p>
+<p>示例 7-17 将示例 7-11 根模块中的 <code>use</code> 改为 <code>pub use</code> 的代码。</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust noplayground test_harness">mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+
+pub use crate::front_of_house::hosting;
+
+pub fn eat_at_restaurant() {
+    hosting::add_to_waitlist();
+}</code></pre>
+<p><span class="caption">示例 7-17: 通过 <code>pub use</code> 使名称可从新作用域中被导入至任何代码</span></p>
+<p>在这个修改之前，外部代码需要使用路径 <code>restaurant::front_of_house::hosting::add_to_waitlist()</code> 来调用 <code>add_to_waitlist</code> 函数，并且还需要将 <code>front_of_house</code> 模块标记为 <code>pub</code>。现在这个 <code>pub use</code> 从根模块重导出了 <code>hosting</code> 模块，外部代码现在可以使用路径 <code>restaurant::hosting::add_to_waitlist</code>。</p>
+<p>当你代码的内部结构与调用你代码的程序员所想象的结构不同时，重导出会很有用。例如，在这个餐馆的比喻中，经营餐馆的人会想到“前台”和“后台”。但顾客在光顾一家餐馆时，可能不会以这些术语来考虑餐馆的各个部分。使用 <code>pub use</code>，我们可以使用一种结构编写代码，却将不同的结构形式暴露出来。这样做使我们的库井井有条，也使开发这个库的程序员和调用这个库的程序员都更加方便。在<a href="ch14-02-publishing-to-crates-io.html#%E4%BD%BF%E7%94%A8-pub-use-%E5%AF%BC%E5%87%BA%E4%BE%BF%E6%8D%B7%E7%9A%84%E5%85%AC%E6%9C%89-api">“使用 <code>pub use</code> 导出便捷的公有 API”</a>部分让我们再看另一个 <code>pub use</code> 的例子来了解这如何影响 crate 的文档。</p>
+<h3 id="使用外部包"><a class="header" href="#使用外部包">使用外部包</a></h3>
+<p>在第二章中我们编写了一个猜猜看游戏。那个项目使用了一个外部包 <code>rand</code> 来生成随机数。为了在项目中使用 <code>rand</code>，在 <em>Cargo.toml</em> 中加入了如下行：</p>
+<p><span class="filename">文件名：Cargo.toml</span></p>
+<pre><code class="language-toml">rand = "0.8.5"
+</code></pre>
+<p>在 <em>Cargo.toml</em> 中加入 <code>rand</code> 依赖告诉了 Cargo 要从 <a href="https://crates.io">crates.io</a> 下载 <code>rand</code> 和其依赖，并使其可在项目代码中使用。</p>
+<p>接着，为了将 <code>rand</code> 定义引入项目包的作用域，我们加入一行 <code>use</code> 起始的包名，它以 <code>rand</code> 包名开头并列出了需要引入作用域的项。回忆一下第二章的“生成一个随机数”部分，我们曾将 <code>Rng</code> trait 引入作用域并调用了 <code>rand::thread_rng</code> 函数：</p>
+<pre><code class="language-rust ignore"><span class="boring">use std::io;
+</span><span class="boring">
+</span>use rand::Rng;
+
+fn main() {
+<span class="boring">    println!("Guess the number!");
+</span><span class="boring">
+</span>    let secret_number = rand::thread_rng().gen_range(1..=100);
+<span class="boring">
+</span><span class="boring">    println!("The secret number is: {secret_number}");
+</span><span class="boring">
+</span><span class="boring">    println!("Please input your guess.");
+</span><span class="boring">
+</span><span class="boring">    let mut guess = String::new();
+</span><span class="boring">
+</span><span class="boring">    io::stdin()
+</span><span class="boring">        .read_line(&amp;mut guess)
+</span><span class="boring">        .expect("Failed to read line");
+</span><span class="boring">
+</span><span class="boring">    println!("You guessed: {guess}");
+</span>}</code></pre>
+<p><a href="https://crates.io">crates.io</a> 上有很多 Rust 社区成员发布的包，将其引入你自己的项目都需要一道相同的步骤：在 <em>Cargo.toml</em> 列出它们并通过 <code>use</code> 将其中定义的项引入项目包的作用域中。</p>
+<p>注意 <code>std</code> 标准库对于你的包来说也是外部 crate。因为标准库随 Rust 语言一同分发，无需修改 <em>Cargo.toml</em> 来引入 <code>std</code>，不过需要通过 <code>use</code> 将标准库中定义的项引入项目包的作用域中来引用它们。例如，对于 <code>HashMap</code>，我们会使用以下语句：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::collections::HashMap;
+<span class="boring">}</span></code></pre></pre>
+<p>这是一个以标准库 crate 名 <code>std</code> 开头的绝对路径。</p>
+<h3 id="使用嵌套路径来清理大量的-use-列表"><a class="header" href="#使用嵌套路径来清理大量的-use-列表">使用嵌套路径来清理大量的 <code>use</code> 列表</a></h3>
+<p>当需要引入很多定义于相同包或相同模块的项时，为每一项单独列出一行会占用源码大量的垂直空间。例如猜猜看章节示例 2-4 中有两行 <code>use</code> 语句都从 <code>std</code> 引入项到作用域：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore"><span class="boring">use rand::Rng;
+</span>// --snip--
+use std::cmp::Ordering;
+use std::io;
+// --snip--
+<span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    println!("Guess the number!");
+</span><span class="boring">
+</span><span class="boring">    let secret_number = rand::thread_rng().gen_range(1..=100);
+</span><span class="boring">
+</span><span class="boring">    println!("The secret number is: {secret_number}");
+</span><span class="boring">
+</span><span class="boring">    println!("Please input your guess.");
+</span><span class="boring">
+</span><span class="boring">    let mut guess = String::new();
+</span><span class="boring">
+</span><span class="boring">    io::stdin()
+</span><span class="boring">        .read_line(&amp;mut guess)
+</span><span class="boring">        .expect("Failed to read line");
+</span><span class="boring">
+</span><span class="boring">    println!("You guessed: {guess}");
+</span><span class="boring">
+</span><span class="boring">    match guess.cmp(&amp;secret_number) {
+</span><span class="boring">        Ordering::Less =&gt; println!("Too small!"),
+</span><span class="boring">        Ordering::Greater =&gt; println!("Too big!"),
+</span><span class="boring">        Ordering::Equal =&gt; println!("You win!"),
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<p>相反，我们可以使用嵌套路径将相同的项在一行中引入作用域。这么做需要指定路径的相同部分，接着是两个冒号，接着是大括号中的各自不同的路径部分，如示例 7-18 所示。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore"><span class="boring">use rand::Rng;
+</span>// --snip--
+use std::{cmp::Ordering, io};
+// --snip--
+<span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    println!("Guess the number!");
+</span><span class="boring">
+</span><span class="boring">    let secret_number = rand::thread_rng().gen_range(1..=100);
+</span><span class="boring">
+</span><span class="boring">    println!("The secret number is: {secret_number}");
+</span><span class="boring">
+</span><span class="boring">    println!("Please input your guess.");
+</span><span class="boring">
+</span><span class="boring">    let mut guess = String::new();
+</span><span class="boring">
+</span><span class="boring">    io::stdin()
+</span><span class="boring">        .read_line(&amp;mut guess)
+</span><span class="boring">        .expect("Failed to read line");
+</span><span class="boring">
+</span><span class="boring">    let guess: u32 = guess.trim().parse().expect("Please type a number!");
+</span><span class="boring">
+</span><span class="boring">    println!("You guessed: {guess}");
+</span><span class="boring">
+</span><span class="boring">    match guess.cmp(&amp;secret_number) {
+</span><span class="boring">        Ordering::Less =&gt; println!("Too small!"),
+</span><span class="boring">        Ordering::Greater =&gt; println!("Too big!"),
+</span><span class="boring">        Ordering::Equal =&gt; println!("You win!"),
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<p><span class="caption">示例 7-18: 指定嵌套的路径在一行中将多个带有相同前缀的项引入作用域</span></p>
+<p>在较大的程序中，使用嵌套路径从相同包或模块中引入很多项，可以显著减少所需的独立 <code>use</code> 语句的数量！</p>
+<p>我们可以在路径的任何层级使用嵌套路径，这在组合两个共享子路径的 <code>use</code> 语句时非常有用。例如，示例 7-19 中展示了两个 <code>use</code> 语句：一个将 <code>std::io</code> 引入作用域，另一个将 <code>std::io::Write</code> 引入作用域：</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust noplayground">use std::io;
+use std::io::Write;</code></pre>
+<p><span class="caption">示例 7-19: 通过两行 <code>use</code> 语句引入两个路径，其中一个是另一个的子路径</span></p>
+<p>两个路径的相同部分是 <code>std::io</code>，这正是第一个路径。为了在一行 <code>use</code> 语句中引入这两个路径，可以在嵌套路径中使用 <code>self</code>，如示例 7-20 所示。</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust noplayground">use std::io::{self, Write};</code></pre>
+<p><span class="caption">示例 7-20: 将示例 7-19 中部分重复的路径合并为一个 <code>use</code> 语句</span></p>
+<p>这一行便将 <code>std::io</code> 和 <code>std::io::Write</code> 同时引入作用域。</p>
+<h3 id="glob-运算符"><a class="header" href="#glob-运算符">glob 运算符</a></h3>
+<p>如果希望将一个路径下<strong>所有</strong>公有项引入作用域，可以指定路径后跟 <code>*</code> glob 运算符：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::collections::*;
+<span class="boring">}</span></code></pre></pre>
+<p>这个 <code>use</code> 语句将 <code>std::collections</code> 中定义的所有公有项引入当前作用域。使用 glob 运算符时请多加小心！Glob 会使得我们难以推导作用域中有什么名称和它们是在何处定义的。</p>
+<p>glob 运算符经常用于测试模块 <code>tests</code> 中，这时会将所有内容引入作用域；我们将在第十一章“如何编写测试”部分讲解。glob 运算符有时也用于 prelude 模式；查看<a href="https://doc.rust-lang.org/std/prelude/index.html#other-preludes">标准库中的文档</a>了解这个模式的更多细节。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch07-05-separating-modules-into-different-files.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch07-05-separating-modules-into-different-files.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
