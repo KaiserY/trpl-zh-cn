@@ -168,7 +168,7 @@ Message: 'j'
 
 在 `get_messages` 中，我们在 `messages` 数组上使用 `enumerate` 迭代器方法以便能够同时获得项本身和其索引。然后我们为偶数索引的项引入 100 毫秒的延时并为奇数索引的项引入 300 毫秒的延时来模拟真实世界的消息流中可能出现的不同的延时。因为我们的延时为 200 毫秒，这应该会影响到其中一半的消息。
 
-为了在 `get_messages` 函数中实现消息间的延迟且不造成阻塞，我们需要使用异步。然而，我们不能将 `get_messages` 函数本身变为异步函数，因为这样它会返回一个 `Future<Output = Stream<Item = String>>` 而不是 `Stream<Item = String>>`。调用者则不得不 await `get_messages` 本身来获取流。不过请记住：在一个给定的 future 中的一切都是线性发生的；并发发生在 futures **之间**。await `get_messages` 会要求其在返回接收端流之前发送所有的消息，包括消息之间的休眠延时。其结果是，超时将毫无用处。流本身没有任何的延时；它们甚至全都发生在流可用之前。
+为了在 `get_messages` 函数中实现消息间的延迟且不造成阻塞，我们需要使用异步。然而，我们不能将 `get_messages` 函数本身变为异步函数，因为这样它会返回一个 `Future<Output = Stream<Item = String>>` 而不是 `Stream<Item = String>`。调用者则不得不 await `get_messages` 本身来获取流。不过请记住：在一个给定的 future 中的一切都是线性发生的；并发发生在 futures **之间**。await `get_messages` 会要求其在返回接收端流之前发送所有的消息，包括消息之间的休眠延时。其结果是，超时将毫无用处。流本身没有任何的延时；它们甚至全都发生在流可用之前。
 
 相反，我们保持 `get_messages` 为一个返回流的常规函数，并 spawn 一个任务来处理异步 `sleep` 调用。
 
