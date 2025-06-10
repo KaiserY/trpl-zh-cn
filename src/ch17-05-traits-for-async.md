@@ -44,7 +44,7 @@ match page_title(url).poll() {
         None => println!("{url} had no title"),
     }
     Pending => {
-        // But what goes here?
+        // 但这里运行什么呢？
     }
 }
 ```
