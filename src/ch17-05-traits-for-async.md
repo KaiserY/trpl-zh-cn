@@ -44,7 +44,7 @@ match page_title(url).poll() {
         None => println!("{url} had no title"),
     }
     Pending => {
-        // But what goes here?
+        // 但这里运行什么呢？
     }
 }
 ```
@@ -197,7 +197,7 @@ pub trait Future {
 
 </figure>
 
-因此，如果 `String` 实现了 `!Unpin` 我们可以做一些非法的事，比如像图 17-9 这样在完全相同的内存位置将一个字符串替换为另一个字符串。这并不违反 `Pin` 的规则，因为 `String` 没有内部引用这使得它可以安全地移动！这是为何它实现了 `Unpin` 而不是 `!Unpin` 的原因。
+因此，如果 `String` 实现了 `!Unpin` 我们可以做一些非法的事，比如像图 17-9 这样在完全相同的内存位置将一个字符串替换为另一个字符串。这并不违反 `Pin` 的规则，因为 `String` 没有内部引用这使得它可以安全地移动！这是为何它实现了 `Unpin` 而不是 `!Unpin`。
 
 <figure>
 
