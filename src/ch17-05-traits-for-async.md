@@ -183,9 +183,9 @@ pub trait Future {
 
 `Unpin` 是一个标记 trait（marker trait），类似于我们在第十六章见过的 `Send` 和 `Sync` trait，因此它们自身没有功能。标记 trait 的存在只是为了告诉编译器在给定上下文中可以安全地使用实现了给定 trait 的类型。`Unpin` 告知编译器这个给定类型**无需**维护被提及的值是否可以安全地移动的任何保证。
 
-正如 `Send` 和 `Sync` 一样，编译器自动为所有被证明为安全的类型实现 `Unpin`。同样类似于 `Send` 和 `Sync`，有一个特殊的例子**不会**为类型实现 `Unpin`。这个例子的符号是 <code>impl !Unpin for <em>SomeType</em></code>，这里 <code><em>SomeType</em></code> 是一个当指向它的指针被用于 `Pin` 时**必须**维护安全保证的类型的名字。
+正如 `Send` 和 `Sync` 一样，编译器自动为所有被证明为安全的类型实现 `Unpin`。同样类似于 `Send` 和 `Sync`，有一个特殊的例子**不会**为类型实现 `Unpin`。这个例子的符号是 <code>impl !Unpin for <em>SomeType</em></code>，这里 <code><em>SomeType</em></code> 指的是这样的一种类型：为了确保内存安全，当一个指向它的指针被用于 `Pin` 时，无论何时它都**必须**维护其不被移动的安全保证。
 
-换句话说，关于 `Pin` 与 `Unpin` 的关系有两点需要牢记。首先，`Unpin` 用于 “正常” 情况，而 `!Unpin` 用于特殊情况。其次，一个类型是否实现了 `Unpin` 或 `!Unpin` **只在于**你是否使用了一个被 pin 住的指向类似 <code>Pin<&mut <em>SomeType</em>></code> 类型的指针。
+换句话说，关于 `Pin` 与 `Unpin` 的关系有两点需要牢记。首先，`Unpin` 用于 “正常” 情况，而 `!Unpin` 用于特殊情况。其次，不管一个类型是实现了 `Unpin` 或者实现了 `!Unpin`，它**只在**你使用了一个被 pin 住的指向类似 <code>Pin<&mut <em>SomeType</em>></code> 类型的指针时才会产生影响。
 
 更具体地说，考虑一下 `String`：它包含一个长度和构成它的 Unicode 字符。我们可以将 `String` 封装进 `Pin` 中，如图 17-8 所示。然而，就像 Rust 中大部分其它类型一样，`String` 自动实现了 `Unpin`。
 
@@ -197,7 +197,7 @@ pub trait Future {
 
 </figure>
 
-因此，如果 `String` 实现了 `!Unpin` 我们可以做一些非法的事，比如像图 17-9 这样在完全相同的内存位置将一个字符串替换为另一个字符串。这并不违反 `Pin` 的规则，因为 `String` 没有内部引用这使得它可以安全地移动！这是为何它实现了 `Unpin` 而不是 `!Unpin`。
+因此，对于 `String` 来说，我们可以像图 17-9 这样在完全相同的内存位置将一个字符串替换为另一个字符串，而如果 `String` 实现的是 `!Unpin`，这个操作本该是非法的。这并不违反 `Pin` 的规则，因为 `String` 没有内部引用这使得它可以安全地移动！这是为何它实现了 `Unpin` 而不是 `!Unpin`。
 
 <figure>
 
