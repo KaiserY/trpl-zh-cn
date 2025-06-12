@@ -3,10 +3,9 @@ use quote::quote;
 
 #[proc_macro_derive(HelloMacro)]
 pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
-    // Construct a representation of Rust code as a syntax tree
-    // that we can manipulate.
+    // 将 Rust 代码构建成我们可以操作的语法树。
     let ast = syn::parse(input).unwrap();
 
-    // Build the trait implementation.
+    // 生成 trait 的实现。
     impl_hello_macro(&ast)
 }

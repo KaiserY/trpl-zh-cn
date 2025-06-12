@@ -1,8 +1,7 @@
 static mut COUNTER: u32 = 0;
 
-/// SAFETY: Calling this from more than a single thread at a time is undefined
-/// behavior, so you *must* guarantee you only call it from a single thread at
-/// a time.
+/// SAFETY: 同时在多个线程调用这个方法是未定义的行为，所以你*必须*保证同一时间只
+/// 有一个线程在调用它。
 unsafe fn add_to_count(inc: u32) {
     unsafe {
         COUNTER += inc;
@@ -11,7 +10,7 @@ unsafe fn add_to_count(inc: u32) {
 
 fn main() {
     unsafe {
-        // SAFETY: This is only called from a single thread in `main`.
+        // SAFETY: 它只在 `main` 这一个线程被调用。
         add_to_count(3);
         println!("COUNTER: {}", *(&raw const COUNTER));
     }
