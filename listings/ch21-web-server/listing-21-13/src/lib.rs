@@ -8,7 +8,7 @@ impl ThreadPool {
     ///
     /// # Panics
     ///
-    /// 如果 size 为 0 ，`new` 方法会 panic。
+    /// 如果 size 为 0，`new` 方法会 panic。
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
