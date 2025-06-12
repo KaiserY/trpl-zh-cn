@@ -22,7 +22,7 @@ impl ThreadPool {
         let mut threads = Vec::with_capacity(size);
 
         for _ in 0..size {
-            // create some threads and store them in the vector
+            // 创建一些线程并将它们存入 vector 中。
         }
 
         ThreadPool { threads }
