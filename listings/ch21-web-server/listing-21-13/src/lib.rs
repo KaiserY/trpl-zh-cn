@@ -2,13 +2,13 @@ pub struct ThreadPool;
 
 // ANCHOR: here
 impl ThreadPool {
-    /// Create a new ThreadPool.
+    /// 创建一个新的线程池。
     ///
-    /// The size is the number of threads in the pool.
+    /// size 是池中线程的数量。
     ///
     /// # Panics
     ///
-    /// The `new` function will panic if the size is zero.
+    /// 如果 size 为 0 ，`new` 方法会 panic。
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
