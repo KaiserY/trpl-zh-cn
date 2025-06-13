@@ -96,7 +96,7 @@
 
 在不安全函数的函数体内部执行不安全操作时，同样需要使用 `unsafe` 块，就像在普通函数中一样，如果忘记了编译器会发出警告（warning）。这有助于将 `unsafe` 块保持得尽可能小，因为 `unsafe` 操作并不一定需要覆盖整个函数体。
 
-> 译注：不安全函数体也是有效的 `unsafe` 块，所以在不安全函数中进行另一个不安全操作时可以不新增额外的 `unsafe` 块，但从 2024 edition 开始，`#[warn(unsafe_op_in_unsafe_fn)]` 是默认开启的，所以此时会产生警告（warning）。参考 [RFC 2585](https://rust-lang.github.io/rfcs/2585-unsafe-block-in-unsafe-fn.html)，出于尽量缩小 `unsafe` 块的动机，不再建议直接在不安全函数体中直接进行不安全操作，因为未来可能将这种行为视为错误（error）。
+> 译注：不安全函数体也是有效的 `unsafe` 块，所以在不安全函数中进行另一个不安全操作时可以不新增额外的 `unsafe` 块，但从 2024 edition 开始，`#[warn(unsafe_op_in_unsafe_fn)]` 是默认开启的，所以此时会产生警告（warning）。参考 [RFC 2585](https://rust-lang.github.io/rfcs/2585-unsafe-block-in-unsafe-fn.html)，出于尽量缩小 `unsafe` 块的动机，不再建议在不安全函数体中直接进行不安全操作，因为未来可能将这种行为视为错误（error）。
 
 #### 创建不安全代码的安全抽象
 
