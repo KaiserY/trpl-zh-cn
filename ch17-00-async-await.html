@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Async 和 await - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch17-00-async-await.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="async-和-await"><a class="header" href="#async-和-await">Async 和 await</a></h1>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch17-00-async-await.md -->
+<!-- commit 3111eda07a4a4692bf69e3aaad999d840ac9c138 -->
+<p>很多我们要求计算机处理的操作都需要一定的时间才能完成。例如，如果你使用视频编辑器来创建一个家庭聚会的视频，导出视频可能会花费几分钟到几小时不等。同样，从家庭成员那里下载共享的视频也可能需要很长时间。如果我们能在等待这些长时间运行的操作完成期间做点其他事情，那就太好了。</p>
+<p>视频导出会尽可能使用所有的 CPU 和 GPU。如果你只有一个 CPU 核，同时操作系统在导出完成前也不会暂停，那么在其运行期间你无法使用计算机进行任何其他操作。这会是一个非常糟糕的体验。相反计算机的操作系统可以（也确实可以）隐式地中断导出过程，频率足够高，使你能够在导出进行的同时完成其他任务。</p>
+<p>下载文件则有所不同。它不占用大量的 CPU 时间。相反 CPU 需要等待来自于网络的数据。虽然可以在部分数据就绪时就开始读取，但等待剩余数据可能还需要一段时间。即便数据全部就绪了，视频文件也可能非常大，因此加载所有数据也会花费一些时间。虽然这可能只需要一两秒，不过这对于一个现代处理器来说已经是非常长的时间了，因为它每秒可以执行数十亿次操作。因此，如果能让 CPU 在等待网络调用完成的同时去处理别的工作就再好不过了。所以同上操作系统会隐式地中断你的程序以便其它工作可以在网络操作进行的同时继续进行。</p>
+<blockquote>
+<p>注意：视频导出这类操作通常被称为 “CPU 密集型”（“CPU-bound”）或者 “计算密集型”（“compute-bound”）操作。其受限于计算机 <em>CPU</em> 或 <em>GPU</em> 处理数据的速度，以及它所能利用的计算能力。而下载视频这类操作通常被称为 “IO 密集型”（“IO-bound”）操作，因为其受限于计算机的 <em>输入输出</em> 速度。下载的速度最多只能与通过网络传输数据的速度一致。</p>
+</blockquote>
+<p>在上述两个例子中，操作系统的隐式中断提供了一种形式的并发。不过这种并发仅限于整个程序的级别：操作系统中断一个程序并让其它程序得以执行。在很多场景中，由于我们能比操作系统在更细粒度上理解我们的程序，因此我们可以观察到很多操作系统无法察觉的并发机会。</p>
+<p>例如，如果我们在构建一个管理文件下载的工具，我们应当以一种不会因开始一个下载任务而锁定 UI 的方式来编写程序，并且用户应该能够同时开始多个下载任务。不过很多操作系统与网络交互的 API 都是 <em>阻塞</em> 的（<em>blocking</em>）。也就是说这些 API 会阻塞程序的进程，直到它们处理的数据完全就绪。</p>
+<blockquote>
+<p>注意：如果你仔细思索一下，会发现这是 <em>大部分</em> 函数调用的工作方式！不过我们通常将 “阻塞” 这个术语保留给那些与文件、网络或其它计算机资源交互的函数调用，因为这些地方是单个程序可以从 <em>非</em> 阻塞操作中获益的地方。</p>
+</blockquote>
+<p>我们可以新建专用的线程来下载每个文件以免阻塞主线程。然而，我们最终会发现这些线程的开销会成为一个问题。如果这些调用在一开始就是非阻塞的话那就更理想了。最后，如果我们能够像在阻塞代码中一样，以直接的风格编写非阻塞代码，那就更好了。比如这样：</p>
+<pre><code class="language-rust ignore does_not_compile">let data = fetch_data_from(url).await;
+println!("{data}");</code></pre>
+<p>这正是 Rust 的 async 抽象所提供的。不过在讲解它们在实践中如何工作之前，让我们稍微绕个远路来了解一下并行（parallelism）和并发（concurrency）的区别。</p>
+<h3 id="并行与并发"><a class="header" href="#并行与并发">并行与并发</a></h3>
+<p>在上一章中，我们大致将并行和并发视为可以互换的概念。但现在我们需要更加精确地区分它们，因为它们的区别将在实际工作中显现出来。</p>
+<p>思考一下不同的团队分割方法来开发一个软件项目。我们可以分配给一个个人多个任务，也可以每个团队成员各自负责一个任务，或者可以采用这两种方法的组合。</p>
+<p>当一个个人在任何一个任务完成前同时处理多个任务，这就是 <em>并发</em>。你可能在计算机上同时运行两个项目，当你对其中一个项目感到厌倦或遇到困难时，可以切换到另一个项目。因为你是单独一个人，所以无法真正同时推进两个任务，但是你可以多任务处理，在不同任务之间切换以取得进展。</p>
+<figure>
+<img alt="并发工作流" src="img/trpl17-01.svg" class="center" />
+<figcaption>图 17-1：一个并发工作流，在任务 A 和任务 B 之间切换</figcaption>
+</figure>
+<p>当你同意将一组任务在组员中分配，每一个组员分配一个任务并单独处理它，这就是 <em>并行</em>。每个组员可以真正同时进行工作。</p>
+<figure>
+<img alt="并发工作流" src="img/trpl17-02.svg" class="center" />
+<figcaption>图 17-2：一个并行流，其中任务 A 和任务 B 的工作同时独立进行</figcaption>
+</figure>
+<p>在这两种场景中，你可能需要协调不同的任务。也许你 <em>认为</em> 某个人负责的任务与其他人的工作完全不相关，但实际上它确实依赖于团队中另一位成员的工作完成。一些工作可以并行进行，不过一些工作事实上是 <em>串行</em> 的：它们只能串行地发生，一个接着一个，如图 17-3 所示。</p>
+<figure>
+<img alt="并发工作流" src="img/trpl17-03.svg" class="center" />
+<figcaption>图 17-3：一个部分并行的工作流，其中任务 A 和任务 B 的工作相互独立，直到任务 A3 阻塞在等待任务 B3 的结果</figcaption>
+</figure>
+<p>同理，你可能会意识到你自己的一个任务依赖另一个任务。现在并发任务也变成串行的了。</p>
+<p>并行与并发也可能相互交叉（阻塞）。如果你得知某个同事卡在等待你的一个任务完成，你可能会集中所有精力在这个任务上来 “解锁” 你的同事。你和你的同事则不再能并行地工作了，同时你也不能够并发地处理自己的任务。</p>
+<p>同样的基础动态也作用于软件与硬件。在一个单核的机器上，CPU 一次只能执行一个操作，不过它仍然可以并发工作。借助像线程、进程和异步（async）等工具，计算机可以暂停一个活动，并在最终切换回第一个活动之前切换到其它活动。在一个有多个 CPU 核心的机器上，它也可以并行工作。一个核心可以做一件工作的同时另一个核心可以做一些完全不相关的工作，而且这些工作实际上是同时发生的。</p>
+<p>当使用 Rust 中的 async 时，我们总是在处理并发。取决于硬件、操作系统和所使用的异步运行时（async runtime）-- 稍后会介绍更多的异步运行时！并发也可能在底层使用了并行。</p>
+<p>现在让我们深入理解 Rust 的异步编程实际上是如何工作的！在接下来的章节中，我们将：</p>
+<ul>
+<li>学习如何使用 Rust 的 <code>async</code> 和 <code>await</code> 语法</li>
+<li>探索如何使用异步模型来解决第十六章中遇到的一些挑战</li>
+<li>了解多线程和异步如何互补，在很多场景中你甚至可以同时使用两者</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch16-04-extensible-concurrency-sync-and-send.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch17-01-futures-and-syntax.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch16-04-extensible-concurrency-sync-and-send.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch17-01-futures-and-syntax.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>

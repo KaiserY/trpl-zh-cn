@@ -1,0 +1,489 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>用 Result 处理可恢复的错误 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch09-02-recoverable-errors-with-result.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="用-result-处理可恢复的错误"><a class="header" href="#用-result-处理可恢复的错误">用 <code>Result</code> 处理可恢复的错误</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch09-02-recoverable-errors-with-result.md -->
+<!-- commit 5d22a358fb2380aa3f270d7b6269b67b8e44849e -->
+<p>大部分错误并没有严重到需要程序完全停止执行。有时函数失败的原因很容易理解并加以处理。例如，如果因为打开一个并不存在的文件而失败，此时我们可能想要创建这个文件，而不是终止进程。</p>
+<p>回忆一下第二章 <a href="ch02-00-guessing-game-tutorial.html#%E4%BD%BF%E7%94%A8-result-%E7%B1%BB%E5%9E%8B%E6%9D%A5%E5%A4%84%E7%90%86%E6%BD%9C%E5%9C%A8%E7%9A%84%E9%94%99%E8%AF%AF">“使用 <code>Result</code> 类型来处理潜在的错误”</a> 部分中的那个 <code>Result</code> 枚举，它定义有如下两个变体，<code>Ok</code> 和 <code>Err</code>：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum Result&lt;T, E&gt; {
+    Ok(T),
+    Err(E),
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>T</code> 和 <code>E</code> 是泛型类型参数；第十章会详细介绍泛型。现在你需要知道的就是 <code>T</code> 代表成功时返回的 <code>Ok</code> 变体中的数据的类型，而 <code>E</code> 代表失败时返回的 <code>Err</code> 变体中的错误的类型。因为 <code>Result</code> 有这些泛型类型参数，我们可以将 <code>Result</code> 类型和标准库中为其定义的函数用于很多不同的场景，这些情况中需要返回的成功值和失败值可能会各不相同。</p>
+<p>让我们调用一个返回 <code>Result</code> 的函数，因为它可能会失败：如示例 9-3 所示尝试打开一个文件：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">use std::fs::File;
+
+fn main() {
+    let greeting_file_result = File::open("hello.txt");
+}</code></pre></pre>
+<p><span class="caption">示例 9-3：打开文件</span></p>
+<p><code>File::open</code> 的返回值是 <code>Result&lt;T, E&gt;</code>。泛型参数 <code>T</code> 会被 <code>File::open</code> 的实现放入成功返回值的类型 <code>std::fs::File</code>，这是一个文件句柄。错误返回值使用的 <code>E</code> 的类型是 <code>std::io::Error</code>。这些返回类型意味着 <code>File::open</code> 调用可能成功并返回一个可以读写的文件句柄。这个函数调用也可能会失败：例如，也许文件不存在，或者可能没有权限访问这个文件。<code>File::open</code> 函数需要一个方法在告诉我们成功与否的同时返回文件句柄或者错误信息。这些信息正好是 <code>Result</code> 枚举所代表的。</p>
+<p>当 <code>File::open</code> 成功时，<code>greeting_file_result</code> 变量将会是一个包含文件句柄的 <code>Ok</code> 实例。当失败时，<code>greeting_file_result</code> 变量将会是一个包含了更多关于发生了何种错误的信息的 <code>Err</code> 实例。</p>
+<p>我们需要在示例 9-3 的代码中增加根据 <code>File::open</code> 返回值进行不同处理的逻辑。示例 9-4 展示了一个使用基本工具处理 <code>Result</code> 的例子，第六章学习过的 <code>match</code> 表达式。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust should_panic edition2021">use std::fs::File;
+
+fn main() {
+    let greeting_file_result = File::open("hello.txt");
+
+    let greeting_file = match greeting_file_result {
+        Ok(file) =&gt; file,
+        Err(error) =&gt; panic!("Problem opening the file: {error:?}"),
+    };
+}</code></pre></pre>
+<p><span class="caption">示例 9-4：使用 <code>match</code> 表达式处理可能会返回的 <code>Result</code> 变体</span></p>
+<p>注意与 <code>Option</code> 枚举一样，<code>Result</code> 枚举和其变体也被导入到了 prelude 中，所以就不需要在 <code>match</code> 分支中的 <code>Ok</code> 和 <code>Err</code> 之前指定 <code>Result::</code>。</p>
+<p>这里我们告诉 Rust 当结果是 <code>Ok</code> 时，返回 <code>Ok</code> 变体中的 <code>file</code> 值，然后将这个文件句柄赋值给变量 <code>greeting_file</code>。<code>match</code> 之后，我们可以利用这个文件句柄来进行读写。</p>
+<p><code>match</code> 的另一个分支处理从 <code>File::open</code> 得到 <code>Err</code> 值的情况。在这种情况下，我们选择调用 <code>panic!</code> 宏。如果当前目录没有一个叫做 <em>hello.txt</em> 的文件，当运行这段代码时会看到如下来自 <code>panic!</code> 宏的输出：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling error-handling v0.1.0 (file:///projects/error-handling)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.73s
+     Running `target/debug/error-handling`
+
+thread 'main' panicked at src/main.rs:8:23:
+Problem opening the file: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+</code></pre>
+<p>一如既往，此输出准确地告诉了我们到底出了什么错。</p>
+<h3 id="匹配不同的错误"><a class="header" href="#匹配不同的错误">匹配不同的错误</a></h3>
+<p>示例 9-4 中的代码不管 <code>File::open</code> 是因为什么原因失败都会 <code>panic!</code>。我们真正希望的是对不同的错误原因采取不同的行为：如果 <code>File::open </code>因为文件不存在而失败，我们希望创建这个文件并返回新文件的句柄。如果 <code>File::open</code> 因为任何其他原因失败 -- 例如没有打开文件的权限 -- 我们仍然希望像示例 9-4 那样 <code>panic!</code>。为此，我们在示例 9-5 中添加了一个内部 <code>match</code> 表达式，如下所示：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore">use std::fs::File;
+use std::io::ErrorKind;
+
+fn main() {
+    let greeting_file_result = File::open("hello.txt");
+
+    let greeting_file = match greeting_file_result {
+        Ok(file) =&gt; file,
+        Err(error) =&gt; match error.kind() {
+            ErrorKind::NotFound =&gt; match File::create("hello.txt") {
+                Ok(fc) =&gt; fc,
+                Err(e) =&gt; panic!("Problem creating the file: {e:?}"),
+            },
+            _ =&gt; {
+                panic!("Problem opening the file: {error:?}");
+            }
+        },
+    };
+}</code></pre>
+<p><span class="caption">示例 9-5：使用不同的方式处理不同类型的错误</span></p>
+<p><code>File::open</code> 返回的 <code>Err</code> 变体中的值类型 <code>io::Error</code>，它是一个标准库中提供的结构体。这个结构体有一个返回 <code>io::ErrorKind</code> 值的 <code>kind</code> 方法可供调用。<code>io::ErrorKind</code> 是一个标准库提供的枚举，它的变体对应 <code>io</code> 操作可能导致的不同错误类型。我们感兴趣的变体是 <code>ErrorKind::NotFound</code>，它代表尝试打开的文件并不存在。这样，<code>match</code> 就匹配完 <code>greeting_file_result</code> 了，不过对于 <code>error.kind()</code> 还有一个内层 <code>match</code>。</p>
+<p>我们希望在内层 <code>match</code> 中检查的条件是 <code>error.kind()</code> 的返回值是否为 <code>ErrorKind</code>的 <code>NotFound</code> 变体。如果是，则通过 <code>File::create</code> 尝试创建该文件。然而因为 <code>File::create</code> 也可能会失败，还需要在内层 <code>match</code> 表达式中增加了第二个分支。当文件不能被创建，会打印出一个不同的错误信息。外层 <code>match</code> 的最后一个分支保持不变，这样对任何除了文件不存在的错误会使程序 panic。</p>
+<blockquote>
+<h4 id="使用-match-处理-resultt-e-的替代方案"><a class="header" href="#使用-match-处理-resultt-e-的替代方案">使用 <code>match</code> 处理 <code>Result&lt;T, E&gt;</code> 的替代方案</a></h4>
+<p>这里有好多 <code>match</code>！<code>match</code> 确实很强大，不过也非常的原始。第十三章我们会介绍闭包（closure），它会和定义在 <code>Result&lt;T, E&gt;</code> 中的很多方法一起使用。在处理代码中的 <code>Result&lt;T, E&gt;</code> 值时，使用这些方法往往比直接写 <code>match</code> 更简洁。</p>
+<p>例如，这是另一个编写与示例 9-5 逻辑相同但是使用闭包和 <code>unwrap_or_else</code> 方法的例子：</p>
+<pre><code class="language-rust ignore">use std::fs::File;
+use std::io::ErrorKind;
+
+fn main() {
+    let greeting_file = File::open("hello.txt").unwrap_or_else(|error| {
+        if error.kind() == ErrorKind::NotFound {
+            File::create("hello.txt").unwrap_or_else(|error| {
+                panic!("Problem creating the file: {error:?}");
+            })
+        } else {
+            panic!("Problem opening the file: {error:?}");
+        }
+    });
+}</code></pre>
+<p>虽然这段代码有着如示例 9-5 一样的行为，但并没有包含任何 <code>match</code> 表达式且更容易阅读。在阅读完第十三章后再回到这个例子，并查看标准库文档 <code>unwrap_or_else</code> 方法都做了什么操作。在处理错误时，还有很多这类方法可以消除大量嵌套的 <code>match</code> 表达式。</p>
+</blockquote>
+<h3 id="失败时-panic-的快捷方式unwrap-和-expect"><a class="header" href="#失败时-panic-的快捷方式unwrap-和-expect">失败时 panic 的快捷方式：<code>unwrap</code> 和 <code>expect</code></a></h3>
+<p><code>match</code> 能够胜任它的工作，不过它可能有点冗长并且不总是能很好的表明其意图。<code>Result&lt;T, E&gt;</code> 类型定义了很多辅助方法来处理各种更为特定的任务。<code>unwrap</code> 方法是一个快捷方式，其内部实现与我们在 Listing 9-4 中编写的 <code>match</code> 表达式相同。如果 <code>Result</code> 值是变体 <code>Ok</code>，<code>unwrap</code> 会返回 <code>Ok</code> 中的值。如果 <code>Result</code> 是变体 <code>Err</code>，<code>unwrap</code> 会为我们调用 <code>panic!</code>。这里是一个实践 <code>unwrap</code> 的例子：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust should_panic edition2021">use std::fs::File;
+
+fn main() {
+    let greeting_file = File::open("hello.txt").unwrap();
+}</code></pre></pre>
+<p>如果调用这段代码时不存在 <em>hello.txt</em> 文件，我们将会看到一个 <code>unwrap</code> 调用 <code>panic!</code> 时提供的错误信息：</p>
+<pre><code class="language-text">thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Os {
+code: 2, kind: NotFound, message: "No such file or directory" }',
+src/main.rs:4:49
+</code></pre>
+<p>同样，<code>expect</code> 方法也允许我们自定义 <code>panic!</code> 的错误信息。使用 <code>expect</code> 而不是 <code>unwrap</code> 并提供一个好的错误信息可以表明你的意图并更易于追踪 panic 的根源。<code>expect</code> 的语法看起来像这样：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust should_panic edition2021">use std::fs::File;
+
+fn main() {
+    let greeting_file = File::open("hello.txt")
+        .expect("hello.txt should be included in this project");
+}</code></pre></pre>
+<p><code>expect</code> 与 <code>unwrap</code> 的使用方式一样：返回文件句柄或调用 <code>panic!</code> 宏。<code>expect</code> 在调用 <code>panic!</code> 时使用的错误信息将是我们传递给 <code>expect</code> 的参数，而不像 <code>unwrap</code> 那样使用默认的 <code>panic!</code> 信息。它看起来像这样：</p>
+<pre><code class="language-text">thread 'main' panicked at src/main.rs:5:10:
+hello.txt should be included in this project: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+</code></pre>
+<p>在生产级别的代码中，大部分 Rustaceans 选择 <code>expect</code> 而不是 <code>unwrap</code> 并提供更多关于为何操作期望是一直成功的上下文。如此如果该假设真的被证明是错的，你也有更多的信息来用于调试。</p>
+<h3 id="传播错误"><a class="header" href="#传播错误">传播错误</a></h3>
+<p>当函数的实现中调用了可能会失败的操作时，除了在这个函数中处理错误外，还可以选择让调用者知道这个错误并决定该如何处理。这被称为<strong>传播</strong>（<em>propagating</em>）错误，这样能更好的控制代码调用，因为比起你代码所拥有的上下文，调用者可能拥有更多信息或逻辑来决定应该如何处理错误。</p>
+<p>例如，示例 9-6 展示了一个从文件中读取用户名的函数。如果文件不存在或不能读取，这个函数会将这些错误返回给调用它的代码：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::fs::File;
+use std::io::{self, Read};
+
+fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
+    let username_file_result = File::open("hello.txt");
+
+    let mut username_file = match username_file_result {
+        Ok(file) =&gt; file,
+        Err(e) =&gt; return Err(e),
+    };
+
+    let mut username = String::new();
+
+    match username_file.read_to_string(&amp;mut username) {
+        Ok(_) =&gt; Ok(username),
+        Err(e) =&gt; Err(e),
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 9-6：一个函数使用 <code>match</code> 将错误返回给代码调用者</span></p>
+<p>这个函数可以编写成更加简短的形式，不过我们以大量手动处理开始以便探索错误处理；在最后我们会展示更简洁的形式。让我们看看函数的返回值：<code>Result&lt;String, io::Error&gt;</code>。这意味着函数返回一个 <code>Result&lt;T, E&gt;</code> 类型的值，其中泛型参数 <code>T</code> 的具体类型是 <code>String</code>，而 <code>E</code> 的具体类型是 <code>io::Error</code>。</p>
+<p>如果这个函数没有出任何错误成功返回，函数的调用者会收到一个包含 <code>String</code> 的 <code>Ok</code> 值 —— 函数从文件中读取到的用户名。如果函数遇到任何错误，函数的调用者会收到一个 <code>Err</code> 值，它储存了一个包含更多这个问题相关信息的 <code>io::Error</code> 实例。这里选择 <code>io::Error</code> 作为函数的返回值是因为它正好是函数体中那两个可能会失败的操作的错误返回值：<code>File::open</code> 函数和 <code>read_to_string</code> 方法。</p>
+<p>函数体以调用 <code>File::open</code> 函数开始。接着使用 <code>match</code> 处理返回值 <code>Result</code>，类似示例 9-4，如果 <code>File::open</code> 成功了，模式变量 <code>file</code> 中的文件句柄就变成了可变变量 <code>username_file</code> 中的值，接着函数继续执行。在 <code>Err</code> 的情况下，我们没有调用 <code>panic!</code>，而是使用 <code>return</code> 关键字提前结束整个函数，并将来自 <code>File::open</code> 的错误值（现在在模式变量 <code>e</code> 中）作为函数的错误值传回给调用者。</p>
+<p>所以，如果在 <code>username_file</code> 中有一个文件句柄，该函数随后会在变量 <code>username</code> 中创建一个新的 <code>String</code> 并调用文件句柄 <code>username_file</code> 上的 <code>read_to_string</code> 方法，以将文件的内容读入 <code>username</code>。<code>read_to_string</code> 方法也返回一个 <code>Result</code>，因为它可能会失败，哪怕是 <code>File::open</code> 已经成功了。因此，我们需要另一个 <code>match</code> 来处理这个 <code>Result</code>：如果 <code>read_to_string</code> 执行成功，那么这个函数也就成功了，我们将从文件中读取的用户名返回，此时用户名位于被封装进 <code>Ok</code> 的 <code>username</code> 中。如果 <code>read_to_string</code> 执行失败，则像之前处理 <code>File::open</code> 的返回值的 <code>match</code> 那样返回错误值。然而，我们无需显式写出 <code>return</code>，因为这是函数的最后一个表达式。</p>
+<p>调用这个函数的代码最终会得到一个包含用户名的 <code>Ok</code> 值，或者一个包含 <code>io::Error</code> 的 <code>Err</code> 值。我们无从得知调用者会如何处理这些值。例如，如果他们得到了一个 <code>Err</code> 值，他们可能会选择 <code>panic!</code> 并使程序崩溃、使用一个默认的用户名或者从文件之外的地方寻找用户名。我们没有足够的信息知晓调用者具体会如何尝试，所以将所有的成功或失败信息向上传播，让他们选择合适的处理方法。</p>
+<p>这种传播错误的模式在 Rust 是如此的常见，以至于 Rust 提供了 <code>?</code> 问号运算符来来简化这一过程。</p>
+<h3 id="传播错误的快捷方式-运算符"><a class="header" href="#传播错误的快捷方式-运算符">传播错误的快捷方式：<code>?</code> 运算符</a></h3>
+<p>示例 9-7 展示了一个 <code>read_username_from_file</code> 的实现，它实现了与示例 9-6 中的代码相同的功能，不过这个实现使用了 <code>?</code> 运算符：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::fs::File;
+use std::io::{self, Read};
+
+fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
+    let mut username_file = File::open("hello.txt")?;
+    let mut username = String::new();
+    username_file.read_to_string(&amp;mut username)?;
+    Ok(username)
+}
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 9-7：一个使用 <code>?</code> 运算符向调用者返回错误的函数</span></p>
+<p><code>Result</code> 值之后的 <code>?</code> 被定义为与示例 9-6 中定义的处理 <code>Result</code> 值的 <code>match</code> 表达式有着几乎完全相同的工作方式。如果 <code>Result</code> 的值是 <code>Ok</code>，这个表达式将会返回 <code>Ok</code> 中的值而程序将继续执行。如果值是 <code>Err</code>，<code>Err</code> 将作为整个函数的返回值，就好像使用了 <code>return</code> 关键字一样，这样错误值就被传播给了调用者。</p>
+<p>示例 9-6 中的 <code>match</code> 表达式与 <code>?</code> 运算符所做的有一点不同：<code>?</code> 运算符所使用的错误值被传递给了 <code>from</code> 函数，它定义于标准库的 <code>From</code> trait 中，其用来将错误从一种类型转换为另一种类型。当 <code>?</code> 运算符调用 <code>from</code> 函数时，收到的错误类型被转换为由当前函数返回类型所指定的错误类型。这在当函数返回单个错误类型来代表所有可能失败的方式时很有用，即使其可能会因很多种原因失败。</p>
+<p>例如，我们可以将示例 9-7 中的 <code>read_username_from_file</code> 函数修改为返回一个自定义的 <code>OurError</code> 错误类型。如果我们也定义了 <code>impl From&lt;io::Error&gt; for OurError</code> 来从 <code>io::Error</code> 构造一个 <code>OurError</code> 实例，那么 <code>read_username_from_file</code> 函数体中的 <code>?</code> 运算符调用会调用 <code>from</code> 并转换错误而无需在函数中增加任何额外的代码。</p>
+<p>在示例 9-7 的上下文中，<code>File::open</code> 调用结尾的 <code>?</code> 会将 <code>Ok</code> 中的值返回给变量 <code>username_file</code>。如果发生了错误，<code>?</code> 运算符会使整个函数提前返回并将任何 <code>Err</code> 值返回给调用代码。同理也适用于 <code>read_to_string</code> 调用结尾的 <code>?</code>。</p>
+<p><code>?</code> 运算符消除了大量样板代码并使得函数的实现更简单。我们甚至可以在 <code>?</code> 之后直接使用链式方法调用来进一步简化代码，如示例 9-8 所示：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::fs::File;
+use std::io::{self, Read};
+
+fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
+    let mut username = String::new();
+
+    File::open("hello.txt")?.read_to_string(&amp;mut username)?;
+
+    Ok(username)
+}
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 9-8：问号运算符之后的链式方法调用</span></p>
+<p>在 <code>username</code> 中创建新的 <code>String</code> 被放到了函数开头；这一部分没有变化。我们对 <code>File::open("hello.txt")?</code> 的结果直接链式调用了 <code>read_to_string</code>，而不再创建变量 <code>username_file</code>。仍然需要 <code>read_to_string</code> 调用结尾的 <code>?</code>，而且当 <code>File::open</code> 和 <code>read_to_string</code> 都成功没有失败时返回包含用户名 <code>username</code> 的 <code>Ok</code> 值，而不是返回错误。其功能再一次与示例 9-6 和示例 9-7 保持一致，不过这是一个与众不同且更符合工程学（ergonomic）的写法。</p>
+<p>示例 9-9 展示了一个使用 <code>fs::read_to_string</code> 的更为简短的写法：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::fs;
+use std::io;
+
+fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
+    fs::read_to_string("hello.txt")
+}
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 9-9: 使用 <code>fs::read_to_string</code> 而不是打开后读取文件</span></p>
+<p>将文件读取到一个字符串是相当常见的操作，所以标准库提供了名为 <code>fs::read_to_string</code> 的函数，它会打开文件、新建一个 <code>String</code>、读取文件的内容，并将内容放入 <code>String</code>，接着返回它。当然，这样做就没有展示所有这些错误处理的机会了，所以我们最初就选择了艰苦的道路。</p>
+<h3 id="哪里可以使用--运算符"><a class="header" href="#哪里可以使用--运算符">哪里可以使用 <code>?</code> 运算符</a></h3>
+<p><code>?</code> 运算符只能被用于返回值与 <code>?</code> 作用的值相兼容的函数。因为 <code>?</code> 运算符被定义为从函数中提早返回一个值，这与示例 9-6 中的 <code>match</code> 表达式有着完全相同的工作方式。示例 9-6 中 <code>match</code> 作用于一个 <code>Result</code> 值，提早返回的分支返回了一个 <code>Err(e)</code> 值。函数的返回值必须是 <code>Result</code> 才能与这个 <code>return</code> 相兼容。</p>
+<p>在示例 9-10 中，让我们看看在返回值不兼容的 <code>main</code> 函数中使用 <code>?</code> 运算符会得到什么错误：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile">use std::fs::File;
+
+fn main() {
+    let greeting_file = File::open("hello.txt")?;
+}</code></pre>
+<p><span class="caption">示例 9-10: 尝试在返回 <code>()</code> 的 <code>main</code> 函数中使用 <code>?</code> 的代码不能编译</span></p>
+<p>这段代码打开一个文件，这可能会失败。<code>?</code> 运算符作用于 <code>File::open</code> 返回的 <code>Result</code> 值，不过 <code>main</code> 函数的返回类型是 <code>()</code> 而不是 <code>Result</code>。当编译这些代码，会得到如下错误信息：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling error-handling v0.1.0 (file:///projects/error-handling)
+error[E0277]: the `?` operator can only be used in a function that returns `Result` or `Option` (or another type that implements `FromResidual`)
+ --&gt; src/main.rs:4:48
+  |
+3 | fn main() {
+  | --------- this function should return `Result` or `Option` to accept `?`
+4 |     let greeting_file = File::open("hello.txt")?;
+  |                                                ^ cannot use the `?` operator in a function that returns `()`
+  |
+  = help: the trait `FromResidual&lt;Result&lt;Infallible, std::io::Error&gt;&gt;` is not implemented for `()`
+help: consider adding return type
+  |
+3 ~ fn main() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {
+4 |     let greeting_file = File::open("hello.txt")?;
+5 +     Ok(())
+  |
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `error-handling` (bin "error-handling") due to 1 previous error
+</code></pre>
+<p>这个错误指出只能在返回 <code>Result</code>、<code>Option</code> 或者其它实现了 <code>FromResidual</code> 的类型的函数中使用 <code>?</code> 运算符。</p>
+<p>为了修复这个错误，有两个选择。一个是，如果没有限制的话将函数的返回值改为与你在 <code>?</code> 运算符所作用的值兼容的类型。另一个是使用 <code>match</code> 或者 <code>Result&lt;T, E&gt;</code> 类型的方法，以适当的方式处理 <code>Result&lt;T, E&gt;</code>。</p>
+<p>错误信息也提到 <code>?</code> 也可用于 <code>Option&lt;T&gt;</code> 值。如同对 <code>Result</code> 使用 <code>?</code> 一样，只能在返回 <code>Option</code> 的函数中对 <code>Option</code> 使用 <code>?</code>。在 <code>Option&lt;T&gt;</code> 上调用 <code>?</code> 运算符的行为与 <code>Result&lt;T, E&gt;</code> 类似：如果值是 <code>None</code>，此时 <code>None</code> 会从函数中提前返回。如果值是 <code>Some</code>，<code>Some</code> 中的值作为表达式的返回值同时函数继续。示例 9-11 中有一个从给定文本中返回第一行最后一个字符的函数的例子：</p>
+<pre><pre class="playground"><code class="language-rust edition2021">fn last_char_of_first_line(text: &amp;str) -&gt; Option&lt;char&gt; {
+    text.lines().next()?.chars().last()
+}
+<span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    assert_eq!(
+</span><span class="boring">        last_char_of_first_line("Hello, world\nHow are you today?"),
+</span><span class="boring">        Some('d')
+</span><span class="boring">    );
+</span><span class="boring">
+</span><span class="boring">    assert_eq!(last_char_of_first_line(""), None);
+</span><span class="boring">    assert_eq!(last_char_of_first_line("\nhi"), None);
+</span><span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 9-11: 在 <code>Option&lt;T&gt;</code> 值上使用 <code>?</code> 运算符</span></p>
+<p>这个函数返回 <code>Option&lt;char&gt;</code> 因为它可能会在这个位置找到一个字符，也可能没有字符。这段代码获取 <code>text</code> 字符串 slice 作为参数并调用其 <code>lines</code> 方法，这会返回一个字符串中每一行的迭代器。因为函数希望检查第一行，所以调用了迭代器 <code>next</code> 来获取迭代器中第一个值。如果 <code>text</code> 是空字符串，<code>next</code> 调用会返回 <code>None</code>，此时我们可以使用 <code>?</code> 来停止并从 <code>last_char_of_first_line</code> 返回 <code>None</code>。如果 <code>text</code> 不是空字符串，<code>next</code> 会返回一个包含 <code>text</code> 中第一行的字符串 slice 的 <code>Some</code> 值。</p>
+<p><code>?</code> 会提取这个字符串 slice，然后可以在字符串 slice 上调用 <code>chars</code> 来获取字符的迭代器。我们感兴趣的是第一行的最后一个字符，所以可以调用 <code>last</code> 来返回迭代器的最后一项。这是一个 <code>Option</code>，因为有可能第一行是一个空字符串；例如 <code>text</code> 以一个空行开头而后面的行有文本，像是 <code>"\nhi"</code>。不过，如果第一行有最后一个字符，它会返回在一个 <code>Some</code> 变体中。<code>?</code> 运算符作用于其中给了我们一个简洁的表达这种逻辑的方式。如果我们不能在 <code>Option</code> 上使用 <code>?</code> 运算符，则不得不使用更多的方法调用或者 <code>match</code> 表达式来实现这些逻辑。</p>
+<p>注意你可以在返回 <code>Result</code> 的函数中对 <code>Result</code> 使用 <code>?</code> 运算符，可以在返回 <code>Option</code> 的函数中对 <code>Option</code> 使用 <code>?</code> 运算符，但是不可以混合搭配。<code>?</code> 运算符不会自动将 <code>Result</code> 转化为 <code>Option</code>，反之亦然；在这些情况下，可以使用类似 <code>Result</code> 的 <code>ok</code> 方法或者 <code>Option</code> 的 <code>ok_or</code> 方法来显式转换。</p>
+<p>目前为止，我们所使用的所有 <code>main</code> 函数都返回 <code>()</code>。<code>main</code> 函数是特殊的因为它是可执行程序的入口点和退出点，为了使程序能正常工作，其可以返回的类型是有限制的。</p>
+<p>幸运的是 <code>main</code> 函数也可以返回 <code>Result&lt;(), E&gt;</code>，示例 9-12 中的代码来自示例 9-10 不过修改了 <code>main</code> 的返回值为 <code>Result&lt;(), Box&lt;dyn Error&gt;&gt;</code> 并在结尾增加了一个 <code>Ok(())</code> 作为返回值。这段代码就可以编译了。</p>
+<pre><code class="language-rust ignore">use std::error::Error;
+use std::fs::File;
+
+fn main() -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
+    let greeting_file = File::open("hello.txt")?;
+
+    Ok(())
+}</code></pre>
+<p><span class="caption">示例 9-12: 修改 <code>main</code> 返回 <code>Result&lt;(), E&gt;</code> 允许对 <code>Result</code> 值使用 <code>?</code> 运算符</span></p>
+<p><code>Box&lt;dyn Error&gt;</code> 类型是一个<strong>trait 对象</strong>（<em>trait object</em>）第十八章<a href="ch18-02-trait-objects.html#%E9%A1%BE%E5%8F%8A%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E5%80%BC%E7%9A%84-trait-%E5%AF%B9%E8%B1%A1">顾及不同类型值的 trait 对象”</a> 部分会做介绍。目前可以将 <code>Box&lt;dyn Error&gt;</code> 理解为 “任何类型的错误”。在返回 <code>Box&lt;dyn Error&gt;</code> 错误类型 <code>main</code> 函数中对 <code>Result</code> 使用 <code>?</code> 是允许的，因为它允许任何 <code>Err</code> 值提前返回。即便 <code>main</code> 函数体从来只会返回 <code>std::io::Error</code> 错误类型，通过指定 <code>Box&lt;dyn Error&gt;</code>，这个签名也仍是正确的，甚至当 <code>main</code> 函数体中增加更多返回其他错误类型的代码，这个函数签名依然保持正确。</p>
+<p>当 <code>main</code> 函数返回 <code>Result&lt;(), E&gt;</code>，如果 <code>main</code> 返回 <code>Ok(())</code> 可执行程序会以 <code>0</code> 值退出，而如果 <code>main</code> 返回 <code>Err</code> 值则会以非零值退出；成功退出的程序会返回整数 <code>0</code>，运行错误的程序会返回非 <code>0</code> 的整数。Rust 也会从二进制程序中返回与这个惯例相兼容的整数。</p>
+<p><code>main</code> 函数也可以返回任何实现了 <a href="https://doc.rust-lang.org/std/process/trait.Termination.html"><code>std::process::Termination</code> trait</a> 的类型，它包含了一个返回 <code>ExitCode</code> 的 <code>report</code> 函数。请查阅标准库文档了解更多为自定义类型实现 <code>Termination</code> trait 的细节。</p>
+<p>现在我们讨论过了调用 <code>panic!</code> 或返回 <code>Result</code> 的细节，让我们回到在不同场景下如何决定使用哪种方式的问题。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch09-01-unrecoverable-errors-with-panic.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch09-03-to-panic-or-not-to-panic.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch09-01-unrecoverable-errors-with-panic.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch09-03-to-panic-or-not-to-panic.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
