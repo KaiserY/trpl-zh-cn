@@ -1,0 +1,431 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>高级类型 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch20-03-advanced-types.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="高级类型"><a class="header" href="#高级类型">高级类型</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch20-03-advanced-types.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
+<p>Rust 的类型系统有一些我们曾经提到但尚未讨论过的特性。首先我们将从一般意义上讨论 newtype 并探讨它们作为类型为何有用。接着会转向类型别名（type aliases），一个类似于 newtype 但有着稍微不同的语义的功能。我们还会讨论 <code>!</code> 类型和动态大小类型。</p>
+<h3 id="使用-newtype-模式实现类型安全和抽象"><a class="header" href="#使用-newtype-模式实现类型安全和抽象">使用 newtype 模式实现类型安全和抽象</a></h3>
+<p>本小节假设你已经阅读了之前的 <a href="ch20-02-advanced-traits.html#%E4%BD%BF%E7%94%A8-newtype-%E6%A8%A1%E5%BC%8F%E5%9C%A8%E5%A4%96%E9%83%A8%E7%B1%BB%E5%9E%8B%E4%B8%8A%E5%AE%9E%E7%8E%B0%E5%A4%96%E9%83%A8-trait">“使用 newtype 模式在外部类型上实现外部 trait”</a> 部分。</p>
+<p>newtype 模式还可用于我们到目前为止尚未讨论的其他任务，包括静态地确保值不会混淆以及标注值的单位。你在示例 20-16 中已经看到了一个使用 newtype 来表示单位的例子：<code>Millimeters</code> 和 <code>Meters</code> 结构体都在 newtype 中封装了 <code>u32</code> 值。如果编写了一个有 <code>Millimeters</code> 类型参数的函数，不小心使用 <code>Meters</code> 或普通的 <code>u32</code> 值来调用该函数的程序是不能编译的。</p>
+<p>newtype 模式也可以用于抽象掉某个类型的部分实现细节：新的类型可以暴露与其私有内部类型不同的共有 API。</p>
+<p>newtype 模式还可以隐藏内部实现。例如，可以提供一个封装了 <code>HashMap&lt;i32, String&gt;</code> 的 <code>People</code> 类型，用来储存人名以及相应的 ID。使用 <code>People</code> 的代码只需与我们提供的公有 API 交互即可，比如向 <code>People</code> 集合增加名字字符串的方法；这样这些代码就无需知道在内部我们将一个 <code>i32</code> ID 赋予了这个名字了。newtype 模式是一种实现第十八章 <a href="ch18-01-what-is-oo.html#%E5%B0%81%E8%A3%85%E9%9A%90%E8%97%8F%E4%BA%86%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82">“封装隐藏了实现细节”</a> 中讨论的隐藏实现细节的轻量级封装方法。</p>
+<h3 id="使用类型别名创建类型同义词"><a class="header" href="#使用类型别名创建类型同义词">使用类型别名创建类型同义词</a></h3>
+<p>Rust 提供了声明 <strong>类型别名</strong>（<em>type alias</em>）的能力，使用 <code>type</code> 关键字为现有类型赋予另一个名字。例如，可以像这样创建 <code>i32</code> 的别名 <code>Kilometers</code>：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    type Kilometers = i32;
+<span class="boring">
+</span><span class="boring">    let x: i32 = 5;
+</span><span class="boring">    let y: Kilometers = 5;
+</span><span class="boring">
+</span><span class="boring">    println!("x + y = {}", x + y);
+</span><span class="boring">}</span></code></pre></pre>
+<p>这意味着 <code>Kilometers</code> 是 <code>i32</code> 的 <strong>同义词</strong>（<em>synonym</em>）；不同于示例 20-16 中创建的 <code>Millimeters</code> 和 <code>Meters</code> 类型。<code>Kilometers</code> 并不是一个新的、单独的类型。<code>Kilometers</code> 类型的值将被完全当作 <code>i32</code> 类型值来对待：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    type Kilometers = i32;
+
+    let x: i32 = 5;
+    let y: Kilometers = 5;
+
+    println!("x + y = {}", x + y);
+<span class="boring">}</span></code></pre></pre>
+<p>因为 <code>Kilometers</code> 是 <code>i32</code> 的别名，它们是同一类型，可以将 <code>i32</code> 与 <code>Kilometers</code> 相加，也可以将 <code>Kilometers</code> 传递给获取 <code>i32</code> 参数的函数。但通过这种手段无法获得上一部分讨论的 newtype 模式所提供的类型检查的好处。换句话说，如果在某处混用 <code>Kilometers</code> 和 <code>i32</code> 的值，编译器也不会给出一个错误。</p>
+<p>类型别名的主要用途是减少重复。例如，可能会有这样很长的类型：</p>
+<pre><code class="language-rust ignore">Box&lt;dyn Fn() + Send + 'static&gt;</code></pre>
+<p>在函数签名和类型注解中到处书写这个冗长的类型既乏味又容易出错。想象一下有一个项目，到处都是像 Listing 20-25 那样的代码。</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let f: Box&lt;dyn Fn() + Send + 'static&gt; = Box::new(|| println!("hi"));
+
+    fn takes_long_type(f: Box&lt;dyn Fn() + Send + 'static&gt;) {
+        // --snip--
+    }
+
+    fn returns_long_type() -&gt; Box&lt;dyn Fn() + Send + 'static&gt; {
+        // --snip--
+<span class="boring">        Box::new(|| ())
+</span>    }
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 20-25: 在很多地方使用名称很长的类型</span></p>
+<p>类型别名通过减少重复使代码更易于管理。在示例 20-26 中，我们为这个冗长的类型引入了名为 <code>Thunk</code> 的别名，并可以使用更简洁的 <code>Thunk</code> 来替换所有使用该类型的地方。</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    type Thunk = Box&lt;dyn Fn() + Send + 'static&gt;;
+
+    let f: Thunk = Box::new(|| println!("hi"));
+
+    fn takes_long_type(f: Thunk) {
+        // --snip--
+    }
+
+    fn returns_long_type() -&gt; Thunk {
+        // --snip--
+<span class="boring">        Box::new(|| ())
+</span>    }
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 20-26: 引入类型别名 <code>Thunk</code> 来减少重复</span></p>
+<p>这样阅读和编写代码都容易多了！为类型别名选择一个好名字也可以帮助你表达意图（单词 <em>thunk</em> 表示会在之后被计算的代码，所以这是一个存放闭包的合适的名字）。</p>
+<p>类型别名也经常与 <code>Result&lt;T, E&gt;</code> 结合使用来减少重复。考虑一下标准库中的 <code>std::io</code> 模块。I/O 操作通常会返回一个 <code>Result&lt;T, E&gt;</code> 来处理操作失败的情况。标准库中的 <code>std::io::Error</code> 结构体代表了所有可能的 I/O 错误。<code>std::io</code> 中的许多函数都会返回 <code>Result&lt;T, E&gt;</code>，其中 <code>E</code> 是 <code>std::io::Error</code>，比如 <code>Write</code> trait 中的这些函数：</p>
+<pre><code class="language-rust noplayground">use std::fmt;
+use std::io::Error;
+
+pub trait Write {
+    fn write(&amp;mut self, buf: &amp;[u8]) -&gt; Result&lt;usize, Error&gt;;
+    fn flush(&amp;mut self) -&gt; Result&lt;(), Error&gt;;
+
+    fn write_all(&amp;mut self, buf: &amp;[u8]) -&gt; Result&lt;(), Error&gt;;
+    fn write_fmt(&amp;mut self, fmt: fmt::Arguments) -&gt; Result&lt;(), Error&gt;;
+}</code></pre>
+<p>这里重复出现了很多次 <code>Result&lt;..., Error&gt;</code>。为此，<code>std::io</code> 有这个类型别名声明：</p>
+<pre><code class="language-rust noplayground"><span class="boring">use std::fmt;
+</span><span class="boring">
+</span>type Result&lt;T&gt; = std::result::Result&lt;T, std::io::Error&gt;;
+<span class="boring">
+</span><span class="boring">pub trait Write {
+</span><span class="boring">    fn write(&amp;mut self, buf: &amp;[u8]) -&gt; Result&lt;usize&gt;;
+</span><span class="boring">    fn flush(&amp;mut self) -&gt; Result&lt;()&gt;;
+</span><span class="boring">
+</span><span class="boring">    fn write_all(&amp;mut self, buf: &amp;[u8]) -&gt; Result&lt;()&gt;;
+</span><span class="boring">    fn write_fmt(&amp;mut self, fmt: fmt::Arguments) -&gt; Result&lt;()&gt;;
+</span><span class="boring">}</span></code></pre>
+<p>该声明位于 <code>std::io</code> 模块中，因此我们可以使用完全限定的别名 <code>std::io::Result&lt;T&gt;</code>；也就是说，<code>Result&lt;T, E&gt;</code> 中 <code>E</code> 放入了 <code>std::io::Error</code>。<code>Write</code> trait 中的函数最终看起来像这样：</p>
+<pre><code class="language-rust noplayground"><span class="boring">use std::fmt;
+</span><span class="boring">
+</span><span class="boring">type Result&lt;T&gt; = std::result::Result&lt;T, std::io::Error&gt;;
+</span><span class="boring">
+</span>pub trait Write {
+    fn write(&amp;mut self, buf: &amp;[u8]) -&gt; Result&lt;usize&gt;;
+    fn flush(&amp;mut self) -&gt; Result&lt;()&gt;;
+
+    fn write_all(&amp;mut self, buf: &amp;[u8]) -&gt; Result&lt;()&gt;;
+    fn write_fmt(&amp;mut self, fmt: fmt::Arguments) -&gt; Result&lt;()&gt;;
+}</code></pre>
+<p>类型别名在两个方面有帮助：易于编写<strong>并</strong>在整个 <code>std::io</code> 中提供了一致的接口。因为这是一个别名，它只是另一个 <code>Result&lt;T, E&gt;</code>，这意味着可以在其上使用 <code>Result&lt;T, E&gt;</code> 的任何方法，以及像 <code>?</code> 这样的特殊语法。</p>
+<h3 id="从不返回的-never-type"><a class="header" href="#从不返回的-never-type">从不返回的 never type</a></h3>
+<p>Rust 有一个叫做 <code>!</code> 的特殊类型。在类型理论术语中被称为 <em>empty type</em>，因为它没有值。我们更倾向于称之为 <em>never type</em>。这个名字描述了它的作用：在函数从不返回的时候充当返回值。下面是一个示例：</p>
+<pre><code class="language-rust noplayground">fn bar() -&gt; ! {
+    // --snip--
+<span class="boring">    panic!();
+</span>}</code></pre>
+<p>这段代码可以读作 “函数 <code>bar</code> 从不返回”，而从不返回的函数被称为 <strong>发散函数</strong>（<em>diverging functions</em>）。不能创建 <code>!</code> 类型的值，所以 <code>bar</code> 也不可能返回值。</p>
+<p>不过一个不能创建值的类型有什么用呢？回想一下示例 2-5 中猜数字游戏的代码；我们在示例 20-27 中重现了其中的一小部分：</p>
+<pre><code class="language-rust ignore"><span class="boring">use std::cmp::Ordering;
+</span><span class="boring">use std::io;
+</span><span class="boring">
+</span><span class="boring">use rand::Rng;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    println!("Guess the number!");
+</span><span class="boring">
+</span><span class="boring">    let secret_number = rand::thread_rng().gen_range(1..=100);
+</span><span class="boring">
+</span><span class="boring">    println!("The secret number is: {secret_number}");
+</span><span class="boring">
+</span><span class="boring">    loop {
+</span><span class="boring">        println!("Please input your guess.");
+</span><span class="boring">
+</span><span class="boring">        let mut guess = String::new();
+</span><span class="boring">
+</span><span class="boring">        // --snip--
+</span><span class="boring">
+</span><span class="boring">        io::stdin()
+</span><span class="boring">            .read_line(&amp;mut guess)
+</span><span class="boring">            .expect("Failed to read line");
+</span><span class="boring">
+</span>        let guess: u32 = match guess.trim().parse() {
+            Ok(num) =&gt; num,
+            Err(_) =&gt; continue,
+        };
+<span class="boring">
+</span><span class="boring">        println!("You guessed: {guess}");
+</span><span class="boring">
+</span><span class="boring">        // --snip--
+</span><span class="boring">
+</span><span class="boring">        match guess.cmp(&amp;secret_number) {
+</span><span class="boring">            Ordering::Less =&gt; println!("Too small!"),
+</span><span class="boring">            Ordering::Greater =&gt; println!("Too big!"),
+</span><span class="boring">            Ordering::Equal =&gt; {
+</span><span class="boring">                println!("You win!");
+</span><span class="boring">                break;
+</span><span class="boring">            }
+</span><span class="boring">        }
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<p><span class="caption">示例 20-27: <code>match</code> 语句和一个以 <code>continue</code> 结束的分支</span></p>
+<p>当时我们忽略了代码中的一些细节。在第六章 <a href="ch06-02-match.html#match-%E6%8E%A7%E5%88%B6%E6%B5%81%E7%BB%93%E6%9E%84">“<code>match</code> 控制流运算符”</a> 部分，我们学习了 <code>match</code> 的分支必须返回相同的类型。如下代码不能工作：</p>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
+</span><span class="boring">    let guess = "3";
+</span>    let guess = match guess.trim().parse() {
+        Ok(_) =&gt; 5,
+        Err(_) =&gt; "hello",
+    };
+<span class="boring">}</span></code></pre>
+<p>这里的 <code>guess</code> 必须既是整型 <strong>也是</strong> 字符串，而 Rust 要求 <code>guess</code> 只能是一个类型。那么 <code>continue</code> 返回了什么呢？为什么在示例 20-27 中，一个分支返回 <code>u32</code>，而另一个分支却以 <code>continue</code> 结束呢？</p>
+<p>正如你可能猜到的，<code>continue</code> 的值是 <code>!</code>。也就是说，当 Rust 要计算 <code>guess</code> 的类型时，它会查看这两个分支。前者是 <code>u32</code> 值，而后者是 <code>!</code> 值。因为 <code>!</code> 类型永远不会有值，Rust 决定 <code>guess</code> 的类型是 <code>u32</code>。</p>
+<p>描述这种行为的正式方式是，类型为 <code>!</code> 的表达式可以被强制转换为任意其他类型。之所以允许 <code>match</code> 分支以 <code>continue</code> 结束是因为 <code>continue</code> 并不真正返回值；相反它把控制权交回上层循环，所以在 <code>Err</code> 的情况，事实上并未对 <code>guess</code> 进行赋值。</p>
+<p>never type 在 <code>panic!</code> 宏中也很有用。还记得 <code>Option&lt;T&gt;</code> 上的 <code>unwrap</code> 函数吗？它产生一个值或 panic。这里是它的定义：</p>
+<pre><code class="language-rust ignore"><span class="boring">enum Option&lt;T&gt; {
+</span><span class="boring">    Some(T),
+</span><span class="boring">    None,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">use crate::Option::*;
+</span><span class="boring">
+</span>impl&lt;T&gt; Option&lt;T&gt; {
+    pub fn unwrap(self) -&gt; T {
+        match self {
+            Some(val) =&gt; val,
+            None =&gt; panic!("called `Option::unwrap()` on a `None` value"),
+        }
+    }
+}</code></pre>
+<p>这里与示例 20-27 中的 <code>match</code> 发生了相同的情况：Rust 知道 <code>val</code> 是 <code>T</code> 类型，<code>panic!</code> 是 <code>!</code> 类型，所以整个 <code>match</code> 表达式的结果是 <code>T</code> 类型。这能工作是因为 <code>panic!</code> 并不产生一个值；它会终止程序。对于 <code>None</code> 的情况，<code>unwrap</code> 并不返回一个值，所以这些代码是有效的。</p>
+<p>最后一个有着 <code>!</code> 类型的表达式是 <code>loop</code>：</p>
+<pre><code class="language-rust ignore"><span class="boring">fn main() {
+</span>    print!("forever ");
+
+    loop {
+        print!("and ever ");
+    }
+<span class="boring">}</span></code></pre>
+<p>这里，循环永远也不结束，所以此表达式的值是 <code>!</code>。但是如果引入 <code>break</code> 这就不为真了，因为循环在执行到 <code>break</code> 后就会终止。</p>
+<h3 id="动态大小类型和-sized-trait"><a class="header" href="#动态大小类型和-sized-trait">动态大小类型和 <code>Sized</code> trait</a></h3>
+<p>Rust 需要知道有关类型的某些细节，例如为特定类型的值需要分配多少空间。这便是起初留下的一个类型系统中令人迷惑的角落：即 <strong>动态大小类型</strong>（<em>dynamically sized types</em>）的概念。这有时被称为 “DST” 或 “unsized types”，它们让我们能够编写使用那些只有在运行时才能知道大小的值的代码。</p>
+<p>让我们深入研究我们在整本书中一直在使用的动态大小类型 <code>str</code> 的细节。没错，不是 <code>&amp;str</code>，而是单独的 <code>str</code> 就是一个 DST。直到运行时我们都不知道字符串有多长。我们无法在编译时知道字符串的长度，这意味着我们无法创建 <code>str</code> 类型的变量，也不能获取 <code>str</code> 类型的参数。考虑一下这些代码，它们不能工作：</p>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
+</span>    let s1: str = "Hello there!";
+    let s2: str = "How's it going?";
+<span class="boring">}</span></code></pre>
+<p>Rust 需要知道应该为特定类型的值分配多少内存，同时所有同一类型的值必须使用相同数量的内存。如果允许编写这样的代码，也就意味着这两个 <code>str</code> 需要占用完全相同大小的空间。不过它们有着不同的长度：<code>s1</code> 需要 12 字节存储，而 <code>s2</code> 需要 15 字节。这也就是为什么不可能创建一个存放动态大小类型的变量的原因。</p>
+<p>那么该怎么办呢？在这种情况下，你已经知道答案：<code>s1</code> 和 <code>s2</code> 的类型是 <code>&amp;str</code> 而不是 <code>str</code>。如果你回想第四章 <a href="ch04-03-slices.html#%E5%AD%97%E7%AC%A6%E4%B8%B2-slice">“字符串 slice”</a> 中提到，slice 数据结构仅仅储存了开始位置和 slice 的长度。所以虽然 <code>&amp;T</code> 是一个储存了 <code>T</code> 所在的内存位置的单个值，<code>&amp;str</code> 则是<strong>两个</strong>值：<code>str</code> 的地址和其长度。这样，<code>&amp;str</code> 就有了一个在编译时可以知道的大小：它是 <code>usize</code> 长度的两倍。也就是说，无论所引用的字符串多长，我们总是知道 <code>&amp;str</code> 的大小。一般来说，这就是 Rust 使用动态大小类型的方式：它们有一些额外的元信息来储存动态信息的大小。这引出了动态大小类型的黄金法则：必须将动态大小类型的值置于某种指针之后。</p>
+<p>可以将 <code>str</code> 与所有类型的指针结合：比如 <code>Box&lt;str&gt;</code> 或 <code>Rc&lt;str&gt;</code>。事实上，之前我们已经见过了，不过是另一个动态大小类型：trait。每一个 trait 都是一个可以通过 trait 名称来引用的动态大小类型。在第十八章 <a href="ch18-02-trait-objects.html#%E9%A1%BE%E5%8F%8A%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E5%80%BC%E7%9A%84-trait-%E5%AF%B9%E8%B1%A1">顾及不同类型值的 trait 对象”</a> 中，我们提到了为了将 trait 用于 trait 对象，必须将它们放入指针之后，比如 <code>&amp;dyn Trait</code> 或 <code>Box&lt;dyn Trait&gt;</code>（<code>Rc&lt;dyn Trait&gt;</code> 也可以）。</p>
+<p>为了处理 DST，Rust 提供了 <code>Sized</code> trait 来决定一个类型的大小是否在编译时可知。该 trait 会自动为所有在编译时大小已知的类型实现。此外，Rust 隐式地为每一个泛型函数增加了 <code>Sized</code> bound。也就是说，对于如下泛型函数定义：</p>
+<pre><code class="language-rust ignore">fn generic&lt;T&gt;(t: T) {
+    // --snip--
+}</code></pre>
+<p>实际上，这会被当作我们写了如下内容来处理：</p>
+<pre><code class="language-rust ignore">fn generic&lt;T: Sized&gt;(t: T) {
+    // --snip--
+}</code></pre>
+<p>默认情况下，泛型函数只能作用于在编译时大小已知的类型。然而，你可以使用如下特殊语法来放宽这一限制：</p>
+<pre><code class="language-rust ignore">fn generic&lt;T: ?Sized&gt;(t: &amp;T) {
+    // --snip--
+}</code></pre>
+<p><code>?Sized</code> 这个 trait bound 表示 “<code>T</code> 可以是 <code>Sized</code>，也可以不是 <code>Sized</code>” 同时这个注解会覆盖泛型类型必须在编译时拥有固定大小的默认规则。具有该含义的 <code>?Trait</code> 语法仅适用于 <code>Sized</code>，而不适用于其他任何 trait。</p>
+<p>另外注意我们将 <code>t</code> 参数的类型从 <code>T</code> 变为了 <code>&amp;T</code>：因为其类型可能不是 <code>Sized</code> 的，所以需要将其置于某种指针之后。在这个例子中选择了引用。</p>
+<p>接下来，我们将讨论函数和闭包！</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch20-02-advanced-traits.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch20-04-advanced-functions-and-closures.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch20-02-advanced-traits.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch20-04-advanced-functions-and-closures.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
