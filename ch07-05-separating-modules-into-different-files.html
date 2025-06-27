@@ -1,0 +1,274 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>将模块拆分成多个文件 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch07-05-separating-modules-into-different-files.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="将模块拆分成多个文件"><a class="header" href="#将模块拆分成多个文件">将模块拆分成多个文件</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch07-05-separating-modules-into-different-files.md -->
+<!-- commit 3a30e4c1fbe641afc066b3af9eb01dcdf5ed8b24 -->
+<p>到目前为止，本章所有的例子都在一个文件中定义多个模块。当模块变得更大时，你可能想要将它们的定义移动到单独的文件中，从而使代码更容易阅读。</p>
+<p>例如，我们从示例 7-17 中包含多个餐厅模块的代码开始。我们会将模块提取到各自的文件中，而不是将所有模块都定义到 crate 根文件中。在这里，crate 根文件是 <em>src/lib.rs</em>，不过这个过程也适用于 crate 根文件是 <em>src/main.rs</em> 的二进制 crate。</p>
+<p>首先将 <code>front_of_house</code> 模块提取到其自己的文件中。删除 <code>front_of_house</code> 模块的大括号中的代码，只留下 <code>mod front_of_house;</code> 声明，这样 <em>src/lib.rs</em> 会包含如示例 7-21 所示的代码。注意直到创建示例 7-22 中的 <em>src/front_of_house.rs</em> 文件之前代码都不能编译。</p>
+<p><span class="filename">文件名：src/lib.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile">mod front_of_house;
+
+pub use crate::front_of_house::hosting;
+
+pub fn eat_at_restaurant() {
+    hosting::add_to_waitlist();
+}</code></pre>
+<p><span class="caption">示例 7-21: 声明 <code>front_of_house</code> 模块，其内容将位于 <em>src/front_of_house.rs</em></span></p>
+<p>接下来将之前大括号内的代码放入一个名叫 <em>src/front_of_house.rs</em> 的新文件中，如示例 7-22 所示。因为编译器找到了 crate 根中名叫 <code>front_of_house</code> 的模块声明，它就知道去搜寻这个文件。</p>
+<p><span class="filename">文件名：src/front_of_house.rs</span></p>
+<pre><code class="language-rust ignore">pub mod hosting {
+    pub fn add_to_waitlist() {}
+}</code></pre>
+<p><span class="caption">示例 7-22: 在 <em>src/front_of_house.rs</em> 中定义 <code>front_of_house</code> 模块</span></p>
+<p>注意你只需在模块树中的某处使用一次 <code>mod</code> 声明就可以加载这个文件。一旦编译器知道了这个文件是项目的一部分（并且通过 <code>mod</code> 语句的位置知道了代码在模块树中的位置），项目中的其他文件应该使用其所声明的位置的路径来引用那个文件的代码，这在<a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html">“引用模块项目的路径”</a>部分有讲到。换句话说，<code>mod</code> <strong>不是</strong>你可能会在其他编程语言中看到的 “include” 操作。</p>
+<p>接下来我们同样将 <code>hosting</code> 模块提取到自己的文件中。这个过程会有所不同，因为 <code>hosting</code> 是 <code>front_of_house</code> 的子模块而不是根模块。我们将 <code>hosting</code> 的文件放在与模块树中它的父模块同名的目录中，在这里是 <em>src/front_of_house/</em>。</p>
+<p>为了移动 <code>hosting</code>，修改 <em>src/front_of_house.rs</em> 使之仅包含 <code>hosting</code> 模块的声明。</p>
+<p><span class="filename">文件名：src/front_of_house.rs</span></p>
+<pre><code class="language-rust ignore">pub mod hosting;</code></pre>
+<p>接着我们创建一个 <em>src/front_of_house</em> 目录和一个包含 <code>hosting</code> 模块定义的 <em>hosting.rs</em> 文件：</p>
+<p><span class="filename">文件名：src/front_of_house/hosting.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn add_to_waitlist() {}
+<span class="boring">}</span></code></pre></pre>
+<p>如果将 <em>hosting.rs</em> 放在 <em>src</em> 目录，编译器会认为 <code>hosting</code> 模块中的 <em>hosting.rs</em> 的代码声明于 crate 根，而不是声明为 <code>front_of_house</code> 的子模块。编译器所遵循的哪些文件对应哪些模块的代码的规则，意味着目录和文件更紧密地贴合模块树。</p>
+<blockquote>
+<h3 id="另一种文件路径"><a class="header" href="#另一种文件路径">另一种文件路径</a></h3>
+<p>目前为止我们介绍了 Rust 编译器所最常用的文件路径，但 Rust 也支持一种更老的路径风格。</p>
+<p>对于声明于 crate 根的 <code>front_of_house</code> 模块，编译器会在如下位置查找模块代码：</p>
+<ul>
+<li><em>src/front_of_house.rs</em>（我们所介绍的）</li>
+<li><em>src/front_of_house/mod.rs</em>（老风格，不过仍然支持）</li>
+</ul>
+<p>对于 <code>front_of_house</code> 的子模块 <code>hosting</code>，编译器会在如下位置查找模块代码：</p>
+<ul>
+<li><em>src/front_of_house/hosting.rs</em>（我们所介绍的）</li>
+<li><em>src/front_of_house/hosting/mod.rs</em>（老风格，不过仍然支持）</li>
+</ul>
+<p>如果你对同一模块同时使用这两种路径风格，会得到一个编译错误。在同一项目中的不同模块混用不同的路径风格是允许的，不过这会使他人感到疑惑。</p>
+<p>使用 <em>mod.rs</em> 这一文件名的风格的主要缺点是会导致项目中出现很多 <em>mod.rs</em> 文件，当你在编辑器中同时打开它们时会感到疑惑。</p>
+</blockquote>
+<p>我们将各个模块的代码移动到独立文件了，同时模块树保持不变。<code>eat_at_restaurant</code> 中的函数调用也无需修改继续保持有效，即便其定义存在于不同的文件中。这个技巧让你可以在模块代码增长时，将它们移动到新文件中。</p>
+<p>注意，<em>src/lib.rs</em> 中的 <code>pub use crate::front_of_house::hosting</code> 语句也并未发生改变，<code>use</code> 也不会对哪些文件会被编译为 crate 的一部分有任何影响。<code>mod</code> 关键字声明了模块，而 Rust 会在与模块同名的文件中查找模块的代码。</p>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>Rust 允许你将一个包拆分为多个 crate，并将一个 crate 拆分为若干模块，从而可以在一个模块中引用另一个模块中定义的项。你可以使用绝对路径或相对路径来实现这一点。你可以通过使用 <code>use</code> 语句将路径引入作用域，这样在多次使用时可以使用更短的路径。模块定义的代码默认是私有的，不过可以选择增加 <code>pub</code> 关键字使其定义变为公有。</p>
+<p>接下来，让我们看看一些标准库提供的集合数据类型，你可以利用它们编写出漂亮整洁的代码。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch08-00-common-collections.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch08-00-common-collections.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
