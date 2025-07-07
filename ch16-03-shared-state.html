@@ -1,0 +1,411 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>共享状态并发 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch16-03-shared-state.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="共享状态的并发"><a class="header" href="#共享状态的并发">共享状态的并发</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch16-03-shared-state.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
+<p>消息传递是一个很好的处理并发的方式，但并不是唯一一个。另一种方式是让多个线程访问相同的共享数据。再考虑一下 Go 语言文档中的这句口号：“不要通过共享内存来通讯”。（“do not communicate by sharing memory.”）</p>
+<p>通过共享内存进行通信，会是什么样的代码？此外，为什么喜欢消息传递的人会警告说谨慎使用内存共享？</p>
+<p>在某种程度上，任何编程语言中的信道都类似于单所有权，因为一旦将一个值传送到信道中，将无法再使用这个值。共享内存类似于多所有权：多个线程可以同时访问相同的内存位置。在 15 章中，我们介绍了智能指针可以实现多所有权，然而这会增加额外的复杂性，因为需要管理多个所有者。Rust 的类型系统和所有权规则在正确管理这些问题上提供了极大的帮助：举个例子，让我们来看看互斥器（mutexes），较为常见的共享内存并发原语之一。</p>
+<h3 id="使用互斥器实现同一时刻只允许一个线程访问数据"><a class="header" href="#使用互斥器实现同一时刻只允许一个线程访问数据">使用互斥器实现同一时刻只允许一个线程访问数据</a></h3>
+<p><strong>互斥器</strong>（<em>mutex</em>）是互相排斥（<em>mutual exclusion</em>）的缩写，因为在同一时刻，它只允许一个线程访问数据。为了访问互斥器中的数据，线程首先需要通过获取互斥器的<strong>锁</strong>（<em>lock</em>）来表明其希望访问数据。锁是一个数据结构，作为互斥器的一部分，它记录谁有数据的专属访问权。因此我们讲，互斥器通过锁系统<strong>保护</strong>（<em>guarding</em>）其数据。</p>
+<p>互斥器以难以使用著称（译注：原文指互斥器在其他编程语言中难以使用），因为你必须记住两个规则：</p>
+<ol>
+<li>在使用数据之前，必须获取锁。</li>
+<li>使用完被互斥器所保护的数据之后，必须解锁数据，这样其他线程才能够获取锁。</li>
+</ol>
+<p>作为一个现实中互斥器的例子，想象一下在某个会议的一次小组座谈会中，只有一个麦克风。如果一位成员要发言，他必须请求或表示希望使用麦克风。得到了麦克风后，他可以畅所欲言，讲完后再将麦克风交给下一位希望讲话的成员。如果一位成员结束发言后忘记将麦克风交还，其他人将无法发言。如果对共享麦克风的管理出现了问题，座谈会将无法正常进行！</p>
+<p>正确的管理互斥器异常复杂，这也是许多人之所以热衷于信道的原因。然而，在 Rust 中，得益于类型系统和所有权，你不可能在锁和解锁上出错。</p>
+<h3 id="mutext的-api"><a class="header" href="#mutext的-api"><code>Mutex&lt;T&gt;</code>的 API</a></h3>
+<p>我们先从在单线程环境中使用互斥器开始，作为展示其用法的一个例子，如示例 16-12 所示：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">use std::sync::Mutex;
+
+fn main() {
+    let m = Mutex::new(5);
+
+    {
+        let mut num = m.lock().unwrap();
+        *num = 6;
+    }
+
+    println!("m = {m:?}");
+}</code></pre></pre>
+<p><span class="caption">示例 16-12: 出于简单的考虑，在一个单线程上下文中探索 <code>Mutex&lt;T&gt;</code> 的 API</span></p>
+<p>像很多类型一样，我们使用关联函数 <code>new</code> 来创建一个 <code>Mutex&lt;T&gt;</code>。使用 <code>lock</code> 方法来获取锁，从而可以访问互斥器中的数据。这个调用会阻塞当前线程，直到我们拥有锁为止。</p>
+<p>如果另一个线程拥有锁，并且那个线程 panic 了，则 <code>lock</code> 调用会失败。在这种情况下，没人能够再获取锁，所以我们调用 <code>unwrap</code>，使当前线程 panic。</p>
+<p>一旦获取了锁，就可以将返回值（命名为 <code>num</code>）视为一个其内部数据的可变引用了。类型系统确保了我们在使用 <code>m</code> 中的值之前获取锁。<code>m</code> 的类型是 <code>Mutex&lt;i32&gt;</code> 而不是 <code>i32</code>，所以<strong>必须</strong>调用 <code>lock</code> 才能使用这个 <code>i32</code> 值。我们不能忘记这么做，因为如果没有获取锁，类型系统就不允许访问内部的 <code>i32</code> 值。</p>
+<p>正如你所猜想的，<code>Mutex&lt;T&gt;</code> 是一个智能指针。更准确的说，<code>lock</code> 调用会<strong>返回</strong>一个叫做 <code>MutexGuard</code> 的智能指针。<code>MutexGuard</code> 智能指针实现了 <code>Deref</code> 来指向其内部数据；它也实现了 <code>Drop</code>，当 <code>MutexGuard</code> 离开作用域时，自动释放锁（发生在示例 16-12 内部作用域的结尾）。这样一来，就不会有忘记释放锁从而导致互斥器阻塞无法被其他线程使用的潜在风险，因为锁的释放是自动发生的。</p>
+<p>释放锁之后，我们可以打印出互斥器内部的 <code>i32</code> 值，并发现我们刚刚已经将其值改为 6。</p>
+<h4 id="在多个线程间共享-mutext"><a class="header" href="#在多个线程间共享-mutext">在多个线程间共享 <code>Mutex&lt;T&gt;</code></a></h4>
+<p>现在让我们尝试使用 <code>Mutex&lt;T&gt;</code> 在多个线程间共享同一个值。我们将启动 10 个线程，并在各个线程中对同一个计数器值加 1，这样计数器将从 0 累加到 10。示例 16-13 中的例子会出现编译错误，而我们将通过这些错误来学习如何使用 <code>Mutex&lt;T&gt;</code>，以及 Rust 又是如何帮助我们正确使用它的。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile">use std::sync::Mutex;
+use std::thread;
+
+fn main() {
+    let counter = Mutex::new(0);
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Result: {}", *counter.lock().unwrap());
+}</code></pre>
+<p><span class="caption">示例 16-13: 程序启动了 10 个线程，每个线程都通过 <code>Mutex&lt;T&gt;</code> 来增加计数器的值</span></p>
+<p>这里创建了一个 <code>counter</code> 变量来存放内含 <code>i32</code> 的 <code>Mutex&lt;T&gt;</code>，类似示例 16-12 那样。接下来我们遍历一个整数 range 来创建了 10 个线程。我们使用了 <code>thread::spawn</code>，并为所有线程传入了相同的闭包：它们每一个都将计数器移动进线程，调用 <code>lock</code> 方法来获取 <code>Mutex&lt;T&gt;</code> 上的锁，接着将互斥器中的值加一。当一个线程结束执行，<code>num</code> 会离开闭包作用域并释放锁，这样另一个线程就可以获取它了。</p>
+<p>在主线程中，我们像示例 16-2 那样收集了所有的 <code>JoinHandle</code>，并调用它们的 <code>join</code> 方法来等待所有线程结束。然后，主线程会获取锁，并打印出程序的结果。</p>
+<p>之前提示过，这个例子不能编译。现在让我们看看为什么！</p>
+<pre><code class="language-console">$ cargo run
+   Compiling shared-state v0.1.0 (file:///projects/shared-state)
+error[E0382]: borrow of moved value: `counter`
+  --&gt; src/main.rs:21:29
+   |
+5  |     let counter = Mutex::new(0);
+   |         ------- move occurs because `counter` has type `Mutex&lt;i32&gt;`, which does not implement the `Copy` trait
+...
+8  |     for _ in 0..10 {
+   |     -------------- inside of this loop
+9  |         let handle = thread::spawn(move || {
+   |                                    ------- value moved into closure here, in previous iteration of loop
+...
+21 |     println!("Result: {}", *counter.lock().unwrap());
+   |                             ^^^^^^^ value borrowed here after move
+   |
+help: consider moving the expression out of the loop so it is only moved once
+   |
+8  ~     let mut value = counter.lock();
+9  ~     for _ in 0..10 {
+10 |         let handle = thread::spawn(move || {
+11 ~             let mut num = value.unwrap();
+   |
+
+For more information about this error, try `rustc --explain E0382`.
+error: could not compile `shared-state` (bin "shared-state") due to 1 previous error
+</code></pre>
+<p>错误信息表明 <code>counter</code> 值在上一次循环中被移动了。所以 Rust 告诉我们，不能将 <code>counter</code> 锁的所有权移动到多个线程中。让我们通过一个第 15 章讨论过的多所有权手段，来修复这个编译错误。</p>
+<h4 id="多线程和多所有权"><a class="header" href="#多线程和多所有权">多线程和多所有权</a></h4>
+<p>在第 15 章中，我们用智能指针 <code>Rc&lt;T&gt;</code> 来创建引用计数，使得一个值有了多个所有者。让我们做同样的事，看看会发生什么。将示例 16-14 中的 <code>Mutex&lt;T&gt;</code> 封装进 <code>Rc&lt;T&gt;</code> 中，并在将所有权移入线程之前克隆（clone）<code>Rc&lt;T&gt;</code>。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile">use std::rc::Rc;
+use std::sync::Mutex;
+use std::thread;
+
+fn main() {
+    let counter = Rc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = Rc::clone(&amp;counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Result: {}", *counter.lock().unwrap());
+}</code></pre>
+<p><span class="caption">示例 16-14: 尝试使用 <code>Rc&lt;T&gt;</code> 来允许多个线程拥有 <code>Mutex&lt;T&gt;</code></span></p>
+<p>再一次编译并...出现了不同的错误！编译器真是教会了我们很多！</p>
+<pre><code class="language-console">$ cargo run
+   Compiling shared-state v0.1.0 (file:///projects/shared-state)
+error[E0277]: `Rc&lt;Mutex&lt;i32&gt;&gt;` cannot be sent between threads safely
+  --&gt; src/main.rs:11:36
+   |
+11 |           let handle = thread::spawn(move || {
+   |                        ------------- ^------
+   |                        |             |
+   |  ______________________|_____________within this `{closure@src/main.rs:11:36: 11:43}`
+   | |                      |
+   | |                      required by a bound introduced by this call
+12 | |             let mut num = counter.lock().unwrap();
+13 | |
+14 | |             *num += 1;
+15 | |         });
+   | |_________^ `Rc&lt;Mutex&lt;i32&gt;&gt;` cannot be sent between threads safely
+   |
+   = help: within `{closure@src/main.rs:11:36: 11:43}`, the trait `Send` is not implemented for `Rc&lt;Mutex&lt;i32&gt;&gt;`
+note: required because it's used within this closure
+  --&gt; src/main.rs:11:36
+   |
+11 |         let handle = thread::spawn(move || {
+   |                                    ^^^^^^^
+note: required by a bound in `spawn`
+  --&gt; /rustc/4eb161250e340c8f48f66e2b929ef4a5bed7c181/library/std/src/thread/mod.rs:728:1
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `shared-state` (bin "shared-state") due to 1 previous error
+</code></pre>
+<p>哇哦，错误信息太长不看！下面是重点要关注的内容：<code>`Rc&lt;Mutex&lt;i32&gt;&gt;` cannot be sent between threads safely</code>。编译器也指出了原因：<code>the trait `Send` is not implemented for `Rc&lt;Mutex&lt;i32&gt;&gt;`</code>。下一节我们会讲到 <code>Send</code>：这是一个确保所使用的类型可以用于并发环境的 trait。</p>
+<p>不幸的是，<code>Rc&lt;T&gt;</code> 并不能安全的在线程间共享。当 <code>Rc&lt;T&gt;</code> 管理引用计数时，它必须在每一个 <code>clone</code> 调用时增加计数，并在每一个克隆体被丢弃时减少计数。<code>Rc&lt;T&gt;</code> 并没有使用任何并发原语，无法确保改变计数的操作不会被其他线程打断。这可能使计数出错，并导致诡异的 bug，比如可能会造成内存泄漏，或在使用结束之前就丢弃一个值。我们所需要的是一个与 <code>Rc&lt;T&gt;</code> 完全一致，又以线程安全的方式改变引用计数的类型。</p>
+<h4 id="原子引用计数-arct"><a class="header" href="#原子引用计数-arct">原子引用计数 <code>Arc&lt;T&gt;</code></a></h4>
+<p>所幸 <code>Arc&lt;T&gt;</code> 正是这么一个类似 <code>Rc&lt;T&gt;</code> 并可以安全地用于并发环境的类型。字母 <em>a</em> 代表 <strong>原子性</strong>（<em>atomic</em>），所以这是一个<strong>原子引用计数</strong>（<em>atomically reference counted</em>）类型。<strong>原子类型</strong> (Atomics) 是另一类这里还未涉及到的并发原语：请查看标准库中 <a href="https://doc.rust-lang.org/std/sync/atomic/index.html"><code>std::sync::atomic</code></a> 的文档来获取更多细节。目前我们只需要知道：原子类型就像基本类型一样，可以安全地在线程间共享。</p>
+<p>你可能会好奇，为什么不是所有的基本类型都是原子性的？为什么标准库中的类型没有全部默认使用 <code>Arc&lt;T&gt;</code> 实现？原因在于，线程安全会造成性能损失，我们希望只在必要时才为此买单。如果只是在单线程中对值进行操作，不必强制原子性所提供的保证可以使代码运行得更快。</p>
+<p>回到之前的例子：<code>Arc&lt;T&gt;</code> 和 <code>Rc&lt;T&gt;</code> 有着相同的 API，所以我们只需修改程序中的 <code>use</code> 行、<code>new</code> 调用和 <code>clone</code> 调用。示例 16-15 中的代码最终可以编译并运行。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    let counter = Arc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = Arc::clone(&amp;counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Result: {}", *counter.lock().unwrap());
+}</code></pre></pre>
+<p><span class="caption">示例 16-15: 使用 <code>Arc&lt;T&gt;</code> 包装一个 <code>Mutex&lt;T&gt;</code> 能够实现在多线程之间共享所有权</span></p>
+<p>这段代码会打印出如下：</p>
+<pre><code class="language-text">Result: 10
+</code></pre>
+<p>成功了！我们从 0 数到了 10，这好像没啥大不了的，不过一路上我们确实学习了很多关于 <code>Mutex&lt;T&gt;</code> 和线程安全的知识！这个例子中构建的结构可以用于比增加计数更为复杂的操作。使用这个策略，我们可将计算任务分成独立的部分，并分散到多个线程中，接着使用 <code>Mutex&lt;T&gt;</code> 使用各自的运算结果来更新最终的结果。</p>
+<p>注意，对于简单的数值运算，<a href="https://doc.rust-lang.org/std/sync/atomic/index.html">标准库中 <code>std::sync::atomic</code> 模块</a> 提供了比 <code>Mutex&lt;T&gt;</code> 更简单的类型。针对基本类型，这些类型提供了安全、并发、原子的操作。在上面的例子中，为了专注于讲明白 <code>Mutex&lt;T&gt;</code> 的用法，我们才选择在基本类型上使用 <code>Mutex&lt;T&gt;</code>。（译注：对于上面例子中出现的 <code>i32</code> 加法操作，更好的做法是使用 <code>AtomicI32</code> 类型来完成。具体参考文档。）</p>
+<h3 id="refcelltrct-与-mutextarct-的相似性"><a class="header" href="#refcelltrct-与-mutextarct-的相似性"><code>RefCell&lt;T&gt;</code>/<code>Rc&lt;T&gt;</code> 与 <code>Mutex&lt;T&gt;</code>/<code>Arc&lt;T&gt;</code> 的相似性</a></h3>
+<p>你可能注意到了，尽管 <code>counter</code> 是不可变的，我们仍然可以获取其内部值的可变引用；这意味着 <code>Mutex&lt;T&gt;</code> 提供了内部可变性，就像 <code>Cell</code> 系列类型那样。使用 <code>RefCell&lt;T&gt;</code> 可以改变 <code>Rc&lt;T&gt;</code> 中内容（在 15 章中讲到过），同样地，使用 <code>Mutex&lt;T&gt;</code> 我们也可以改变 <code>Arc&lt;T&gt;</code> 中的内容。</p>
+<p>另一个值得注意的细节是，Rust 不能完全避免使用 <code>Mutex&lt;T&gt;</code> 所带来的逻辑错误。回忆一下，第 15 章中讲过，使用 <code>Rc&lt;T&gt;</code> 就有造成引用循环的风险：两个 <code>Rc&lt;T&gt;</code> 值相互引用，造成内存泄漏。同理，<code>Mutex&lt;T&gt;</code> 也有造成<strong>死锁</strong>（<em>deadlock</em>）的风险：当某个操作需要锁住两个资源，而两个线程分别持有两个资源的其中一个锁时，它们会永远相互等待。如果你对这个话题感兴趣，尝试编写一个带有死锁的 Rust 程序，接着研究其它语言中使用互斥器的死锁规避策略，并尝试在 Rust 中实现它们。标准库中 <code>Mutex&lt;T&gt;</code> 和 <code>MutexGuard</code> 的 API 文档会提供有用的信息。</p>
+<p>作为本章的最后，我们将讨论 <code>Send</code> 和 <code>Sync</code> trait，以及如何将它们用于自定义类型。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch16-02-message-passing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch16-04-extensible-concurrency-sync-and-send.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch16-02-message-passing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch16-04-extensible-concurrency-sync-and-send.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
