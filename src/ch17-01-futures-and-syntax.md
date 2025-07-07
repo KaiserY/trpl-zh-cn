@@ -97,7 +97,6 @@ fn page_title(url: &str) -> impl Future<Output = Option<String>> {
 - 所有原始函数中被调用的代码被封装进一个 `async move` 块。回忆一下，代码块是表达式。这整个块就是函数所返回的表达式
 - 如上所述，这个异步代码块产生一个 `Option<String>` 类型的值。这个值与返回类型中的 `Output` 类型一致。这正类似于你已经见过的其它代码块。
 - 新版函数的函数体是一个 `async move` 代码块，因为它如何使用 `url` 参数决定了这一点。（本章后续部分将更详细地讨论 `async` 和 `async move` 之间的区别。）
-- 新版函数的函数体之所以是 `async move` 块，是因为它对 `url` 参数的使用方式所决定的。（本章后面会更详细地讨论 `async` 与 `async move` 的区别。）
 
 现在我们可以在 `main` 中调用 `page_title`。
 
