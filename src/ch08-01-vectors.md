@@ -49,7 +49,7 @@
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-04/src/main.rs:here}}
 ```
 
-<span class="caption">列表 8-4：使用索引语法或 `get` 方法来访问 vector 中的项</span>
+<span class="caption">示例 8-4：使用索引语法或 `get` 方法来访问 vector 中的项</span>
 
 这里有几个细节需要注意。我们使用索引值 `2` 来获取第三个元素，因为索引是从数字 0 开始的。使用 `&` 和 `[]` 会得到一个索引位置元素的引用。当使用索引作为参数调用 `get` 方法时，会得到一个可以用于 `match` 的 `Option<&T>`。
 

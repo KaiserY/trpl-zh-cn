@@ -76,7 +76,7 @@ match x {
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-03/src/main.rs:here}}
 ```
 
-<span class="caption">列表 19-3: 在 `for` 循环中使用模式来解构元组</span>
+<span class="caption">示例 19-3: 在 `for` 循环中使用模式来解构元组</span>
 
 示例 19-3 的代码会打印出：
 
@@ -130,15 +130,15 @@ let PATTERN = EXPRESSION;
 
 ### 函数参数
 
-函数参数也可以是模式。列表 19-6 中的代码声明了一个叫做 `foo` 的函数，它获取一个 `i32` 类型的参数 `x`，现在这看起来应该很熟悉：
+函数参数也可以是模式。示例 19-6 中的代码声明了一个叫做 `foo` 的函数，它获取一个 `i32` 类型的参数 `x`，现在这看起来应该很熟悉：
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-06/src/main.rs:here}}
 ```
 
-<span class="caption">列表 19-6: 在参数中使用模式的函数签名</span>
+<span class="caption">示例 19-6: 在参数中使用模式的函数签名</span>
 
-`x` 部分就是一个模式！类似于之前对 `let` 所做的，可以在函数参数中匹配元组。列表 19-7 将传递给函数的元组拆分为各个值：
+`x` 部分就是一个模式！类似于之前对 `let` 所做的，可以在函数参数中匹配元组。示例 19-7 将传递给函数的元组拆分为各个值：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -146,7 +146,7 @@ let PATTERN = EXPRESSION;
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-07/src/main.rs}}
 ```
 
-<span class="caption">列表 19-7: 一个在参数中解构元组的函数</span>
+<span class="caption">示例 19-7: 一个在参数中解构元组的函数</span>
 
 这会打印出 `Current location: (3, 5)`。值 `&(3, 5)` 会匹配模式 `&(x, y)`，如此 `x` 得到了值 `3`，而 `y` 得到了值 `5`。
 
