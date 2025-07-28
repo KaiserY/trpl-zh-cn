@@ -78,7 +78,7 @@
 {{#rustdoc_include ../listings/ch18-oop/listing-18-14/src/lib.rs:here}}
 ```
 
-<span class="caption">列表 18-14: 增加一个 `Post` 的 `content` 方法的占位实现，它总是返回一个空字符串 slice</span>
+<span class="caption">示例 18-14: 增加一个 `Post` 的 `content` 方法的占位实现，它总是返回一个空字符串 slice</span>
 
 通过增加这个 `content` 方法，示例 18-11 中直到第 7 行的代码能如期运行。
 
@@ -220,7 +220,7 @@
 {{#rustdoc_include ../listings/ch18-oop/listing-18-20/src/lib.rs:here}}
 ```
 
-<span class="caption">列表 18-20: `PendingReviewPost` 通过调用 `DraftPost` 的 `request_review` 创建，`approve` 方法将 `PendingReviewPost` 变为发布的 `Post`</span>
+<span class="caption">示例 18-20: `PendingReviewPost` 通过调用 `DraftPost` 的 `request_review` 创建，`approve` 方法将 `PendingReviewPost` 变为发布的 `Post`</span>
 
 `request_review` 和 `approve` 方法获取 `self` 的所有权，因此会消费 `DraftPost` 和 `PendingReviewPost` 实例，并分别转换为 `PendingReviewPost` 和发布的 `Post`。这样在调用 `request_review` 之后就不会遗留任何 `DraftPost` 实例，后者同理。`PendingReviewPost` 并没有定义 `content` 方法，所以尝试读取其内容会导致编译错误，`DraftPost` 同理。因为唯一得到定义了 `content` 方法的 `Post` 实例的途径是调用 `PendingReviewPost` 的 `approve` 方法，而得到 `PendingReviewPost` 的唯一办法是调用 `DraftPost` 的 `request_review` 方法，现在我们就将发博文的工作流编码进了类型系统。
 
