@@ -472,10 +472,10 @@ Failed after 2 seconds
 
 在实践中，你会直接处理 `async` 和 `await`，其次才是类似 `join`、`join_all`、`race` 等函数和宏，在使用这些 API 时你只会偶尔遇到 `pin`。
 
-现在我们见过了一系列同时处理多个 future 的方法了。接下来，我们来看看如何通过（*流*）*streams* 处理一个时间序列的多个 future。不过，在此之前，这里有几个你可能想要先考虑的问题：
+现在我们见过了一系列同时处理多个 future 的方法了。接下来，我们来看看如何通过（*流*）*streams* 按时间顺序处理多个 future。不过，在此之前，这里有几个你可能想要先考虑的问题：
 
-- 我们在 `Vec` 上使用了 `join_all` 来等待一组中的所有 future 完成。相反该如何使用 `Vec` 来依次处理一个序列的 future 呢？这么做有哪些权衡取舍呢？
-- 仔细观察 `futures` crate 中的 `futures::stream::FuturesUnordered` 类型。使用它与使用 `Vec` 又有什么区别呢？（不用担心它来自与 crate 的 `stream` 部分的事实；它刚好能处理任何 future 的集合。）
+- 我们之前使用 `Vec` 配合 `join_all` 来等待一组 future 全部完成。那么该如何使用 `Vec` 来按顺序处理一组 future 呢？这么做有哪些权衡取舍呢？
+- 仔细观察 `futures` crate 中的 `futures::stream::FuturesUnordered` 类型。使用它与使用 `Vec` 又有什么区别呢？（不用担心它来自于 crate 的 `stream` 模块这一事实；它很好的适用于任何 future 集合。）
 
 [collections]: ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: ch12-03-improving-error-handling-and-modularity.html
