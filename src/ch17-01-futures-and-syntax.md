@@ -217,6 +217,10 @@ enum Either<A, B> {
 
 现在我们完成一个可用的小型网页爬虫的构建了！挑选一对 URL 并运行命令行工具。你会发现某些网站稳定地快于其它网站，而在另一些情况下哪个站点更快则因每次运行而异。更重要的是，你已经掌握了处理 futures 的基础知识，因此我们现在可以进一步探索更多 async 的可能性了。
 
+[crate-source]: https://github.com/rust-lang/book/tree/main/packages/trpl
+[futures-crate]: https://crates.io/crates/futures
+[tokio]: https://tokio.rs
+
 [impl-trait]: ch10-02-traits.html#trait-作为参数
 [iterators-lazy]: ch13-02-iterators.html
 [thread-spawn]: ch16-01-threads.html#creating-a-new-thread-with-spawn
