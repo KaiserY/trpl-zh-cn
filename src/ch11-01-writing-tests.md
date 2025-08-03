@@ -3,7 +3,7 @@
 <!-- https://github.com/rust-lang/book/blob/main/src/ch11-01-writing-tests.md -->
 <!-- commit 02e053cdbbb3bf9edd9ad32ed49eb533404350a9 -->
 
-Rust 中的测试函数是用来验证非测试代码是否是按照期望的方式运行的。测试函数体通常执行如下三种操作：
+Rust 中的测试函数是用来验证非测试代码是否按照期望的方式运行的。测试函数体通常执行如下三种操作：
 
 - 设置任何所需的数据或状态
 - 运行需要测试的代码
