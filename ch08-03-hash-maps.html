@@ -1,0 +1,355 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>使用 Hash Map 储存键值对 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch08-03-hash-maps.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="使用-hash-map-储存键值对"><a class="header" href="#使用-hash-map-储存键值对">使用 Hash Map 储存键值对</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch08-03-hash-maps.md -->
+<!-- commit 5d22a358fb2380aa3f270d7b6269b67b8e44849e -->
+<p>最后介绍的常用集合类型是<strong>哈希 map</strong>（<em>hash map</em>）。<code>HashMap&lt;K, V&gt;</code> 类型储存了一个键类型 <code>K</code> 对应一个值类型 <code>V</code> 的映射。它通过一个<strong>哈希函数</strong>（<em>hashing function</em>）来实现映射，决定如何将键和值放入内存中。很多编程语言支持这种数据结构，不过通常有不同的名字：<strong>哈希</strong>、<strong>map</strong>、<strong>对象</strong>、<strong>哈希表</strong>、<strong>字典</strong>或者<strong>关联数组</strong>，仅举几例。</p>
+<p>哈希 map 可以用于需要任何类型作为键来寻找数据的情况，而不是像 vector 那样通过索引。例如，在一个游戏中，你可以将每个团队的分数记录到哈希 map 中，其中键是队伍的名字而值是每个队伍的分数。给出一个队名，就能检索到该队的得分。</p>
+<p>本章我们会介绍哈希 map 的基本 API，不过还有更多吸引人的功能隐藏于标准库在 <code>HashMap&lt;K, V&gt;</code> 上定义的函数中。一如既往请查看标准库文档来了解更多信息。</p>
+<h3 id="新建一个哈希-map"><a class="header" href="#新建一个哈希-map">新建一个哈希 map</a></h3>
+<p>可以使用 <code>new</code> 创建一个空的 <code>HashMap</code>，并使用 <code>insert</code> 增加元素。在示例 8-20 中我们记录两支队伍的分数，分别是<strong>蓝队</strong>和<strong>黄队</strong>。蓝队开始有 10 分而黄队开始有 50 分：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-20：新建一个哈希 map 并插入一些键值对</span></p>
+<p>注意必须首先 <code>use</code> 标准库中集合部分的 <code>HashMap</code>。在这三个常用集合中，<code>HashMap</code> 是最不常用的，所以并没有被 prelude 自动引用。标准库中对 <code>HashMap</code> 的支持也相对较少，例如，并没有内建的构建宏。</p>
+<p>像 vector 一样，哈希 map 将它们的数据储存在堆上，这个 <code>HashMap</code> 的键类型是 <code>String</code> 而值类型是 <code>i32</code>。类似于 vector，哈希 map 是同质的：所有的键必须是相同类型，值也必须都是相同类型。</p>
+<h3 id="访问哈希-map-中的值"><a class="header" href="#访问哈希-map-中的值">访问哈希 map 中的值</a></h3>
+<p>可以通过 <code>get</code> 方法并提供对应的键来从哈希 map 中获取值，如示例 8-21 所示：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+
+    let team_name = String::from("Blue");
+    let score = scores.get(&amp;team_name).copied().unwrap_or(0);
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-21：访问哈希 map 中储存的蓝队分数</span></p>
+<p>这里，<code>score</code> 是与蓝队分数相关的值，应为 <code>10</code>。<code>get</code> 方法返回 <code>Option&lt;&amp;V&gt;</code>，如果某个键在哈希 map 中没有对应的值，<code>get</code> 会返回 <code>None</code>。程序中通过调用 <code>copied</code> 方法来获取一个 <code>Option&lt;i32&gt;</code> 而不是 <code>Option&lt;&amp;i32&gt;</code>，接着调用 <code>unwrap_or</code> 在  <code>scores</code> 中没有该键所对应的项时将其设置为零。</p>
+<p>可以使用与 vector 类似的方式来遍历哈希 map 中的每一个键值对，也就是 <code>for</code> 循环：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+
+    for (key, value) in &amp;scores {
+        println!("{key}: {value}");
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>这会以任意顺序打印出每一个键值对：</p>
+<pre><code class="language-text">Yellow: 50
+Blue: 10
+</code></pre>
+<h3 id="哈希-map-和所有权"><a class="header" href="#哈希-map-和所有权">哈希 map 和所有权</a></h3>
+<p>对于像 <code>i32</code> 这样的实现了 <code>Copy</code> trait 的类型，其值可以拷贝进哈希 map。对于像 <code>String</code> 这样拥有所有权的值，其值将被移动而哈希 map 会成为这些值的所有者，如示例 8-22 所示：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    use std::collections::HashMap;
+
+    let field_name = String::from("Favorite color");
+    let field_value = String::from("Blue");
+
+    let mut map = HashMap::new();
+    map.insert(field_name, field_value);
+    // 这里 field_name 和 field_value 不再有效，
+    // 尝试使用它们看看会出现什么编译错误！
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-22：展示一旦键值对被插入后就为哈希 map 所拥有</span></p>
+<p>当 <code>insert</code> 调用将 <code>field_name</code> 和 <code>field_value</code> 移动到哈希 map 中后，将不能使用这两个绑定。</p>
+<p>如果将值的引用插入哈希 map，这些值本身将不会被移动进哈希 map。但是这些引用指向的值必须至少在哈希 map 有效时也是有效的。第十章 <a href="ch10-03-lifetime-syntax.html#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%A1%AE%E4%BF%9D%E5%BC%95%E7%94%A8%E6%9C%89%E6%95%88">“生命周期确保引用有效”</a> 部分将会更多的讨论这个问题。</p>
+<h3 id="更新哈希-map"><a class="header" href="#更新哈希-map">更新哈希 map</a></h3>
+<p>尽管键值对的数量是可以增长的，每个唯一的键只能同时关联一个值（反之不一定成立：比如蓝队和黄队的 <code>scores</code> 哈希 map 中都可能存储有 10 这个值）。</p>
+<p>当我们想要改变哈希 map 中的数据时，必须决定如何处理一个键已经有值了的情况。可以选择完全无视旧值并用新值代替旧值。可以选择保留旧值而忽略新值，并只在键<strong>没有</strong>对应值时增加新值。或者可以结合新旧两值。让我们看看这分别该如何实现！</p>
+<h4 id="覆盖一个值"><a class="header" href="#覆盖一个值">覆盖一个值</a></h4>
+<p>如果我们插入了一个键值对，接着用相同的键插入一个不同的值，与这个键相关联的旧值将被替换。即便示例 8-23 中的代码调用了两次 <code>insert</code>，哈希 map 也只会包含一个键值对，因为两次都是对蓝队的键插入的值：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Blue"), 25);
+
+    println!("{scores:?}");
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-23：替换以特定键储存的值</span></p>
+<p>这会打印出 <code>{"Blue": 25}</code>。原始的值 <code>10</code> 则被覆盖了。</p>
+<h4 id="只在键尚不存在时插入键值对"><a class="header" href="#只在键尚不存在时插入键值对">只在键尚不存在时插入键值对</a></h4>
+<p>我们经常会检查某个特定的键是否已经存在于哈希 map 中并进行如下操作：如果哈希 map 中键已经存在则不做任何操作；如果不存在则连同值一块插入。</p>
+<p>为此哈希 map 有一个专用的 API，叫做 <code>entry</code>，它获取我们想要检查的键作为参数。<code>entry</code> 函数的返回值是一个枚举 <code>Entry</code> 它代表了可能存在也可能不存在的值。比如说我们想要检查黄队的键是否关联了一个值。如果没有，就插入值 <code>50</code>，对于蓝队也是如此。使用 <code>entry</code> API 的代码看起来如示例 8-24 所示。</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+    scores.insert(String::from("Blue"), 10);
+
+    scores.entry(String::from("Yellow")).or_insert(50);
+    scores.entry(String::from("Blue")).or_insert(50);
+
+    println!("{scores:?}");
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-24：使用 <code>entry</code> 方法只在键没有对应一个值时插入</span></p>
+<p><code>Entry</code> 的 <code>or_insert</code> 方法在键对应的值存在时就返回这个值的可变引用，如果不存在则将参数作为新值插入并返回新值的可变引用。这比编写自己的逻辑要简明的多，另外也与借用检查器结合得更好。</p>
+<p>运行示例 8-24 的代码会打印出 <code>{"Yellow": 50, "Blue": 10}</code>。第一个 <code>entry</code> 调用会插入黄队的键和值 <code>50</code>，因为黄队并没有一个值。第二个 <code>entry</code> 调用不会改变哈希 map 因为蓝队已经有了值 <code>10</code>。</p>
+<h4 id="根据旧值更新一个值"><a class="header" href="#根据旧值更新一个值">根据旧值更新一个值</a></h4>
+<p>另一个常见的哈希 map 的应用场景是找到一个键对应的值并根据旧的值更新它。例如，示例 8-25 中的代码计数一些文本中每一个单词分别出现了多少次。我们使用哈希 map 以单词作为键并递增其值来记录我们遇到过几次这个单词。如果是第一次看到某个单词，就先插入值 <code>0</code>。</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    use std::collections::HashMap;
+
+    let text = "hello world wonderful world";
+
+    let mut map = HashMap::new();
+
+    for word in text.split_whitespace() {
+        let count = map.entry(word).or_insert(0);
+        *count += 1;
+    }
+
+    println!("{map:?}");
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-25：通过哈希 map 储存单词和计数来统计出现次数</span></p>
+<p>这会打印出 <code>{"world": 2, "hello": 1, "wonderful": 1}</code>。你可能会看到相同的键值对以不同的顺序打印：回忆一下<a href="#%E8%AE%BF%E9%97%AE%E5%93%88%E5%B8%8C-map-%E4%B8%AD%E7%9A%84%E5%80%BC">“访问哈希 map 中的值”</a>部分中提到遍历哈希 map 会以任意顺序进行。</p>
+<p><code>split_whitespace</code> 方法返回一个由空格分隔 <code>text</code> 值子 slice 的迭代器。<code>or_insert</code> 方法返回这个键的值的一个可变引用（<code>&amp;mut V</code>）。这里我们将这个可变引用储存在 <code>count</code> 变量中，所以为了赋值必须首先使用星号（<code>*</code>）解引用 <code>count</code>。这个可变引用在 <code>for</code> 循环的结尾离开作用域，这样所有这些改变都是安全的并符合借用规则。</p>
+<h3 id="哈希函数"><a class="header" href="#哈希函数">哈希函数</a></h3>
+<p><code>HashMap</code> 默认使用一种叫做 SipHash 的哈希函数，它可以抵御涉及哈希表（hash table）<sup class="footnote-reference" id="fr-siphash-1"><a href="#footnote-siphash">1</a></sup> 的拒绝服务（Denial of Service, DoS）攻击。然而这并不是可用的最快的算法，不过为了更高的安全性值得付出一些性能的代价。如果性能监测显示此哈希函数非常慢，以致于你无法接受，你可以指定一个不同的 <em>hasher</em> 来切换为其它函数。hasher 是一个实现了 <code>BuildHasher</code> trait 的类型。<a href="ch10-02-traits.html">第十章</a>会讨论 trait 和如何实现它们。你并不需要从头开始实现你自己的 hasher；<a href="https://crates.io">crates.io</a> 有其他人分享的实现了许多常用哈希算法的 hasher 的库。</p>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>vector、字符串和哈希 map 会在你的程序需要储存、访问和修改数据时帮助你。这里有一些你应该能够解决的练习问题：</p>
+<ol>
+<li>给定一组整数，使用 vector 并返回这个列表的中位数（排列数组后位于中间的值）和众数（出现次数最多的值；在这里哈希 map 会很有帮助）。</li>
+<li>将字符串转换为 pig latin。也就是每一个单词的第一个辅音字母被移动到单词的结尾并增加 <em>ay</em>，所以 <em>first</em> 会变成 <em>irst-fay</em>。元音字母开头的单词则在结尾增加 <em>hay</em>（<em>apple</em> 会变成 <em>apple-hay</em>）。请注意 UTF-8 编码的细节！</li>
+<li>使用哈希 map 和 vector，创建一个文本接口来允许用户向公司的部门中增加员工的名字。例如，“Add Sally to Engineering” 或 “Add Amir to Sales”。接着让用户获取一个部门的所有员工的列表，或者公司每个部门的所有员工按照字典序排列的列表。</li>
+</ol>
+<p>标准库 API 文档中描述的这些类型的方法将有助于你进行这些练习！</p>
+<p>我们已经开始接触可能会有失败操作的复杂程序了，这也意味着接下来是一个了解错误处理的绝佳时机！接下来我们将讨论这一部分！</p>
+<hr>
+<ol class="footnote-definition"><li id="footnote-siphash">
+<p><a href="https://en.wikipedia.org/wiki/SipHash">https://en.wikipedia.org/wiki/SipHash</a> <a href="#fr-siphash-1">↩</a></p>
+</li>
+</ol>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch08-02-strings.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch09-00-error-handling.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch08-02-strings.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch09-00-error-handling.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>

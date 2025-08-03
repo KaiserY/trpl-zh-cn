@@ -1,0 +1,351 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>使用 Box&lt;T&gt; 指向堆上数据 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch15-01-box.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="使用-boxt-指向堆上的数据"><a class="header" href="#使用-boxt-指向堆上的数据">使用 <code>Box&lt;T&gt;</code> 指向堆上的数据</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch15-01-box.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
+<p>最简单直接的智能指针是 <em>box</em>，其类型是 <code>Box&lt;T&gt;</code>。box 允许你将一个值放在堆上而不是栈上。留在栈上的则是指向堆数据的指针。如果你想回顾一下栈与堆的区别请参考第四章。</p>
+<p>除了数据被储存在堆上而不是栈上之外，box 没有性能损失。不过也没有很多额外的功能。它们多用于如下场景：</p>
+<ul>
+<li>当有一个在编译时未知大小的类型，而又想要在需要确切大小的上下文中使用这个类型值的时候</li>
+<li>当有大量数据并希望在确保数据不被拷贝的情况下转移所有权的时候</li>
+<li>当希望拥有一个值并只关心它的类型是否实现了特定 trait 而不是其具体类型的时候</li>
+</ul>
+<p>我们会在<a href="#box-%E5%85%81%E8%AE%B8%E5%88%9B%E5%BB%BA%E9%80%92%E5%BD%92%E7%B1%BB%E5%9E%8B">“box 允许创建递归类型”</a>部分展示第一种场景。在第二种情况中，转移大量数据的所有权可能会花费很长的时间，因为数据在栈上进行了拷贝。为了改善这种情况下的性能，可以通过 box 将这些数据储存在堆上。接着，只有少量的指针数据在栈上被拷贝。第三种情况被称为 <strong>trait 对象</strong>（<em>trait object</em>），第十八章刚好有一整个部分<a href="ch18-02-trait-objects.html#%E9%A1%BE%E5%8F%8A%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E5%80%BC%E7%9A%84-trait-%E5%AF%B9%E8%B1%A1">“顾及不同类型值的 trait 对象”</a>专门讲解这个主题。所以这里所学的内容会在第十八章再次应用！</p>
+<h3 id="使用-boxt-在堆上存储数据"><a class="header" href="#使用-boxt-在堆上存储数据">使用 <code>Box&lt;T&gt;</code> 在堆上存储数据</a></h3>
+<p>在讨论 <code>Box&lt;T&gt;</code> 的堆存储用例之前，让我们熟悉一下语法以及如何与存储在 <code>Box&lt;T&gt;</code> 中的值进行交互。</p>
+<p>示例 15-1 展示了如何使用 box 在堆上储存一个 <code>i32</code>：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
+    let b = Box::new(5);
+    println!("b = {b}");
+}</code></pre></pre>
+<p><span class="caption">示例 15-1：使用 box 在堆上储存一个 <code>i32</code> 值</span></p>
+<p>这里定义了变量 <code>b</code>，其值是一个指向被分配在堆上的值 <code>5</code> 的 <code>Box</code>。这个程序会打印出 <code>b = 5</code>；在这个例子中，我们可以像数据是储存在栈上的那样访问 box 中的数据。正如任何拥有数据所有权的值那样，当像 <code>b</code> 这样的 box 在 <code>main</code> 的末尾离开作用域时，它将被释放。这个释放过程作用于 box 本身（位于栈上）和它所指向的数据（位于堆上）。</p>
+<p>将一个单独的值存放在堆上并不是很有意义，所以像示例 15-1 这样单独使用 box 并不常见。将像单个 <code>i32</code> 这样的值储存在栈上，也就是其默认存放的地方在大部分使用场景中更为合适。让我们看看一个不使用 box 时无法定义的类型的例子。</p>
+<h3 id="box-允许创建递归类型"><a class="header" href="#box-允许创建递归类型">Box 允许创建递归类型</a></h3>
+<p><strong>递归类型</strong>（<em>recursive type</em>）的值可以拥有另一个同类型的值作为其自身的一部分。但是这会产生一个问题，因为 Rust 需要在编译时知道类型占用多少空间。递归类型的值嵌套理论上可以无限地进行下去，所以 Rust 不知道递归类型需要多少空间。因为 box 有一个已知的大小，所以通过在循环类型定义中插入 box，就可以创建递归类型了。</p>
+<p>作为一个递归类型的例子，让我们探索一下 <em>cons list</em>。这是一个函数式编程语言中常见的数据类型，来展示这个（递归类型）概念。除了递归之外，我们将要定义的 cons list 类型相当简单，所以这个例子中的概念，在任何遇到更为复杂的涉及到递归类型的场景时都很实用。</p>
+<h4 id="cons-list-的更多信息"><a class="header" href="#cons-list-的更多信息">cons list 的更多信息</a></h4>
+<p><em>cons list</em> 是一个来源于 Lisp 编程语言及其方言的数据结构，它由嵌套的列表组成。它的名字来源于 Lisp 中的 <code>cons</code> 函数（“construct function" 的缩写），它利用两个参数来构造一个新的列表。通过对一个包含值的列表和另一个值调用 <code>cons</code>，可以构建由递归列表组成的 cons list。</p>
+<p>例如这里有一个包含列表 <code>1, 2, 3</code> 的 cons list 的伪代码表示，其每个对在一个括号中：</p>
+<pre><code class="language-text">(1, (2, (3, Nil)))
+</code></pre>
+<p>cons list 的每一项都包含两个元素：当前项的值和下一项。其最后一项值包含一个叫做 <code>Nil</code> 的值且没有下一项。cons list 通过递归调用 <code>cons</code> 函数产生。代表递归的归基条件（base case）的规范名称是 <code>Nil</code>，它宣布列表的终止。注意这不同于第六章中的 “null” 或 “nil” 的概念，它们代表无效或缺失的值。</p>
+<p>cons list 并不是一个 Rust 中常见的类型。大部分在 Rust 中需要列表的时候，<code>Vec&lt;T&gt;</code> 是一个更好的选择。其他更为复杂的递归数据类型<strong>确实</strong>在 Rust 的很多场景中很有用，不过通过以 cons list 作为开始，我们可以探索如何使用 box 毫不费力地定义一个递归数据类型。</p>
+<p>示例 15-2 包含一个 cons list 的枚举定义。注意这还不能编译因为这个类型没有已知的大小，之后我们会展示：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile">enum List {
+    Cons(i32, List),
+    Nil,
+}
+<span class="boring">
+</span><span class="boring">fn main() {}</span></code></pre>
+<p><span class="caption">示例 15-2：第一次尝试定义一个代表 <code>i32</code> 值的 cons list 数据结构的枚举</span></p>
+<blockquote>
+<p>注意：出于示例的需要我们选择实现一个只存放 <code>i32</code> 值的 cons list。也可以用泛型，正如第十章讲到的，来定义一个可以存放任何类型值的 cons list 类型。</p>
+</blockquote>
+<p>使用这个 cons list 来储存列表 <code>1, 2, 3</code> 将看起来如示例 15-3 所示：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">enum List {
+</span><span class="boring">    Cons(i32, List),
+</span><span class="boring">    Nil,
+</span><span class="boring">}
+</span><span class="boring">
+</span>use crate::List::{Cons, Nil};
+
+fn main() {
+    let list = Cons(1, Cons(2, Cons(3, Nil)));
+}</code></pre>
+<p><span class="caption">示例 15-3：使用 <code>List</code> 枚举储存列表 <code>1, 2, 3</code></span></p>
+<p>第一个 <code>Cons</code> 储存了 <code>1</code> 和另一个 <code>List</code> 值。这个 <code>List</code> 是另一个包含 <code>2</code> 的 <code>Cons</code> 值和下一个 <code>List</code> 值。接着又有另一个存放了 <code>3</code> 的 <code>Cons</code> 值和最后一个值为 <code>Nil</code> 的 <code>List</code>，非递归变体代表了列表的结尾。</p>
+<p>如果尝试编译示例 15-3 的代码，会得到如示例 15-4 所示的错误：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling cons-list v0.1.0 (file:///projects/cons-list)
+error[E0072]: recursive type `List` has infinite size
+ --&gt; src/main.rs:1:1
+  |
+1 | enum List {
+  | ^^^^^^^^^
+2 |     Cons(i32, List),
+  |               ---- recursive without indirection
+  |
+help: insert some indirection (e.g., a `Box`, `Rc`, or `&amp;`) to break the cycle
+  |
+2 |     Cons(i32, Box&lt;List&gt;),
+  |               ++++    +
+
+error[E0391]: cycle detected when computing when `List` needs drop
+ --&gt; src/main.rs:1:1
+  |
+1 | enum List {
+  | ^^^^^^^^^
+  |
+  = note: ...which immediately requires computing when `List` needs drop again
+  = note: cycle used when computing whether `List` needs drop
+  = note: see https://rustc-dev-guide.rust-lang.org/overview.html#queries and https://rustc-dev-guide.rust-lang.org/query.html for more information
+
+Some errors have detailed explanations: E0072, E0391.
+For more information about an error, try `rustc --explain E0072`.
+error: could not compile `cons-list` (bin "cons-list") due to 2 previous errors
+</code></pre>
+<p><span class="caption">示例 15-4：尝试定义一个递归枚举时得到的错误</span></p>
+<p>这个错误表明这个类型 “有无限的大小”（“has infinite size”）。其原因是 <code>List</code> 的一个变体被定义为是递归的：它直接存放了另一个相同类型的值。这意味着 Rust 无法计算为了存放 <code>List</code> 值到底需要多少空间。让我们拆开来看为何会得到这个错误。首先了解一下 Rust 如何决定需要多少空间来存放一个非递归类型。</p>
+<h3 id="计算非递归类型的大小"><a class="header" href="#计算非递归类型的大小">计算非递归类型的大小</a></h3>
+<p>回忆一下第六章讨论枚举定义时示例 6-2 中定义的 <code>Message</code> 枚举：</p>
+<pre><pre class="playground"><code class="language-rust edition2021">enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+<span class="boring">
+</span><span class="boring">fn main() {}</span></code></pre></pre>
+<p>当 Rust 需要知道要为 <code>Message</code> 值分配多少空间时，它可以检查每一个变体并发现 <code>Message::Quit</code> 并不需要任何空间，<code>Message::Move</code> 需要足够储存两个 <code>i32</code> 值的空间，依此类推。因为 enum 实际上只会使用其中的一个变体，所以 <code>Message</code> 值所需的空间等于储存其最大变体的空间大小。</p>
+<p>与此相对当 Rust 编译器检查像示例 15-2 中的 <code>List</code> 这样的递归类型时会发生什么呢。编译器从 <code>Cons</code> 变体开始分析，其需要的空间等于 <code>i32</code> 的大小加上 <code>List</code> 的大小。为了计算 <code>List</code> 需要多少内存，编译器检查其变体，从 <code>Cons</code> 变体开始。<code>Cons</code> 变体储存了一个 <code>i32</code> 值和一个<code>List</code>值，这样的计算将无限进行下去，如图 15-1 所示：</p>
+<img alt="An infinite Cons list" src="img/trpl15-01.svg" class="center" style="width: 50%;" />
+<p><span class="caption">图 15-1：一个包含无限个 <code>Cons</code> 变体的无限 <code>List</code></span></p>
+<h3 id="使用-boxt-给递归类型一个已知的大小"><a class="header" href="#使用-boxt-给递归类型一个已知的大小">使用 <code>Box&lt;T&gt;</code> 给递归类型一个已知的大小</a></h3>
+<p>因为 Rust 无法计算出要为定义为递归的类型分配多少空间，所以编译器给出了一个包括了有用建议的错误：</p>
+<pre><code class="language-text">help: insert some indirection (e.g., a `Box`, `Rc`, or `&amp;`) to break the cycle
+  |
+2 |     Cons(i32, Box&lt;List&gt;),
+  |               ++++    +
+</code></pre>
+<p>在建议中，<em>indirection</em> 意味着不同于直接储存一个值，应该间接地存储一个指向值的指针。</p>
+<p>因为 <code>Box&lt;T&gt;</code> 是一个指针，我们总是知道它需要多少空间：指针的大小并不会根据其指向的数据量而改变。这意味着可以将 <code>Box</code> 放入 <code>Cons</code> 变体中而不是直接存放另一个 <code>List</code> 值。<code>Box</code> 会指向下一个位于堆上的 <code>List</code> 值，而不是存放在 <code>Cons</code> 变体中。从概念上讲，我们仍然是在创建一个包含其他列表的列表，不过现在实现这个概念的方式更像是一个项挨着另一项，而不是一项包含另一项。</p>
+<p>我们可以修改示例 15-2 中 <code>List</code> 枚举的定义和示例 15-3 中对 <code>List</code> 的应用，如示例 15-5 所示，这是可以编译的：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">enum List {
+    Cons(i32, Box&lt;List&gt;),
+    Nil,
+}
+
+use crate::List::{Cons, Nil};
+
+fn main() {
+    let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
+}</code></pre></pre>
+<p><span class="caption">示例 15-5：为了拥有已知大小而使用 <code>Box&lt;T&gt;</code> 的 <code>List</code> 定义</span></p>
+<p><code>Cons</code> 变体将会需要一个 <code>i32</code> 的大小加上储存 box 指针数据的空间。<code>Nil</code> 变体不储存值，所以它比 <code>Cons</code> 变体需要更少的空间。现在我们知道了任何 <code>List</code> 值最多需要一个 <code>i32</code> 加上 box 指针数据的大小。通过使用 box，打破了这无限递归的连锁，这样编译器就能够计算出储存 <code>List</code> 值需要的大小了。图 15-2 展示了现在 <code>Cons</code> 变体看起来像什么：</p>
+<img alt="A finite Cons list" src="img/trpl15-02.svg" class="center" />
+<p><span class="caption">图 15-2：因为 <code>Cons</code> 存放一个 <code>Box</code> 所以 <code>List</code> 不是无限大小的了</span></p>
+<p>box 只提供了间接存储和堆分配；它们并没有任何其他特殊的功能，比如我们将会见到的其他智能指针。它们也没有这些特殊功能带来的性能损失，所以它们可以用于像 cons list 这样间接存储是唯一所需特性的场景。我们还将在第十八章看到 box 的更多应用场景。</p>
+<p><code>Box&lt;T&gt;</code> 类型是一个智能指针，因为它实现了 <code>Deref</code> trait，它允许 <code>Box&lt;T&gt;</code> 值被当作引用对待。当 <code>Box&lt;T&gt;</code> 值离开作用域时，由于 <code>Box&lt;T&gt;</code> 类型 <code>Drop</code> trait 的实现，box 所指向的堆数据也会被清除。这两个 trait 对于在本章余下讨论的其他智能指针所提供的功能中，将会更为重要。让我们更详细地探索一下这两个 trait。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch15-00-smart-pointers.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch15-02-deref.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch15-00-smart-pointers.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch15-02-deref.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
