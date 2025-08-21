@@ -103,7 +103,7 @@ $ cargo run
 Hello, world!
 ```
 
-比起要记得运行 `cargo build` 之后再用可执行文件的完整路径来运行程序，使用 `cargo run` 更方便，所以大多数开发者会使用 `cargo run`。
+比起必须先运行 `cargo build` 再用可执行文件的完整路径来执行程序，使用 `cargo run` 更方便，所以大多数开发者会选择 `cargo run`。
 
 注意这一次并没有出现表明 Cargo 正在编译 `hello_cargo` 的输出。Cargo 发现文件并没有被改变，所以它并没有重新构建，而是直接运行了二进制文件。如果修改了源文件的话，Cargo 会在运行之前重新构建项目，并会出现像这样的输出：
 
