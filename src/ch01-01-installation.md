@@ -27,7 +27,7 @@ $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 Rust is installed now. Great!
 ```
 
-另外，你还需要一个 *链接器（linker）*，这是 Rust 用来将其编译的输出连接成一个文件中的程序。很可能你已经有一个了。如果你遇到了链接器错误，请尝试安装一个 C 编译器，它通常包括一个链接器。C 编译器也很有用，因为一些常见的 Rust 包依赖于 C 代码，因此需要安装一个 C 编译器。
+另外，你还需要一个 *链接器（linker）*，它是 Rust 用来将其编译的输出链接成一个文件的程序。很可能你已经有一个了。如果你遇到了链接器错误，请尝试安装一个 C 编译器，它通常包括一个链接器。C 编译器也很有用，因为一些常见的 Rust 包依赖于 C 代码，因此需要安装一个 C 编译器。
 
 在 macOS 上，你可以通过运行以下命令获得 C 语言编译器：
 
@@ -105,7 +105,7 @@ $ rustup self uninstall
 
 ### 离线使用本书
 
-在很多示例中，我们会使用多于标准库的 Rust 包。为了处理这些示例，要么需要网络连接要么需要提前下载这些依赖。为了提前下载这些依赖，可以运行如下命令。（我们稍后会详细解释 `cargo` 是什么以及这每一个命令在干什么。）
+在一些示例中，我们将会使用标准库之外的 Rust 包。要运行这些示例，你需要保持网络连接，或者事先下载好这些依赖。要提前下载依赖，可以运行以下命令。（我们稍后会详细解释 `cargo` 是什么，以及这些命令分别的作用。）
 
 ```console
 $ cargo new get-dependencies
@@ -113,7 +113,7 @@ $ cd get-dependencies
 $ cargo add rand@0.8.5 trpl@0.2.0
 ```
 
-这会缓存这些包的下载所以之后你不用再下载它们。一旦你运行了这些命令，就可以在本书之后所有的 `cargo` 命令中使用 `--offline` 参数来使用这些缓存的版本而不是尝试使用网络。
+这会将这些包的下载结果缓存起来，因此你之后就不需要再下载它们了。运行完该命令后，你无需保留 `get-dependencies` 文件夹。一旦你运行了这些命令，就可以在本书之后所有的 `cargo` 命令中，使用 `--offline` 参数来使用这些缓存的版本，而不必尝试使用网络。
 
 [otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
 [install]: https://www.rust-lang.org/tools/install
