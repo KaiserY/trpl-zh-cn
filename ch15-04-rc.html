@@ -1,0 +1,322 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Rc&lt;T&gt; 引用计数智能指针 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch15-04-rc.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="rct-引用计数智能指针"><a class="header" href="#rct-引用计数智能指针"><code>Rc&lt;T&gt;</code> 引用计数智能指针</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch15-04-rc.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
+<p>大部分情况下所有权是非常明确的：可以准确地知道哪个变量拥有某个值。然而，有些情况单个值可能会有多个所有者。例如，在图数据结构中，多个边可能指向相同的节点，而这个节点从概念上讲为所有指向它的边所拥有。节点在没有任何边指向它从而没有任何所有者之前，都不应该被清理掉。</p>
+<p>为了启用多所有权需要显式地使用 Rust 类型 <code>Rc&lt;T&gt;</code>，其为<strong>引用计数</strong>（<em>reference counting</em>）的缩写。引用计数意味着记录一个值的引用数量来知晓这个值是否仍在被使用。如果某个值有零个引用，就代表没有任何有效引用并可以被清理。</p>
+<p>可以将其想象为客厅中的电视。当一个人进来看电视时，他打开电视。其他人也可以进来看电视。当最后一个人离开房间时，他关掉电视因为它不再被使用了。如果某人在其他人还在看的时候就关掉了电视，正在看电视的人肯定会抓狂的！</p>
+<p><code>Rc&lt;T&gt;</code> 用于当我们希望在堆上分配一些内存供程序的多个部分读取，而且无法在编译时确定程序的哪一部分会最后结束使用它的时候。如果确实知道哪部分是最后一个结束使用的话，就可以令其成为数据的所有者，正常的所有权规则就可以在编译时生效。</p>
+<p>注意 <code>Rc&lt;T&gt;</code> 只能用于单线程场景；在第十六章讨论并发时会涉及到如何在多线程程序中进行引用计数。</p>
+<h3 id="使用-rct-共享数据"><a class="header" href="#使用-rct-共享数据">使用 <code>Rc&lt;T&gt;</code> 共享数据</a></h3>
+<p>让我们回到示例 15-5 中使用 <code>Box&lt;T&gt;</code> 定义 cons list 的例子。这一次，我们希望创建两个共享第三个列表所有权的列表，其概念将会看起来如图 15-3 所示：</p>
+<img alt="Two lists that share ownership of a third list" src="img/trpl15-03.svg" class="center" />
+<p><span class="caption">图 15-3: 两个列表，<code>b</code> 和 <code>c</code>, 共享第三个列表 <code>a</code> 的所有权</span></p>
+<p>列表 <code>a</code> 包含 <code>5</code> 之后是 <code>10</code>，之后是另两个列表：<code>b</code> 从 <code>3</code> 开始而 <code>c</code> 从 <code>4</code> 开始。<code>b</code> 和 <code>c</code> 会接上包含 <code>5</code> 和 <code>10</code> 的列表 <code>a</code>。换句话说，这两个列表会尝试共享第一个列表所包含的 <code>5</code> 和 <code>10</code>。</p>
+<p>尝试使用 <code>Box&lt;T&gt;</code> 定义的 <code>List</code> 实现并不能工作，如示例 15-17 所示：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile">enum List {
+    Cons(i32, Box&lt;List&gt;),
+    Nil,
+}
+
+use crate::List::{Cons, Nil};
+
+fn main() {
+    let a = Cons(5, Box::new(Cons(10, Box::new(Nil))));
+    let b = Cons(3, Box::new(a));
+    let c = Cons(4, Box::new(a));
+}</code></pre>
+<p><span class="caption">示例 15-17: 展示不能用两个 <code>Box&lt;T&gt;</code> 的列表尝试共享第三个列表的所有权</span></p>
+<p>编译会得出如下错误：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling cons-list v0.1.0 (file:///projects/cons-list)
+error[E0382]: use of moved value: `a`
+  --&gt; src/main.rs:11:30
+   |
+9  |     let a = Cons(5, Box::new(Cons(10, Box::new(Nil))));
+   |         - move occurs because `a` has type `List`, which does not implement the `Copy` trait
+10 |     let b = Cons(3, Box::new(a));
+   |                              - value moved here
+11 |     let c = Cons(4, Box::new(a));
+   |                              ^ value used here after move
+
+For more information about this error, try `rustc --explain E0382`.
+error: could not compile `cons-list` (bin "cons-list") due to 1 previous error
+</code></pre>
+<p><code>Cons</code> 成员拥有其储存的数据，所以当创建 <code>b</code> 列表时，<code>a</code> 被移动进了 <code>b</code> 这样 <code>b</code> 就拥有了 <code>a</code>。接着当再次尝试使用 <code>a</code> 创建 <code>c</code> 时，这不被允许，因为 <code>a</code> 的所有权已经被移动。</p>
+<p>可以改变 <code>Cons</code> 的定义来存放一个引用，不过接着必须指定生命周期参数。通过指定生命周期参数，表明列表中的每一个元素都至少与列表本身存在的一样久。这是示例 15-17 中元素与列表的情况，但并不是所有情况都如此。</p>
+<p>相反，我们修改 <code>List</code> 的定义为使用 <code>Rc&lt;T&gt;</code> 代替 <code>Box&lt;T&gt;</code>，如示例 15-18 所示。现在每一个 <code>Cons</code> 变量都包含一个值和一个指向 <code>List</code> 的 <code>Rc&lt;T&gt;</code>。当创建 <code>b</code> 时，不同于获取 <code>a</code> 的所有权，这里会克隆 <code>a</code> 所包含的 <code>Rc&lt;List&gt;</code>，这会将引用计数从 1 增加到 2 并允许 <code>a</code> 和 <code>b</code> 共享 <code>Rc&lt;List&gt;</code> 中数据的所有权。创建 <code>c</code> 时同样会克隆 <code>a</code>，这会将引用计数从 2 增加为 3。每次调用 <code>Rc::clone</code>，<code>Rc&lt;List&gt;</code> 中数据的引用计数都会增加，直到有零个引用之前其数据都不会被清理。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">enum List {
+    Cons(i32, Rc&lt;List&gt;),
+    Nil,
+}
+
+use crate::List::{Cons, Nil};
+use std::rc::Rc;
+
+fn main() {
+    let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
+    let b = Cons(3, Rc::clone(&amp;a));
+    let c = Cons(4, Rc::clone(&amp;a));
+}</code></pre></pre>
+<p><span class="caption">示例 15-18: 使用 <code>Rc&lt;T&gt;</code> 定义的 <code>List</code></span></p>
+<p>需要使用 <code>use</code> 语句将 <code>Rc&lt;T&gt;</code> 引入作用域，因为它不在 prelude 中。在 <code>main</code> 中创建了存放 5 和 10 的列表并将其存放在 <code>a</code> 的新的 <code>Rc&lt;List&gt;</code> 中。接着当创建 <code>b</code> 和 <code>c</code> 时，调用 <code>Rc::clone</code> 函数并传递 <code>a</code> 中 <code>Rc&lt;List&gt;</code> 的引用作为参数。</p>
+<p>也可以调用 <code>a.clone()</code> 而不是 <code>Rc::clone(&amp;a)</code>，不过在这里 Rust 的习惯是使用 <code>Rc::clone</code>。<code>Rc::clone</code> 的实现并不像大部分类型的 <code>clone</code> 实现那样对所有数据进行深拷贝。<code>Rc::clone</code> 只会增加引用计数，这并不会花费多少时间。深拷贝可能会花费很长时间。通过使用 <code>Rc::clone</code> 进行引用计数，可以在视觉上区别深拷贝类的克隆和增加引用计数类的克隆。当查找代码中的性能问题时，只需考虑深拷贝类的克隆而无需考虑 <code>Rc::clone</code> 调用。</p>
+<h3 id="克隆-rct-会增加引用计数"><a class="header" href="#克隆-rct-会增加引用计数">克隆 <code>Rc&lt;T&gt;</code> 会增加引用计数</a></h3>
+<p>让我们修改示例 15-18 的代码以便观察创建和丢弃 <code>a</code> 中 <code>Rc&lt;List&gt;</code> 的引用时引用计数的变化。</p>
+<p>在示例 15-19 中，修改了 <code>main</code> 以便将列表 <code>c</code> 置于内部作用域中，这样就可以观察当 <code>c</code> 离开作用域时引用计数如何变化。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">enum List {
+</span><span class="boring">    Cons(i32, Rc&lt;List&gt;),
+</span><span class="boring">    Nil,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">use crate::List::{Cons, Nil};
+</span><span class="boring">use std::rc::Rc;
+</span><span class="boring">
+</span>fn main() {
+    let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
+    println!("count after creating a = {}", Rc::strong_count(&amp;a));
+    let b = Cons(3, Rc::clone(&amp;a));
+    println!("count after creating b = {}", Rc::strong_count(&amp;a));
+    {
+        let c = Cons(4, Rc::clone(&amp;a));
+        println!("count after creating c = {}", Rc::strong_count(&amp;a));
+    }
+    println!("count after c goes out of scope = {}", Rc::strong_count(&amp;a));
+}</code></pre></pre>
+<p><span class="caption">示例 15-19：打印出引用计数</span></p>
+<p>在程序中每个引用计数变化的点，会打印出引用计数，其值可以通过调用 <code>Rc::strong_count</code> 函数获得。这个函数叫做 <code>strong_count</code> 而不是 <code>count</code> 是因为 <code>Rc&lt;T&gt;</code> 也有 <code>weak_count</code>；在<a href="ch15-06-reference-cycles.html#%E4%BD%BF%E7%94%A8-weakt-%E9%98%B2%E6%AD%A2%E5%BC%95%E7%94%A8%E5%BE%AA%E7%8E%AF">“避免引用循环：将 <code>Rc&lt;T&gt;</code> 变为 <code>Weak&lt;T&gt;</code>”</a>部分会讲解 <code>weak_count</code> 的用途。</p>
+<p>这段代码会打印出：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling cons-list v0.1.0 (file:///projects/cons-list)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.45s
+     Running `target/debug/cons-list`
+count after creating a = 1
+count after creating b = 2
+count after creating c = 3
+count after c goes out of scope = 2
+</code></pre>
+<p>我们能够看到 <code>a</code> 中 <code>Rc&lt;List&gt;</code> 的初始引用计数为 1，接着每次调用 <code>clone</code>，计数会增加 1。当 <code>c</code> 离开作用域时，计数减 1。不必像调用 <code>Rc::clone</code> 增加引用计数那样调用一个函数来减少计数；<code>Drop</code> trait 的实现当 <code>Rc&lt;T&gt;</code> 值离开作用域时自动减少引用计数。</p>
+<p>从这个例子我们所不能看到的是，在 <code>main</code> 的结尾当 <code>b</code> 然后是 <code>a</code> 离开作用域时，此处计数会是 0，同时 <code>Rc&lt;List&gt;</code> 被完全清理。使用 <code>Rc&lt;T&gt;</code> 允许一个值有多个所有者，引用计数则确保只要任何所有者依然存在其值也保持有效。</p>
+<p>通过不可变引用， <code>Rc&lt;T&gt;</code> 允许在程序的多个部分之间只读地共享数据。如果 <code>Rc&lt;T&gt;</code> 也允许多个可变引用，则会违反第四章讨论的借用规则之一：相同位置的多个可变借用可能造成数据竞争和不一致。不过可以修改数据是非常有用的！在下一部分，我们将讨论内部可变性模式和 <code>RefCell&lt;T&gt;</code> 类型，它可以与 <code>Rc&lt;T&gt;</code> 结合使用来处理不可变性的限制。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch15-03-drop.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch15-05-interior-mutability.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch15-03-drop.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch15-05-interior-mutability.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
