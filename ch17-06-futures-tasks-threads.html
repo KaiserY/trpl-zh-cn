@@ -1,0 +1,338 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>future、任务和线程 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch17-06-futures-tasks-threads.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="结合使用-future任务和线程"><a class="header" href="#结合使用-future任务和线程">结合使用 future、任务和线程</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch17-06-futures-tasks-threads.md -->
+<!-- commit 06d73f3935dfec895aec9790127dc8b6fc827ce1 -->
+<p>正如我们在<a href="ch16-00-concurrency.html">第十六章</a>所见，线程提供了一种并发的方式。在这一章节我们见过了另一种方式：通过 future 和流来使用异步。如果你好奇何时选择一个而不是另一个，答案是：视具体情况而定！同时在很多场景下，我们不应只选择线程<strong>或</strong>异步，而应同时考虑线程<strong>和</strong>异步两者。</p>
+<p>几十年来很多操作系统已经提供了基于线程的并发模型，因此很多编程语言也对其提供了支持。然而这些模型并非没有取舍。在很多操作系统中，它们为每一个线程使用了不少的内存，同时启动和停止带来了一些开销。线程也只有当你的操作系统和硬件支持它们的时候才是一个选项。不同于主流的桌面和移动电脑，一些嵌入式系统根本没有操作系统，因此也就没有线程。</p>
+<p>异步模型提供了一个不同的 -- 最终也是互补的 -- 权衡取舍。在异步模型中，并发操作无需各自独立的线程。相反，它们运行在任务上，正如流小节中我们用 <code>trpl::spawn_task</code> 从异步函数中开始工作一样。任务类似于线程，但不是由操作系统管理，而是由库级别的代码管理：也就是运行时。</p>
+<p>在上一小节中，我们看到可以通过异步信道来构建一个流并产生一个可以在异步代码中调用的异步任务。我们也可以用线程来做到完全相同的事情。在示例 17-40 中使用了 <code>trpl::spawn_task</code> 和 <code>trpl::sleep</code>。在示例 17-41 中，我们将 <code>get_intervals</code> 函数中的代码替换为标准库中的 <code>thread::spawn</code> 和 <code>thread::sleep</code> API。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{pin::pin, thread, time::Duration};
+</span><span class="boring">
+</span><span class="boring">use trpl::{ReceiverStream, Stream, StreamExt};
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::run(async {
+</span><span class="boring">        let messages = get_messages().timeout(Duration::from_millis(200));
+</span><span class="boring">        let intervals = get_intervals()
+</span><span class="boring">            .map(|count| format!("Interval #{count}"))
+</span><span class="boring">            .throttle(Duration::from_millis(500))
+</span><span class="boring">            .timeout(Duration::from_secs(10));
+</span><span class="boring">        let merged = messages.merge(intervals).take(20);
+</span><span class="boring">        let mut stream = pin!(merged);
+</span><span class="boring">
+</span><span class="boring">        while let Some(result) = stream.next().await {
+</span><span class="boring">            match result {
+</span><span class="boring">                Ok(item) =&gt; println!("{item}"),
+</span><span class="boring">                Err(reason) =&gt; eprintln!("Problem: {reason:?}"),
+</span><span class="boring">            }
+</span><span class="boring">        }
+</span><span class="boring">    });
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn get_messages() -&gt; impl Stream&lt;Item = String&gt; {
+</span><span class="boring">    let (tx, rx) = trpl::channel();
+</span><span class="boring">
+</span><span class="boring">    trpl::spawn_task(async move {
+</span><span class="boring">        let messages = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+</span><span class="boring">
+</span><span class="boring">        for (index, message) in messages.into_iter().enumerate() {
+</span><span class="boring">            let time_to_sleep = if index % 2 == 0 { 100 } else { 300 };
+</span><span class="boring">            trpl::sleep(Duration::from_millis(time_to_sleep)).await;
+</span><span class="boring">
+</span><span class="boring">            if let Err(send_error) = tx.send(format!("Message: '{message}'")) {
+</span><span class="boring">                eprintln!("Cannot send message '{message}': {send_error}");
+</span><span class="boring">                break;
+</span><span class="boring">            }
+</span><span class="boring">        }
+</span><span class="boring">    });
+</span><span class="boring">
+</span><span class="boring">    ReceiverStream::new(rx)
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn get_intervals() -&gt; impl Stream&lt;Item = u32&gt; {
+    let (tx, rx) = trpl::channel();
+
+    // 这里 *不是* `trpl::spawn`，是 `std::thread::spawn`！
+    thread::spawn(move || {
+        let mut count = 0;
+        loop {
+            // 同样，这里 *不是* `trpl::sleep`，是 `std::thread::sleep`！
+            thread::sleep(Duration::from_millis(1));
+            count += 1;
+
+            if let Err(send_error) = tx.send(count) {
+                eprintln!("Could not send interval {count}: {send_error}");
+                break;
+            };
+        }
+    });
+
+    ReceiverStream::new(rx)
+}</code></pre></pre>
+<figcaption>示例 17-41：为 `get_intervals` 函数使用 `std::thread` API 而不是异步 `trpl` API</figcaption>
+</figure>
+<p>如果你运行这段代码，其输入与示例 17-40 的一样。同时请注意从调用代码的角度来说改变是多么的微小。而且，即便一个函数在运行时上产生一个异步任务而另一个产生一个系统线程，其返回的流不受该区别的影响。</p>
+<p>尽管它们是相似的，这两种方式的行为非常不同，尽管在这个非常简单的例子中我们可能很难进行测量。我们可以在任何现代计算机中产生数以百万计的异步任务。如果尝试用线程来这样做，我们实际上会耗尽内存！</p>
+<p>然而，这些 API 如此相似是有理由的。线程作为同步操作集的边界；线程<strong>之间</strong>的并发是可能的。任务作为<strong>异步</strong>操作集的边界，任务<strong>之间</strong>和<strong>之内</strong>的并发是可能的，因为任务可以在其内部切换 future。最后，future 是 Rust 中最细粒度的并发单位，同时每一个 future 可能代表一棵由其它 future 组成的树。其运行时 -- 更具体地说，其执行器（executor）-- 管理任务，任务则管理 future。在这一点上，任务类似于轻量的、运行时管理的线程，并具有由运行时而非操作系统管理所赋予的额外能力。</p>
+<p>这并不意味着异步任务总是优于线程（反之亦然）。基于线程的并发在某种程度上来说是一个比基于 <code>async</code> 的并发更简单的编程模型。这既可以是优点，也可以是缺点。线程有点像 “射后不理”（“fire and forget”）；它们没有原生等同于 future 的机制，所以它们简单地运行到结束而不会被中断，除非操作系统本身介入。也就是说，它们没有像 future 那样内建<strong>任务内并发</strong>（<strong>intratask concurrency</strong>）支持。Rust 中的线程也没有提供取消机制 -- 本章虽未明确讨论此主题，但当我们结束一个 future 时，其状态能够被正确清理就隐含了这一事实。</p>
+<p>这些限制也使得线程比 future 更加难以组合。例如，更加难以使用线程构建类似于本章之前的 <code>timeout</code> 和 <code>throttle</code> 辅助方法。正如我们所见，future 更加丰富的数据结构的事实意味着它们可以更自然地组合在一起。</p>
+<p>接下来，任务在 future 之上提供了<strong>额外</strong>控制，允许我们选择在何处如何组合它们。同时事实证明线程和 future 常常能很好地协同工作，因为任务可以（至少是在一些运行时中）在线程间移动。事实上，在底层我们使用的运行时 -- 包括 <code>spawn_blocking</code> 和 <code>spawn_task</code> 函数 -- 默认就是多线程的！很多运行时采用一种被称为<strong>工作窃取</strong>（<strong>work stealing</strong>）的方式来透明地在线程间移动任务，它基于当前线程是如何被利用的，以提高系统的整体性能。这个方式实际上需要线程<strong>和</strong>任务，因此也需要 future。</p>
+<p>当思考何时采用哪种方法时，考虑这些经验法则：</p>
+<ul>
+<li>如果工作是<strong>非常可并行的</strong>，例如处理大量数据其中每一部分数据都可以单独处理时，线程是更佳的选择。</li>
+<li>如果工作是<strong>非常并发的</strong>，例如处理大量不同来源的消息，它们可能有着不同的间隔或者速率，异步是更佳的选择。</li>
+</ul>
+<p>同时如果你同时需要并行和并发，也无需在线程和异步间做出选择。你可以随意同时使用它们，让它们各自处理最擅长的工作。例如，示例 17-42 展示了一个这样的真实世界 Rust 代码中非常常见的组合示例。</p>
+<figure class="listing">
+<p><span class="file-name">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // for mdbook test
+</span><span class="boring">
+</span>use std::{thread, time::Duration};
+
+fn main() {
+    let (tx, mut rx) = trpl::channel();
+
+    thread::spawn(move || {
+        for i in 1..11 {
+            tx.send(i).unwrap();
+            thread::sleep(Duration::from_secs(1));
+        }
+    });
+
+    trpl::run(async {
+        while let Some(message) = rx.recv().await {
+            println!("{message}");
+        }
+    });
+}</code></pre></pre>
+<figcaption>示例 17-42：在线程中通过阻塞代码发送消息并在 async 代码块中 await 消息</figcaption>
+</figure>
+<p>我们以创建异步信道作为开始，接着产生一个线程来获取信道发送端的所有权。在线程中，我们发送数字 1 到 10，每个之间休眠一秒。最后，就像贯穿本章的那样将一个 async 代码块创建的 future 传递给 <code>trpl::run</code> 运行。在 future 中，我们 await 这些信息，就像我们见过的其它消息传递的示例那样。</p>
+<p>为了回到本章开头提出的场景，想象一下用一个专门的线程来运行一系列视频解码任务（因为视频解码是计算密集型任务）不过通知 UI 这些任务完成了是通过异步信道完成的。在现实世界的用例中有无数这类组合的例子。</p>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>这并不会是本书中你最后一次接触并发。<a href="ch21-00-final-project-a-web-server.html">第二一章</a> 中的项目会在一个更加真实的场景中运用这些概念，而不是这里讨论的简单示例，同时会更直接地比较线程和任务的解决问题方式。</p>
+<p>无论你选择何种方式，Rust 提供了编写安全、快速和并发代码的工具 -- 无论是用于高吞吐量 web 服务器或是用于嵌入式操作系统。</p>
+<p>接下来，我们会讨论随着 Rust 程序增大时如何以惯用的方式对问题进行建模和对解决方案进行结构化。此外我们还会讨论 Rust 的惯用写法如何与你可能已经熟悉的面向对象编程惯例相对应。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch17-05-traits-for-async.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch18-00-oop.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch17-05-traits-for-async.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch18-00-oop.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
