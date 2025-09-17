@@ -1,0 +1,360 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>使用 Vector 储存列表 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch08-01-vectors.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="使用-vector-储存列表"><a class="header" href="#使用-vector-储存列表">使用 Vector 储存列表</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch08-01-vectors.md -->
+<!-- commit 5d22a358fb2380aa3f270d7b6269b67b8e44849e -->
+<p>我们要讲到的第一个类型是 <code>Vec&lt;T&gt;</code>，也被称为 <em>vector</em>。vector 允许我们在一个单独的数据结构中储存多于一个的值，它在内存中彼此相邻地排列所有的值。vector 只能储存相同类型的值。它们在拥有一系列项的场景下非常实用，例如文件中的文本行或是购物车中商品的价格。</p>
+<h3 id="新建-vector"><a class="header" href="#新建-vector">新建 vector</a></h3>
+<p>为了新建一个的空 vector，可以调用 <code>Vec::new</code> 函数，如示例 8-1 所示。</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let v: Vec&lt;i32&gt; = Vec::new();
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-1：新建一个的空 vector 来储存 <code>i32</code> 类型的值</span></p>
+<p>注意这里我们增加了一个类型注解。因为没有向这个 vector 中插入任何值，Rust 并不知道我们想要储存什么类型的元素。这是一个非常重要的点。vector 是用泛型实现的，第十章会涉及到如何对你自己的类型使用它们。现在，所有你需要知道的就是 <code>Vec&lt;T&gt;</code> 是一个由标准库提供的类型，它可以存放任何类型，而当 <code>Vec</code> 存放某个特定类型时，那个类型位于尖括号中。在示例 8-1 中，我们告诉 Rust <code>v</code> 这个 <code>Vec&lt;T&gt;</code> 将存放 <code>i32</code> 类型的元素。</p>
+<p>通常，我们会用初始值来创建一个 <code>Vec&lt;T&gt;</code> 而 Rust 会推断出储存值的类型，所以很少会需要这些类型注解。为了方便 Rust 提供了 <code>vec!</code> 宏，这个宏会根据我们提供的值来创建一个新的 vector。示例 8-2 新建一个拥有值 <code>1</code>、<code>2</code> 和 <code>3</code> 的 <code>Vec&lt;i32&gt;</code>。推断为 <code>i32</code> 是因为这是默认整型类型，第三章的 <a href="ch03-02-data-types.html#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B">“数据类型”</a> 讨论过：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let v = vec![1, 2, 3];
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-2：新建一个包含初值的 vector</span></p>
+<p>因为我们提供了 <code>i32</code> 类型的初始值，Rust 可以推断出 <code>v</code> 的类型是 <code>Vec&lt;i32&gt;</code>，因此类型注解就不是必须的。接下来让我们看看如何修改一个 vector。</p>
+<h3 id="更新-vector"><a class="header" href="#更新-vector">更新 vector</a></h3>
+<p>对于新建一个 vector 并向其增加元素，可以使用 <code>push</code> 方法，如示例 8-3 所示：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let mut v = Vec::new();
+
+    v.push(5);
+    v.push(6);
+    v.push(7);
+    v.push(8);
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-3：使用 <code>push</code> 方法向 vector 增加值</span></p>
+<p>如第三章中讨论的任何变量一样，如果想要能够改变它的值，必须使用 <code>mut</code> 关键字使其可变。放入其中的所有值都是 <code>i32</code> 类型的，而且 Rust 也根据数据做出如此判断，所以不需要 <code>Vec&lt;i32&gt;</code> 注解。</p>
+<h3 id="读取-vector-的元素"><a class="header" href="#读取-vector-的元素">读取 vector 的元素</a></h3>
+<p>有两种方法引用 vector 中储存的值：通过索引或使用 <code>get</code> 方法。在接下来的示例中，为了更加清楚的说明，我们已经标注了这些函数返回的值的类型。</p>
+<p>示例 8-4 展示了访问 vector 中一个值的两种方式，索引语法或者 <code>get</code> 方法：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let v = vec![1, 2, 3, 4, 5];
+
+    let third: &amp;i32 = &amp;v[2];
+    println!("The third element is {third}");
+
+    let third: Option&lt;&amp;i32&gt; = v.get(2);
+    match third {
+        Some(third) =&gt; println!("The third element is {third}"),
+        None =&gt; println!("There is no third element."),
+    }
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-4：使用索引语法或 <code>get</code> 方法来访问 vector 中的项</span></p>
+<p>这里有几个细节需要注意。我们使用索引值 <code>2</code> 来获取第三个元素，因为索引是从数字 0 开始的。使用 <code>&amp;</code> 和 <code>[]</code> 会得到一个索引位置元素的引用。当使用索引作为参数调用 <code>get</code> 方法时，会得到一个可以用于 <code>match</code> 的 <code>Option&lt;&amp;T&gt;</code>。</p>
+<p>Rust 提供了两种引用元素的方法的原因是当尝试使用现有元素范围之外的索引值时可以选择让程序如何运行。举个例子，让我们看看使用这个技术，尝试在当有一个 5 个元素的 vector 接着访问索引 100 位置的元素会发生什么，如示例 8-5 所示：</p>
+<pre><pre class="playground"><code class="language-rust should_panic panics edition2021"><span class="boring">fn main() {
+</span>    let v = vec![1, 2, 3, 4, 5];
+
+    let does_not_exist = &amp;v[100];
+    let does_not_exist = v.get(100);
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-5：尝试访问一个包含 5 个元素的 vector 的索引 100 处的元素</span></p>
+<p>当运行这段代码，你会发现对于第一个 <code>[]</code> 方法，当引用一个不存在的元素时 Rust 会造成 panic。此方法适用于当你希望在尝试访问 vector 末尾之外的元素时让程序直接崩溃的场景。</p>
+<p>当 <code>get</code> 方法被传递了一个数组外的索引时，它不会 panic 而是返回 <code>None</code>。当偶尔出现超过 vector 范围的访问属于正常情况的时候可以考虑使用它。接着你的代码可以有处理 <code>Some(&amp;element)</code> 或 <code>None</code> 的逻辑，如第六章讨论的那样。例如，索引可能来源于用户输入的数字。如果它们不慎输入了一个过大的数字那么程序就会得到 <code>None</code> 值，你可以告诉用户当前 vector 元素的数量并再请求它们输入一个有效的值。这就比因为输入错误而使程序崩溃要友好的多！</p>
+<p>一旦程序获取了一个有效的引用，借用检查器将会执行所有权和借用规则（第四章讲到）来确保 vector 内容的这个引用和任何其他引用保持有效。回忆一下不能在相同作用域中同时存在可变和不可变引用的规则。这个规则适用于示例 8-6，当我们获取了 vector 的第一个元素的不可变引用并尝试在 vector 末尾增加一个元素的时候，如果尝试在函数的后面再次引用这个元素是行不通的：</p>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
+</span>    let mut v = vec![1, 2, 3, 4, 5];
+
+    let first = &amp;v[0];
+
+    v.push(6);
+
+    println!("The first element is: {first}");
+<span class="boring">}</span></code></pre>
+<p><span class="caption">示例 8-6：尝试在拥有 vector 中项的引用的同时向其增加一个元素</span></p>
+<p>编译会给出这个错误：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling collections v0.1.0 (file:///projects/collections)
+error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immutable
+ --&gt; src/main.rs:6:5
+  |
+4 |     let first = &amp;v[0];
+  |                  - immutable borrow occurs here
+5 |
+6 |     v.push(6);
+  |     ^^^^^^^^^ mutable borrow occurs here
+7 |
+8 |     println!("The first element is: {first}");
+  |                                     ------- immutable borrow later used here
+
+For more information about this error, try `rustc --explain E0502`.
+error: could not compile `collections` (bin "collections") due to 1 previous error
+</code></pre>
+<p>示例 8-6 中的代码看起来应该能够运行：为什么第一个元素的引用会关心 vector 结尾的变化？不能这么做的原因是由于 vector 的工作方式：在 vector 的结尾增加新元素时，在没有足够空间将所有元素依次相邻存放的情况下，可能会要求分配新内存并将老的元素拷贝到新的空间中。这时，第一个元素的引用就指向了被释放的内存。借用规则阻止程序陷入这种状况。</p>
+<blockquote>
+<p>注意：关于 <code>Vec&lt;T&gt;</code> 类型的更多实现细节，请查看 <a href="https://doc.rust-lang.org/nomicon/vec/vec.html">“The Rustonomicon”</a></p>
+</blockquote>
+<h3 id="遍历-vector-中的元素"><a class="header" href="#遍历-vector-中的元素">遍历 vector 中的元素</a></h3>
+<p>如果想要依次访问 vector 中的每一个元素，我们可以遍历其所有的元素而无需通过索引一次一个的访问。示例 8-7 展示了如何使用 <code>for</code> 循环来获取 <code>i32</code> 值的 vector 中的每一个元素的不可变引用并将其打印：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let v = vec![100, 32, 57];
+    for i in &amp;v {
+        println!("{i}");
+    }
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-7：通过 <code>for</code> 循环遍历 vector 的元素并打印</span></p>
+<p>我们也可以遍历可变 vector 的每一个元素的可变引用以便能改变它们。示例 8-8 中的 <code>for</code> 循环会给每一个元素加 <code>50</code>：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let mut v = vec![100, 32, 57];
+    for i in &amp;mut v {
+        *i += 50;
+    }
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-8：遍历 vector 中元素的可变引用</span></p>
+<p>为了修改可变引用所指向的值，在使用 <code>+=</code> 运算符之前必须使用解引用运算符（<code>*</code>）获取 <code>i</code> 中的值。第十五章的<a href="ch15-02-deref.html#%E8%BF%BD%E8%B8%AA%E6%8C%87%E9%92%88%E7%9A%84%E5%80%BC">“通过解引用运算符追踪指针的值”</a>部分会详细介绍解引用运算符。</p>
+<p>由于借用检查器的规则，无论可变还是不可变地遍历一个 vector 都是安全的。如果尝试在示例 8-7 和 示例 8-8 的 <code>for</code> 循环体内插入或删除项，都会得到一个类似示例 8-6 代码中类似的编译错误。<code>for</code> 循环中获取的 vector 引用阻止了同时对整个 vector 进行修改。</p>
+<h3 id="使用枚举来储存多种类型"><a class="header" href="#使用枚举来储存多种类型">使用枚举来储存多种类型</a></h3>
+<p>vector 只能储存相同类型的值。这是很不方便的；绝对会有需要储存一系列不同类型的值的用例。幸运的是，枚举的成员都被定义为相同的枚举类型，所以当需要在 vector 中储存不同类型值时，我们可以定义并使用一个枚举！</p>
+<p>例如，假如我们想要从电子表格的一行中获取值，而这一行的有些列包含数字，有些包含浮点值，还有些是字符串。我们可以定义一个枚举，其成员会存放这些不同类型的值，同时所有这些枚举成员都会被当作相同类型：那个枚举的类型。接着可以创建一个储存该枚举值的 vector，这样最终就能够储存不同类型的值了。示例 8-9 展示了这个用法：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    enum SpreadsheetCell {
+        Int(i32),
+        Float(f64),
+        Text(String),
+    }
+
+    let row = vec![
+        SpreadsheetCell::Int(3),
+        SpreadsheetCell::Text(String::from("blue")),
+        SpreadsheetCell::Float(10.12),
+    ];
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-9：定义一个枚举，以便能在 vector 中存放不同类型的数据</span></p>
+<p>Rust 在编译时必须确切知道 vector 中的类型，这样它才能确定在堆上需要为每个元素分配多少内存。我们还必须明确这个 vector 中允许的类型。如果 Rust 允许 vector 存储任意类型，那么可能会因为一个或多个类型在对 vector 元素执行操作时导致（类型相关）错误。使用枚举加上 <code>match</code> 表达式意味着 Rust 会在编译时确保每种可能的情况都得到处理，正如第六章讲到的那样。</p>
+<p>如果在编写程序时不能确切无遗地知道运行时会储存进 vector 的所有类型，枚举技术就行不通了。相反，你可以使用 trait 对象，第十八章会讲到它。</p>
+<p>现在我们了解了一些使用 vector 的最常见的方式，请一定去看看标准库中 <code>Vec</code> 定义的很多其他实用方法的 <a href="https://doc.rust-lang.org/std/vec/struct.Vec.html">API 文档</a>。例如，除了 <code>push</code> 之外还有一个 <code>pop</code> 方法，它会移除并返回 vector 的最后一个元素。</p>
+<h3 id="丢弃-vector-时也会丢弃其所有元素"><a class="header" href="#丢弃-vector-时也会丢弃其所有元素">丢弃 vector 时也会丢弃其所有元素</a></h3>
+<p>类似于任何其他的 <code>struct</code>，vector 在其离开作用域时会被释放，如示例 8-10 所标注的：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    {
+        let v = vec![1, 2, 3, 4];
+
+        // 使用 v
+    } // &lt;- 在这里 v 离开作用域并被释放
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">示例 8-10：展示 vector 和其元素于何处被丢弃</span></p>
+<p>当 vector 被丢弃时，所有其内容也会被丢弃，这意味着这里它包含的整数将被清理。借用检查器确保了任何 vector 中内容的引用仅在 vector 本身有效时才可用。</p>
+<p>让我们继续下一个集合类型：<code>String</code>！</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch08-00-common-collections.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch08-02-strings.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch08-00-common-collections.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch08-02-strings.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>

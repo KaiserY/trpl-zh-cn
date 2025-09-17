@@ -1,0 +1,411 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>函数 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch03-03-how-functions-work.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="函数"><a class="header" href="#函数">函数</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch03-03-how-functions-work.md -->
+<!-- commit a619cc5f073b1b59c026cf0f92ab061a46716325 -->
+<p>函数在 Rust 代码中非常普遍。你已经见过语言中最重要的函数之一：<code>main</code> 函数，它是很多程序的入口点。你也见过 <code>fn</code> 关键字，它用来声明新函数。</p>
+<p>Rust 代码中的函数和变量名使用 <em>snake case</em> 规范风格。在 snake case 中，所有字母都是小写并使用下划线分隔单词。这是一个包含函数定义示例的程序：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
+    println!("Hello, world!");
+
+    another_function();
+}
+
+fn another_function() {
+    println!("Another function.");
+}</code></pre></pre>
+<p>我们在 Rust 中通过输入 <code>fn</code> 后面跟着函数名和一对圆括号来定义函数。大括号告诉编译器哪里是函数体的开始和结尾。</p>
+<p>可以使用函数名后跟圆括号来调用我们定义过的任意函数。因为程序中已定义 <code>another_function</code> 函数，所以可以在 <code>main</code> 函数中调用它。注意，源码中 <code>another_function</code> 定义在 <code>main</code> 函数 <strong>之后</strong>；也可以定义在之前。Rust 不关心函数定义所在的位置，只要函数被调用时出现在调用之处可见的作用域内就行。</p>
+<p>让我们新建一个叫做 <em>functions</em> 的二进制项目来进一步探索函数。将上面的 <code>another_function</code> 例子写入 <em>src/main.rs</em> 中并运行。你应该会看到如下输出：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.28s
+     Running `target/debug/functions`
+Hello, world!
+Another function.
+</code></pre>
+<p><code>main</code> 函数中的代码会按顺序执行。首先，打印 “Hello, world!” 信息，然后调用 <code>another_function</code> 函数并打印它的信息。</p>
+<h3 id="参数"><a class="header" href="#参数">参数</a></h3>
+<p>我们可以定义为拥有 <strong>参数</strong>（<em>parameters</em>）的函数，参数是特殊变量，是函数签名的一部分。当函数拥有参数（形参）时，可以为这些参数提供具体的值（实参）。技术上讲，这些具体值被称为参数（<em>arguments</em>），但是在日常交流中，人们倾向于不区分使用 <em>parameter</em> 和 <em>argument</em> 来表示函数定义中的变量或调用函数时传入的具体值。</p>
+<p>在这版 <code>another_function</code> 中，我们增加了一个参数：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
+    another_function(5);
+}
+
+fn another_function(x: i32) {
+    println!("The value of x is: {x}");
+}</code></pre></pre>
+<p>尝试运行程序，将会输出如下内容：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.21s
+     Running `target/debug/functions`
+The value of x is: 5
+</code></pre>
+<p><code>another_function</code> 的声明中有一个命名为 <code>x</code> 的参数。<code>x</code> 的类型被指定为 <code>i32</code>。当我们将 <code>5</code> 传给 <code>another_function</code> 时，<code>println!</code> 宏会把 <code>5</code> 放在格式字符串中包含 <code>x</code> 的那对花括号的位置。</p>
+<p>在函数签名中，<strong>必须</strong> 声明每个参数的类型。这是 Rust 设计中一个经过慎重考虑的决定：要求在函数定义中提供类型注解，意味着编译器再也不需要你在代码的其他地方注明类型来指出你的意图。而且，在知道函数需要什么类型后，编译器就能够给出更有用的错误消息。</p>
+<p>当定义多个参数时，使用逗号分隔，像这样：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
+    print_labeled_measurement(5, 'h');
+}
+
+fn print_labeled_measurement(value: i32, unit_label: char) {
+    println!("The measurement is: {value}{unit_label}");
+}</code></pre></pre>
+<p>这个例子创建了一个名为 <code>print_labeled_measurement</code> 的函数，它有两个参数。第一个参数名为 <code>value</code>，类型是 <code>i32</code>。第二个参数是 <code>unit_label</code> ，类型是 <code>char</code>。然后，该函数打印包含 <code>value</code> 和 <code>unit_label</code> 的文本。</p>
+<p>尝试运行代码。使用上面的例子替换当前 <em>functions</em> 项目的 <em>src/main.rs</em> 文件，并用 <code>cargo run</code> 运行它：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.31s
+     Running `target/debug/functions`
+The measurement is: 5h
+</code></pre>
+<p>因为我们使用 <code>5</code> 作为 <code>value</code> 的值，<code>h</code> 作为 <code>unit_label</code> 的值来调用函数，所以程序输出包含这些值。</p>
+<h3 id="语句和表达式"><a class="header" href="#语句和表达式">语句和表达式</a></h3>
+<p>函数体由一系列的语句和一个可选的结尾表达式构成。目前为止，我们提到的函数还不包含结尾表达式，不过你已经见过作为语句一部分的表达式。因为 Rust 是一门基于表达式（expression-based）的语言，这是一个需要理解的重要区别。其他语言并没有这样的区别，所以让我们看看语句与表达式有什么区别以及这些区别是如何影响函数体的。</p>
+<ul>
+<li><strong>语句</strong>（<em>Statements</em>）是执行一些操作但不返回值的指令。</li>
+<li><strong>表达式</strong>（<em>Expressions</em>）计算并产生一个值。</li>
+</ul>
+<p>让我们看一些例子。</p>
+<p>实际上，我们已经使用过语句和表达式。使用 <code>let</code> 关键字创建变量并绑定一个值是一个语句。在示例 3-1 中，<code>let y = 6;</code> 是一个语句。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
+    let y = 6;
+}</code></pre></pre>
+<p><span class="caption">示例 3-1：包含一个语句的 <code>main</code> 函数定义</span></p>
+<p>函数定义也是语句，上面整个例子本身就是一个语句。（不过，如我们将在下面看到，<strong>调用</strong>函数并不是语句。）</p>
+<p>语句不返回值。因此，不能把 <code>let</code> 语句赋值给另一个变量，比如下面的例子尝试做的，会产生一个错误：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile">fn main() {
+    let x = (let y = 6);
+}</code></pre>
+<p>当运行这个程序时，会得到如下错误：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+error: expected expression, found `let` statement
+ --&gt; src/main.rs:2:14
+  |
+2 |     let x = (let y = 6);
+  |              ^^^
+  |
+  = note: only supported directly in conditions of `if` and `while` expressions
+
+warning: unnecessary parentheses around assigned value
+ --&gt; src/main.rs:2:13
+  |
+2 |     let x = (let y = 6);
+  |             ^         ^
+  |
+  = note: `#[warn(unused_parens)]` on by default
+help: remove these parentheses
+  |
+2 -     let x = (let y = 6);
+2 +     let x = let y = 6;
+  |
+
+warning: `functions` (bin "functions") generated 1 warning
+error: could not compile `functions` (bin "functions") due to 1 previous error; 1 warning emitted
+</code></pre>
+<p><code>let y = 6</code> 语句并不返回值，所以没有可以绑定到 <code>x</code> 上的值。这与其他语言不同，例如 C 和 Ruby，它们的赋值语句会返回所赋的值。在这些语言中，可以这么写 <code>x = y = 6</code>，这样 <code>x</code> 和 <code>y</code> 的值都是 <code>6</code>；Rust 中不能这样写。</p>
+<p>表达式会计算出一个值，并且你将编写的大部分 Rust 代码是由表达式组成的。考虑一个数学运算，比如 <code>5 + 6</code>，这是一个表达式并计算出值 <code>11</code>。表达式可以是语句的一部分：在示例 3-1 中，语句 <code>let y = 6;</code> 中的 <code>6</code> 是一个表达式，它计算出的值是 <code>6</code>。函数调用是一个表达式。宏调用是一个表达式。用大括号创建的一个新的块作用域也是一个表达式，例如：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
+    let y = {
+        let x = 3;
+        x + 1
+    };
+
+    println!("The value of y is: {y}");
+}</code></pre></pre>
+<p>这个表达式：</p>
+<pre><code class="language-rust ignore">{
+    let x = 3;
+    x + 1
+}</code></pre>
+<p>是一个代码块，它的值是 <code>4</code>。这个值作为 <code>let</code> 语句的一部分被绑定到 <code>y</code> 上。注意 <code>x + 1</code> 这一行在结尾没有分号，与你见过的大部分代码行不同。表达式的结尾没有分号。如果在表达式的结尾加上分号，它就变成了语句，而语句不会返回值。在接下来探索具有返回值的函数和表达式时要谨记这一点。</p>
+<h3 id="具有返回值的函数"><a class="header" href="#具有返回值的函数">具有返回值的函数</a></h3>
+<p>函数可以向调用它的代码返回值。我们并不对返回值命名，但要在箭头（<code>-&gt;</code>）后声明它的类型。在 Rust 中，函数的返回值等同于函数体最后一个表达式的值。使用 <code>return</code> 关键字和指定值，可从函数中提前返回；但大部分函数隐式的返回最后的表达式。这是一个有返回值的函数的例子：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">fn five() -&gt; i32 {
+    5
+}
+
+fn main() {
+    let x = five();
+
+    println!("The value of x is: {x}");
+}</code></pre></pre>
+<p>在 <code>five</code> 函数中没有函数调用、宏、甚至没有 <code>let</code> 语句 —— 只有数字 <code>5</code>。这在 Rust 中是一个完全有效的函数。注意，也指定了函数返回值的类型，就是 <code>-&gt; i32</code>。尝试运行代码；输出应该看起来像这样：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.30s
+     Running `target/debug/functions`
+The value of x is: 5
+</code></pre>
+<p><code>five</code> 函数的返回值是 <code>5</code>，所以返回值类型是 <code>i32</code>。让我们仔细检查一下这段代码。有两个重要的部分：首先，<code>let x = five();</code> 这一行表明我们使用函数的返回值初始化一个变量。因为 <code>five</code> 函数返回 <code>5</code>，这一行与如下代码相同：</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = 5;
+<span class="boring">}</span></code></pre></pre>
+<p>其次，<code>five</code> 函数没有参数并定义了返回值类型，不过函数体只有单单一个 <code>5</code> 也没有分号，因为这是一个表达式，我们想要返回它的值。</p>
+<p>让我们看看另一个例子：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
+    let x = plus_one(5);
+
+    println!("The value of x is: {x}");
+}
+
+fn plus_one(x: i32) -&gt; i32 {
+    x + 1
+}</code></pre></pre>
+<p>运行代码会打印出 <code>The value of x is: 6</code>。但如果在包含 <code>x + 1</code> 的行尾加上一个分号，把它从表达式变成语句，我们将看到一个错误。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile">fn main() {
+    let x = plus_one(5);
+
+    println!("The value of x is: {x}");
+}
+
+fn plus_one(x: i32) -&gt; i32 {
+    x + 1;
+}</code></pre>
+<p>运行代码会产生一个错误，如下：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+error[E0308]: mismatched types
+ --&gt; src/main.rs:7:24
+  |
+7 | fn plus_one(x: i32) -&gt; i32 {
+  |    --------            ^^^ expected `i32`, found `()`
+  |    |
+  |    implicitly returns `()` as its body has no tail or `return` expression
+8 |     x + 1;
+  |          - help: remove this semicolon to return this value
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `functions` (bin "functions") due to 1 previous error
+</code></pre>
+<p>主要的错误信息，“mismatched types”（类型不匹配），揭示了代码的核心问题。函数 <code>plus_one</code> 的定义说明它要返回一个 <code>i32</code> 类型的值，不过语句并不会返回值，使用单位类型 <code>()</code> 表示不返回值。因为不返回值与函数定义相矛盾，从而出现一个错误。在输出中，Rust 提供了一条信息，可能有助于纠正这个错误：它建议删除分号，这会修复这个错误。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch03-02-data-types.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch03-04-comments.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch03-02-data-types.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch03-04-comments.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>

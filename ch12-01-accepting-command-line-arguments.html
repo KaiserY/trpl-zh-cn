@@ -1,0 +1,294 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>接受命令行参数 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch12-01-accepting-command-line-arguments.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="接受命令行参数"><a class="header" href="#接受命令行参数">接受命令行参数</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch12-01-accepting-command-line-arguments.md -->
+<!-- commit 8880eacd339876c9a53d606720176bb02a4e5b3f -->
+<p>一如既往使用 <code>cargo new</code> 新建一个项目，我们称之为 <code>minigrep</code> 以便与可能已经安装在系统上的 <code>grep</code> 工具相区分。</p>
+<pre><code class="language-console">$ cargo new minigrep
+     Created binary (application) `minigrep` project
+$ cd minigrep
+</code></pre>
+<p>第一个任务是让 <code>minigrep</code> 能够接受两个命令行参数：文件路径和要搜索的字符串。也就是说我们希望能够使用 <code>cargo run</code>，两个连字符来表明后面的参数是要传递给程序而不是 <code>cargo</code>，要搜索的字符串和被搜索的文件的路径来运行程序，像这样：</p>
+<pre><code class="language-console">$ cargo run -- searchstring example-filename.txt
+</code></pre>
+<p>现在 <code>cargo new</code> 生成的程序无法处理传递给它的参数。<a href="https://crates.io/">Crates.io</a> 上有一些现成的库可以帮助我们接受命令行参数，不过我们正在学习这一概念，就让我们自己实现这个功能。</p>
+<h3 id="读取参数值"><a class="header" href="#读取参数值">读取参数值</a></h3>
+<p>为了确保 <code>minigrep</code> 能够获取传递给它的命令行参数的值，我们需要一个 Rust 标准库提供的 <code>std::env::args</code> 函数。这个函数返回一个传递给程序的命令行参数的<strong>迭代器</strong>（<em>iterator</em>）。我们会在<a href="ch13-00-functional-features.html">第十三章</a>全面介绍迭代器。但是现在只需理解迭代器的两个细节：迭代器生成一系列的值，可以在迭代器上调用 <code>collect</code> 方法将其转换为一个集合，比如包含所有迭代器产生元素的 vector。</p>
+<p>示例 12-1 中的代码允许 <code>minigrep</code> 程序读取任何传递给它的命令行参数并将其收集到一个 vector 中。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">use std::env;
+
+fn main() {
+    let args: Vec&lt;String&gt; = env::args().collect();
+    dbg!(args);
+}</code></pre></pre>
+<p><span class="caption">示例 12-1：将命令行参数收集到一个 vector 中并打印出来</span></p>
+<p>首先使用 <code>use</code> 语句来将 <code>std::env</code> 模块引入作用域以便可以使用它的 <code>args</code> 函数。注意 <code>std::env::args</code> 函数被嵌套进了两层模块中。正如<a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html#%E5%88%9B%E5%BB%BA%E6%83%AF%E7%94%A8%E7%9A%84-use-%E8%B7%AF%E5%BE%84">第七章</a>讲到的，当所需函数嵌套了多于一层模块时，通常将父模块引入作用域而不是其自身。这便于我们利用 <code>std::env</code> 中的其他函数。这比增加了 <code>use std::env::args;</code> 后仅仅使用 <code>args</code> 调用函数要更明确一些，因为 <code>args</code> 容易被错认成一个定义于当前模块的函数。</p>
+<blockquote>
+<h3 id="args-函数和无效的-unicode"><a class="header" href="#args-函数和无效的-unicode"><code>args</code> 函数和无效的 Unicode</a></h3>
+<p>注意 <code>std::env::args</code> 在其任何参数包含无效 Unicode 字符时会 panic。如果你需要接受包含无效 Unicode 字符的参数，使用 <code>std::env::args_os</code> 代替。这个函数返回 <code>OsString</code> 值而不是 <code>String</code> 值。这里出于简单考虑使用了 <code>std::env::args</code>，因为 <code>OsString</code> 值每个平台都不一样而且比 <code>String</code> 值处理起来更为复杂。</p>
+</blockquote>
+<p>在 <code>main</code> 函数的第一行，我们调用了 <code>env::args</code>，并立即使用 <code>collect</code> 来创建了一个包含迭代器所有值的 vector。<code>collect</code> 可以被用来创建很多类型的集合，所以这里显式注明 <code>args</code> 的类型来指定我们需要一个字符串 vector。虽然在 Rust 中我们很少会需要注明类型，然而 <code>collect</code> 是一个经常需要注明类型的函数，因为 Rust 不能推断出你想要什么类型的集合。</p>
+<p>最后，我们使用调试宏打印出 vector。让我们先在不传递任何参数的情况下运行一次代码，然后再传入两个参数运行一次：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.61s
+     Running `target/debug/minigrep`
+[src/main.rs:5:5] args = [
+    "target/debug/minigrep",
+]
+</code></pre>
+<pre><code class="language-console">$ cargo run -- needle haystack
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.57s
+     Running `target/debug/minigrep needle haystack`
+[src/main.rs:5:5] args = [
+    "target/debug/minigrep",
+    "needle",
+    "haystack",
+]
+</code></pre>
+<p>注意 vector 的第一个值是 <code>"target/debug/minigrep"</code>，它是我们二进制文件的名称。这与 C 中的参数列表的行为相匹配，让程序使用在执行时调用它们的名称。如果要在消息中打印它或者根据用于调用程序的命令行别名更改程序的行为，通常可以方便地访问程序名称，不过考虑到本章的目的，我们将忽略它并只保存所需的两个参数。</p>
+<h3 id="将参数值保存进变量"><a class="header" href="#将参数值保存进变量">将参数值保存进变量</a></h3>
+<p>目前程序可以访问指定为命令行参数的值。现在需要将这两个参数的值保存进变量这样就可以在程序的余下部分使用这些值了。让我们如示例 12-2 这样做：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust should_panic noplayground">use std::env;
+
+fn main() {
+    let args: Vec&lt;String&gt; = env::args().collect();
+
+    let query = &amp;args[1];
+    let file_path = &amp;args[2];
+
+    println!("Searching for {query}");
+    println!("In file {file_path}");
+}</code></pre>
+<p><span class="caption">示例 12-2：创建变量来存放查询参数和文件路径参数</span></p>
+<p>正如之前打印出 vector 时所看到的，程序的名称占据了 vector 的第一个值 <code>args[0]</code>，所以我们从索引为 <code>1</code> 的参数开始。<code>minigrep</code> 获取的第一个参数是需要搜索的字符串，所以将第一个参数的引用存放在变量 <code>query</code> 中。第二个参数将是文件路径，所以将第二个参数的引用放入变量 <code>file_path</code> 中。</p>
+<p>我们将临时打印出这些变量的值来证明代码如我们期望的那样工作。使用参数 <code>test</code> 和 <code>sample.txt</code> 再次运行这个程序：</p>
+<pre><code class="language-console">$ cargo run -- test sample.txt
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.0s
+     Running `target/debug/minigrep test sample.txt`
+Searching for test
+In file sample.txt
+</code></pre>
+<p>太好了，程序正常工作！我们将所需的参数值保存进了对应的变量中。之后会增加一些错误处理来应对类似用户没有提供参数的情况。不过现在我们将忽略它们并开始增加读取文件功能。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch12-00-an-io-project.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch12-02-reading-a-file.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch12-00-an-io-project.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch12-02-reading-a-file.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
