@@ -1,4 +1,4 @@
-## 流（Streams）：顺序的 Futrues
+## 流（Streams）：顺序的 Futures
 
 <!-- https://github.com/rust-lang/book/blob/main/src/ch17-04-streams.md -->
 <!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
