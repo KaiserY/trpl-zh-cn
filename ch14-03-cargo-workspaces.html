@@ -1,0 +1,408 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Cargo 工作空间 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch14-03-cargo-workspaces.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="cargo-工作空间"><a class="header" href="#cargo-工作空间">Cargo 工作空间</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch14-03-cargo-workspaces.md -->
+<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
+<p>第十二章中，我们构建一个包含二进制 crate 和库 crate 的包。你可能会发现，随着项目开发的深入，库 crate 持续增大，而你希望将其进一步拆分成多个库 crate。Cargo 提供了一个叫<strong>工作空间</strong>（<em>workspaces</em>）的功能，它可以帮助我们管理多个相关的协同开发的包。</p>
+<h3 id="创建工作空间"><a class="header" href="#创建工作空间">创建工作空间</a></h3>
+<p><strong>工作空间</strong>是一系列共享同样的 <em>Cargo.lock</em> 和输出目录的包。让我们使用工作空间创建一个项目 —— 这里采用常见的代码以便可以关注工作空间的结构。有多种组织工作空间的方式，所以我们只展示一个常用方法。我们的工作空间有一个二进制项目和两个库。二进制项目会提供主要功能，并会依赖另两个库。一个库会提供 <code>add_one</code> 方法而第二个会提供 <code>add_two</code> 方法。这三个 crate 将会是相同工作空间的一部分。让我们以新建工作空间目录开始：</p>
+<pre><code class="language-console">$ mkdir add
+$ cd add
+</code></pre>
+<p>接着在 <em>add</em> 目录中，创建 <em>Cargo.toml</em> 文件，用于配置整个整个工作空间。它不会包含 <code>[package]</code> 部分。相反，它以 <code>[workspace]</code> 部分作为开始，允许我们向工作区添加成员。我们还通过将 <code>resolver</code> 设置为 <code>"3"</code>，在工作区中使用 Cargo 最新且最强大的解析算法。</p>
+<p><span class="filename">文件名：Cargo.toml</span></p>
+<pre><code class="language-toml">[workspace]
+resolver = "3"
+</code></pre>
+<p>接下来，在 <em>add</em> 目录运行 <code>cargo new</code> 新建 <code>adder</code> 二进制 crate：</p>
+<pre><code class="language-console">$ cargo new adder
+    Creating binary (application) `adder` package
+      Adding `adder` as member of workspace at `file:///projects/add`
+</code></pre>
+<p>在工作空间中运行 <code>cargo new</code> 也会自动将新建包加入到工作空间 <code>Cargo.toml</code> 的 <code>[workspace]</code> 定义的 <code>members</code> 键中，像这样：</p>
+<pre><code class="language-toml">[workspace]
+resolver = "3"
+members = ["adder"]
+</code></pre>
+<p>到此为止，可以运行 <code>cargo build</code> 来构建工作空间。<em>add</em> 目录中的文件应该看起来像这样：</p>
+<pre><code class="language-text">├── Cargo.lock
+├── Cargo.toml
+├── adder
+│   ├── Cargo.toml
+│   └── src
+│       └── main.rs
+└── target
+</code></pre>
+<p>工作空间在顶级目录只有一个 <em>target</em> 目录，用于存放编译生成的产物；<code>adder</code> 包并没有自己的 <em>target</em> 目录。即使进入 <em>adder</em> 目录运行 <code>cargo build</code>，构建结果也位于 <em>add/target</em> 而不是 <em>add/adder/target</em>。工作空间中的 crate 之间相互依赖。如果每个 crate 有其自己的 <em>target</em> 目录，为了在自己的 <em>target</em> 目录中生成构建结果，工作空间中的每一个 crate 都不得不相互重新编译其他 crate。通过共享一个 <em>target</em> 目录，工作空间可以避免其他 crate 重复构建。</p>
+<h3 id="在工作空间中创建第二个包"><a class="header" href="#在工作空间中创建第二个包">在工作空间中创建第二个包</a></h3>
+<p>接下来，让我们在工作空间中创建另一个成员包，并将其命名为 <code>add_one</code>。生成一个名为 <code>add_one</code> 的库 crate：</p>
+<pre><code class="language-console">$ cargo new add_one --lib
+    Creating library `add_one` package
+      Adding `add_one` as member of workspace at `file:///projects/add`
+</code></pre>
+<p>现在顶层的 <em>Cargo.toml</em> 的 <code>members</code> 列表将会包含 add_one* 路径：</p>
+<p><span class="filename">文件名：Cargo.toml</span></p>
+<pre><code class="language-toml">[workspace]
+resolver = "3"
+members = ["adder", "add_one"]
+</code></pre>
+<p>现在 <em>add</em> 目录应该有如下目录和文件：</p>
+<pre><code class="language-text">├── Cargo.lock
+├── Cargo.toml
+├── add_one
+│   ├── Cargo.toml
+│   └── src
+│       └── lib.rs
+├── adder
+│   ├── Cargo.toml
+│   └── src
+│       └── main.rs
+└── target
+</code></pre>
+<p>在 <em>add_one/src/lib.rs</em> 文件中，增加一个 <code>add_one</code> 函数：</p>
+<p><span class="filename">文件名：add_one/src/lib.rs</span></p>
+<pre><code class="language-rust noplayground">pub fn add_one(x: i32) -&gt; i32 {
+    x + 1
+}</code></pre>
+<p>现在我们有了二进制 <code>adder</code> 包依赖库 crate <code>add_one</code> 包。首先需要在 <em>adder/Cargo.toml</em> 文件中增加 <code>add_one</code> 作为路径依赖：</p>
+<p><span class="filename">文件名：adder/Cargo.toml</span></p>
+<pre><code class="language-toml">[dependencies]
+add_one = { path = "../add_one" }
+</code></pre>
+<p>cargo 并不假定工作空间中的 Crates 会相互依赖，所以需要显式表明工作空间中 crate 的依赖关系。</p>
+<p>接下来，在 <code>adder</code> crate 中使用（ <code>add_one</code> crate 中的）函数 <code>add_one</code>。打开 <em>adder/src/main.rs</em> 在顶部增加一行 <code>use</code> 将新 <code>add_one</code> 库 crate 引入作用域。接着修改 <code>main</code> 函数来调用 <code>add_one</code> 函数，如示例 14-7 所示。</p>
+<p><span class="filename">文件名：adder/src/main.rs</span></p>
+<pre><code class="language-rust ignore">fn main() {
+    let num = 10;
+    println!("Hello, world! {num} plus one is {}!", add_one::add_one(num));
+}</code></pre>
+<p><span class="caption">示例 14-7：在 <code>adder</code> crate 中使用 <code>add_one</code> 库 crate</span></p>
+<p>在顶层 <em>add</em> 目录中运行 <code>cargo build</code> 来构建工作空间！</p>
+<pre><code class="language-console">$ cargo build
+   Compiling add_one v0.1.0 (file:///projects/add/add_one)
+   Compiling adder v0.1.0 (file:///projects/add/adder)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.22s
+</code></pre>
+<p>为了在顶层 <em>add</em> 目录运行二进制 crate，可以通过 <code>-p</code> 参数和包名称来运行 <code>cargo run</code> 指定工作空间中我们希望使用的包：</p>
+<pre><code class="language-console">$ cargo run -p adder
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running `target/debug/adder`
+Hello, world! 10 plus one is 11!
+</code></pre>
+<p>这会运行 <em>adder/src/main.rs</em> 中的代码，其依赖 <code>add_one</code> crate</p>
+<h4 id="在工作空间中依赖外部包"><a class="header" href="#在工作空间中依赖外部包">在工作空间中依赖外部包</a></h4>
+<p>还需注意的是工作空间只在根目录有一个 <em>Cargo.lock</em>，而不是在每一个 crate 目录都有 <em>Cargo.lock</em>。这确保了所有的 crate 都使用完全相同版本的依赖。如果在 <em>Cargo.toml</em> 和 <em>add_one/Cargo.toml</em> 中都增加 <code>rand</code> crate，则 Cargo 会将其都解析为同一版本并记录到唯一的 <em>Cargo.lock</em> 中。使得工作空间中的所有 crate 都使用相同的依赖意味着其中的 crate 都是相互兼容的。让我们在 <em>add_one/Cargo.toml</em> 中的 <code>[dependencies]</code> 部分增加 <code>rand</code> crate 以便能够在 <code>add_one</code> crate 中使用 <code>rand</code> crate：</p>
+<p><span class="filename">文件名：add_one/Cargo.toml</span></p>
+<pre><code class="language-toml">[dependencies]
+rand = "0.8.5"
+</code></pre>
+<p>现在就可以在 <em>add_one/src/lib.rs</em> 中增加 <code>use rand;</code> 了，接着在 <em>add</em> 目录运行 <code>cargo build</code> 构建整个工作空间就会引入并编译 <code>rand</code> crate。我们会收到一个警告，因为我们并没有引用已导入作用域的 <code>rand</code>：</p>
+<pre><code class="language-console">$ cargo build
+    Updating crates.io index
+  Downloaded rand v0.8.5
+   --snip--
+   Compiling rand v0.8.5
+   Compiling add_one v0.1.0 (file:///projects/add/add_one)
+warning: unused import: `rand`
+ --&gt; add_one/src/lib.rs:1:5
+  |
+1 | use rand;
+  |     ^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: `add_one` (lib) generated 1 warning (run `cargo fix --lib -p add_one` to apply 1 suggestion)
+   Compiling adder v0.1.0 (file:///projects/add/adder)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.95s
+</code></pre>
+<p>现在顶级的 <em>Cargo.lock</em> 包含了 <code>add_one</code> 的 <code>rand</code> 依赖的信息。然而，即使 <code>rand</code> 被用于工作空间的某处，也不能在其他 crate 中使用它，除非也在它们的 <em>Cargo.toml</em> 中加入 <code>rand</code>。例如，如果在顶级的 <code>adder</code> crate 的 <em>adder/src/main.rs</em> 中增加 <code>use rand;</code>，会得到一个错误：</p>
+<pre><code class="language-console">$ cargo build
+  --snip--
+   Compiling adder v0.1.0 (file:///projects/add/adder)
+error[E0432]: unresolved import `rand`
+ --&gt; adder/src/main.rs:2:5
+  |
+2 | use rand;
+  |     ^^^^ no external crate `rand`
+</code></pre>
+<p>为了修复这个错误，修改顶级 <code>adder</code> crate 的 <em>Cargo.toml</em> 来表明 <code>rand</code> 也是这个 crate 的依赖。构建 <code>adder</code> crate 会将 <code>rand</code> 加入到 <em>Cargo.lock</em> 中 <code>adder</code> 的依赖列表中，但是这并不会下载 <code>rand</code> 的额外拷贝。Cargo 确保了工作空间中任何使用 <code>rand</code> 的 crate 都采用相同的版本，这节省了空间并确保了工作空间中的 crate 将是相互兼容的。</p>
+<p>如果工作空间中的 crate 指定了不兼容的同一依赖的不同版本，Cargo 会解析它们，但仍会尽量减少解析的版本数量。</p>
+<h4 id="为工作空间增加测试"><a class="header" href="#为工作空间增加测试">为工作空间增加测试</a></h4>
+<p>作为另一个改进，让我们为 <code>add_one</code> crate 中的 <code>add_one::add_one</code> 函数增加一个测试：</p>
+<p><span class="filename">文件名：add_one/src/lib.rs</span></p>
+<pre><code class="language-rust noplayground">pub fn add_one(x: i32) -&gt; i32 {
+    x + 1
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_works() {
+        assert_eq!(3, add_one(2));
+    }
+}</code></pre>
+<p>在顶级 <em>add</em> 目录运行 <code>cargo test</code>。在像这样的工作空间结构中运行 <code>cargo test</code> 会运行工作空间中所有 crate 的测试。：</p>
+<pre><code class="language-console">$ cargo test
+   Compiling add_one v0.1.0 (file:///projects/add/add_one)
+   Compiling adder v0.1.0 (file:///projects/add/adder)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.20s
+     Running unittests src/lib.rs (target/debug/deps/add_one-93c49ee75dc46543)
+
+running 1 test
+test tests::it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/adder-3a47283c568d2b6a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests add_one
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+</code></pre>
+<p>输出的第一部分显示 <code>add_one</code> crate 的 <code>it_works</code> 测试通过了。下一个部分显示 <code>adder</code> crate 中找到了零个测试，最后一部分显示 <code>add_one</code> crate 中有零个文档测试。</p>
+<p>也可以选择运行工作空间中特定 crate 的测试，通过在根目录使用 <code>-p</code> 参数并指定希望测试的 crate 名称：</p>
+<pre><code class="language-console">$ cargo test -p add_one
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running unittests src/lib.rs (target/debug/deps/add_one-93c49ee75dc46543)
+
+running 1 test
+test tests::it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests add_one
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+</code></pre>
+<p>输出显示了 <code>cargo test</code> 只运行了 <code>add_one</code> crate 的测试而没有运行 <code>adder</code> crate 的测试。</p>
+<p>如果你选择向 <a href="https://crates.io/">crates.io</a> 发布工作空间中的 crate，每一个工作空间中的 crate 需要单独发布。就像 <code>cargo test</code> 一样，可以通过 <code>-p</code> 参数并指定期望发布的 crate 名来发布工作空间中的某个特定的 crate。</p>
+<p>现在尝试以类似 <code>add_one</code> crate 的方式向工作空间增加 <code>add_two</code> crate 来作为更多的练习！</p>
+<p>随着项目增长，考虑使用工作空间：每一个更小的组件比一大块代码要容易理解。如果它们经常需要同时被修改的话，将 crate 保持在工作空间中更易于协调 crate 的改变。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch14-02-publishing-to-crates-io.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch14-04-installing-binaries.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch14-02-publishing-to-crates-io.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch14-04-installing-binaries.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
