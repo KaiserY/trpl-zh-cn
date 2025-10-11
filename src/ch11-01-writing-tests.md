@@ -93,7 +93,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 
 <span class="caption">示例 11-4：一个测试通过和一个测试失败的测试结果</span>
 
-`test tests::another` 这一行是 `FAILED` 而不是 `ok` 了。在单独测试结果和摘要之间多了两个新的部分：第一个部分显示了测试失败的详细原因。在这个例子中，我们看到 `another` 因为在 _src/lib.rs_ 的第 10 行 `panicked at 'Make this test fail'` 而失败的详细信息。下一部分列出了所有失败的测试，这在有很多测试和很多失败测试的详细输出时很有帮助。我们可以通过使用失败测试的名称来只运行这个测试，以便调试；下一部分 [“控制测试如何运行”][controlling-how-tests-are-run] 会讲到更多运行测试的方法。
+`test tests::another` 这一行是 `FAILED` 而不是 `ok` 了。在单独测试结果和摘要之间多了两个新的部分：第一个部分显示了测试失败的详细原因。在这个例子中，我们看到 `another` 因为在 _src/lib.rs_ 的第 17 行 `panicked at 'Make this test fail'` 而失败的详细信息。下一部分列出了所有失败的测试，这在有很多测试和很多失败测试的详细输出时很有帮助。我们可以通过使用失败测试的名称来只运行这个测试，以便调试；下一部分 [“控制测试如何运行”][controlling-how-tests-are-run] 会讲到更多运行测试的方法。
 
 最后是摘要行：总体上讲，测试结果是 `FAILED`。有一个测试通过和一个测试失败。
 
