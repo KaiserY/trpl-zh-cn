@@ -60,7 +60,7 @@ $ cargo new add_one --lib
       Adding `add_one` as member of workspace at `file:///projects/add`
 ```
 
-现在顶层的 *Cargo.toml* 的 `members` 列表将会包含 add_one* 路径：
+现在顶层的 *Cargo.toml* 的 `members` 列表将会包含 *add_one* 路径：
 
 <span class="filename">文件名：Cargo.toml</span>
 
@@ -92,7 +92,7 @@ $ cargo new add_one --lib
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/add_one/src/lib.rs}}
 ```
 
-现在我们有了二进制 `adder` 包依赖库 crate `add_one` 包。首先需要在 *adder/Cargo.toml* 文件中增加 `add_one` 作为路径依赖：
+现在我们能够拥有二进制 `adder` 包以及其依赖的 `add_one` 包了。首先需要在 *adder/Cargo.toml* 文件中增加 `add_one` 作为路径依赖：
 
 <span class="filename">文件名：adder/Cargo.toml</span>
 
@@ -102,7 +102,7 @@ $ cargo new add_one --lib
 
 cargo 并不假定工作空间中的 Crates 会相互依赖，所以需要显式表明工作空间中 crate 的依赖关系。
 
-接下来，在 `adder` crate 中使用（ `add_one` crate 中的）函数 `add_one`。打开 *adder/src/main.rs* 在顶部增加一行 `use` 将新 `add_one` 库 crate 引入作用域。接着修改 `main` 函数来调用 `add_one` 函数，如示例 14-7 所示。
+接下来，让我们在 `adder` crate 中使用（ `add_one` crate 中的）函数 `add_one`。打开 *adder/src/main.rs* 文件并修改 `main` 函数来调用 `add_one` 函数，如示例 14-7 所示。
 
 <span class="filename">文件名：adder/src/main.rs</span>
 
@@ -130,7 +130,7 @@ $ cargo run -p adder
 Hello, world! 10 plus one is 11!
 ```
 
-这会运行 *adder/src/main.rs* 中的代码，其依赖 `add_one` crate
+这会运行 *adder/src/main.rs* 中的代码，其依赖 `add_one` crate。
 
 
 #### 在工作空间中依赖外部包
