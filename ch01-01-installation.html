@@ -1,0 +1,284 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>安装 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch01-01-installation.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="安装"><a class="header" href="#安装">安装</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch01-01-installation.md -->
+<!-- a4f94174155ff413f23af936c3a31ab71f11cb6f -->
+<p>第一步是安装 Rust。我们会通过 <code>rustup</code> 下载 Rust，这是一个管理 Rust 版本和相关工具的命令行工具。下载时需要联网。</p>
+<blockquote>
+<p>注意：如果你出于某些理由倾向于不使用 <code>rustup</code>，请到 <a href="https://forge.rust-lang.org/infra/other-installation-methods.html">Rust 的其他安装方法页面</a> 查看其它安装选项。</p>
+</blockquote>
+<p>接下来的步骤会安装最新的稳定版 Rust 编译器。Rust 的稳定性确保本书所有示例在最新版本的 Rust 中能够继续编译。不同版本的输出可能略有不同，因为 Rust 经常改进错误信息和警告。也就是说，任何通过这些步骤安装的最新稳定版 Rust，都应该能正常运行本书中的内容。</p>
+<blockquote>
+<h3 id="命令行标记"><a class="header" href="#命令行标记">命令行标记</a></h3>
+<p>本章和全书中，我们会展示一些在终端中使用的命令。所有需要输入到终端的行都以 <code>$</code> 开头。你不需要输入 <code>$</code> 字符；这里显示的 <code>$</code> 字符表示命令行提示符，仅用于提示每行命令的起点。不以 <code>$</code> 起始的行通常展示前一个命令的输出。另外，PowerShell 专用的示例会采用 <code>&gt;</code> 而不是 <code>$</code>。</p>
+</blockquote>
+<h3 id="在-linux-或-macos-上安装-rustup"><a class="header" href="#在-linux-或-macos-上安装-rustup">在 Linux 或 macOS 上安装 <code>rustup</code></a></h3>
+<p>如果你使用 Linux 或 macOS，打开终端并输入如下命令：</p>
+<pre><code class="language-console">$ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+</code></pre>
+<p>此命令下载一个脚本并开始安装 <code>rustup</code> 工具，这会安装最新稳定版 Rust。过程中可能会提示你输入密码。如果安装成功，将会出现如下内容：</p>
+<pre><code class="language-text">Rust is installed now. Great!
+</code></pre>
+<p>另外，你还需要一个 <em>链接器（linker）</em>，它是 Rust 用来将其编译的输出链接成一个文件的程序。很可能你已经有一个了。如果你遇到了链接器错误，请尝试安装一个 C 编译器，它通常包括一个链接器。C 编译器也很有用，因为一些常见的 Rust 包依赖于 C 代码，因此需要安装一个 C 编译器。</p>
+<p>在 macOS 上，你可以通过运行以下命令获得 C 语言编译器：</p>
+<pre><code class="language-console">$ xcode-select --install
+</code></pre>
+<p>Linux 用户通常需要根据发行版（distribution）文档安装 GCC 或 Clang。比如，如果你使用 Ubuntu，可以安装 <code>build-essential</code> 包。</p>
+<h3 id="在-windows-上安装-rustup"><a class="header" href="#在-windows-上安装-rustup">在 Windows 上安装 <code>rustup</code></a></h3>
+<p>在 Windows 上，前往 <a href="https://www.rust-lang.org/tools/install">https://www.rust-lang.org/install.html</a> 并按照说明安装 Rust。在安装过程的某个步骤，你会被提示要安装 Visual Studio。它提供了一个链接器和编译程序所需的原生库。如果你在此步骤需要更多帮助，请访问 <a href="https://rust-lang.github.io/rustup/installation/windows-msvc.html">https://rust-lang.github.io/rustup/installation/windows-msvc.html</a>。</p>
+<p>本书的余下部分会使用能同时运行于 <em>cmd.exe</em> 和 PowerShell 的命令。如果存在特定差异，我们会解释使用哪一个。</p>
+<h3 id="故障排除troubleshooting"><a class="header" href="#故障排除troubleshooting">故障排除（Troubleshooting）</a></h3>
+<p>要检查是否正确安装了 Rust，打开命令行并输入：</p>
+<pre><code class="language-console">$ rustc --version
+</code></pre>
+<p>你应该可以看到按照以下格式显示的最新稳定版本的版本号、对应的 Commit Hash 和 Commit 日期：</p>
+<pre><code class="language-text">rustc x.y.z (abcabcabc yyyy-mm-dd)
+</code></pre>
+<p>如果看到了这样的信息，就说明 Rust 已经安装成功了！如果没看到，请按照下面说明的方法检查 Rust 是否在您的 <code>%PATH%</code> 系统变量中。</p>
+<p>在 Windows CMD 中，请使用命令：</p>
+<pre><code class="language-console">&gt; echo %PATH%
+</code></pre>
+<p>在 PowerShell 中，请使用命令：</p>
+<pre><code class="language-powershell">&gt; echo $env:Path
+</code></pre>
+<p>在 Linux 和 macOS 中，请使用命令：</p>
+<pre><code class="language-console">$ echo $PATH
+</code></pre>
+<p>如果一切正确但 Rust 仍不能使用，有许多地方可以求助。您可以在<a href="https://www.rust-lang.org/community">社区页面</a>查看如何与其他 Rustaceans（Rust 用户的称号，有自嘲意味）联系。</p>
+<h2 id="更新与卸载"><a class="header" href="#更新与卸载">更新与卸载</a></h2>
+<p>通过 <code>rustup</code> 安装了 Rust 之后，更新到最新版本就很简单了。只需要在您对应的命令行中运行如下更新脚本：</p>
+<pre><code class="language-console">$ rustup update
+</code></pre>
+<p>若要卸载 Rust 和 <code>rustup</code>，请在命令行中运行如下卸载脚本：</p>
+<pre><code class="language-console">$ rustup self uninstall
+</code></pre>
+<h3 id="本地文档"><a class="header" href="#本地文档">本地文档</a></h3>
+<p>安装程序也自带一份文档的本地拷贝，可以离线阅读。运行 <code>rustup doc</code> 在浏览器中查看本地文档。</p>
+<p>任何时候，如果你拿不准标准库中的类型或函数的用途和用法，请查阅应用程序接口（application programming interface，API）文档！</p>
+<h3 id="文本编辑器和集成开发环境integrated-development-environments-ide"><a class="header" href="#文本编辑器和集成开发环境integrated-development-environments-ide">文本编辑器和集成开发环境（Integrated Development Environments, IDE）</a></h3>
+<p>本书不会假设你使用何种工具来编写 Rust 代码。几乎任何文本编辑器都可以搞定！然而，很多文本编辑器和集成开发环境（IDE）内置了 Rust 支持。你总是可以在 Rust 官网的<a href="https://www.rust-lang.org/tools">工具页面</a>找到很多相对流行的编辑器和 IDE 列表。</p>
+<h3 id="离线使用本书"><a class="header" href="#离线使用本书">离线使用本书</a></h3>
+<p>在一些示例中，我们将会使用标准库之外的 Rust 包。要运行这些示例，你需要保持网络连接，或者事先下载好这些依赖。要提前下载依赖，可以运行以下命令。（我们稍后会详细解释 <code>cargo</code> 是什么，以及这些命令分别的作用。）</p>
+<pre><code class="language-console">$ cargo new get-dependencies
+$ cd get-dependencies
+$ cargo add rand@0.8.5 trpl@0.2.0
+</code></pre>
+<p>这会将这些包的下载结果缓存起来，因此你之后就不需要再下载它们了。运行完该命令后，你无需保留 <code>get-dependencies</code> 文件夹。一旦你运行了这些命令，就可以在本书之后所有的 <code>cargo</code> 命令中，使用 <code>--offline</code> 参数来使用这些缓存的版本，而不必尝试使用网络。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch01-00-getting-started.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch01-02-hello-world.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch01-00-getting-started.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch01-02-hello-world.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>

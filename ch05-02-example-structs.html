@@ -1,0 +1,409 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>结构体示例程序 - Rust 程序设计语言 简体中文版</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust 程序设计语言 简体中文版</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/tree/main" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/KaiserY/trpl-zh-cn/edit/main/src/ch05-02-example-structs.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="结构体示例程序"><a class="header" href="#结构体示例程序">结构体示例程序</a></h2>
+<!-- https://github.com/rust-lang/book/blob/main/src/ch05-02-example-structs.md -->
+<!-- commit 02e053cdbbb3bf9edd9ad32ed49eb533404350a9 -->
+<p>为了理解何时会需要使用结构体，让我们编写一个计算长方形面积的程序。我们会从单独的变量开始，接着重构程序直到使用结构体替代它们为止。</p>
+<p>使用 Cargo 新建一个叫做 <em>rectangles</em> 的二进制程序，它获取以像素为单位的长方形的宽度和高度，并计算出长方形的面积。示例 5-8 显示了位于项目的 <em>src/main.rs</em> 中的小程序，它刚刚好实现此功能：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
+    let width1 = 30;
+    let height1 = 50;
+
+    println!(
+        "The area of the rectangle is {} square pixels.",
+        area(width1, height1)
+    );
+}
+
+fn area(width: u32, height: u32) -&gt; u32 {
+    width * height
+}</code></pre></pre>
+<p><span class="caption">示例 5-8：通过分别指定长方形的宽和高的变量来计算长方形面积</span></p>
+<p>现在使用 <code>cargo run</code> 运行程序：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling rectangles v0.1.0 (file:///projects/rectangles)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.42s
+     Running `target/debug/rectangles`
+The area of the rectangle is 1500 square pixels.
+</code></pre>
+<p>这个示例代码在调用 <code>area</code> 函数时传入每个维度，虽然可以正确计算出长方形的面积，但我们仍然可以修改这段代码来使它的意义更加明确，并且增加可读性。</p>
+<p>这些代码的问题突显在 <code>area</code> 的签名上：</p>
+<pre><code class="language-rust ignore"><span class="boring">fn main() {
+</span><span class="boring">    let width1 = 30;
+</span><span class="boring">    let height1 = 50;
+</span><span class="boring">
+</span><span class="boring">    println!(
+</span><span class="boring">        "The area of the rectangle is {} square pixels.",
+</span><span class="boring">        area(width1, height1)
+</span><span class="boring">    );
+</span><span class="boring">}
+</span><span class="boring">
+</span>fn area(width: u32, height: u32) -&gt; u32 {
+<span class="boring">    width * height
+</span><span class="boring">}</span></code></pre>
+<p>函数 <code>area</code> 本应该计算一个长方形的面积，不过函数却有两个参数。这两个参数是相关联的，不过程序本身却没有表现出这一点。将长度和宽度组合在一起将更易懂也更易处理。第三章的 <a href="ch03-02-data-types.html#%E5%85%83%E7%BB%84%E7%B1%BB%E5%9E%8B">“元组类型”</a> 部分已经讨论过了一种可行的方法：元组。</p>
+<h3 id="使用元组重构"><a class="header" href="#使用元组重构">使用元组重构</a></h3>
+<p>示例 5-9 展示了使用元组的另一个程序版本。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
+    let rect1 = (30, 50);
+
+    println!(
+        "The area of the rectangle is {} square pixels.",
+        area(rect1)
+    );
+}
+
+fn area(dimensions: (u32, u32)) -&gt; u32 {
+    dimensions.0 * dimensions.1
+}</code></pre></pre>
+<p><span class="caption">示例 5-9：使用元组来指定长方形的宽高</span></p>
+<p>在某种程度上说，这个程序更好一点了。元组帮助我们增加了一些结构性，并且现在只需传一个参数。不过在另一方面，这个版本却有一点不明确了：元组并没有给出元素的名称，所以计算变得更费解了，因为不得不使用索引来获取元组的每一部分。</p>
+<p>在计算面积时将宽和高弄混倒无关紧要，不过当在屏幕上绘制长方形时就有问题了！我们必须牢记 <code>width</code> 的元组索引是 <code>0</code>，<code>height</code> 的元组索引是 <code>1</code>。如果其他人要使用这些代码，他们必须要搞清楚这一点，并也要牢记于心。很容易忘记或者混淆这些值而造成错误，因为我们没有在代码中传达数据的意图。</p>
+<h3 id="使用结构体重构赋予更多意义"><a class="header" href="#使用结构体重构赋予更多意义">使用结构体重构：赋予更多意义</a></h3>
+<p>我们使用结构体为数据命名来为其赋予意义。我们可以将我们正在使用的元组转换成一个有整体名称而且每个部分也有对应名字的结构体，如示例 5-10 所示：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let rect1 = Rectangle {
+        width: 30,
+        height: 50,
+    };
+
+    println!(
+        "The area of the rectangle is {} square pixels.",
+        area(&amp;rect1)
+    );
+}
+
+fn area(rectangle: &amp;Rectangle) -&gt; u32 {
+    rectangle.width * rectangle.height
+}</code></pre></pre>
+<p><span class="caption">示例 5-10：定义 <code>Rectangle</code> 结构体</span></p>
+<p>这里我们定义了一个结构体并称其为 <code>Rectangle</code>。在大括号中定义了字段 <code>width</code> 和 <code>height</code>，类型都是 <code>u32</code>。接着在 <code>main</code> 中，我们创建了一个具体的 <code>Rectangle</code> 实例，它的宽是 <code>30</code>，高是 <code>50</code>。</p>
+<p>函数 <code>area</code> 现在被定义为接收一个名叫 <code>rectangle</code> 的参数，其类型是一个结构体 <code>Rectangle</code> 实例的不可变借用。第四章讲到过，我们希望借用结构体而不是获取它的所有权，这样 <code>main</code> 函数就可以保持 <code>rect1</code> 的所有权并继续使用它，所以这就是为什么在函数签名和调用的地方会有 <code>&amp;</code>。</p>
+<p><code>area</code> 函数访问 <code>Rectangle</code> 实例的 <code>width</code> 和 <code>height</code> 字段（注意，访问对结构体的引用的字段不会移动字段的所有权，这就是为什么你经常看到对结构体的引用）。<code>area</code> 的函数签名现在明确的阐述了我们的意图：使用 <code>Rectangle</code> 的 <code>width</code> 和 <code>height</code> 字段，计算 <code>Rectangle</code> 的面积。这表明宽高是相互联系的，并为这些值提供了描述性的名称而不是使用元组的索引值 <code>0</code> 和 <code>1</code> 。这在可读性上是一个明显的提升。</p>
+<h3 id="通过派生-trait-增加实用功能"><a class="header" href="#通过派生-trait-增加实用功能">通过派生 trait 增加实用功能</a></h3>
+<p>在调试程序时打印出 <code>Rectangle</code> 实例来查看其所有字段的值非常有用。示例 5-11 像前面章节那样尝试使用 <a href="https://doc.rust-lang.org/std/macro.println.html"><code>println!</code> 宏</a>。但这并不行。</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile">struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let rect1 = Rectangle {
+        width: 30,
+        height: 50,
+    };
+
+    println!("rect1 is {}", rect1);
+}</code></pre>
+<p><span class="caption">示例 5-11：尝试打印出 <code>Rectangle</code> 实例</span></p>
+<p>当我们运行这个代码时，会出现带有如下核心信息的错误：</p>
+<pre><code class="language-text">error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
+</code></pre>
+<p><code>println!</code> 宏能处理很多类型的格式，不过，<code>{}</code> 默认告诉 <code>println!</code> 使用被称为 <code>Display</code> 的格式：意在提供给直接终端用户查看的输出。目前为止见过的基本类型都默认实现了 <code>Display</code>，因为它就是向用户展示 <code>1</code> 或其他任何基本类型的唯一方式。不过对于结构体，<code>println!</code> 应该用来输出的格式是不明确的，因为这有更多显示的可能性：是否需要逗号？需要打印出大括号吗？所有字段都应该显示吗？由于这种不确定性，Rust 不会尝试猜测我们的意图，所以结构体并没有提供一个 <code>Display</code> 实现来使用 <code>println!</code> 与 <code>{}</code> 占位符。</p>
+<p>但是如果我们继续阅读错误，将会发现这个有帮助的信息：</p>
+<pre><code class="language-text">   = help: the trait `std::fmt::Display` is not implemented for `Rectangle`
+   = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
+</code></pre>
+<p>让我们来试试！现在 <code>println!</code> 宏调用看起来像 <code>println!("rect1 is {:?}", rect1);</code> 这样。在 <code>{}</code> 中加入 <code>:?</code> 指示符告诉 <code>println!</code> 我们想要使用叫做 <code>Debug</code> 的输出格式。<code>Debug</code> 是一个 trait，它允许我们以一种对开发者有帮助的方式打印结构体，以便当我们调试代码时能看到它的值。</p>
+<p>这样调整后再次运行程序。见鬼了！仍然能看到一个错误：</p>
+<pre><code class="language-text">error[E0277]: `Rectangle` doesn't implement `Debug`
+</code></pre>
+<p>不过编译器又一次给出了一个有帮助的信息：</p>
+<pre><code class="language-text">   = help: the trait `Debug` is not implemented for `Rectangle`
+   = note: add `#[derive(Debug)]` to `Rectangle` or manually `impl Debug for Rectangle`
+</code></pre>
+<p>Rust <strong>确实</strong> 包含了打印出调试信息的功能，不过我们必须为结构体显式选择这个功能。为此，在结构体定义之前加上外部属性 <code>#[derive(Debug)]</code>，如示例 5-12 所示：</p>
+<p><span class="filename">文件名：src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let rect1 = Rectangle {
+        width: 30,
+        height: 50,
+    };
+
+    println!("rect1 is {rect1:?}");
+}</code></pre></pre>
+<p><span class="caption">示例 5-12：增加属性来派生 <code>Debug</code> trait，并使用调试格式打印 <code>Rectangle</code> 实例</span></p>
+<p>现在我们再运行这个程序时，就不会有任何错误，并会出现如下输出：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling rectangles v0.1.0 (file:///projects/rectangles)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.48s
+     Running `target/debug/rectangles`
+rect1 is Rectangle { width: 30, height: 50 }
+</code></pre>
+<p>好极了！这并不是最漂亮的输出，不过它显示这个实例的所有字段，毫无疑问这对调试有帮助。当我们有一个更大的结构体时，能有更易读一点的输出就好了，为此可以使用 <code>{:#?}</code> 替换 <code>println!</code> 字符串中的 <code>{:?}</code>。在这个例子中使用 <code>{:#?}</code> 风格将会输出如下：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling rectangles v0.1.0 (file:///projects/rectangles)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.48s
+     Running `target/debug/rectangles`
+rect1 is Rectangle {
+    width: 30,
+    height: 50,
+}
+</code></pre>
+<p>另一种使用 <code>Debug</code> 格式打印数值的方法是使用 <a href="https://doc.rust-lang.org/std/macro.dbg.html"><code>dbg!</code> 宏</a>。<code>dbg!</code> 宏接收一个表达式的所有权（与 <code>println!</code> 宏相反，后者接收的是引用），打印出代码中调用 dbg! 宏时所在的文件和行号，以及该表达式的结果值，并返回该值的所有权。</p>
+<blockquote>
+<p>注意：调用 <code>dbg!</code> 宏会打印到标准错误控制台流（<code>stderr</code>），与 <code>println!</code> 不同，后者会打印到标准输出控制台流（<code>stdout</code>）。我们将在<a href="ch12-06-writing-to-stderr-instead-of-stdout.html">第十二章 “将错误信息写入标准错误而不是标准输出” 一节</a>中更多地讨论 <code>stderr</code> 和 <code>stdout</code>。</p>
+</blockquote>
+<p>下面是一个例子，我们对分配给 <code>width</code> 字段的值以及 <code>rect1</code> 中整个结构的值感兴趣。</p>
+<pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let scale = 2;
+    let rect1 = Rectangle {
+        width: dbg!(30 * scale),
+        height: 50,
+    };
+
+    dbg!(&amp;rect1);
+}</code></pre></pre>
+<p>我们可以把 <code>dbg!</code> 放在表达式 <code>30 * scale</code> 周围，因为 <code>dbg!</code> 返回表达式的值的所有权，所以 <code>width</code> 字段将获得相同的值，就像我们在那里没有 <code>dbg!</code> 调用一样。我们不希望 <code>dbg!</code> 拥有 <code>rect1</code> 的所有权，所以我们在下一次调用 <code>dbg!</code> 时传递一个引用。下面是这个例子的输出结果：</p>
+<pre><code class="language-console">$ cargo run
+   Compiling rectangles v0.1.0 (file:///projects/rectangles)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.61s
+     Running `target/debug/rectangles`
+[src/main.rs:10:16] 30 * scale = 60
+[src/main.rs:14:5] &amp;rect1 = Rectangle {
+    width: 60,
+    height: 50,
+}
+</code></pre>
+<p>我们可以看到第一点输出来自 <em>src/main.rs</em> 第 10 行，我们正在调试表达式 <code>30 * scale</code>，其结果值是 <code>60</code>（为整数实现的 <code>Debug</code> 格式化是只打印它们的值）。在 <em>src/main.rs</em> 第 14 行 的 <code>dbg!</code> 调用输出 <code>&amp;rect1</code> 的值，即 <code>Rectangle</code> 结构。这个输出使用了更为易读的 <code>Debug</code> 格式。当你试图弄清楚你的代码在做什么时，<code>dbg!</code> 宏可能真的很有帮助！</p>
+<p>除了 <code>Debug</code> trait，Rust 还为我们提供了很多可以通过 <code>derive</code> 属性来使用的 trait，它们可以为我们的自定义类型增加实用的行为。<a href="appendix-03-derivable-traits.html">附录 C</a> 中列出了这些 trait 和行为。第十章会介绍如何通过自定义行为来实现这些 trait，同时还有如何创建你自己的 trait。除了 <code>derive</code> 之外，还有很多属性；更多信息请参见 <a href="https://doc.rust-lang.org/stable/reference/attributes.html">Rust Reference</a> 的 Attributes 部分。</p>
+<p>我们的 <code>area</code> 函数用途非常专一：它仅计算长方形的面积。如果这个行为与 <code>Rectangle</code> 结构体再结合得更紧密一些就更好了，因为它不能用于其他类型。现在让我们看看如何继续重构这些代码，来将 <code>area</code> 函数协调进 <code>Rectangle</code> 类型定义的 <code>area</code> <strong>方法</strong> 中。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch05-01-defining-structs.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch05-03-method-syntax.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch05-01-defining-structs.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch05-03-method-syntax.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
