@@ -253,7 +253,7 @@ pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
 
 这里有两个 `TokenStream` 类型的参数；第一个用于属性内容本身，也就是 `GET, "/"` 部分。第二个是属性所标记的项：在本例中，是 `fn index() {}` 和剩下的函数体。
 
-除此之外，类属性宏与自定义派生宏工作方式一致：创建 `proc-macro` crate 类型的 crate 并实现希望生成代码的函数！
+除此之外，类属性宏与自定义派生宏工作方式一致：创建 `proc-macro` crate 类型的 crate 并实现生成所希望的代码的函数！
 
 ### 类函数宏
 
@@ -263,7 +263,7 @@ pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
 let sql = sql!(SELECT * FROM posts WHERE id=1);
 ```
 
-这个宏会解析其中的 SQL 语句并检查其是否是句法正确的，这是比 `macro_rules!` 可以做到的更为复杂的处理。`sql!` 宏会被定义为类似如此：
+这个宏会解析其中的 SQL 语句并检查其是否是句法正确的，这是比 `macro_rules!` 可以做到的更为复杂的处理。`sql!` 宏会被类似于像这样定义：
 
 ```rust,ignore
 #[proc_macro]
