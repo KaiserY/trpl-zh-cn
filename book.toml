@@ -16,7 +16,9 @@ additional-css = [
 ]
 additional-js = ["ferris.js"]
 git-repository-url = "https://github.com/KaiserY/trpl-zh-cn/tree/main"
-edit-url-template = "https://github.com/KaiserY/trpl-zh-cn/edit/main/{path}"
+
+[output.html.search]
+use-boolean-and = true
 
 [output.typst-pdf]
 custom-template = "custom-template.typ"
@@ -25,4 +27,4 @@ section-number = true
 rust-book = true
 
 [rust]
-edition = "2021"
+edition = "2024"
