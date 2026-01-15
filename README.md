@@ -9,6 +9,7 @@
 PS:
 
 * 对照源码位置：[https://github.com/rust-lang/book/tree/main/src][source]
+* 注意源码 `src` 目录一般会比 [https://doc.rust-lang.org/book/](https://doc.rust-lang.org/book/) 要新，如果遇到冲突建议对照 `src` 目录。
 * 每章翻译开头都带有官方链接和 commit hash 的注释，若发现与官方不一致，欢迎 Issue 或 PR
 
 [source]: https://github.com/rust-lang/book/tree/main/src
