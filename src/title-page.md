@@ -14,7 +14,7 @@
 
 [install]: ch01-01-installation.html
 [appendix-e]: appendix-05-editions.html
-[nsprust]: https://nostarch.com/rust-programming-language-2nd-edition
+[nsprust]: https://nostarch.com/rust-programming-language-3rd-edition
 [translations]: appendix-06-translation.html
 
 > **🚨 想要具有互动性的学习体验吗？试试 Rust Book 的另一个版本，其中包括测验、高亮、可视化等功能**：<https://rust-book.cs.brown.edu>
