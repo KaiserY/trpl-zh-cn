@@ -7,13 +7,13 @@
 
 ### 新建 vector
 
-为了新建一个的空 vector，可以调用 `Vec::new` 函数，如示例 8-1 所示。
+为了新建一个空的 vector，可以调用 `Vec::new` 函数，如示例 8-1 所示。
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-01/src/main.rs:here}}
 ```
 
-<span class="caption">示例 8-1：新建一个的空 vector 来储存 `i32` 类型的值</span>
+<span class="caption">示例 8-1：新建一个空的 vector 来储存 `i32` 类型的值</span>
 
 注意这里我们增加了一个类型注解。因为没有向这个 vector 中插入任何值，Rust 并不知道我们想要储存什么类型的元素。这是一个非常重要的点。vector 是用泛型实现的，第十章会涉及到如何对你自己的类型使用它们。现在，所有你需要知道的就是 `Vec<T>` 是一个由标准库提供的类型，它可以存放任何类型，而当 `Vec` 存放某个特定类型时，那个类型位于尖括号中。在示例 8-1 中，我们告诉 Rust `v` 这个 `Vec<T>` 将存放 `i32` 类型的元素。
 
