@@ -25,6 +25,7 @@ custom-template = "custom-template.typ"
 pdf = true
 section-number = true
 rust-book = true
+optional = true
 
 [rust]
 edition = "2024"
