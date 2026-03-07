@@ -1,7 +1,6 @@
 ## 引用模块树中项的路径
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md -->
-<!-- commit 5d22a358fb2380aa3f270d7b6269b67b8e44849e -->
+[ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md](https://github.com/rust-lang/book/blob/79b9d15410a7b15a65cb86bcb40cbea99198a9e4/src/ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md)
 
 为了向 Rust 指示在模块树中从何处查找某个项，我们使用路径，就像在文件系统中使用路径一样。为了调用一个函数，我们需要知道它的路径。
 

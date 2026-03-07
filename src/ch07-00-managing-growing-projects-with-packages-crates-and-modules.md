@@ -1,7 +1,6 @@
-# 使用包、Crate 和模块管理不断增长的项目
+# 包、Crates 与模块
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch07-00-managing-growing-projects-with-packages-crates-and-modules.md -->
-<!-- commit 5d22a358fb2380aa3f270d7b6269b67b8e44849e -->
+[ch07-00-managing-growing-projects-with-packages-crates-and-modules.md](https://github.com/rust-lang/book/blob/79b9d15410a7b15a65cb86bcb40cbea99198a9e4/src/ch07-00-managing-growing-projects-with-packages-crates-and-modules.md)
 
 当你编写大型程序时，组织代码显得尤为重要。通过对相关功能进行分组和划分不同功能的代码，你可以清楚在哪里可以找到实现了特定功能的代码，以及在哪里可以改变一个功能的工作方式。
 
@@ -14,7 +13,7 @@
 Rust 有许多功能可以让你管理代码的组织，包括哪些细节可以被公开，哪些细节作为私有部分，以及程序中各个作用域中有哪些名称。这些特性，有时被统称为 “模块系统（the module system）”，包括：
 
 - **包**（*Packages*）：Cargo 的一个功能，它允许你构建、测试和分享 crate。
-- **Crates** ：一个模块的树形结构，它形成了库或可执行文件项目。
+- **Crates**：一个模块树，可以产生一个库或可执行文件。
 - **模块**（*Modules*）和 **use**：允许你控制作用域和路径的私有性。
 - **路径**（*path*）：一个为例如结构体、函数或模块等项命名的方式。
 

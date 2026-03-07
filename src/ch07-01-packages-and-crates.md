@@ -1,11 +1,10 @@
 ## 包和 Crate
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch07-01-packages-and-crates.md -->
-<!-- commit 02e053cdbbb3bf9edd9ad32ed49eb533404350a9 -->
+[ch07-01-packages-and-crates.md](https://github.com/rust-lang/book/blob/79b9d15410a7b15a65cb86bcb40cbea99198a9e4/src/ch07-01-packages-and-crates.md)
 
 模块系统的第一部分，我们将介绍包和 crate。
 
-crate 是 Rust 在编译时最小的代码单位。即使你用 `rustc` 而不是 `cargo` 来编译一个单独的源代码文件（正如我们在第 1 章“编写并运行 Rust 程序”中所做的那样），编译器还是会将那个文件视为一个 crate。crate 可以包含模块，模块可以定义在其他文件，然后和 crate 一起编译，我们会在接下来的章节中遇到。
+crate 是 Rust 编译器每次处理的最小代码单位。即使你用 `rustc` 而不是 `cargo` 来编译单个源代码文件（正如我们在第一章的 [“Rust 程序基础”][basics] 中做的那样），编译器也会把那个文件视为一个 crate。crate 可以包含模块，而这些模块也可以定义在其他文件中，并与该 crate 一起编译；我们会在接下来的小节中看到这一点。
 
 crate 有两种形式：二进制 crate 和库 crate。**二进制 crate**（*Binary crates*）可以被编译为可执行程序，比如命令行程序或者服务端。它们必须有一个名为 `main` 函数来定义当程序被执行的时候所需要做的事情。目前我们所创建的 crate 都是二进制 crate。
 
@@ -33,5 +32,6 @@ main.rs
 
 在此，我们有了一个只包含 *src/main.rs* 的包，意味着它只含有一个名为 `my-project` 的二进制 crate。如果一个包同时含有 *src/main.rs* 和 *src/lib.rs*，则它有两个 crate：一个二进制的和一个库的，且名字都与包相同。通过将文件放在 *src/bin* 目录下，一个包可以拥有多个二进制 crate：每个 *src/bin* 下的文件都会被编译成一个独立的二进制 crate。
 
+[basics]: ch01-02-hello-world.html#rust-程序基础
 [modules]: ch07-02-defining-modules-to-control-scope-and-privacy.html
 [rand]: ch02-00-guessing-game-tutorial.html#生成一个随机数

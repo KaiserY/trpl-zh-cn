@@ -1,7 +1,6 @@
 ## 使用 `use` 关键字将路径引入作用域
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch07-04-bringing-paths-into-scope-with-the-use-keyword.md -->
-<!-- commit 72ad14e4acb12438aa467c4cf256e0bc55df585a -->
+[ch07-04-bringing-paths-into-scope-with-the-use-keyword.md](https://github.com/rust-lang/book/blob/79b9d15410a7b15a65cb86bcb40cbea99198a9e4/src/ch07-04-bringing-paths-into-scope-with-the-use-keyword.md)
 
 不得不编写路径来调用函数显得繁琐且重复。在示例 7-7 中，无论我们选择 `add_to_waitlist` 函数的绝对路径还是相对路径，每次我们想要调用 `add_to_waitlist` 时，都必须指定`front_of_house` 和 `hosting`。幸运的是，有一种方法可以简化这个过程。我们可以使用 `use` 关键字创建一个捷径，然后就可以在作用域中的任何地方使用这个更短的名字。
 
@@ -177,7 +176,7 @@ use std::collections::HashMap;
 
 这一行便将 `std::io` 和 `std::io::Write` 同时引入作用域。
 
-### glob 运算符
+### 通过 glob 运算符导入项
 
 如果希望将一个路径下**所有**公有项引入作用域，可以指定路径后跟 `*` glob 运算符：
 
@@ -187,7 +186,7 @@ use std::collections::*;
 
 这个 `use` 语句将 `std::collections` 中定义的所有公有项引入当前作用域。使用 glob 运算符时请多加小心！Glob 会使得我们难以推导作用域中有什么名称和它们是在何处定义的。
 
-glob 运算符经常用于测试模块 `tests` 中，这时会将所有内容引入作用域；我们将在第十一章“如何编写测试”部分讲解。glob 运算符有时也用于 prelude 模式；查看[标准库中的文档](https://doc.rust-lang.org/std/prelude/index.html#other-preludes)了解这个模式的更多细节。
+glob 运算符经常用于测试模块 `tests` 中，这时会将所有内容引入作用域；我们将在第十一章[“如何编写测试”][writing-tests]部分讲解。glob 运算符有时也用于 prelude 模式；查看[标准库中的文档](https://doc.rust-lang.org/std/prelude/index.html#other-preludes)了解这个模式的更多细节。
 
 [ch14-pub-use]: ch14-02-publishing-to-crates-io.html#使用-pub-use-导出便捷的公有-api
 [rand]: ch02-00-guessing-game-tutorial.html#生成一个随机数

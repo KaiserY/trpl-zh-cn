@@ -1,7 +1,6 @@
 ## 定义模块来控制作用域与私有性
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch07-02-defining-modules-to-control-scope-and-privacy.md -->
-<!-- commit 3a30e4c1fbe641afc066b3af9eb01dcdf5ed8b24 -->
+[ch07-02-defining-modules-to-control-scope-and-privacy.md](https://github.com/rust-lang/book/blob/8c0eacd5c4acbb650497454f3a58c9e8083202a4/src/ch07-02-defining-modules-to-control-scope-and-privacy.md)
 
 在本节，我们将讨论模块和其它一些关于模块系统的部分，如允许你命名项的 *路径*（*paths*）；用来将路径引入作用域的 `use` 关键字；以及使项变为公有的 `pub` 关键字。我们还将讨论 `as` 关键字、外部包（external packages）和 glob 运算符（glob operator）。
 

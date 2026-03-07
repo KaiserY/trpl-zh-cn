@@ -182,4 +182,4 @@
 
 [tuples]: ch03-02-data-types.html#元组类型
 [move]: ch04-01-what-is-ownership.html#使用移动的变量与数据交互
-[copy]: ch04-01-what-is-ownership.html#只在栈上的数据-拷贝
+[copy]: ch04-01-what-is-ownership.html#只在栈上的数据拷贝

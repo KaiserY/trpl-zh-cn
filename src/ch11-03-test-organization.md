@@ -124,7 +124,7 @@ adder
     └── integration_test.rs
 ```
 
-这是一种老的命名规范，正如第七章[“另一种文件路径”][alt-paths]中提到的 Rust 仍然理解它们。这样命名告诉 Rust 不要将 `common` 看作一个集成测试文件。将 `setup` 函数代码移动到 *tests/common/mod.rs* 并删除 *tests/common.rs* 文件之后，测试输出中将不会出现这一部分。*tests* 目录中的子目录不会被作为单独的 crate 编译或作为一个测试结果部分出现在测试输出中。
+这是一种老的命名规范，正如第七章[“替代文件路径”][alt-paths]中提到的 Rust 仍然理解它们。这样命名告诉 Rust 不要将 `common` 看作一个集成测试文件。将 `setup` 函数代码移动到 *tests/common/mod.rs* 并删除 *tests/common.rs* 文件之后，测试输出中将不会出现这一部分。*tests* 目录中的子目录不会被作为单独的 crate 编译或作为一个测试结果部分出现在测试输出中。
 
 一旦创建了 *tests/common/mod.rs*，就可以将其作为模块以便在任何集成测试文件中使用。这里是一个 *tests/integration_test.rs* 中调用 `setup` 函数的 `it_adds_two` 测试的示例：
 
@@ -151,4 +151,4 @@ Rust 的测试功能提供了一个确保即使你改变了函数的实现方式
 [paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
 [separating-modules-into-files]:
 ch07-05-separating-modules-into-different-files.html
-[alt-paths]: ch07-05-separating-modules-into-different-files.html#另一种文件路径
+[alt-paths]: ch07-05-separating-modules-into-different-files.html#替代文件路径
