@@ -1,7 +1,6 @@
 ## 重构改进模块性和错误处理
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch12-03-improving-error-handling-and-modularity.md -->
-<!-- commit 3a30e4c1fbe641afc066b3af9eb01dcdf5ed8b24 -->
+[ch12-03-improving-error-handling-and-modularity.md](https://github.com/rust-lang/book/blob/d7c0e477a22bcb37fdb290c6046058565d6738c2/src/ch12-03-improving-error-handling-and-modularity.md)
 
 为了改善我们的程序这里有四个问题需要修复，而且它们都与程序的组织方式和如何处理潜在错误有关。第一，`main` 现在进行了两个任务：它解析了参数并打开了文件。然而随着 `main` 中的功能持续增加，`main` 函数处理的独立任务也会增加。当函数承担了更多责任，它就更难以推导，更难以测试，并且更难以在不破坏其他部分的情况下做出修改。最好能分离出功能以便每个函数各司其职。
 

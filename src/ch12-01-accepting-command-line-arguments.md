@@ -1,7 +1,6 @@
 ## 接受命令行参数
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch12-01-accepting-command-line-arguments.md -->
-<!-- commit 8880eacd339876c9a53d606720176bb02a4e5b3f -->
+[ch12-01-accepting-command-line-arguments.md](https://github.com/rust-lang/book/blob/d7c0e477a22bcb37fdb290c6046058565d6738c2/src/ch12-01-accepting-command-line-arguments.md)
 
 一如既往使用 `cargo new` 新建一个项目，我们称之为 `minigrep` 以便与可能已经安装在系统上的 `grep` 工具相区分。
 
@@ -17,7 +16,7 @@ $ cd minigrep
 $ cargo run -- searchstring example-filename.txt
 ```
 
-现在 `cargo new` 生成的程序无法处理传递给它的参数。[Crates.io](https://crates.io/) 上有一些现成的库可以帮助我们接受命令行参数，不过我们正在学习这一概念，就让我们自己实现这个功能。
+现在 `cargo new` 生成的程序还不能处理我们传给它的参数。[crates.io](https://crates.io/) 上有一些现成的库可以帮助编写接受命令行参数的程序，不过既然你现在正在学习这个概念，我们就自己来实现这个功能。
 
 ### 读取参数值
 

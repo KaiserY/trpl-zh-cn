@@ -1,7 +1,6 @@
 ## 处理环境变量
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch12-05-working-with-environment-variables.md -->
-<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
+[ch12-05-working-with-environment-variables.md](https://github.com/rust-lang/book/blob/d7c0e477a22bcb37fdb290c6046058565d6738c2/src/ch12-05-working-with-environment-variables.md)
 
 我们将增加一个额外的功能来改进 `minigrep`：用户可以通过设置环境变量来设置搜索是否是大小写敏感的选项。当然，我们也可以将其设计为一个命令行参数并要求用户每次需要时都加上它，不过在这里我们将使用环境变量。这允许用户设置环境变量一次之后在整个终端会话中所有的搜索都将是大小写不敏感的。
 
@@ -45,35 +44,35 @@
 {{#include ../listings/ch12-an-io-project/listing-12-21/output.txt}}
 ```
 
-太好了！测试都通过了。现在，让我们在 `run` 函数中实际调用新 `search_case_insensitive` 函数。首先，我们将在 `Config` 结构体中增加一个配置项来切换大小写敏感和大小写不敏感搜索。增加这些字段会导致编译错误，因为我们还没有在任何地方初始化这些字段：
+太好了！测试都通过了。现在，让我们在 `run` 函数中实际调用新的 `search_case_insensitive` 函数。首先，我们将在 `Config` 结构体中增加一个配置项来切换大小写敏感和大小写不敏感搜索。增加这个字段会导致编译错误，因为我们还没有在任何地方初始化它：
 
-<span class="filename">文件名：src/lib.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/main.rs:here}}
 ```
 
-这里增加了 `ignore_case` 字段来存放一个布尔值。接着我们需要 `run` 函数检查 `case_sensitive` 字段的值并使用它来决定是否调用 `search` 函数或 `search_case_insensitive` 函数，如示例 12-22 所示。注意这还不能编译：
+这里增加了 `ignore_case` 字段来存放一个布尔值。接着我们需要 `run` 函数检查 `ignore_case` 字段的值，并用它来决定是否调用 `search` 函数或 `search_case_insensitive` 函数，如示例 12-22 所示。注意这还不能编译：
 
-<span class="filename">文件名：src/lib.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/lib.rs:there}}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/main.rs:there}}
 ```
 
 <span class="caption">示例 12-22：根据 `config.ignore_case` 的值调用 `search` 或 `search_case_insensitive`</span>
 
-最后需要实际检查环境变量。处理环境变量的函数位于标准库的 `env` 模块中，所以我们需要在 *src/lib.rs* 的开头将这个模块引入作用域中。接着使用 `env` 模块的 `var` 方法来检查一个叫做 `IGNORE_CASE` 的环境变量，如示例 12-23 所示：
+最后需要实际检查环境变量。处理环境变量的函数位于标准库的 `env` 模块中，而这个模块已经在 *src/main.rs* 顶部被引入了作用域。接着使用 `env` 模块的 `var` 方法来检查一个叫做 `IGNORE_CASE` 的环境变量，如示例 12-23 所示：
 
-<span class="filename">文件名：src/lib.rs</span>
+<span class="filename">文件名：src/main.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-23/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-23/src/main.rs:here}}
 ```
 
 <span class="caption">示例 12-23：检查叫做 `IGNORE_CASE` 的环境变量</span>
 
-这里创建了一个新变量 `ignore_case`。为了设置它的值，需要调用 `env::var` 函数并传递我们需要寻找的环境变量名称，`IGNORE_CASE`。`env::var` 返回一个 `Result`，它在环境变量被设置时返回包含其值的 `Ok` 变体，并在环境变量未被设置时返回 `Err` 变体。
+这里创建了一个新变量 `ignore_case`。为了设置它的值，需要调用 `env::var` 函数，并把环境变量 `IGNORE_CASE` 的名字传给它。`env::var` 返回一个 `Result`：如果环境变量被设置成任意值，就返回包含该值的成功 `Ok` 变体；如果环境变量没有被设置，就返回 `Err` 变体。
 
 我们使用 `Result` 的 `is_ok` 方法来检查环境变量是否被设置，这也就意味着程序应该进行一个大小写不敏感的搜索。如果 `IGNORE_CASE` 环境变量没有被设置为任何值，`is_ok` 会返回 `false` 并将进行大小写敏感的搜索。我们并不关心环境变量所设置的**值**，只关心它是否被设置了，所以检查 `is_ok` 而不是 `unwrap`、`expect` 或任何我们已经见过的 `Result` 的方法。
 

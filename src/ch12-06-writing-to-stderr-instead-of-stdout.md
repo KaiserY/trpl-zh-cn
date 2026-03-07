@@ -1,7 +1,6 @@
-## 将错误信息输出到标准错误而不是标准输出
+## 将错误重定向到标准错误
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch12-06-writing-to-stderr-instead-of-stdout.md -->
-<!-- commit 3a30e4c1fbe641afc066b3af9eb01dcdf5ed8b24 -->
+[ch12-06-writing-to-stderr-instead-of-stdout.md](https://github.com/rust-lang/book/blob/d7c0e477a22bcb37fdb290c6046058565d6738c2/src/ch12-06-writing-to-stderr-instead-of-stdout.md)
 
 目前为止，我们将所有的输出都通过 `println!` 写到了终端。大部分终端都提供了两种输出：**标准输出**（*standard output*，`stdout`）对应一般信息，**标准错误**（*standard error*，`stderr`）则用于错误信息。这种区别允许用户选择将程序正常输出定向到一个文件中并仍将错误信息打印到屏幕上。
 
@@ -67,6 +66,6 @@ How dreary to be somebody!
 
 ## 总结
 
-在这一章中，我们回顾了目前为止的一些主要章节并涉及了如何在 Rust 环境中进行常规的 I/O 操作。通过使用命令行参数、文件、环境变量和打印错误的 `eprintln!` 宏，现在你已经准备好编写命令行程序了。通过结合前几章的知识，你的代码将会是组织良好的，并能有效的将数据存储到合适的数据结构中、更好的处理错误，并且还是经过良好测试的。
+这一章回顾了迄今为止你学到的一些主要概念，并介绍了如何在 Rust 中执行常见的 I/O 操作。通过使用命令行参数、文件、环境变量和用于打印错误的 `eprintln!` 宏，你现在已经准备好编写命令行程序了。结合前几章的知识，你的代码将会组织良好，能将数据有效地存储在合适的数据结构中，能妥善处理错误，并且经过良好测试。
 
 接下来，让我们探索一些 Rust 中受函数式编程语言影响的功能：闭包和迭代器。
