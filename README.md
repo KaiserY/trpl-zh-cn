@@ -16,7 +16,7 @@ PS:
 
 ## 校对
 
-部分章节采用 ChatGPT 进行校对。提示词详见 [proofreading_prompt.md](proofreading_prompt.md)
+部分章节采用 Codex 进行校对。提示词可参考 [proofreading_prompt.md](proofreading_prompt.md)
 
 ## 静态页面构建与文档撰写
 

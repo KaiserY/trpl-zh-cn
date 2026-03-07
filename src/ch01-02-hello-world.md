@@ -1,7 +1,6 @@
 ## Hello, World!
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch01-02-hello-world.md -->
-<!-- commit aba1ee29dca6c90a1737c996efd7c870957aefb8 -->
+[ch01-02-hello-world.md](https://github.com/rust-lang/book/blob/d46785983db2d2f94ca3d571db2cfbad0f5ad3e6/src/ch01-02-hello-world.md)
 
 既然安装好了 Rust，是时候来编写第一个 Rust 程序了。当学习一门新语言的时候，使用该语言在屏幕上打印 `Hello, world!` 是一项传统，我们将沿用这一传统！
 
@@ -9,7 +8,7 @@
 
 ### 创建项目目录
 
-首先创建一个存放 Rust 代码的目录。Rust 并不关心代码的存放位置，不过对于本书的练习和项目来说，我们建议你在 home 目录中创建 *projects* 目录，并将你的所有项目存放在这里。
+首先创建一个存放 Rust 代码的目录。Rust 并不关心代码存放在哪里，不过对于本书中的练习和项目，我们建议你在 home 目录中创建一个 *projects* 目录，并将所有项目都放在那里。
 
 打开终端并输入如下命令创建 *projects* 目录，并在 *projects* 目录中为 “Hello, world!” 项目创建一个目录。
 
@@ -31,9 +30,9 @@ $ cd hello_world
 > cd hello_world
 ```
 
-### 编写并运行 Rust 程序
+### Rust 程序基础
 
-接下来，新建一个源文件，命名为 *main.rs*。Rust 源文件总是以 *.rs* 扩展名结尾。如果文件名包含多个单词，那么按照命名习惯，应当使用下划线来分隔单词。例如命名为 *hello_world.rs*，而不是 *helloworld.rs*。
+接下来，新建一个源文件，命名为 *main.rs*。Rust 文件总是以 *.rs* 扩展名结尾。如果文件名包含多个单词，那么按照命名习惯，应当使用下划线来分隔单词。例如应命名为 *hello_world.rs*，而不是 *helloworld.rs*。
 
 现在打开刚创建的 *main.rs* 文件，输入示例 1-1 中的代码。
 
@@ -60,7 +59,7 @@ $ ./main
 Hello, world!
 ```
 
-在 Windows 上，输入命令 `.\main.exe`，而不是 `./main`：
+在 Windows 上，输入命令 `.\main`，而不是 `./main`：
 
 ```powershell
 > rustc main.rs
@@ -70,7 +69,7 @@ Hello, world!
 
 不管使用何种操作系统，终端应该打印字符串 `Hello, world!`。如果没有看到这些输出，回到安装部分的 [“故障排除”][troubleshooting] 小节查找有帮助的方法。
 
-如果 `Hello, world!` 出现了，恭喜你！你已经正式编写了一个 Rust 程序。现在你成为一名 Rust 程序员，欢迎！
+如果 `Hello, world!` 确实打印出来了，恭喜你！你已经正式写出了一个 Rust 程序。现在你已经是一名 Rust 程序员了，欢迎加入！
 
 ### Rust 程序的结构
 
@@ -82,7 +81,7 @@ fn main() {
 }
 ```
 
-这几行定义了一个名叫 `main` 的函数。`main` 函数是一个特殊的函数：在可执行的 Rust 程序中，它总是最先运行的代码。第一行代码声明了一个叫做 `main` 的函数，它没有参数也没有返回值。如果有参数的话，它们的名称应该出现在小括号 `()` 中。
+这几行定义了一个名叫 `main` 的函数。`main` 函数很特殊：在每个可执行的 Rust 程序中，它都是最先运行的代码。这里第一行声明了一个名为 `main` 的函数，它没有参数也没有返回值。如果有参数，它们会写在小括号 `()` 中。
 
 函数体被包裹在 `{}` 中。Rust 要求所有函数体都要用花括号包裹起来。一般来说，将左花括号与函数声明置于同一行并以空格分隔，是良好的代码风格。
 
@@ -96,13 +95,13 @@ println!("Hello, world!");
 
 这行代码完成这个简单程序的所有工作：在屏幕上打印文本。这里有三个重要的细节需要注意。
 
-首先，`println!` 调用了一个 Rust 宏（macro）。如果是调用函数，则应输入 `println`（没有`!`）。我们将在[第二十章][ch20-macros]详细讨论宏。现在你只需记住，当看到符号 `!` 的时候，就意味着调用的是宏而不是普通函数，并且宏并不总是遵循与函数相同的规则。
+首先，`println!` 调用了一个 Rust 宏（macro）。如果调用的是函数，就应该写成 `println`（不带 `!`）。Rust 宏是一种用来编写可生成代码的代码，从而扩展 Rust 语法的方式；我们将在[第二十章][ch20-macros]详细讨论宏。现在你只需要知道，看到 `!` 就意味着调用的是宏而不是普通函数，并且宏并不总是遵循与函数相同的规则。
 
 第二，`"Hello, world!"` 是一个字符串。我们把这个字符串作为一个参数传递给 `println!`，字符串将被打印到屏幕上。
 
 第三，该行以分号结尾（`;`），这代表一个表达式的结束和下一个表达式可以开始。大部分 Rust 代码行以分号结尾。
 
-### 编译和运行是彼此独立的步骤
+### 编译与运行
 
 你刚刚运行了一个新创建的程序，那么让我们检查此过程中的每一个步骤。
 
@@ -114,7 +113,7 @@ $ rustc main.rs
 
 如果你有 C 或 C++ 背景，就会发现这与 `gcc` 和 `clang` 类似。编译成功后，Rust 会输出一个二进制的可执行文件。
 
-在 Linux、macOS 或 Windows 的 PowerShell 上，在 shell 中输入 `ls` 命令可以看见这个可执行文件。
+在 Linux、macOS，以及 Windows 的 PowerShell 上，你可以在 shell 中输入 `ls` 命令来查看这个可执行文件。
 
 ```console
 $ ls
@@ -130,7 +129,7 @@ main.pdb
 main.rs
 ```
 
-这展示了扩展名为 *.rs* 的源文件、可执行文件（在 Windows 下是 *main.exe*，其它平台是 *main*），以及当使用 CMD 时会有一个包含调试信息、扩展名为 *.pdb* 的文件。从这里开始运行 *main* 或 *main.exe* 文件，如下：
+这展示了带有 *.rs* 扩展名的源代码文件、可执行文件（Windows 上是 *main.exe*，其他平台上则是 *main*），以及在 Windows 上一个带有 *.pdb* 扩展名、包含调试信息的文件。接下来，你可以运行 *main* 或 *main.exe*，如下所示：
 
 ```console
 $ ./main # Windows 是 .\main.exe
@@ -138,7 +137,7 @@ $ ./main # Windows 是 .\main.exe
 
 如果这里的 *main.rs* 是上文所述的 “Hello, world!” 程序，那么在终端上就会打印出 `Hello, world!`。
 
-如果你更熟悉动态语言，如 Ruby、Python 或 JavaScript，则可能不习惯将编译和运行分为两个单独的步骤。Rust 是一种 **预编译静态类型**（*ahead-of-time compiled*）语言，这意味着你可以编译程序，并将可执行文件送给其他人，他们甚至不需要安装 Rust 就可以运行。如果你给他人一个 *.rb*、*.py* 或 *.js* 文件，他们需要先分别安装 Ruby，Python，JavaScript 实现（运行时环境，VM）。不过在这些语言中，只需要一句命令就可以编译和运行程序。这一切都是语言设计上的权衡取舍。
+如果你更熟悉 Ruby、Python 或 JavaScript 这样的动态语言，可能不太习惯把编译和运行分成两个独立步骤。Rust 是一种 **预先编译**（*ahead-of-time compiled*）语言，这意味着你可以先将程序编译好，再把可执行文件交给其他人；即使他们没有安装 Rust，也可以直接运行。如果你给别人的是一个 *.rb*、*.py* 或 *.js* 文件，他们就需要分别安装 Ruby、Python 或 JavaScript 的实现（运行时环境）。不过在这些语言中，编译和运行程序通常只需要一条命令。语言设计中的一切都是权衡取舍。
 
 仅仅使用 `rustc` 编译简单程序是没问题的，不过随着项目的增长，你可能需要管理你项目的方方面面，并让代码易于分享。接下来，我们要介绍一个叫做 Cargo 的工具，它会帮助你编写真实世界中的 Rust 程序。
 
