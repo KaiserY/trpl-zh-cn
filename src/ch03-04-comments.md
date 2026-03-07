@@ -1,9 +1,8 @@
 ## 注释
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch03-04-comments.md -->
-<!-- commit 5d22a358fb2380aa3f270d7b6269b67b8e44849e -->
+[ch03-04-comments.md](https://github.com/rust-lang/book/blob/9cc190796f28505c7a9a9cacea42f50d895ff3bd/src/ch03-04-comments.md)
 
-所有程序员都力求使其代码易于理解，不过有时还需要提供额外的解释。在这种情况下，程序员在源码中留下 **注释**（*comments*），编译器会忽略它们，不过阅读代码的人可能觉得有用。
+所有程序员都努力让自己的代码易于理解，不过有时仍然需要额外的解释。在这种情况下，程序员会在源码中留下 **注释**（*comments*），编译器会忽略它们，但阅读源码的人可能会觉得这些注释很有帮助。
 
 这是一个简单的注释：
 
@@ -11,7 +10,7 @@
 // hello, world
 ```
 
-在 Rust 中，惯用的注释样式是以两个斜杠开始注释，并持续到本行的结尾。对于超过一行的注释，需要在每一行前都加上 `//`，像这样：
+在 Rust 中，惯用的注释风格是用两个斜杠开始一条注释，并让注释持续到该行末尾。对于跨越多行的注释，你需要在每一行前面都加上 `//`，像这样：
 
 ```rust
 // So we’re doing something complicated here, long enough that we need
@@ -27,7 +26,7 @@
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-24-comments-end-of-line/src/main.rs}}
 ```
 
-不过你更经常看到的是以这种格式使用它们，也就是位于它所解释的代码行的上面一行：
+不过，你更常见到的用法是把注释放在它所解释的代码上一行，像这样：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -35,6 +34,6 @@
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}
 ```
 
-Rust 还有另一种注释，称为文档注释，我们将在 14 章的 [“将 crate 发布到 Crates.io” ][publishing]部分讨论它。
+Rust 还有另一种注释，叫作文档注释，我们会在第十四章的[“将 crate 发布到 Crates.io”][publishing]部分讨论它。
 
 [publishing]: ch14-02-publishing-to-crates-io.html
