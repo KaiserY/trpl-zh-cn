@@ -400,7 +400,7 @@ let guess: u32 = guess.trim().parse().expect("Please type a number!");
 
 另外，程序中的 `u32` 注解以及与 `secret_number` 的比较，意味着 Rust 会推断出 `secret_number` 也是 `u32` 类型。现在可以使用相同类型比较两个值了！
 
-`parse` 方法只会在字符逻辑上确实可以转换为数字时才成功，因此很容易失败。例如，如果字符串里包含 `A👍%`，那就根本不可能把它转换成数字。正因如此，`parse` 方法会返回一个 `Result` 类型，就像前面在 [“使用 `Result` 类型来处理潜在的错误”](#handling-potential-failure-with-the-result-type) 中讨论过的 `read_line` 方法一样。这里我们再次使用 `expect` 方法来处理它。如果 `parse` 无法从字符串中生成数字，并返回 `Result` 的 `Err` 成员，`expect` 就会让游戏崩溃，并打印我们提供的消息。如果 `parse` 成功把字符串转换为数字，它就会返回 `Result` 的 `Ok` 成员，而 `expect` 会把 `Ok` 里保存的数字返回给我们。
+`parse` 方法只会在字符逻辑上确实可以转换为数字时才成功，因此很容易失败。例如，如果字符串里包含 `A👍%`，那就根本不可能把它转换成数字。正因如此，`parse` 方法会返回一个 `Result` 类型，就像前面在 [“使用 `Result` 类型来处理潜在的错误”](#使用-result-类型来处理潜在的错误) 中讨论过的 `read_line` 方法一样。这里我们再次使用 `expect` 方法来处理它。如果 `parse` 无法从字符串中生成数字，并返回 `Result` 的 `Err` 成员，`expect` 就会让游戏崩溃，并打印我们提供的消息。如果 `parse` 成功把字符串转换为数字，它就会返回 `Result` 的 `Ok` 成员，而 `expect` 会把 `Ok` 里保存的数字返回给我们。
 
 现在让我们运行程序！
 
