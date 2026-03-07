@@ -1,7 +1,6 @@
 # 编写一个猜数字游戏
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch02-00-guessing-game-tutorial.md -->
-<!-- commit 6dd246c12a5c732c427e53a51e25a0e1d6797a14 -->
+[ch02-00-guessing-game-tutorial.md](https://github.com/rust-lang/book/blob/95dd8a023b2c736d12377a713bb6b8ed77e48678/src/ch02-00-guessing-game-tutorial.md)
 
 让我们一起动手完成一个项目来快速上手 Rust！本章将介绍一些 Rust 中常见的概念，并通过真实的程序来展示如何运用它们。你将会学到 `let`、`match`、方法（methods）、关联函数（associated functions）、外部 crate 等知识！后续章节会深入探讨这些概念的细节。在这一章，我们将主要练习基础内容。
 
@@ -16,7 +15,7 @@ $ cargo new guessing_game
 $ cd guessing_game
 ```
 
-第一个命令，`cargo new`，它获取项目的名称（`guessing_game`）作为第一个参数。第二个命令进入到新创建的项目目录。
+第一条命令 `cargo new` 将项目名称（`guessing_game`）作为第一个参数。第二条命令则进入新创建的项目目录。
 
 看看生成的 _Cargo.toml_ 文件：
 
@@ -60,15 +59,15 @@ $ cd guessing_game
 
 </figure>
 
-这些代码包含很多信息，我们一行一行地讲解。为了获取用户输入并打印结果作为输出，我们需要将 `io` 输入/输出库引入当前作用域。`io` 库来自于标准库，也被称为 `std`：
+这些代码包含很多信息，我们一行一行地讲解。为了获取用户输入并将结果打印为输出，我们需要把输入/输出库 `io` 引入当前作用域。`io` 库来自标准库，也被称为 `std`：
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:io}}
 ```
 
-默认情况下，Rust 设定了若干个会自动导入到每个程序作用域中的标准库内容，这组内容被称为 *预导入（prelude）* 内容。你可以在[标准库文档][prelude]中查看预导入的所有内容。
+默认情况下，Rust 会把标准库中的一组内容自动带入每个程序的作用域，这组内容被称为 *预导入（prelude）*。你可以在[标准库文档][prelude]中查看 prelude 里都有哪些内容。
 
-如果你需要的类型不在预导入内容中，就必须使用 `use` 语句显式地将其引入作用域。`std::io` 库提供很多有用的功能，包括接收用户输入的功能。
+如果你需要的类型不在 prelude 中，就必须使用 `use` 语句显式地将其引入作用域。`std::io` 库提供了许多有用的功能，其中包括接收用户输入。
 
 如第一章所提及，`main` 函数是程序的入口点：
 
@@ -131,7 +130,7 @@ let mut bananas = 5; // 可变
 
 ### 使用 `Result` 类型来处理潜在的错误
 
-我们还没有完全分析完这行代码。虽然我们已经讲到了第三行代码，但要注意：它仍是逻辑行（虽然换行了但仍是语句）的一部分。后一部分是这个方法（method）：
+我们还没有完全分析完这行代码。虽然我们已经讲到了第三行文本，但要注意：它仍然属于同一条逻辑代码。接下来的部分是这个方法（method）：
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:expect}}
@@ -143,7 +142,7 @@ let mut bananas = 5; // 可变
 io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```
 
-不过，过长的代码行难以阅读，所以最好拆开来写。通常来说，当使用 `.method_name()` 语法调用方法时引入换行符和空格将长的代码行拆开是明智的。现在来看看这行代码干了什么。
+不过，过长的代码行难以阅读，所以最好拆开来写。通常来说，当使用 `.method_name()` 语法调用方法时，适当加入换行和空白来拆分长代码行是很明智的。现在来看看这行代码到底做了什么。
 
 之前提到了 `read_line` 会将用户输入附加到传递给它的字符串中，不过它也会返回一个类型为 `Result` 的值。[`Result`][result]<!-- ignore --> 是一种[*枚举类型*][enums]<!-- ignore -->，通常也写作 *enum*，它可以是多种可能状态中的一个。我们把每种可能的状态称为一种 **枚举成员**（*variant*）。
 
@@ -205,9 +204,9 @@ You guessed: 6
 
 ### 使用 crate 来增加更多功能
 
-记住，crate 是一组 Rust 源代码文件。我们正在构建的项目是一个 *二进制 crate*，它生成一个可执行文件。 `rand` crate 是一个 *库 crate*，库 crate 可以包含任意能被其他程序使用的代码，但是无法独立执行。
+记住，crate 是一组 Rust 源代码文件。我们正在构建的项目是一个 *二进制 crate*，它会生成一个可执行文件。`rand` crate 则是一个 *库 crate*，库 crate 可以包含任意能被其他程序使用的代码，但不能独立执行。
 
-Cargo 对外部 crate 的运用是其真正的亮点所在。在我们使用 `rand` 编写代码之前，需要修改 *Cargo.toml* 文件，引入一个 `rand` 依赖。现在打开这个文件并将下面这一行添加到 `[dependencies]` section 标题之下。在当前版本下，请确保按照我们这里的方式指定 `rand`，否则本教程中的示例代码可能无法工作。
+Cargo 在管理外部 crate 方面的能力正是其真正大放异彩的地方。在我们使用 `rand` 编写代码之前，需要修改 *Cargo.toml* 文件，把 `rand` 加为一个依赖。现在打开这个文件，并将下面这一行添加到 `[dependencies]` section 标题之下。在当前版本下，请务必按这里的方式指定 `rand`，否则本教程中的示例代码可能无法运行。
 
 <span class="filename">文件名：Cargo.toml</span>
 
@@ -215,9 +214,9 @@ Cargo 对外部 crate 的运用是其真正的亮点所在。在我们使用 `ra
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:8:}}
 ```
 
-在 _Cargo.toml_ 文件中，标题以及之后的内容属同一个 section，直到遇到下一个标题才开始新的 section。`[dependencies]` section 告诉 Cargo 本项目依赖了哪些外部 crate 及其版本。本例中，我们使用语义化版本 `0.8.5` 来指定 `rand` crate。Cargo 理解 [语义化版本（Semantic Versioning）][semver]<!-- ignore -->（有时也称为 _SemVer_），这是一种定义版本号的标准。`0.8.5` 事实上是 `^0.8.5` 的简写，它表示任何至少是 `0.8.5` 但小于 `0.9.0` 的版本。
+在 _Cargo.toml_ 文件中，一个标题以及其后的内容都属于同一个 section，直到出现下一个标题才会开始新的 section。`[dependencies]` section 用来告诉 Cargo：这个项目依赖哪些外部 crate，以及它们的版本要求。在本例中，我们使用语义化版本 `0.8.5` 来指定 `rand` crate。Cargo 理解 [语义化版本（Semantic Versioning）][semver]<!-- ignore -->，也常简称为 _SemVer_，它是一种编写版本号的标准。`0.8.5` 实际上是 `^0.8.5` 的简写，表示任何至少为 `0.8.5` 但小于 `0.9.0` 的版本。
 
-Cargo 认为这些版本与 `0.8.5` 版本的公有 API 相兼容，这样的版本指定确保了我们可以获取能使本章代码编译的最新的补丁（patch）版本。任何大于等于 `0.9.0` 的版本不能保证和接下来的示例采用了相同的 API。
+Cargo 认为这些版本与 `0.8.5` 的公开 API 兼容，因此这样的版本约束可以确保我们获得仍能编译本章代码的最新补丁（patch）版本。任何大于等于 `0.9.0` 的版本，都不能保证仍然使用与后续示例相同的 API。
 
 现在，不修改任何代码，构建项目，如示例 2-2 所示。
 
@@ -270,9 +269,9 @@ $ cargo build
 
 #### _Cargo.lock_ 文件确保可重现构建
 
-Cargo 有一个机制，确保无论是你还是其他人在任何时候重新构建代码，都会生成相同的构建产物：Cargo 只会使用你指定的依赖版本，除非你明确指定其他版本。例如，如果下周 `rand` crate 的 `0.8.6` 版本出来了，该版本包含了一个重要的 bug 修复，但同时也引入了一个会破坏你代码的回归问题。为了解决这个问题，Rust 在你第一次运行 `cargo build` 时创建了 *Cargo.lock* 文件，我们现在可以在 *guessing_game* 目录找到它。
+Cargo 有一个机制，可以确保无论是你还是其他人在任何时候重新构建代码，都会得到相同的构建产物：Cargo 只会使用已经确定下来的依赖版本，除非你明确要求它更新。例如，假设下周 `rand` crate 发布了 `0.8.6` 版本，其中修复了一个重要 bug，但同时也引入了一个会破坏你代码的回归问题。为了解决这类问题，Cargo 会在你第一次运行 `cargo build` 时创建 *Cargo.lock* 文件，我们现在就能在 *guessing_game* 目录中看到它。
 
-当第一次构建项目时，Cargo 计算出所有符合要求的依赖版本并写入 *Cargo.lock* 文件。当将来构建项目时，Cargo 会发现 *Cargo.lock* 已存在并使用其中指定的版本，而不是再次计算所有的版本。这使得你拥有了一个自动化的可重现构建（reproducible build）。换句话说，项目会持续使用 `0.8.5` 直到你显式升级，多亏有了 *Cargo.lock* 文件。由于 *Cargo.lock* 文件对于可重现构建非常重要，因此它通常会和项目中的其余代码一样提交到版本控制系统中。
+当你第一次构建项目时，Cargo 会计算出所有符合要求的依赖版本，并把它们写入 *Cargo.lock* 文件。之后再次构建项目时，Cargo 会发现 *Cargo.lock* 已经存在，于是直接使用其中记录的版本，而不是重新计算一遍。这就让你自动拥有了可重现构建（reproducible build）。换句话说，项目会一直停留在 `0.8.5`，直到你显式升级它，这都要归功于 *Cargo.lock* 文件。由于 *Cargo.lock* 对可重现构建非常重要，所以它通常会和项目中的其余代码一起提交到版本控制系统中。
 
 #### 更新 crate 到一个新版本
 
