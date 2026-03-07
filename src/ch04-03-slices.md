@@ -1,21 +1,20 @@
 ## Slice 类型
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch04-03-slices.md -->
-<!-- commit f8ed2ced5daaa26e2b3a69df4bf5e1ce04dda758 -->
+[ch04-03-slices.md](https://github.com/rust-lang/book/blob/8a6130451b0817ead5c2522ce641dcb0f11a8571/src/ch04-03-slices.md)
 
 **切片**（*slice*）允许你引用集合中一段连续的元素序列，而不用引用整个集合。slice 是一种引用，所以它不拥有所有权。
 
-这里有一个编程小习题：编写一个函数，该函数接收一个用空格分隔单词的字符串，并返回在该字符串中找到的第一个单词。如果函数在该字符串中并未找到空格，则整个字符串就是一个单词，所以应该返回整个字符串。
+这里有一个编程小习题：编写一个函数，接收一个由空格分隔单词的字符串，并返回它在该字符串中找到的第一个单词。如果函数在该字符串中没有找到空格，那么整个字符串就是一个单词，因此应该返回整个字符串。
 
-> 注意：出于介绍字符串 slice 的目的，本小节假设只使用 ASCII 字符集；一个关于 UTF-8 处理的更全面的讨论位于第八章[“使用字符串储存 UTF-8 编码的文本”][strings]小节。
+> 注意：为了介绍字符串 slice，本小节假设只处理 ASCII；关于 UTF-8 处理的更完整讨论，请见第八章的[“使用字符串储存 UTF-8 编码的文本”][strings]一节。
 
-让我们推敲下如何不用 slice 编写这个函数的签名，来理解 slice 能解决的问题：
+让我们先想想，如果不用 slice，该怎样写这个函数的签名，从而理解 slice 解决了什么问题：
 
 ```rust,ignore
 fn first_word(s: &String) -> ?
 ```
 
-`first_word` 函数有一个参数 `&String`。因为我们不需要所有权，所以这没有问题。不过应该返回什么呢？我们并没有一个真正获取**部分**字符串的办法。不过，我们可以返回单词结尾的索引，结尾由一个空格表示。试试如示例 4-7 中的代码。
+`first_word` 函数有一个 `&String` 类型的参数。因为我们不需要所有权，所以这没有问题。不过应该返回什么呢？我们其实没有办法真正表示字符串的**一部分**。不过，我们可以返回单词结尾的索引，也就是空格所在的位置。试试示例 4-7 中的代码。
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -25,7 +24,7 @@ fn first_word(s: &String) -> ?
 
 <span class="caption">示例 4-7：`first_word` 函数返回 `String` 参数的一个字节索引值</span>
 
-因为需要逐个元素的检查 `String` 中的值是否为空格，需要用 `as_bytes` 方法将 `String` 转化为字节数组。
+因为我们需要逐个检查 `String` 中的元素是否为空格，所以要用 `as_bytes` 方法把 `String` 转换成字节数组。
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:as_bytes}}
@@ -37,9 +36,9 @@ fn first_word(s: &String) -> ?
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:iter}}
 ```
 
-我们将在[第十三章][ch13]详细讨论迭代器。现在，只需知道 `iter` 方法返回集合中的每一个元素，而 `enumerate` 包装了 `iter` 的结果，将这些元素作为元组的一部分来返回。`enumerate` 返回的元组中，第一个元素是索引，第二个元素是集合中元素的引用。这比我们自己计算索引要方便一些。
+我们会在[第十三章][ch13]更详细地讨论迭代器。现在只需要知道，`iter` 方法会返回集合中的每个元素，而 `enumerate` 会包装 `iter` 的结果，把每个元素作为元组的一部分返回。`enumerate` 返回的元组中，第一个元素是索引，第二个元素是该元素的引用。这比我们自己手动计算索引更方便一些。
 
-因为 `enumerate` 方法返回一个元组，我们可以使用模式来解构，我们将在[第六章][ch6]中进一步讨论有关模式的问题。所以在 `for` 循环中，我们指定了一个模式，其中元组中的 `i` 是索引而元组中的 `&item` 是单个字节。因为我们从 `.iter().enumerate()` 中获取了集合元素的引用，所以模式中使用了 `&`。
+因为 `enumerate` 方法返回的是元组，所以我们可以用模式来解构它；我们会在[第六章][ch6]进一步讨论模式。因此，在 `for` 循环中，我们指定了一个模式，其中元组里的 `i` 是索引，元组里的 `&item` 是单个字节。因为我们从 `.iter().enumerate()` 拿到的是元素的引用，所以模式中用了 `&`。
 
 在 `for` 循环中，我们通过字节的字面值语法来寻找代表空格的字节。如果找到了一个空格，返回它的位置。否则，使用 `s.len()` 返回字符串的长度。
 
@@ -57,7 +56,7 @@ fn first_word(s: &String) -> ?
 
 <span class="caption">示例 4-8：存储 `first_word` 函数调用的返回值并接着改变 `String` 的内容</span>
 
-这个程序编译时没有任何错误，而且在调用 `s.clear()` 之后使用 `word` 也不会出错。因为 `word` 与 `s` 状态完全没有联系，所以 `word ` 仍然包含值 `5`。可以尝试用值 `5` 来提取变量 `s` 的第一个单词，不过这是有 bug 的，因为在我们将 `5` 保存到 `word` 之后 `s` 的内容已经改变。
+这个程序编译时不会报任何错误，而且即使在调用 `s.clear()` 之后再使用 `word`，也同样不会报错。因为 `word` 和 `s` 的状态完全没有关联，所以 `word` 仍然包含值 `5`。我们可以尝试用这个值 `5` 从变量 `s` 中提取第一个单词，但这会出 bug，因为在把 `5` 保存进 `word` 之后，`s` 的内容已经变了。
 
 我们不得不时刻担心 `word` 的索引与 `s` 中的数据不再同步，这既繁琐又易出错！如果编写这么一个 `second_word` 函数的话，管理索引这件事将更加容易出问题。它的签名看起来像这样：
 
@@ -79,7 +78,7 @@ fn second_word(s: &String) -> (usize, usize) {
 
 不同于整个 `String` 的引用，`hello` 是一个部分 `String` 的引用，由一个额外的 `[0..5]` 部分指定。可以使用一个由中括号中的 `[starting_index..ending_index]` 指定的 range 创建一个 slice，其中 `starting_index` 是 slice 的第一个位置，`ending_index` 则是 slice 最后一个位置的后一个值。在其内部，slice 的数据结构存储了 slice 的开始位置和长度，长度对应于 `ending_index` 减去 `starting_index` 的值。所以对于 `let world = &s[6..11];` 的情况，`world` 将是一个包含指向 `s` 索引 6 的指针和长度值 5 的 slice。
 
-图 4-7 展示了一个图例。
+图 4-7 给出了示意图。
 
 <img alt="Three tables: a table representing the stack data of s, which points
 to the byte at index 0 in a table of the string data &quot;hello world&quot; on
@@ -122,7 +121,7 @@ let slice = &s[..];
 
 > 注意：字符串 slice range 的索引必须位于有效的 UTF-8 字符边界内，如果尝试从一个多字节字符的中间位置创建字符串 slice，则程序将会因错误而退出。
 
-在记住所有这些知识后，让我们重写 `first_word` 来返回一个 slice。“字符串 slice” 的类型声明写作 `&str`：
+有了这些知识之后，让我们重写 `first_word`，让它返回一个 slice。“字符串 slice” 的类型写作 `&str`：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -132,7 +131,7 @@ let slice = &s[..];
 
 我们使用跟示例 4-7 相同的方式获取单词结尾的索引，通过寻找第一个出现的空格。当找到一个空格，我们返回一个字符串 slice，它使用字符串的开始和空格的索引作为开始和结束的索引。
 
-现在当调用 `first_word` 时，会返回与底层数据关联的单个值。这个值由一个 slice 开始位置的引用和 slice 中元素的数量组成。
+现在调用 `first_word` 时，它会返回一个与底层数据绑定在一起的值。这个值由一个指向 slice 起始位置的引用和 slice 中元素的数量组成。
 
 `second_word` 函数也可以改为返回一个 slice：
 
@@ -140,7 +139,7 @@ let slice = &s[..];
 fn second_word(s: &String) -> &str {
 ```
 
-现在我们有了一个不易混淆且直观的 API 了，因为编译器会确保指向 `String` 的引用持续有效。还记得示例 4-8 程序中，那个当我们获取第一个单词结尾的索引后，接着就清除了字符串导致索引就无效的 bug 吗？那些代码在逻辑上是不正确的，但却没有显示任何直接的错误。问题会在之后尝试对空字符串使用第一个单词的索引时出现。slice 就不可能出现这种 bug 并让我们更早的知道出问题了。使用 slice 版本的 `first_word` 会抛出一个编译时错误：
+现在我们有了一个更直观、也更不容易出错的 API，因为编译器会确保指向 `String` 的引用始终有效。还记得示例 4-8 里的那个 bug 吗？我们先拿到了第一个单词结尾的索引，然后又清空了字符串，于是索引失效了。那段代码在逻辑上是错的，但当时却不会直接报错。问题会在之后你尝试对一个已被清空的字符串继续使用那个索引时才暴露出来。slice 让这种 bug 不再可能发生，并且会更早告诉我们代码出了问题。使用 slice 版本的 `first_word` 会得到一个编译时错误：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -182,7 +181,7 @@ fn first_word(s: &String) -> &str {
 
 <span class="caption">示例 4-9: 通过将 `s` 参数的类型改为字符串 slice 来改进 `first_word` 函数</span>
 
-如果有一个字符串 slice，可以直接传递它。如果有一个 `String`，则可以传递整个 `String` 的 slice 或对 `String` 的引用。这种灵活性利用了 *deref coercions* 的优势，这个特性我们将在[“函数和方法的隐式 Deref 强制转换”][deref-coercions]章节中介绍。定义一个获取字符串 slice 而不是 `String` 引用的函数使得我们的 API 更加通用并且不会丢失任何功能：
+如果我们有一个字符串 slice，就可以直接把它传进去。如果我们有一个 `String`，也可以传入整个 `String` 的 slice，或者传入对 `String` 的引用。这种灵活性利用了 *deref coercions*，也就是我们会在[“在函数和方法中使用 Deref 强制转换”][deref-coercions]一节中讲到的特性。把函数参数定义为字符串 slice，而不是 `String` 的引用，会让我们的 API 更通用、更有用，而且不会损失任何功能：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -219,4 +218,4 @@ assert_eq!(slice, &[2, 3]);
 [ch13]: ch13-02-iterators.html
 [ch6]: ch06-02-match.html#绑定值的模式
 [strings]: ch08-02-strings.html#使用字符串储存-utf-8-编码的文本
-[deref-coercions]: ch15-02-deref.html#函数和方法的隐式-deref-强制转换
+[deref-coercions]: ch15-02-deref.html#在函数和方法中使用-deref-强制转换

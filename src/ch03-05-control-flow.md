@@ -252,5 +252,5 @@ again!
 
 当你准备好继续时，我们将讨论一个在其他编程语言中**并不**常见的概念：所有权（ownership）。
 
-[comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
-[quitting-after-a-correct-guess]: ch02-00-guessing-game-tutorial.html#quitting-after-a-correct-guess
+[comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.html#比较猜测的数字和秘密数字
+[quitting-after-a-correct-guess]: ch02-00-guessing-game-tutorial.html#猜测正确后退出

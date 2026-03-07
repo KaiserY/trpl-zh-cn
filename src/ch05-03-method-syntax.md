@@ -1,4 +1,4 @@
-## 方法语法
+## 方法
 
 <!-- https://github.com/rust-lang/book/blob/main/src/ch05-03-method-syntax.md -->
 <!-- commit 6b65e9500535f85fad186c6f0e67a927863e454d -->
