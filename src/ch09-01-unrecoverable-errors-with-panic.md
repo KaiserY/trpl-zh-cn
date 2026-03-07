@@ -1,9 +1,8 @@
 ## 用 `panic!` 处理不可恢复的错误
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch09-01-unrecoverable-errors-with-panic.md -->
-<!-- commit dac5234891dbdbf88ea2d4e35e80a8ba8b67e48c -->
+[ch09-01-unrecoverable-errors-with-panic.md](https://github.com/rust-lang/book/blob/d46785983db2d2f94ca3d571db2cfbad0f5ad3e6/src/ch09-01-unrecoverable-errors-with-panic.md)
 
-突然有一天，代码出问题了，而你对此束手无策。对于这种情况，Rust 有 `panic!`宏。在实践中有两种方法造成 panic：执行会造成代码 panic 的操作（比如访问超过数组结尾的内容）或者显式调用 `panic!` 宏。这两种情况都会使程序 panic。通常情况下这些 panic 会打印出一个错误信息，展开并清理栈数据，然后退出。通过一个环境变量，你也可以让 Rust 在 panic 发生时打印调用堆栈（call stack）以便于定位 panic 的原因。
+有时，你的代码里会发生一些糟糕的事情，而且你对此无能为力。在这种情况下，Rust 提供了 `panic!` 宏。实际中有两种方式会导致 panic：一种是执行了会让代码 panic 的操作，比如访问超出数组结尾的位置；另一种是显式调用 `panic!` 宏。这两种情况都会让程序 panic。默认情况下，这些 panic 会打印失败信息、展开栈、清理栈数据，然后退出。你还可以通过环境变量，让 Rust 在 panic 发生时显示调用栈（call stack），以便更容易追踪 panic 的来源。
 
 > ### 响应 panic 时的栈展开或终止
 >
@@ -36,8 +35,7 @@
 
 ### 使用 `panic!` 的 backtrace
 
-
-我们可以使用 `panic!` 被调用的函数的 backtrace 来寻找代码中出问题的地方。下面我们会详细介绍 backtrace 是什么。为了了解如何使用 `panic!` 的 backtrace，让我们来看另一个示例，我们代码中的 bug 引起的别的库中 `panic!` 的例子，而不是直接的宏调用看起来如何。示例 9-1 有一些尝试通过索引访问 vector 中超出有效范围元素的例子：
+我们可以利用触发 `panic!` 的函数 backtrace，找出代码里到底是哪一部分出了问题。为了理解如何使用 `panic!` 的 backtrace，让我们再看一个例子：这次 `panic!` 调用不是来自我们直接调用宏，而是因为我们代码里的 bug 触发了库中的 `panic!`。示例 9-1 展示了一段尝试访问 vector 有效索引范围之外元素的代码：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -49,7 +47,7 @@
 
 这里尝试访问 vector 的第 100 个元素（这里的索引是 99 因为索引从 0 开始），不过它只有三个元素。这种情况下 Rust 会 panic。`[]` 应当返回一个元素，不过如果传递了一个无效索引，就没有可供 Rust 返回的正确元素。
 
-C 语言中，尝试读取数据结构之后的值是未定义行为（undefined behavior）。你会得到任何对应数据结构中这个元素的内存位置的值，甚至是这些内存并不属于这个数据结构的情况。这被称为 **缓存区过读**（*buffer overread*），并可能会导致安全漏洞，比如攻击者可以像这样操作索引来读取储存在数据结构之后未经授权的数据。
+C 语言中，尝试读取数据结构末尾之后的内容属于未定义行为（undefined behavior）。你可能会读到数据结构中对应那个位置的内存里的任意值，即使那块内存根本不属于这个数据结构。这被称为**缓冲区过读**（*buffer overread*），并可能导致安全漏洞；例如，攻击者也许能通过操纵索引，读取本不该被读取、但恰好存储在该数据结构之后的数据。
 
 为了保护程序不受此类漏洞的影响，如果尝试读取一个索引不存在的元素，Rust 会停止执行并拒绝继续。让我们来试一试，看看结果：
 
@@ -57,10 +55,10 @@ C 语言中，尝试读取数据结构之后的值是未定义行为（undefined
 {{#include ../listings/ch09-error-handling/listing-09-01/output.txt}}
 ```
 
-错误指向 *main.rs* 的第 4 行，这里我们试图访问向量 `v` 中的索引 `99`。
+这个错误指向了 *main.rs* 的第 4 行，也就是我们试图访问向量 `v` 中索引 `99` 的地方。
 
 
-`note:` 告诉我们可以设置 `RUST_BACKTRACE` 环境变量来得到一个 backtrace。*backtrace* 是一个执行到目前位置所有被调用的函数的列表。Rust 的 backtrace 跟其他语言中的一样：阅读 backtrace 的关键是从头开始读直到发现你编写的文件。这就是问题的发源地。这一行往上是你的代码所调用的代码；往下则是调用你的代码的代码。这些行可能包含核心 Rust 代码，标准库代码或用到的 crate 代码。让我们将 `RUST_BACKTRACE` 环境变量设置为任何不是 `0` 的值来获取 backtrace 看看。示例 9-2 展示了与你看到类似的输出：
+`note:` 这一行告诉我们，可以设置 `RUST_BACKTRACE` 环境变量来得到 backtrace。*backtrace* 是一份到达当前执行点之前所有被调用函数的列表。Rust 中的 backtrace 和其他语言里的工作方式一样：阅读 backtrace 的关键，是从最上面开始往下读，直到看到你自己写的文件。那一处就是问题开始的地方。它上面的那些行，是你的代码调用过的代码；下面的那些行，则是调用了你代码的代码。这些前前后后的行，可能包括 Rust 核心代码、标准库代码，或你正在使用的 crate。现在把 `RUST_BACKTRACE` 环境变量设成除 `0` 之外的任意值，来看看 backtrace。示例 9-2 展示了类似下面这样的输出：
 
 ```console
 $ RUST_BACKTRACE=1 cargo run
@@ -88,11 +86,10 @@ note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose bac
 
 <span class="caption">示例 9-2：当设置 `RUST_BACKTRACE` 环境变量时 `panic!` 调用所生成的 backtrace 信息</span>
 
-这里有大量的输出！你实际看到的输出可能因不同的操作系统和 Rust 版本而有所不同。为了获取带有这些信息的 backtrace，必须启用调试符号（debug symbols）。当不使用 `--release` 参数运行 cargo build 或 cargo run 时调试符号会默认启用，就像这里一样。
+这里的输出很多！你实际看到的内容可能会因为操作系统和 Rust 版本不同而有所区别。要获得带有这些信息的 backtrace，必须启用调试符号（debug symbols）。当像这里这样，不带 `--release` 参数运行 `cargo build` 或 `cargo run` 时，调试符号默认就是启用的。
 
 示例 9-2 的输出中，backtrace 的第 6 行指向了我们项目中造成问题的行：*src/main.rs* 的第 4 行。如果你不希望程序 panic，就应当从第一个提到我们自己编写的文件的那一行开始调查。在示例 9-1 中，我们故意编写了会导致 panic 的代码，修复这个 panic 的方法就是不要尝试在一个只包含三个项的 vector 中请求索引是 100 的元素。当将来你的代码出现了 panic，你需要搞清楚在这特定的场景下代码中执行了什么操作和什么值导致了 panic，以及应当如何处理才能避免该问题。
 
 本章后面的小节 [“要不要 panic!”][to-panic-or-not-to-panic] 会再次回到 `panic!` 并讲解何时应该、何时不应该使用 `panic!` 来处理错误情况。接下来，我们来看看如何使用 `Result` 来从错误中恢复。
 
-[to-panic-or-not-to-panic]:
-ch09-03-to-panic-or-not-to-panic.html#要不要-panic
+[to-panic-or-not-to-panic]: ch09-03-to-panic-or-not-to-panic.html#要不要-panic

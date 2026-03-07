@@ -1,7 +1,6 @@
 ## 使用 Hash Map 储存键值对
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch08-03-hash-maps.md -->
-<!-- commit 5d22a358fb2380aa3f270d7b6269b67b8e44849e -->
+[ch08-03-hash-maps.md](https://github.com/rust-lang/book/blob/2581c23b669eff30c26e036a13475ec5cf70c1b8/src/ch08-03-hash-maps.md)
 
 最后介绍的常用集合类型是**哈希 map**（*hash map*）。`HashMap<K, V>` 类型储存了一个键类型 `K` 对应一个值类型 `V` 的映射。它通过一个**哈希函数**（*hashing function*）来实现映射，决定如何将键和值放入内存中。很多编程语言支持这种数据结构，不过通常有不同的名字：**哈希**、**map**、**对象**、**哈希表**、**字典**或者**关联数组**，仅举几例。
 
@@ -48,7 +47,7 @@ Yellow: 50
 Blue: 10
 ```
 
-### 哈希 map 和所有权
+### 在哈希 map 中管理所有权
 
 对于像 `i32` 这样的实现了 `Copy` trait 的类型，其值可以拷贝进哈希 map。对于像 `String` 这样拥有所有权的值，其值将被移动而哈希 map 会成为这些值的所有者，如示例 8-22 所示：
 
@@ -60,7 +59,7 @@ Blue: 10
 
 当 `insert` 调用将 `field_name` 和 `field_value` 移动到哈希 map 中后，将不能使用这两个绑定。
 
-如果将值的引用插入哈希 map，这些值本身将不会被移动进哈希 map。但是这些引用指向的值必须至少在哈希 map 有效时也是有效的。第十章 [“生命周期确保引用有效”][validating-references-with-lifetimes] 部分将会更多的讨论这个问题。
+如果我们把对值的引用插入哈希 map，这些值本身并不会被移动进哈希 map。引用所指向的值必须至少在哈希 map 有效的那段时间里一直有效。第十章的[“生命周期确保引用有效”][validating-references-with-lifetimes]部分会更详细地讨论这个问题。
 
 ### 更新哈希 map
 
@@ -82,9 +81,9 @@ Blue: 10
 
 #### 只在键尚不存在时插入键值对
 
-我们经常会检查某个特定的键是否已经存在于哈希 map 中并进行如下操作：如果哈希 map 中键已经存在则不做任何操作；如果不存在则连同值一块插入。
+我们经常会检查某个特定的键是否已经在哈希 map 中有对应的值，然后执行如下操作：如果这个键已经存在，就让原来的值保持不变；如果这个键不存在，就插入它和它对应的值。
 
-为此哈希 map 有一个专用的 API，叫做 `entry`，它获取我们想要检查的键作为参数。`entry` 函数的返回值是一个枚举 `Entry` 它代表了可能存在也可能不存在的值。比如说我们想要检查黄队的键是否关联了一个值。如果没有，就插入值 `50`，对于蓝队也是如此。使用 `entry` API 的代码看起来如示例 8-24 所示。
+Hash map 为这种场景提供了一个特殊的 API，叫做 `entry`，它接收你想检查的键作为参数。`entry` 方法的返回值是一个名为 `Entry` 的枚举，它表示一个可能存在、也可能不存在的值。假设我们想检查黄队这个键是否已经有关联的值。如果没有，就插入值 `50`；蓝队也是同样的处理方式。使用 `entry` API 的代码如示例 8-24 所示。
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-24/src/main.rs:here}}
@@ -92,7 +91,7 @@ Blue: 10
 
 <span class="caption">示例 8-24：使用 `entry` 方法只在键没有对应一个值时插入</span>
 
-`Entry` 的 `or_insert` 方法在键对应的值存在时就返回这个值的可变引用，如果不存在则将参数作为新值插入并返回新值的可变引用。这比编写自己的逻辑要简明的多，另外也与借用检查器结合得更好。
+`Entry` 上的 `or_insert` 方法被定义为：如果对应 `Entry` 的键已经存在，就返回该值的可变引用；如果不存在，就把参数作为这个键的新值插入，并返回这个新值的可变引用。这比我们自己手写逻辑要清晰得多，而且和借用检查器的配合也更好。
 
 运行示例 8-24 的代码会打印出 `{"Yellow": 50, "Blue": 10}`。第一个 `entry` 调用会插入黄队的键和值 `50`，因为黄队并没有一个值。第二个 `entry` 调用不会改变哈希 map 因为蓝队已经有了值 `10`。
 
@@ -112,7 +111,7 @@ Blue: 10
 
 ### 哈希函数
 
-`HashMap` 默认使用一种叫做 SipHash 的哈希函数，它可以抵御涉及哈希表（hash table）[^siphash] 的拒绝服务（Denial of Service, DoS）攻击。然而这并不是可用的最快的算法，不过为了更高的安全性值得付出一些性能的代价。如果性能监测显示此哈希函数非常慢，以致于你无法接受，你可以指定一个不同的 *hasher* 来切换为其它函数。hasher 是一个实现了 `BuildHasher` trait 的类型。[第十章][traits]会讨论 trait 和如何实现它们。你并不需要从头开始实现你自己的 hasher；[crates.io](https://crates.io) 有其他人分享的实现了许多常用哈希算法的 hasher 的库。
+`HashMap` 默认使用一种叫做 SipHash 的哈希函数，它可以提供对涉及哈希表[^siphash]的拒绝服务（Denial of Service, DoS）攻击的抵抗能力。不过这不是目前可用的最快哈希算法，但为了更好的安全性而接受一些性能下降，是值得的权衡。如果你分析代码后发现默认哈希函数对你的用途来说太慢，就可以通过指定不同的 hasher 来切换到其他函数。*hasher* 是一种实现了 `BuildHasher` trait 的类型。[第十章][traits]会讨论 trait 以及如何实现它们。你不一定要从零开始自己实现 hasher；[crates.io](https://crates.io/) 上有其他 Rust 用户共享的库，它们提供了许多常见哈希算法的 hasher 实现。
 
 [^siphash]: [https://en.wikipedia.org/wiki/SipHash](https://en.wikipedia.org/wiki/SipHash)
 
