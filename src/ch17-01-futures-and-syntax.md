@@ -221,7 +221,7 @@ enum Either<A, B> {
 [futures-crate]: https://crates.io/crates/futures
 [tokio]: https://tokio.rs
 
-[impl-trait]: ch10-02-traits.html#trait-作为参数
+[impl-trait]: ch10-02-traits.html#使用-trait-作为参数
 [iterators-lazy]: ch13-02-iterators.html
 [thread-spawn]: ch16-01-threads.html#creating-a-new-thread-with-spawn
 [cli-args]: ch12-01-accepting-command-line-arguments.html

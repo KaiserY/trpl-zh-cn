@@ -1,14 +1,12 @@
 ## 控制测试如何运行
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch11-02-running-tests.md -->
-<!-- commit 3a30e4c1fbe641afc066b3af9eb01dcdf5ed8b24 -->
+[ch11-02-running-tests.md](https://github.com/rust-lang/book/blob/99071589c5358114de6324d9aa2643caeee305bd/src/ch11-02-running-tests.md)
 
 就像 `cargo run` 会编译代码并运行生成的二进制文件一样，`cargo test` 在测试模式下编译代码并运行生成的测试二进制文件。`cargo test` 产生的二进制文件的默认行为是并发运行所有的测试，并截获测试运行过程中产生的输出，阻止它们被显示出来，使得阅读测试结果相关的内容变得更容易。不过可以指定命令行参数来改变 `cargo test` 的默认行为。
 
-可以将一部分命令行参数传递给 `cargo test`，而将另外一部分传递给生成的测试二进制文件。为了分隔这两种参数，需要先列出传递给 `cargo test` 的参数，接着是分隔符 `--`，再之后是传递给测试二进制文件的参数。运行 `cargo test --help` 会提示 `cargo test` 的有关参数，而运行 `cargo test -- --help` 可以提示在分隔符之后使用的有关参数。有关这些选项的说明，请参阅 [the rustc book][rustc] 的 [“Tests” 一节][tests]。
+可以将一部分命令行参数传递给 `cargo test`，而将另外一部分传递给生成的测试二进制文件。为了分隔这两种参数，需要先列出传递给 `cargo test` 的参数，接着是分隔符 `--`，再之后是传递给测试二进制文件的参数。运行 `cargo test --help` 会显示可用于 `cargo test` 的选项，而运行 `cargo test -- --help` 会显示可用于分隔符之后的选项。有关这些选项的说明，也可以参阅 [《rustc 手册》中的 “Tests” 一节][tests]。
 
 [tests]: https://doc.rust-lang.org/rustc/tests/index.html
-[rustc]: https://doc.rust-lang.org/rustc/index.html
 
 ### 并行或顺序运行测试
 
@@ -100,7 +98,7 @@ $ cargo test -- --show-output
 
 这运行了所有名字中带有 `add` 的测试，也过滤掉了名为 `one_hundred` 的测试。同时注意测试所在的模块也是测试名称的一部分，所以可以通过过滤模块名来运行一个模块中的所有测试。
 
-### 除非特别指定否则忽略某些测试
+### 除非特别指定否则忽略测试
 
 有时一些特定的测试执行起来是非常耗费时间的，所以在大多数运行 `cargo test` 的时候希望能排除它们。虽然可以通过参数列举出所有希望运行的测试来做到，也可以使用 `ignore` 属性来标记耗时的测试并排除它们，如下所示：
 

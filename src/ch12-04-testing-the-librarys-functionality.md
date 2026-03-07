@@ -163,7 +163,7 @@ Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被
 
 [validating-references-with-lifetimes]:
 ch10-03-lifetime-syntax.html#生命周期确保引用有效
-[ch11-anatomy]: ch11-01-writing-tests.html#测试函数剖析
+[ch11-anatomy]: ch11-01-writing-tests.html#精心组织测试函数
 [ch10-lifetimes]: ch10-03-lifetime-syntax.html
 [ch3-iter]: ch03-05-control-flow.html#使用-for-遍历集合
 [ch13-iterators]: ch13-02-iterators.html

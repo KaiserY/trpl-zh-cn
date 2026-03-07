@@ -1,13 +1,12 @@
 # 编写自动化测试
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch11-00-testing.md -->
-<!-- commit 5d22a358fb2380aa3f270d7b6269b67b8e44849e -->
+[ch11-00-testing.md](https://github.com/rust-lang/book/blob/99071589c5358114de6324d9aa2643caeee305bd/src/ch11-00-testing.md)
 
-Edsger W. Dijkstra 在其 1972 年的文章《谦卑的程序员》（“The Humble Programmer”）中说到 “软件测试是证明 bug 存在的有效方法，而证明其不存在时则显得令人绝望的不足。”（“Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing their absence.”）这并不意味着我们不应尽可能地测试软件！
+Edsger W. Dijkstra 在其 1972 年的文章《谦卑的程序员》（“The Humble Programmer”）中说：“软件测试是证明 bug 存在的有效方法，而要证明 bug 不存在，它就显得远远不够。”（“Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing their absence.”）这并不意味着我们不应尽可能地做测试！
 
-程序的正确性意味着代码如我们期望的那样运行。Rust 是一个相当注重正确性的编程语言，不过正确性是一个难以证明的复杂主题。Rust 的类型系统在此问题上下了很大的功夫，不过类型系统不可能捕获所有问题。为此，Rust 包含了编写自动化软件测试的功能支持。
+程序的正确性，指的是代码在多大程度上实现了我们的预期。Rust 在设计上高度重视程序的正确性，不过正确性是一个复杂且不易证明的主题。Rust 的类型系统承担了这方面很大一部分工作，但类型系统不可能捕获所有问题。为此，Rust 提供了编写自动化软件测试的支持。
 
-假设我们可以编写一个叫做 `add_two` 的将传递给它的值加二的函数。它的签名有一个整型参数并返回一个整型值。当实现和编译这个函数时，Rust 会进行所有目前我们已经见过的类型检查和借用检查，例如，这些检查会确保我们不会传递 `String` 或无效的引用给这个函数。Rust 所**不能**检查的是这个函数是否会准确的完成我们期望的工作：返回参数加二后的值，而不是比如说参数加 10 或减 50 的值！这正是测试的用武之地。
+假设我们编写了一个叫做 `add_two` 的函数，它会把传给它的数字加上 2。这个函数的签名接受一个整数参数，并返回一个整数结果。当我们实现并编译这个函数时，Rust 会进行目前你已经见过的所有类型检查和借用检查，以确保例如我们不会向这个函数传递一个 `String` 值或无效引用。但 Rust **无法**检查这个函数是否真的精确实现了我们的意图，也就是返回“参数加 2”，而不是比如“参数加 10”或“参数减 50”！这正是测试发挥作用的地方。
 
 我们可以编写测试断言，比如说，当传递 `3` 给 `add_two` 函数时，返回值是 `5`。无论何时对代码进行修改，都可以运行测试来确保任何现存的正确行为没有被改变。
 

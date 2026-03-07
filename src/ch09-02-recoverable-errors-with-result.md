@@ -1,7 +1,6 @@
 ## 用 `Result` 处理可恢复的错误
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch09-02-recoverable-errors-with-result.md -->
-<!-- commit 5d22a358fb2380aa3f270d7b6269b67b8e44849e -->
+[ch09-02-recoverable-errors-with-result.md](https://github.com/rust-lang/book/blob/13e27c4a35705c4bd473bd90a3d3a8f87ef9ae58/src/ch09-02-recoverable-errors-with-result.md)
 
 大部分错误并没有严重到需要程序完全停止执行。有时函数失败的原因很容易理解并加以处理。例如，如果因为打开一个并不存在的文件而失败，此时我们可能想要创建这个文件，而不是终止进程。
 
@@ -93,7 +92,7 @@ enum Result<T, E> {
 >
 > 虽然这段代码有着如示例 9-5 一样的行为，但并没有包含任何 `match` 表达式且更容易阅读。在阅读完第十三章后再回到这个例子，并查看标准库文档 `unwrap_or_else` 方法都做了什么操作。在处理错误时，还有很多这类方法可以消除大量嵌套的 `match` 表达式。
 
-### 失败时 panic 的快捷方式：`unwrap` 和 `expect`
+#### 失败时 panic 的快捷方式
 
 `match` 能够胜任它的工作，不过它可能有点冗长并且不总是能很好的表明其意图。`Result<T, E>` 类型定义了很多辅助方法来处理各种更为特定的任务。`unwrap` 方法是一个快捷方式，其内部实现与我们在 Listing 9-4 中编写的 `match` 表达式相同。如果 `Result` 值是变体 `Ok`，`unwrap` 会返回 `Ok` 中的值。如果 `Result` 是变体 `Err`，`unwrap` 会为我们调用 `panic!`。这里是一个实践 `unwrap` 的例子：
 
@@ -152,9 +151,9 @@ hello.txt should be included in this project: Os { code: 2, kind: NotFound, mess
 
 调用这个函数的代码最终会得到一个包含用户名的 `Ok` 值，或者一个包含 `io::Error` 的 `Err` 值。我们无从得知调用者会如何处理这些值。例如，如果他们得到了一个 `Err` 值，他们可能会选择 `panic!` 并使程序崩溃、使用一个默认的用户名或者从文件之外的地方寻找用户名。我们没有足够的信息知晓调用者具体会如何尝试，所以将所有的成功或失败信息向上传播，让他们选择合适的处理方法。
 
-这种传播错误的模式在 Rust 是如此的常见，以至于 Rust 提供了 `?` 问号运算符来来简化这一过程。
+这种传播错误的模式在 Rust 中太常见了，因此 Rust 提供了问号运算符 `?` 来简化这一过程。
 
-### 传播错误的快捷方式：`?` 运算符
+#### `?` 运算符快捷方式
 
 示例 9-7 展示了一个 `read_username_from_file` 的实现，它实现了与示例 9-6 中的代码相同的功能，不过这个实现使用了 `?` 运算符：
 
@@ -166,9 +165,9 @@ hello.txt should be included in this project: Os { code: 2, kind: NotFound, mess
 
 <span class="caption">示例 9-7：一个使用 `?` 运算符向调用者返回错误的函数</span>
 
-`Result` 值之后的 `?` 被定义为与示例 9-6 中定义的处理 `Result` 值的 `match` 表达式有着几乎完全相同的工作方式。如果 `Result` 的值是 `Ok`，这个表达式将会返回 `Ok` 中的值而程序将继续执行。如果值是 `Err`，`Err` 将作为整个函数的返回值，就好像使用了 `return` 关键字一样，这样错误值就被传播给了调用者。
+放在 `Result` 值后面的 `?`，其定义的工作方式与我们在示例 9-6 中编写的处理 `Result` 值的 `match` 表达式几乎完全相同。如果 `Result` 的值是 `Ok`，这个表达式就会返回 `Ok` 中的值，程序继续执行。如果值是 `Err`，`Err` 就会像使用了 `return` 关键字一样，作为整个函数的返回值提前返回，这样错误值就被传播给了调用者。
 
-示例 9-6 中的 `match` 表达式与 `?` 运算符所做的有一点不同：`?` 运算符所使用的错误值被传递给了 `from` 函数，它定义于标准库的 `From` trait 中，其用来将错误从一种类型转换为另一种类型。当 `?` 运算符调用 `from` 函数时，收到的错误类型被转换为由当前函数返回类型所指定的错误类型。这在当函数返回单个错误类型来代表所有可能失败的方式时很有用，即使其可能会因很多种原因失败。
+示例 9-6 中的 `match` 表达式和 `?` 运算符还有一点不同：被 `?` 作用的错误值会经过 `from` 函数。这个函数定义在标准库的 `From` trait 中，用于把一种类型的值转换成另一种类型。当 `?` 运算符调用 `from` 函数时，接收到的错误类型会被转换成当前函数返回类型里定义的错误类型。当一个函数用单一错误类型来表示它所有可能的失败方式时，这会非常有用，即使函数内部的不同部分可能会因为很多不同的原因而失败。
 
 例如，我们可以将示例 9-7 中的 `read_username_from_file` 函数修改为返回一个自定义的 `OurError` 错误类型。如果我们也定义了 `impl From<io::Error> for OurError` 来从 `io::Error` 构造一个 `OurError` 实例，那么 `read_username_from_file` 函数体中的 `?` 运算符调用会调用 `from` 并转换错误而无需在函数中增加任何额外的代码。
 
@@ -246,7 +245,7 @@ hello.txt should be included in this project: Os { code: 2, kind: NotFound, mess
 
 <span class="caption">示例 9-12: 修改 `main` 返回 `Result<(), E>` 允许对 `Result` 值使用 `?` 运算符</span>
 
-`Box<dyn Error>` 类型是一个**trait 对象**（*trait object*），这在第十八章[顾及不同类型值的 trait 对象”][trait-objects] 部分会做介绍。目前可以将 `Box<dyn Error>` 理解为 “任何类型的错误”。在返回 `Box<dyn Error>` 错误类型的 `main` 函数中对 `Result` 使用 `?` 是被允许的，因为它允许任何 `Err` 值提前返回。即便 `main` 函数体从来只会返回 `std::io::Error` 错误类型，通过指定 `Box<dyn Error>`，这个签名也仍是正确的，甚至当 `main` 函数体中增加更多返回其他错误类型的代码，这个函数签名依然保持正确。
+`Box<dyn Error>` 类型是一个**trait 对象**（*trait object*），第十八章的[“顾及不同类型值的 trait 对象”][trait-objects]部分会介绍它。现在可以把 `Box<dyn Error>` 理解为“任何类型的错误”。在返回错误类型 `Box<dyn Error>` 的 `main` 函数中，对 `Result` 使用 `?` 是被允许的，因为它允许任何 `Err` 值提前返回。即便 `main` 函数体现在只会返回 `std::io::Error` 错误类型，通过指定 `Box<dyn Error>`，这个签名仍然是正确的；即使以后在 `main` 函数体中加入返回其他错误类型的代码，这个函数签名依然保持正确。
 
 当 `main` 函数返回 `Result<(), E>`，如果 `main` 返回 `Ok(())` 可执行程序会以 `0` 值退出，而如果 `main` 返回 `Err` 值则会以非零值退出；成功退出的程序会返回整数 `0`，运行错误的程序会返回非 `0` 的整数。Rust 也会从二进制程序中返回与这个惯例相兼容的整数。
 

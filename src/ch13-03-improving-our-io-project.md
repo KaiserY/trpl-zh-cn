@@ -107,4 +107,4 @@ I/O 项目中其他可以利用迭代器的地方是 `search` 函数，示例 13
 
 不过这两种实现真的完全等价吗？直觉上的假设是更底层的循环会更快一些。让我们聊聊性能吧。
 
-[impl-trait]: ch10-02-traits.html#trait-作为参数
+[impl-trait]: ch10-02-traits.html#使用-trait-作为参数
