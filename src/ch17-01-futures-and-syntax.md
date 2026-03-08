@@ -1,25 +1,24 @@
-## Futures 和 async 语法
+## Future 与 async 语法
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch17-01-futures-and-syntax.md -->
-<!-- commit a6b375b6d2dd1d608cfa2c0af753f357b6056c23 -->
+[ch17-01-futures-and-syntax.md](https://github.com/rust-lang/book/blob/0d5a0dd395aba1f82d7e5aaf6dbb59b2b843ad2c/src/ch17-01-futures-and-syntax.md)
 
 Rust 异步编程的关键元素是 *futures* 和 Rust 的 `async` 与 `await` 关键字。
 
-*future* 是一个现在可能还没有准备好但将在未来某个时刻准备好的值。（相同的概念也出现在很多语言中，有时被称为 “task” 或者 “promise”。）Rust 提供了 `Future` trait 作为基础组件，这样不同的异步操作就可以在不同的数据结构上实现。在 Rust 中，我们称实现了 `Future` trait 的类型为 future。每个 future 会维护自身的进度状态信息以及对 “ready” 的定义。
+*future* 是一个现在也许还没准备好，但会在将来某个时刻准备好的值。（这个概念在很多语言里都存在，只是有时会用 *task* 或 *promise* 之类的名字。）Rust 提供了 `Future` trait 作为基础构件，让不同的异步操作可以用不同的数据结构来实现，同时又拥有统一的接口。在 Rust 中，future 就是那些实现了 `Future` trait 的类型。每个 future 都保存了自身的进度信息，以及“就绪”到底意味着什么。
 
-`async` 关键字可以用于代码块和函数，表明它们可以被中断并恢复。在一个 async 块或 async 函数中，可以使用 `await` 关键字来 *await 一个 future*（即等待其就绪）。async 块或 async 函数中每一个等待 future 的地方都可能是一个 async 块或 async 函数中断并随后恢复的点。检查一个 future 并查看其值是否已经准备就绪的过程被称为 *轮询*（polling）。
+`async` 关键字可以用于代码块和函数，表示它们可以被中断和恢复。在 async 块或 async 函数中，你可以使用 `await` 关键字来 *await 一个 future*，也就是等待它变为就绪。在 async 块或函数里，每个等待 future 的位置，都是这个块或函数可能暂停并随后恢复的点。检查 future、看看它的值是否已经可用，这个过程称为 *polling*（轮询）。
 
-其它一些语言，例如 C# 和 JavaScript，也使用 `async` 和 `await` 关键字进行异步编程。如果你熟悉这些语言，则可能会注意到它们与 Rust 的处理方式存在显著差异，包括语法层面。我们将会看到，这样做是有充分理由的！
+其他一些语言，例如 C# 和 JavaScript，也用 `async` 和 `await` 关键字进行异步编程。如果你熟悉这些语言，可能会注意到 Rust 在语法处理上存在一些明显差异。我们会看到，这样设计是有充分理由的。
 
-在大多数情况下，编写异步 Rust 代码时，我们使用 `async` 和 `await` 关键字。Rust 将其编译为等同于使用 `Future` trait 的代码，这非常类似于将 `for` 循环编译为等同于使用 `Iterator` trait 的代码。不过，由于 Rust 提供了 `Future` trait，你也可以在需要时为你自己的数据类型实现它。在整个章节中你会看到很多函数的返回值类型都有其自己的 `Future` 实现。我们会在本章结尾回到这个 trait 的定义，并深入了解它的工作原理，但现在这些细节已经足够让我们继续前进了。
+编写异步 Rust 时，大多数时候我们直接使用 `async` 和 `await` 关键字。Rust 会把它们编译成等价的、基于 `Future` trait 的代码，就像它把 `for` 循环编译成基于 `Iterator` trait 的等价代码一样。不过，既然 Rust 提供了 `Future` trait，你在需要时也可以为自己的数据类型实现它。本章中我们会见到很多函数，它们都返回拥有各自 `Future` 实现的类型。我们会在本章结尾回到这个 trait 的定义，进一步深入理解它的工作原理；不过眼下这些细节已经足够让我们继续前进。
 
-这些内容可能有点抽象，所以让我们来编写第一个异步程序：一个小型网络爬虫。我们会从命令行传递两个 URL，并发地抓取它们，并返回第一个完成解析的结果。这个示例会引入不少新语法，不过不用担心 -- 我们会逐步解释所有你需要了解的内容。
+这些内容可能仍然有些抽象，所以我们来写第一个异步程序：一个小型网页抓取器。我们会从命令行传入两个 URL，并发地抓取它们，然后返回那个最先完成的结果。这个例子会带来不少新语法，不过不用担心，我们会一路把需要知道的内容都解释清楚。
 
 ## 第一个异步程序
 
-为了保持本章的内容专注于学习 async，而不是在生态系统的诸多组件之间周旋，我们已经创建了一个 `trpl` crate（`trpl` 是 “The Rust Programming Language” 的缩写）。它重导出了你需要的所有类型、traits 和函数，它们主要来自于 [`futures`][futures-crate] 和 [`tokio`][tokio] crates。`futures` crate 是一个 Rust 异步代码试验的官方仓库，也正是 `Future` 最初设计的地方。Tokio 是目前 Rust 中应用最广泛的异步运行时（async runtime），特别是 web 应用。这里还有其他优秀的运行时，它们可能更适合你的需求。我们在 `trpl` 的底层使用 `tokio` crate 是因为它经过了充分测试并被广泛采用。
+为了让本章专注于学习 async，而不是在生态系统的各种组件之间来回切换，我们准备了一个 `trpl` crate（`trpl` 是 “The Rust Programming Language” 的缩写）。它重新导出了本章需要的所有类型、trait 和函数，主要来自 [`futures`][futures-crate] 和 [`tokio`][tokio] crate。`futures` crate 是 Rust 异步代码实验的官方阵地，`Future` trait 最初就是在那里设计出来的。Tokio 则是目前 Rust 中使用最广泛的异步运行时（async runtime），尤其常见于 Web 应用。生态中也还有其他很优秀的运行时，而且它们可能更适合你的实际用途。我们在 `trpl` 的底层使用 `tokio`，是因为它经过了充分测试，也足够常用。
 
-在一些场景中，`trpl` 也会重命名或者封装原始 API 以便我们专注于与本章相关的细节。如果你想了解该 crate 的具体功能，我们鼓励你查看[其源码][crate-source]。你可以看到每个重导出的内容来自哪个 crate，我们留下了大量注释来解释这个 crate 的用途。
+在某些场景下，`trpl` 还会对原始 API 进行重命名或包装，好让你把注意力集中在本章相关的细节上。如果你想了解这个 crate 实际做了什么，我们建议你看看[它的源码][crate-source]。你可以从中看到每个重导出项究竟来自哪个 crate，我们也留下了很多注释来解释这个 crate 的行为。
 
 创建一个名为 `hello-async` 的二进制项目并将 `trpl` crate 作为一个依赖添加：
 
@@ -29,7 +28,7 @@ $ cd hello-async
 $ cargo add trpl
 ```
 
-现在我们可以利用 `trpl` 提供的多种组件来编写第一个异步程序。我们构建了一个小的命令行工具来抓取两个网页，拉取各自的 `<title>` 元素，并打印出第一个完成全部过程的那个页面的标题。
+现在我们可以利用 `trpl` 提供的各种组件来编写第一个异步程序。我们要构建一个小型命令行工具：抓取两个网页，从各自页面中提取 `<title>` 元素，然后打印出那个最先完成整套流程的页面标题。
 
 ### 定义 page_title 函数
 
@@ -47,15 +46,15 @@ $ cargo add trpl
 
 </figure>
 
-首先，我们定义一个名为 `page_title` 的函数，并使用了 `async` 关键字标记。接着我们使用 `trpl::get` 函数来获取传入的任意 URL，然后使用 `await` 关键字来等待响应。接着我们调用其 `text` 方法来获取响应的文本，这里再一次使用 `await` 关键字等待。这两个步骤都是异步的。对于 `get` 来说，我们需要等待服务器发送回其响应的第一部分，这会包含 HTTP 头（headers）、cookies 等，这部分响应可以独立于响应体发送。特别是在响应体非常大的时候，全部到达可能需要一些时间。因此我们不得不等待响应 *整体* 返回，所以 `text` 方法也是异步。
+首先，我们定义了一个名为 `page_title` 的函数，并用 `async` 关键字标记它。然后使用 `trpl::get` 函数抓取传入的 URL，再用 `await` 关键字等待响应。为了得到 `response` 的文本，我们调用它的 `text` 方法，并再次使用 `await` 进行等待。这两个步骤都是异步的。对于 `get` 函数来说，我们必须等待服务器先把响应的第一部分发回来，其中包括 HTTP headers、cookies 等，这些内容可以和响应体分开发送。尤其当响应体很大时，全部数据到达可能要花上一些时间。由于我们必须等待响应*完整*到达，`text` 方法自然也是 async 的。
 
-我们必须显式地 await 这两个 futures，因为 Rust 中的 futures 是 *惰性*（*lazy*）的：在你使用 `await` 请求之前它们不会执行任何操作。（事实上，如果你不使用一个 future，Rust 会显示一个编译器警告）这应该会让你想起第十三章[使用迭代器处理元素序列][iterators-lazy]部分的讨论。直到你调用迭代器的 `next` 方法 -- 直接调用或者使用 `for` 循环或者类似 `map` 这类在底层使用 `next` 的方法 -- 之前它们什么也不会做。同样地，future 也只有在你显式请求时才会运行。惰性使得 Rust 可以避免提前运行异步代码，直到真正需要时才执行。
+我们必须显式地等待这两个 future，因为 Rust 中的 future 是 *lazy* 的：在你用 `await` 请求它之前，它什么都不会做。（实际上，如果你创建了 future 却不使用它，Rust 还会给出编译器警告。）这大概会让你想起第十三章[“使用迭代器处理元素序列”][iterators-lazy]中的讨论。迭代器只有在你调用 `next` 方法时才会工作，无论是直接调用，还是通过 `for` 循环，或者借助像 `map` 这样底层会调用 `next` 的方法。future 也是一样，只有你显式要求它运行时，它才会开始工作。这种惰性让 Rust 能够避免在真正需要之前就运行异步代码。
 
-> 注意：这不同于上一章节中 `thread::spawn` 的行为，当时传递给另一个线程的闭包会立即开始运行。它也不同于许多其他语言实现 async 的方式。但这样做对于 Rust 提供与迭代器相同级别的性能保证至关重要。
+> 注意：这和我们在第十六章[“使用 spawn 创建新线程”][thread-spawn]里看到的 `thread::spawn` 的行为不同，在那里我们传给新线程的闭包会立刻开始执行。它也和许多其他语言处理 async 的方式不同。但这对于 Rust 提供它一贯的性能保证很重要，正如迭代器也是如此。
 
-当我们有了 `response_text` 字符串后，就可以使用 `Html::parse` 将其解析为一个 `Html` 类型的实例。不同于原始字符串，现在我们有了一个可以将 HTML 作为更丰富数据结构来操作的数据类型。特别是我们可以使用 `select_first` 方法来找出给定 CSS 选择器（selector）中第一个匹配元素。通过传递字符串 `"title"`，我们会得到文档中的第一个 `<title>` 元素，如果它存在的话。由于可能没有任何匹配的元素，`select_first` 返回一个 `Option<ElementRef>`。最后我们使用 `Option::map` 方法，它允许我们在 `Option` 中有元素时对其进行处理，而在没有时则什么也不做。（这里也可以使用一个 `match` 表达式，但 `map` 更符合惯用的写法。）在传递给 `map` 的函数体中，我们调用了 `title` 上的 `inner_html` 来获取其内容，这是一个 `String`。当上面所讲的都完成后，我们会得到一个 `Option<String>`。
+有了 `response_text` 之后，我们就可以用 `Html::parse` 把它解析成 `Html` 类型的实例。这样一来，我们得到的就不再是原始字符串，而是一个可以把 HTML 当作更丰富数据结构来操作的类型。特别是，我们可以用 `select_first` 方法找到给定 CSS selector 的第一个匹配项。传入字符串 `"title"` 后，我们就能拿到文档中的第一个 `<title>` 元素，如果它存在的话。因为也可能根本没有匹配项，所以 `select_first` 返回的是 `Option<ElementRef>`。最后，我们使用 `Option::map` 方法：如果 `Option` 中有值，它就会对其中的值进行处理；如果没有，就什么都不做。（这里当然也可以使用 `match` 表达式，不过 `map` 更符合惯用写法。）在我们传给 `map` 的闭包里，会对 `title` 调用 `inner_html` 来获取其中的内容，它是一个 `String`。到这里，我们最终得到的就是一个 `Option<String>`。
 
-注意 Rust 的 `await` 关键字出现在需要等待的表达式之后而不是之前。也就是说，这是一个 *后缀关键字*（*postfix keyword*）。如果你在其它语言中使用过 async 的话，这可能与你所熟悉的有所不同。Rust 如此选择是因为这使得方法的链式调用更加简洁。因此，我们可以修改 `page_title` 的函数体来链式调用 `trpl::get` 和 `text` 并在其之间使用 `await`，如示例 17-2 所示：
+注意，Rust 的 `await` 关键字放在要等待的表达式*后面*，而不是前面。也就是说，它是一个 *postfix keyword*（后缀关键字）。如果你在其他语言里用过 async，这一点可能和你的习惯不同；但在 Rust 中，这种设计会让链式方法调用更易读。因此，我们可以把 `page_title` 的函数体改写成在 `trpl::get` 和 `text` 调用之间插入 `await` 的链式写法，如示例 17-2 所示：
 
 <figure class="listing">
 
@@ -93,16 +92,16 @@ fn page_title(url: &str) -> impl Future<Output = Option<String>> {
 让我们挨个看一下转换后版本的每一个部分：
 
 - 它使用了之前第十章 [“trait 作为参数”][impl-trait] 部分讨论过的 `impl Trait` 语法。
-- 它返回的 trait 是一个 `Future`，它有一个关联类型 `Output`。注意 `Output` 的类型是 `Option<String>`，这与 `async fn` 版本的 `page_title` 的原始返回值类型相同。
-- 所有原始函数中被调用的代码被封装进一个 `async move` 块。回忆一下，代码块是表达式。这整个块就是函数所返回的表达式
+- 它返回的值实现了 `Future` trait，并且这个 trait 有一个关联类型 `Output`。注意 `Output` 的类型是 `Option<String>`，这和 `async fn` 版本的 `page_title` 的原始返回类型一致。
+- 原始函数体中的所有代码都被包进了一个 `async move` 块。回忆一下，代码块本身就是表达式。整个块就是函数返回的那个表达式。
 - 如上所述，这个异步代码块产生一个 `Option<String>` 类型的值。这个值与返回类型中的 `Output` 类型一致。这正类似于你已经见过的其它代码块。
-- 新版函数的函数体是一个 `async move` 代码块，因为它如何使用 `url` 参数决定了这一点。（本章后续部分将更详细地讨论 `async` 和 `async move` 之间的区别。）
+- 这个新函数体之所以是 `async move` 块，是由它使用 `url` 参数的方式决定的。（本章后面会更详细地讨论 `async` 和 `async move` 的区别。）
 
 现在我们可以在 `main` 中调用 `page_title`。
 
-## 确定单个页面的标题
+### 使用运行时执行异步函数
 
-首先，我们只会获取一个页面的标题。在示例 17-3 中，我们沿用了第十二章中[“接受命令行参数”][cli-args]小节中获取命令行参数的相同模式。接着我们传递第一个 URL 给 `page_title`，并 await 结果。因为 future 产生的值是一个 `Option<String>`，我们使用 `match` 表达式来根据页面是否有 `<title>` 来打印不同的信息。
+首先，我们只获取单个页面的标题，如示例 17-3 所示。不幸的是，这段代码还不能编译。
 
 <figure class="listing">
 
@@ -116,7 +115,9 @@ fn page_title(url: &str) -> impl Future<Output = Option<String>> {
 
 </figure>
 
-很不幸的是这还不能编译。唯一可以使用 `await` 关键字的地方是 async 函数或者代码块中，同时 Rust 不允许将特殊的 `main` 函数标记为 `async`。
+我们沿用了第十二章[“接受命令行参数”][cli-args]一节中获取命令行参数的模式。然后把 URL 参数传给 `page_title`，再等待它的结果。由于 future 产出的值是 `Option<String>`，我们使用 `match` 表达式来根据页面是否含有 `<title>` 打印不同的信息。
+
+唯一能使用 `await` 关键字的地方，是 async 函数或 async 代码块中，而 Rust 又不允许我们把特殊的 `main` 函数标记为 `async`。
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-03
@@ -134,11 +135,11 @@ error[E0752]: `main` function is not allowed to be `async`
 
 `main` 不能标记为 `async` 的原因是异步代码需要一个 *运行时*：即一个管理执行异步代码细节的 Rust crate。一个程序的 `main` 函数可以 *初始化* 一个运行时，但是其 *自身* 并不是一个运行时。（稍后我们会进一步解释原因。）每一个执行异步代码的 Rust 程序必须至少有一个设置运行时并执行 futures 的地方。
 
-大部分支持异步的语言会打包一个运行时在语言中，Rust 则不是。相反，这里有很多不同的异步运行时，每一个都有适合其目标的权衡取舍。例如，一个拥有很多核心和大量内存的高吞吐 web server 与一个单核、少量内存并且没有堆分配能力的微控制器相比有着截然不同的需求。提供这些运行时的 crate 通常也提供了例如文件或者网络 IO 这类常用功能的异步版本。
+大多数支持 async 的语言都会自带运行时，但 Rust 不会。相反，Rust 有很多不同的异步运行时可供选择，每一种都针对自己的目标用例做了不同权衡。比如，一个拥有许多 CPU 核心和大量 RAM 的高吞吐 Web 服务器，和一个单核、RAM 很小、甚至不能进行堆分配的微控制器，需求就截然不同。提供这些运行时的 crate 往往也会一并提供文件或网络 I/O 等常见功能的异步版本。
 
-从这里到本章余下部分，我们会使用 `trpl` crate 的 `run` 函数，它获取一个 future 作为参数并运行到结束。在内部，调用 `run` 会设置一个运行时来运行传递的 future。一旦 future 完成，`run` 返回 future 返回的任何值。
+在这里，以及本章余下的部分，我们会使用 `trpl` crate 提供的 `block_on` 函数。它接受一个 future 作为参数，并阻塞当前线程，直到这个 future 运行完成为止。在内部，调用 `block_on` 会借助 `tokio` crate 设置一个运行时，用来执行传入的 future（`trpl` 的 `block_on` 和其他运行时 crate 提供的同名函数行为类似）。一旦 future 完成，`block_on` 就会返回 future 产生的值。
 
-我们可以将 `page_title` 返回的 future 直接传递给 `run`。一旦其完成，我们能够匹配返回的 `Option<String>`，正如示例 17-3 我们尝试的那样。然而，在本章的大部分示例中（以及大多数实际应用中的异步代码中），我们会执行不止一次异步函数调用，所以相反我们会传递一个 `async` 块并显式地等待 `page_title` 调用的结果，如示例 17-4 所示。
+我们当然可以把 `page_title` 返回的 future 直接传给 `block_on`，并在它完成后对得到的 `Option<String>` 进行匹配，就像我们在示例 17-3 中本来打算做的那样。不过，本章的大部分例子里（以及现实中的大多数 async 代码里），我们都不止会进行一次异步函数调用，因此我们改为传入一个 `async` 块，并在其中显式等待 `page_title` 的结果，如示例 17-4 所示。
 
 <figure class="listing">
 
@@ -148,11 +149,11 @@ error[E0752]: `main` function is not allowed to be `async`
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-04/src/main.rs:run}}
 ```
 
-<figcaption>示例 17-4：等待一个使用异步代码块的 `trpl::run`</figcaption>
+<figcaption>示例 17-4：使用 `trpl::block_on` 等待一个 async 代码块</figcaption>
 
 </figure>
 
-当我们运行代码，我们会得到最初预想的行为：
+当我们运行这段代码时，就会得到一开始期待的行为：
 
 ```console
 $ cargo run -- https://www.rust-lang.org
@@ -172,17 +173,17 @@ The title for https://www.rust-lang.org was
 
 编写代码来手动控制不同状态之间的转换是非常乏味且容易出错的，特别是之后增加了更多功能和状态的时候。相反，Rust 编译器自动创建并管理异步代码的状态机数据结构。如果你感兴趣的话：是的，正常的借用和所有权也全部适用于这些数据结构。幸运的是，编译器也会为我们处理这些检查，并提供友好的错误信息。本章稍后会讲解一些相关内容！
 
-最终需要某个组件来执行状态机，而这个组件就是运行时。（这也是为什么在了解运行时的时候，你可能会看到 *executors* 这个词：executor 是运行时中负责执行异步代码的部分。）
+最终，总得有某个组件来执行这个状态机，而那个组件就是运行时。（这也是为什么在了解运行时时，你可能会看到 *executor* 这个词：executor 是运行时中负责执行异步代码的那一部分。）
 
-现在我们能够理解之前示例 17-3 中为何编译器阻止我们将 `main` 本身标记为异步函数了。如果 `main` 是一个异步函数，需要有其它组件来管理 `main` future 返回的状态机，但是 `main` 是程序的入口点！为此我们在 `main` 函数中调用 `trpl::run`，它设置了一个运行时并运行 `async` 块返回的 future 直到其完成为止。
+现在你就能理解，为什么编译器会在示例 17-3 中阻止我们把 `main` 本身写成异步函数了。如果 `main` 是 async 函数，那么就必须有别的东西来管理 `main` 返回的 future 对应的状态机；可 `main` 本身就是程序的入口点！因此，我们改为在 `main` 中调用 `trpl::block_on`，让它设置好运行时，并运行 `async` 块返回的 future，直到执行完成。
 
-> 注意：一些运行时提供了相关的宏，所以你 *可以* 编写一个异步 `main` 函数。这些宏将 `async fn main() { ... }` 重写为正常的 `fn main`，执行的逻辑与我们在示例 17-5 中手动实现的一样：像 `trpl::run` 一样调用一个函数运行 future 直到结束。
+> 注意：有些运行时会提供宏，因此你*确实可以*写异步版的 `main` 函数。这些宏会把 `async fn main() { ... }` 重写成普通的 `fn main`，其逻辑和我们在示例 17-4 中手动做的事情一样：调用一个像 `trpl::block_on` 这样的函数，把 future 跑到完成为止。
 
-让我们将这些代码片段整理一下来看看如何编写并发代码。
+现在让我们把这些部分组合起来，看看如何编写并发代码。
 
-### 让两个 URL 相互竞争
+### 让两个 URL 并发竞争
 
-在示例 17-5 中，我们从命令行传入两个不同的 URL，分别调用 `page_title` 并让它们互相竞争。
+在示例 17-5 中，我们会对从命令行传入的两个不同 URL 分别调用 `page_title`，并选出最先完成的那个 future。
 
 <figure class="listing">
 
@@ -194,15 +195,15 @@ The title for https://www.rust-lang.org was
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-05/src/main.rs:all}}
 ```
 
-<figcaption>示例 17-5</figcaption>
+<figcaption>示例 17-5：对两个 URL 调用 `page_title`，看谁先返回</figcaption>
 
 </figure>
 
-示例 17-5 中以分别由用户提供的 URL 调用 `page_title` 开始。我们将调用 `page_title` 产生的 future 分别保存为 `title_fut_1` 和 `title_fut_2`。请记住，它们还没有进行任何工作，因为 future 是惰性的，并且我们还没有 `await` 它们。接着我们将 futures 传递给 `trpl::race`，它返回一个值表明哪个传递的 future 最先返回。
+我们首先分别对用户提供的两个 URL 调用 `page_title`。随后把得到的 future 保存到 `title_fut_1` 和 `title_fut_2` 中。记住，它们此时还什么都没做，因为 future 是惰性的，而我们也还没有等待它们。接着我们把这些 future 传给 `trpl::select`，它会返回一个值，用来表明传入的 future 中哪一个最先完成。
 
-> 注意：在内部 `race` 构建在一个更通用的函数 `select` 之上，你会在真实的 Rust 代码中更常遇到它。`select` 函数可以做很多 `trpl::race` 函数做不了的事，不过它也有一些额外的复杂性，所以目前我们先略过介绍。
+> 注意：在底层，`trpl::select` 建立在 `futures` crate 中更通用的 `select` 函数之上。`futures` crate 的 `select` 函数能做很多 `trpl::select` 做不到的事，不过它也带来了一些额外复杂性，所以我们暂时先跳过。
 
-由于任何一个 future 都可以合理地 “获胜”，所以返回 `Result` 没有意义。相反 `race` 返回了一个我们之前没有见过的类型 `trpl::Either`。`Either` 类型有点类似于 `Result`，它也有两个成员。但是不同于 `Result`，`Either` 没有内置成功或者失败的概念。相反它使用 `Left` 和 `Right` 来表示 “一个或另一个”。
+任意一个 future 都有可能“获胜”，因此这里返回 `Result` 并不合理。相反，`trpl::select` 返回的是一个我们之前还没见过的类型：`trpl::Either`。`Either` 在某种程度上有点像 `Result`，也有两个分支；但不同的是，它并没有内建“成功”或“失败”的语义，而是用 `Left` 和 `Right` 来表示“这个或那个”。
 
 ```rust
 enum Either<A, B> {
@@ -211,11 +212,11 @@ enum Either<A, B> {
 }
 ```
 
-如果第一个参数先完成，`race` 函数返回 `Left` 并包含该 future 的输出，如果第二个 future 先完成，则返回 `Right` 和第二个 future 的输出。这匹配调用函数时参数出现的顺序：第一个参数在第二个参数的左边。
+如果第一个参数先完成，`select` 就返回 `Left`，其中包含该 future 的输出；如果第二个 future 先完成，则返回 `Right`，其中包含第二个 future 的输出。这正好对应函数调用时参数的顺序：第一个参数位于第二个参数的左边。
 
-我们还更新了 `page_title` 来返回与传递时相同的 URL。如此如果首先返回的页面没有可以解析的 `<title>`，仍然可以打印出有意义的信息。有了这些信息，我们对 `println!` 的输出进行了封装和更新，以表明哪个 URL 最先完成，并在页面有 `<title>` 时打印出它的内容。
+我们还更新了 `page_title`，让它把传入的 URL 一并返回。这样一来，即使最先返回的页面无法解析出 `<title>`，我们仍然可以打印出一条有意义的信息。有了这些数据之后，我们最后再调整 `println!` 的输出，让它既能显示哪个 URL 最先完成，也能在页面存在 `<title>` 时打印出标题内容。
 
-现在我们完成一个可用的小型网页爬虫的构建了！挑选一对 URL 并运行命令行工具。你会发现某些网站稳定地快于其它网站，而在另一些情况下哪个站点更快则因每次运行而异。更重要的是，你已经掌握了处理 futures 的基础知识，因此我们现在可以进一步探索更多 async 的可能性了。
+至此，你已经构建出了一个可以工作的迷你网页抓取器！随便选两个 URL 运行一下这个命令行工具吧。你会发现有些站点总是比另一些更快，而另一些情况下则每次运行谁快谁慢都不一定。更重要的是，你已经掌握了使用 future 的基础知识，所以现在我们可以继续深入，看看 async 还能做些什么。
 
 [crate-source]: https://github.com/rust-lang/book/tree/main/packages/trpl
 [futures-crate]: https://crates.io/crates/futures
@@ -223,5 +224,5 @@ enum Either<A, B> {
 
 [impl-trait]: ch10-02-traits.html#使用-trait-作为参数
 [iterators-lazy]: ch13-02-iterators.html
-[thread-spawn]: ch16-01-threads.html#creating-a-new-thread-with-spawn
+[thread-spawn]: ch16-01-threads.html#使用-spawn-创建新线程
 [cli-args]: ch12-01-accepting-command-line-arguments.html
