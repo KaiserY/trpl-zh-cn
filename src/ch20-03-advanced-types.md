@@ -1,13 +1,12 @@
 ## 高级类型
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch20-03-advanced-types.md -->
-<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
+[ch20-03-advanced-types.md](https://github.com/rust-lang/book/blob/57ff62db22b006e6b319e2e35c9364d932a8b4e5/src/ch20-03-advanced-types.md)
 
 Rust 的类型系统有一些我们曾经提到但尚未讨论过的特性。首先我们将从一般意义上讨论 newtype 并探讨它们作为类型为何有用。接着会转向类型别名（type aliases），一个类似于 newtype 但有着稍微不同的语义的功能。我们还会讨论 `!` 类型和动态大小类型。
 
-### 使用 newtype 模式实现类型安全和抽象
+### 使用 newtype 模式实现类型安全与抽象
 
-本小节假设你已经阅读了之前的 [“使用 newtype 模式在外部类型上实现外部 trait”][using-the-newtype-pattern] 部分。
+本小节假设你已经阅读了之前的 [“使用 newtype 模式在外部类型上实现外部 trait”][newtype] 部分。
 
 newtype 模式还可用于我们到目前为止尚未讨论的其他任务，包括静态地确保值不会混淆以及标注值的单位。你在示例 20-16 中已经看到了一个使用 newtype 来表示单位的例子：`Millimeters` 和 `Meters` 结构体都在 newtype 中封装了 `u32` 值。如果编写了一个有 `Millimeters` 类型参数的函数，不小心使用 `Meters` 或普通的 `u32` 值来调用该函数的程序是不能编译的。
 
@@ -15,7 +14,7 @@ newtype 模式也可以用于抽象掉某个类型的部分实现细节：新的
 
 newtype 模式还可以隐藏内部实现。例如，可以提供一个封装了 `HashMap<i32, String>` 的 `People` 类型，用来储存人名以及相应的 ID。使用 `People` 的代码只需与我们提供的公有 API 交互即可，比如向 `People` 集合增加名字字符串的方法；这样这些代码就无需知道在内部我们将一个 `i32` ID 赋予了这个名字了。newtype 模式是一种实现第十八章 [“封装隐藏了实现细节”][encapsulation-that-hides-implementation-details] 中讨论的隐藏实现细节的轻量级封装方法。
 
-### 使用类型别名创建类型同义词
+### 类型同义词与类型别名
 
 Rust 提供了声明 **类型别名**（*type alias*）的能力，使用 `type` 关键字为现有类型赋予另一个名字。例如，可以像这样创建 `i32` 的别名 `Kilometers`：
 
@@ -93,7 +92,7 @@ Rust 有一个叫做 `!` 的特殊类型。在类型理论术语中被称为 *em
 
 <span class="caption">示例 20-27: `match` 语句和一个以 `continue` 结束的分支</span>
 
-当时我们忽略了代码中的一些细节。在第六章 [“`match` 控制流运算符”][the-match-control-flow-operator] 部分，我们学习了 `match` 的分支必须返回相同的类型。如下代码不能工作：
+当时我们略过了这段代码中的一些细节。在第六章 [“`match` 控制流结构”][the-match-control-flow-construct] 部分，我们讨论过：`match` 的各个分支必须返回相同的类型。所以下面的代码是行不通的：
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-08-match-arms-different-types/src/main.rs:here}}
@@ -135,7 +134,7 @@ Rust 需要知道应该为特定类型的值分配多少内存，同时所有同
 
 那么该怎么办呢？在这种情况下，你已经知道答案：`s1` 和 `s2` 的类型是 `&str` 而不是 `str`。如果你回想第四章 [“字符串 slice”][string-slices] 中提到，slice 数据结构仅仅储存了开始位置和 slice 的长度。所以虽然 `&T` 是一个储存了 `T` 所在的内存位置的单个值，`&str` 则是**两个**值：`str` 的地址和其长度。这样，`&str` 就有了一个在编译时可以知道的大小：它是 `usize` 长度的两倍。也就是说，无论所引用的字符串多长，我们总是知道 `&str` 的大小。一般来说，这就是 Rust 使用动态大小类型的方式：它们有一些额外的元信息来储存动态信息的大小。这引出了动态大小类型的黄金法则：必须将动态大小类型的值置于某种指针之后。
 
-可以将 `str` 与所有类型的指针结合：比如 `Box<str>` 或 `Rc<str>`。事实上，之前我们已经见过了，不过是另一个动态大小类型：trait。每一个 trait 都是一个可以通过 trait 名称来引用的动态大小类型。在第十八章 [顾及不同类型值的 trait 对象”][using-trait-objects-that-allow-for-values-of-different-types] 中，我们提到了为了将 trait 用于 trait 对象，必须将它们放入指针之后，比如 `&dyn Trait` 或 `Box<dyn Trait>`（`Rc<dyn Trait>` 也可以）。
+可以将 `str` 与各种指针类型组合使用：例如 `Box<str>` 或 `Rc<str>`。事实上，你以前已经见过这种做法，不过对象换成了另一种动态大小类型：trait。每个 trait 本身也是一种动态大小类型，我们可以通过 trait 的名字来引用它。在第十八章 [“使用 trait object 来抽象出共享行为”][using-trait-objects-to-abstract-over-shared-behavior] 一节中，我们提到过：为了把 trait 用作 trait 对象，必须把它放在某种指针之后，比如 `&dyn Trait` 或 `Box<dyn Trait>`（`Rc<dyn Trait>` 也可以）。
 
 为了处理 DST，Rust 提供了 `Sized` trait 来决定一个类型的大小是否在编译时可知。该 trait 会自动为所有在编译时大小已知的类型实现。此外，Rust 隐式地为每一个泛型函数增加了 `Sized` bound。也就是说，对于如下泛型函数定义：
 
@@ -161,11 +160,8 @@ Rust 需要知道应该为特定类型的值分配多少内存，同时所有同
 
 接下来，我们将讨论函数和闭包！
 
-[encapsulation-that-hides-implementation-details]:
-ch18-01-what-is-oo.html#封装隐藏了实现细节
+[encapsulation-that-hides-implementation-details]: ch18-01-what-is-oo.html#封装隐藏了实现细节
 [string-slices]: ch04-03-slices.html#字符串-slice
-[the-match-control-flow-operator]:
-ch06-02-match.html#match-控制流结构
-[using-trait-objects-that-allow-for-values-of-different-types]:
-ch18-02-trait-objects.html#顾及不同类型值的-trait-对象
-[using-the-newtype-pattern]: ch20-02-advanced-traits.html#使用-newtype-模式在外部类型上实现外部-trait
+[the-match-control-flow-construct]: ch06-02-match.html#match-控制流结构
+[using-trait-objects-to-abstract-over-shared-behavior]: ch18-02-trait-objects.html#使用-trait-object-来抽象出共享行为
+[newtype]: ch20-02-advanced-traits.html#使用-newtype-模式在外部类型上实现外部-trait

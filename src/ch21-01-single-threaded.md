@@ -1,7 +1,6 @@
 ## 构建单线程 web server
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch21-01-single-threaded.md -->
-<!-- commit bf3d2256c82408e89f5cfdaf8ec212739c255dd3 -->
+[ch21-01-single-threaded.md](https://github.com/rust-lang/book/blob/8aa0d003e6499d733d639de32d70f590efa48657/src/ch21-01-single-threaded.md)
 
 首先让我们创建一个可运行的单线程 web server。在开始之前，我们将快速了解一下构建 web server 所涉及到的协议。这些协议的细节超出了本书的范畴，不过一个简单的概括会提供我们所需的信息。
 
@@ -109,7 +108,7 @@ Request: [
 
 让我们拆开请求数据来理解浏览器向程序请求了什么。
 
-#### 仔细观察 HTTP 请求
+### 更仔细地观察 HTTP 请求
 
 HTTP 是一个基于文本的协议，同时一个请求有如下格式：
 
@@ -237,7 +236,7 @@ HTTP/1.1 200 OK\r\n\r\n
 
 有了这些修改，再次运行服务端。请求 *127.0.0.1:7878* 应该会返回 *hello.html* 的内容，而对于任何其他请求，比如 *127.0.0.1:7878/foo*，应该会返回 *404.html* 中的错误 HTML。
 
-### 稍加重构
+### 重构
 
 目前 `if` 和 `else` 块中的代码存在大量重复：他们都读取文件并将其内容写入流。唯一的区别是状态行和文件名。为使代码更简洁，将这些区别分别提取到各自的 `if` 和 `else` 中，对状态行和文件名变量赋值；然后在读取文件和写入响应的代码中无条件地使用这些变量。重构后取代了大段 `if` 和 `else` 块代码后的结果如示例 21-9 所示：
 

@@ -1,7 +1,6 @@
 ## 宏
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch20-05-macros.md -->
-<!-- commit 1d1424ba1c30b8efab636c911be0a215df305eea -->
+[ch20-05-macros.md](https://github.com/rust-lang/book/blob/57ff62db22b006e6b319e2e35c9364d932a8b4e5/src/ch20-05-macros.md)
 
 我们已经在本书中使用过像 `println!` 这样的宏了，不过尚未深入探讨什么是宏以及它是如何工作的。**宏**（*Macro*）指的是 Rust 中一系列的功能：使用 `macro_rules!` 的 **声明宏**（*declarative macro*），和三种 **过程宏**（*procedural macro*）：
 
@@ -23,7 +22,7 @@
 
 宏和函数的最后一个重要的区别是：在一个文件里调用宏 **之前** 必须定义它，或将其引入作用域，而函数则可以在任何地方定义和调用。
 
-### 使用 `macro_rules!` 的声明宏用于通用元编程
+### 用 `macro_rules!` 编写用于通用元编程的声明宏
 
 Rust 最常用的宏形式是 **声明宏**（*declarative macros*）。它们有时也被称为 “macros by example”、“`macro_rules!` 宏” 或者就是 “macros”。其核心概念是，声明宏允许我们编写一些类似 Rust `match` 表达式的代码。正如在第六章讨论的那样，`match` 表达式是一种控制结构，其接收一个表达式，与表达式的结果进行模式匹配，然后根据模式匹配执行相关代码。宏也将一个值和包含相关代码的模式进行比较：此种情况下，该值是传递给宏的 Rust 源代码字面值；模式用于和前面提到的源代码字面值进行比较，一旦匹配成功，每个模式的相关代码会替换传递给宏的代码。所有这一切都发生于编译时。
 
@@ -86,7 +85,7 @@ let v: Vec<u32> = vec![1, 2, 3];
 <span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore
-use proc_macro;
+use proc_macro::TokenStream;
 
 #[some_attribute]
 pub fn some_name(input: TokenStream) -> TokenStream {
@@ -169,7 +168,7 @@ $ cargo new hello_macro_derive --lib
 
 注意我们将代码分成了 `hello_macro_derive` 和 `impl_hello_macro` 两个函数，前者负责解析 `TokenStream`，后者负责转换语法树：这使得编写过程宏更加方便。几乎你看到或者创建的每一个过程宏的外部函数（这里是 `hello_macro_derive`）中的代码都跟这里是一样的。你放入内部函数（这里是 `impl_hello_macro`）中的代码根据你的过程宏的设计目的会有所不同。
 
-现在，我们已经引入了三个新的 crate：`proc_macro` 、 [`syn`] 和 [`quote`] 。Rust 自带 `proc_macro` crate，因此无需将其加到 *Cargo.toml* 文件的依赖中。`proc_macro` crate 是编译器提供用来读取和操作我们 Rust 代码的 API。
+现在，我们已经引入了三个新的 crate：`proc_macro`、[syn] 和 [quote]。Rust 自带 `proc_macro` crate，因此无需将其加到 *Cargo.toml* 文件的依赖中。`proc_macro` crate 是编译器提供的 API，让我们能够在自己的代码中读取并操作 Rust 代码。
 
 `syn` crate 将字符串中的 Rust 代码解析成为一个可以操作的数据结构。`quote` crate 则将 `syn` 解析的数据结构转换回 Rust 代码。这些 crate 让解析任何我们所要处理的 Rust 代码变得更加简单：为 Rust 编写完整的解析器并不是一件简单的工作。
 
@@ -199,7 +198,7 @@ DeriveInput {
 
 <span class="caption">示例 20-41: 解析示例 20-37 中带有宏属性的代码时得到的 `DeriveInput` 实例</span>
 
-该结构体的字段展示了我们解析的 Rust 代码是一个类单元结构体，其 `ident`（identifier，表示名字）为 `Pancakes`。该结构体里面有更多字段描述了所有类型的 Rust 代码，查阅 [`syn` 中 `DeriveInput` 的文档][syn-docs] 以获取更多信息。
+该结构体的字段表明：我们解析出的 Rust 代码是一个类单元结构体，它的 `ident`（标识符，也就是名称）是 `Pancakes`。这个结构体里还有更多字段，用来描述各种 Rust 代码；更多信息请参见 [syn 中 `DeriveInput` 的文档][syn-docs]。
 
 很快我们将定义 `impl_hello_macro` 函数，其用于构建所要包含在内的 Rust 新代码。但在此之前，注意其输出也是 `TokenStream`。所返回的 `TokenStream` 会被加到我们的 crate 用户所写的代码中，因此，当用户编译他们的 crate 时，他们会通过修改后的 `TokenStream` 获取到我们所提供的额外功能。
 
@@ -215,11 +214,11 @@ DeriveInput {
 
 <span class="caption">示例 20-42: 使用解析过的 Rust 代码实现 `HelloMacro` trait</span>
 
-我们得到一个包含以 `ast.ident` 作为注解类型名字（标识符）的 `Ident` 结构体实例。示例 20-33 中的结构体表明当 `impl_hello_macro` 函数运行于示例 20-31 中的代码上时 `ident` 字段的值是 `"Pancakes"`。因此，示例 20-34 中 `name` 变量会包含一个 `Ident` 结构体的实例，当打印时，会是字符串 `"Pancakes"`，也就是示例 20-37 中结构体的名称。
+我们会得到一个 `Ident` 结构体实例，其中包含了注解类型的名字（标识符），这个值来自 `ast.ident`。示例 20-41 中的结构体表明：当 `impl_hello_macro` 函数作用于示例 20-37 中的代码时，`ident` 字段的值就是 `"Pancakes"`。因此，在示例 20-42 中，`name` 变量会包含一个 `Ident` 结构体实例；当它被打印出来时，就是字符串 `"Pancakes"`，也就是示例 20-37 中那个结构体的名称。
 
 `quote!` 宏能让我们编写希望返回的 Rust 代码。`quote!` 宏执行的直接结果并不是编译器所期望的所以需要转换为 `TokenStream`。为此需要调用 `into` 方法，它会消费这个中间表示（intermediate representation，IR）并返回所需的 `TokenStream` 类型值。
 
-这个宏也提供了一些非常酷的模板机制；我们可以写 `#name` ，然后 `quote!` 会以名为 `name` 的变量值来替换它。你甚至可以做一些类似常用宏那样的重复代码的工作。查阅 [`quote` crate 的文档][quote-docs] 来获取完整的介绍。
+这个宏还提供了一套很方便的模板机制；我们可以写 `#name`，然后 `quote!` 会把它替换成名为 `name` 的变量的值。你甚至还可以像常规宏那样做一些重复代码生成。完整介绍请参见 [quote crate 的文档][quote-docs]。
 
 我们期望我们的过程式宏能够为通过 `#name` 获取到的用户注解类型生成 `HelloMacro` trait 的实现。该 trait 的实现有一个函数 `hello_macro` ，其函数体包括了我们期望提供的功能：打印 `Hello, Macro! My name is` 和注解的类型名。
 
@@ -280,8 +279,8 @@ pub fn sql(input: TokenStream) -> TokenStream {
 
 [ref]: https://doc.rust-lang.org/reference/macros-by-example.html
 [tlborm]: https://veykril.github.io/tlborm/
-[`syn`]: https://crates.io/crates/syn
-[`quote`]: https://crates.io/crates/quote
-[syn-docs]: https://docs.rs/syn/1.0/syn/struct.DeriveInput.html
+[syn]: https://crates.io/crates/syn
+[quote]: https://crates.io/crates/quote
+[syn-docs]: https://docs.rs/syn/2.0/syn/struct.DeriveInput.html
 [quote-docs]: https://docs.rs/quote
-[decl]: #使用-macro_rules-的声明宏用于通用元编程
+[decl]: #用-macro_rules-编写用于通用元编程的声明宏

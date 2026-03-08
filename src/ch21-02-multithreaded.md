@@ -1,11 +1,10 @@
 ## 将单线程 server 变为多线程 server
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch21-02-multithreaded.md -->
-<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
+[ch21-02-multithreaded.md](https://github.com/rust-lang/book/blob/8aa0d003e6499d733d639de32d70f590efa48657/src/ch21-02-multithreaded.md)
 
 目前服务端会依次处理每一个请求，意味着它在完成第一个连接的处理之前不会处理第二个连接。如果服务端正接收越来越多的请求，这类串行操作会使性能越来越差。如果一个请求花费很长时间来处理，随后而来的请求则不得不等待这个长请求结束，即便这些新请求可以很快就处理完。我们需要修复这种情况，不过首先让我们实际尝试一下这个问题。
 
-### 在当前服务端实现中模拟慢请求
+### 模拟慢请求
 
 让我们看看一个慢请求如何影响当前服务端实现中的其他请求。示例 21-10 通过模拟慢响应实现了 */sleep* 请求处理，它会使服务端在响应之前休眠五秒。
 
@@ -119,9 +118,9 @@
 {{#include ../listings/ch21-web-server/no-listing-02-impl-threadpool-new/output.txt}}
 ```
 
-这里发生错误是因为并没有 `ThreadPool` 上的 `execute` 方法。回忆 [“创建有限数量的线程”](#创建有限数量的线程) 部分我们决定线程池应该有与 `thread::spawn` 类似的接口，同时我们将实现 `execute` 函数来获取传递的闭包并将其传递给池中的空闲线程执行。
+这里发生错误是因为并没有 `ThreadPool` 上的 `execute` 方法。回忆 [“创建有限数量的线程”](#创建有限数量的线程) 部分，我们决定线程池应该有与 `thread::spawn` 类似的接口。此外，我们将实现 `execute` 函数，使其接收传给它的闭包，并将其交给池中的某个空闲线程去运行。
 
-我们会在 `ThreadPool` 上定义 `execute` 函数来获取一个闭包参数。回忆第十三章的 [“将捕获的值移出闭包”][fn-traits] 部分，闭包作为参数时可以使用三个不同的 trait：`Fn`、`FnMut` 和 `FnOnce`。我们需要决定这里应该使用哪种闭包。最终需要实现的类似于标准库的 `thread::spawn`，所以我们可以观察 `thread::spawn` 的签名在其参数中使用了何种 bound。查看文档会发现：
+我们会在 `ThreadPool` 上定义 `execute` 方法，让它接收一个闭包作为参数。回忆第十三章的 [“将捕获的值移出闭包”][moving-out-of-closures] 部分，我们可以用三种不同的 trait 来接收闭包参数：`Fn`、`FnMut` 和 `FnOnce`。我们需要决定这里该用哪一种。我们知道最终会做出类似标准库 `thread::spawn` 的实现，所以可以先看看 `thread::spawn` 的签名对其参数施加了哪些约束。文档给出的签名如下：
 
 ```rust,ignore
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
@@ -205,7 +204,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 如果再次运行 `cargo check`，它应该会成功。
 
-#### `Worker` 结构体负责将代码从 `ThreadPool` 传递给线程
+#### 将代码从 `ThreadPool` 发送给线程
 
 示例 21-14 的 `for` 循环中留下了一个关于创建线程的注释。这里，我们来看看如何实际创建线程。标准库提供了 `thread::spawn` 作为创建线程的方法，`thread::spawn` 期望获取一些一旦创建线程就应该执行的代码。然而，我们希望开始线程并使其等待稍后传递的代码。标准库的线程实现并没有包含这么做的方法；我们必须手动实现。
 
@@ -306,7 +305,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 #### 实现 `execute` 方法
 
-最后让我们实现 `ThreadPool` 上的 `execute` 方法。同时也要修改 `Job` 结构体：它将不再是结构体，`Job` 将是一个有着 `execute` 接收到的闭包类型的 trait 对象的类型别名。第二十章 [“使用类型别名创建类型同义词”][creating-type-synonyms-with-type-aliases] 部分提到过，类型别名允许将长的类型变短。观察示例 21-19：
+最后让我们实现 `ThreadPool` 上的 `execute` 方法。同时也要修改 `Job` 结构体：它将不再是结构体，`Job` 将是一个有着 `execute` 接收到的闭包类型的 trait 对象的类型别名。第二十章 [“类型同义词与类型别名”][type-aliases] 部分提到过，类型别名允许将长的类型变短。观察示例 21-19：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -378,6 +377,8 @@ Worker 2 got a job; executing.
 
 > 注意如果同时在多个浏览器窗口打开 */sleep*，它们可能会彼此间隔地加载 5 秒，因为一些浏览器出于缓存的原因会顺序执行相同请求的多个实例。这些限制并不是由于我们的 web 服务端造成的。
 
+现在正适合停下来想一想：如果示例 21-18、21-19 和 21-20 中，待执行的工作不是一个闭包而是 future，那么这些代码会有哪些不同？哪些类型会变？方法签名会不会变化？哪些部分又会保持不变？
+
 在学习了第十七章和第十八章的 `while let` 循环之后，你可能会好奇为何不能如此编写 worker 线程，如示例 21-21 所示：
 
 <span class="filename">文件名：src/lib.rs</span>
@@ -392,8 +393,7 @@ Worker 2 got a job; executing.
 
 示例 21-20 中的代码使用的 `let job = receiver.lock().unwrap().recv().unwrap();` 之所以可以工作是因为对于 `let` 来说，当 `let` 语句结束时任何表达式中等号右侧使用的临时值都会立即被丢弃。然而 `while let`（`if let` 和 `match`）直到相关的代码块结束都不会丢弃临时值。在示例 21-21 中，`job()` 调用期间锁一直持续，这也意味着其他的 `Worker` 实例无法接收任务。
 
-[creating-type-synonyms-with-type-aliases]:
-ch20-03-advanced-types.html#使用类型别名创建类型同义词
+[type-aliases]: ch20-03-advanced-types.html#类型同义词与类型别名
 [integer-types]: ch03-02-data-types.html#整型
 [fn-traits]: ch13-01-closures.html#将捕获的值移出闭包
 [builder]: https://doc.rust-lang.org/std/thread/struct.Builder.html

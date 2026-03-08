@@ -245,7 +245,7 @@ hello.txt should be included in this project: Os { code: 2, kind: NotFound, mess
 
 <span class="caption">示例 9-12: 修改 `main` 返回 `Result<(), E>` 允许对 `Result` 值使用 `?` 运算符</span>
 
-`Box<dyn Error>` 类型是一个**trait 对象**（*trait object*），第十八章的[“顾及不同类型值的 trait 对象”][trait-objects]部分会介绍它。现在可以把 `Box<dyn Error>` 理解为“任何类型的错误”。在返回错误类型 `Box<dyn Error>` 的 `main` 函数中，对 `Result` 使用 `?` 是被允许的，因为它允许任何 `Err` 值提前返回。即便 `main` 函数体现在只会返回 `std::io::Error` 错误类型，通过指定 `Box<dyn Error>`，这个签名仍然是正确的；即使以后在 `main` 函数体中加入返回其他错误类型的代码，这个函数签名依然保持正确。
+`Box<dyn Error>` 类型是一个**trait 对象**（*trait object*），第十八章的[“使用 trait object 来抽象出共享行为”][trait-objects]部分会介绍它。现在可以把 `Box<dyn Error>` 理解为“任何类型的错误”。在返回错误类型 `Box<dyn Error>` 的 `main` 函数中，对 `Result` 使用 `?` 是被允许的，因为它允许任何 `Err` 值提前返回。即便 `main` 函数体现在只会返回 `std::io::Error` 错误类型，通过指定 `Box<dyn Error>`，这个签名仍然是正确的；即使以后在 `main` 函数体中加入返回其他错误类型的代码，这个函数签名依然保持正确。
 
 当 `main` 函数返回 `Result<(), E>`，如果 `main` 返回 `Ok(())` 可执行程序会以 `0` 值退出，而如果 `main` 返回 `Err` 值则会以非零值退出；成功退出的程序会返回整数 `0`，运行错误的程序会返回非 `0` 的整数。Rust 也会从二进制程序中返回与这个惯例相兼容的整数。
 
@@ -254,5 +254,5 @@ hello.txt should be included in this project: Os { code: 2, kind: NotFound, mess
 现在我们讨论过了调用 `panic!` 或返回 `Result` 的细节，让我们回到在不同场景下如何决定使用哪种方式的问题。
 
 [handle_failure]: ch02-00-guessing-game-tutorial.html#使用-result-类型来处理潜在的错误
-[trait-objects]: ch18-02-trait-objects.html#顾及不同类型值的-trait-对象
+[trait-objects]: ch18-02-trait-objects.html#使用-trait-object-来抽象出共享行为
 [termination]: https://doc.rust-lang.org/std/process/trait.Termination.html

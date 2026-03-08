@@ -1,7 +1,6 @@
 ## 高级函数与闭包
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch20-04-advanced-functions-and-closures.md -->
-<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
+[ch20-04-advanced-functions-and-closures.md](https://github.com/rust-lang/book/blob/57ff62db22b006e6b319e2e35c9364d932a8b4e5/src/ch20-04-advanced-functions-and-closures.md)
 
 本部分将探索一些有关函数和闭包的高级特性，这包括函数指针以及返回闭包。
 
@@ -39,7 +38,7 @@
 
 </figure>
 
-或者可以将函数作为 `map` 的参数来代替闭包，如示例 20-30 所示：
+或者，也可以把一个函数作为 `map` 的参数来代替闭包。示例 20-30 展示了这种写法。
 
 <figure class="listing">
 
@@ -47,7 +46,7 @@
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-30/src/main.rs:here}}
 ```
 
-<figcaption>示例 20-30：使用 `String::to_string` 方法将数字转换为字符串</figcaption>
+<figcaption>示例 20-30：使用 `String::to_string` 函数配合 `map` 方法将数字转换为字符串</figcaption>
 
 </figure>
 
@@ -86,7 +85,7 @@
 
 </figure>
 
-然而，如我们在 [“推断和注解闭包类型”][closure-types] 中所注意到的，每一个闭包也有其独立的类型。如果你需要处理多个拥有相同签名但是不同实现的函数，就需要使用 trait 对象。考虑一下如果编写类似示例 20-33 中所示代码会发生什么。
+然而，正如我们在第十三章 [“推断和注解闭包类型”][closure-types] 一节中提到的，每个闭包也都有自己独特的类型。如果你需要处理多个签名相同但实现不同的函数，就需要为它们使用 trait 对象。来看一下，如果写出类似示例 20-33 的代码，会发生什么。
 
 <figure class="listing">
 
@@ -94,7 +93,7 @@
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-33/src/main.rs}}
 ```
 
-<figcaption>示例 20-33：创建一个由返回 `impl Fn` 的函数定义的闭包的 `Vec<T>`</figcaption>
+示例 20-33：创建一个由返回 `impl Fn` 的函数定义的闭包的 `Vec<T>`
 
 </figure>
 
@@ -104,7 +103,7 @@
 {{#include ../listings/ch20-advanced-features/listing-20-33/output.txt}}
 ```
 
-错误信息告诉我们每当返回一个 `impl Trait` Rust 会创建一个独特的**不透明类型**（*opaque type*），这是一个无法看清 Rust 为我们构建了什么细节的类型。所以即使这些函数都返回了实现了相同 trait（ `Fn(i32) -> i32`）的闭包，Rust 为我们生成的不透明类型也是不同的。这类似于 Rust 如何为不同的异步代码块生成不同的具体类型，即使它们有着相同的输出类型，如第十七章 [“使用任意数量的 futures”][any-number-of-futures] 所示。我们已经多次看到这个问题的解决方案：我们可以使用 trait 对象，如示例 20-34 所示。
+错误信息告诉我们每当返回一个 `impl Trait` Rust 会创建一个独特的**不透明类型**（*opaque type*），这是一个无法看清 Rust 为我们构建了什么细节的类型。所以即使这些函数都返回了实现了相同 trait（ `Fn(i32) -> i32`）的闭包，Rust 为我们生成的不透明类型也是不同的。这类似于 Rust 如何为不同的异步代码块生成不同的具体类型，即使它们有着相同的输出类型，如第十七章 [“`Pin` 类型与 `Unpin` trait”][future-types] 所示。我们已经多次看到这个问题的解决方案：我们可以使用 trait 对象，如示例 20-34 所示。
 
 <figure class="listing">
 
@@ -112,16 +111,16 @@
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-34/src/main.rs:here}}
 ```
 
-<figcaption>示例 20-34：创建一个由返回 `Box<dyn Fn>` 的函数定义的闭包的 `Vec<T>` 以便它们有相同的类型</figcaption>
+示例 20-34：创建一个由返回 `Box<dyn Fn>` 的函数定义的闭包的 `Vec<T>` 以便它们有相同的类型
 
 </figure>
 
-这段代码正好可以编译。关于 trait 对象的更多内容，请回顾第十八章的 [顾及不同类型值的 trait 对象”][using-trait-objects-that-allow-for-values-of-different-types] 部分。
+这段代码可以顺利编译。关于 trait 对象的更多内容，请回顾第十八章 [“使用 trait 对象抽象出共享行为”][trait-objects] 一节。
 
 接下来让我们学习宏！
 
 [advanced-traits]: ch20-02-advanced-traits.html#高级-trait
 [enum-values]: ch06-01-defining-an-enum.html#枚举值
 [closure-types]: ch13-01-closures.html#推断和注解闭包类型
-[any-number-of-futures]: ch17-03-more-futures.html
-[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#顾及不同类型值的-trait-对象
+[future-types]: ch17-05-traits-for-async.html#pin-类型与-unpin-trait
+[trait-objects]: ch18-02-trait-objects.html#使用-trait-object-来抽象出共享行为

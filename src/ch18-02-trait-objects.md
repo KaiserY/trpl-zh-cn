@@ -1,7 +1,6 @@
-## 顾及不同类型值的 trait 对象
+## 使用 trait object 来抽象出共享行为
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch18-02-trait-objects.md -->
-<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
+[ch18-02-trait-objects.md](https://github.com/rust-lang/book/blob/eb54c18184c0555acd9f636f5ef7875236b0ff53/src/ch18-02-trait-objects.md)
 
 在第八章中，我们谈到了 vector 只能存储同种类型元素的局限性。示例 8-9 中提供了一个替代方案，通过定义 `SpreadsheetCell` 枚举，来储存整型、浮点型或文本类型的变体。这意味着，我们可以在每个单元中储存不同类型的数据，并仍能拥有一个代表一排单元的 vector。只要我们需存储的值由一组固定的类型组成，并且在代码编译时就知道具体会有哪些类型，那么这种使用枚举的办法是完全可行的。
 
@@ -15,7 +14,7 @@
 
 为了实现 `gui` 所期望的行为，让我们定义一个 `Draw` trait，其中包含名为 `draw` 的方法。接着可以定义一个存放**trait 对象**（*trait object*）的 vector。trait 对象指向一个实现了我们指定 trait 的类型的实例，以及一个用于在运行时查找该类型的 trait 方法的表。我们通过指定某种指针来创建 trait 对象，例如 `&` 引用或 `Box<T>` 智能指针，还有 `dyn` 关键字，以及指定相关的 trait（第二十章 [“动态大小类型和 `Sized` trait”][dynamically-sized] 部分会介绍 trait 对象必须使用指针的原因）。我们可以使用 trait 对象代替泛型或具体类型。任何使用 trait 对象的位置，Rust 的类型系统会在编译时确保任何在此上下文中使用的值会实现其 trait 对象的 trait。如此便无需在编译时就知晓所有可能的类型。
 
-之前提到过，Rust 刻意不将结构体与枚举称为 “对象”，以便与其他语言中的对象相区别。在结构体或枚举中，结构体字段中的数据和 `impl` 块中的行为是分开的，不同于其他语言中将数据和行为组合进一个称为对象的概念中。trait 对象将数据和行为两者相结合，从这种意义上说**则**更类似其他语言中的对象。不过 trait 对象不同于传统的对象，因为不能向 trait 对象添加数据。trait 对象并不像其他语言中的对象那么通用：其具体的作用是允许对通用行为进行抽象。
+之前提到过，在 Rust 中，我们刻意不把结构体和枚举称为“对象”，以便把它们和其他语言里的对象区分开来。在结构体或枚举里，字段中的数据和 `impl` 块里的行为是分开的，而在其他语言中，数据和行为往往会被合并进一个被称为对象的概念里。trait object 和其他语言中的对象也不完全相同，因为我们不能向 trait object 中添加数据。trait object 没有其他语言中的对象那么通用；它的特定用途是为共享行为提供抽象。
 
 示例 18-3 展示了如何定义一个带有 `draw` 方法的 trait `Draw`：
 
@@ -117,7 +116,7 @@
 {{#include ../listings/ch18-oop/listing-18-10/output.txt}}
 ```
 
-这告诉了我们，要么是我们传递了并不希望传递给 `Screen` 的类型并应该提供其他类型，要么应该在 `String` 上实现 `Draw` 以便 `Screen` 可以调用其上的 `draw`。
+这个错误告诉我们：要么是我们把一个本来就不该传给 `Screen` 的类型传进来了，因此应该换成别的类型；要么就该为 `String` 实现 `Draw`，让 `Screen` 能够对它调用 `draw`。
 
 ### trait 对象执行动态分发
 
@@ -125,7 +124,6 @@
 
 当使用 trait 对象时，Rust 必须使用动态分发。编译器无法知晓所有可能用于 trait 对象代码的类型，所以它也不知道应该调用哪个类型的哪个方法实现。为此，Rust 在运行时使用 trait 对象中的指针来知晓需要调用哪个方法。这种查找会带来在静态分发中不会产生的运行时开销。动态分发也阻止编译器有选择地内联方法代码，这会相应地禁用一些优化，Rust 还定义了一些规则，称为**dyn 兼容性**（_dyn compatibility_），用于规定可以和不可以在哪些地方使用动态分发。这些规则超出了本讨论范围，但你可以在[参考资料][dyn-compatibility]中详细了解。尽管在编写示例 18-5 和可以支持示例 18-9 中的代码的过程中确实获得了额外的灵活性，但仍然需要权衡取舍。
 
-[performance-of-code-using-generics]:
-ch10-01-syntax.html#泛型代码的性能
+[performance-of-code-using-generics]: ch10-01-syntax.html#泛型代码的性能
 [dynamically-sized]: ch20-03-advanced-types.html#动态大小类型和-sized-trait
 [dyn-compatibility]: https://doc.rust-lang.org/reference/items/traits.html#dyn-compatibility
