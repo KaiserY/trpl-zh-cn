@@ -1,13 +1,12 @@
 ## 引用循环与内存泄漏
 
-<!-- https://github.com/rust-lang/book/blob/main/src/ch15-06-reference-cycles.md -->
-<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
+[ch15-06-reference-cycles.md](https://github.com/rust-lang/book/blob/ecef81cbc6f0c2d1c8a67409329b0641258c04c2/src/ch15-06-reference-cycles.md)
 
 Rust 的内存安全性保证使其难以意外地制造永远也不会被清理的内存（被称为 **内存泄漏**，_memory leak_），但并非不可能。Rust 并不保证完全防止内存泄漏，这意味着内存泄漏在 Rust 中被认为是内存安全的。这一点可以通过 `Rc<T>` 和 `RefCell<T>` 看出 Rust 允许出现内存泄漏：创建引用循环的可能性是存在的。这会造成内存泄漏，因为每一项的引用计数永远也到不了 0，持有的数据也就永远不会被释放。
 
 ### 制造引用循环
 
-让我们看看引用循环是如何发生的以及如何避免它，以示例 15-25 中的 `List` 枚举和 `tail` 方法的定义开始：
+让我们看看引用循环可能是如何发生的，以及如何避免它。先从示例 15-25 中 `List` 枚举和 `tail` 方法的定义开始：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -15,11 +14,11 @@ Rust 的内存安全性保证使其难以意外地制造永远也不会被清理
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-25/src/main.rs}}
 ```
 
-<span class="caption">示例 15-25: 一个存放 `RefCell` 的 cons list 定义，这样可以修改 `Cons` 变体所引用的数据</span>
+<span class="caption">示例 15-25：一个持有 `RefCell<T>` 的 cons list 定义，这样我们就能修改 `Cons` 变体所引用的内容</span>
 
 这里采用了示例 15-5 中 `List` 定义的另一种变体。现在 `Cons` 变体的第二个元素是 `RefCell<Rc<List>>`，这意味着不同于像示例 15-24 那样能够修改 `i32` 的值，我们希望能够修改 `Cons` 变体所指向的 `List`。这里还增加了一个 `tail` 方法来方便我们在有 `Cons` 变体的时候访问其第二项。
 
-在示例 15-26 中增加了一个 `main` 函数，其使用了示例 15-25 中的定义。这些代码在 `a` 中创建了一个列表，一个指向 `a` 中列表的 `b` 列表，接着修改 `a` 中的列表指向 `b` 中的列表，这会创建一个引用循环。在这个过程的多个位置有 `println!` 语句展示引用计数。
+在示例 15-26 中，我们添加了一个 `main` 函数，它使用了示例 15-25 中的定义。这段代码会先在 `a` 中创建一个列表，再创建一个指向 `a` 中列表的 `b` 列表。然后，它会修改 `a` 中的列表，使其指向 `b`，从而创建一个引用循环。沿途加入的 `println!` 语句会展示这一过程中不同位置的引用计数。
 
 <span class="filename">文件：src/main.rs</span>
 
@@ -27,11 +26,11 @@ Rust 的内存安全性保证使其难以意外地制造永远也不会被清理
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-26/src/main.rs:here}}
 ```
 
-<span class="caption">示例 15-26：创建一个引用循环：两个 `List` 值互相指向彼此</span>
+<span class="caption">示例 15-26：创建两个彼此互相指向的 `List` 值，从而形成引用循环</span>
 
-这里在变量 `a` 中创建了一个 `Rc<List>` 实例来存放初值为 `5, Nil` 的 `List` 值。接着在变量 `b` 中创建了存放包含值 `10` 和指向列表 `a` 的 `List` 的另一个 `Rc<List>` 实例。
+我们在变量 `a` 中创建了一个 `Rc<List>` 实例，它持有一个值为 `5, Nil` 的 `List`。接着，又在变量 `b` 中创建了另一个 `Rc<List>` 实例，它持有一个值为 `10`、并指向 `a` 中列表的 `List`。
 
-下来修改 `a` 使其指向 `b` 而不是 `Nil`，这就创建了一个循环。为此需要使用 `tail` 方法获取 `a` 中 `RefCell<Rc<List>>` 的引用，并放入变量 `link` 中。接着使用 `RefCell<Rc<List>>` 的 `borrow_mut` 方法将其值从存放 `Nil` 的 `Rc<List>` 修改为 `b` 中的 `Rc<List>`。
+然后，我们修改 `a`，让它指向 `b` 而不是 `Nil`，这样就创建了一个循环。为此，我们使用 `tail` 方法获取 `a` 中 `RefCell<Rc<List>>` 的引用，并把它放到变量 `link` 中。接着，调用这个 `RefCell<Rc<List>>` 上的 `borrow_mut` 方法，把它内部的值从持有 `Nil` 的 `Rc<List>` 改成 `b` 中的 `Rc<List>`。
 
 如果保持最后的 `println!` 行注释并运行代码，会得到如下输出：
 
@@ -39,11 +38,11 @@ Rust 的内存安全性保证使其难以意外地制造永远也不会被清理
 {{#include ../listings/ch15-smart-pointers/listing-15-26/output.txt}}
 ```
 
-可以看到将列表 `a` 修改为指向 `b` 之后， `a` 和 `b` 中的 `Rc<List>` 实例的引用计数都是 2。在 `main` 的结尾，Rust 丢弃 `b`，这会使 `b` `Rc<List>` 实例的引用计数从 2 减为 1。此时该 `Rc<List>` 实例并不会被回收，因为其引用计数是 1 而不是 0。接下来 Rust 会丢弃 `a` 将 `a` `Rc<List>` 实例的引用计数从 2 减为 1。这个实例也不能被回收，由于另一个 `Rc<List>` 实例依然引用它，所以其引用计数是 1。这些列表的内存将永远保持未被回收的状态。为了更直观地展示这一引用循环，我们创建了一个如图 15-4 所示的示意图：
+我们可以看到，当把 `a` 中的列表改为指向 `b` 之后，`a` 和 `b` 中 `Rc<List>` 实例的引用计数都变成了 2。在 `main` 结束时，Rust 会先丢弃变量 `b`，这会使 `b` 中那个 `Rc<List>` 实例的引用计数从 2 减到 1。由于引用计数不是 0，所以此时分配在堆上的内存不会被丢弃。然后，Rust 再丢弃 `a`，这会使 `a` 中那个 `Rc<List>` 实例的引用计数也从 2 减到 1。这个实例的内存同样无法被清理，因为另一个 `Rc<List>` 实例仍然引用着它。分配给这些列表的内存将会永远留在那里而不会被回收。为了更直观地展示这个引用循环，我们创建了图 15-4 所示的示意图：
 
 <img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
 
-<span class="caption">图 15-4: 列表 `a` 和 `b` 彼此互相指向形成引用循环</span>
+<span class="caption">图 15-4：列表 `a` 和 `b` 彼此互相指向，从而形成引用循环</span>
 
 如果取消最后 `println!` 的注释并运行程序，Rust 会尝试打印出 `a` 指向 `b` 指向 `a` 这样的循环直到栈溢出。
 
@@ -63,9 +62,9 @@ Rust 的内存安全性保证使其难以意外地制造永远也不会被清理
 
 作为示例，我们不再使用只知道下一个元素的列表，而是创建一个既知道子节点又知道父节点的树结构。
 
-#### 创建树形数据结构：带有子节点的 `Node`
+#### 创建树形数据结构
 
-首先，我们将构建一个节点能够知道其子节点的树。创建一个用于存放其拥有所有权的 `i32` 值和对其子 `Node` 的引用：
+首先，我们将构建一棵树，其中节点能够知道自己的子节点。我们会创建一个名为 `Node` 的结构体，它存放自己的 `i32` 值，以及对子 `Node` 值的引用：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -73,7 +72,7 @@ Rust 的内存安全性保证使其难以意外地制造永远也不会被清理
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-27/src/main.rs:here}}
 ```
 
-我们希望 `Node` 能够拥有其子节点，同时也希望能将所有权共享给变量，以便可以直接访问树中的每一个 `Node`，为此 `Vec<T>` 的项的类型被定义为 `Rc<Node>`。我们还希望能修改其他节点的子节点，所以 `children` 中 `Vec<Rc<Node>>` 被放进了 `RefCell<T>`。
+我们希望 `Node` 能拥有它的子节点，同时也希望能与变量共享这种所有权，以便能够直接访问树中的每个 `Node`。为此，我们将 `Vec<T>` 中元素的类型定义为 `Rc<Node>`。我们还希望能够修改某个节点的子节点，因此把 `children` 中的 `Vec<Rc<Node>>` 包装进了 `RefCell<T>`。
 
 接下来，使用此结构体定义来创建一个叫做 `leaf` 的带有值 `3` 且没有子节点的 `Node` 实例，和另一个带有值 5 并以 `leaf` 作为子节点的实例 `branch`，如示例 15-27 所示：
 
@@ -91,7 +90,7 @@ Rust 的内存安全性保证使其难以意外地制造永远也不会被清理
 
 为了使子节点知道其父节点，需要在 `Node` 结构体定义中增加一个 `parent` 字段。问题是 `parent` 的类型应该是什么。我们知道其不能包含 `Rc<T>`，因为这样 `leaf.parent` 将会指向 `branch` 而 `branch.children` 会包含 `leaf` 的指针，这会形成引用循环，会造成其 `strong_count` 永远也不会为 0。
 
-现在换一种方式思考这个关系，父节点应该拥有其子节点：如果父节点被丢弃了，其子节点也应该被丢弃。然而子节点不应该拥有其父节点：如果丢弃子节点，其父节点应该依然存在。这正是弱引用的例子！
+换一种方式来思考这种关系：父节点应该拥有它的子节点。如果父节点被丢弃了，它的子节点也应该被丢弃。然而，子节点不应该拥有它的父节点。如果我们丢弃一个子节点，父节点仍然应该存在。这正是弱引用适用的场景！
 
 所以 `parent` 使用 `Weak<T>` 类型而不是 `Rc<T>`，具体来说是 `RefCell<Weak<Node>>`。现在 `Node` 结构体定义看起来像这样：
 
@@ -131,7 +130,7 @@ children: RefCell { value: [] } }] } })
 
 没有无限的输出表明这段代码并没有造成引用循环。这一点也可以从观察 `Rc::strong_count` 和 `Rc::weak_count` 调用的结果看出。
 
-#### 可视化 `strong_count` 和 `weak_count` 的改变
+#### 可视化 `strong_count` 和 `weak_count` 的变化
 
 让我们通过创建了一个新的内部作用域并将 `branch` 的创建放入其中，来观察 `Rc<Node>` 实例的 `strong_count` 和 `weak_count` 值的变化。这会展示当 `branch` 创建和离开作用域被丢弃时会发生什么。这些修改如示例 15-29 所示：
 
