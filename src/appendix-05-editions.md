@@ -1,13 +1,12 @@
 ## 附录 E：版本
 
-<!-- https://github.com/rust-lang/book/blob/main/src/appendix-05-editions.md -->
-<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
+[appendix-05-editions.md](https://github.com/rust-lang/book/blob/555182e7f27ffb9761e18455f4d7eb42443a2954/src/appendix-05-editions.md)
 
 早在第一章，我们见过 `cargo new` 在 *Cargo.toml* 中增加了一些有关 `edition` 的元数据。本附录将解释其意义！
 
 Rust 语言和编译器有一个为期六周的发布循环，这意味着用户会稳定得到新功能的更新。其他编程语言发布大更新但不甚频繁；Rust 选择更为频繁的发布小更新。一段时间之后，所有这些小更新会日积月累。不过随着小更新逐次的发布，或许很难回过头来感叹：“哇，从 Rust 1.10 到 Rust 1.31，Rust 的变化真大！”
 
-大约每两到三年，Rust 团队会生成一个新的 Rust **版本**（*edition*）。每一个版本会结合已经落地的功能，并提供一个清晰的带有完整更新文档和工具的功能包。新版本会作为常规的六周发布过程的一部分发布。
+大约每三年左右，Rust 团队会发布一个新的 Rust **版本**（*edition*）。每一个版本会把已经落地的特性整合成一个清晰的整体，并配套提供完全更新过的文档和工具。新版本会作为常规六周发布流程的一部分发布。
 
 新的版本对不同人群具有不同意义：
 
@@ -25,4 +24,6 @@ Rust 语言和编译器有一个为期六周的发布循环，这意味着用户
 
 有一点需要明确：大部分功能在所有版本中都能使用。开发者使用任何 Rust 版本将能继续接收最新稳定版的改进。然而在一些情况，主要是增加了新关键字的时候，则可能出现了只能用于新版本的功能。只需切换版本即可利用新版本的功能。
 
-请查看 [_Edition Guide_](https://rust-lang-nursery.github.io/edition-guide/) 了解更多细节，这是一个全面介绍不同版本之间差异的书籍，包括如何通过 `cargo fix` 自动将代码迁移到新版本。
+更多细节请参见 [_Edition Guide_][edition-guide]。这是一本完整的指南，列举了不同 edition 之间的差异，并说明了如何通过 `cargo fix` 自动将代码升级到新的 edition。
+
+[edition-guide]: https://doc.rust-lang.org/stable/edition-guide

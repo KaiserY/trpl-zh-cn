@@ -1,10 +1,8 @@
 ## 附录 A：关键字
 
-<!-- https://github.com/rust-lang/book/blob/main/src/appendix-01-keywords.md -->
-<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
+[appendix-01-keywords.md](https://github.com/rust-lang/book/blob/c0f0135ed8056650d0b4b8ac3cffdb277c31f06a/src/appendix-01-keywords.md)
 
-下面的列表包含 Rust 中正在使用或者将来会用到的关键字。因此，这些关键字不能被用作标识符（除了 “[原始标识符][raw-identifiers]” 部分介绍的原始标识符），这包括函数、变量、参数、结构体字段、模块、crate、常量、宏、静态值、属性、类型、trait 或生命周期
-的名字。
+下面的列表包含 Rust 语言当前使用中或为将来使用而保留的关键字。因此，它们不能被用作标识符（原始标识符除外，我们会在 [“原始标识符”][raw-identifiers] 一节中介绍）。_标识符_ 指的是函数、变量、参数、结构体字段、模块、crate、常量、宏、静态值、属性、类型、trait 或生命周期的名字。
 
 [raw-identifiers]: #原始标识符
 
@@ -79,6 +77,8 @@
 
 例如，`match` 是关键字。如果尝试编译如下使用 `match` 作为名字的函数：
 
+<span class="filename">文件名：src/main.rs</span>
+
 ```rust,ignore,does_not_compile
 fn match(needle: &str, haystack: &str) -> bool {
     haystack.contains(needle)
@@ -111,6 +111,6 @@ fn main() {
 
 此代码编译没有任何错误。注意 `r#` 前缀需同时用于函数名定义和 `main` 函数中的调用。
 
-原始标识符允许使用你选择的任何单词作为标识符，即使该单词恰好是保留关键字。这给予了我们更大的自由来选择名字，这样与其他语言交互式就不用考虑到关键字问题，在要交互的语言中这个名字不是关键字。此外，原始标识符允许你使用以不同于你的 crate 使用的 Rust 版本编写的库。比如，`try` 在 2015 edition 中不是关键字，而在 2018、2021 和 2024 edition 则是。所以如果用 2015 edition 编写的库中带有 `try` 函数，在 2018 edition 中调用时就需要使用原始标识符语法，在这里是 `r#try`。有关版本的更多信息，请参见[附录 E][appendix-e]。
+原始标识符允许你把任意单词用作标识符，即使这个单词恰好是保留关键字。这让我们在选择标识符名称时拥有更大的自由，也让我们能够与那些把这些词当作普通名称、而不是关键字的其他语言程序进行集成。此外，原始标识符还允许你使用采用不同 Rust edition 编写的库。例如，`try` 在 2015 edition 中不是关键字，但在 2018、2021 和 2024 edition 中是。如果你依赖的某个库使用 2015 edition 编写，并且其中有一个名为 `try` 的函数，那么在较新的 edition 中调用它时，就需要使用原始标识符语法，在这里就是 `r#try`。有关 edition 的更多信息，请参见[附录 E][appendix-e]。
 
 [appendix-e]: appendix-05-editions.html

@@ -1,9 +1,8 @@
 ## 附录 F：本书译本
 
-<!-- https://github.com/rust-lang/book/blob/main/src/appendix-06-translation.md -->
-<!-- commit fd0c2e900711a9c9e4b0b440f9156d926d52d513 -->
+[appendix-06-translation.md](https://github.com/rust-lang/book/blob/6818718c6b3cabc1ef6b06b2272632e12462162d/src/appendix-06-translation.md)
 
-一些非英语语言的资源。多数仍在翻译中；请查阅[翻译标签][label]来帮助翻译，或者添加译本链接！
+这里列出的是一些非英语资源。大多数仍在进行中；如果你想帮忙，或者想告诉我们新的译本，请查看[翻译标签][label]！
 
 [label]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 
@@ -28,3 +27,7 @@
 - [हिंदी](https://github.com/venkatarun95/rust-book-hindi)
 - [ไทย](https://github.com/rust-lang-th/book-th)
 - [Danske](https://github.com/DanKHansen/book-dk)
+- [O'zbek](https://github.com/rust-lang-uz/book)
+- [Tiếng Việt](https://github.com/tuanemdev/rust-book-vn)
+- [Italiano](https://nixxo.github.io/rust-lang-book-it/)
+- [বাংলা](https://github.com/IsmailHosenIsmailJames/rust-book-bn)

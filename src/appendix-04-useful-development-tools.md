@@ -1,7 +1,6 @@
 ## 附录 D：实用开发工具
 
-<!-- https://github.com/rust-lang/book/blob/main/src/appendix-04-useful-development-tools.md -->
-<!-- commit 56ec353290429e6547109e88afea4de027b0f1a9 -->
+[appendix-04-useful-development-tools.md](https://github.com/rust-lang/book/blob/7b2b4804c0bd9442805441d21a945e4dd37092b2/src/appendix-04-useful-development-tools.md)
 
 在本附录中，我们将讨论 Rust 项目提供的一些有助于开发 Rust 代码的工具。我们将介绍自动格式化、快速应用警告修复、linter 以及与 IDE 的集成。
 
@@ -9,17 +8,7 @@
 
 `rustfmt` 工具根据社区代码风格格式化代码。很多项目使用 `rustfmt` 来避免编写 Rust 代码风格的争论：所有人都用这个工具格式化代码！
 
-安装 `rustfmt`：
-
-Rust 安装默认已包含 rustfmt，因此你的系统上应该已经有 `rustfmt` 和 `cargo-fmt` 程序了。这两个命令类似于 `rustc` 和 `cargo`，其中 `rustfmt` 提供了更细粒度的控制，而 `cargo-fmt` 则理解使用 Cargo 的项目约定。要格式化任何 Cargo 项目，请输入以下命令：
-
-```sh
-$ cargo fmt
-```
-
-运行此命令会格式化当前 crate 中所有的 Rust 代码。这应该只会改变代码风格，而不是代码语义。
-
-该命令会为你提供 `rustfmt` 和 `cargo-fmt`，类似于 Rust 同时提供 `rustc` 和 `cargo`。要格式化任何 Cargo 项目，请执行以下命令：
+Rust 安装默认已包含 `rustfmt`，因此你的系统上应该已经有 `rustfmt` 和 `cargo-fmt` 这两个程序了。它们类似于 `rustc` 和 `cargo` 的关系：`rustfmt` 提供更细粒度的控制，而 `cargo-fmt` 则理解使用 Cargo 的项目约定。要格式化任意 Cargo 项目，请运行以下命令：
 
 ```console
 $ cargo fmt
@@ -42,9 +31,7 @@ fn main() {
 }
 ```
 
-这里定义变量 `x` 为可变，但是我们从未修改它。Rust 会警告说：
-
-这里调用了 `do_something` 函数 100 次，不过从未在 `for` 循环体中使用变量 `i`。Rust 会警告说：
+这里定义变量 `x` 为可变，但我们实际上从未修改它。Rust 会对此发出警告：
 
 ```console
 $ cargo build
@@ -82,7 +69,7 @@ fn main() {
 
 变量 `x` 现在是不可变的了，警告也不再出现。
 
-`cargo fix` 命令可以用于在不同 Rust 版本间迁移代码。版本在[附录 E][editions]中介绍。
+你也可以用 `cargo fix` 在不同 Rust edition 之间迁移代码。edition 在[附录 E][editions]中介绍。
 
 ### 使用 Clippy 获取更多 lint
 
@@ -94,7 +81,7 @@ Clippy 工具是一组 lints 的集合，用于分析你的代码，帮助你捕
 $ cargo clippy
 ```
 
-例如，你编写了一个程序使用了数学常数，例如 pi，的一个近似值，如下所示，：
+例如，假设你写了一个程序，像下面这样使用某个数学常量的近似值，例如 pi：
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -138,12 +125,12 @@ fn main() {
 
 ### 使用 `rust-analyzer` 的 IDE 集成
 
-为了帮助 IDE 集成，Rust 社区建议使用 [`rust-analyzer`][rust-analyzer]。这个工具是一组以编译器为中心的实用程序，它实现了 [Language Server Protocol][lsp]，一个 IDE 与编程语言之间的通信规范。`rust-analyzer` 可以用于不同的客户端，比如 [Visual Studio Code 的 Rust analyzer 插件][vscode]。
+为了帮助 IDE 集成，Rust 社区建议使用 [`rust-analyzer`][rust-analyzer]。这个工具是一组以编译器为中心的实用程序，它实现了 [Language Server Protocol][lsp]，这是 IDE 与编程语言之间通信的一项规范。不同的客户端都可以使用 `rust-analyzer`，例如 [Visual Studio Code 的 Rust analyzer 插件][vscode]。
 
 [lsp]: http://langserver.org/
 [vscode]: https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer
 
-访问 `rust-analyzer` 项目的[主页][rust-analyzer]来了解如何安装它，然后为你的 IDE 安装 language server 支持。如此你的 IDE 便会获得如自动补全、跳转到定义和 inline error 之类的功能。
+访问 `rust-analyzer` 项目的[主页][rust-analyzer]获取安装说明，然后为你所使用的 IDE 安装相应的 language server 支持。这样一来，你的 IDE 就会获得自动补全、跳转到定义以及内联错误等能力。
 
 [rust-analyzer]: https://rust-analyzer.github.io
 [editions]: appendix-05-editions.html

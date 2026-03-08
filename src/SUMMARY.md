@@ -37,7 +37,7 @@
 
 ## 基本 Rust 技能
 
-- [使用包、Crate 和模块管理不断增长的项目](ch07-00-managing-growing-projects-with-packages-crates-and-modules.md)
+- [包、Crates 与模块](ch07-00-managing-growing-projects-with-packages-crates-and-modules.md)
   - [包和 Crate](ch07-01-packages-and-crates.md)
   - [定义模块来控制作用域与私有性](ch07-02-defining-modules-to-control-scope-and-privacy.md)
   - [引用模块树中项的路径](ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md)
@@ -101,17 +101,17 @@
   - [共享状态并发](ch16-03-shared-state.md)
   - [使用 `Sync` 与 `Send` Traits 的可扩展并发](ch16-04-extensible-concurrency-sync-and-send.md)
 
-- [Async 和 await](ch17-00-async-await.md)
+- [异步编程基础：Async、Await、Future 与 Stream](ch17-00-async-await.md)
   - [Futures 和 async 语法](ch17-01-futures-and-syntax.md)
   - [并发与 async](ch17-02-concurrency-with-async.md)
   - [使用任意数量的 futures](ch17-03-more-futures.md)
-  - [流（Streams）](ch17-04-streams.md)
+  - [Stream：按顺序出现的 Future](ch17-04-streams.md)
   - [深入理解 async 相关的 traits](ch17-05-traits-for-async.md)
   - [future、任务和线程](ch17-06-futures-tasks-threads.md)
 
 - [面向对象编程特性](ch18-00-oop.md)
   - [面向对象语言的特征](ch18-01-what-is-oo.md)
-  - [顾及不同类型值的 trait 对象](ch18-02-trait-objects.md)
+  - [使用 trait object 来抽象出共享行为](ch18-02-trait-objects.md)
   - [面向对象设计模式的实现](ch18-03-oo-design-patterns.md)
 
 ## 高级主题
@@ -129,7 +129,7 @@
   - [宏](ch20-05-macros.md)
 
 - [最后的项目：构建多线程 web server](ch21-00-final-project-a-web-server.md)
-  - [建立单线程 web server](ch21-01-single-threaded.md)
+  - [构建单线程 web server](ch21-01-single-threaded.md)
   - [将单线程 server 变为多线程 server](ch21-02-multithreaded.md)
   - [优雅停机与清理](ch21-03-graceful-shutdown-and-cleanup.md)
 
