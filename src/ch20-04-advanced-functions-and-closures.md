@@ -86,7 +86,7 @@
 
 </figure>
 
-然而，如我们在 [“闭包类型推断和注解”][closure-types] 中所注意到的，每一个闭包也有其独立的类型。如果你需要处理多个拥有相同签名但是不同实现的函数，就需要使用 trait 对象。考虑一下如果编写类似示例 20-33 中所示代码会发生什么。
+然而，如我们在 [“推断和注解闭包类型”][closure-types] 中所注意到的，每一个闭包也有其独立的类型。如果你需要处理多个拥有相同签名但是不同实现的函数，就需要使用 trait 对象。考虑一下如果编写类似示例 20-33 中所示代码会发生什么。
 
 <figure class="listing">
 
@@ -122,6 +122,6 @@
 
 [advanced-traits]: ch20-02-advanced-traits.html#高级-trait
 [enum-values]: ch06-01-defining-an-enum.html#枚举值
-[closure-types]: ch13-01-closures.html#闭包类型推断和注解
+[closure-types]: ch13-01-closures.html#推断和注解闭包类型
 [any-number-of-futures]: ch17-03-more-futures.html
 [using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#顾及不同类型值的-trait-对象
