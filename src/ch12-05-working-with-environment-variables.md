@@ -66,7 +66,7 @@
 
 <span class="filename">文件名：src/main.rs</span>
 
-```rust,noplayground
+```rust,ignore,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-23/src/main.rs:here}}
 ```
 

@@ -167,7 +167,7 @@ hi number 9 from the first task!
 
 <span class="file-name">文件名：src/main.rs</span>
 
-```rust
+```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:many-messages}}
 ```
 

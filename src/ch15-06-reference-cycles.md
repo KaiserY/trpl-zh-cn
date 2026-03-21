@@ -11,7 +11,7 @@ Rust 的内存安全性保证使其难以意外地制造永远也不会被清理
 <span class="filename">文件名：src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-25/src/main.rs}}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-25/src/main.rs:here}}
 ```
 
 <span class="caption">示例 15-25：一个持有 `RefCell<T>` 的 cons list 定义，这样我们就能修改 `Cons` 变体所引用的内容</span>
