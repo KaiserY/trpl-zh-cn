@@ -11,7 +11,7 @@
 <span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch13-functional-features/listing-12-23-reproduced/src/lib.rs:ch13}}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-12-23-reproduced/src/main.rs:ch13}}
 ```
 
 <span class="caption">示例 13-17：重现示例 12-23 的 `Config::build` 函数</span>
@@ -51,7 +51,7 @@
 <span class="filename">文件名：src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch13-functional-features/listing-13-19/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-19/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-19：以迭代器作为参数更新 `Config::build` 的签名</span>
@@ -68,8 +68,8 @@
 
 <span class="filename">文件名：src/lib.rs</span>
 
-```rust,noplayground
-{{#rustdoc_include ../listings/ch13-functional-features/listing-13-20/src/lib.rs:here}}
+```rust,ignore,noplayground
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-20/src/main.rs:here}}
 ```
 
 <span class="caption">示例 13-20：修改 `Config::build` 的函数体来使用迭代器方法</span>
