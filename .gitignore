@@ -4,3 +4,9 @@ book/
 dist
 .DS_Store
 .idea
+ai-server/target/
+
+# Local environment variables and API secrets
+.env
+.env.*
+!.env.example

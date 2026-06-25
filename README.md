@@ -42,6 +42,36 @@ mdbook build
 mdbook serve
 ```
 
+## Ferris
+
+网页右侧包含一个可折叠的 Ferris 学习助手面板。它可以读取当前教材页面作为上下文，并通过本地代理服务调用 DeepSeek。API Key 仅由本地 Rust 服务读取，不会发送到浏览器。
+
+复制环境变量示例并填写 DeepSeek API Key：
+
+```bash
+cp .env.example .env
+```
+
+编辑 `.env`：
+
+```env
+DEEPSEEK_API_KEY=你的真实密钥
+```
+
+分别启动教材和 AI 服务：
+
+```bash
+mdbook serve
+```
+
+```bash
+cargo run --manifest-path ai-server/Cargo.toml
+```
+
+然后访问 <http://localhost:3000>。AI 服务默认监听 `127.0.0.1:8787`。
+
+`.env` 已加入 `.gitignore`，不要将真实密钥写入 `.env.example` 或前端 JavaScript。
+
 ## 社区资源
 
 - Rust 语言中文社区：<https://rustcc.cn/>
