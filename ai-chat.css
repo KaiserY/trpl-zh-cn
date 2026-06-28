@@ -334,3 +334,32 @@ body.ayu #rust-ai-panel {
     display: none !important;
   }
 }
+
+/* RAG Reference links */
+.ai-references {
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: var(--ai-soft);
+  border: 1px solid var(--ai-border);
+  border-radius: 8px;
+  font-size: 11px;
+}
+.ai-references-label {
+  color: var(--ai-muted);
+  font-weight: bold;
+}
+.ai-ref-link {
+  display: inline-block;
+  margin: 2px 4px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--ai-surface);
+  color: var(--ai-accent) !important;
+  border: 1px solid var(--ai-border);
+  text-decoration: none;
+}
+.ai-ref-link:hover {
+  background: var(--ai-soft);
+  text-decoration: underline;
+}
+

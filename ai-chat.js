@@ -7,11 +7,13 @@
 
   const API_BASE = "http://127.0.0.1:8787";
   const STORAGE_PREFIX = "rust-book-ai:";
-  const pageKey = `${STORAGE_PREFIX}chat:${location.pathname}`;
+  const activeConvKey = `${STORAGE_PREFIX}active-conversation:${location.pathname}`;
   const widthKey = `${STORAGE_PREFIX}panel-width`;
   const openKey = `${STORAGE_PREFIX}panel-open`;
+  
   const state = {
-    messages: loadMessages(),
+    conversationId: localStorage.getItem(activeConvKey) || null,
+    messages: /** @type {Array<{role: string, content: string, chapters?: Array<{title: string, path: string}>}>} */ ([]),
     generating: false,
     composing: false,
     controller: /** @type {AbortController | null} */ (null),
@@ -35,7 +37,12 @@
     document.body.insertAdjacentHTML("beforeend", panelTemplate());
     bindEvents();
     restorePanelState();
-    renderMessages();
+
+    if (state.conversationId) {
+      loadConversationMessages(state.conversationId);
+    } else {
+      renderMessages();
+    }
     checkHealth();
   }
 
@@ -144,10 +151,38 @@
     try {
       const response = await fetch(`${API_BASE}/api/health`);
       if (!response.ok) throw new Error();
-      const data = await response.json();
-      status.textContent = data.model || "服务已连接";
+      status.textContent = "服务已连接";
     } catch {
       status.textContent = "AI 服务未启动";
+    }
+  }
+
+  async function loadConversationMessages(id) {
+    const status = byId("rust-ai-status");
+    status.textContent = "正在加载历史记录…";
+    try {
+      const response = await fetch(`${API_BASE}/api/conversations/${id}/messages`);
+      if (!response.ok) {
+        if (response.status === 404) {
+          // Conversation deleted on backend
+          state.conversationId = null;
+          localStorage.removeItem(activeConvKey);
+        }
+        throw new Error();
+      }
+      const data = await response.json();
+      state.messages = data.map((/** @type {any} */ msg) => ({
+        role: msg.role,
+        content: msg.content,
+        chapters: msg.metadata?.retrieval?.chapters || [],
+      }));
+      renderMessages();
+      status.textContent = "历史记录已加载";
+    } catch {
+      status.textContent = "无法加载历史记录";
+      renderMessages();
+    } finally {
+      setTimeout(checkHealth, 1500);
     }
   }
 
@@ -161,13 +196,35 @@
     const content = input.value.trim();
     if (!content) return;
 
+    // 1. If conversation does not exist, create it first
+    if (!state.conversationId) {
+      const status = byId("rust-ai-status");
+      status.textContent = "正在创建对话…";
+      try {
+        const title = getPageTitle();
+        const response = await fetch(`${API_BASE}/api/conversations`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title, currentPage: location.pathname }),
+        });
+        if (!response.ok) throw new Error("无法创建服务器会话");
+        const conv = await response.json();
+        state.conversationId = conv.id;
+        localStorage.setItem(activeConvKey, conv.id);
+      } catch (error) {
+        status.textContent = "创建对话失败";
+        alert(`会话初始化失败: ${error instanceof Error ? error.message : "网络错误"}`);
+        return;
+      }
+    }
+
     state.messages.push({ role: "user", content });
     input.value = "";
     input.style.height = "auto";
-    persistMessages();
     renderMessages();
 
-    const assistant = { role: "assistant", content: "" };
+    /** @type {{role: string, content: string, chapters: Array<{title: string, path: string}>}} */
+    const assistant = { role: "assistant", content: "", chapters: [] };
     state.messages.push(assistant);
     setGenerating(true);
     renderMessages();
@@ -175,14 +232,14 @@
     state.controller = new AbortController();
     try {
       const mode = /** @type {HTMLSelectElement} */ (byId("rust-ai-mode")).value;
-      const response = await fetch(`${API_BASE}/api/chat`, {
+      const response = await fetch(`${API_BASE}/api/conversations/${state.conversationId}/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: state.controller.signal,
         body: JSON.stringify({
+          content,
           mode,
           page: mode === "rust" ? null : getPageContext(),
-          messages: state.messages.slice(0, -1),
         }),
       });
 
@@ -192,29 +249,43 @@
       }
       if (!response.body) throw new Error("浏览器不支持流式响应");
 
-      await readStream(response.body, (text) => {
-        assistant.content += text;
-        updateLastAssistant(assistant.content);
+      await readStream(response.body, {
+        retrieval: (data) => {
+          if (data.chapters && data.chapters.length > 0) {
+            assistant.chapters = data.chapters;
+            updateLastAssistant(assistant.content, assistant.chapters);
+          }
+        },
+        delta: (data) => {
+          assistant.content += data.content;
+          updateLastAssistant(assistant.content, assistant.chapters);
+        },
+        done: (data) => {
+          // SSE done event
+        }
       });
-      persistMessages();
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") {
         if (!assistant.content) assistant.content = "已停止生成。";
       } else {
         assistant.content = `请求失败：${error instanceof Error ? error.message : "未知错误"}`;
       }
-      updateLastAssistant(assistant.content);
-      persistMessages();
+      updateLastAssistant(assistant.content, assistant.chapters);
     } finally {
       setGenerating(false);
       state.controller = null;
     }
   }
 
-  async function readStream(stream, onText) {
+  /**
+   * @param {ReadableStream<Uint8Array>} stream
+   * @param {Record<string, (data: any) => void>} handlers
+   */
+  async function readStream(stream, handlers) {
     const reader = stream.getReader();
     const decoder = new TextDecoder();
     let buffer = "";
+    let currentEvent = "";
 
     while (true) {
       const { value, done } = await reader.read();
@@ -223,15 +294,22 @@
       buffer = lines.pop() || "";
 
       for (const line of lines) {
-        if (!line.startsWith("data:")) continue;
-        const data = line.slice(5).trim();
-        if (!data || data === "[DONE]") continue;
-        try {
-          const payload = JSON.parse(data);
-          const text = payload.choices?.[0]?.delta?.content;
-          if (text) onText(text);
-        } catch {
-          // A partial or provider-specific SSE line is ignored.
+        const trimmed = line.trim();
+        if (trimmed.startsWith("event:")) {
+          currentEvent = trimmed.slice(6).trim();
+        } else if (trimmed.startsWith("data:")) {
+          const dataStr = trimmed.slice(5).trim();
+          if (dataStr) {
+            try {
+              const data = JSON.parse(dataStr);
+              if (handlers[currentEvent]) {
+                handlers[currentEvent](data);
+              }
+            } catch (e) {
+              console.error("Failed to parse SSE data JSON:", e, dataStr);
+            }
+          }
+          currentEvent = ""; // Reset event
         }
       }
       if (done) break;
@@ -252,7 +330,8 @@
   function clearConversation() {
     if (state.generating) state.controller?.abort();
     state.messages = [];
-    localStorage.removeItem(pageKey);
+    state.conversationId = null;
+    localStorage.removeItem(activeConvKey);
     renderMessages();
     /** @type {HTMLTextAreaElement} */ (byId("rust-ai-input")).focus();
   }
@@ -272,15 +351,29 @@
     }
 
     container.innerHTML = state.messages
-      .map((message) => messageTemplate(message.role, message.content))
+      .map((message) => messageTemplate(message.role, message.content, message.chapters))
       .join("");
     container.scrollTop = container.scrollHeight;
   }
 
-  function updateLastAssistant(content) {
+  /**
+   * @param {string} content
+   * @param {Array<{title: string, path: string}>} [chapters]
+   */
+  function updateLastAssistant(content, chapters) {
     const bodies = document.querySelectorAll(".ai-message-assistant .ai-message-body");
     const last = bodies[bodies.length - 1];
-    if (last) last.innerHTML = renderMarkdown(content || "正在思考…");
+    if (last) {
+      let refsHtml = "";
+      if (chapters && chapters.length > 0) {
+        refsHtml = `
+          <div class="ai-references">
+            <span class="ai-references-label">📚 查阅章节：</span>
+            ${chapters.map(ch => `<a class="ai-ref-link" href="${ch.path}" target="_blank">${ch.title}</a>`).join("")}
+          </div>`;
+      }
+      last.innerHTML = renderMarkdown(content || "正在思考…") + refsHtml;
+    }
     const container = byId("rust-ai-messages");
     container.scrollTop = container.scrollHeight;
   }
@@ -299,12 +392,29 @@
       </div>`;
   }
 
-  function messageTemplate(role, content) {
+  /**
+   * @param {string} role
+   * @param {string} content
+   * @param {Array<{title: string, path: string}>} [chapters]
+   */
+  fnTemplate = messageTemplate; // helper for type checker
+  function messageTemplate(role, content, chapters) {
     const label = role === "user" ? "你" : "RUST AI";
+    let refsHtml = "";
+    if (chapters && chapters.length > 0) {
+      refsHtml = `
+        <div class="ai-references">
+          <span class="ai-references-label">📚 查阅章节：</span>
+          ${chapters.map(ch => `<a class="ai-ref-link" href="${ch.path}" target="_blank">${ch.title}</a>`).join("")}
+        </div>`;
+    }
     return `
       <article class="ai-message ai-message-${role}">
         <div class="ai-message-role">${label}</div>
-        <div class="ai-message-body">${renderMarkdown(content || "正在思考…")}</div>
+        <div class="ai-message-body">
+          ${renderMarkdown(content || "正在思考…")}
+          ${refsHtml}
+        </div>
       </article>`;
   }
 
@@ -336,19 +446,6 @@
     return document.querySelector("#mdbook-content main h1")?.textContent?.trim()
       || document.title.replace(" - Rust 程序设计语言 简体中文版", "")
       || "当前页面";
-  }
-
-  function loadMessages() {
-    try {
-      const value = JSON.parse(localStorage.getItem(pageKey) || "[]");
-      return Array.isArray(value) ? value : [];
-    } catch {
-      return [];
-    }
-  }
-
-  function persistMessages() {
-    localStorage.setItem(pageKey, JSON.stringify(state.messages.slice(-30)));
   }
 
   function escapeHtml(value) {
