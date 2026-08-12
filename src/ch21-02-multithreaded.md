@@ -265,7 +265,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 <span class="caption">示例 21-16: 修改 `ThreadPool` 来储存一个传输 `Job` 实例的发送者</span>
 
-在 `ThreadPool::new` 中，新建了一个信道，并接着让线程池在接收端等待。这段代码能够成功编译。
+在 `ThreadPool::new` 中，新建了一个信道，并接着让线程池持有发送端。这段代码能够成功编译。
 
 让我们尝试在线程池创建每个 worker 时将接收端传递给它们。须知我们希望在 worker 所分配的线程中使用接收者，所以将在闭包中引用 `receiver` 参数。示例 21-17 中展示的代码还不能编译：
 
