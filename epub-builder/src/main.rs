@@ -321,6 +321,7 @@ fn main() {
     let status = std::process::Command::new("pandoc")
         .args(&[
             temp_merged_path,
+            "-f", "markdown-tex_math_dollars",
             "-o", output_epub,
             "--toc",
             "--resource-path=src",
