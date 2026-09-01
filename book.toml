@@ -1,5 +1,6 @@
 [book]
 title = "Rust 程序设计语言 简体中文版"
+language = "zh-CN"
 authors = [
     "Steve Klabnik",
     "Carol Nichols",
@@ -10,11 +11,12 @@ authors = [
 [output.html]
 additional-css = [
     "ferris.css",
+    "ai-chat.css",
     "theme/2018-edition.css",
     "theme/semantic-notes.css",
     "theme/listing.css",
 ]
-additional-js = ["ferris.js"]
+additional-js = ["ferris.js", "ai-chat.js"]
 git-repository-url = "https://github.com/KaiserY/trpl-zh-cn/tree/main"
 
 [output.html.search]

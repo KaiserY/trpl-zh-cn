@@ -1,0 +1,365 @@
+:root {
+  --ai-panel-width: 390px;
+  --ai-border: rgba(120, 119, 116, 0.22);
+  --ai-muted: #787774;
+  --ai-surface: #ffffff;
+  --ai-soft: #f7f7f5;
+  --ai-accent: #b7410e;
+  --ai-input-accent: #2383e2;
+  --ai-input-accent-hover: #1b6fc2;
+  --ai-input-ring: rgba(35, 131, 226, 0.14);
+}
+
+html.ai-panel-open #mdbook-page-wrapper {
+  margin-right: var(--ai-panel-width);
+}
+
+/* Chapter navigation remains available from the table of contents. */
+.nav-wide-wrapper,
+.nav-wrapper {
+  display: none !important;
+}
+
+#rust-ai-panel {
+  position: fixed;
+  z-index: 1100;
+  inset: 0 0 0 auto;
+  width: var(--ai-panel-width);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  color: var(--fg);
+  background: var(--ai-surface);
+  border-left: 1px solid var(--ai-border);
+  box-shadow: -8px 0 24px rgba(15, 15, 15, 0.04);
+  font-family: "Noto Sans SC", "PingFang SC", sans-serif;
+  transform: translateX(100%);
+  transition: transform 180ms ease;
+}
+
+html.ai-panel-open #rust-ai-panel {
+  transform: translateX(0);
+}
+
+.ai-panel-header {
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px 0 16px;
+  border-bottom: 1px solid var(--ai-border);
+}
+
+.ai-panel-heading {
+  min-width: 0;
+  flex: 1;
+}
+
+.ai-panel-heading strong,
+.ai-panel-heading span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ai-panel-heading strong {
+  font-size: 14px;
+}
+
+.ai-panel-heading span {
+  margin-top: 2px;
+  color: var(--ai-muted);
+  font-size: 11px;
+}
+
+.ai-icon-button,
+#rust-ai-toggle {
+  appearance: none;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.ai-icon-button {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  font-size: 18px;
+}
+
+.ai-icon-button:hover,
+#rust-ai-toggle:hover {
+  background: var(--ai-soft);
+}
+
+#rust-ai-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 9px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.ai-ferris-icon {
+  width: 24px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.ai-chat-scroll {
+  overflow-y: auto;
+  padding: 22px 20px 30px;
+  overscroll-behavior: contain;
+}
+
+.ai-empty {
+  margin-top: min(18vh, 140px);
+}
+
+.ai-empty h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.ai-empty p {
+  margin: 0 0 18px;
+  color: var(--ai-muted);
+  font-size: 13px;
+}
+
+.ai-suggestions {
+  display: grid;
+  gap: 7px;
+}
+
+.ai-suggestion {
+  padding: 9px 10px;
+  text-align: left;
+  color: inherit;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.ai-suggestion:hover {
+  background: var(--ai-soft);
+  border-color: var(--ai-border);
+}
+
+.ai-message {
+  margin-bottom: 22px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.ai-message-role {
+  margin-bottom: 6px;
+  color: var(--ai-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.ai-message-user .ai-message-body {
+  padding: 10px 12px;
+  background: var(--ai-soft);
+  border-radius: 10px;
+}
+
+.ai-message-body p {
+  margin: 0 0 0.75em;
+}
+
+.ai-message-body p:last-child {
+  margin-bottom: 0;
+}
+
+.ai-message-body pre {
+  position: relative;
+  overflow-x: auto;
+  padding: 12px;
+  border-radius: 7px;
+  background: #252525;
+  color: #f4f4f4;
+  font-size: 12px;
+}
+
+.ai-message-body code {
+  font-family: var(--mono-font);
+}
+
+.ai-status {
+  color: var(--ai-muted);
+  font-size: 12px;
+}
+
+.ai-composer-wrap {
+  padding: 10px 14px 14px;
+  background: linear-gradient(to bottom, transparent, var(--ai-surface) 18%);
+}
+
+.ai-context-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+
+.ai-context-row select {
+  max-width: 150px;
+  color: var(--ai-muted);
+  background: transparent;
+  border: 0;
+  font-size: 11px;
+}
+
+.ai-composer {
+  padding: 10px 10px 8px;
+  border: 1px solid var(--ai-border);
+  border-radius: 12px;
+  background: var(--ai-surface);
+  box-shadow: 0 2px 8px rgba(15, 15, 15, 0.06);
+}
+
+.ai-composer:focus-within {
+  border-color: var(--ai-input-accent);
+  box-shadow: none;
+}
+
+#rust-ai-input {
+  width: 100%;
+  min-height: 52px;
+  max-height: 180px;
+  resize: none;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  outline: none;
+  font: inherit;
+  line-height: 1.5;
+}
+
+.ai-composer-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ai-composer-hint {
+  color: var(--ai-muted);
+  font-size: 10px;
+}
+
+#rust-ai-send {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  color: var(--ai-accent);
+  background: #fff;
+  border: 1px solid var(--ai-border);
+  cursor: pointer;
+}
+
+#rust-ai-send:hover:not(:disabled) {
+  background: var(--ai-soft);
+  border-color: var(--ai-border);
+}
+
+#rust-ai-send:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.ai-send-claw {
+  width: 25px;
+  height: 25px;
+  display: block;
+  object-fit: contain;
+}
+
+.ai-resize-handle {
+  position: absolute;
+  inset: 0 auto 0 -4px;
+  width: 8px;
+  cursor: col-resize;
+}
+
+body.coal #rust-ai-panel,
+body.navy #rust-ai-panel,
+body.ayu #rust-ai-panel {
+  --ai-border: rgba(255, 255, 255, 0.13);
+  --ai-muted: #a7a7a7;
+  --ai-surface: var(--bg);
+  --ai-soft: rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 1279px) {
+  html.ai-panel-open #mdbook-page-wrapper {
+    margin-right: 0;
+  }
+
+  #rust-ai-panel {
+    max-width: min(92vw, 420px);
+    box-shadow: -14px 0 38px rgba(15, 15, 15, 0.16);
+  }
+}
+
+@media (max-width: 700px) {
+  #rust-ai-toggle .ai-toggle-label {
+    display: none;
+  }
+
+  #rust-ai-panel {
+    width: 100vw;
+    max-width: none;
+  }
+
+  .ai-resize-handle {
+    display: none;
+  }
+}
+
+@media print {
+  #rust-ai-panel,
+  #rust-ai-toggle {
+    display: none !important;
+  }
+}
+
+/* RAG Reference links */
+.ai-references {
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: var(--ai-soft);
+  border: 1px solid var(--ai-border);
+  border-radius: 8px;
+  font-size: 11px;
+}
+.ai-references-label {
+  color: var(--ai-muted);
+  font-weight: bold;
+}
+.ai-ref-link {
+  display: inline-block;
+  margin: 2px 4px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--ai-surface);
+  color: var(--ai-accent) !important;
+  border: 1px solid var(--ai-border);
+  text-decoration: none;
+}
+.ai-ref-link:hover {
+  background: var(--ai-soft);
+  text-decoration: underline;
+}
+
