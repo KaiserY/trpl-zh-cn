@@ -22,7 +22,7 @@ fn main() {
         .read_line(&mut guess)
         .expect("Failed to read line");
 
-    // 译者注：官方rustbook这里错误延用了第二章有意报错版本的代码，无法编译。需要加上下面这行以修复
+    // 译者注：官方 rustbook 这里错误延用了第二章有意报错版本的代码，无法编译。需要加上下面这行以修复
     let guess: u32 = guess.trim().parse().expect("Please type a number!");
 
     println!("You guessed: {guess}");
