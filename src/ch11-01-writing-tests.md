@@ -1,6 +1,6 @@
 ## 如何编写测试
 
-[ch11-01-writing-tests.md](https://github.com/rust-lang/book/blob/99071589c5358114de6324d9aa2643caeee305bd/src/ch11-01-writing-tests.md)
+[ch11-01-writing-tests.md](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch11-01-writing-tests.md)
 
 Rust 中的测试函数是用来验证非测试代码是否按照期望的方式运行的。测试函数体通常执行如下三种操作：
 
@@ -94,7 +94,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 
 <span class="caption">示例 11-4：一个测试通过和一个测试失败的测试结果</span>
 
-`test tests::another` 这一行是 `FAILED` 而不是 `ok` 了。在单独测试结果和摘要之间多了两个新的部分：第一个部分显示了测试失败的详细原因。在这个例子中，我们看到 `another` 因为在 _src/lib.rs_ 的第 17 行 `panicked at 'Make this test fail'` 而失败的详细信息。下一部分列出了所有失败的测试，这在有很多测试和很多失败测试的详细输出时很有帮助。我们可以通过使用失败测试的名称来只运行这个测试，以便调试；下一部分 [“控制测试如何运行”][controlling-how-tests-are-run] 会讲到更多运行测试的方法。
+`test tests::another` 这一行是 `FAILED` 而不是 `ok` 了。在单独测试结果和摘要之间多了两个新的部分：第一个部分显示了测试失败的详细原因。在这个例子中，详细信息表明 `tests::another` 在 *src/lib.rs* 的第 17 行以 `Make this test fail` 消息触发 panic，因此测试失败。下一部分列出了所有失败的测试，这在有很多测试和很多失败测试的详细输出时很有帮助。我们可以通过使用失败测试的名称来只运行这个测试，以便调试；下一部分 [“控制测试如何运行”][controlling-how-tests-are-run] 会讲到更多运行测试的方法。
 
 最后是摘要行：总体上讲，测试结果是 `FAILED`。有一个测试通过和一个测试失败。
 
@@ -200,7 +200,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 
 测试捕获到了 bug！`it_adds_two` 测试失败，错误信息告诉我们断言失败了，它告诉我们 ``assertion `left == right` failed`` 以及 `left` 和 `right` 的值是什么。这个错误信息有助于我们开始调试：它说 `assert_eq!` 的 `left` 参数（也就是 `add_two(2)` 的结果）是 `5`，而 `right` 参数是 `4`。可以想象当有很多测试在运行时这些信息是多么的有用。
 
-需要注意的是，在一些语言和测试框架中，断言两个值相等的函数的参数被称为 `expected` 和 `actual`，而且指定参数的顺序非常重要。然而在 Rust 中，它们则叫做 `left` 和 `right`，同时指定期望的值和被测试代码产生的值的顺序并不重要。这个测试中的断言也可以写成 `assert_eq!(add_two(2), result)`，这时失败信息仍同样是 `` assertion failed: `(left == right)` ``。
+需要注意的是，在一些语言和测试框架中，断言两个值相等的函数的参数被称为 `expected` 和 `actual`，而且指定参数的顺序非常重要。然而在 Rust 中，它们则叫做 `left` 和 `right`，同时指定期望的值和被测试代码产生的值的顺序并不重要。这个测试中的断言也可以写成 `assert_eq!(4, result)`，这时失败信息仍同样是 `` assertion `left == right` failed ``。
 
 `assert_ne!` 宏在传递给它的两个值不相等时通过，而在相等时失败。当我们不确定值**会**是什么，不过能确定值绝对**不会**是什么的时候，这个宏最有用处。例如，如果一个函数保证会以某种方式改变其输入，不过这种改变方式是由运行测试时是星期几来决定的，这时最好的断言可能就是函数的输出不等于其输入。
 
@@ -306,7 +306,7 @@ Cargo 编译并运行了测试。可以看到 `running 1 test` 这一行。下�
 {{#include ../listings/ch11-writing-automated-tests/no-listing-09-guess-with-panic-msg-bug/output.txt}}
 ```
 
-失败信息表明测试确实如期望 panic 了，不过 panic 信息中并没有包含期望的信息 `less than or equal to 100`。而我们得到的 panic 信息是 `Guess value must be greater than or equal to 1, got 200.`。这样就可以开始寻找 bug 在哪了！
+失败信息表明测试确实如期望 panic 了，不过 panic 信息中并没有包含期望的信息 `less than or equal to 100`。而我们得到的 panic 信息是 `Guess value must be greater than or equal to 1, got 200`。这样就可以开始寻找 bug 在哪了！
 
 ### 在测试中使用 `Result<T, E>`
 

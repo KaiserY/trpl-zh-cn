@@ -1,3 +1,5 @@
+mod links;
+
 use std::collections::HashMap;
 use std::path::Path;
 use regex::{Regex, Captures};
@@ -209,6 +211,13 @@ fn main() {
         }
     }
     
+    let book_targets: links::BookTargets = file_list.iter().filter_map(|file| {
+        let path = Path::new("src").join(file);
+        let content = std::fs::read_to_string(path).ok()?;
+        let file_id = Path::new(file).file_stem()?.to_str()?.to_string();
+        Some((file_id.clone(), links::chapter_targets(&content, &file_id)))
+    }).collect();
+
     let mut merged_lines = Vec::new();
     let lang_re = Regex::new(r"^(\s*`{3,4})\s*([a-zA-Z0-9_\-]+)(?:[, \t].*)?$").unwrap();
     let header_re = Regex::new(r"^(#+)\s+(.+)$").unwrap();
@@ -228,29 +237,32 @@ fn main() {
         let filename = Path::new(file_path_str).file_name().unwrap().to_string_lossy().into_owned();
         let file_id = file_id_map.get(&filename).expect("找不到对应的 file_id").clone();
         
+        let content_resolved = links::prepare_references(&content_resolved, &file_id, &book_targets);
+
         let mut new_lines = Vec::new();
         let mut first_header = true;
         let mut inside_code_block = false;
         
         for line in content_resolved.lines() {
+            let (quote_prefix, body) = links::split_quote_prefix(line);
             let mut processed_line = line.to_string();
             
-            if line.trim().starts_with("```") {
+            if body.trim().starts_with("```") {
                 inside_code_block = !inside_code_block;
                 
                 if inside_code_block {
-                    if let Some(caps) = lang_re.captures(line) {
+                    if let Some(caps) = lang_re.captures(body) {
                         let backticks = caps.get(1).unwrap().as_str();
                         let lang = caps.get(2).unwrap().as_str();
-                        processed_line = format!("{}{}", backticks, lang);
+                        processed_line = format!("{}{}{}", quote_prefix, backticks, lang);
                     }
                 }
                 new_lines.push(processed_line);
                 continue;
             }
             
-            if !inside_code_block && line.starts_with('#') {
-                if let Some(caps) = header_re.captures(line) {
+            if !inside_code_block && body.starts_with('#') {
+                if let Some(caps) = header_re.captures(body) {
                     let level = caps.get(1).unwrap().as_str();
                     let header_text = caps.get(2).unwrap().as_str();
                     
@@ -264,7 +276,7 @@ fn main() {
                         format!("{}-{}", file_id, slug)
                     };
                     
-                    processed_line = format!("{} {} {{#{}}}", level, header_text_clean, header_id);
+                    processed_line = format!("{}{} {} {{#{}}}", quote_prefix, level, header_text_clean, header_id);
                 }
             }
             
@@ -281,27 +293,12 @@ fn main() {
             let text = caps.get(2).unwrap().as_str();
             let url = caps.get(3).unwrap().as_str();
             
-            if url.starts_with("http://") || url.starts_with("https://") || url.starts_with("mailto:") || url.starts_with("ftp:") {
-                return caps.get(0).unwrap().as_str().to_string();
+            let rewritten = links::rewrite_target(url, &file_id, &book_targets);
+            if rewritten == url {
+                caps.get(0).unwrap().as_str().to_string()
+            } else {
+                format!("[{}]({})", text, rewritten)
             }
-            
-            let parts: Vec<&str> = url.split('#').collect();
-            let path = parts[0];
-            let fragment = if parts.len() > 1 { parts[1] } else { "" };
-            
-            let target_filename = Path::new(path).file_name().map_or("", |s| s.to_str().unwrap_or(""));
-            if target_filename.ends_with(".md") {
-                if let Some(target_file_id) = file_id_map.get(target_filename) {
-                    if !fragment.is_empty() {
-                        let new_fragment = format!("{}-{}", target_file_id, slugify(fragment));
-                        return format!("[{}](#{})", text, new_fragment);
-                    } else {
-                        return format!("[{}](#{})", text, target_file_id);
-                    }
-                }
-            }
-            
-            caps.get(0).unwrap().as_str().to_string()
         });
         
         merged_lines.push(final_content.into_owned());

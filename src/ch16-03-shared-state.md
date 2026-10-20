@@ -1,6 +1,6 @@
 ## 共享状态并发
 
-[ch16-03-shared-state.md](https://github.com/rust-lang/book/blob/9bd32402af8d3103302650895ec9d129ebfa47e1/src/ch16-03-shared-state.md)
+[ch16-03-shared-state.md](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch16-03-shared-state.md)
 
 消息传递是一个很好的处理并发的方式，但并不是唯一一个。另一种方式是让多个线程访问相同的共享数据。再考虑一下 Go 语言文档中的这句口号：“不要通过共享内存来通讯”。（“do not communicate by sharing memory.”）
 
@@ -39,7 +39,7 @@
 
 一旦获取了锁，就可以将返回值（命名为 `num`）视为一个其内部数据的可变引用了。类型系统确保了我们在使用 `m` 中的值之前获取锁。`m` 的类型是 `Mutex<i32>` 而不是 `i32`，所以**必须**调用 `lock` 才能使用这个 `i32` 值。我们不能忘记这么做，因为如果没有获取锁，类型系统就不允许访问内部的 `i32` 值。
 
-正如你所猜想的，`Mutex<T>` 是一个智能指针。更准确的说，`lock` 调用会**返回**一个叫做 `MutexGuard` 的智能指针。`MutexGuard` 智能指针实现了 `Deref` 来指向其内部数据；它也实现了 `Drop`，当 `MutexGuard` 离开作用域时，自动释放锁（发生在示例 16-12 内部作用域的结尾）。这样一来，就不会有忘记释放锁从而导致互斥器阻塞无法被其他线程使用的潜在风险，因为锁的释放是自动发生的。
+`lock` 调用返回一个包裹在 `LockResult` 中的 `MutexGuard`，我们通过调用 `unwrap` 处理了这个 `LockResult`。`MutexGuard` 智能指针实现了 `Deref` 来指向其内部数据；它也实现了 `Drop`，当 `MutexGuard` 离开作用域时，自动释放锁（发生在示例 16-12 内部作用域的结尾）。这样一来，就不会有忘记释放锁从而导致互斥器阻塞无法被其他线程使用的潜在风险，因为锁的释放是自动发生的。
 
 释放锁之后，我们可以打印出互斥器内部的 `i32` 值，并发现我们刚刚已经将其值改为 6。
 

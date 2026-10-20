@@ -1,6 +1,6 @@
 ## 结合起来看：Future、任务与线程
 
-[ch17-06-futures-tasks-threads.md](https://github.com/rust-lang/book/blob/0d5a0dd395aba1f82d7e5aaf6dbb59b2b843ad2c/src/ch17-06-futures-tasks-threads.md)
+[ch17-06-futures-tasks-threads.md](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch17-06-futures-tasks-threads.md)
 
 正如我们在[第十六章][ch16]中看到的那样，线程提供了一种实现并发的方式。而在本章里，我们又看到了另一种方式：使用基于 future 和 stream 的 async。如果你想知道应该在什么时候选哪一种，答案是：这取决于具体情况！而且在很多情况下，真正的选择并不是线程*或* async，而是线程*和* async 一起用。
 

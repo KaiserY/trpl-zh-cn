@@ -2,7 +2,7 @@
 
 ## 采用测试驱动开发增加功能
 
-[ch12-04-testing-the-librarys-functionality.md](https://github.com/rust-lang/book/blob/d7c0e477a22bcb37fdb290c6046058565d6738c2/src/ch12-04-testing-the-librarys-functionality.md)
+[ch12-04-testing-the-librarys-functionality.md](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch12-04-testing-the-librarys-functionality.md)
 
 现在我们将逻辑提取到了 *src/lib.rs* 并将所有的参数解析和错误处理留在了 *src/main.rs* 中，为代码的核心功能编写测试将更加容易。我们可以直接使用多种参数调用函数并检查返回值而无需从命令行运行二进制文件了。
 
@@ -19,7 +19,7 @@
 
 ### 编写失败测试
 
-去掉 *src/lib.rs* 和 *src/main.rs* 中用于检查程序行为的 `println!` 语句，因为不再真正需要它们了。接着我们会像[第十一章][ch11-anatomy]那样增加一个 `test` 模块和一个测试函数。测试函数指定了 `search` 函数期望拥有的行为：它会获取一个需要查询的字符串和用来查询的文本，并只会返回包含请求的文本行。示例 12-15 展示了这个测试，它还不能编译：
+我们会像[第十一章][ch11-anatomy]那样，在 *src/lib.rs* 中增加一个 `tests` 模块和一个测试函数。测试函数指定了 `search` 函数期望拥有的行为：它会获取一个需要查询的字符串和用来查询的文本，并只会返回包含请求的文本行。示例 12-15 展示了这个测试：
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -31,7 +31,7 @@
 
 这里选择使用 `"duct"` 作为这个测试中需要搜索的字符串。用来搜索的文本有三行，其中只有一行包含 `"duct"`。（注意双引号之后的反斜杠，这告诉 Rust 不要在字符串字面值内容的开头加入换行符）我们断言 `search` 函数的返回值只包含期望的那一行。
 
-我们还不能运行这个测试并看到它失败，因为它甚至都还不能编译：`search` 函数还不存在呢！根据 TDD 的原则，我们将增加足够的代码来使其能够编译：一个总是会返回空 vector 的 `search` 函数定义，如示例 12-16 所示。然后这个测试应该能够编译并因为空 vector 并不匹配一个包含一行 `"safe, fast, productive."` 的 vector 而失败。
+现在运行这个测试，它会失败，因为 `unimplemented!` 宏会以“not implemented”消息触发 panic。根据 TDD 的原则，我们先迈出一小步，加入刚好足够的代码，让函数调用不再 panic：把 `search` 函数定义为总是返回一个空 vector，如示例 12-16 所示。然后这个测试应该能够编译，并因为空 vector 与包含 `"safe, fast, productive."` 这一行的 vector 不匹配而失败
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -39,7 +39,7 @@
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-16/src/lib.rs:here}}
 ```
 
-<span class="caption">示例 12-16：刚好足够使测试通过编译的 `search` 函数定义</span>
+<span class="caption">示例 12-16：为 `search` 函数添加刚好足够的定义，使调用它时不会 panic</span>
 
 注意需要在 `search` 的签名中定义一个显式生命周期 `'a` 并用于 `contents` 参数和返回值。回忆一下[第十章][ch10-lifetimes]中讲到生命周期参数指定哪个参数的生命周期与返回值的生命周期相关联。在这个例子中，我们表明返回的 vector 中应该包含引用参数 `contents`（而不是参数`query`）slice 的字符串 slice。
 
@@ -51,17 +51,9 @@
 {{#include ../listings/ch12-an-io-project/output-only-02-missing-lifetimes/output.txt}}
 ```
 
-Rust 不可能知道我们需要的是哪一个参数，所以需要显式地告诉它。因为参数 `contents` 包含了所有的文本而且我们希望返回匹配的那部分文本，所以我们知道 `contents` 是应该要使用生命周期语法来与返回值相关联的参数。
+Rust 不可能知道输出需要使用哪一个参数，所以需要显式地告诉它。注意，帮助信息建议为所有参数和输出类型指定相同的生命周期参数，这并不符合我们的意图！因为参数 `contents` 包含了所有的文本而且我们希望返回匹配的那部分文本，所以我们知道 `contents` 是应该要使用生命周期语法来与返回值相关联的参数。
 
 其他语言中并不需要你在函数签名中将参数与返回值相关联。所以这么做可能仍然感觉有些陌生，随着时间的推移这将会变得越来越容易。你可能想要将这个例子与第十章中[“生命周期确保引用有效”][validating-references-with-lifetimes]部分做对比。
-
-现在运行测试：
-
-```console
-{{#include ../listings/ch12-an-io-project/listing-12-16/output.txt}}
-```
-
-很好，测试失败了，这正是我们所期望的。修改代码来让测试通过吧！
 
 ### 编写使测试通过的代码
 
@@ -124,18 +116,6 @@ Rust 有一个有助于一行一行遍历字符串的方法，出于方便它被
 测试通过了，我们知道它可以工作了！
 
 现在正是可以考虑重构的时机，在保证测试通过，保持功能不变的前提下重构 `search` 函数。`search` 函数中的代码并不坏，不过并没有利用迭代器的一些实用功能。第十三章将回到这个例子并深入探索迭代器并看看如何改进代码。
-
-#### 在 `run` 函数中使用 `search` 函数
-
-现在 `search` 函数是可以工作并测试通过了的，我们需要实际在 `run` 函数中调用 `search`。需要将 `config.query` 值和 `run` 从文件中读取的 `contents` 传递给 `search` 函数。接着 `run` 会打印出 `search` 返回的每一行：
-
-<span class="filename">文件名：src/lib.rs</span>
-
-```rust,ignore
-{{#rustdoc_include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/src/lib.rs:here}}
-```
-
-这里仍然使用了 `for` 循环获取了 `search` 返回的每一行并打印出来。
 
 现在整个程序应该可以工作了！让我们试一试，首先使用一个只会在艾米莉·狄金森的诗中返回一行的单词 “frog”：
 

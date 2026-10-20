@@ -1,6 +1,6 @@
 ## 将单线程 server 变为多线程 server
 
-[ch21-02-multithreaded.md](https://github.com/rust-lang/book/blob/8aa0d003e6499d733d639de32d70f590efa48657/src/ch21-02-multithreaded.md)
+[ch21-02-multithreaded.md](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch21-02-multithreaded.md)
 
 目前服务端会依次处理每一个请求，意味着它在完成第一个连接的处理之前不会处理第二个连接。如果服务端正接收越来越多的请求，这类串行操作会使性能越来越差。如果一个请求花费很长时间来处理，随后而来的请求则不得不等待这个长请求结束，即便这些新请求可以很快就处理完。我们需要修复这种情况，不过首先让我们实际尝试一下这个问题。
 
@@ -395,6 +395,6 @@ Worker 2 got a job; executing.
 
 [type-aliases]: ch20-03-advanced-types.html#类型同义词与类型别名
 [integer-types]: ch03-02-data-types.html#整型
-[fn-traits]: ch13-01-closures.html#将捕获的值移出闭包
+[moving-out-of-closures]: ch13-01-closures.html#将捕获的值移出闭包
 [builder]: https://doc.rust-lang.org/std/thread/struct.Builder.html
 [builder-spawn]: https://doc.rust-lang.org/std/thread/struct.Builder.html#method.spawn

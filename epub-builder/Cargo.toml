@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 regex = "1.10"
 percent-encoding = "2.3"
+pulldown-cmark = { version = "0.13.4", default-features = false }
 
 [target.'cfg(target_os = "windows")'.dependencies]
 winreg = "0.52"

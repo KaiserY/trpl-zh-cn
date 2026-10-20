@@ -1,6 +1,6 @@
 ## 附录 C：可派生的 trait
 
-[appendix-03-derivable-traits.md](https://github.com/rust-lang/book/blob/042803ac0fc63e2cb62a4e3b7aaedec018c583f9/src/appendix-03-derivable-traits.md)
+[appendix-03-derivable-traits.md](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/appendix-03-derivable-traits.md)
 
 在本书的各个部分中，我们讨论了可应用于结构体和枚举定义的 `derive` 属性。`derive` 属性会在使用 `derive` 语法标记的类型上生成对应 trait 的默认实现的代码。
 
@@ -48,7 +48,9 @@
 
 当在结构体上派生时，`PartialOrd` 按照结构体定义中字段出现的顺序，依次比较每个字段的值，以此来比较两个实例。当在枚举上派生时，认为在枚举定义中声明较早的枚举变体小于其后的变体。
 
-例如，对于来自于 `rand` crate 中的 `gen_range` 方法来说，当在一个范围表达式指定的范围内生成一个随机值时，`PartialOrd` trait 是必须的。
+例如，对于来自于 `rand` crate 中的 `random_range` 方法来说，当在一个范围表达式指定的范围内生成一个随机值时，`PartialOrd` trait 是必须的。
+
+> 译者注：此处按第二章使用的 `rand` 0.10 API 更新为 `random_range`，英文原文仍使用旧名称 `gen_range`
 
 `Ord` trait 也让你知道在一个带注解类型上的任意两个值存在有效顺序。`Ord` trait 实现了 `cmp` 方法，它返回一个 `Ordering` 而不是 `Option<Ordering>`，因为总存在一个合法的顺序。只可以在实现了 `PartialOrd` 和 `Eq`（`Eq` 依赖 `PartialEq`）的类型上使用 `Ord` trait。当在结构体或枚举上派生时，`cmp` 的行为与 `PartialOrd` 派生实现的 `partial_cmp` 相同。
 
