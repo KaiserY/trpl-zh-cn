@@ -1,6 +1,6 @@
 ## 将 crate 发布到 Crates.io
 
-[ch14-02-publishing-to-crates-io.md](https://github.com/rust-lang/book/blob/43b9ad334aaf7353e5708dba49f84f941b50ec4b/src/ch14-02-publishing-to-crates-io.md)
+[ch14-02-publishing-to-crates-io.md](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch14-02-publishing-to-crates-io.md)
 
 我们曾经在项目中使用 [crates.io](https://crates.io)<!-- ignore --> 上的包作为依赖，不过你也可以通过发布自己的包来向他人分享代码。[crates.io](https://crates.io)<!-- ignore --> 上的 crate 注册表会分发你包的源代码，因此它主要托管开源代码。
 
@@ -226,11 +226,17 @@ license = "MIT OR Apache-2.0"
 $ cargo publish
     Updating crates.io index
    Packaging guessing_game v0.1.0 (file:///projects/guessing_game)
+    Packaged 6 files, 1.2KiB (895.0B compressed)
    Verifying guessing_game v0.1.0 (file:///projects/guessing_game)
    Compiling guessing_game v0.1.0
 (file:///projects/guessing_game/target/package/guessing_game-0.1.0)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s
    Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
+    Uploaded guessing_game v0.1.0 to registry `crates-io`
+note: waiting for `guessing_game v0.1.0` to be available at registry
+`crates-io`.
+You may press ctrl-c to skip waiting; the crate should be available shortly.
+   Published guessing_game v0.1.0 at registry `crates-io`
 ```
 
 至此，你已经把代码分享给 Rust 社区了，任何人都可以轻松地把你的 crate 加入自己的项目依赖中。

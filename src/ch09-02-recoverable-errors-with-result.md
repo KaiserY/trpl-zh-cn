@@ -1,6 +1,6 @@
 ## 用 `Result` 处理可恢复的错误
 
-[ch09-02-recoverable-errors-with-result.md](https://github.com/rust-lang/book/blob/13e27c4a35705c4bd473bd90a3d3a8f87ef9ae58/src/ch09-02-recoverable-errors-with-result.md)
+[ch09-02-recoverable-errors-with-result.md](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch09-02-recoverable-errors-with-result.md)
 
 大部分错误并没有严重到需要程序完全停止执行。有时函数失败的原因很容易理解并加以处理。例如，如果因为打开一个并不存在的文件而失败，此时我们可能想要创建这个文件，而不是终止进程。
 
@@ -107,9 +107,8 @@ enum Result<T, E> {
 如果调用这段代码时不存在 *hello.txt* 文件，我们将会看到一个 `unwrap` 调用 `panic!` 时提供的错误信息：
 
 ```text
-thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Os {
-code: 2, kind: NotFound, message: "No such file or directory" }',
-src/main.rs:4:49
+thread 'main' panicked at src/main.rs:4:49:
+called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
 ```
 
 同样，`expect` 方法也允许我们自定义 `panic!` 的错误信息。使用 `expect` 而不是 `unwrap` 并提供一个好的错误信息可以表明你的意图并更易于追踪 panic 的根源。`expect` 的语法看起来像这样：

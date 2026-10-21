@@ -1,6 +1,6 @@
 ## 数据类型
 
-[ch03-02-data-types.md](https://github.com/rust-lang/book/blob/9cc190796f28505c7a9a9cacea42f50d895ff3bd/src/ch03-02-data-types.md)
+[ch03-02-data-types.md](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch03-02-data-types.md)
 
 在 Rust 中，每个值都属于某种特定的 **数据类型**（*data type*），这会告诉 Rust 当前指定的是什么种类的数据，从而知道该如何处理这些数据。我们将看到两类数据类型的子集：标量（scalar）和复合（compound）。
 
@@ -64,7 +64,7 @@ let guess: u32 = "42".parse().expect("Not a number!");
 > 当你使用 `--release` flag 在 release 模式下编译时，Rust **不会**加入会导致 panic 的整型溢出检查。相反，如果发生溢出，Rust 会执行一种叫做 *two’s complement wrapping* 的行为。简而言之，超过该类型最大值的数会“回绕”到该类型所能表示的最小值。对于 `u8` 来说，`256` 会变成 `0`，`257` 会变成 `1`，依此类推。程序不会 panic，但变量得到的值很可能不是你原本期望的值。依赖整型溢出的回绕行为通常被认为是一种错误。
 >
 > 为了显式地处理溢出的可能性，可以使用这几类标准库提供的原始数字类型方法：
-> * 所有模式下都可以使用 `wrapping_*` 方法进行 wrapping，如 `wrapping_add`
+> * 所有编译模式下都可以使用 `wrapping_*` 方法进行 wrapping，如 `wrapping_add`
 > * 如果 `checked_*` 方法发生溢出，则返回 `None` 值
 > * 用 `overflowing_*` 方法返回值和一个布尔值，表示是否出现溢出
 > * 用 `saturating_*` 方法在值的最小值或最大值处进行饱和处理

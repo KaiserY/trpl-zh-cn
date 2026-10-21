@@ -1,6 +1,6 @@
 ## 高级函数与闭包
 
-[ch20-04-advanced-functions-and-closures.md](https://github.com/rust-lang/book/blob/57ff62db22b006e6b319e2e35c9364d932a8b4e5/src/ch20-04-advanced-functions-and-closures.md)
+[ch20-04-advanced-functions-and-closures.md](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch20-04-advanced-functions-and-closures.md)
 
 本部分将探索一些有关函数和闭包的高级特性，这包括函数指针以及返回闭包。
 
@@ -93,7 +93,7 @@
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-33/src/main.rs}}
 ```
 
-示例 20-33：创建一个由返回 `impl Fn` 的函数定义的闭包的 `Vec<T>`
+<figcaption>示例 20-33：创建一个由返回 `impl Fn` 的函数定义的闭包的 `Vec<T>`</figcaption>
 
 </figure>
 
@@ -111,7 +111,7 @@
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-34/src/main.rs:here}}
 ```
 
-示例 20-34：创建一个由返回 `Box<dyn Fn>` 的函数定义的闭包的 `Vec<T>` 以便它们有相同的类型
+<figcaption>示例 20-34：创建一个由返回 `Box<dyn Fn>` 的函数定义的闭包的 `Vec<T>` 以便它们有相同的类型</figcaption>
 
 </figure>
 

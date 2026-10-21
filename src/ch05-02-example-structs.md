@@ -1,6 +1,6 @@
 ## 结构体示例程序
 
-[ch05-02-example-structs.md](https://github.com/rust-lang/book/blob/8a6130451b0817ead5c2522ce641dcb0f11a8571/src/ch05-02-example-structs.md)
+[ch05-02-example-structs.md](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch05-02-example-structs.md)
 
 为了理解何时会需要使用结构体，让我们编写一个计算长方形面积的程序。我们会从单独的变量开始，接着重构程序直到使用结构体替代它们为止。
 
@@ -91,7 +91,7 @@
 但是如果我们继续阅读错误，将会发现这个有帮助的信息：
 
 ```text
-{{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/output.txt:12:13}}
+{{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/output.txt:9:10}}
 ```
 
 让我们来试试！现在 `println!` 宏调用看起来会像 `println!("rect1 is {rect1:?}");`。在大括号中加入 `:?` 指示符，告诉 `println!` 我们想使用一种叫做 `Debug` 的输出格式。`Debug` 是一个 trait，它允许我们以一种对开发者有帮助的方式打印结构体，这样在调试代码时就能看到它的值。
@@ -105,7 +105,7 @@
 不过编译器又一次给出了一个有帮助的信息：
 
 ```text
-{{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-01-debug/output.txt:11:12}}
+{{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-01-debug/output.txt:9:10}}
 ```
 
 Rust **确实** 包含了打印出调试信息的功能，不过我们必须为结构体显式选择这个功能。为此，在结构体定义之前加上外部属性 `#[derive(Debug)]`，如示例 5-12 所示：

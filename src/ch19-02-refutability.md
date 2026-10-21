@@ -1,6 +1,6 @@
 ## 可反驳性：模式是否可能匹配失败
 
-[ch19-02-refutability.md](https://github.com/rust-lang/book/blob/f78ab89d7545ac17780e6a367055cc089f4cd2ec/src/ch19-02-refutability.md)
+[ch19-02-refutability.md](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch19-02-refutability.md)
 
 模式分为两种形式：可反驳（*refutable*）和不可反驳（*irrefutable*）。对传入的任意可能值都能匹配的模式，称为**不可反驳**模式。比如语句 `let x = 5;` 中的 `x` 就是一个例子，因为 `x` 可以匹配任何值，因此不可能匹配失败。对某些可能值会匹配失败的模式，称为**可反驳**模式。比如表达式 `if let Some(x) = a_value` 中的 `Some(x)`；如果变量 `a_value` 中的值是 `None` 而不是 `Some`，那么模式 `Some(x)` 就不会匹配。
 
@@ -40,7 +40,7 @@
 
 <span class="caption">示例 19-10: 尝试在 `let...else` 中使用不可反驳模式</span>
 
-Rust 会抱怨说，在 `let...else` 中使用不可反驳模式没有意义：
+Rust 会抱怨说，在 `let...else` 中使用不可反驳模式没有意义，因为永远不会执行 `else` 分支：
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-10/output.txt}}

@@ -1,6 +1,6 @@
 ## 模式语法
 
-[ch19-03-pattern-syntax.md](https://github.com/rust-lang/book/blob/3e7aac1d7bc4de520b7040d4ef0f50c937468bd0/src/ch19-03-pattern-syntax.md)
+[ch19-03-pattern-syntax.md](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch19-03-pattern-syntax.md)
 
 在本节中，我们收集了模式中所有有效的语法，并讨论为什么以及何时你可能要使用这些语法。
 
@@ -112,7 +112,7 @@ Rust 知道 `'c'` 位于第一个模式的范围内，并会打印出 `early ASC
 
 在这个例子中，值 `p` 因为其 `x` 包含 `0` 而匹配第二个分支，因此会打印出 `On the y axis at 7`。
 
-记住 `match` 表达式一旦找到一个匹配的模式就会停止检查其它分支，所以即使 `Point { x: 0, y: 0}` 在 `x` 轴上也在 `y` 轴上，这些代码也只会打印 `On the x axis at 0`。
+记住 `match` 表达式一旦找到一个匹配的模式就会停止检查其它分支，所以即使 `Point { x: 0, y: 0 }` 在 `x` 轴上也在 `y` 轴上，这些代码也只会打印 `On the x axis at 0`。
 
 #### 枚举
 
@@ -126,7 +126,7 @@ Rust 知道 `'c'` 位于第一个模式的范围内，并会打印出 `early ASC
 
 <span class="caption">示例 19-15: 解构包含不同类型值变体的枚举</span>
 
-这段代码会打印出 `Change the color to red 0, green 160, and blue 255`。尝试改变 `msg` 的值来观察其他分支代码的运行。
+这段代码会打印出 `Change color to red 0, green 160, and blue 255`。尝试改变 `msg` 的值来观察其他分支代码的运行。
 
 对于像 `Message::Quit` 这样没有任何数据的枚举变体，不能进一步解构其值。只能匹配其字面值 `Message::Quit`，因此模式中没有任何变量。
 
@@ -332,7 +332,7 @@ Rust 不可能决定在元组中匹配 `second` 值之前应该忽略多少个�
 
 ### 使用 `@` 绑定
 
-_at_ 运算符（`@`）允许我们在创建一个存放值的变量的同时测试其值是否匹配模式。示例 19-29 展示了一个例子，这里我们希望测试 `Message::Hello` 的 `id` 字段是否位于 `3..=7` 范围内，同时也希望能将其值绑定到 `id_variable` 变量中以便此分支相关联的代码可以使用它。可以将 `id_variable` 命名为 `id`，与字段同名，不过出于示例的目的这里选择了不同的名称。
+_at_ 运算符（`@`）允许我们在创建一个存放值的变量的同时测试其值是否匹配模式。示例 19-29 展示了一个例子，这里我们希望测试 `Message::Hello` 的 `id` 字段是否位于 `3..=7` 范围内，同时也希望能将其值绑定到 `id` 变量中，以便此分支相关联的代码可以使用它
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-29/src/main.rs:here}}
@@ -340,7 +340,7 @@ _at_ 运算符（`@`）允许我们在创建一个存放值的变量的同时测
 
 <span class="caption">示例 19-29: 使用 `@` 在模式中绑定值的同时测试它</span>
 
-上例会打印出 `Found an id in range: 5`。通过在 `3..=7` 之前指定 `id_variable @`，我们捕获了任何匹配此范围的值并同时测试其值匹配这个范围模式。
+上例会打印出 `Found an id in range: 5`。通过在 `3..=7` 之前指定 `id @`，我们捕获了任何匹配此范围的值并同时测试其值匹配这个范围模式。
 
 第二个分支只在模式中指定了一个范围，分支相关代码没有一个包含 `id` 字段实际值的变量。`id` 字段的值可以是 10、11 或 12，不过这个模式的代码并不知情也不能使用 `id` 字段中的值，因为没有将 `id` 值保存进一个变量。
 

@@ -1,6 +1,6 @@
 ## 函数
 
-[ch03-03-how-functions-work.md](https://github.com/rust-lang/book/blob/9cc190796f28505c7a9a9cacea42f50d895ff3bd/src/ch03-03-how-functions-work.md)
+[ch03-03-how-functions-work.md](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch03-03-how-functions-work.md)
 
 函数在 Rust 代码中非常普遍。你已经见过语言中最重要的函数之一：`main` 函数，它是很多程序的入口点。你也见过 `fn` 关键字，它用来声明新函数。
 
@@ -62,7 +62,7 @@ Rust 代码中的函数名和变量名通常使用 *snake case* 风格。在 sna
 {{#include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/output.txt}}
 ```
 
-因为我们使用 `5` 作为 `value` 的值，`h` 作为 `unit_label` 的值来调用函数，所以程序输出包含这些值。
+因为我们使用 `5` 作为 `value` 的值，`'h'` 作为 `unit_label` 的值来调用函数，所以程序输出包含这些值。
 
 ### 语句和表达式
 

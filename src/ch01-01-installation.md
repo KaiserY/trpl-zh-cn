@@ -1,6 +1,6 @@
 ## 安装
 
-[ch01-01-installation.md](https://github.com/rust-lang/book/blob/369386fefd1138cbdf50ae628bae1ffc4ffce669/src/ch01-01-installation.md)
+[ch01-01-installation.md](https://github.com/rust-lang/book/blob/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/ch01-01-installation.md)
 
 第一步是安装 Rust。我们会通过 `rustup` 下载 Rust，这是一个管理 Rust 版本和相关工具的命令行工具。下载时需要联网。
 
@@ -113,7 +113,7 @@ $ rustup self uninstall
 ```console
 $ cargo new get-dependencies
 $ cd get-dependencies
-$ cargo add rand@0.8.5 trpl@0.2.0
+$ cargo add rand@0.10.1 trpl@0.2.0
 ```
 
 这会把这些包下载并缓存起来，因此之后你就不需要再次下载它们了。运行完这些命令后，你无需保留 `get-dependencies` 文件夹。只要你执行过这些命令，在本书后续所有的 `cargo` 命令中，都可以使用 `--offline` 参数来使用这些已缓存的版本，而不必尝试联网。
