@@ -93,7 +93,7 @@
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-33/src/main.rs}}
 ```
 
-<figcaption>示例 20-33：创建一个由返回 `impl Fn` 的函数定义的闭包的 `Vec<T>`</figcaption>
+<figcaption>示例 20-33：创建一个由返回 <code>impl Fn</code> 的函数定义的闭包的 <code>Vec&lt;T&gt;</code></figcaption>
 
 </figure>
 
@@ -111,7 +111,7 @@
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-34/src/main.rs:here}}
 ```
 
-<figcaption>示例 20-34：创建一个由返回 `Box<dyn Fn>` 的函数定义的闭包的 `Vec<T>` 以便它们有相同的类型</figcaption>
+<figcaption>示例 20-34：创建一个由返回 <code>Box&lt;dyn Fn&gt;</code> 的函数定义的闭包的 <code>Vec&lt;T&gt;</code> 以便它们有相同的类型</figcaption>
 
 </figure>
 

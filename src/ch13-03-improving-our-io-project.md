@@ -104,7 +104,7 @@ I/O 项目中其他可以利用迭代器的地方是 `search` 函数，示例 13
 
 回忆一下，`search` 函数的目的是返回所有 `contents` 中包含 `query` 的行。类似于示例 13-16 中的 `filter` 例子，这段代码使用 `filter` 适配器来保留 `line.contains(query)` 返回 `true` 的行。接着使用 `collect` 将匹配行收集到另一个 vector 中。这样就容易多了！尝试对 `search_case_insensitive` 函数做出同样的使用迭代器方法的修改吧。
 
-还可以进一步改进：移除 `collect` 调用，并将返回类型改为 `impl Iterator<Item = &'a str>`，让 `search` 函数返回一个迭代器，从而使这个函数本身成为迭代器适配器。注意，你也需要更新测试！在修改前后，用 `minigrep` 工具搜索一个大文件，观察行为的差异。修改前，程序只有收集完所有结果后才会打印；修改后，每找到一个匹配行就会打印出来，因为 `run` 函数中的 `for` 循环可以利用迭代器的惰性
+还可以进一步改进：移除 `collect` 调用，并将返回类型改为 `impl Iterator<Item = &'a str>`，让 `search` 函数返回一个迭代器，从而使这个函数本身成为迭代器适配器。注意，你也需要更新测试！在修改前后，用 `minigrep` 工具搜索一个大文件，观察行为的差异。修改前，程序只有收集完所有结果后才会打印；修改后，每找到一个匹配行就会打印出来，因为 `run` 函数中的 `for` 循环可以利用迭代器的惰性。
 
 <a id="choosing-between-loops-or-iterators"></a>
 

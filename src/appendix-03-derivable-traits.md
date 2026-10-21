@@ -50,7 +50,7 @@
 
 例如，对于来自于 `rand` crate 中的 `random_range` 方法来说，当在一个范围表达式指定的范围内生成一个随机值时，`PartialOrd` trait 是必须的。
 
-> 译者注：此处按第二章使用的 `rand` 0.10 API 更新为 `random_range`，英文原文仍使用旧名称 `gen_range`
+> 译者注：此处按第二章使用的 `rand` 0.10 API 更新为 `random_range`，英文原文仍使用旧名称 `gen_range`。
 
 `Ord` trait 也让你知道在一个带注解类型上的任意两个值存在有效顺序。`Ord` trait 实现了 `cmp` 方法，它返回一个 `Ordering` 而不是 `Option<Ordering>`，因为总存在一个合法的顺序。只可以在实现了 `PartialOrd` 和 `Eq`（`Eq` 依赖 `PartialEq`）的类型上使用 `Ord` trait。当在结构体或枚举上派生时，`cmp` 的行为与 `PartialOrd` 派生实现的 `partial_cmp` 相同。
 

@@ -31,7 +31,7 @@
 
 这里选择使用 `"duct"` 作为这个测试中需要搜索的字符串。用来搜索的文本有三行，其中只有一行包含 `"duct"`。（注意双引号之后的反斜杠，这告诉 Rust 不要在字符串字面值内容的开头加入换行符）我们断言 `search` 函数的返回值只包含期望的那一行。
 
-现在运行这个测试，它会失败，因为 `unimplemented!` 宏会以“not implemented”消息触发 panic。根据 TDD 的原则，我们先迈出一小步，加入刚好足够的代码，让函数调用不再 panic：把 `search` 函数定义为总是返回一个空 vector，如示例 12-16 所示。然后这个测试应该能够编译，并因为空 vector 与包含 `"safe, fast, productive."` 这一行的 vector 不匹配而失败
+现在运行这个测试，它会失败，因为 `unimplemented!` 宏会以“not implemented”消息触发 panic。根据 TDD 的原则，我们先迈出一小步，加入刚好足够的代码，让函数调用不再 panic：把 `search` 函数定义为总是返回一个空 vector，如示例 12-16 所示。然后这个测试应该能够编译，并因为空 vector 与包含 `"safe, fast, productive."` 这一行的 vector 不匹配而失败。
 
 <span class="filename">文件名：src/lib.rs</span>
 
