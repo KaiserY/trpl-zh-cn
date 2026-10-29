@@ -72,7 +72,7 @@ Rust 的内存安全性保证使其难以意外地制造永远也不会被清理
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-27/src/main.rs:here}}
 ```
 
-我们希望 `Node` 能拥有它的子节点，同时也希望能与变量共享这种所有权，以便能够直接访问树中的每个 `Node`。为此，我们将 `Vec<T>` 中元素的类型定义为 `Rc<Node>`。我们还希望能够修改某个节点的子节点，因此把 `children` 中的 `Vec<Rc<Node>>` 包装进了 `RefCell<T>`。
+我们希望 `Node` 能拥有它的子节点，同时也希望能与变量共享这种所有权，以便能够直接访问树中的每个 `Node`。为此，我们将 `Vec<T>` 中元素的类型定义为 `Rc<Node>`。我们还希望能够修改哪些节点是另一个节点的子节点，因此把 `children` 中的 `Vec<Rc<Node>>` 包装进了 `RefCell<T>`。
 
 接下来，使用此结构体定义来创建一个叫做 `leaf` 的带有值 `3` 且没有子节点的 `Node` 实例，和另一个带有值 5 并以 `leaf` 作为子节点的实例 `branch`，如示例 15-27 所示：
 
